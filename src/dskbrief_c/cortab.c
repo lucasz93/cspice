@@ -1,4 +1,4 @@
-/* cortab.f -- translated by f2c (version 19980913).
+/* cortab.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -201,7 +201,7 @@ static integer c__0 = 0;
     starts_dim1 = *ncols;
     values_dim1 = *ncols;
     values_dim2 = *n;
-    values_offset = values_dim1 + 1;
+    values_offset = 1 + values_dim1 * 1;
 
     /* Function Body */
     if (return_()) {
@@ -216,10 +216,10 @@ static integer c__0 = 0;
 
 /*     BCOL is the character index of the first column. */
 
-    starts[(i__1 = 0) < starts_dim1 ? i__1 : s_rnge("starts", i__1, "cortab_",
-	     (ftnlen)210)] = *start1;
-    bcol = starts[(i__1 = 0) < starts_dim1 ? i__1 : s_rnge("starts", i__1, 
-	    "cortab_", (ftnlen)211)];
+    starts[(i__1 = 0) < 1 * starts_dim1 ? i__1 : s_rnge("starts", i__1, "cor"
+	    "tab_", (ftnlen)210)] = *start1;
+    bcol = starts[(i__1 = 0) < 1 * starts_dim1 ? i__1 : s_rnge("starts", i__1,
+	     "cortab_", (ftnlen)211)];
     i__1 = *ncols;
     for (colix = 1; colix <= i__1; ++colix) {
 
@@ -240,8 +240,8 @@ static integer c__0 = 0;
 	i__2 = *n;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    dpval = values[(i__3 = colix + i__ * values_dim1 - values_offset) 
-		    < values_dim1 * values_dim2 && 0 <= i__3 ? i__3 : s_rnge(
-		    "values", i__3, "cortab_", (ftnlen)233)];
+		    < 1 * values_dim1 * values_dim2 && 0 <= i__3 ? i__3 : 
+		    s_rnge("values", i__3, "cortab_", (ftnlen)233)];
 	    if (abs(dpval) >= 1. && abs(dpval) < 1e6) {
 
 /*              We can represent the value in fixed-point format. */
@@ -370,8 +370,8 @@ static integer c__0 = 0;
 /*        Set the start value for the next column. */
 
 	if (colix < *ncols) {
-	    starts[(i__2 = colix) < starts_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "starts", i__2, "cortab_", (ftnlen)366)] = bcol;
+	    starts[(i__2 = colix) < 1 * starts_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("starts", i__2, "cortab_", (ftnlen)366)] = bcol;
 	}
     }
     chkout_("CORTAB", (ftnlen)6);

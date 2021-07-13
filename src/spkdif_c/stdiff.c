@@ -1,4 +1,4 @@
-/* stdiff.f -- translated by f2c (version 19980913).
+/* stdiff.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -805,18 +805,18 @@ static integer c__2 = 2;
 			"stdiff_", (ftnlen)794)] + velcmp[(i__4 = i__ - 1) < 
 			3 && 0 <= i__4 ? i__4 : s_rnge("velcmp", i__4, "stdi"
 			"ff_", (ftnlen)794)];
-		sumpa[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("sum"
-			"pa", i__2, "stdiff_", (ftnlen)796)] = sumpa[(i__3 = 
-			i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("sumpa", 
-			i__3, "stdiff_", (ftnlen)796)] + (d__1 = poscmp[(i__4 
-			= i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("poscmp", 
-			i__4, "stdiff_", (ftnlen)796)], abs(d__1));
-		sumva[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("sum"
-			"va", i__2, "stdiff_", (ftnlen)798)] = sumva[(i__3 = 
-			i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("sumva", 
-			i__3, "stdiff_", (ftnlen)798)] + (d__1 = velcmp[(i__4 
-			= i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("velcmp", 
-			i__4, "stdiff_", (ftnlen)798)], abs(d__1));
+		sumpa[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("sum"
+			"pa", i__3, "stdiff_", (ftnlen)796)] = sumpa[(i__4 = 
+			i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("sumpa", 
+			i__4, "stdiff_", (ftnlen)796)] + (d__1 = poscmp[(i__2 
+			= i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("poscmp", 
+			i__2, "stdiff_", (ftnlen)796)], abs(d__1));
+		sumva[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("sum"
+			"va", i__3, "stdiff_", (ftnlen)798)] = sumva[(i__4 = 
+			i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("sumva", 
+			i__4, "stdiff_", (ftnlen)798)] + (d__1 = velcmp[(i__2 
+			= i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("velcmp", 
+			i__2, "stdiff_", (ftnlen)798)], abs(d__1));
 		sumps[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("sum"
 			"ps", i__2, "stdiff_", (ftnlen)800)] = sumps[(i__3 = 
 			i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("sumps", 
