@@ -54,7 +54,7 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer myid;
+    static thread_local integer myid;
     extern /* Subroutine */ int fetcha_(integer *, integer *, char *, integer 
 	    *, ftnlen), clpval_(integer *, integer *, char *, integer *, 
 	    ftnlen);

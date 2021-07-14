@@ -51,68 +51,69 @@ static integer c__10 = 10;
     extern /* Subroutine */ int ekgc_(integer *, integer *, integer *, char *,
 	     logical *, logical *, ftnlen), ekgd_(integer *, integer *, 
 	    integer *, doublereal *, logical *, logical *);
-    static integer qbeg[400], high;
+    static thread_local integer qbeg[400], high;
     extern /* Subroutine */ int ekgi_(integer *, integer *, integer *, 
 	    integer *, logical *, logical *), scan_(char *, char *, integer *,
 	     integer *, integer *, integer *, integer *, integer *, integer *,
 	     integer *, ftnlen, ftnlen);
-    static integer keep[1], qend[400], best[16];
-    static char nams[64*406], qcol[64], item[64];
-    static integer myid;
-    static char fmts[128*400], tfmt[128];
-    static integer ptrs[406];
+    static thread_local integer keep[1], qend[400], best[16];
+    static thread_local char nams[64*406], qcol[64], item[64];
+    static thread_local integer myid;
+    static thread_local char fmts[128*400], tfmt[128];
+    static thread_local integer ptrs[406];
     extern /* Subroutine */ int zzekencd_(char *, integer *, char *, 
 	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
 	    ftnlen), zzekpcol_(char *, integer *, char *, char *, char *, 
 	    integer *, char *, integer *, logical *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer b, e, i__, j, l, n;
+    static thread_local integer b, e, i__, j, l, n;
     extern integer cardi_(integer *);
-    static char table[64];
-    static doublereal x;
-    static integer w;
-    static logical avail[400];
-    static char lname[64];
+    static thread_local char table[64];
+    static thread_local doublereal x;
+    static thread_local integer w;
+    static thread_local logical avail[400];
+    static thread_local char lname[64];
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
-    static char rname[6], names[64*400];
-    static integer hndls[8006], scope;
-    static char eqryc[2000];
-    static doublereal eqryd[100];
-    static char marks[4*1];
-    static integer eqryi[27875];
-    static char known[64*406];
+    static thread_local char rname[6], names[64*400];
+    static thread_local integer hndls[8006], scope;
+    static thread_local char eqryc[2000];
+    static thread_local doublereal eqryd[100];
+    static thread_local char marks[4*1];
+    static thread_local integer eqryi[27875];
+    static thread_local char known[64*406];
     extern integer rtrim_(char *, ftnlen);
-    static integer sizes[400], ident[400];
-    static char mycol[128];
-    static integer nqids, qcids[400], types[400], count, start;
-    static char justs[8*400];
-    static logical gotit;
+    static thread_local integer sizes[400], ident[400];
+    static thread_local char mycol[128];
+    static thread_local integer nqids, qcids[400], types[400], count, start;
+    static thread_local char justs[8*400];
+    static thread_local logical gotit;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), repmc_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
-    static char mystr[1024];
+    static thread_local char mystr[1024];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    fmtdp_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static integer nb;
+    static thread_local integer nb;
     extern logical failed_(void);
-    static integer te;
-    static logical ok;
-    static char cnames[64*400];
+    static thread_local integer te;
+    static thread_local logical ok;
+    static thread_local char cnames[64*400];
     extern integer brckti_(integer *, integer *, integer *), isrchi_(integer *
 	    , integer *, integer *);
     extern logical return_(void);
-    static char aliass[64*400], tables[64*400];
-    static integer nactiv, lenths[400], widths[400];
-    static logical active[400], indexd[400], nullok[400];
-    static integer amount[400];
-    static char errmsg[1024];
-    static integer errptr, currnt, cutoff, scores[16], highst, nmarks, mrklen[
-	    1], pnters[5], ntokns;
-    static char myalis[64], qalias[64*400], qcolmn[64*400], talias[64];
-    static integer colidx, qtindx[400], tabidx, han;
-    static logical badqry, gotone, gotfre, nulval;
+    static thread_local char aliass[64*400], tables[64*400];
+    static thread_local integer nactiv, lenths[400], widths[400];
+    static thread_local logical active[400], indexd[400], nullok[400];
+    static thread_local integer amount[400];
+    static thread_local char errmsg[1024];
+    static thread_local integer errptr, currnt, cutoff, scores[16], highst, 
+	    nmarks, mrklen[1], pnters[5], ntokns;
+    static thread_local char myalis[64], qalias[64*400], qcolmn[64*400], 
+	    talias[64];
+    static thread_local integer colidx, qtindx[400], tabidx, han;
+    static thread_local logical badqry, gotone, gotfre, nulval;
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), ssizei_(
 	    integer *, integer *), setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 

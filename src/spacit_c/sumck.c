@@ -42,25 +42,25 @@ static integer c__0 = 0;
 	     integer *, char *, ftnlen);
 
     /* Local variables */
-    static logical done;
-    static char line[255];
+    static thread_local logical done;
+    static thread_local char line[255];
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     extern integer cardd_(doublereal *);
-    static doublereal beget;
-    static char segid[40];
+    static thread_local doublereal beget;
+    static thread_local char segid[40];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char bsclk[32];
-    static doublereal endet;
-    static char esclk[32];
+    static thread_local char bsclk[32];
+    static thread_local doublereal endet;
+    static thread_local char esclk[32];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static char separ[80];
-    static logical found;
+    static thread_local char separ[80];
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), ckgss_(char *, integer *, integer *, 
 	    integer *, integer *, doublereal *, doublereal *, integer *, 
 	    integer *, ftnlen), reset_(void);
-    static logical error;
+    static thread_local logical error;
     extern /* Subroutine */ int ckwss_(integer *, char *, integer *, integer *
 	    , integer *, integer *, doublereal *, doublereal *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
@@ -68,44 +68,44 @@ static integer c__0 = 0;
 	    et2utc_(doublereal *, char *, integer *, char *, ftnlen, ftnlen), 
 	    daffna_(logical *);
     extern logical failed_(void);
-    static integer segbad;
+    static thread_local integer segbad;
     extern /* Subroutine */ int scdecd_(integer *, doublereal *, char *, 
 	    ftnlen), dafbfs_(integer *);
-    static integer segead;
-    static doublereal begscl;
+    static thread_local integer segead;
+    static thread_local doublereal begscl;
     extern /* Subroutine */ int scardd_(integer *, doublereal *), scencd_(
 	    integer *, char *, doublereal *, ftnlen);
-    static logical segfnd;
-    static doublereal endscl;
-    static char begutc[32];
+    static thread_local logical segfnd;
+    static thread_local doublereal endscl;
+    static thread_local char begutc[32];
     extern /* Subroutine */ int cnfirm_(char *, logical *, ftnlen), getchr_(
 	    char *, char *, logical *, logical *, char *, ftnlen, ftnlen, 
 	    ftnlen);
-    static logical haveit;
-    static char endutc[32];
-    static integer segfrm;
-    static doublereal segbtm, segetm;
-    static integer instid, segins;
-    static doublereal segint[8];
-    static logical anyseg;
+    static thread_local logical haveit;
+    static thread_local char endutc[32];
+    static thread_local integer segfrm;
+    static thread_local doublereal segbtm, segetm;
+    static thread_local integer instid, segins;
+    static thread_local doublereal segint[8];
+    static thread_local logical anyseg;
     extern /* Subroutine */ int getint_(char *, integer *, logical *, logical 
 	    *, char *, ftnlen, ftnlen);
-    static char errmsg[320], option[20], sumsep[80];
+    static thread_local char errmsg[320], option[20], sumsep[80];
     extern logical return_(void);
-    static char fnmout[255], sclout[255];
-    static integer missin;
-    static char lpsout[255];
-    static integer menuop, segrts;
-    static char tmpstr[80];
-    static integer segtyp;
-    static doublereal intrvl[8], intsct[8];
-    static logical contnu, tryagn;
+    static thread_local char fnmout[255], sclout[255];
+    static thread_local integer missin;
+    static thread_local char lpsout[255];
+    static thread_local integer menuop, segrts;
+    static thread_local char tmpstr[80];
+    static thread_local integer segtyp;
+    static thread_local doublereal intrvl[8], intsct[8];
+    static thread_local logical contnu, tryagn;
     extern /* Subroutine */ int ssized_(integer *, doublereal *), writln_(
 	    char *, integer *, ftnlen), getopt_(char *, integer *, char *, 
 	    char *, integer *, ftnlen, ftnlen, ftnlen), wninsd_(doublereal *, 
 	    doublereal *, doublereal *), wnintd_(doublereal *, doublereal *, 
 	    doublereal *);
-    static char typout[255];
+    static thread_local char typout[255];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
     /* Fortran I/O blocks */

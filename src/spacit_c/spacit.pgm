@@ -38,32 +38,32 @@ static integer c__6 = 6;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static logical done;
-    static char line[255];
-    static integer iopt, i__, r__;
+    static thread_local logical done;
+    static thread_local char line[255];
+    static thread_local integer iopt, i__, r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char cmrcl[80*7];
+    static thread_local char cmrcl[80*7];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int reset_(void);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen),
 	     spat2b_(logical *, integer *), spab2t_(logical *, integer *);
     extern logical failed_(void);
-    static logical logfil;
+    static thread_local logical logfil;
     extern /* Subroutine */ int spardc_(logical *, integer *), erract_(char *,
 	     char *, ftnlen, ftnlen), spalog_(char *, logical *, integer *, 
 	    ftnlen), byebye_(char *, ftnlen), chkout_(char *, ftnlen);
-    static integer loglun;
+    static thread_local integer loglun;
     extern /* Subroutine */ int getopt_(char *, integer *, char *, char *, 
 	    integer *, ftnlen, ftnlen, ftnlen);
-    static logical contnu;
-    static char option[20];
+    static thread_local logical contnu;
+    static thread_local char option[20];
     extern /* Subroutine */ int spasum_(logical *, integer *), tostdo_(char *,
 	     ftnlen), errprt_(char *, char *, ftnlen, ftnlen), tkvrsn_(char *,
 	     char *, ftnlen, ftnlen);
-    static char tkv[12];
+    static thread_local char tkv[12];
 
 /* $ Abstract */
 

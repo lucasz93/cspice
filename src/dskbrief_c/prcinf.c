@@ -35,9 +35,9 @@ static integer c__2 = 2;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), tostdo_(char *, ftnlen);
     extern logical return_(void);
-    static char hlptxt[80*105], verstr[80];
+    static thread_local char hlptxt[80*105], verstr[80];
     extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen);
-    static char usgtxt[80*32];
+    static thread_local char usgtxt[80*32];
 
 /* $ Abstract */
 

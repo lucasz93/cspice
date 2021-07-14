@@ -41,16 +41,16 @@ static integer c__0 = 0;
 	    ftnlen, ftnlen), f_clos(cllist *);
 
     /* Local variables */
-    static char arch[3];
-    static logical done;
-    static char line[1000];
-    static logical more;
-    static integer iopt;
-    static char type__[4];
-    static integer i__;
+    static thread_local char arch[3];
+    static thread_local logical done;
+    static thread_local char line[1000];
+    static thread_local logical more;
+    static thread_local integer iopt;
+    static thread_local char type__[4];
+    static thread_local integer i__;
     extern /* Subroutine */ int dasdc_(integer *);
     extern integer cardi_(integer *);
-    static integer r__;
+    static thread_local integer r__;
     extern /* Subroutine */ int spcac_(integer *, integer *, char *, char *, 
 	    ftnlen, ftnlen), chkin_(char *, ftnlen), spcec_(integer *, 
 	    integer *), spcdc_(integer *), errch_(char *, char *, ftnlen, 
@@ -59,23 +59,23 @@ static integer c__0 = 0;
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dafhof_(integer *);
-    static integer handle;
+    static thread_local integer handle;
     extern /* Subroutine */ int dafcls_(integer *), dasacu_(integer *, char *,
 	     char *, logical *, integer *, ftnlen, ftnlen), cleari_(integer *,
 	     integer *), delfil_(char *, ftnlen), dasecu_(integer *, integer *
 	    , logical *), scardi_(integer *, integer *), dashof_(integer *);
-    static logical fileok;
+    static thread_local logical fileok;
     extern /* Subroutine */ int clcomm_(void), getfat_(char *, char *, char *,
 	     ftnlen, ftnlen, ftnlen), cnfirm_(char *, logical *, ftnlen);
-    static char fnmtbl[128*2], messag[1000], errmsg[320], messgs[1000*7], 
-	    option[20], prmtbl[80*2], statbl[3*2];
+    static thread_local char fnmtbl[128*2], messag[1000], errmsg[320], messgs[
+	    1000*7], option[20], prmtbl[80*2], statbl[3*2];
     extern logical exists_(char *, ftnlen);
-    static integer comlun;
-    static char status[1000*2];
-    static integer numfnm;
-    static char prmpts[80*2];
-    static integer numopn, opnset[7], tblidx[2];
-    static logical comnts, contnu, ndfnms, tryagn;
+    static thread_local integer comlun;
+    static thread_local char status[1000*2];
+    static thread_local integer numfnm;
+    static thread_local char prmpts[80*2];
+    static thread_local integer numopn, opnset[7], tblidx[2];
+    static thread_local logical comnts, contnu, ndfnms, tryagn;
     extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen), 
 	    erract_(char *, char *, ftnlen, ftnlen), errprt_(char *, char *, 
 	    ftnlen, ftnlen), tostdo_(char *, ftnlen), ssizei_(integer *, 
@@ -88,8 +88,8 @@ static integer c__0 = 0;
 	    spcrfl_(integer *, char *, logical *, ftnlen), spcrnl_(char *, 
 	    logical *, ftnlen), dasopr_(char *, integer *, ftnlen), txtopn_(
 	    char *, integer *, ftnlen), chkout_(char *, ftnlen);
-    static logical eoc;
-    static char tkv[12];
+    static thread_local logical eoc;
+    static thread_local char tkv[12];
 
 /* $ Abstract */
 

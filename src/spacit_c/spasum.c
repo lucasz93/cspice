@@ -39,12 +39,12 @@ static integer c__6 = 6;
 	    ftnlen, ftnlen), dafopr_(char *, integer *, ftnlen);
     logical ndsclk;
     extern /* Subroutine */ int dascls_(integer *);
-    static char sclfnm[128];
+    static thread_local char sclfnm[128];
     char bfstat[3];
     extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen);
     char lfstat[3];
-    static char lpsfnm[128];
+    static thread_local char lpsfnm[128];
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sumpck_(integer *, char *, char *, logical *, integer *, 
 	    ftnlen, ftnlen);

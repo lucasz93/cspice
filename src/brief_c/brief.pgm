@@ -37,115 +37,115 @@ static integer c__3 = 3;
     logical l_le(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char arch[80], fall[8], fsec[8];
-    static integer objg[2], nbod;
-    static char fday[8];
-    static logical keep;
-    static char line[80];
-    static logical help;
-    static char fmin[8];
-    static integer cent, nobj;
-    static logical gdsp;
-    static integer body[6], item;
-    static doublereal when, from;
-    static integer last;
-    static logical cntr, sdsp, tdsp;
-    static integer size, frst;
-    static logical vrsn;
-    static char pass1[25000], pass2[25000];
-    static integer b, c__, e, i__, j;
+    static thread_local char arch[80], fall[8], fsec[8];
+    static thread_local integer objg[2], nbod;
+    static thread_local char fday[8];
+    static thread_local logical keep;
+    static thread_local char line[80];
+    static thread_local logical help;
+    static thread_local char fmin[8];
+    static thread_local integer cent, nobj;
+    static thread_local logical gdsp;
+    static thread_local integer body[6], item;
+    static thread_local doublereal when, from;
+    static thread_local integer last;
+    static thread_local logical cntr, sdsp, tdsp;
+    static thread_local integer size, frst;
+    static thread_local logical vrsn;
+    static thread_local char pass1[25000], pass2[25000];
+    static thread_local integer b, c__, e, i__, j;
     extern integer cardd_(doublereal *);
-    static integer n, o;
+    static thread_local integer n, o;
     extern logical idmch_(integer *, integer *);
-    static integer t;
+    static thread_local integer t;
     extern /* Subroutine */ int dafgs_(doublereal *), etcal_(doublereal *, 
 	    char *, ftnlen), kdata_(integer *, char *, char *, char *, char *,
 	     integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer frame;
-    static logical obnam;
+    static thread_local integer frame;
+    static thread_local logical obnam;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char fhelp[8];
-    static integer fcent;
+    static thread_local char fhelp[8];
+    static thread_local integer fcent;
     extern logical beint_(char *, ftnlen);
-    static logical sfile;
-    static integer objct[3];
-    static char ftsec[8], objnm[64];
-    static integer class__;
+    static thread_local logical sfile;
+    static thread_local integer objct[3];
+    static thread_local char ftsec[8], objnm[64];
+    static thread_local integer class__;
     extern logical idset_(integer *, integer *);
-    static char ffrom[8], frmat[32*2*2*2*2];
-    static logical found;
-    static char fcntr[8];
-    static integer value;
-    static logical timat;
-    static char ftdsp[8];
-    static logical havto;
-    static char fhour[8], ftutc[8], ftdoy[8];
-    static logical round;
-    static char error[80];
-    static logical first;
+    static thread_local char ffrom[8], frmat[32*2*2*2*2];
+    static thread_local logical found;
+    static thread_local char fcntr[8];
+    static thread_local integer value;
+    static thread_local logical timat;
+    static thread_local char ftdsp[8];
+    static thread_local logical havto;
+    static thread_local char fhour[8], ftutc[8], ftdoy[8];
+    static thread_local logical round;
+    static thread_local char error[80];
+    static thread_local logical first;
     extern integer rtrim_(char *, ftnlen);
-    static integer start;
-    static char fvrsn[8], fsort[8];
-    static logical nonly, ulist;
-    static char htext[80*50];
-    static integer ndone;
+    static thread_local integer start;
+    static thread_local char fvrsn[8], fsort[8];
+    static thread_local logical nonly, ulist;
+    static thread_local char htext[80*50];
+    static thread_local integer ndone;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    rdnbl_(char *, char *, logical *, ftnlen, ftnlen), bodn2c_(char *,
 	     integer *, logical *, ftnlen);
-    static char utext[80*21];
+    static thread_local char utext[80*21];
     extern /* Subroutine */ int swapd_(doublereal *, doublereal *), dafus_(
 	    doublereal *, integer *, integer *, doublereal *, integer *), 
 	    objcf2_(I_fp, integer *, integer *, integer *, integer *), 
 	    objcf1_(I_fp, integer *, integer *, integer *), rndem_(char *, 
 	    logical *, integer *, integer *, doublereal *, doublereal *, char 
 	    *, integer *, doublereal *, ftnlen, ftnlen);
-    static doublereal dc[2];
-    static integer ic[6], id;
+    static thread_local doublereal dc[2];
+    static thread_local integer ic[6], id;
     extern /* Subroutine */ int lx4sgn_(char *, integer *, integer *, integer 
 	    *, ftnlen), daffna_(logical *);
-    static integer hi, jg;
-    static char etstr1[64];
-    static logical at;
-    static char etstr2[64];
+    static thread_local integer hi, jg;
+    static thread_local char etstr1[64];
+    static thread_local logical at;
+    static thread_local char etstr2[64];
     extern /* Subroutine */ int objadd_(integer *, integer *, integer *), 
 	    dafbfs_(integer *);
-    static logical ok;
-    static integer handle;
+    static thread_local logical ok;
+    static thread_local integer handle;
     extern /* Subroutine */ int dafcls_(integer *);
     extern integer bigger_();
-    static char fsbbod[8], fsbcen[8];
+    static thread_local char fsbbod[8], fsbcen[8];
     extern integer objact_(integer *);
-    static char fobnam[8];
-    static doublereal to;
-    static char objnam[64];
-    static integer savbeg;
-    static char fsfile[8];
-    static logical havfil;
-    static char objnmg[64];
-    static integer objctg[3], object[3], savend, clssid;
+    static thread_local char fobnam[8];
+    static thread_local doublereal to;
+    static thread_local char objnam[64];
+    static thread_local integer savbeg;
+    static thread_local char fsfile[8];
+    static thread_local logical havfil;
+    static thread_local char objnmg[64];
+    static thread_local integer objctg[3], object[3], savend, clssid;
     extern logical wnincd_(doublereal *, doublereal *, doublereal *);
-    static logical havfrm;
-    static char fmtpic[32];
-    static integer objlis[400006], bodlst[706];
-    static char srcfil[255];
-    static doublereal filwin[100006], intval;
+    static thread_local logical havfrm;
+    static thread_local char fmtpic[32];
+    static thread_local integer objlis[400006], bodlst[706];
+    static thread_local char srcfil[255];
+    static thread_local doublereal filwin[100006], intval;
     extern integer intmin_(void), intmax_(void);
-    static integer objsiz;
-    static char fgroup[8], fnonly[8];
-    static logical fromto;
-    static char kertyp[80];
+    static thread_local integer objsiz;
+    static thread_local char fgroup[8], fnonly[8];
+    static thread_local logical fromto;
+    static thread_local char kertyp[80];
     extern logical exists_(char *, ftnlen);
-    static char string[255];
-    static doublereal winval[2000006];
+    static thread_local char string[255];
+    static thread_local doublereal winval[2000006];
     extern /* Subroutine */ int writit_(char *, ftnlen);
-    static integer winptr[100006];
-    static doublereal segwin[8];
-    static char winsym[64*100006];
-    static doublereal tmpwin[100006], segsum[6];
-    static char timtyp[32], tabchr[1];
-    static logical gotspk, gotpck;
-    static integer scount, sindex;
-    static char filtyp[32], source[255];
+    static thread_local integer winptr[100006];
+    static thread_local doublereal segwin[8];
+    static thread_local char winsym[64*100006];
+    static thread_local doublereal tmpwin[100006], segsum[6];
+    static thread_local char timtyp[32], tabchr[1];
+    static thread_local logical gotspk, gotpck;
+    static thread_local integer scount, sindex;
+    static thread_local char filtyp[32], source[255];
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen), 
 	    objinl_(integer *, integer *, integer *), tkvrsn_(char *, char *, 
 	    ftnlen, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
@@ -154,25 +154,25 @@ static integer c__3 = 3;
 	    ftnlen, ftnlen, ftnlen), furnsh_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), replch_(char *, char *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), cltext_(char *, ftnlen);
-    static integer beg;
+    static thread_local integer beg;
     extern /* Subroutine */ int ktotal_(char *, integer *, ftnlen), tparse_(
 	    char *, doublereal *, char *, ftnlen, ftnlen), nparsi_(char *, 
 	    integer *, char *, integer *, ftnlen, ftnlen), namfrm_(char *, 
 	    integer *, ftnlen), frinfo_(integer *, integer *, integer *, 
 	    integer *, logical *), ssizec_(integer *, char *, ftnlen);
-    static integer bod[2];
+    static thread_local integer bod[2];
     extern /* Subroutine */ int ssizei_(integer *, integer *);
-    static integer end, gap;
-    static logical all;
+    static thread_local integer end, gap;
+    static thread_local logical all;
     extern integer inc_();
-    static char fat[8];
-    static integer obj[2], ref;
-    static logical fnd, eof;
+    static thread_local char fat[8];
+    static thread_local integer obj[2], ref;
+    static thread_local logical fnd, eof;
     extern /* Subroutine */ int ssized_(integer *, doublereal *), dafopr_(
 	    char *, integer *, ftnlen), scardd_(integer *, doublereal *), 
 	    objsbf_(L_fp, integer *, integer *, integer *, logical *), 
 	    wninsd_(doublereal *, doublereal *, doublereal *);
-    static char fto[8];
+    static thread_local char fto[8];
     extern /* Subroutine */ int objfnd_(integer *, integer *, integer *, 
 	    integer *, logical *), maknam_(integer *, integer *, logical *, 
 	    char *, char *, ftnlen, ftnlen), sygetd_(char *, char *, integer *
@@ -181,15 +181,15 @@ static integer c__3 = 3;
 	    syputd_(char *, doublereal *, integer *, char *, integer *, 
 	    doublereal *, ftnlen, ftnlen), objnth_(integer *, integer *, 
 	    integer *, logical *);
-    static integer num;
+    static thread_local integer num;
     extern /* Subroutine */ int filtem_(char *, logical *, integer *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, char *, 
 	    integer *, doublereal *, ftnlen, ftnlen);
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer low;
+    static thread_local integer low;
     extern /* Subroutine */ int objget_(integer *, integer *, integer *);
-    static char tkv[64];
-    static integer ptr;
+    static thread_local char tkv[64];
+    static thread_local integer ptr;
     extern /* Subroutine */ int objcmp_(integer *), objset_(integer *, 
 	    integer *, integer *), disply_(char *, logical *, logical *, 
 	    logical *, logical *, integer *, char *, integer *, doublereal *, 
@@ -2633,7 +2633,7 @@ logical mchboc_0_(int n__, integer *object, integer *size, integer *id,
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer ref[2];
+    static thread_local integer ref[2];
 
     /* Parameter adjustments */
     if (object) {

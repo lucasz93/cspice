@@ -44,31 +44,33 @@ static integer c__3 = 3;
 	    , s_wsfe(cilist *), e_wsfe(void), f_clos(cllist *);
 
     /* Local variables */
-    static integer ndig;
-    static char dpfm[50];
-    static integer nfil, prec, nseg, unit, i__, j, n;
+    static thread_local integer ndig;
+    static thread_local char dpfm[50];
+    static thread_local integer nfil, prec, nseg, unit, i__, j, n;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dskgd_(integer *, 
 	    integer *, doublereal *), errch_(char *, char *, ftnlen, ftnlen), 
 	    usage_(void), dskp02_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *), dskv02_(integer *, integer *, integer *, 
 	    integer *, integer *, doublereal *);
-    static integer segno;
-    static logical found;
+    static thread_local integer segno;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), movei_(integer *, integer *, integer *), 
 	    dskz02_(integer *, integer *, integer *, integer *);
-    static integer dtype;
+    static thread_local integer dtype;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal verts[48000006]	/* was [3][16000002] */;
-    static integer dladsc[8], handle;
+    static thread_local doublereal verts[48000006]	/* was [3][16000002] 
+	    */;
+    static thread_local integer dladsc[8], handle;
     extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
-    static integer np, fmtcde, nv;
+    static thread_local integer np, fmtcde, nv;
     extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
 	    logical *);
-    static char cmd[2000], numfmt[50], dsk[255], numstr[50], outfil[255], 
-	    outstr[80], stprec[50], txtfil[255], txtfmt[50];
-    static doublereal dskdsc[24];
-    static integer nxtdsc[8], plates[96000000]	/* was [3][32000000] */;
+    static thread_local char cmd[2000], numfmt[50], dsk[255], numstr[50], 
+	    outfil[255], outstr[80], stprec[50], txtfil[255], txtfmt[50];
+    static thread_local doublereal dskdsc[24];
+    static thread_local integer nxtdsc[8], plates[96000000]	/* was [3][
+	    32000000] */;
     extern /* Subroutine */ int getcml_(char *, ftnlen), kxtrct_(char *, char 
 	    *, integer *, char *, logical *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), byebye_(char *, ftnlen), prsint_(char *, integer *, 

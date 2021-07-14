@@ -34,48 +34,49 @@ static integer c__5 = 5;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static logical done;
-    static char line[1024];
-    static integer msec;
-    static char time[1024*2];
-    static doublereal step;
-    static integer nitr, hour, i__, j;
+    static thread_local logical done;
+    static thread_local char line[1024];
+    static thread_local integer msec;
+    static thread_local char time[1024*2];
+    static thread_local doublereal step;
+    static thread_local integer nitr, hour, i__, j;
     extern integer cardd_(doublereal *);
-    static integer bodid[2], cenid[2];
+    static thread_local integer bodid[2], cenid[2];
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    static char frame[32*2];
+    static thread_local char frame[32*2];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch[1000000];
+    static thread_local doublereal epoch[1000000];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), repmf_(char *, char *, doublereal *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), repmi_(char *, char *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen), errdp_(char *, 
 	    doublereal *, ftnlen);
-    static char hword[32];
-    static integer count;
-    static char error[1840];
+    static thread_local char hword[32];
+    static thread_local integer count;
+    static thread_local char error[1840];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal state1[6000000]	/* was [6][1000000] */, state2[
-	    6000000]	/* was [6][1000000] */;
+    static thread_local doublereal state1[6000000]	/* was [6][1000000] */
+	    , state2[6000000]	/* was [6][1000000] */;
     extern /* Subroutine */ int dr2str_(doublereal *, char *, ftnlen);
-    static doublereal et[2];
-    static logical ok;
+    static thread_local doublereal et[2];
+    static thread_local logical ok;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    static char bodnam[32*2], cennam[32*2];
+    static thread_local char bodnam[32*2], cennam[32*2];
     extern /* Subroutine */ int kclear_(void);
-    static integer sigdig;
-    static char hlline[5120];
+    static thread_local integer sigdig;
+    static thread_local char hlline[5120];
     extern integer wncard_(doublereal *);
-    static char infmsg[1024*27];
-    static integer infcnt;
-    static char gapstr[1024], kernls[1024*3], timfmt[1024], diftyp[32];
-    static doublereal cmpwin[1000006], stepsv, winmes;
-    static integer erridx, nsgcnt, sgtcnt, minuts, trycnt;
-    static logical eponly;
-    static char stpstr[1024];
-    static logical infprt[27], ovrflw, sample;
+    static thread_local char infmsg[1024*27];
+    static thread_local integer infcnt;
+    static thread_local char gapstr[1024], kernls[1024*3], timfmt[1024], 
+	    diftyp[32];
+    static thread_local doublereal cmpwin[1000006], stepsv, winmes;
+    static thread_local integer erridx, nsgcnt, sgtcnt, minuts, trycnt;
+    static thread_local logical eponly;
+    static thread_local char stpstr[1024];
+    static thread_local logical infprt[27], ovrflw, sample;
     extern /* Subroutine */ int errprt_(char *, char *, ftnlen, ftnlen), 
 	    ssized_(integer *, doublereal *), getcml_(char *, ftnlen), 
 	    chwcml_(char *, char *, char *, integer *, char *, integer *, 
@@ -93,10 +94,10 @@ static integer c__5 = 5;
 	    stdiff_(doublereal *, doublereal *, doublereal *, integer *, 
 	    doublereal *, char *, char *, logical *, integer *, ftnlen, 
 	    ftnlen), chkout_(char *, ftnlen);
-    static integer sec, day;
+    static thread_local integer sec, day;
     extern doublereal spd_(void);
-    static char spk[1024*2];
-    static doublereal hdp1, hdp2, hdp3, hdp4;
+    static thread_local char spk[1024*2];
+    static thread_local doublereal hdp1, hdp2, hdp3, hdp4;
 
 /* $ Abstract */
 

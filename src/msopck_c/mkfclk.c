@@ -23,21 +23,21 @@ static integer c__33 = 33;
     integer s_rnge(char *, integer, char *, integer), f_clos(cllist *);
 
     /* Local variables */
-    static doublereal tvec[6];
-    static integer unit;
-    static char text[80*33];
-    static integer i__;
+    static thread_local doublereal tvec[6];
+    static thread_local integer unit;
+    static thread_local char text[80*33];
+    static thread_local integer i__;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
 	    char *, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen), dpfmt_(doublereal *, char *, char *, 
 	    ftnlen, ftnlen), repmi_(char *, char *, integer *, char *, ftnlen,
 	     ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    static char start[80];
+    static thread_local char start[80];
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen), chkout_(char *, ftnlen), cputim_(
 	    doublereal *), writla_(integer *, char *, integer *, ftnlen);
-    static char curtim[80];
+    static thread_local char curtim[80];
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);

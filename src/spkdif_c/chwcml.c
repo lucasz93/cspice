@@ -55,60 +55,60 @@ static doublereal c_b698 = 1e-8;
     integer s_cmp(char *, char *, ftnlen, ftnlen), i_dnnt(doublereal *);
 
     /* Local variables */
-    static char arch[3], time[1024*2], type__[3];
-    static integer i__;
+    static thread_local char arch[3], time[1024*2], type__[3];
+    static thread_local integer i__;
     extern /* Subroutine */ int kdata_(integer *, char *, char *, char *, 
 	    char *, integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen), 
 	    dafgs_(doublereal *), etcal_(doublereal *, char *, ftnlen);
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char hline[1024];
-    static doublereal descr[5];
+    static thread_local char hline[1024];
+    static thread_local doublereal descr[5];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    filli_(integer *, integer *, integer *), errch_(char *, char *, 
 	    ftnlen, ftnlen), dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *), repmc_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
     extern doublereal dpmin_(void), dpmax_(void);
-    static integer nargs;
-    static logical found;
+    static thread_local integer nargs;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen), 
 	    copyd_(doublereal *, doublereal *);
     extern integer wdcnt_(char *, ftnlen);
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static char hword[32];
+    static thread_local char hword[32];
     extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    static integer count;
-    static char error[1024];
+    static thread_local integer count;
+    static thread_local char error[1024];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen),
 	     bodc2n_(integer *, char *, logical *, ftnlen);
-    static char hline2[1024];
-    static integer flids1[50006], flids2[50006];
-    static doublereal cover1[1000006], cover2[1000006];
-    static integer spids1[50006];
-    static doublereal dc[2];
-    static integer spids2[50006], sp1cnt, sp2cnt, ic[6];
+    static thread_local char hline2[1024];
+    static thread_local integer flids1[50006], flids2[50006];
+    static thread_local doublereal cover1[1000006], cover2[1000006];
+    static thread_local integer spids1[50006];
+    static thread_local doublereal dc[2];
+    static thread_local integer spids2[50006], sp1cnt, sp2cnt, ic[6];
     extern /* Subroutine */ int dafbbs_(integer *), str2et_(char *, 
 	    doublereal *, ftnlen), daffpa_(logical *);
-    static logical clflag[21];
-    static doublereal et[2];
-    static integer handle;
+    static thread_local logical clflag[21];
+    static thread_local doublereal et[2];
+    static thread_local integer handle;
     extern /* Subroutine */ int dafcls_(integer *);
-    static integer framid;
+    static thread_local integer framid;
     extern /* Subroutine */ int kclear_(void), scardd_(integer *, doublereal *
 	    ), scardi_(integer *, integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    wncard_(doublereal *), intmax_(void);
     extern logical exists_(char *, ftnlen);
-    static char hlline[5120], hlpmsg[80*23], usgmsg[80*29], vermsg[80*3], 
-	    clvals[1024*21], covdsc[1024*2], hkrnam[1024], timdsc[1024], 
-	    unprsd[1024], clkeyu[32*21];
-    static doublereal coverc[8];
-    static integer iclstb[6], iclstn[6], iclsts[6];
+    static thread_local char hlline[5120], hlpmsg[80*23], usgmsg[80*29], 
+	    vermsg[80*3], clvals[1024*21], covdsc[1024*2], hkrnam[1024], 
+	    timdsc[1024], unprsd[1024], clkeyu[32*21];
+    static thread_local doublereal coverc[8];
+    static thread_local integer iclstb[6], iclstn[6], iclsts[6];
     extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen), 
 	    parcml_(char *, integer *, char *, logical *, char *, logical *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), tostdo_(char *, ftnlen), 
@@ -127,9 +127,9 @@ static doublereal c_b698 = 1e-8;
 	    doublereal *, doublereal *), nparsd_(char *, doublereal *, char *,
 	     integer *, ftnlen, ftnlen), rmaind_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), chkout_(char *, ftnlen);
-    static doublereal ett[2];
-    static integer ptr;
-    static doublereal hdp1, hdp2;
+    static thread_local doublereal ett[2];
+    static thread_local integer ptr;
+    static thread_local doublereal hdp1, hdp2;
 
 /* $ Abstract */
 

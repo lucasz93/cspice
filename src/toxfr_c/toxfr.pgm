@@ -32,8 +32,8 @@ static integer c__1 = 1;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static char line[256];
-    static integer i__;
+    static thread_local char line[256];
+    static thread_local integer i__;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen), 
 	    chkin_(char *, ftnlen), ucase_(char *, char *, ftnlen, ftnlen), 
@@ -42,29 +42,29 @@ static integer c__1 = 1;
     extern integer cposr_(char *, char *, integer *, ftnlen, ftnlen), rtrim_(
 	    char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer basbeg;
+    static thread_local integer basbeg;
     extern logical failed_(void);
     extern /* Subroutine */ int dafhof_(integer *), dafcls_(integer *), 
 	    cleari_(integer *, integer *), delfil_(char *, ftnlen), dashof_(
 	    integer *), scardi_(integer *, integer *);
-    static char binfnm[128];
+    static thread_local char binfnm[128];
     extern /* Subroutine */ int dascls_(integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char bslash[1];
+    static thread_local char bslash[1];
     extern /* Subroutine */ int getcml_(char *, ftnlen), erract_(char *, char 
 	    *, ftnlen, ftnlen), byebye_(char *, ftnlen);
-    static char pthchr[3];
+    static thread_local char pthchr[3];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), convbt_(char *, char 
 	    *, ftnlen, ftnlen), chkout_(char *, ftnlen);
-    static char xfrfnm[128];
+    static thread_local char xfrfnm[128];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer idxext, dotpos, opnset[7];
+    static thread_local integer idxext, dotpos, opnset[7];
     extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer numopn;
+    static thread_local integer numopn;
     extern /* Subroutine */ int errprt_(char *, char *, ftnlen, ftnlen);
     extern logical exists_(char *, ftnlen);
-    static char extnsn[3];
+    static thread_local char extnsn[3];
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
 
 /* $ Abstract */

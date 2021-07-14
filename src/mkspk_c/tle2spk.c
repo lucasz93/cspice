@@ -28,44 +28,44 @@ static integer c__10 = 10;
 	    char *, integer);
 
     /* Local variables */
-    static char code[32];
-    static logical done;
-    static char type__[1];
+    static thread_local char code[32];
+    static thread_local logical done;
+    static thread_local char type__[1];
     extern /* Subroutine */ int zzgetelm_(integer *, char *, doublereal *, 
 	    doublereal *, logical *, char *, ftnlen, ftnlen);
-    static integer i__, j, n;
+    static thread_local integer i__, j, n;
     extern logical elemd_(doublereal *, doublereal *);
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
 	    char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static doublereal elems[500010];
+    static thread_local doublereal elems[500010];
     extern doublereal dpmin_(void), dpmax_(void);
-    static char lines[512*2];
-    static logical found;
+    static thread_local char lines[512*2];
+    static thread_local logical found;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
 	    doublereal *, integer *, doublereal *);
-    static char hword[32];
-    static integer total;
+    static thread_local char hword[32];
+    static thread_local integer total;
     extern /* Subroutine */ int spkw10_(integer *, integer *, integer *, char 
 	    *, doublereal *, doublereal *, char *, doublereal *, integer *, 
 	    doublereal *, doublereal *, ftnlen, ftnlen);
-    static char error[512*2], outfn[255];
+    static thread_local char error[512*2], outfn[255];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static char chose1[32], chose2[32];
-    static doublereal begpad;
+    static thread_local char chose1[32], chose2[32];
+    static thread_local doublereal begpad;
     extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    static logical ok;
-    static doublereal endpad;
-    static logical begbol;
+    static thread_local logical ok;
+    static thread_local doublereal endpad;
+    static thread_local logical begbol;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern logical return_(void);
-    static integer frcode, framid;
-    static doublereal dupchk[50006], epochs[50001], geophs[8], begint, endint,
-	     svepch, bsavep, bsavel[10], esavep, esavel[10];
-    static logical eof, fmodel, priors, endbol;
-    static integer iorder[50000];
-    static char geolst[255];
-    static logical bsavfl, esavfl;
+    static thread_local integer frcode, framid;
+    static thread_local doublereal dupchk[50006], epochs[50001], geophs[8], 
+	    begint, endint, svepch, bsavep, bsavel[10], esavep, esavel[10];
+    static thread_local logical eof, fmodel, priors, endbol;
+    static thread_local integer iorder[50000];
+    static thread_local char geolst[255];
+    static thread_local logical bsavfl, esavfl;
     extern /* Subroutine */ int ssized_(integer *, doublereal *), setmsg_(
 	    char *, ftnlen), sigerr_(char *, ftnlen), dafcls_(integer *), 
 	    delfil_(char *, ftnlen), errint_(char *, integer *, ftnlen), 

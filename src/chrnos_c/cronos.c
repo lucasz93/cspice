@@ -45,45 +45,45 @@ static doublereal c_b511 = 1.;
     double d_mod(doublereal *, doublereal *);
 
     /* Local variables */
-    static integer scid;
-    static char line[256];
-    static doublereal tvec[10];
-    static logical mods;
-    static doublereal elts[8];
-    static char type__[5], tots[32], tott[32];
+    static thread_local integer scid;
+    static thread_local char line[256];
+    static thread_local doublereal tvec[10];
+    static thread_local logical mods;
+    static thread_local doublereal elts[8];
+    static thread_local char type__[5], tots[32], tott[32];
     extern /* Subroutine */ int sce2c_(integer *, doublereal *, doublereal *),
 	     sct2e_(integer *, doublereal *, doublereal *), sce2t_(integer *, 
 	    doublereal *, doublereal *);
     extern integer zzbodbry_(integer *);
-    static integer i__, j, n;
-    static doublereal r__, t;
+    static thread_local integer i__, j, n;
+    static thread_local doublereal r__, t;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char hline[256];
+    static thread_local char hline[256];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen), speak_(char *, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), repmd_(char *, char *, doublereal *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static doublereal lsecs;
+    static thread_local doublereal lsecs;
     extern /* Subroutine */ int ltime_(doublereal *, integer *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), dpfmt_(doublereal *, char *, char *, 
 	    ftnlen, ftnlen);
-    static integer ntvec;
-    static doublereal state[6];
-    static char hword[32];
-    static integer count;
-    static char error[256];
-    static doublereal sungm, lstet;
+    static thread_local integer ntvec;
+    static thread_local doublereal state[6];
+    static thread_local char hword[32];
+    static thread_local integer count;
+    static thread_local char error[256];
+    static thread_local doublereal sungm, lstet;
     extern integer rtrim_(char *, ftnlen);
-    static char scstr[32];
+    static thread_local char scstr[32];
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    static doublereal etout;
+    static thread_local doublereal etout;
     extern doublereal twopi_(void);
-    static char types[32*10];
+    static thread_local char types[32*10];
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen),
 	     et2utc_(doublereal *, char *, integer *, char *, ftnlen, ftnlen),
 	     hx2int_(char *, integer *, logical *, char *, ftnlen, ftnlen), 
@@ -92,38 +92,40 @@ static doublereal c_b511 = 1.;
 	    *, char *, char *, ftnlen, ftnlen, ftnlen), str2et_(char *, 
 	    doublereal *, ftnlen), scdecd_(integer *, doublereal *, char *, 
 	    ftnlen);
-    static integer sc;
-    static logical clflag[19];
-    static doublereal et;
-    static integer hr, mn;
-    static logical ok;
+    static thread_local integer sc;
+    static thread_local logical clflag[19];
+    static thread_local doublereal et;
+    static thread_local integer hr, mn;
+    static thread_local logical ok;
     extern doublereal ls_(integer *, doublereal *, char *, ftnlen);
-    static doublereal lt;
+    static thread_local doublereal lt;
     extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
 	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
-    static integer frcode;
+    static thread_local integer frcode;
     extern /* Subroutine */ int scencd_(integer *, char *, doublereal *, 
 	    ftnlen), cidfrm_(integer *, integer *, char *, logical *, ftnlen);
-    static char fields[32*10];
+    static thread_local char fields[32*10];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char cmdsav[2048];
-    static doublereal midnet;
-    static char cmdtmp[2048], modify[8*5], clvals[256*19], intime[256];
+    static thread_local char cmdsav[2048];
+    static thread_local doublereal midnet;
+    static thread_local char cmdtmp[2048], modify[8*5], clvals[256*19], 
+	    intime[256];
     extern logical return_(void);
-    static char unprsd[2048], outime[256], tofrmt[256], tofrmh[256], clkeys[
-	    32*19], curkey[32], deftyp[32*4], fromts[32], fromtt[32], lsttim[
-	    32], systms[32*4], censtr[32], solids[32], fmtpic[64*4*10];
-    static doublereal ettemp, pmmotn, sclkdp, scrate;
-    static integer bodyid, frsidx, frtidx;
-    static doublereal hdp;
-    static integer solday, solzer, tosidx, totidx;
-    static doublereal lat;
-    static char hwd[32];
-    static logical bad, fmtted[40]	/* was [4][10] */;
+    static thread_local char unprsd[2048], outime[256], tofrmt[256], tofrmh[
+	    256], clkeys[32*19], curkey[32], deftyp[32*4], fromts[32], fromtt[
+	    32], lsttim[32], systms[32*4], censtr[32], solids[32], fmtpic[64*
+	    4*10];
+    static thread_local doublereal ettemp, pmmotn, sclkdp, scrate;
+    static thread_local integer bodyid, frsidx, frtidx;
+    static thread_local doublereal hdp;
+    static thread_local integer solday, solzer, tosidx, totidx;
+    static thread_local doublereal lat;
+    static thread_local char hwd[32];
+    static thread_local logical bad, fmtted[40]	/* was [4][10] */;
     extern doublereal dpr_(void), spd_(void);
-    static logical systyp[40]	/* was [4][10] */;
-    static doublereal lon;
-    static logical yabbrv;
+    static thread_local logical systyp[40]	/* was [4][10] */;
+    static thread_local doublereal lon;
+    static thread_local logical yabbrv;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), crcnst_(char *, char *, char *, 
 	    logical *, logical *, char *, char *, ftnlen, ftnlen, ftnlen, 

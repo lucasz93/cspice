@@ -75,15 +75,15 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern logical have_(char *, ftnlen);
-    static integer rest, e, i__, l;
-    static logical found;
+    static thread_local integer rest, e, i__, l;
+    static thread_local logical found;
     extern /* Subroutine */ int nspld_(char *, char *, ftnlen, ftnlen);
     extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), m2vget_(char *, integer *
 	    , logical *, integer *, integer *, ftnlen), m2ints_(integer *, 
 	    char *, integer *, char *, ftnlen, ftnlen);
-    static char bs[1];
+    static thread_local char bs[1];
     extern logical m2xist_(char *, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
@@ -92,8 +92,8 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen), nsphlp_(char *, char *, ftnlen, ftnlen), nspuld_(
 	    char *, char *, ftnlen, ftnlen), nspsho_(char *, char *, ftnlen, 
 	    ftnlen), nspset_(char *, char *, ftnlen, ftnlen);
-    static char synkey[32*15];
-    static integer synptr[15];
+    static thread_local char synkey[32*15];
+    static thread_local integer synptr[15];
 
     /* Fortran I/O blocks */
     static cilist io___13 = { 0, 6, 0, 0, 0 };

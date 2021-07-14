@@ -13,9 +13,9 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char hname[1024];
+    static thread_local char hname[1024];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char hline[5120];
+    static thread_local char hline[5120];
     extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen), furnsh_(char *, ftnlen), chkout_(char *, ftnlen);
 

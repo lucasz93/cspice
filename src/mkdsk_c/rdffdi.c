@@ -34,23 +34,23 @@ static integer c__6 = 6;
     /* Local variables */
     doublereal datd;
     integer dati, ndat;
-    static char line[255];
-    static integer nfmt;
+    static thread_local char line[255];
+    static thread_local integer nfmt;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
     extern integer wdcnt_(char *, ftnlen);
-    static char error[160];
+    static thread_local char error[160];
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static char datitm[255*6];
+    static thread_local char datitm[255*6];
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int lparse_(char *, char *, integer *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen), nparsd_(char *, doublereal *, 
 	    char *, integer *, ftnlen, ftnlen), sigerr_(char *, ftnlen), 
 	    nparsi_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
 	    chkout_(char *, ftnlen);
-    static char fmtitm[255*6];
+    static thread_local char fmtitm[255*6];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), rdtext_(char *, char *, logical *, ftnlen, 
 	    ftnlen);

@@ -56,59 +56,61 @@ static integer c__24 = 24;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer node, nseg, ndsk;
-    static doublereal xbds[200000]	/* was [2][100000] */, ybds[200000]	
-	    /* was [2][100000] */;
-    static integer nsig;
+    static thread_local integer node, nseg, ndsk;
+    static thread_local doublereal xbds[200000]	/* was [2][100000] */, ybds[
+	    200000]	/* was [2][100000] */;
+    static thread_local integer nsig;
     extern /* Subroutine */ int sum02_(integer *, integer *, integer *);
-    static integer srcs[4];
+    static thread_local integer srcs[4];
     extern /* Subroutine */ int sum04_(integer *, integer *, integer *);
-    static integer nout;
+    static thread_local integer nout;
     extern /* Subroutine */ int zzdbrgap_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *, integer *, doublereal *, doublereal *);
-    static integer b, e, i__, j, k;
+    static thread_local integer b, e, i__, j, k;
     extern /* Subroutine */ int kdata_(integer *, char *, char *, char *, 
 	    char *, integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static char fname[255];
-    static integer dlads[800000]	/* was [8][100000] */;
+    static thread_local char fname[255];
+    static thread_local integer dlads[800000]	/* was [8][100000] */;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dskgd_(integer *, 
 	    integer *, doublereal *);
     extern logical beint_(char *, ftnlen);
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    static doublereal gxbds[200000]	/* was [2][100000] */, gybds[200000]	
-	    /* was [2][100000] */;
+    static thread_local doublereal gxbds[200000]	/* was [2][100000] */,
+	     gybds[200000]	/* was [2][100000] */;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer segno, ncomp;
-    static logical found;
-    static integer dskno;
-    static logical segtm[100000];
+    static thread_local integer segno, ncomp;
+    static thread_local logical found;
+    static thread_local integer dskno;
+    static thread_local logical segtm[100000];
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), movei_(integer *, integer *, integer *);
-    static integer b1, e1;
-    static doublereal minco1, minco2, maxco1, maxco2, maxco3, minco3;
-    static integer ng, dladsc[8], handle;
-    static logical didfil;
+    static thread_local integer b1, e1;
+    static thread_local doublereal minco1, minco2, maxco1, maxco2, maxco3, 
+	    minco3;
+    static thread_local integer ng, dladsc[8], handle;
+    static thread_local logical didfil;
     extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
-    static logical diddsk;
-    static char banner[80];
+    static thread_local logical diddsk;
+    static thread_local char banner[80];
     extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
 	    logical *);
-    static doublereal comdsc[24];
+    static thread_local doublereal comdsc[24];
     extern integer brckti_(integer *, integer *, integer *), isrchc_(char *, 
 	    integer *, char *, ftnlen, ftnlen), lnknxt_(integer *, integer *);
     extern logical exists_(char *, ftnlen);
     extern /* Subroutine */ int attcmp_();
-    static char errmsg[255], filtyp[10], numstr[32], option[32], outlin[255], 
-	    source[255];
-    static doublereal dskdsc[24], grpdsc[24], lonbds[4]	/* was [2][2] */, 
-	    maxtdb, maxlon, minlon, mintdb, outbds[8]	/* was [2][4] */;
-    static char cmd[25500];
-    static integer corsys, currnt[8], grpsiz, hanlst[100000], nivals, nxtdsc[
-	    8], seglst[100000], sgpool[200012]	/* was [2][100006] */, sgptrs[
-	    10000], typcde;
-    static logical opterr;
+    static thread_local char errmsg[255], filtyp[10], numstr[32], option[32], 
+	    outlin[255], source[255];
+    static thread_local doublereal dskdsc[24], grpdsc[24], lonbds[4]	/* 
+	    was [2][2] */, maxtdb, maxlon, minlon, mintdb, outbds[8]	/* 
+	    was [2][4] */;
+    static thread_local char cmd[25500];
+    static thread_local integer corsys, currnt[8], grpsiz, hanlst[100000], 
+	    nivals, nxtdsc[8], seglst[100000], sgpool[200012]	/* was [2][
+	    100006] */, sgptrs[10000], typcde;
+    static thread_local logical opterr;
     extern /* Subroutine */ int prcinf_(char *, ftnlen), getcml_(char *, 
 	    ftnlen), byebye_(char *, ftnlen), setmsg_(char *, ftnlen), 
 	    errint_(char *, integer *, ftnlen), sigerr_(char *, ftnlen), 

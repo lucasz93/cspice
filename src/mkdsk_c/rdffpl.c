@@ -25,46 +25,47 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer nrec;
+    static thread_local integer nrec;
     extern logical even_(integer *);
-    static integer ntok, i__, j, n[6303750]	/* was [1025][1025][6] */, q;
+    static thread_local integer ntok, i__, j, n[6303750]	/* was [1025][
+	    1025][6] */, q;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char iline[255];
+    static thread_local char iline[255];
     extern /* Subroutine */ int rdnbl_(char *, char *, logical *, ftnlen, 
 	    ftnlen), errch_(char *, char *, ftnlen, ftnlen), prsdp_(char *, 
 	    doublereal *, ftnlen);
-    static char error[160];
+    static thread_local char error[160];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer n0;
+    static thread_local integer n0;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    static doublereal w1[3], w2[3];
-    static integer nc, nd;
+    static thread_local doublereal w1[3], w2[3];
+    static thread_local integer nc, nd;
     extern logical failed_(void);
-    static integer ni;
+    static thread_local integer ni;
     extern /* Subroutine */ int rdffdi_(char *, integer *, char *, integer *, 
 	    integer *, integer *, doublereal *, integer *, char *, logical *, 
 	    ftnlen, ftnlen, ftnlen), nparsd_(char *, doublereal *, char *, 
 	    integer *, ftnlen, ftnlen);
-    static char format[10], tokens[80*3];
+    static thread_local char format[10], tokens[80*3];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    static integer ix1, ix2;
+    static thread_local integer ix1, ix2;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), extmsi_(char *, char 
 	    *, integer *, ftnlen, ftnlen), nparsi_(char *, integer *, char *, 
 	    integer *, ftnlen, ftnlen);
-    static char arc[40*6];
-    static doublereal ard[3];
+    static thread_local char arc[40*6];
+    static thread_local doublereal ard[3];
     extern /* Subroutine */ int lparsm_(char *, char *, integer *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen), prsint_(char *, integer *, 
 	    ftnlen);
-    static logical eof;
+    static thread_local logical eof;
     extern /* Subroutine */ int tostdo_(char *, ftnlen);
-    static integer ari[4];
-    static doublereal vec[3];
-    static integer ptr, face;
+    static thread_local integer ari[4];
+    static thread_local doublereal vec[3];
+    static thread_local integer ptr, face;
 
 /* $ Abstract */
 

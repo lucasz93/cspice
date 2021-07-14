@@ -29,61 +29,61 @@ static integer c_b177 = 100000;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static char name__[64];
-    static logical same;
-    static char line[132];
-    static integer nobj, objn[2], sobj, size;
-    static char rest[132];
-    static integer b, e, i__, j;
+    static thread_local char name__[64];
+    static thread_local logical same;
+    static thread_local char line[132];
+    static thread_local integer nobj, objn[2], sobj, size;
+    static thread_local char rest[132];
+    static thread_local integer b, e, i__, j;
     extern integer cardc_(char *, ftnlen);
-    static integer s;
+    static thread_local integer s;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char names[64*100006], sname[64];
-    static logical found;
+    static thread_local char names[64*100006], sname[64];
+    static thread_local logical found;
     extern integer rtrim_(char *, ftnlen);
-    static integer n1, n2;
-    static char p1[8], p2[8];
-    static integer start;
-    static logical group;
-    static doublereal sstop[1000000];
-    static integer objct2[3];
-    static char header[132*2], wd[8];
+    static thread_local integer n1, n2;
+    static thread_local char p1[8], p2[8];
+    static thread_local integer start;
+    static thread_local logical group;
+    static thread_local doublereal sstop[1000000];
+    static thread_local integer objct2[3];
+    static thread_local char header[132*2], wd[8];
     extern integer objact_(integer *);
     extern /* Subroutine */ int maknam_(integer *, integer *, logical *, char 
 	    *, char *, ftnlen, ftnlen), appndc_(char *, char *, ftnlen, 
 	    ftnlen);
-    static integer object[3], remain;
+    static thread_local integer object[3], remain;
     extern /* Subroutine */ int objget_(integer *, integer *, integer *), 
 	    objrem_(integer *, integer *), orderd_(doublereal *, integer *, 
 	    integer *), reordd_(integer *, integer *, doublereal *), rmaini_(
 	    integer *, integer *, integer *, integer *);
-    static char timlbl[8];
-    static integer iorder[1000000], npline;
+    static thread_local char timlbl[8];
+    static thread_local integer iorder[1000000], npline;
     extern /* Subroutine */ int objnth_(integer *, integer *, integer *, 
 	    logical *);
-    static doublereal filwin[100006];
-    static integer nlines, objtmp[2];
+    static thread_local doublereal filwin[100006];
+    static thread_local integer nlines, objtmp[2];
     extern integer touchi_(integer *);
     extern /* Subroutine */ int distim_(char *, doublereal *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer widest;
+    static thread_local integer widest;
     extern integer objsiz_(integer *);
-    static integer stotal;
+    static thread_local integer stotal;
     extern /* Subroutine */ int chkout_(char *, ftnlen), nextwd_(char *, char 
 	    *, char *, ftnlen, ftnlen, ftnlen);
-    static integer ngroup;
+    static thread_local integer ngroup;
     extern /* Subroutine */ int objnxt_(integer *, integer *, integer *, 
 	    logical *), prname_(integer *, integer *, char *, char *, char *, 
 	    integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen)
 	    , sygetd_(char *, char *, integer *, doublereal *, integer *, 
 	    doublereal *, logical *, ftnlen, ftnlen);
     extern logical return_(void);
-    static doublereal sstart[1000000], lstwin[100006];
-    static char timstr[64];
+    static thread_local doublereal sstart[1000000], lstwin[100006];
+    static thread_local char timstr[64];
     extern /* Subroutine */ int writit_(char *, ftnlen), reordi_(integer *, 
 	    integer *, integer *), ssizec_(integer *, char *, ftnlen);
-    static logical fnd;
-    static integer obj[2], obj1[1000000], obj2[1000000];
+    static thread_local logical fnd;
+    static thread_local integer obj[2], obj1[1000000], obj2[1000000];
 
 /* $ Abstract */
 

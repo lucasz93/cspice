@@ -28,16 +28,17 @@ static integer c_b38 = 100000000;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal dval, last;
-    static integer i__;
+    static thread_local doublereal dval, last;
+    static thread_local integer i__;
     extern /* Subroutine */ int zzvoxscl_(doublereal *, doublereal *, integer 
 	    *, integer *, integer *, doublereal *);
-    static doublereal scale;
-    static char frame[32];
+    static thread_local doublereal scale;
+    static thread_local char frame[32];
     extern /* Subroutine */ int zztrgnvx_(integer *, integer *, integer *), 
 	    chkin_(char *, ftnlen), getp02_(integer *, doublereal *, integer *
 	    );
-    static integer cells[120000000]	/* was [2][60000000] */;
+    static thread_local integer cells[120000000]	/* was [2][60000000] 
+	    */;
     extern /* Subroutine */ int zzpsxtnt_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *, doublereal *), dskw02_(integer *, 
 	    integer *, integer *, integer *, char *, integer *, doublereal *, 
@@ -45,17 +46,18 @@ static integer c_b38 = 100000000;
 	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
 	     doublereal *, integer *, integer *, doublereal *, integer *, 
 	    ftnlen), movei_(integer *, integer *, integer *);
-    static integer dtype;
-    static doublereal first;
+    static thread_local integer dtype;
+    static thread_local doublereal first;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dskrb2_(integer *, doublereal *, integer *, 
 	    integer *, integer *, doublereal *, doublereal *, doublereal *), 
 	    dskmi2_(integer *, doublereal *, integer *, integer *, doublereal 
 	    *, integer *, integer *, integer *, integer *, logical *, integer 
 	    *, integer *, doublereal *, integer *);
-    static doublereal mncor1, mncor2, mncor3, mxcor1, mxcor2, mxcor3;
+    static thread_local doublereal mncor1, mncor2, mncor3, mxcor1, mxcor2, 
+	    mxcor3;
     extern logical failed_(void);
-    static integer np, nv, centid, dclass, cgrscl;
+    static thread_local integer np, nv, centid, dclass, cgrscl;
     extern /* Subroutine */ int getgen_(integer *, integer *, char *, 
 	    doublereal *, doublereal *, integer *, integer *, char *, char *, 
 	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
@@ -65,14 +67,14 @@ static integer c_b38 = 100000000;
 	    doublereal *, integer *, integer *, integer *, doublereal *, 
 	    integer *, integer *, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
-    static char aunits[255], dunits[255];
-    static doublereal avplex, corpar[10], extent[6]	/* was [2][3] */, 
-	    spaixd[10], voxscl, vrtces[48000006]	/* was [3][16000002] 
-	    */;
-    static integer corsys, nvxptr, nvxtot, plates[96000000]	/* was [3][
-	    32000000] */, plttyp, spaixi[164100012], surfid, trgcor, trgfin, 
-	    vgrext[3];
-    static logical makvpm;
+    static thread_local char aunits[255], dunits[255];
+    static thread_local doublereal avplex, corpar[10], extent[6]	/* 
+	    was [2][3] */, spaixd[10], voxscl, vrtces[48000006]	/* was [3][
+	    16000002] */;
+    static thread_local integer corsys, nvxptr, nvxtot, plates[96000000]	
+	    /* was [3][32000000] */, plttyp, spaixi[164100012], surfid, 
+	    trgcor, trgfin, vgrext[3];
+    static thread_local logical makvpm;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
 	    ftnlen), tostdo_(char *, ftnlen), convrt_(doublereal *, char *, 

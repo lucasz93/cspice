@@ -32,22 +32,22 @@ static integer c__9 = 9;
 	    char *, integer);
 
     /* Local variables */
-    static char body[32];
+    static thread_local char body[32];
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    static char frame[32];
+    static thread_local char frame[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
 	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static char lines[80*9];
-    static logical found;
+    static thread_local char lines[80*9];
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), bodc2n_(integer *, char *, logical *, 
 	    ftnlen), et2utc_(doublereal *, char *, integer *, char *, ftnlen, 
 	    ftnlen);
     extern logical failed_(void);
-    static char begtim[32], endtim[32];
+    static thread_local char begtim[32], endtim[32];
     extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen), chkout_(
 	    char *, ftnlen), writla_(integer *, char *, integer *, ftnlen);
-    static char typdsc[80];
+    static thread_local char typdsc[80];
     extern logical return_(void);
 
 /* $ Abstract */

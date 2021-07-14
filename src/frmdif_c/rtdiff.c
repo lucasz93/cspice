@@ -36,34 +36,36 @@ static integer c__14 = 14;
 	    ), mxmt_(doublereal *, doublereal *, doublereal *), m2eul_(
 	    doublereal *, integer *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *);
-    static integer i__, j, k;
-    static doublereal mdiff[9]	/* was [3][3] */, angle[3];
+    static thread_local integer i__, j, k;
+    static thread_local doublereal mdiff[9]	/* was [3][3] */, angle[3];
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
 	    char *, ftnlen);
-    static doublereal avdav;
+    static thread_local doublereal avdav;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
     extern doublereal dpmin_(void);
-    static doublereal ranav;
+    static thread_local doublereal ranav;
     extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen), moved_(doublereal *, integer *, doublereal *);
-    static doublereal raxis[3];
+    static thread_local doublereal raxis[3];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal m1[9]	/* was [3][3] */, m2[9]	/* was [3][3] */;
+    static thread_local doublereal m1[9]	/* was [3][3] */, m2[9]	/* 
+	    was [3][3] */;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int dr2str_(doublereal *, char *, ftnlen), 
 	    et2str_(doublereal *, char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen);
-    static doublereal avdiff[3], qdiffo[4], rangle;
+    static thread_local doublereal avdiff[3], qdiffo[4], rangle;
     extern logical return_(void);
     extern integer wncard_(doublereal *);
-    static char hlpstr[80], dmpstr[1024], datstr[1024], hdrstr[1024];
-    static doublereal qdiffs[4], avdtmp[3], avnorm, ranmax, avdmax, ranmet, 
-	    avdmet, ranrms, avdrms;
-    static integer infcnt;
-    static char infmsg[1024*32];
-    static logical infprt[32];
+    static thread_local char hlpstr[80], dmpstr[1024], datstr[1024], hdrstr[
+	    1024];
+    static thread_local doublereal qdiffs[4], avdtmp[3], avnorm, ranmax, 
+	    avdmax, ranmet, avdmet, ranrms, avdrms;
+    static thread_local integer infcnt;
+    static thread_local char infmsg[1024*32];
+    static thread_local logical infprt[32];
     extern /* Subroutine */ int tostdo_(char *, ftnlen), suffix_(char *, 
 	    integer *, char *, ftnlen, ftnlen), q2m_(doublereal *, doublereal 
 	    *), dpstrp_(doublereal *, integer *, char *, ftnlen), m2q_(
@@ -72,7 +74,7 @@ static integer c__14 = 14;
 	    , doublereal *), setmsg_(char *, ftnlen), sigerr_(char *, ftnlen),
 	     dpstrf_(doublereal *, integer *, char *, char *, ftnlen, ftnlen),
 	     chkout_(char *, ftnlen);
-    static doublereal hdp;
+    static thread_local doublereal hdp;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 

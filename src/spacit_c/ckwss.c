@@ -38,16 +38,16 @@ static integer c__11 = 11;
 	    char *, integer);
 
     /* Local variables */
-    static integer sclk;
+    static thread_local integer sclk;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
-    static doublereal beget;
-    static char frame[32];
+    static thread_local doublereal beget;
+    static thread_local char frame[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal endet;
+    static thread_local doublereal endet;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static char lines[80*11];
-    static logical found;
+    static thread_local char lines[80*11];
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), bodc2n_(integer *, char *, logical *, 
 	    ftnlen), et2utc_(doublereal *, char *, integer *, char *, ftnlen, 
@@ -55,12 +55,12 @@ static integer c__11 = 11;
     extern logical failed_(void);
     extern /* Subroutine */ int scdecd_(integer *, doublereal *, char *, 
 	    ftnlen), ckmeta_(integer *, char *, integer *, ftnlen);
-    static char begtim[32], endtim[32], spname[32];
+    static thread_local char begtim[32], endtim[32], spname[32];
     extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen), chkout_(
 	    char *, ftnlen);
-    static integer spcrft;
+    static thread_local integer spcrft;
     extern /* Subroutine */ int writla_(integer *, char *, integer *, ftnlen);
-    static char typdsc[80];
+    static thread_local char typdsc[80];
     extern logical return_(void);
 
 /* $ Abstract */

@@ -32,43 +32,43 @@ static integer c__0 = 0;
 	    ftnlen, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer nchl, vlen, i__, j, k;
+    static thread_local integer nchl, vlen, i__, j, k;
     extern integer cardc_(char *, ftnlen);
-    static integer p;
+    static thread_local integer p;
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen), 
 	    chkin_(char *, ftnlen);
-    static char minch[20], maxch[20];
+    static thread_local char minch[20], maxch[20];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    static integer lines, hdnum;
-    static char value[300], kwnam[32*100];
+    static thread_local integer lines, hdnum;
+    static thread_local char value[300], kwnam[32*100];
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer pnter;
+    static thread_local integer pnter;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer kwstk[6];
-    static char hd[32];
-    static integer cp;
+    static thread_local integer kwstk[6];
+    static thread_local char hd[32];
+    static thread_local integer cp;
     extern logical failed_(void);
-    static integer ep;
-    static char ln[350];
+    static thread_local integer ep;
+    static thread_local char ln[350];
     extern /* Subroutine */ int cleari_(integer *, integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char action[10];
+    static thread_local char action[10];
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *), lastnb_(char *, 
 	    ftnlen), frstnb_(char *, ftnlen);
-    static char values[350*40];
-    static integer newlev, kwdmin, kwdmax, chlnum[100];
-    static char symbol[100];
-    static integer kwcntr[240]	/* was [40][6] */, stklev, kwdnum, nummin[100]
-	    ;
+    static thread_local char values[350*40];
+    static thread_local integer newlev, kwdmin, kwdmax, chlnum[100];
+    static thread_local char symbol[100];
+    static thread_local integer kwcntr[240]	/* was [40][6] */, stklev, 
+	    kwdnum, nummin[100];
     extern logical return_(void);
     extern /* Character */ VOID crtptr_(char *, ftnlen, char *, integer *, 
 	    char *, ftnlen, ftnlen);
-    static integer nummax[100], chlptr[101], lstcmd, linstk[5];
+    static thread_local integer nummax[100], chlptr[101], lstcmd, linstk[5];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), sygetc_(char *, char *, integer 
 	    *, char *, integer *, char *, logical *, ftnlen, ftnlen, ftnlen, 
@@ -78,8 +78,8 @@ static integer c__0 = 0;
 	    , integer *, char *, ftnlen, ftnlen), inttxt_(integer *, char *, 
 	    ftnlen), syenqc_(char *, char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static logical fnd;
-    static char kwd[32], msg[320];
+    static thread_local logical fnd;
+    static thread_local char kwd[32], msg[320];
 
 /* $ Abstract */
 

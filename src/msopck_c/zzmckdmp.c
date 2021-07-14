@@ -25,7 +25,7 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer addr__, i__, j;
+    static thread_local integer addr__, i__, j;
     extern /* Subroutine */ int dafgs_(doublereal *), ckgr01_(integer *, 
 	    doublereal *, integer *, doublereal *), ckgr02_(integer *, 
 	    doublereal *, integer *, doublereal *), ckgr03_(integer *, 
@@ -34,26 +34,26 @@ static integer c__1 = 1;
 	    integer *, ftnlen), cknr02_(integer *, doublereal *, integer *), 
 	    cknr03_(integer *, doublereal *, integer *), dafus_(doublereal *, 
 	    integer *, integer *, doublereal *, integer *);
-    static integer nidir;
+    static thread_local integer nidir;
     extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
-    static doublereal dc[2];
-    static integer ic[6];
+    static thread_local doublereal dc[2];
+    static thread_local integer ic[6];
     extern /* Subroutine */ int daffna_(logical *), dafbfs_(integer *);
-    static integer handle;
-    static doublereal intbeg, record[10];
-    static char number[80];
-    static integer numrec, segmnt;
+    static thread_local integer handle;
+    static thread_local doublereal intbeg, record[10];
+    static thread_local char number[80];
+    static thread_local integer numrec, segmnt;
     extern /* Subroutine */ int chkout_(char *, ftnlen), suffix_(char *, 
 	    integer *, char *, ftnlen, ftnlen);
-    static char outlin[80];
-    static integer numint;
+    static thread_local char outlin[80];
+    static thread_local integer numint;
     extern /* Subroutine */ int tostdo_(char *, ftnlen);
-    static doublereal sum[5];
+    static thread_local doublereal sum[5];
 
 /* $ Abstract */
 

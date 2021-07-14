@@ -38,75 +38,75 @@ static integer c__5 = 5;
     integer f_rew(alist *), f_clos(cllist *);
 
     /* Local variables */
-    static logical data;
-    static char name__[300];
-    static logical same;
-    static char line[350];
-    static integer body[10000], nval;
-    static doublereal tvec[6], wind[40006];
-    static logical used;
-    static integer nsrc, nspk, unit, work[10000];
-    static char text[350];
-    static integer i__, j, k;
+    static thread_local logical data;
+    static thread_local char name__[300];
+    static thread_local logical same;
+    static thread_local char line[350];
+    static thread_local integer body[10000], nval;
+    static thread_local doublereal tvec[6], wind[40006];
+    static thread_local logical used;
+    static thread_local integer nsrc, nspk, unit, work[10000];
+    static thread_local char text[350];
+    static thread_local integer i__, j, k;
     extern integer cardd_(doublereal *);
-    static integer m;
-    static char bodch[16];
-    static integer n;
+    static thread_local integer m;
+    static thread_local char bodch[16];
+    static thread_local integer n;
     extern /* Subroutine */ int dafgn_(char *, ftnlen), dafgs_(doublereal *), 
 	    rdcmd_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen),
 	     spcac_(integer *, integer *, char *, char *, ftnlen, ftnlen), 
 	    chkin_(char *, ftnlen), spcec_(integer *, integer *), dafus_(
 	    doublereal *, integer *, integer *, doublereal *, integer *), 
 	    errch_(char *, char *, ftnlen, ftnlen);
-    static integer gbody[10000];
+    static thread_local integer gbody[10000];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
     extern doublereal dpmin_(void);
-    static doublereal gwind[40006];
+    static thread_local doublereal gwind[40006];
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen);
-    static integer nbody;
-    static char value[300];
+    static thread_local integer nbody;
+    static thread_local char value[300];
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), copyd_(doublereal *, doublereal *), 
 	    movei_(integer *, integer *, integer *);
-    static integer pnter;
+    static thread_local integer pnter;
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int et2utc_(doublereal *, char *, integer *, char 
 	    *, ftnlen, ftnlen);
-    static doublereal dc[2];
-    static integer ic[6];
+    static thread_local doublereal dc[2];
+    static thread_local integer ic[6];
     extern /* Subroutine */ int dafbbs_(integer *), str2et_(char *, 
 	    doublereal *, ftnlen), daffpa_(logical *), dafcls_(integer *), 
 	    scardc_(integer *, char *, ftnlen), scardd_(integer *, doublereal 
 	    *);
-    static char cmdval[300*6006];
-    static doublereal addwin[40006], begtim;
-    static char segnam[40];
-    static integer oldhan;
+    static thread_local char cmdval[300*6006];
+    static thread_local doublereal addwin[40006], begtim;
+    static thread_local char segnam[40];
+    static thread_local integer oldhan;
     extern /* Subroutine */ int getcml_(char *, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *);
-    static char begsym[100];
-    static doublereal endtim, locval[60006], locwin[40006];
-    static char cmdsym[100*6006];
-    static doublereal segwin[40006];
-    static integer cmdptr[6006];
-    static doublereal winval[60006];
-    static integer newhan, ngbody;
-    static doublereal segsum[5];
-    static char symbol[100], locsym[16*10006], tstamp[22];
-    static integer locptr[10006], cmtunt, logunt;
-    static logical commnt;
+    static thread_local char begsym[100];
+    static thread_local doublereal endtim, locval[60006], locwin[40006];
+    static thread_local char cmdsym[100*6006];
+    static thread_local doublereal segwin[40006];
+    static thread_local integer cmdptr[6006];
+    static thread_local doublereal winval[60006];
+    static thread_local integer newhan, ngbody;
+    static thread_local doublereal segsum[5];
+    static thread_local char symbol[100], locsym[16*10006], tstamp[22];
+    static thread_local integer locptr[10006], cmtunt, logunt;
+    static thread_local logical commnt;
     extern /* Subroutine */ int trcoff_(void);
     extern /* Character */ VOID crtptr_(char *, ftnlen, char *, integer *, 
 	    char *, ftnlen, ftnlen);
-    static char srcsym[100];
-    static doublereal tmpwin[40006];
+    static thread_local char srcsym[100];
+    static thread_local doublereal tmpwin[40006];
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen);
-    static integer winptr[10006];
+    static thread_local integer winptr[10006];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    static char winsym[16*10006];
+    static thread_local char winsym[16*10006];
     extern /* Subroutine */ int ssizei_(integer *, integer *), ssized_(
 	    integer *, doublereal *), cputim_(doublereal *), tkvrsn_(char *, 
 	    char *, ftnlen, ftnlen), tostdo_(char *, ftnlen), prompt_(char *, 
@@ -129,14 +129,14 @@ static integer c__5 = 5;
 	    , spksub_(integer *, doublereal *, char *, doublereal *, 
 	    doublereal *, integer *, ftnlen), wnunid_(doublereal *, 
 	    doublereal *, doublereal *);
-    static integer bod;
+    static thread_local integer bod;
     extern /* Subroutine */ int syputd_(char *, doublereal *, integer *, char 
 	    *, integer *, doublereal *, ftnlen, ftnlen), suffix_(char *, 
 	    integer *, char *, ftnlen, ftnlen);
-    static logical fnd, all;
+    static thread_local logical fnd, all;
     extern /* Subroutine */ int txtopr_(char *, integer *, ftnlen);
-    static logical log__;
-    static char val[300*6000], err[80], tkv[8];
+    static thread_local logical log__;
+    static thread_local char val[300*6000], err[80], tkv[8];
 
 
 /* $ Abstract */

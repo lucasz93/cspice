@@ -20,7 +20,7 @@ static integer c__6 = 6;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
 	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), repmf_(char *, 
 	    char *, doublereal *, integer *, char *, char *, ftnlen, ftnlen, 
@@ -28,17 +28,17 @@ static integer c__6 = 6;
 	    repmi_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen),
 	     reset_(void);
     extern logical failed_(void);
-    static doublereal lt;
+    static thread_local doublereal lt;
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen);
-    static char savact[80];
+    static thread_local char savact[80];
     extern /* Subroutine */ int getmsg_(char *, char *, ftnlen, ftnlen);
-    static doublereal hstate[6];
+    static thread_local doublereal hstate[6];
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static char longms[1840];
+    static thread_local char longms[1840];
     extern /* Subroutine */ int errprt_(char *, char *, ftnlen, ftnlen);
-    static char savrpt[80];
+    static thread_local char savrpt[80];
     extern logical return_(void);
 
 /* $ Abstract */

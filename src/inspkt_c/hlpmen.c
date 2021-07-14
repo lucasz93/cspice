@@ -61,47 +61,48 @@ static integer c__4 = 4;
     /* Local variables */
     extern /* Subroutine */ int getopt_2__(char *, integer *, integer *, char 
 	    *, char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    static char name__[32], help[80*506];
-    static integer item, indx, last, size, nopt, ntxt, b, i__, j;
+    static thread_local char name__[32], help[80*506];
+    static thread_local integer item, indx, last, size, nopt, ntxt, b, i__, j;
     extern integer cardc_(char *, ftnlen);
-    static integer n;
+    static thread_local integer n;
     extern logical batch_(void), elemc_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
     extern logical match_(char *, char *, ftnlen, ftnlen);
-    static char lname[32];
+    static thread_local char lname[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), repmc_(
 	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static char ordnl[32];
-    static logical dopmt;
+    static thread_local char ordnl[32];
+    static thread_local logical dopmt;
     extern integer ltrim_(char *, ftnlen);
-    static logical lstat[3], sstat[3];
-    static char style[80];
+    static thread_local logical lstat[3], sstat[3];
+    static thread_local char style[80];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer menbeg;
+    static thread_local integer menbeg;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer pagewd, pageht;
+    static thread_local integer pagewd, pageht;
     extern /* Subroutine */ int pagscn_(char *, ftnlen);
-    static integer dothem;
-    static logical didpmt;
-    static integer opagwd;
-    static char messge[200];
+    static thread_local integer dothem;
+    static thread_local logical didpmt;
+    static thread_local integer opagwd;
+    static thread_local char messge[200];
     extern /* Subroutine */ int params_(char *, char *, integer *, ftnlen, 
 	    ftnlen);
-    static logical ftitle;
+    static thread_local logical ftitle;
     extern /* Subroutine */ int pagset_(char *, integer *, ftnlen), pagpmt_(
 	    logical *, char *, ftnlen);
-    static integer oindnt;
+    static thread_local integer oindnt;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern integer frstnb_(char *, ftnlen);
-    static integer olndnt;
-    static char visitd[32*20];
-    static integer olskip, oiskip, txinfo[3], option, txtdat[306];
-    static char respns[32], txtnam[32*106];
-    static integer ostart;
+    static thread_local integer olndnt;
+    static thread_local char visitd[32*20];
+    static thread_local integer olskip, oiskip, txinfo[3], option, txtdat[306]
+	    ;
+    static thread_local char respns[32], txtnam[32*106];
+    static thread_local integer ostart;
     extern logical return_(void);
     extern /* Subroutine */ int nspwln_();
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), ssizei_(
@@ -114,10 +115,10 @@ static integer c__4 = 4;
 	    integer *, integer *, ftnlen, ftnlen), nspmrg_(char *, ftnlen), 
 	    suffix_(char *, integer *, char *, ftnlen, ftnlen), prefix_(char *
 	    , integer *, char *, ftnlen, ftnlen), pagrst_(void);
-    static char opttxt[32*19];
+    static thread_local char opttxt[32*19];
     extern /* Subroutine */ int pagput_(char *, ftnlen), subtex_(char *, 
 	    ftnlen);
-    static integer txtptr[106];
+    static thread_local integer txtptr[106];
     extern /* Subroutine */ int nspgst_(char *, logical *, ftnlen), nspioh_(
 	    char *, ftnlen), prompt_(char *, char *, ftnlen, ftnlen), nsppst_(
 	    char *, logical *, ftnlen), bbgeti_1__(char *, char *, integer *, 

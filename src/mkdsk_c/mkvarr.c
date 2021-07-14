@@ -41,7 +41,7 @@ static integer c__1000 = 1000;
     doublereal ascale, dscale;
     integer nr, nv;
     doublereal height, leftco, corscl, coords[2];
-    static doublereal values[1000];
+    static thread_local doublereal values[1000];
     extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
 	    doublereal *, ftnlen, ftnlen);
     extern logical return_(void);

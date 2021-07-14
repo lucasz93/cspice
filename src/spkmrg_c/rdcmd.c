@@ -36,31 +36,31 @@ static integer c__0 = 0;
     integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void);
 
     /* Local variables */
-    static char line[350];
-    static integer unit;
+    static thread_local char line[350];
+    static thread_local integer unit;
     extern /* Subroutine */ int chkin_(char *, ftnlen), cperr_(char *, 
 	    integer *, ftnlen), repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static char tabval[32*26];
+    static thread_local char tabval[32*26];
     extern /* Subroutine */ int evalcp_(char *, logical *, char *, integer *, 
 	    char *, logical *, ftnlen, ftnlen, ftnlen), initcp_(char *, 
 	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
-    static char reason[160];
+    static thread_local char reason[160];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer tabptr[26];
+    static thread_local integer tabptr[26];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char tabsym[32*26];
+    static thread_local char tabsym[32*26];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), chkout_(
 	    char *, ftnlen);
-    static integer linnum, iostat;
+    static thread_local integer linnum, iostat;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), ssizei_(integer *, 
 	    integer *);
     extern logical return_(void);
     extern /* Subroutine */ int syputc_(char *, char *, integer *, char *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen, ftnlen), txtopr_(char *
 	    , integer *, ftnlen);
-    static logical eof, err;
+    static thread_local logical eof, err;
 
 /* $ Abstract */
 

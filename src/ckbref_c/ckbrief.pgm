@@ -32,84 +32,85 @@ static doublereal c_b313 = 0.;
 	    integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer avfa[1000000];
-    static char arch[3], line[256];
-    static logical help;
-    static integer nobj, avfo[1000000];
-    static logical fdsp, gdsp;
-    static integer avfs[1000000];
+    static thread_local integer avfa[1000000];
+    static thread_local char arch[3], line[256];
+    static thread_local logical help;
+    static thread_local integer nobj, avfo[1000000];
+    static thread_local logical fdsp, gdsp;
+    static thread_local integer avfs[1000000];
     extern /* Subroutine */ int zzckcvr2_(integer *, integer *, integer *, 
 	    doublereal *);
-    static doublereal wind[2000006];
-    static logical ndsp;
+    static thread_local doublereal wind[2000006];
+    static thread_local logical ndsp;
     extern /* Subroutine */ int zzckcvr3_(integer *, integer *, integer *, 
 	    doublereal *), zzckcvr4_(integer *, integer *, integer *, 
 	    doublereal *), zzckcvr5_(integer *, integer *, integer *, 
 	    doublereal *);
-    static logical tdsp;
-    static char type__[3], text[256*47], strn[256];
-    static logical vrsn;
-    static char tout[256], pass1[50000], pass2[50000], pass3[50000];
-    static integer i__, k, l;
+    static thread_local logical tdsp;
+    static thread_local char type__[3], text[256*47], strn[256];
+    static thread_local logical vrsn;
+    static thread_local char tout[256], pass1[50000], pass2[50000], pass3[
+	    50000];
+    static thread_local integer i__, k, l;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int kdata_(integer *, char *, char *, char *, 
 	    char *, integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen), 
 	    dafgs_(doublereal *);
-    static logical doall, obnam;
-    static doublereal tenda[1000000];
+    static thread_local logical doall, obnam;
+    static thread_local doublereal tenda[1000000];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical beint_(char *, ftnlen);
-    static logical sfile;
-    static integer nobgo;
+    static thread_local logical sfile;
+    static thread_local integer nobgo;
     extern /* Subroutine */ int rdnbl_(char *, char *, logical *, ftnlen, 
 	    ftnlen), repmc_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static integer nobgs;
-    static doublereal tendo[1000000], tempe[1000000];
-    static integer value;
-    static doublereal tends[1000000];
-    static logical idump, found;
+    static thread_local integer nobgs;
+    static thread_local doublereal tendo[1000000], tempe[1000000];
+    static thread_local integer value;
+    static thread_local doublereal tends[1000000];
+    static thread_local logical idump, found;
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
-    static integer typea[1000000];
-    static char hword[256];
+    static thread_local integer typea[1000000];
+    static thread_local char hword[256];
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), movei_(integer *, integer *, integer *), 
 	    moved_(doublereal *, integer *, doublereal *);
-    static doublereal temps[1000000];
-    static char error[256];
+    static thread_local doublereal temps[1000000];
+    static thread_local char error[256];
     extern integer rtrim_(char *, ftnlen);
-    static integer start;
-    static char utext[256*21];
-    static doublereal dc[2];
-    static integer ic[6], baddra[1000000];
+    static thread_local integer start;
+    static thread_local char utext[256*21];
+    static thread_local doublereal dc[2];
+    static thread_local integer ic[6], baddra[1000000];
     extern /* Subroutine */ int daffna_(logical *);
-    static integer eaddra[1000000];
+    static thread_local integer eaddra[1000000];
     extern /* Subroutine */ int dafbfs_(integer *);
-    static integer handle, framea[1000000];
+    static thread_local integer handle, framea[1000000];
     extern /* Subroutine */ int dafcls_(integer *), scardd_(integer *, 
 	    doublereal *);
-    static logical havfil;
-    static integer frameo[1000000];
+    static thread_local logical havfil;
+    static thread_local integer frameo[1000000];
     extern /* Subroutine */ int getcml_(char *, ftnlen);
-    static integer frames[1000000], findex;
+    static thread_local integer frames[1000000], findex;
     extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
 	    integer *, integer *);
     extern integer isrchi_(integer *, integer *, integer *);
-    static char srcfil[256];
-    static integer iorder[1000000], objlis[100];
-    static logical fulbuf, nomerg, fndsum;
-    static integer numobj;
-    static logical mixdav, mixdfr;
-    static integer fcount;
-    static doublereal segsum[5];
-    static char filtyp[256], source[256];
+    static thread_local char srcfil[256];
+    static thread_local integer iorder[1000000], objlis[100];
+    static thread_local logical fulbuf, nomerg, fndsum;
+    static thread_local integer numobj;
+    static thread_local logical mixdav, mixdfr;
+    static thread_local integer fcount;
+    static thread_local doublereal segsum[5];
+    static thread_local char filtyp[256], source[256];
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen), 
 	    tostdo_(char *, ftnlen), fndnwd_(char *, integer *, integer *, 
 	    integer *, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), nparsi_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen), getfat_(char *, char *, char *, ftnlen, ftnlen, ftnlen);
-    static doublereal tstrta[1000000];
+    static thread_local doublereal tstrta[1000000];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), furnsh_(char *, ftnlen), ktotal_(char *, integer *, 
 	    ftnlen), tkvrsn_(char *, char *, ftnlen, ftnlen), dafopr_(char *, 
@@ -119,13 +120,13 @@ static doublereal c_b313 = 0.;
 	    *, logical *, logical *, logical *, ftnlen), wnvald_(integer *, 
 	    integer *, doublereal *), orderd_(doublereal *, integer *, 
 	    integer *), reordd_(integer *, integer *, doublereal *);
-    static doublereal tstrto[1000000];
+    static thread_local doublereal tstrto[1000000];
     extern /* Subroutine */ int reordi_(integer *, integer *, integer *), 
 	    chkout_(char *, ftnlen), byebye_(char *, ftnlen);
-    static doublereal tstrts[1000000];
-    static integer beg, ida[1000000], end;
-    static logical fnd, eof;
-    static integer ido[1000000], loc, ids[1000000], cnt, ptr;
+    static thread_local doublereal tstrts[1000000];
+    static thread_local integer beg, ida[1000000], end;
+    static thread_local logical fnd, eof;
+    static thread_local integer ido[1000000], loc, ids[1000000], cnt, ptr;
     extern /* Subroutine */ int zzckcv06_(integer *, integer *, integer *, 
 	    integer *, doublereal *, doublereal *, char *, doublereal *, 
 	    ftnlen);

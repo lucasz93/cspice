@@ -31,46 +31,47 @@ static integer c__0 = 0;
 	     s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char line[1024], time[1024*2];
-    static integer axes[3];
-    static doublereal step;
-    static integer nitr, i__;
+    static thread_local char line[1024], time[1024*2];
+    static thread_local integer axes[3];
+    static thread_local doublereal step;
+    static thread_local integer nitr, i__;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    static integer ffrid[2];
+    static thread_local integer ffrid[2];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch[1000000];
-    static logical avflg;
+    static thread_local doublereal epoch[1000000];
+    static thread_local logical avflg;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    static integer tfrid[2];
+    static thread_local integer tfrid[2];
     extern /* Subroutine */ int repmf_(char *, char *, doublereal *, integer *
 	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), repmi_(char *, 
 	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    static char hword[32];
-    static integer tlidx, count;
-    static char error[1840];
+    static thread_local char hword[32];
+    static thread_local integer tlidx, count;
+    static thread_local char error[1840];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static char avstr[1024];
-    static doublereal q1[4000000]	/* was [4][1000000] */, q2[4000000]	
-	    /* was [4][1000000] */;
+    static thread_local char avstr[1024];
+    static thread_local doublereal q1[4000000]	/* was [4][1000000] */, q2[
+	    4000000]	/* was [4][1000000] */;
     extern /* Subroutine */ int dr2str_(doublereal *, char *, ftnlen);
-    static doublereal et[2];
-    static logical ok;
+    static thread_local doublereal et[2];
+    static thread_local logical ok;
     extern /* Subroutine */ int kclear_(void);
-    static logical avfflg;
-    static integer sigdig;
-    static char ffrnam[32*2];
-    static integer sclkid[2];
-    static char hlline[5120], infmsg[1024*32], kernls[1024*3], gapstr[1024], 
-	    kernam[1024*2], timfmt[1024], tfrnam[32*2], diftyp[32], stpstr[
-	    1024], aunits[32];
-    static doublereal cmpwin[1000006], av1[3000000]	/* was [3][1000000] */
-	    , av2[3000000]	/* was [3][1000000] */, winmes;
-    static integer infcnt, myscid, sgtcnt, nsgcnt;
-    static logical infprt[32], sample, eponly;
+    static thread_local logical avfflg;
+    static thread_local integer sigdig;
+    static thread_local char ffrnam[32*2];
+    static thread_local integer sclkid[2];
+    static thread_local char hlline[5120], infmsg[1024*32], kernls[1024*3], 
+	    gapstr[1024], kernam[1024*2], timfmt[1024], tfrnam[32*2], diftyp[
+	    32], stpstr[1024], aunits[32];
+    static thread_local doublereal cmpwin[1000006], av1[3000000]	/* 
+	    was [3][1000000] */, av2[3000000]	/* was [3][1000000] */, 
+	    winmes;
+    static thread_local integer infcnt, myscid, sgtcnt, nsgcnt;
+    static thread_local logical infprt[32], sample, eponly;
     extern integer wncard_(doublereal *);
     extern /* Subroutine */ int errprt_(char *, char *, ftnlen, ftnlen), 
 	    ssized_(integer *, doublereal *), getcml_(char *, ftnlen), 
@@ -89,7 +90,7 @@ static integer c__0 = 0;
 	     doublereal *, char *, logical *, logical *, char *, integer *, 
 	    integer *, char *, logical *, integer *, ftnlen, ftnlen, ftnlen), 
 	    chkout_(char *, ftnlen);
-    static doublereal hdp1, hdp2;
+    static thread_local doublereal hdp1, hdp2;
 
 /* $ Abstract */
 

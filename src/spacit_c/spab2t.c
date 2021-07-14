@@ -28,30 +28,30 @@ static integer c__6 = 6;
     integer s_cmp(char *, char *, ftnlen, ftnlen), f_clos(cllist *);
 
     /* Local variables */
-    static char arch[3], line[255], type__[4];
+    static thread_local char arch[3], line[255], type__[4];
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen), reset_(void);
-    static char prmpt[80];
+    static thread_local char prmpt[80];
     extern /* Subroutine */ int fn2lun_(char *, integer *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int daffnh_(char *, integer *, ftnlen);
-    static integer handle;
+    static thread_local integer handle;
     extern /* Subroutine */ int dafcls_(integer *), delfil_(char *, ftnlen), 
 	    dasfnh_(char *, integer *, ftnlen);
-    static char binfnm[128];
-    static logical fileok;
+    static thread_local char binfnm[128];
+    static thread_local logical fileok;
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen), dascls_(integer *);
-    static char bfstat[3];
+    static thread_local char bfstat[3];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), convbt_(char *, char 
 	    *, ftnlen, ftnlen);
     extern logical isopen_(char *, ftnlen);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static char xfrfnm[128];
+    static thread_local char xfrfnm[128];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char xfstat[3];
-    static integer xfrlun;
+    static thread_local char xfstat[3];
+    static thread_local integer xfrlun;
     extern logical exists_(char *, ftnlen), return_(void);
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen), 
 	    getfnm_1__(char *, char *, char *, logical *, ftnlen, ftnlen, 

@@ -35,14 +35,14 @@ static integer c__100 = 100;
 	    ftnlen);
     extern logical failed_(void);
     integer to;
-    static integer remain, lineno;
+    static thread_local integer remain, lineno;
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), lparsm_(char *, char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     char errmsg[320];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char tokens[35*100];
+    static thread_local char tokens[35*100];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer ptr;

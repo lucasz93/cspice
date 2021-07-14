@@ -31,32 +31,32 @@ static integer c__1 = 1;
 	    char *, integer, char *, integer);
 
     /* Local variables */
-    static char arch[3], line[255], type__[4];
+    static thread_local char arch[3], line[255], type__[4];
     extern /* Subroutine */ int zzgetfat_(char *, char *, char *, integer *, 
 	    ftnlen, ftnlen, ftnlen), zzconvtb_(char *, char *, char *, char *,
 	     integer *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer i__;
+    static thread_local integer i__;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen), reset_(void);
-    static char prmpt[80];
+    static thread_local char prmpt[80];
     extern logical failed_(void);
     extern /* Subroutine */ int dafhof_(integer *), dafcls_(integer *), 
 	    cleari_(integer *, integer *), delfil_(char *, ftnlen), scardi_(
 	    integer *, integer *), dashof_(integer *);
-    static char binfnm[128];
-    static logical fileok;
+    static thread_local char binfnm[128];
+    static thread_local logical fileok;
     extern /* Subroutine */ int dascls_(integer *);
-    static char bfstat[3];
-    static integer number;
+    static thread_local char bfstat[3];
+    static thread_local integer number;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static char xfrfnm[128];
+    static thread_local char xfrfnm[128];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer opnset[7];
-    static char xfstat[3];
-    static integer numopn;
+    static thread_local integer opnset[7];
+    static thread_local char xfstat[3];
+    static thread_local integer numopn;
     extern /* Subroutine */ int tostdo_(char *, ftnlen);
     extern logical exists_(char *, ftnlen), return_(void);
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen), 

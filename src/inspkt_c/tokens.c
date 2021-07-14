@@ -16,7 +16,7 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer line;
+    static thread_local integer line;
     char what[5];
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
     integer begin;
@@ -30,7 +30,7 @@
     extern /* Subroutine */ int cutstr_(char *, integer *, integer *, char *, 
 	    integer *, integer *, ftnlen, ftnlen);
     integer end;
-    static integer col;
+    static thread_local integer col;
 
 /* $ Abstract */
 

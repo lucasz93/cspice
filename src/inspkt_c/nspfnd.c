@@ -124,22 +124,22 @@ static logical c_true = TRUE_;
     extern /* Subroutine */ int getopt_2__(char *, integer *, integer *, char 
 	    *, char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
     extern logical have_(char *, ftnlen);
-    static char cols[1024];
-    static integer from, last;
-    static char copy[1024];
-    static integer nopt, b, e, i__, k, n;
+    static thread_local char cols[1024];
+    static thread_local integer from, last;
+    static thread_local char copy[1024];
+    static thread_local integer nopt, b, e, i__, k, n;
     extern logical batch_(void);
-    static integer r__;
+    static thread_local integer r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static char title[80];
-    static integer count, every;
-    static logical lstat[3];
+    static thread_local char title[80];
+    static thread_local integer count, every;
+    static thread_local logical lstat[3];
     extern integer rtrim_(char *, ftnlen);
-    static logical sstat[3];
-    static char style[80], query[1024];
+    static thread_local logical sstat[3];
+    static thread_local char style[80], query[1024];
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), m2geta_(char *, char *, 
 	    logical *, char *, ftnlen, ftnlen, ftnlen);
@@ -148,32 +148,32 @@ static logical c_true = TRUE_;
 	    ftnlen, ftnlen), m2vget_(char *, integer *, logical *, integer *, 
 	    integer *, ftnlen), m2ints_(integer *, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    static char bs[1];
+    static thread_local char bs[1];
     extern logical m2xist_(char *, ftnlen);
-    static integer to;
-    static logical select;
-    static integer center;
-    static char messge[800];
-    static logical sample;
+    static thread_local integer to;
+    static thread_local logical select;
+    static thread_local integer center;
+    static thread_local char messge[800];
+    static thread_local logical sample;
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static char format[32];
-    static integer idlist[101], lradus, oindnt;
-    static char optnam[1*3];
+    static thread_local char format[32];
+    static thread_local integer idlist[101], lradus, oindnt;
+    static thread_local char optnam[1*3];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static integer tindnt;
+    static thread_local integer tindnt;
     extern /* Subroutine */ int namxpn_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen), repsub_(char *, integer *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen);
-    static integer uradus, option;
-    static logical disply;
+    static thread_local integer uradus, option;
+    static thread_local logical disply;
     extern /* Subroutine */ int nsplog_(char *, logical *, ftnlen), clscop_(
 	    char *, char *, integer *, integer *, integer *, char *, ftnlen, 
 	    ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int nspgst_(char *, logical *, ftnlen), nspwln_(
 	    char *, ftnlen);
-    static char synkey[32*11];
+    static thread_local char synkey[32*11];
     extern /* Subroutine */ int nspioh_(char *, ftnlen), nspmrg_(char *, 
 	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    nspdel_(integer *, integer *, integer *, integer *, integer *), 
@@ -181,10 +181,10 @@ static logical c_true = TRUE_;
 	    integer *, integer *, integer *, char *, ftnlen), nspvrb_(integer 
 	    *, integer *, integer *, integer *, integer *), nsptab_(integer *,
 	     integer *, integer *, integer *, integer *, char *, ftnlen);
-    static logical summrz;
-    static integer synptr[11];
-    static char opttxt[80*3];
-    static integer num;
+    static thread_local logical summrz;
+    static thread_local integer synptr[11];
+    static thread_local char opttxt[80*3];
+    static thread_local integer num;
     extern /* Subroutine */ int bbgetc_1__(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), bbgeti_1__(char *, char *, integer *, 
 	    integer *, ftnlen, ftnlen), nicepr_1__(char *, char *, S_fp, 

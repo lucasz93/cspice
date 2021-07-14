@@ -33,15 +33,15 @@ static integer c__1 = 1;
 	    char *, integer), f_clos(cllist *);
 
     /* Local variables */
-    static char arch[3], type__[4];
+    static thread_local char arch[3], type__[4];
     extern /* Subroutine */ int dafdc_(integer *);
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int dasdc_(integer *);
     extern integer cardi_(integer *);
     extern /* Subroutine */ int spcac_(integer *, integer *, char *, char *, 
 	    ftnlen, ftnlen), chkin_(char *, ftnlen), ucase_(char *, char *, 
 	    ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static char usage[80];
+    static thread_local char usage[80];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
     extern integer wdcnt_(char *, ftnlen);
@@ -49,33 +49,33 @@ static integer c__1 = 1;
     extern logical failed_(void);
     extern /* Subroutine */ int dafecu_(integer *, integer *, logical *), 
 	    dafhof_(integer *);
-    static char cmdflg[7];
+    static thread_local char cmdflg[7];
     extern /* Subroutine */ int dafcls_(integer *), cleari_(integer *, 
 	    integer *), dasacu_(integer *, char *, char *, logical *, integer 
 	    *, ftnlen, ftnlen), dasllc_(integer *), dasecu_(integer *, 
 	    integer *, logical *), scardi_(integer *, integer *);
-    static integer kerhan;
+    static thread_local integer kerhan;
     extern /* Subroutine */ int dascls_(integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int getcml_(char *, ftnlen), getfat_(char *, char 
 	    *, char *, ftnlen, ftnlen, ftnlen), dafopr_(char *, integer *, 
 	    ftnlen);
-    static char comfnm[128], kerfnm[128];
+    static thread_local char comfnm[128], kerfnm[128];
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen), 
 	    byebye_(char *, ftnlen), dafopw_(char *, integer *, ftnlen), 
 	    dashof_(integer *), dasopr_(char *, integer *, ftnlen);
-    static char inplin[512], hlpmsg[80*18];
+    static thread_local char inplin[512], hlpmsg[80*18];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer comlun;
+    static thread_local integer comlun;
     extern /* Subroutine */ int chkout_(char *, ftnlen), dasopw_(char *, 
 	    integer *, ftnlen);
-    static char tmplin[512];
+    static thread_local char tmplin[512];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), writla_(integer *, 
 	    char *, integer *, ftnlen);
-    static integer idxopt;
-    static char option[16];
-    static integer opnset[7], numopn, nwords;
-    static logical gotsom;
+    static thread_local integer idxopt;
+    static thread_local char option[16];
+    static thread_local integer opnset[7], numopn, nwords;
+    static thread_local logical gotsom;
     extern logical exists_(char *, ftnlen);
     extern /* Subroutine */ int errprt_(char *, char *, ftnlen, ftnlen), 
 	    nextwd_(char *, char *, char *, ftnlen, ftnlen, ftnlen), tostdo_(

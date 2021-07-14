@@ -46,12 +46,12 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer size;
-    static char text[80*3056];
-    static integer i__, j, begin[76];
+    static thread_local integer size;
+    static thread_local char text[80*3056];
+    static thread_local integer i__, j, begin[76];
     extern integer sizec_(char *, ftnlen);
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer finish[76];
+    static thread_local integer finish[76];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), zzhlp000_(
 	    integer *, integer *, char *, ftnlen), zzhlp001_(integer *, 
 	    integer *, char *, ftnlen), zzhlp002_(integer *, integer *, char *

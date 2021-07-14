@@ -99,7 +99,7 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__, j;
+    static thread_local integer i__, j;
 
 /* $ Abstract */
 

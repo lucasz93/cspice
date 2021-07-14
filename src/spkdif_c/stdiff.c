@@ -33,27 +33,27 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static doublereal diff[6], avdt, avve[3], axis[9]	/* was [3][3] */, 
-	    avpo[3];
+    static thread_local doublereal diff[6], avdt, avve[3], axis[9]	/* 
+	    was [3][3] */, avpo[3];
     extern doublereal vrel_(doublereal *, doublereal *), vdot_(doublereal *, 
 	    doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    static doublereal sump[3], sumv[3];
-    static integer i__, j;
+    static thread_local doublereal sump[3], sumv[3];
+    static thread_local integer i__, j;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    static doublereal delta;
+    static thread_local doublereal delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal avadt, avvea[3], avpoa[3];
+    static thread_local doublereal avadt, avvea[3], avpoa[3];
     extern doublereal dpmin_(void);
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), dpfmt_(doublereal *, char *, char *, 
 	    ftnlen, ftnlen);
-    static doublereal avvel;
-    static char outch[32*4];
-    static doublereal avsdt, sumpa[3];
+    static thread_local doublereal avvel;
+    static thread_local char outch[32*4];
+    static thread_local doublereal avsdt, sumpa[3];
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
-    static doublereal avpos, sumva[3], sumdt;
+    static thread_local doublereal avpos, sumva[3], sumdt;
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
@@ -61,20 +61,20 @@ static integer c__2 = 2;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
 	    ftnlen);
-    static doublereal sumps[3], sumvs[3];
+    static thread_local doublereal sumps[3], sumvs[3];
     extern /* Subroutine */ int dr2str_(doublereal *, char *, ftnlen);
-    static doublereal veldif[3], velmag;
+    static thread_local doublereal veldif[3], velmag;
     extern integer wncard_(doublereal *);
-    static char dmpstr[1024];
+    static thread_local char dmpstr[1024];
     extern logical return_(void);
-    static char velstr[80], swdstr[16], hlpstr[80], datstr[1024], posstr[80], 
-	    hdrstr[1024];
-    static doublereal posdif[3], poscmp[3], velcmp[3], mxapos[3], mxavel[3], 
-	    mxrpos[3], mxrvel[3], avposq[3], avvesq[3], vcross[3], tmpvec[3], 
-	    posmag, possum, velsum, sumadt, sumsdt, posrel, velrel, relpsm, 
-	    relvsm, maxpmg, maxvmg, maxprl, maxvrl, mxaadt, mxradt, avrelp, 
-	    avrelv, mxatim, mxrtim;
-    static logical mxatru, mxrtru, nonzer;
+    static thread_local char velstr[80], swdstr[16], hlpstr[80], datstr[1024],
+	     posstr[80], hdrstr[1024];
+    static thread_local doublereal posdif[3], poscmp[3], velcmp[3], mxapos[3],
+	     mxavel[3], mxrpos[3], mxrvel[3], avposq[3], avvesq[3], vcross[3],
+	     tmpvec[3], posmag, possum, velsum, sumadt, sumsdt, posrel, 
+	    velrel, relpsm, relvsm, maxpmg, maxvmg, maxprl, maxvrl, mxaadt, 
+	    mxradt, avrelp, avrelv, mxatim, mxrtim;
+    static thread_local logical mxatru, mxrtru, nonzer;
     extern /* Subroutine */ int tostdo_(char *, ftnlen), dpstre_(doublereal *,
 	     integer *, char *, ftnlen), timout_(doublereal *, char *, char *,
 	     ftnlen, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen)

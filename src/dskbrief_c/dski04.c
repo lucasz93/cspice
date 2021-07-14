@@ -27,19 +27,19 @@ static integer c__8 = 8;
 
     /* Local variables */
     integer ndat, size, b, e, dbase, ibase;
-    static doublereal dbuff[43];
+    static thread_local doublereal dbuff[43];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ndims;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static integer nc;
+    static thread_local integer nc;
     extern logical failed_(void);
-    static integer nr;
+    static thread_local integer nr;
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
 	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
 	    ;
     extern logical dlassg_(integer *, integer *, integer *, integer *), 
 	    return_(void);
-    static integer pixptr;
+    static thread_local integer pixptr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);

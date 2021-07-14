@@ -27,27 +27,27 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static char line[80];
-    static doublereal tvec[6];
+    static thread_local char line[80];
+    static thread_local doublereal tvec[6];
     extern /* Subroutine */ int dasac_(integer *, integer *, char *, ftnlen);
-    static integer l, m;
+    static thread_local integer l, m;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dpfmt_(doublereal *, 
 	    char *, char *, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), readln_(
 	    integer *, char *, logical *, ftnlen);
-    static char cmnbuf[255*10006];
+    static thread_local char cmnbuf[255*10006];
     extern /* Subroutine */ int chkout_(char *, ftnlen), ssizec_(integer *, 
 	    char *, ftnlen);
-    static char astrln[80];
-    static integer cmnunt;
+    static thread_local char astrln[80];
+    static thread_local integer cmnunt;
     extern /* Subroutine */ int cputim_(doublereal *);
-    static char tstamp[80];
+    static thread_local char tstamp[80];
     extern integer frstnp_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int txtopr_(char *, integer *, ftnlen);
-    static logical eof;
+    static thread_local logical eof;
 
 /* $ Abstract */
 

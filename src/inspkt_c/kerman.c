@@ -76,59 +76,59 @@ static integer c__10 = 10;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer need;
-    static char file[127], name__[32];
-    static integer clen;
+    static thread_local integer need;
+    static thread_local char file[127], name__[32];
+    static thread_local integer clen;
     extern logical have_(char *, ftnlen);
-    static integer left, reqd, nseg;
-    static char indx[4], pval[32*4];
-    static integer hits;
-    static char size[32], type__[32];
-    static logical quit;
+    static thread_local integer left, reqd, nseg;
+    static thread_local char indx[4], pval[32*4];
+    static thread_local integer hits;
+    static thread_local char size[32], type__[32];
+    static thread_local logical quit;
     extern /* Subroutine */ int zzeksinf_(integer *, integer *, char *, 
 	    integer *, char *, integer *, ftnlen, ftnlen);
-    static integer i__, j, k;
+    static thread_local integer i__, j, k;
     extern integer cardc_(char *, ftnlen);
-    static integer l, n;
+    static thread_local integer l, n;
     extern /* Subroutine */ int clgai_(integer *, char *, integer *, integer *
 	    , ftnlen), clgac_(integer *, char *, char *, ftnlen, ftnlen);
-    static integer r__;
-    static char cname[80], break__[80];
-    static integer headr[5];
+    static thread_local integer r__;
+    static thread_local char cname[80], break__[80];
+    static thread_local integer headr[5];
     extern /* Subroutine */ int eklef_(char *, integer *, ftnlen), clnid_(
 	    integer *, integer *, logical *);
-    static integer space;
+    static thread_local integer space;
     extern logical match_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer tcode, ncomc;
+    static thread_local integer tcode, ncomc;
     extern /* Subroutine */ int ekuef_(integer *);
-    static char rname[6], tname[32];
+    static thread_local char rname[6], tname[32];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), clnew_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, logical *, logical *, integer *, 
 	    ftnlen);
-    static logical found;
-    static integer csize, ncols, ncomr;
-    static logical cnull;
-    static integer right, width[5], ctype;
+    static thread_local logical found;
+    static thread_local integer csize, ncols, ncomr;
+    static thread_local logical cnull;
+    static thread_local integer right, width[5], ctype;
     extern integer ltrim_(char *, ftnlen);
-    static integer count;
+    static thread_local integer count;
     extern integer rtrim_(char *, ftnlen);
-    static integer sizes[5];
-    static char style[80];
+    static thread_local integer sizes[5];
+    static thread_local char style[80];
     extern /* Subroutine */ int clnum_(integer *);
-    static logical justr[5];
+    static thread_local logical justr[5];
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), m2getc_(char *, char *, 
 	    logical *, char *, ftnlen, ftnlen, ftnlen), m2ints_(integer *, 
 	    char *, integer *, char *, ftnlen, ftnlen);
-    static integer id, nb;
-    static char bs[1];
+    static thread_local integer id, nb;
+    static thread_local char bs[1];
     extern logical m2xist_(char *, ftnlen);
-    static integer nh, sb, handle;
-    static char ifname[60], tabnam[64], tabcol[80*506], rnamec[7], cnames[64*
-	    100];
-    static integer handls[20], segdsc[24];
+    static thread_local integer nh, sb, handle;
+    static thread_local char ifname[60], tabnam[64], tabcol[80*506], rnamec[7]
+	    , cnames[64*100];
+    static thread_local integer handls[20], segdsc[24];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    eknseg_(integer *);
     extern /* Subroutine */ int gcolmn_();
@@ -136,24 +136,25 @@ static integer c__10 = 10;
     extern /* Subroutine */ int pagput_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int nspwln_(char *, ftnlen);
-    static char synkey[32*9];
-    static integer synptr[9];
-    static char ekfils[127*20], thisfl[127], messge[300], idword[8];
-    static integer cdscrs[1100]	/* was [11][100] */, widest, totalc, nresvr, 
-	    nresvc;
-    static logical cindxd;
-    static char spcial[4*5], lsttab[32];
-    static integer colids[506], lmarge, ordvec[500];
-    static logical presrv[5];
+    static thread_local char synkey[32*9];
+    static thread_local integer synptr[9];
+    static thread_local char ekfils[127*20], thisfl[127], messge[300], idword[
+	    8];
+    static thread_local integer cdscrs[1100]	/* was [11][100] */, widest, 
+	    totalc, nresvr, nresvc;
+    static thread_local logical cindxd;
+    static thread_local char spcial[4*5], lsttab[32];
+    static thread_local integer colids[506], lmarge, ordvec[500];
+    static thread_local logical presrv[5];
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen), prefix_(char *, integer *, char *
 	    , ftnlen, ftnlen), chkout_(char *, ftnlen), expool_(char *, 
 	    logical *, ftnlen), repmct_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), clunld_(integer *), 
 	    ldpool_(char *, ftnlen);
-    static integer nid;
+    static thread_local integer nid;
     extern /* Subroutine */ int dasfnh_(char *, integer *, ftnlen);
-    static integer col, seg, ids[5];
+    static thread_local integer col, seg, ids[5];
     extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
 	    *, ftnlen), nspglr_(integer *, integer *), nspmrg_(char *, ftnlen)
 	    , suffix_(char *, integer *, char *, ftnlen, ftnlen), pagrst_(

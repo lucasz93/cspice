@@ -26,26 +26,26 @@ static integer c__1 = 1;
     /* Local variables */
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static logical found;
-    static integer nkeys;
+    static thread_local logical found;
+    static thread_local integer nkeys;
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), m2getc_(char *, char *, 
 	    logical *, char *, ftnlen, ftnlen, ftnlen), m2ints_(integer *, 
 	    char *, integer *, char *, ftnlen, ftnlen);
     extern logical m2xist_(char *, ftnlen);
-    static char loccmd[2000];
+    static thread_local char loccmd[2000];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static char errmsg[1840*2];
+    static thread_local char errmsg[1840*2];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), ssizei_(
 	    integer *, integer *), prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static char synval[2000*18];
+    static thread_local char synval[2000*18];
     extern logical return_(void);
     extern /* Subroutine */ int prompt_(char *, char *, ftnlen, ftnlen);
-    static char synkey[32*18];
-    static integer synptr[18];
+    static thread_local char synkey[32*18];
+    static thread_local integer synptr[18];
 
 /* $ Abstract */
 

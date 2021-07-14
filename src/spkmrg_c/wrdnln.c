@@ -19,15 +19,15 @@
 
     /* Local variables */
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer b, e;
-    static char l[350];
+    static thread_local integer b, e;
+    static thread_local char l[350];
     extern integer ltrim_(char *, ftnlen);
-    static integer vlmax, vpmax;
+    static thread_local integer vlmax, vpmax;
     extern integer rtrim_(char *, ftnlen);
-    static integer ep, kl, kp, vp;
+    static thread_local integer ep, kl, kp, vp;
     extern logical return_(void);
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
-    static integer vp1;
+    static thread_local integer vp1;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
 /* $ Abstract */

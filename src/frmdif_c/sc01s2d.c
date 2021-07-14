@@ -29,28 +29,28 @@ static integer c__10 = 10;
 	    char *, integer);
 
     /* Local variables */
-    static integer noff, nmod, last;
+    static thread_local integer noff, nmod, last;
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer next, i__, n;
+    static thread_local integer next, i__, n;
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
 	    *, doublereal *, ftnlen), scli01_(char *, integer *, integer *, 
 	    integer *, integer *, ftnlen), chkin_(char *, ftnlen), errch_(
 	    char *, char *, ftnlen, ftnlen);
-    static integer oldsc;
+    static thread_local integer oldsc;
     extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
 	    ftnlen), repmi_(char *, char *, integer *, char *, ftnlen, ftnlen,
 	     ftnlen);
-    static logical first;
-    static char error[320];
+    static thread_local logical first;
+    static thread_local char error[320];
     extern integer rtrim_(char *, ftnlen);
-    static integer start;
+    static thread_local integer start;
     extern logical failed_(void);
-    static integer nfield;
-    static doublereal fractn;
-    static char kvname[32*3];
-    static doublereal fvalue[10], offset[10], moduli[10];
-    static integer findex;
-    static logical update;
+    static thread_local integer nfield;
+    static thread_local doublereal fractn;
+    static thread_local char kvname[32*3];
+    static thread_local doublereal fvalue[10], offset[10], moduli[10];
+    static thread_local integer findex;
+    static thread_local logical update;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), nparsi_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
@@ -60,7 +60,7 @@ static integer c__10 = 10;
     extern logical return_(void);
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer ptr;
+    static thread_local integer ptr;
 
 /* $ Abstract */
 

@@ -19,7 +19,7 @@ static integer c__14 = 14;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
 	    char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen), repmc_(
 	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), 
@@ -27,21 +27,21 @@ static integer c__14 = 14;
 	    ftnlen, ftnlen, ftnlen, ftnlen), reset_(void), xf2rav_(doublereal 
 	    *, doublereal *, doublereal *);
     extern logical failed_(void);
-    static doublereal pm[9]	/* was [3][3] */, xm[36]	/* was [6][6] 
-	    */;
+    static thread_local doublereal pm[9]	/* was [3][3] */, xm[36]	
+	    /* was [6][6] */;
     extern /* Subroutine */ int erract_(char *, char *, ftnlen, ftnlen);
-    static char savact[80];
+    static thread_local char savact[80];
     extern /* Subroutine */ int getmsg_(char *, char *, ftnlen, ftnlen), 
 	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static char longms[1840];
+    static thread_local char longms[1840];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), pxform_(char *, char 
 	    *, doublereal *, doublereal *, ftnlen, ftnlen), errprt_(char *, 
 	    char *, ftnlen, ftnlen);
-    static char savrpt[80];
+    static thread_local char savrpt[80];
     extern logical return_(void);
     extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen), m2q_(doublereal *, doublereal *);
-    static char tmpstr[80];
+    static thread_local char tmpstr[80];
 
 /* $ Abstract */
 

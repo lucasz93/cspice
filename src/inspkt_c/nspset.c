@@ -88,27 +88,27 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[80];
+    static thread_local char name__[80];
     extern logical have_(char *, ftnlen);
-    static char item[80], temp[80], attr[80];
-    static integer i__;
+    static thread_local char item[80], temp[80], attr[80];
+    static thread_local integer i__;
     extern /* Subroutine */ int clgac_(integer *, char *, char *, ftnlen, 
 	    ftnlen);
-    static integer n, p;
+    static thread_local integer n, p;
     extern /* Subroutine */ int clpac_(integer *, char *, char *, ftnlen, 
 	    ftnlen);
-    static integer w;
+    static thread_local integer w;
     extern /* Subroutine */ int clpai_(integer *, char *, integer *, ftnlen);
-    static char delim[80];
+    static thread_local char delim[80];
     extern /* Subroutine */ int clnid_(integer *, integer *, logical *), 
 	    chkin_(char *, ftnlen), ucase_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    static integer useid;
-    static logical found;
+    static thread_local integer useid;
+    static thread_local logical found;
     extern /* Subroutine */ int clnum_(integer *);
-    static integer atype;
-    static char quote[80];
+    static thread_local integer atype;
+    static thread_local char quote[80];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), cln2id_(char *, integer *
@@ -117,16 +117,16 @@ static integer c__1 = 1;
 	    , ftnlen, ftnlen, ftnlen), m2marg_(char *, ftnlen), m2geti_(char *
 	    , char *, logical *, integer *, ftnlen, ftnlen), m2ints_(integer *
 	    , char *, integer *, char *, ftnlen, ftnlen);
-    static integer id;
-    static char bs[1];
+    static thread_local integer id;
+    static thread_local char bs[1];
     extern logical m2xist_(char *, ftnlen);
-    static char colnam[80], margin[80];
-    static logical colcom;
+    static thread_local char colnam[80], margin[80];
+    static thread_local logical colcom;
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static char litnam[80];
-    static integer ivalue, numfnd;
-    static char svalue[80];
+    static thread_local char litnam[80];
+    static thread_local integer ivalue, numfnd;
+    static thread_local char svalue[80];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), chkout_(char *, ftnlen), namxpn_(char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen), suffix_(char *, integer *, char *, 
@@ -134,9 +134,9 @@ static integer c__1 = 1;
     extern logical return_(void);
     extern /* Subroutine */ int nspcht_(char *, integer *, ftnlen), nspslr_(
 	    integer *, integer *);
-    static char synkey[80*32];
+    static thread_local char synkey[80*32];
     extern /* Subroutine */ int nspmrg_(char *, ftnlen);
-    static integer synptr[32];
+    static thread_local integer synptr[32];
     extern /* Subroutine */ int bbputc_1__(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), bbputi_1__(char *, char *, integer *, 
 	    integer *, ftnlen, ftnlen);

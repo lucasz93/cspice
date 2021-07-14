@@ -30,15 +30,15 @@ static integer c__1 = 1;
 
     /* Local variables */
     char what[4];
-    static integer ptrs[19];
+    static thread_local integer ptrs[19];
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
-    static char names[16*19];
+    static thread_local char names[16*19];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer values[19];
+    static thread_local integer values[19];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), setmsg_(
 	    char *, ftnlen), ssizei_(integer *, integer *), synthi_(char *, 
 	    integer *, char *, integer *, integer *, integer *, logical *, 
