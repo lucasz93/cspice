@@ -1,4 +1,4 @@
-/* zzwind2d.f -- translated by f2c (version 19980913).
+/* zzwind2d.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -291,7 +291,7 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 /*     The total "wrap angle" starts at zero. */
 
     atotal = 0.;
-    vsubg_(&vertcs[(i__1 = 0) < vertcs_dim2 << 1 ? i__1 : s_rnge("vertcs", 
+    vsubg_(&vertcs[(i__1 = 0) < 2 * vertcs_dim2 ? i__1 : s_rnge("vertcs", 
 	    i__1, "zzwind2d_", (ftnlen)285)], point, &c__2, rvec);
     i__1 = *n + 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
@@ -304,8 +304,8 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 /*        Find the angular separation of RVEC and the next vector */
 /*        RNEXT. */
 
-	vsubg_(&vertcs[(i__2 = (j << 1) - 2) < vertcs_dim2 << 1 && 0 <= i__2 ?
-		 i__2 : s_rnge("vertcs", i__2, "zzwind2d_", (ftnlen)299)], 
+	vsubg_(&vertcs[(i__2 = (j << 1) - 2) < 2 * vertcs_dim2 && 0 <= i__2 ? 
+		i__2 : s_rnge("vertcs", i__2, "zzwind2d_", (ftnlen)299)], 
 		point, &c__2, rnext);
 	sep = vsepg_(rnext, rvec, &c__2);
 

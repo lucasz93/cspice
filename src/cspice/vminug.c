@@ -1,4 +1,4 @@
-/* vminug.f -- translated by f2c (version 19980913).
+/* vminug.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -148,10 +148,10 @@
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "vminug_", (ftnlen)138)] = -vin[(i__3 = i__ - 1) < 
-		vin_dim1 && 0 <= i__3 ? i__3 : s_rnge("vin", i__3, "vminug_", 
-		(ftnlen)138)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"vout", i__2, "vminug_", (ftnlen)138)] = -vin[(i__3 = i__ - 1)
+		 < 1 * vin_dim1 && 0 <= i__3 ? i__3 : s_rnge("vin", i__3, 
+		"vminug_", (ftnlen)138)];
     }
     return 0;
 } /* vminug_ */

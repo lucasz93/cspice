@@ -1,4 +1,4 @@
-/* mxvg.f -- translated by f2c (version 19980913).
+/* mxvg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -166,7 +166,7 @@
     v2_dim1 = *nc1r2;
     m1_dim1 = *nr1;
     m1_dim2 = *nc1r2;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
 
     /* Function Body */
     i__1 = *nr1;
@@ -174,13 +174,13 @@
 	sum = 0.;
 	i__2 = *nc1r2;
 	for (k = 1; k <= i__2; ++k) {
-	    sum += m1[(i__3 = i__ + k * m1_dim1 - m1_offset) < m1_dim1 * 
+	    sum += m1[(i__3 = i__ + k * m1_dim1 - m1_offset) < 1 * m1_dim1 * 
 		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mxvg_", 
-		    (ftnlen)163)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 ?
-		     i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)163)];
+		    (ftnlen)163)] * v2[(i__4 = k - 1) < 1 * v2_dim1 && 0 <= 
+		    i__4 ? i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)163)];
 	}
-	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "mxvg_", (ftnlen)165)] = sum;
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"vout", i__2, "mxvg_", (ftnlen)165)] = sum;
     }
     return 0;
 } /* mxvg_ */

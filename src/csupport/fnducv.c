@@ -1,4 +1,4 @@
-/* fnducv.f -- translated by f2c (version 19980913).
+/* fnducv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,51 +28,51 @@ static integer c__0 = 0;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static doublereal lsec, lday, lmin;
-    static integer iaus, i__, j;
-    static char candp[33];
-    static doublereal scale;
-    static char cands[32];
+    static thread_local doublereal lsec, lday, lmin;
+    static thread_local integer iaus, i__, j;
+    static thread_local char candp[33];
+    static thread_local doublereal scale;
+    static thread_local char cands[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal hrang;
+    static thread_local doublereal hrang;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char names[8*1];
+    static thread_local char names[8*1];
     extern logical benum_(char *, ftnlen);
-    static doublereal light;
-    static logical found;
-    static doublereal lyear;
+    static thread_local doublereal light;
+    static thread_local logical found;
+    static thread_local doublereal lyear;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static integer count;
-    static char error[32];
-    static doublereal lhour;
+    static thread_local integer count;
+    static thread_local char error[32];
+    static thread_local doublereal lhour;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern doublereal twopi_(void);
-    static char units[32*84];
-    static doublereal au;
+    static thread_local char units[32*84];
+    static thread_local doublereal au;
     extern doublereal pi_(void);
-    static doublereal degree, arcsec, secang;
+    static thread_local doublereal degree, arcsec, secang;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal arcmin;
+    static thread_local doublereal arcmin;
     extern doublereal clight_(void);
-    static doublereal minang, parsec;
+    static thread_local doublereal minang, parsec;
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen),
 	     reordc_(integer *, integer *, char *, ftnlen), reordd_(integer *,
 	     integer *, doublereal *);
-    static logical update;
-    static integer iparsc, nnames, ordvec[84];
+    static thread_local logical update;
+    static thread_local integer iparsc, nnames, ordvec[84];
     extern /* Subroutine */ int reordi_(integer *, integer *, integer *);
-    static integer uclass[84];
+    static thread_local integer uclass[84];
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal uvalue[84];
+    static thread_local doublereal uvalue[84];
     extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen), suffix_(
 	    char *, integer *, char *, ftnlen, ftnlen), setmsg_(char *, 
 	    ftnlen), rtpool_(char *, integer *, doublereal *, logical *, 
 	    ftnlen), swpool_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer iau;
-    static doublereal rev;
-    static integer ptr;
+    static thread_local integer iau;
+    static thread_local doublereal rev;
+    static thread_local integer ptr;
 
 /* $ Abstract */
 

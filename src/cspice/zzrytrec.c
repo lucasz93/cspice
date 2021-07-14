@@ -1,4 +1,4 @@
-/* zzrytrec.f -- translated by f2c (version 19980913).
+/* zzrytrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -265,9 +265,9 @@ static integer c__0 = 0;
 /*     Expand the box using the specified margin. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	delta[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("delta", i__1,
-		 "zzrytrec_", (ftnlen)269)] = *margin * (d__1 = l[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("l", i__2, "zzrytrec_", 
+	delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", i__2,
+		 "zzrytrec_", (ftnlen)269)] = *margin * (d__1 = l[(i__1 = i__ 
+		- 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzrytrec_", 
 		(ftnlen)269)], abs(d__1));
 	boxori[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("boxori", 
 		i__1, "zzrytrec_", (ftnlen)271)] = bounds[(i__2 = (i__ << 1) 

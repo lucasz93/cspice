@@ -1,4 +1,4 @@
-/* zztanutl.f -- translated by f2c (version 19980913).
+/* zztanutl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,7 +20,7 @@
     doublereal apex[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vequ_(
 	    doublereal *, doublereal *);
-    static doublereal svet;
+    static thread_local doublereal svet;
     extern /* Subroutine */ int zzsuelin_(integer *), zzsudski_(integer *, 
 	    integer *, integer *, integer *), zzraysfx_(doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *), chkin_(char 
@@ -31,18 +31,18 @@
 	    *, doublereal *);
     extern doublereal pi_(void);
     doublereal raydir[3];
-    static doublereal svirad;
+    static thread_local doublereal svirad;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     doublereal vrtoff[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), vhatip_(doublereal *), vsclip_(doublereal *, 
 	    doublereal *);
-    static doublereal svaxis[3];
+    static thread_local doublereal svaxis[3];
     extern logical return_(void);
-    static doublereal svnrml[3];
-    static integer svcurv;
-    static doublereal svvrtx[3];
+    static thread_local doublereal svnrml[3];
+    static thread_local integer svcurv;
+    static thread_local doublereal svvrtx[3];
 
 /* $ Abstract */
 

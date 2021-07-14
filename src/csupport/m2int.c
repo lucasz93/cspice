@@ -1,4 +1,4 @@
-/* m2int.f -- translated by f2c (version 19980913).
+/* m2int.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,15 +20,15 @@ logical m2int_(char *word, ftnlen word_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer zero, plus, i__, value;
+    static thread_local integer zero, plus, i__, value;
     extern integer ltrim_(char *, ftnlen);
-    static integer minus, start, factor, length;
+    static thread_local integer minus, start, factor, length;
     extern integer intmin_(void), intmax_(void);
-    static logical usemin;
-    static integer subseq;
+    static thread_local logical usemin;
+    static thread_local integer subseq;
     extern integer qrtrim_(char *, ftnlen);
-    static logical bad[256];
-    static integer end;
+    static thread_local logical bad[256];
+    static thread_local integer end;
 
 /* $ Abstract */
 

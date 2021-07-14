@@ -1,4 +1,4 @@
-/* gfrprt.f -- translated by f2c (version 19980913).
+/* gfrprt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,16 +38,16 @@ static integer c__1 = 1;
     extern integer cardd_(doublereal *);
     char begin[55];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char copyb[55];
+    static thread_local char copyb[55];
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static char copye[13];
+    static thread_local char copye[13];
     extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
     doublereal total;
     integer short__;
-    static doublereal t0;
+    static thread_local doublereal t0;
     extern logical failed_(void);
     integer tcheck, chrcod;
-    static doublereal remain;
+    static thread_local doublereal remain;
     extern integer lastnb_(char *, ftnlen);
     doublereal stddev;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);

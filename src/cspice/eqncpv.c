@@ -1,4 +1,4 @@
-/* eqncpv.f -- translated by f2c (version 19980913).
+/* eqncpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -43,7 +43,7 @@ static doublereal c_b13 = 1.;
     extern doublereal kepleq_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static doublereal pi2;
+    static thread_local doublereal pi2;
     doublereal dx1, dy1;
     extern logical return_(void);
     doublereal ecc, can, dlp, san;

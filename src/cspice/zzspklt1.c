@@ -1,4 +1,4 @@
-/* zzspklt1.f -- translated by f2c (version 19980913).
+/* zzspklt1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,19 +33,19 @@ static doublereal c_b19 = -1.;
     extern /* Subroutine */ int zzspkgo1_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);
     extern doublereal vdot_(doublereal *, doublereal *);
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     doublereal a, b, c__;
     integer i__, refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical usecn;
+    static thread_local logical usecn;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *), vsubg_(doublereal *, doublereal *,
 	     integer *, doublereal *);
     doublereal ssblt, lterr;
-    static logical uselt;
+    static thread_local logical uselt;
     extern doublereal vnorm_(doublereal *);
     doublereal prvlt;
     extern logical failed_(void);

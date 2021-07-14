@@ -1,4 +1,4 @@
-/* zzgfpau.f -- translated by f2c (version 19980913).
+/* zzgfpau.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,7 +34,7 @@ static integer c__0 = 0;
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern doublereal dvsep_(doublereal *, doublereal *);
-    static integer svobs;
+    static thread_local integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     doublereal s1[6], s2[6];
@@ -42,12 +42,12 @@ static integer c__0 = 0;
     extern logical failed_(void);
     doublereal lt;
     extern doublereal clight_(void);
-    static char svabco[5];
-    static logical svablk[15];
+    static thread_local char svabco[5];
+    static thread_local logical svablk[15];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
 	    ftnlen);
-    static integer svillm, svtarg;
+    static thread_local integer svillm, svtarg;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);

@@ -1,4 +1,4 @@
-/* sc01.f -- translated by f2c (version 19980913).
+/* sc01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -56,55 +56,56 @@ static integer c__30 = 30;
     integer i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static doublereal rate;
-    static integer pntr;
+    static thread_local doublereal rate;
+    static thread_local integer pntr;
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
-    static integer i__, j, n;
+    static thread_local integer i__, j, n;
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
 	    *, doublereal *, ftnlen), scli01_(char *, integer *, integer *, 
 	    integer *, integer *, ftnlen), chkin_(char *, ftnlen), errch_(
 	    char *, char *, ftnlen, ftnlen);
-    static doublereal prend[9999];
+    static thread_local doublereal prend[9999];
     extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
 	    ftnlen), repmi_(char *, char *, integer *, char *, ftnlen, ftnlen,
 	     ftnlen);
     extern integer sumai_(integer *, integer *);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static integer npart;
-    static doublereal const__;
-    static integer lower;
-    static char error[240];
-    static integer upper, ntsys, delcde;
+    static thread_local integer npart;
+    static thread_local doublereal const__;
+    static thread_local integer lower;
+    static thread_local char error[240];
+    static thread_local integer upper, ntsys, delcde;
     extern logical failed_(void);
-    static integer needed, middle, ncoeff;
-    static char dpchar[30];
-    static integer nfield;
-    static doublereal coeffs[150000]	/* was [3][50000] */, tikdif;
-    static char kvname[60*9];
-    static doublereal cmpval[10], moduli[10], maxwid, cmptks[10], mxtick, 
-	    offset[10];
+    static thread_local integer needed, middle, ncoeff;
+    static thread_local char dpchar[30];
+    static thread_local integer nfield;
+    static thread_local doublereal coeffs[150000]	/* was [3][50000] */, 
+	    tikdif;
+    static thread_local char kvname[60*9];
+    static thread_local doublereal cmpval[10], moduli[10], maxwid, cmptks[10],
+	     mxtick, offset[10];
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static doublereal partim, tikmsc, timdif;
-    static integer cmpwid[10], length[10];
-    static logical update;
+    static thread_local doublereal partim, tikmsc, timdif;
+    static thread_local integer cmpwid[10], length[10];
+    static thread_local logical update;
     extern logical return_(void);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer usrctr[2];
+    static thread_local integer usrctr[2];
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), swpool_(char *, integer *, char *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen), lparsm_(char *, char *, integer *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen);
-    static integer timsys;
+    static thread_local integer timsys;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), nparsd_(
 	    char *, doublereal *, char *, integer *, ftnlen, ftnlen), dpstrf_(
 	    doublereal *, integer *, char *, char *, ftnlen, ftnlen), prefix_(
 	    char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal prstrt[9999];
-    static integer pad, end;
-    static char cmp[30*10];
-    static doublereal rem;
+    static thread_local doublereal prstrt[9999];
+    static thread_local integer pad, end;
+    static thread_local char cmp[30*10];
+    static thread_local doublereal rem;
 
 /* $ Abstract */
 
@@ -1623,10 +1624,10 @@ L_scfm01:
     rem = d_nint(ticks);
     i__1 = nfield - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	d__1 = rem / cmptks[(i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		s_rnge("cmptks", i__3, "sc01_", (ftnlen)1580)];
-	cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval", 
-		i__2, "sc01_", (ftnlen)1580)] = d_int(&d__1) + offset[(i__4 = 
+	d__1 = rem / cmptks[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge("cmptks", i__2, "sc01_", (ftnlen)1580)];
+	cmpval[(i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmpval", 
+		i__3, "sc01_", (ftnlen)1580)] = d_int(&d__1) + offset[(i__4 = 
 		i__ - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge("offset", i__4, 
 		"sc01_", (ftnlen)1580)];
 	rem = d_mod(&rem, &cmptks[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 

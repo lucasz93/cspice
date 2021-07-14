@@ -1,4 +1,4 @@
-/* zzphsh.f -- translated by f2c (version 19980913).
+/* zzphsh.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,16 +21,16 @@ integer zzphsh_0_(int n__, char *word, integer *m, integer *m2, ftnlen
     integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer base, f, i__, blank;
+    static thread_local integer base, f, i__, blank;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static integer length, maxdiv;
+    static thread_local integer length, maxdiv;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     extern integer intmax_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static integer val[129];
+    static thread_local integer val[129];
 
 /* $ Abstract */
 

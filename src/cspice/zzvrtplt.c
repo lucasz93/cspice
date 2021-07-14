@@ -1,4 +1,4 @@
-/* zzvrtplt.f -- translated by f2c (version 19980913).
+/* zzvrtplt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -17,11 +17,11 @@
     extern /* Subroutine */ int zzaddlnk_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *), zzinilnk_(integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int zzuntngl_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *), chkin_(char *, 
 	    ftnlen);
-    static integer ncell;
+    static thread_local integer ncell;
     extern logical failed_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 

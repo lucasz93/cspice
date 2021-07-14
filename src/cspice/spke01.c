@@ -1,4 +1,4 @@
-/* spke01.f -- translated by f2c (version 19980913).
+/* spke01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,19 +26,19 @@ static integer c__45 = 45;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal g[15];
-    static integer i__, j;
-    static doublereal w[17], delta;
+    static thread_local doublereal g[15];
+    static thread_local integer i__, j;
+    static thread_local doublereal w[17], delta;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer kqmax1;
-    static doublereal dt[45]	/* was [15][3] */, wc[13];
-    static integer kq[3], ks;
-    static doublereal tl;
-    static integer jx;
-    static doublereal tp, refvel[3], refpos[3];
+    static thread_local integer kqmax1;
+    static thread_local doublereal dt[45]	/* was [15][3] */, wc[13];
+    static thread_local integer kq[3], ks;
+    static thread_local doublereal tl;
+    static thread_local integer jx;
+    static thread_local doublereal tp, refvel[3], refpos[3];
     extern logical return_(void);
-    static integer mq2, ks1, kqq;
-    static doublereal sum;
+    static thread_local integer mq2, ks1, kqq;
+    static thread_local doublereal sum;
 
 /* $ Abstract */
 

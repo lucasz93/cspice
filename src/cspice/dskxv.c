@@ -1,4 +1,4 @@
-/* dskxv.f -- translated by f2c (version 19980913).
+/* dskxv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,21 +32,21 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
     extern logical failed_(void);
-    static integer trgcde, fixfid;
+    static thread_local integer trgcde, fixfid;
     logical frmfnd, trgfnd;
     integer fxcent;
-    static integer svtcde;
+    static thread_local integer svtcde;
     logical update;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer frmctr[2];
+    static thread_local integer frmctr[2];
     integer fxtpid;
     logical newfrm;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer fxclss;
-    static integer trgctr[2];
+    static thread_local integer trgctr[2];
     logical newtrg;
-    static logical svtfnd;
-    static char svtnam[36];
+    static thread_local logical svtfnd;
+    static thread_local char svtnam[36];
     extern logical return_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(

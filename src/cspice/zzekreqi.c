@@ -1,4 +1,4 @@
-/* zzekreqi.f -- translated by f2c (version 19980913).
+/* zzekreqi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,12 +33,12 @@ static integer c__15 = 15;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), ljust_(
 	    char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char tmpnam[32];
+    static thread_local char tmpnam[32];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen);
 

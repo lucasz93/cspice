@@ -1,4 +1,4 @@
-/* dasec.f -- translated by f2c (version 19980913).
+/* dasec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,17 +34,17 @@ static integer c__5000 = 5000;
     char ch[1];
     extern logical failed_(void);
     char ifname[60];
-    static integer filhan[5000];
-    static char crecrd[1024];
+    static thread_local integer filhan[5000];
+    static thread_local char crecrd[1024];
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen);
-    static integer filchr[5000];
+    static thread_local integer filchr[5000];
     extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *);
     integer linlen, nchars, daslun;
-    static integer filcnt[5000];
+    static thread_local integer filcnt[5000];
     char idword[8];
-    static integer lsthan, nfiles, lstrec[5000];
+    static thread_local integer lsthan, nfiles, lstrec[5000];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer numcom;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
@@ -56,7 +56,7 @@ static integer c__5000 = 5000;
     integer curpos;
     extern logical return_(void);
     integer nresvr;
-    static integer lstpos[5000];
+    static thread_local integer lstpos[5000];
     logical eol;
 
 /* $ Abstract */

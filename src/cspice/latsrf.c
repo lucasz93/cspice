@@ -1,4 +1,4 @@
-/* latsrf.f -- translated by f2c (version 19980913).
+/* latsrf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -57,16 +57,16 @@ static doublereal c_b43 = 1.;
 	    ;
     doublereal r__, x[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer shape;
+    static thread_local integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    edpnt_(doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *), errdp_(char *, doublereal *, ftnlen);
-    static integer nsurf;
+    static thread_local integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical svfnd1;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
+    static thread_local integer svctr3[2];
     integer trgcde, fixfid, fxclid;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
@@ -76,20 +76,20 @@ static doublereal c_b43 = 1.;
     integer fxcent;
     char trmtyp[20];
     integer fxclss;
-    static integer srfctr[2], srflst[100];
+    static thread_local integer srfctr[2], srflst[100];
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svradi[3];
+    static thread_local char svtarg[36];
+    static thread_local integer svtcde;
+    static thread_local char svfref[32];
+    static thread_local integer svfxfc;
+    static thread_local doublereal svradi[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 
 	    ftnlen), vminus_(doublereal *, doublereal *);
     logical fnd;
     extern doublereal dpr_(void);
-    static logical pri;
+    static thread_local logical pri;
 
 /* $ Abstract */
 

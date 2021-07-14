@@ -1,4 +1,4 @@
-/* stmp03.f -- translated by f2c (version 19980913).
+/* stmp03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,7 +27,7 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal pairs[20], lbound;
+    static thread_local doublereal pairs[20], lbound;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
 

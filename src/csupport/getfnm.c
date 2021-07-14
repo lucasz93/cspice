@@ -1,4 +1,4 @@
-/* getfnm.f -- translated by f2c (version 19980913).
+/* getfnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,13 +37,16 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static char badchr[162];
+    static thread_local char badchr[162];
+    extern logical failed_(void);
+    char nambuf[1000];
     integer length;
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical exists_(char *, ftnlen), return_(void);
     extern /* Subroutine */ int prompt_(char *, char *, ftnlen, ftnlen);
     char status[3];
+    extern /* Subroutine */ int expfnm_2__(char *, char *, ftnlen, ftnlen);
 
 /* $ Abstract */
 
@@ -373,6 +376,16 @@ static integer c__1 = 1;
     } else {
 	prompt_(prmpt, fname, prmpt_len, fname_len);
     }
+
+/*     The string we just obtained could be an environment variable. */
+/*     If so, expand it. */
+
+    expfnm_2__(fname, nambuf, fname_len, (ftnlen)1000);
+    if (failed_()) {
+	chkout_("GETFNM", (ftnlen)6);
+	return 0;
+    }
+    s_copy(fname, nambuf, fname_len, (ftnlen)1000);
     if (s_cmp(fname, " ", fname_len, (ftnlen)1) == 0) {
 	*valid = FALSE_;
 	s_copy(messg, "A blank filename is not valid.", messg_len, (ftnlen)30)

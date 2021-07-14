@@ -1,4 +1,4 @@
-/* meta_2.f -- translated by f2c (version 19980913).
+/* meta_2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -46,34 +46,34 @@ static integer c__3 = 3;
     extern /* Subroutine */ int getopt_1__(char *, integer *, char *, integer 
 	    *, char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer sbeg;
-    static char mode[16], pick[32];
-    static integer b, e, i__, j;
+    static thread_local integer sbeg;
+    static thread_local char mode[16], pick[32];
+    static thread_local integer b, e, i__, j;
     extern integer cardc_(char *, ftnlen);
     extern logical batch_(void);
-    static integer score;
-    static logical fixit;
+    static thread_local integer score;
+    static thread_local logical fixit;
     extern integer rtrim_(char *, ftnlen);
-    static char style[128];
-    static integer m2code;
-    static char tryit[600];
+    static thread_local char style[128];
+    static thread_local integer m2code;
+    static thread_local char tryit[600];
     extern /* Subroutine */ int m2gmch_(char *, char *, char *, integer *, 
 	    logical *, integer *, logical *, integer *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen), m2rcvr_(integer *, integer *, 
 	    char *, ftnlen), scardc_(integer *, char *, ftnlen);
-    static integer bscore, cutoff;
-    static logical reason;
+    static thread_local integer bscore, cutoff;
+    static thread_local logical reason;
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), ssizec_(integer *, char *, ftnlen), repsub_(char *, 
 	    integer *, integer *, char *, char *, ftnlen, ftnlen, ftnlen);
-    static logical intrct;
+    static thread_local logical intrct;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char thnwds[32*7], kwords[32*16];
+    static thread_local char thnwds[32*7], kwords[32*16];
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen), prepsn_(char *, ftnlen);
-    static logical pssthn;
-    static char questn[80];
+    static thread_local logical pssthn;
+    static thread_local char questn[80];
     extern /* Subroutine */ int niceio_3__(char *, integer *, char *, ftnlen, 
 	    ftnlen), cnfirm_1__(char *, logical *, ftnlen);
 

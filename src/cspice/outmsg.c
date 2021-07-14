@@ -1,4 +1,4 @@
-/* outmsg.f -- translated by f2c (version 19980913).
+/* outmsg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -56,7 +56,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char device[255];
     integer remain;
-    static char border[80];
+    static thread_local char border[80];
     extern /* Subroutine */ int getdev_(char *, ftnlen);
     logical dfault;
     integer length;

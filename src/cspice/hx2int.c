@@ -1,4 +1,4 @@
-/* hx2int.f -- translated by f2c (version 19980913).
+/* hx2int.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,19 +22,19 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer mini, maxi;
+    static thread_local integer mini, maxi;
     logical more;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer iplus, lccbeg, digbeg, lccend, uccbeg, digend, uccend, 
-	    ispace;
+    static thread_local integer iplus, lccbeg, digbeg, lccend, uccbeg, digend,
+	     uccend, ispace;
     integer idigit;
-    static integer minmod, maxmod;
+    static thread_local integer minmod, maxmod;
     integer strbeg;
     logical negtiv;
     extern integer intmin_(void), intmax_(void);
     integer letter, strend;
-    static integer iminus;
+    static thread_local integer iminus;
     integer tmpnum, pos;
 
 /* $ Abstract */

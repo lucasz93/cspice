@@ -1,4 +1,4 @@
-/* echo.f -- translated by f2c (version 19980913).
+/* echo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,24 +31,24 @@ static logical c_true = TRUE_;
 	     s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char lead[3], hide[80], flag__[3], seen[80], dont[32];
-    static logical wipe, stat[3];
-    static char delim[1];
+    static thread_local char lead[3], hide[80], flag__[3], seen[80], dont[32];
+    static thread_local logical wipe, stat[3];
+    static thread_local char delim[1];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    nthwd_(char *, integer *, char *, integer *, ftnlen, ftnlen);
-    static char style[80], cdelim[1];
+    static thread_local char style[80], cdelim[1];
     extern /* Subroutine */ int getdel_(char *, ftnlen);
-    static char repeat[32], scndwd[32], thrdwd[32];
+    static thread_local char repeat[32], scndwd[32], thrdwd[32];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), nspioh_(char *, ftnlen), nsplog_(char *, logical *, 
 	    ftnlen), trnlat_(char *, char *, ftnlen, ftnlen);
-    static char hstyle[80], frstwd[32];
+    static thread_local char hstyle[80], frstwd[32];
     extern /* Subroutine */ int nspmrg_(char *, ftnlen), nspgls_(char *, char 
 	    *, char *, ftnlen, ftnlen, ftnlen), nsplgs_(char *, char *, char *
 	    , ftnlen, ftnlen, ftnlen), nspgst_(char *, logical *, ftnlen);
     extern /* Subroutine */ int nspwln_();
     extern /* Subroutine */ int nsppst_(char *, logical *, ftnlen);
-    static integer loc;
+    static thread_local integer loc;
     extern /* Subroutine */ int nicepr_1__(char *, char *, U_fp, ftnlen, 
 	    ftnlen);
 

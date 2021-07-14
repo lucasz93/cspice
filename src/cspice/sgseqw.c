@@ -1,4 +1,4 @@
-/* sgseqw.f -- translated by f2c (version 19980913).
+/* sgseqw.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,7 +34,7 @@ static integer c__17 = 17;
     /* Local variables */
     integer meta[17], size, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer fthan[20], ftoff[20], index;
+    static thread_local integer fthan[20], ftoff[20], index;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal xmeta[17], myref;
     extern /* Subroutine */ int dafada_(doublereal *, integer *), dafcad_(
@@ -49,7 +49,7 @@ static integer c__17 = 17;
     extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *), 
 	    dafsih_(integer *, char *, ftnlen);
     integer refadr;
-    static integer ftbadr[20];
+    static thread_local integer ftbadr[20];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
     integer sidlen;
@@ -58,20 +58,20 @@ static integer c__17 = 17;
     extern integer isrchi_(integer *, integer *, integer *), lastnb_(char *, 
 	    ftnlen);
     integer pktadr;
-    static logical fxdseg;
-    static integer lsthan;
-    static doublereal ftrefs[40]	/* was [2][20] */;
-    static integer ftncon[20];
-    static logical explct;
+    static thread_local logical fxdseg;
+    static thread_local integer lsthan;
+    static thread_local doublereal ftrefs[40]	/* was [2][20] */;
+    static thread_local integer ftncon[20];
+    static thread_local logical explct;
     doublereal dpksiz;
-    static integer ftnpkt[20], ftnref[20], ftnres[20];
+    static thread_local integer ftnpkt[20], ftnref[20], ftnres[20];
     extern logical return_(void);
     doublereal mysize;
     integer pktpos;
-    static integer ftityp[20], ftpksz[20];
-    static logical ftfixd[20], ftexpl[20];
+    static thread_local integer ftityp[20], ftpksz[20];
+    static thread_local logical ftfixd[20], ftexpl[20];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer ftmxsz[20];
+    static thread_local integer ftmxsz[20];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), errint_(char *, integer *, ftnlen);
     integer ich;

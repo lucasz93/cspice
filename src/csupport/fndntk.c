@@ -1,4 +1,4 @@
-/* fndntk.f -- translated by f2c (version 19980913).
+/* fndntk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -364,14 +364,12 @@
 	while(! delimr) {
 	    if (*end + 1 >= eol) {
 		delimr = TRUE_;
-	    } else /* if(complicated condition) */ {
 		i__1 = *end;
-		if (i_indx(delims, string + i__1, delims_len, *end + 1 - i__1)
-			 != 0) {
-		    delimr = TRUE_;
-		} else {
-		    ++(*end);
-		}
+	    } else if (i_indx(delims, string + i__1, delims_len, *end + 1 - 
+		    i__1) != 0) {
+		delimr = TRUE_;
+	    } else {
+		++(*end);
 	    }
 	}
 

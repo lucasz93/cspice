@@ -1,4 +1,4 @@
-/* header.f -- translated by f2c (version 19980913).
+/* header.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,9 +21,9 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern integer rtrim_(char *, ftnlen);
-    static char buffer[1600*40*10];
+    static thread_local char buffer[1600*40*10];
 
 /* $ Abstract */
 

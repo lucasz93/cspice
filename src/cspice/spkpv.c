@@ -1,4 +1,4 @@
-/* spkpv.f -- translated by f2c (version 19980913).
+/* spkpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -23,17 +23,17 @@ static integer c__6 = 6;
 	    char *, integer *, ftnlen, ftnlen), zzctruin_(integer *), chkin_(
 	    char *, ftnlen), dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *), errch_(char *, char *, ftnlen, ftnlen);
-    static char svref[32];
+    static thread_local char svref[32];
     doublereal xform[36]	/* was [6][6] */, dc[2];
     integer ic[6];
-    static integer svctr1[2];
+    static thread_local integer svctr1[2];
     extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     integer irfreq;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
     doublereal tstate[6];
-    static integer svirfr;
+    static thread_local integer svirfr;
     extern logical return_(void);
     extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
 	     integer *, doublereal *, integer *);

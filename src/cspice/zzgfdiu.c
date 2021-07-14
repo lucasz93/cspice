@@ -1,4 +1,4 @@
-/* zzgfdiu.f -- translated by f2c (version 19980913).
+/* zzgfdiu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,7 +20,7 @@ static integer c__0 = 0;
 	    char *, char *, ftnlen, ftnlen);
     logical found;
     doublereal state[6];
-    static integer svobs;
+    static thread_local integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen), bods2c_(
 	    char *, integer *, logical *, ftnlen);
@@ -29,11 +29,11 @@ static integer c__0 = 0;
     logical attblk[15];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static integer svtarg;
+    static thread_local integer svtarg;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
-    static char svcorr[5];
+    static thread_local char svcorr[5];
     extern /* Subroutine */ int zzgfdiq_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, ftnlen);
 

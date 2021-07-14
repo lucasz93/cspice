@@ -1,4 +1,4 @@
-/* zzinpdt.f -- translated by f2c (version 19980913).
+/* zzinpdt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -41,10 +41,10 @@ static doublereal c_b16 = 1e-12;
     extern logical failed_(void);
     doublereal re;
     extern doublereal pi_(void), halfpi_(void);
-    static doublereal altbds[6]	/* was [2][3] */;
+    static thread_local doublereal altbds[6]	/* was [2][3] */;
     doublereal amnalt, amnlat, amnlon, amxalt, amxlat, amxlon, lonmrg, maxalt,
 	     maxlat, maxlon, minalt, minlat, minlon, pcnlat;
-    static doublereal pi2;
+    static thread_local doublereal pi2;
     integer relmin;
     extern logical return_(void);
     integer relmax;

@@ -1,4 +1,4 @@
-/* subpnt.f -- translated by f2c (version 19980913).
+/* subpnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -46,7 +46,7 @@ static integer c__3 = 3;
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    ), vequ_(doublereal *, doublereal *);
-    static logical xmit;
+    static thread_local logical xmit;
     doublereal tpos[3];
     extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
 	    ), zznamfrm_(integer *, char *, integer *, char *, integer *, 
@@ -61,17 +61,17 @@ static integer c__3 = 3;
     doublereal s, radii[3], range;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static logical usecn;
+    static thread_local logical usecn;
     extern doublereal vdist_(doublereal *, doublereal *);
     doublereal vtemp[3], xform[9]	/* was [3][3] */;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer nsurf;
+    static thread_local integer nsurf;
     extern doublereal vnorm_(doublereal *);
-    static logical uselt, svfnd1, svfnd2;
+    static thread_local logical uselt, svfnd1, svfnd2;
     doublereal corvj2[3], subvj2[3];
-    static integer svctr1[2], svctr2[2];
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
+    static thread_local integer svctr3[2], svctr4[2];
     doublereal lt, etdiff;
     integer obscde, fixcid;
     doublereal ltdiff;
@@ -80,27 +80,27 @@ static integer c__3 = 3;
     extern doublereal touchd_(doublereal *);
     extern logical return_(void);
     char pntdef[20], shpstr[9];
-    static char subtyp[20];
+    static thread_local char subtyp[20];
     char trmstr[20];
     doublereal corpos[3], obspos[3], prevet, prevlt, ssbost[6], ssbtst[6], 
 	    stloff[3], subvec[3];
     integer fixcls, fixctr;
-    static integer srflst[100];
+    static thread_local integer srflst[100];
     logical attblk[15], fnd, surfup;
-    static logical usestl;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
+    static thread_local logical usestl;
+    static thread_local char svtarg[36];
+    static thread_local integer svtcde;
+    static thread_local char svobsr[36];
+    static thread_local integer svobsc;
     doublereal alt;
-    static char svfref[32];
-    static integer svrefc;
+    static thread_local char svfref[32];
+    static thread_local integer svrefc;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 
 	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
 	    *, doublereal *, doublereal *, ftnlen, ftnlen);
-    static logical pri;
+    static thread_local logical pri;
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *), bodvcd_(
 	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
 	    nearpt_(doublereal *, doublereal *, doublereal *, doublereal *, 

@@ -1,4 +1,4 @@
-/* zzgfilu.f -- translated by f2c (version 19980913).
+/* zzgfilu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -44,25 +44,25 @@ static integer c__3 = 3;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    static char svref[32];
-    static integer svobs;
+    static thread_local char svref[32];
+    static thread_local integer svobs;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     integer fxfcde;
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
     doublereal angles[3], incsta[2];
-    static char svinam[36];
+    static thread_local char svinam[36];
     doublereal emista[2], ettarg, normal[3];
-    static char svonam[36];
+    static thread_local char svonam[36];
     doublereal phssta[2], srfvec[3];
-    static char svmeth[200], svtnam[36];
+    static thread_local char svmeth[200], svtnam[36];
     integer fxclss, fxtyid, fxcent;
     extern logical return_(void);
-    static char svcorr[5];
-    static doublereal svnrml[3];
-    static integer svaidx, svilum, svtarg;
-    static logical svablk[15];
+    static thread_local char svcorr[5];
+    static thread_local doublereal svnrml[3];
+    static thread_local integer svaidx, svilum, svtarg;
+    static thread_local logical svablk[15];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), cmprss_(char *, integer *, char 
 	    *, char *, ftnlen, ftnlen, ftnlen), bodvrd_(char *, char *, 
@@ -74,7 +74,7 @@ static integer c__3 = 3;
 	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    static doublereal svsspt[3];
+    static thread_local doublereal svsspt[3];
 
 /* $ Abstract */
 

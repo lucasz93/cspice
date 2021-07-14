@@ -1,4 +1,4 @@
-/* m2selc.f -- translated by f2c (version 19980913).
+/* m2selc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -15,7 +15,7 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer b, e, f, l, p, w;
+    static thread_local integer b, e, f, l, p, w;
     extern /* Subroutine */ int chkin_(char *, ftnlen), m2vget_(char *, 
 	    integer *, logical *, integer *, integer *, ftnlen), sigerr_(char 
 	    *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);

@@ -1,4 +1,4 @@
-/* zzxlated.f -- translated by f2c (version 19980913).
+/* zzxlated.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,7 +20,7 @@ static integer c__128 = 128;
     static integer natbff = 0;
 
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    integer i__1, i__2, i__3, i__4, i__5, i__6;
     char ch__1[1];
     static doublereal equiv_0[128];
 
@@ -36,11 +36,11 @@ static integer c__128 = 128;
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     integer value;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    integer numdp;
+    integer osign, numdp;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer bigint;
+    static thread_local integer bigint;
 #define dpbufr (equiv_0)
-    static char strbff[8*4];
+    static thread_local char strbff[8*4];
 #define inbufr ((integer *)equiv_0)
     integer lenipt;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -48,7 +48,7 @@ static integer c__128 = 128;
     extern integer intmin_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static integer smlint;
+    static thread_local integer smlint;
     extern logical return_(void);
     char tmpstr[8];
     integer outpos;
@@ -603,9 +603,9 @@ static integer c__128 = 128;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This, however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -625,7 +625,7 @@ static integer c__128 = 128;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-		    379)) << 3), (ftnlen)3, (ftnlen)8);
+		    380)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
@@ -701,10 +701,10 @@ static integer c__128 = 128;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			475)) << 3), (ftnlen)1, (ftnlen)8);
+			476)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			476)) << 3), (ftnlen)1, (ftnlen)8);
+			477)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
 		return 0;
@@ -722,10 +722,10 @@ static integer c__128 = 128;
 		errint_("#", &numdp, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			496)) << 3), (ftnlen)1, (ftnlen)8);
+			497)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			497)) << 3), (ftnlen)1, (ftnlen)8);
+			498)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
@@ -796,68 +796,216 @@ static integer c__128 = 128;
 /*                     INBUFR(K+1) */
 
 
-/*              Utilize the military extension bit manipulation */
-/*              intrinsics to perform the necessary computations. */
-/*              It has been determined empirically that on these */
-/*              environments this is faster than arithmetic. */
+/*              Perform the necessary computations.  What is outlined */
+/*              above is implemented below using arithmetic operations. */
+/*              The last "shifted 24 bits to the MSb" is handled */
+/*              in a special way, since the sign bit can not be shifted */
+/*              into place through simple multiplication. */
 
 		i__2 = j + 3;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)578)] = value;
+			"inbufr", i__2, "zzxlated_", (ftnlen)580)] = value;
 		i__2 = j + 4;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)582)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)584)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)582)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)584)] + value;
 		i__2 = j + 5;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)586)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)588)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)586)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)588)] + value;
 		i__2 = j + 6;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with INBUFR(K). */
+
 		value <<= 24;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)590)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)610)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)590)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)610)] + value;
+
+/*              Install the sign bit.  At the moment in INBUFR(K) */
+/*              the bits are precisely as they need to be arranged. */
+/*              Perform the following computations: */
+
+/*                 INBUFR(K) = (2**31-1) - INBUFR(K) + 1 */
+
+/*              Break this up into steps since 2**31 is not */
+/*              representable with 32 bit integers that utilize */
+/*              2's complement. */
+
+/*              First, negate the result: */
+
+/*                 INBUFR(K) = -INBUFR(K) */
+
+/*              But this negation is effectively: */
+
+/*                 INBUFR(K) = 2**32 - INBUFR(K) */
+
+/*              Which yields: */
+
+/*                 2**32 - (2**31) + INBUFR(K) */
+
+/*              or */
+
+/*                 2**31 + INBUFR(K) */
+
+/*              which is the desired quantity.  Note, 0 must be */
+/*              treated as a special case. */
+
+		if (osign == 1) {
+		    if (inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+			    s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)643)] 
+			    == 0) {
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				644)] = smlint;
+		    } else {
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				646)] = bigint - inbufr[(i__3 = k - 1) < 256 
+				&& 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+				"zzxlated_", (ftnlen)646)];
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				647)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)647)] + 1;
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				648)] = -inbufr[(i__3 = k - 1) < 256 && 0 <= 
+				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)648)];
+		    }
+		}
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__4 = 0, i__5 = *(unsigned char *)&ch__1[0];
+		i__2 = -1, i__3 = min(i__4,i__5);
+		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)594)] = value;
+			 i__2, "zzxlated_", (ftnlen)653)] = value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)598)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)657)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)598)] | value;
+			"zzxlated_", (ftnlen)657)] + value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)602)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)661)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)602)] | value;
+			"zzxlated_", (ftnlen)661)] + value;
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with INBUFR(K). */
+
 		value <<= 24;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)606)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)683)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)606)] | value;
+			"zzxlated_", (ftnlen)683)] + value;
+
+/*              Install the sign bit.  At the moment in INBUFR(K+1) */
+/*              we have the bits precisely as they need to be */
+/*              arranged.  Perform the computations as with the */
+/*              previous integer. */
+
+		if (osign == 1) {
+		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+			    "inbufr", i__2, "zzxlated_", (ftnlen)692)] == 0) {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)693)] = 
+				smlint;
+		    } else {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)695)] = 
+				bigint - inbufr[(i__3 = k) < 256 && 0 <= i__3 
+				? i__3 : s_rnge("inbufr", i__3, "zzxlated_", (
+				ftnlen)695)];
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)696)] = 
+				inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 : 
+				s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
+				696)] + 1;
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)697)] = 
+				-inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 :
+				 s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
+				697)];
+		    }
+		}
 
 /*              Check to see if the local buffer is full and the */
 /*              double precision numbers need to be moved into the */
@@ -887,10 +1035,10 @@ static integer c__128 = 128;
 		    " file format # to #. This error should never occur and i"
 		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)643)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)736)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)644)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)737)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATED", (ftnlen)8);
@@ -913,10 +1061,10 @@ static integer c__128 = 128;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			671)) << 3), (ftnlen)1, (ftnlen)8);
+			764)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			672)) << 3), (ftnlen)1, (ftnlen)8);
+			765)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
 		return 0;
@@ -934,10 +1082,10 @@ static integer c__128 = 128;
 		errint_("#", &numdp, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			692)) << 3), (ftnlen)1, (ftnlen)8);
+			785)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-			693)) << 3), (ftnlen)1, (ftnlen)8);
+			786)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATED", (ftnlen)8);
@@ -1008,68 +1156,216 @@ static integer c__128 = 128;
 /*                     INBUFR(K+1) */
 
 
-/*              Utilize the military extension bit manipulation */
-/*              intrinsics to perform the necessary computations. */
-/*              It has been determined empirically that on these */
-/*              environments this is faster than arithmetic. */
+/*              Perform the necessary computations. What is outlined */
+/*              above is implemented below using arithmetic operations. */
+/*              The last "shifted 24 bits to the MSb" is handled */
+/*              in a special way, since the sign bit can not be shifted */
+/*              into place through simple multiplication. */
 
 		i__2 = j + 6;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)774)] = value;
+			"inbufr", i__2, "zzxlated_", (ftnlen)868)] = value;
 		i__2 = j + 5;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)778)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)872)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)778)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)872)] + value;
 		i__2 = j + 4;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)782)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)876)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)782)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)876)] + value;
 		i__2 = j + 3;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with INBUFR(K). */
+
 		value <<= 24;
 		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)786)] = inbufr[(
+			"inbufr", i__2, "zzxlated_", (ftnlen)898)] = inbufr[(
 			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)786)] | value;
+			"inbufr", i__3, "zzxlated_", (ftnlen)898)] + value;
+
+/*              Install the sign bit.  At the moment in INBUFR(K) */
+/*              the bits are precisely as they need to be arranged. */
+/*              Perform the following computations: */
+
+/*                 INBUFR(K) = (2**31-1) - INBUFR(K) + 1 */
+
+/*              Break this up into steps since 2**31 is not */
+/*              representable with 32 bit integers that utilize */
+/*              2's complement. */
+
+/*              First, negate the result: */
+
+/*                 INBUFR(K) = -INBUFR(K) */
+
+/*              But this negation is effectively: */
+
+/*                 INBUFR(K) = 2**32 - INBUFR(K) */
+
+/*              Which yields: */
+
+/*                 2**32 - (2**31) + INBUFR(K) */
+
+/*              or */
+
+/*                 2**31 + INBUFR(K) */
+
+/*              which is the desired quantity.  Note, 0 must be */
+/*              treated as a special case. */
+
+		if (osign == 1) {
+		    if (inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+			    s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)931)] 
+			    == 0) {
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				932)] = smlint;
+		    } else {
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				934)] = bigint - inbufr[(i__3 = k - 1) < 256 
+				&& 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+				"zzxlated_", (ftnlen)934)];
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				935)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)935)] + 1;
+			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
+				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
+				936)] = -inbufr[(i__3 = k - 1) < 256 && 0 <= 
+				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)936)];
+		    }
+		}
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)790)] = value;
+			 i__2, "zzxlated_", (ftnlen)941)] = value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)794)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)945)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)794)] | value;
+			"zzxlated_", (ftnlen)945)] + value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)798)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)949)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)798)] | value;
+			"zzxlated_", (ftnlen)949)] + value;
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__4 = 0, i__5 = *(unsigned char *)&ch__1[0];
+		i__2 = -1, i__3 = min(i__4,i__5);
+		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with INBUFR(K). */
+
 		value <<= 24;
 		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)802)] = inbufr[(i__3 = k) 
+			 i__2, "zzxlated_", (ftnlen)971)] = inbufr[(i__3 = k) 
 			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-			"zzxlated_", (ftnlen)802)] | value;
+			"zzxlated_", (ftnlen)971)] + value;
+
+/*              Install the sign bit.  At the moment in INBUFR(K+1) */
+/*              we have the bits precisely as they need to be */
+/*              arranged.  Perform the computations as with the */
+/*              previous integer. */
+
+		if (osign == 1) {
+		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+			    "inbufr", i__2, "zzxlated_", (ftnlen)980)] == 0) {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)981)] = 
+				smlint;
+		    } else {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)983)] = 
+				bigint - inbufr[(i__3 = k) < 256 && 0 <= i__3 
+				? i__3 : s_rnge("inbufr", i__3, "zzxlated_", (
+				ftnlen)983)];
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)984)] = 
+				inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 : 
+				s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
+				984)] + 1;
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
+				"inbufr", i__2, "zzxlated_", (ftnlen)985)] = 
+				-inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 :
+				 s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
+				985)];
+		    }
+		}
 
 /*              Check to see if the local buffer is full and the */
 /*              double precision numbers need to be moved into the */
@@ -1099,10 +1395,10 @@ static integer c__128 = 128;
 		    " file format # to #. This error should never occur and i"
 		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)839)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)1024)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)840)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)1025)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATED", (ftnlen)8);
@@ -1118,7 +1414,7 @@ static integer c__128 = 128;
 		"not currently supported for translation of double precision "
 		"numbers from non-native formats.", (ftnlen)151);
 	errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("strbff", i__1, "zzxlated_", (ftnlen)858)) << 3), (
+		s_rnge("strbff", i__1, "zzxlated_", (ftnlen)1043)) << 3), (
 		ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZXLATED", (ftnlen)8);

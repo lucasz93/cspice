@@ -1,4 +1,4 @@
-/* scpart.f -- translated by f2c (version 19980913).
+/* scpart.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -36,7 +36,7 @@ static integer c__9999 = 9999;
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
 	    *, doublereal *, ftnlen), chkin_(char *, ftnlen), repmi_(char *, 
 	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    static doublereal prtsa[9999], prtso[9999];
+    static thread_local doublereal prtsa[9999], prtso[9999];
     extern logical failed_(void);
     char kvname[60*2];
     logical update;
@@ -45,11 +45,11 @@ static integer c__9999 = 9999;
 	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen);
     integer nprtsa;
     extern logical return_(void);
-    static integer usrctr[2];
+    static thread_local integer usrctr[2];
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     integer nprtso;
-    static integer lstprt;
+    static thread_local integer lstprt;
 
 /* $ Abstract */
 

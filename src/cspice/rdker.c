@@ -1,14 +1,9 @@
-/* rdker.f -- translated by f2c (version 19980913).
+/* rdker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
-
-/* Table of constant values */
-
-static logical c_true = TRUE_;
-static logical c_false = FALSE_;
 
 /* $Procedure      RDKER ( Read a kernel file ) */
 /* Subroutine */ int rdker_0_(int n__, char *kernel, char *line, integer *
@@ -32,22 +27,21 @@ static logical c_false = FALSE_;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzsetnnread_(logical *);
-    static integer i__, r__;
+    static thread_local integer i__, r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char first[80];
+    static thread_local char first[80];
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static char begdat[10];
+    static thread_local char begdat[10];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static char begtxt[10];
+    static thread_local char begtxt[10];
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), cltext_(char *, ftnlen), rdtext_(char *, char *, logical 
 	    *, ftnlen, ftnlen);
     extern logical return_(void);
-    static integer status;
-    static logical end;
+    static thread_local integer status;
+    static thread_local logical end;
 
 /* $ Abstract */
 
@@ -601,14 +595,7 @@ L_rdknew:
 /*     the line number of the last line read and can return this */
 /*     information from RDKLIN. */
 
-
-/*     The ZZSETNNREAD calls will not exist in source files intended */
-/*     for the FORTRAN toolkit files, they exists only to provide f2c */
-/*     a stub for translation to C. */
-
-    zzsetnnread_(&c_true);
     rdtext_(kernel, first, &end, kernel_len, (ftnlen)80);
-    zzsetnnread_(&c_false);
 
 /*     Replace any tab characters with blanks. */
 
@@ -873,14 +860,7 @@ L_rdkdat:
     s_copy(line, " ", line_len, (ftnlen)1);
     while(! failed_() && (status == 1 || s_cmp(line, " ", line_len, (ftnlen)1)
 	     == 0)) {
-
-/*        The ZZSETNNREAD calls will not exist in source files intended */
-/*        for the FORTRAN toolkit files, they exists only to provide f2c */
-/*        a stub for translation to C. */
-
-	zzsetnnread_(&c_true);
 	rdtext_(file, line, eof, (ftnlen)255, line_len);
-	zzsetnnread_(&c_false);
 
 /*        Replace any tab characters with blanks. */
 

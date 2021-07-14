@@ -1,4 +1,4 @@
-/* zzmobliq.f -- translated by f2c (version 19980913).
+/* zzmobliq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -13,9 +13,9 @@
 
     static logical first = TRUE_;
 
-    static doublereal year, t;
+    static thread_local doublereal year, t;
     extern doublereal jyear_(void);
-    static doublereal persec, rad;
+    static thread_local doublereal persec, rad;
     extern doublereal rpd_(void);
 
 /* $ Abstract */

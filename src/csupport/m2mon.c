@@ -1,4 +1,4 @@
-/* m2mon.f -- translated by f2c (version 19980913).
+/* m2mon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,16 +28,16 @@ logical m2mon_(char *word, ftnlen word_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static char copy[9];
-    static integer i__;
+    static thread_local char copy[9];
+    static thread_local integer i__;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer month;
+    static thread_local integer month;
     extern integer ltrim_(char *, ftnlen);
-    static integer start;
+    static thread_local integer start;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer length;
+    static thread_local integer length;
     extern integer qrtrim_(char *, ftnlen);
-    static integer end;
+    static thread_local integer end;
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* dcyphr.f -- translated by f2c (version 19980913).
+/* dcyphr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,17 +26,17 @@ static integer c__2 = 2;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer lbnd, ubnd;
-    static char attr[32*2];
-    static logical next;
-    static integer n;
-    static logical alpha;
+    static thread_local integer lbnd, ubnd;
+    static thread_local char attr[32*2];
+    static thread_local logical next;
+    static thread_local integer n;
+    static thread_local logical alpha;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static logical pc, hp;
-    static char messge[800*90];
+    static thread_local logical pc, hp;
+    static thread_local char messge[800*90];
     extern /* Subroutine */ int pltfrm_(integer *, integer *, char *, ftnlen);
-    static logical sgi, vax, sun;
+    static thread_local logical sgi, vax, sun;
 
 /* $ Abstract */
 

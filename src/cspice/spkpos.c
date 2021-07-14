@@ -1,4 +1,4 @@
-/* spkpos.f -- translated by f2c (version 19980913).
+/* spkpos.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,15 +20,15 @@
     integer obsid;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     integer targid;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer svtgid;
+    static thread_local integer svtgid;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer svobsi;
-    static char svtarg[36], svobsn[36];
+    static thread_local integer svobsi;
+    static thread_local char svtarg[36], svobsn[36];
     extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
 	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);

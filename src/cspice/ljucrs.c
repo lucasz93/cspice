@@ -1,4 +1,4 @@
-/* ljucrs.f -- translated by f2c (version 19980913).
+/* ljucrs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,9 +21,9 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer lowa, lowz;
+    static thread_local integer lowa, lowz;
     integer i__, j, inlen;
-    static integer shift;
+    static thread_local integer shift;
     integer count, outlen, ich;
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* zzgffvu.f -- translated by f2c (version 19980913).
+/* zzgffvu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -69,7 +69,7 @@ static doublereal c_b130 = 2.;
     doublereal stobs[6], vtemp[3], fovpt[3], m1[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
     doublereal m2[9]	/* was [3][3] */;
-    static integer svobs;
+    static thread_local integer svobs;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
@@ -93,22 +93,22 @@ static doublereal c_b130 = 2.;
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
 	    doublereal *);
     doublereal fovrad[3];
-    static char svinam[36];
+    static thread_local char svinam[36];
     extern logical return_(void);
-    static char svifrm[32], svishp[9], svtfrm[32], svtnam[36], svtshp[9], 
-	    svcorr[5];
+    static thread_local char svifrm[32], svishp[9], svtfrm[32], svtnam[36], 
+	    svtshp[9], svcorr[5];
     doublereal ctrext, ettarg, fvlimb[9], insmat[9]	/* was [3][3] */, 
 	    obspos[3], semipt[6]	/* was [3][2] */;
-    static doublereal svarad, svbnds[30000]	/* was [3][10000] */, svedct[
-	    3], svfaxi[3], svfovm[9]	/* was [3][3] */, svfpol[20000]	/* 
-	    was [2][10000] */, svfsmx[9]	/* was [3][3] */, svfvct[3], 
-	    svplan[4], svrdir[3], svsemi[6]	/* was [3][2] */, svtrad[3], 
-	    svxmag[2];
+    static thread_local doublereal svarad, svbnds[30000]	/* was [3][
+	    10000] */, svedct[3], svfaxi[3], svfovm[9]	/* was [3][3] */, 
+	    svfpol[20000]	/* was [2][10000] */, svfsmx[9]	/* was [3][3] 
+	    */, svfvct[3], svplan[4], svrdir[3], svsemi[6]	/* was [3][2] 
+	    */, svtrad[3], svxmag[2];
     doublereal trgctr[3], trgsmx[9]	/* was [3][3] */;
     integer clssid, frcent, frclss, ocstat;
-    static integer svinst, svnvrt, svtarg;
+    static thread_local integer svinst, svnvrt, svtarg;
     logical attblk[15];
-    static logical svuray, svustl, svxmit, svxtrg;
+    static thread_local logical svuray, svustl, svxmit, svxtrg;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), namfrm_(char *, integer *, 
 	    ftnlen);

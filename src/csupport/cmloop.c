@@ -1,4 +1,4 @@
-/* cmloop.f -- translated by f2c (version 19980913).
+/* cmloop.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -36,41 +36,41 @@ static logical c_false = FALSE_;
     /* Local variables */
     extern /* Subroutine */ int echo_(char *, char *, ftnlen, ftnlen);
     extern logical have_(char *, ftnlen);
-    static integer from;
-    static logical trap;
-    static integer rest, l;
-    static logical dolog;
+    static thread_local integer from;
+    static thread_local logical trap;
+    static thread_local integer rest, l;
+    static thread_local logical dolog;
     extern integer ltrim_(char *, ftnlen);
-    static char error[1760*2], com2do[1024];
+    static thread_local char error[1760*2], com2do[1024];
     extern logical no_(char *, ftnlen);
     extern /* Subroutine */ int logchk_(char *, char *, logical *, ftnlen, 
 	    ftnlen), cmredo_(char *, integer *, logical *, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char commnd[1024], errflg[32];
+    static thread_local char commnd[1024], errflg[32];
     extern logical cmmore_(char *, ftnlen);
     extern /* Subroutine */ int setdel_(char *, ftnlen), erract_(char *, char 
 	    *, ftnlen, ftnlen);
-    static char usenam[255];
+    static thread_local char usenam[255];
     extern /* Subroutine */ int errdev_(char *, char *, ftnlen, ftnlen);
-    static logical problm;
+    static thread_local logical problm;
     extern /* Subroutine */ int setdap_(char *, char *, ftnlen, ftnlen), 
 	    getcom_(char *, integer *, ftnlen), edtcom_(char *, char *, char *
 	    , integer *, ftnlen, ftnlen, ftnlen), builtn_(char *, logical *, 
 	    char *, ftnlen, ftnlen), nsplog_(char *, logical *, ftnlen), 
 	    nspend_(void), trnlat_(char *, char *, ftnlen, ftnlen), nsplgs_(
 	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
-    static char hstyle[120];
+    static thread_local char hstyle[120];
     extern /* Subroutine */ int nsperr_(char *, char *, ftnlen, ftnlen), 
 	    nspopl_(char *, char *, ftnlen, ftnlen);
-    static char lstyle[120];
+    static thread_local char lstyle[120];
     extern /* Subroutine */ int cmstup_(void);
     extern integer qrtrim_(char *, ftnlen);
     extern /* Subroutine */ int nspslr_(integer *, integer *);
-    static char sstyle[120];
+    static thread_local char sstyle[120];
     extern /* Subroutine */ int ressym_(char *, char *, ftnlen, ftnlen);
-    static char vstyle[120];
+    static thread_local char vstyle[120];
     extern /* Subroutine */ int nspsty_(char *, char *, ftnlen, ftnlen);
-    static logical log__[4], hit;
+    static thread_local logical log__[4], hit;
 
 
 /* $ Abstract */

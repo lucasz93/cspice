@@ -1,4 +1,4 @@
-/* hyptof.f -- translated by f2c (version 19980913).
+/* hyptof.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -24,7 +24,7 @@
     extern doublereal dcbrt_(doublereal *), dpmax_(void);
     integer count;
     doublereal lower, upper, middle, midval, lastdf;
-    static doublereal maxlog;
+    static thread_local doublereal maxlog;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     integer mcount;

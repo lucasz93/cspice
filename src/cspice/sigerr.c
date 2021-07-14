@@ -1,4 +1,4 @@
-/* sigerr.f -- translated by f2c (version 19980913).
+/* sigerr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -18,10 +18,10 @@ static logical c_false = FALSE_;
     static char defmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK, DEFAULT";
     static char errmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK         ";
 
-    static logical stat;
+    static thread_local logical stat;
     extern logical failed_(void), accept_(logical *);
     extern /* Subroutine */ int getact_(integer *);
-    static integer action;
+    static thread_local integer action;
     extern /* Subroutine */ int byebye_(char *, ftnlen), freeze_(void);
     extern logical seterr_(logical *);
     extern /* Subroutine */ int outmsg_(char *, ftnlen), putsms_(char *, 

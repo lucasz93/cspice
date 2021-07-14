@@ -1,4 +1,4 @@
-/* zzspkfap.f -- translated by f2c (version 19980913).
+/* zzspkfap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,7 +22,7 @@
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    ), vequ_(doublereal *, doublereal *);
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *, doublereal *), zzvalcor_(char *, 
 	    logical *, ftnlen), zzspkflt_(U_fp, doublereal *, char *, char *, 
@@ -32,7 +32,7 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
     doublereal pcorr[3];
-    static logical uselt;
+    static thread_local logical uselt;
     extern logical failed_(void);
     logical attblk[15];
     doublereal dpcorr[3], corvel[3];
@@ -41,7 +41,7 @@
 	    ftnlen);
     doublereal corpos[3];
     extern logical return_(void);
-    static logical usestl;
+    static thread_local logical usestl;
 
 /* $ Abstract */
 

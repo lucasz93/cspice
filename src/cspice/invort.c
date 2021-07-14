@@ -1,4 +1,4 @@
-/* invort.f -- translated by f2c (version 19980913).
+/* invort.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -23,7 +23,7 @@
     integer i__;
     doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal bound;
+    static thread_local doublereal bound;
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), xpose_(
 	    doublereal *, doublereal *), unorm_(doublereal *, doublereal *, 

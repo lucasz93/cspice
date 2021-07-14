@@ -1,4 +1,4 @@
-/* lspcn.f -- translated by f2c (version 19980913).
+/* lspcn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,14 +38,14 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
     doublereal uavel[3], npole[3], trans[9]	/* was [3][3] */;
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    static logical svfnd1;
-    static integer svctr1[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
     integer idcode;
     doublereal lt;
     extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static integer svidcd;
+    static thread_local integer svidcd;
     extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
 	    doublereal *, ftnlen);
     doublereal bstate[6], radius;
@@ -53,7 +53,7 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 	    integer *, doublereal *, doublereal *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
     doublereal sstate[6];
-    static char svbody[36];
+    static thread_local char svbody[36];
     extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
 	     integer *, doublereal *);
     extern logical return_(void);

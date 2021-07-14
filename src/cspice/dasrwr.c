@@ -1,4 +1,4 @@
-/* dasrwr.f -- translated by f2c (version 19980913).
+/* dasrwr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -52,26 +52,26 @@ static integer c__1024 = 1024;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer node, next;
+    static thread_local integer node, next;
     extern /* Subroutine */ int zzdasgrd_(integer *, integer *, doublereal *),
 	     zzddhhlu_(integer *, char *, logical *, integer *, ftnlen), 
 	    zzdasgri_(integer *, integer *, integer *), chkin_(char *, ftnlen)
 	    , lnkan_(integer *, integer *), moved_(doublereal *, integer *, 
 	    doublereal *);
-    static integer poolc[32]	/* was [2][16] */, poold[32]	/* was [2][16]
-	     */;
+    static thread_local integer poolc[32]	/* was [2][16] */, poold[32]	
+	    /* was [2][16] */;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static integer pooli[32]	/* was [2][16] */;
+    static thread_local integer pooli[32]	/* was [2][16] */;
     extern integer lnktl_(integer *, integer *);
     extern logical failed_(void);
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
 	    ftnlen, ftnlen), dasiod_(char *, integer *, integer *, doublereal 
 	    *, ftnlen);
-    static char rcbufc[1024*10];
-    static doublereal rcbufd[1280]	/* was [128][10] */;
+    static thread_local char rcbufc[1024*10];
+    static thread_local doublereal rcbufd[1280]	/* was [128][10] */;
     extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    static integer rcbufi[2560]	/* was [256][10] */;
+    static thread_local integer rcbufi[2560]	/* was [256][10] */;
     extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *), 
 	    dassih_(integer *, char *, ftnlen), errhan_(char *, integer *, 
 	    ftnlen), lnkini_(integer *, integer *), sigerr_(char *, ftnlen), 

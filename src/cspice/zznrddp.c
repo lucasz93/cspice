@@ -1,4 +1,4 @@
-/* zznrddp.f -- translated by f2c (version 19980913).
+/* zznrddp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -19,47 +19,50 @@
 	    doublereal *, doublereal *), atan2(doublereal, doublereal);
 
     /* Local variables */
-    static doublereal ctem, delt, pinc, sghl;
-    static logical cont;
-    static doublereal sghs, aqnv, cosq, temp, stem, eqsq, sinq, thgr, xmao, 
-	    xnoi, zmol, zmos, pinc0, ainv2, sini2, temp1, cosq2, c__;
+    static thread_local doublereal ctem, delt, pinc, sghl;
+    static thread_local logical cont;
+    static thread_local doublereal sghs, aqnv, cosq, temp, stem, eqsq, sinq, 
+	    thgr, xmao, xnoi, zmol, zmos, pinc0, ainv2, sini2, temp1, cosq2, 
+	    c__;
     extern /* Subroutine */ int zzsecprt_(integer *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    static integer i__;
-    static doublereal bfact, alfdp, jdtdb;
+    static thread_local integer i__;
+    static thread_local doublereal bfact, alfdp, jdtdb;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal betdp, atime, theta, xfact, preep, jdut50, xincl, cosiq,
-	     cosok, cosis, xlamo, a1, a2, a3, a4, a5, a6, a7, a8, a9, e3, f2, 
-	    f3, siniq, sinis, sinok, sinzf, stepn, s1, s2, s3, s4, s5, s6, s7,
-	     stepp, x1, x2, x3, x4, x5, x6, x7, x8, xldot, xnddt, xndot, 
-	    xqncl, z1, z2, z3, zcosg, zcosh, zcosi, zsing, zsinh, zsini;
+    static thread_local doublereal betdp, atime, theta, xfact, preep, jdut50, 
+	    xincl, cosiq, cosok, cosis, xlamo, a1, a2, a3, a4, a5, a6, a7, a8,
+	     a9, e3, f2, f3, siniq, sinis, sinok, sinzf, stepn, s1, s2, s3, 
+	    s4, s5, s6, s7, stepp, x1, x2, x3, x4, x5, x6, x7, x8, xldot, 
+	    xnddt, xndot, xqncl, z1, z2, z3, zcosg, zcosh, zcosi, zsing, 
+	    zsinh, zsini;
     extern doublereal twopi_(void);
-    static doublereal a10, cc, dg[10], eo, pe, eq, ph, et, ft, se, pl, sh, si,
-	     sl, z11, z12, z13, z21, xl, z22, omegao, z23, z31, z32, z33, ze, 
-	    zf, zm, zn, xnodce;
+    static thread_local doublereal a10, cc, dg[10], eo, pe, eq, ph, et, ft, 
+	    se, pl, sh, si, sl, z11, z12, z13, z21, xl, z22, omegao, z23, z31,
+	     z32, z33, ze, zf, zm, zn, xnodce;
     extern doublereal pi_(void);
-    static doublereal zx, zy;
-    static integer iresfl;
-    static doublereal f220, f221, ee2, f311, f321, cosomo, f322, f330, f441, 
-	    f442, f522, f523, f542, f543, g200, g201, g211, g300, g310, g322, 
-	    g410, g422, g520, g521, g532, g533, oxnode, pe0, ph0, pl0, rteqsq,
-	     se2, se3, sh2, sh3, si2, si3, sinomo, sl2, sl3, sl4, xh2, xh3, 
-	    xi2, xi3, xl2, xl3, xl4, xnodeo, zcosgl, zcoshl, zcosil, zsingl, 
-	    zsinhl, zsinil;
-    static integer isynfl;
-    static doublereal gam, del[3], eoc;
+    static thread_local doublereal zx, zy;
+    static thread_local integer iresfl;
+    static thread_local doublereal f220, f221, ee2, f311, f321, cosomo, f322, 
+	    f330, f441, f442, f522, f523, f542, f543, g200, g201, g211, g300, 
+	    g310, g322, g410, g422, g520, g521, g532, g533, oxnode, pe0, ph0, 
+	    pl0, rteqsq, se2, se3, sh2, sh3, si2, si3, sinomo, sl2, sl3, sl4, 
+	    xh2, xh3, xi2, xi3, xl2, xl3, xl4, xnodeo, zcosgl, zcoshl, zcosil,
+	     zsingl, zsinhl, zsinil;
+    static thread_local integer isynfl;
+    static thread_local doublereal gam, del[3], eoc;
     extern doublereal j2000_(void), j1950_(void);
     extern logical return_(void);
-    static doublereal ds50, day, pgh, sgh, sel, bsq, shl, sil;
+    static thread_local doublereal ds50, day, pgh, sgh, sel, bsq, shl, sil;
     extern doublereal spd_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal ses, sll, xli, shs, sis, xni, sls, xmo, xls, xnq;
+    static thread_local doublereal ses, sll, xli, shs, sis, xni, sls, xmo, 
+	    xls, xnq;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal ssx[5], pgh0, sgh2, sgh3, sgh4, xgh2, xgh3, xgh4, pix1, 
-	    pix2, xno2;
+    static thread_local doublereal ssx[5], pgh0, sgh2, sgh3, sgh4, xgh2, xgh3,
+	     xgh4, pix1, pix2, xno2;
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* lx4uns.f -- translated by f2c (version 19980913).
+/* lx4uns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,8 +20,8 @@
     integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer i__, l;
-    static logical digit[384];
+    static thread_local integer i__, l;
+    static thread_local logical digit[384];
 
 /* $ Abstract */
 

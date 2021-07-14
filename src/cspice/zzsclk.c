@@ -1,4 +1,4 @@
-/* zzsclk.f -- translated by f2c (version 19980913).
+/* zzsclk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,13 +37,13 @@ logical zzsclk_(integer *ckid, integer *sclkid)
     char agent[32];
     logical watch, found;
     extern integer sizei_(integer *);
-    static integer known[16];
+    static thread_local integer known[16];
     logical keepid;
-    static integer passed[16];
+    static thread_local integer passed[16];
     logical update;
     extern /* Subroutine */ int chkout_(char *, ftnlen), dtpool_(char *, 
 	    logical *, integer *, char *, ftnlen, ftnlen);
-    static integer dtsize[7];
+    static thread_local integer dtsize[7];
     extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
     char sclkvr[32*7];
     extern /* Subroutine */ int ssizei_(integer *, integer *), removi_(

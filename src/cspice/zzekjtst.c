@@ -1,4 +1,4 @@
-/* zzekjtst.f -- translated by f2c (version 19980913).
+/* zzekjtst.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,35 +31,36 @@ static integer c__5 = 5;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer base, case__, ltab;
-    static logical done;
-    static integer rtab, lcol, lseg, rcol, lelt, rseg, lcur, relt, lptr, lrow,
-	     rptr, rrow;
+    static thread_local integer base, case__, ltab;
+    static thread_local logical done;
+    static thread_local integer rtab, lcol, lseg, rcol, lelt, rseg, lcur, 
+	    relt, lptr, lrow, rptr, rrow;
     extern logical zzekvmch_(integer *, logical *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *), zzekrcmp_(integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer svcp1[100], svcp2[100], svrb1, svrb2;
+    static thread_local integer svcp1[100], svcp2[100], svrb1, svrb2;
     extern /* Subroutine */ int zzekspsh_(integer *, integer *), zzeksupd_(
 	    integer *, integer *, integer *), zzekjsrt_(integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *), zzekstop_(
 	    integer *);
-    static integer i__, j, k, svnr1, svnr2, svnt1, svnt2, jbase, lbase, rbase;
+    static thread_local integer i__, j, k, svnr1, svnr2, svnt1, svnt2, jbase, 
+	    lbase, rbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer lhans[100], lsdsc[2400]	/* was [24][100] */, rhans[
-	    100], rsdsc[2400]	/* was [24][100] */;
+    static thread_local integer lhans[100], lsdsc[2400]	/* was [24][100] */, 
+	    rhans[100], rsdsc[2400]	/* was [24][100] */;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static integer lelts[100], cnstr, relts[100], dtptr, lrows[100], svops[
-	    100], rrows[100], svbas1, svbas2, rb, nr, nt;
-    static logical locact[100];
+    static thread_local integer lelts[100], cnstr, relts[100], dtptr, lrows[
+	    100], svops[100], rrows[100], svbas1, svbas2, rb, nr, nt;
+    static thread_local logical locact[100];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer addrss, ldscrs[1100]	/* was [11][100] */, lovbas, lrvidx, 
-	    minirv[2], offset, nt3, rdscrs[1100]	/* was [11][100] */, 
-	    rovbas, rrvidx, svncon, tab, top;
-    static logical fnd, lsmall;
+    static thread_local integer addrss, ldscrs[1100]	/* was [11][100] */, 
+	    lovbas, lrvidx, minirv[2], offset, nt3, rdscrs[1100]	/* 
+	    was [11][100] */, rovbas, rrvidx, svncon, tab, top;
+    static thread_local logical fnd, lsmall;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), zzeksrd_(integer *, integer *, integer *);
 

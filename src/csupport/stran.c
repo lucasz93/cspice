@@ -1,4 +1,4 @@
-/* stran.f -- translated by f2c (version 19980913).
+/* stran.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,59 +29,60 @@ static integer c__12 = 12;
 	    char *, ftnlen);
 
     /* Local variables */
-    static integer ldef, leno, vdim, slot, lout, lsym, ptrs[810], i__, j;
+    static thread_local integer ldef, leno, vdim, slot, lout, lsym, ptrs[810],
+	     i__, j;
     extern integer cardc_(char *, ftnlen);
-    static integer l, n;
-    static logical check[200];
+    static thread_local integer l, n;
+    static thread_local logical check[200];
     extern logical batch_(void);
-    static integer place;
+    static thread_local integer place;
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
-    static char delim[1];
+    static thread_local char delim[1];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer nname;
+    static thread_local integer nname;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char names[32*206];
+    static thread_local char names[32*206];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    geteq_(char *, ftnlen);
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    static char symbl[33];
-    static integer psize;
+    static thread_local char symbl[33];
+    static thread_local integer psize;
     extern integer rtrim_(char *, ftnlen);
-    static logical checkd[200];
+    static thread_local logical checkd[200];
     extern logical failed_(void);
-    static char alphab[32];
+    static thread_local char alphab[32];
     extern /* Subroutine */ int getdel_(char *, ftnlen);
     extern logical matchm_(char *, char *, char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    static char buffer[256*52];
+    static thread_local char buffer[256*52];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    lastnb_(char *, ftnlen);
-    static logical gotone;
+    static thread_local logical gotone;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), repsub_(char *, integer *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static char equote[1];
+    static thread_local char equote[1];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char resvrd[32*12], symbol[33], pattrn[80];
-    static integer nxtchr;
+    static thread_local char resvrd[32*12], symbol[33], pattrn[80];
+    static thread_local integer nxtchr;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), rdstmn_(char *, char *, char *, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int sbget_1__(char *, char *, integer *, char *, 
 	    char *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), nthuqw_(char *
 	    , integer *, char *, char *, integer *, ftnlen, ftnlen, ftnlen);
-    static char myprmt[80];
+    static thread_local char myprmt[80];
     extern /* Subroutine */ int sbrem_1__(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer lsttry;
+    static thread_local integer lsttry;
     extern /* Subroutine */ int sbset_1__(char *, char *, char *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static char def[1024];
-    static integer loc;
-    static char key[32];
-    static logical new__;
+    static thread_local char def[1024];
+    static thread_local integer loc;
+    static thread_local char key[32];
+    static thread_local logical new__;
     extern /* Subroutine */ int sbinit_1__(integer *, integer *, integer *, 
 	    char *, integer *, char *, ftnlen, ftnlen);
 

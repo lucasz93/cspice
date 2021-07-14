@@ -1,4 +1,4 @@
-/* zzddhnfc.f -- translated by f2c (version 19980913).
+/* zzddhnfc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,9 +28,9 @@ static integer c__4 = 4;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static integer savbff;
+    static thread_local integer savbff;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char strbff[8*4];
+    static thread_local char strbff[8*4];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
     extern logical return_(void);

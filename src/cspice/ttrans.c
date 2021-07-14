@@ -1,4 +1,4 @@
-/* ttrans.f -- translated by f2c (version 19980913).
+/* ttrans.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -45,79 +45,79 @@ static doublereal c_b189 = 60.;
     double d_int(doublereal *);
 
     /* Local variables */
-    static doublereal jd1101;
-    static integer dn2000;
-    static doublereal dp2000, frac;
-    static integer nref, week;
-    static doublereal secs;
-    static integer year;
-    static doublereal mins;
-    static char vars__[32*1];
-    static integer qint;
-    static char rest[32], myto[32];
+    static thread_local doublereal jd1101;
+    static thread_local integer dn2000;
+    static thread_local doublereal dp2000, frac;
+    static thread_local integer nref, week;
+    static thread_local doublereal secs;
+    static thread_local integer year;
+    static thread_local doublereal mins;
+    static thread_local char vars__[32*1];
+    static thread_local integer qint;
+    static thread_local char rest[32], myto[32];
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
-    static integer i__;
-    static doublereal halfd;
+    static thread_local integer i__;
+    static thread_local doublereal halfd;
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[8*21];
-    static integer fmday;
-    static doublereal daydp;
+    static thread_local char recog[8*21];
+    static thread_local integer fmday;
+    static thread_local doublereal daydp;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
-    static logical needy[21];
-    static integer dyear;
-    static doublereal tempd;
-    static logical found;
-    static integer tempi;
-    static logical forml[21];
-    static integer wkday;
-    static doublereal tsecs;
-    static integer dofyr, pfrom, month, dpsun;
-    static doublereal hours, dt;
+    static thread_local logical needy[21];
+    static thread_local integer dyear;
+    static thread_local doublereal tempd;
+    static thread_local logical found;
+    static thread_local integer tempi;
+    static thread_local logical forml[21];
+    static thread_local integer wkday;
+    static thread_local doublereal tsecs;
+    static thread_local integer dofyr, pfrom, month, dpsun;
+    static thread_local doublereal hours, dt;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal taitab[280];
-    static integer daytab[280];
+    static thread_local doublereal taitab[280];
+    static thread_local integer daytab[280];
     extern /* Subroutine */ int rmaind_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal jdsecs, daylen;
-    static integer parsed[21];
+    static thread_local doublereal jdsecs, daylen;
+    static thread_local integer parsed[21];
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
-    static doublereal formal, secspd;
-    static integer ordvec[21];
-    static logical update;
-    static integer doffst, offset;
+    static thread_local doublereal formal, secspd;
+    static thread_local integer ordvec[21];
+    static thread_local logical update;
+    static thread_local integer doffst, offset;
     extern integer lstled_(doublereal *, integer *, doublereal *);
     extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen),
 	     reordi_(integer *, integer *, integer *);
-    static doublereal exsecs, lastdt;
+    static thread_local doublereal exsecs, lastdt;
     extern integer lstlei_(integer *, integer *, integer *);
-    static integer daynum, fyrday;
-    static char unifrm[8*27];
+    static thread_local integer daynum, fyrday;
+    static thread_local char unifrm[8*27];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    static integer refptr, dayptr;
+    static thread_local integer refptr, dayptr;
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static integer sunday, taiptr;
+    static thread_local integer sunday, taiptr;
     extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
-    static char myfrom[32];
+    static thread_local char myfrom[32];
     extern /* Subroutine */ int reordl_(integer *, integer *, logical *);
     extern integer lstlti_(integer *, integer *, integer *);
     extern logical return_(void);
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
 	    *, doublereal *, logical *, ftnlen), setmsg_(char *, ftnlen);
-    static integer usrctr[2];
+    static thread_local integer usrctr[2];
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
 	    nextwd_(char *, char *, char *, ftnlen, ftnlen, ftnlen), rmaini_(
 	    integer *, integer *, integer *, integer *);
-    static integer yr1, yr4;
+    static thread_local integer yr1, yr4;
     extern doublereal j2000_(void);
     extern logical odd_(integer *);
-    static doublereal tai;
-    static integer day, rem;
+    static thread_local doublereal tai;
+    static thread_local integer day, rem;
     extern doublereal spd_(void);
-    static integer pto, yr100, yr400;
+    static thread_local integer pto, yr100, yr400;
 
 /* $ Abstract */
 
@@ -742,24 +742,24 @@ static doublereal c_b189 = 60.;
 	secspd = spd_();
 	halfd = spd_() / 2.;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__2000) / c__4 * c__4 + 1 - abs(c__2000);
+	i__3 = 0, i__4 = 1 + abs(c__2000) / c__4 * c__4 - abs(c__2000);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__2000) / c__100 * c__100 + 1 - abs(c__2000);
+	i__5 = 0, i__6 = 1 + abs(c__2000) / c__100 * c__100 - abs(c__2000);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__2000) / c__400 * c__400 + 1 - abs(c__2000);
-	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
+	i__7 = 0, i__8 = 1 + abs(c__2000) / c__400 * c__400 - abs(c__2000);
+	dn2000 = 365 * (c__2000 - 1) + (c__2000 - 1) / 4 - (c__2000 - 1) / 
 		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
 		946)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
 		s_rnge("extra", i__2, "ttrans_", (ftnlen)946)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1991) / c__4 * c__4 + 1 - abs(c__1991);
+	i__3 = 0, i__4 = 1 + abs(c__1991) / c__4 * c__4 - abs(c__1991);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__1991) / c__100 * c__100 + 1 - abs(c__1991);
+	i__5 = 0, i__6 = 1 + abs(c__1991) / c__100 * c__100 - abs(c__1991);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__1991) / c__400 * c__400 + 1 - abs(c__1991);
-	sunday = (c__1991 - 1) * 365 + (c__1991 - 1) / 4 - (c__1991 - 1) / 
+	i__7 = 0, i__8 = 1 + abs(c__1991) / c__400 * c__400 - abs(c__1991);
+	sunday = 365 * (c__1991 - 1) + (c__1991 - 1) / 4 - (c__1991 - 1) / 
 		100 + (c__1991 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
 		947)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
@@ -1116,12 +1116,12 @@ static doublereal c_b189 = 60.;
 	    doffst = yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	daynum = 365 * (year - 1) + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
 		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1361)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
@@ -1145,12 +1145,12 @@ static doublereal c_b189 = 60.;
 	    doffst = yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	daynum = 365 * (year - 1) + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
 		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1388)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
@@ -1175,12 +1175,12 @@ static doublereal c_b189 = 60.;
 	}
 	frac = tvec[1] - (doublereal) day;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	daynum = 365 * (year - 1) + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
 		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1416)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
@@ -1244,12 +1244,12 @@ static doublereal c_b189 = 60.;
 	    doffst = yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	daynum = 365 * (year - 1) + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
 		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1504)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
@@ -1280,12 +1280,12 @@ static doublereal c_b189 = 60.;
 	    doffst = yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	daynum = 365 * (year - 1) + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
 		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1541)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
@@ -1461,11 +1461,11 @@ static doublereal c_b189 = 60.;
 	dofyr = rem + 1;
 	year = yr400 * 400 + yr100 * 100 + (yr4 << 2) + yr1 + 1;
 /* Computing MAX */
-	i__1 = 0, i__2 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__1 = 0, i__2 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__400 * c__400 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__400 * c__400 - abs(year);
 	if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
 	    month = lstlti_(&dofyr, &c__12, dpjan0);
 	    day = dofyr - dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 :
@@ -1563,12 +1563,12 @@ static doublereal c_b189 = 60.;
 	    doffst = yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(year) / c__4 * c__4 - abs(year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(year) / c__100 * c__100 - abs(year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	week = (daynum - ((year - 1) * 365 + (year - 1) / 4 - (year - 1) / 
+	i__7 = 0, i__8 = 1 + abs(year) / c__400 * c__400 - abs(year);
+	week = (daynum - (365 * (year - 1) + (year - 1) / 4 - (year - 1) / 
 		100 + (year - 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
 		1851)] + extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : 

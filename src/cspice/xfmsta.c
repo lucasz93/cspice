@@ -1,4 +1,4 @@
-/* xfmsta.f -- translated by f2c (version 19980913).
+/* xfmsta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -53,8 +53,8 @@ static doublereal c_b65 = 0.;
 	    doublereal *, integer *, doublereal *);
     doublereal sqtmp;
     char isysu[40], osysu[40];
-    static logical svfnd1;
-    static integer svctr1[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
     doublereal jacobi[9]	/* was [3][3] */;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
@@ -67,7 +67,7 @@ static doublereal c_b65 = 0.;
 	    doublereal *, doublereal *);
     integer bodyid;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer svbdid;
+    static thread_local integer svbdid;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), drdlat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), cylrec_(doublereal *, doublereal *, 
@@ -90,7 +90,7 @@ static doublereal c_b65 = 0.;
 	    doublereal *, doublereal *, doublereal *), ljucrs_(integer *, 
 	    char *, char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), dsphdr_(
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static char svbody[36];
+    static thread_local char svbody[36];
     extern /* Subroutine */ int dpgrdr_(char *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);

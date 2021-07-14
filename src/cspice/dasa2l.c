@@ -1,4 +1,4 @@
-/* dasa2l.f -- translated by f2c (version 19980913).
+/* dasa2l.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -58,30 +58,30 @@ static integer c__2 = 2;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer free, nrec, i__, j, range[2];
+    static thread_local integer free, nrec, i__, j, range[2];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ncomc;
-    static logical segok;
-    static integer ncomr, ndirs;
+    static thread_local integer ncomc;
+    static thread_local logical segok;
+    static thread_local integer ncomr, ndirs;
     extern logical failed_(void);
-    static integer ub, hiaddr;
+    static thread_local integer ub, hiaddr;
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    static integer baserc;
-    static char access[10];
-    static integer dscloc, dirrec[256];
+    static thread_local integer baserc;
+    static thread_local char access[10];
+    static thread_local integer dscloc, dirrec[256];
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
-    static logical samfil;
-    static integer mxaddr;
+    static thread_local logical samfil;
+    static thread_local integer mxaddr;
     extern integer isrchi_(integer *, integer *, integer *);
-    static integer lstrec[3];
+    static thread_local integer lstrec[3];
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen);
-    static integer nresvc, nxtrec;
+    static thread_local integer nresvc, nxtrec;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), chkout_(char *, ftnlen), dasrri_(integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer lstwrd[3], nresvr, ntypes, curtyp, prvtyp;
+    static thread_local integer lstwrd[3], nresvr, ntypes, curtyp, prvtyp;
 
 /* $ Abstract */
 
@@ -1146,11 +1146,11 @@ static integer c__2 = 2;
 /*           in, update the highest address count. */
 
 	    if (curtyp == *type__) {
-		hiaddr += nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("nw", i__1, "dasa2l_", (ftnlen)1196)] * (i__3 =
-			 dirrec[(i__2 = dscloc - 1) < 256 && 0 <= i__2 ? i__2 
-			: s_rnge("dirrec", i__2, "dasa2l_", (ftnlen)1196)], 
-			abs(i__3));
+		hiaddr += nw[(i__3 = *type__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+			s_rnge("nw", i__3, "dasa2l_", (ftnlen)1196)] * (i__2 =
+			 dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? i__1 
+			: s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)1196)], 
+			abs(i__2));
 	    }
 
 /*           Compute the number of records described by the current */

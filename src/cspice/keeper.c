@@ -1,4 +1,4 @@
-/* keeper.f -- translated by f2c (version 19980913).
+/* keeper.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -46,24 +46,24 @@ static integer c__1 = 1;
 	    char *, ftnlen), ekuef_(integer *);
     logical dopck;
     extern /* Subroutine */ int cklpf_(char *, integer *, ftnlen);
-    static char files[255*5300];
+    static thread_local char files[255*5300];
     logical dodsk;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), ckupf_(integer *);
-    static integer srces[5300];
+    static thread_local integer srces[5300];
     logical dospk, paths, gotit;
-    static char known[32*3];
+    static thread_local char known[32*3];
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     integer n1, n2, n3, nmult, start;
-    static char types[8*5300];
+    static thread_local char types[8*5300];
     char fil2ld[255];
     extern logical failed_(void);
     logical ok, didpck, diddsk;
     extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
 	    *, ftnlen);
-    static integer handls[5300];
+    static thread_local integer handls[5300];
     logical dometa;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     char nofile[500];

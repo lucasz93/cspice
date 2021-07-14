@@ -1,4 +1,4 @@
-/* tcheck.f -- translated by f2c (version 19980913).
+/* tcheck.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,22 +39,22 @@ static integer c__2 = 2;
 	    s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer comp;
-    static doublereal jun30;
-    static integer year, hour, i__, j, k;
-    static doublereal hlbnd, hubnd;
+    static thread_local integer comp;
+    static thread_local doublereal jun30;
+    static thread_local integer year, hour, i__, j, k;
+    static thread_local doublereal hlbnd, hubnd;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen), repmi_(char *, char *,
 	     integer *, char *, ftnlen, ftnlen, ftnlen);
-    static integer myear;
-    static doublereal dinyr;
-    static integer month;
+    static thread_local integer myear;
+    static thread_local doublereal dinyr;
+    static thread_local integer month;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer second, leapdy;
-    static char messge[200];
-    static integer minute, day;
-    static doublereal doy;
+    static thread_local integer second, leapdy;
+    static thread_local char messge[200];
+    static thread_local integer minute, day;
+    static thread_local doublereal doy;
 
 /* $ Abstract */
 
@@ -358,11 +358,11 @@ static integer c__2 = 2;
 	myear = year;
     }
 /* Computing MAX */
-    i__1 = 0, i__2 = abs(myear) / c__4 * c__4 + 1 - abs(myear);
+    i__1 = 0, i__2 = 1 + abs(myear) / c__4 * c__4 - abs(myear);
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(myear) / c__100 * c__100 + 1 - abs(myear);
+    i__3 = 0, i__4 = 1 + abs(myear) / c__100 * c__100 - abs(myear);
 /* Computing MAX */
-    i__5 = 0, i__6 = abs(myear) / c__400 * c__400 + 1 - abs(myear);
+    i__5 = 0, i__6 = 1 + abs(myear) / c__400 * c__400 - abs(myear);
     leapdy = max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6);
     dinmon[1] = (doublereal) leapdy + 28.;
     dinyr = (doublereal) leapdy + 365.;

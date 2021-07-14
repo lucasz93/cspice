@@ -1,4 +1,4 @@
-/* str2et.f -- translated by f2c (version 19980913).
+/* str2et.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,63 +38,63 @@ static integer c__6 = 6;
     double d_int(doublereal *);
 
     /* Local variables */
-    static doublereal frac, hoff, moff, secs;
-    static integer year;
-    static doublereal tvec[8];
-    static logical mods;
-    static integer last;
-    static doublereal hour;
-    static char hstr[2], type__[16], mstr[2];
-    static integer i__;
-    static char check[16];
+    static thread_local doublereal frac, hoff, moff, secs;
+    static thread_local integer year;
+    static thread_local doublereal tvec[8];
+    static thread_local logical mods;
+    static thread_local integer last;
+    static thread_local doublereal hour;
+    static thread_local char hstr[2], type__[16], mstr[2];
+    static thread_local integer i__;
+    static thread_local char check[16];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer cyear;
+    static thread_local integer cyear;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static integer gyear;
+    static thread_local integer gyear;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), moved_(doublereal *, integer *, 
 	    doublereal *), dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen), repmi_(char *, char *, integer *, char *, ftnlen, ftnlen,
 	     ftnlen);
-    static logical dojul;
-    static doublereal tvecm[8];
-    static char forml[16];
-    static integer ntvec;
-    static logical zoned;
-    static doublereal extra;
-    static integer month;
-    static char error[400];
+    static thread_local logical dojul;
+    static thread_local doublereal tvecm[8];
+    static thread_local char forml[16];
+    static thread_local integer ntvec;
+    static thread_local logical zoned;
+    static thread_local doublereal extra;
+    static thread_local integer month;
+    static thread_local char error[400];
     extern /* Subroutine */ int jul2gr_(integer *, integer *, integer *, 
 	    integer *), gr2jul_(integer *, integer *, integer *, integer *);
-    static integer sc, hr, mm, mn, dy;
-    static logical ok;
+    static thread_local integer sc, hr, mm, mn, dy;
+    static thread_local logical ok;
     extern /* Subroutine */ int tchckd_(char *, ftnlen), tcheck_(doublereal *,
 	     char *, logical *, char *, logical *, char *, ftnlen, ftnlen, 
 	    ftnlen);
-    static char calndr[16];
+    static thread_local char calndr[16];
     extern /* Subroutine */ int timdef_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer yr;
+    static thread_local integer yr;
     extern /* Subroutine */ int tparch_(char *, ftnlen);
-    static logical succes;
-    static char modify[16*5];
-    static logical yabbrv, adjust;
+    static thread_local logical succes;
+    static thread_local char modify[16*5];
+    static thread_local logical yabbrv, adjust;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), prefix_(char *, 
 	    integer *, char *, ftnlen, ftnlen), chkout_(char *, ftnlen);
-    static doublereal minute;
+    static thread_local doublereal minute;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char pictur[80];
-    static logical ok1, ok2;
+    static thread_local char pictur[80];
+    static thread_local logical ok1, ok2;
     extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
 	    ftnlen);
     extern logical return_(void);
-    static integer orgnyr;
+    static thread_local integer orgnyr;
     extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
 	    *, char *, logical *, logical *, logical *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), texpyr_(integer *);
-    static integer day;
-    static doublereal mdy[2], mon[2];
-    static integer doy;
+    static thread_local integer day;
+    static thread_local doublereal mdy[2], mon[2];
+    static thread_local integer doy;
     extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
 	    doublereal *, integer *, logical *, ftnlen);
 

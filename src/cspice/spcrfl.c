@@ -1,4 +1,4 @@
-/* spcrfl.f -- translated by f2c (version 19980913).
+/* spcrfl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,31 +22,31 @@ static integer c__1 = 1;
     integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
 
     /* Local variables */
-    static integer dafu, free;
-    static char temp[1000], null[1];
+    static thread_local integer dafu, free;
+    static thread_local char temp[1000], null[1];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen), chkin_(char *, ftnlen);
-    static integer bward, fward, nd;
+    static thread_local integer bward, fward, nd;
     extern logical failed_(void);
-    static logical called;
-    static integer ni;
-    static char ifname[60];
-    static integer hanbuf;
+    static thread_local logical called;
+    static thread_local integer ni;
+    static thread_local char ifname[60];
+    static thread_local integer hanbuf;
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
-    static char record[1000];
-    static logical eocsav;
+    static thread_local char record[1000];
+    static thread_local logical eocsav;
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen);
-    static integer tmplen;
+    static thread_local integer tmplen;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer iostat;
+    static thread_local integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static integer posnul, rec, bol, eol;
-    static char eot[1];
+    static thread_local integer posnul, rec, bol, eol;
+    static thread_local char eot[1];
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer nrr;
+    static thread_local integer nrr;
 
     /* Fortran I/O blocks */
     static cilist io___16 = { 1, 0, 1, 0, 0 };

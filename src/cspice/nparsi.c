@@ -1,4 +1,4 @@
-/* nparsi.f -- translated by f2c (version 19980913).
+/* nparsi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,7 +22,7 @@
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
     extern integer intmin_(void), intmax_(void);
-    static doublereal xmnint, xmxint;
+    static thread_local doublereal xmnint, xmxint;
 
 /* $ Abstract */
 

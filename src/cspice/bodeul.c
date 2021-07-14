@@ -1,4 +1,4 @@
-/* bodeul.f -- translated by f2c (version 19980913).
+/* bodeul.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -53,7 +53,7 @@ static integer c__100 = 100;
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
     doublereal sinth[100];
     extern doublereal twopi_(void);
-    static integer j2code;
+    static thread_local integer j2code;
     doublereal rf2bfx[9]	/* was [3][3] */, ac[100], dc[100];
     integer na, nd, nl;
     doublereal wc[100];

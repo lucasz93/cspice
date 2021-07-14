@@ -1,4 +1,4 @@
-/* dasac.f -- translated by f2c (version 19980913).
+/* dasac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,7 +40,7 @@ static logical c_false = FALSE_;
     extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
-    static char eolmrk[1];
+    static thread_local char eolmrk[1];
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen), daswfr_(integer *, char 
 	    *, char *, integer *, integer *, integer *, integer *, ftnlen, 

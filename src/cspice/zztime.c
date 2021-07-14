@@ -1,4 +1,4 @@
-/* zztime.f -- translated by f2c (version 19980913).
+/* zztime.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,67 +37,67 @@ logical zztime_0_(int n__, char *string, char *transl, char *letter, char *
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer case__, begs[64], kind, nsec, ends[64];
-    static logical ampm;
-    static integer nday, item, from;
+    static thread_local integer case__, begs[64], kind, nsec, ends[64];
+    static thread_local logical ampm;
+    static thread_local integer nday, item, from;
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer last, nmin, nmon;
-    static char this__[1];
-    static integer ndoy, next;
+    static thread_local integer last, nmin, nmon;
+    static thread_local char this__[1];
+    static thread_local integer ndoy, next;
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
 	    , char *, ftnlen, ftnlen, ftnlen);
-    static integer f[95];
+    static thread_local integer f[95];
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), zztknerr_(char *, char *, char *, char *,
 	     logical *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer i__, j, k, l[95];
-    static logical check;
-    static integer r__, blank, w, nchar;
+    static thread_local integer i__, j, k, l[95];
+    static thread_local logical check;
+    static thread_local integer r__, blank, w, nchar;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[12*70];
-    static integer pbegs[64];
+    static thread_local char recog[12*70];
+    static thread_local integer pbegs[64];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char names[32*95], class__[1*70];
+    static thread_local char names[32*95], class__[1*70];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer pends[64], value;
+    static thread_local integer pends[64], value;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer nyear, width[70];
-    static char wkday[12*3*2];
-    static integer pfrom;
-    static char mnmrk[12*3*2], month[3];
-    static integer nhour;
+    static thread_local integer nyear, width[70];
+    static thread_local char wkday[12*3*2];
+    static thread_local integer pfrom;
+    static thread_local char mnmrk[12*3*2], month[3];
+    static thread_local integer nhour;
     extern integer rtrim_(char *, ftnlen);
-    static char myerr[32];
-    static integer pnext, p1, p2;
+    static thread_local char myerr[32];
+    static thread_local integer pnext, p1, p2;
     extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    static integer to;
+    static thread_local integer to;
     extern logical samchi_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char spcial[12];
+    static thread_local char spcial[12];
     extern logical samsbi_(char *, integer *, integer *, char *, integer *, 
 	    integer *, ftnlen, ftnlen);
-    static char messge[320], picerr[320];
+    static thread_local char messge[320], picerr[320];
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), nparsi_(char *, 
 	    integer *, char *, integer *, ftnlen, ftnlen), chkout_(char *, 
 	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    suffix_(char *, integer *, char *, ftnlen, ftnlen);
-    static char pictur[320], tknerr[320];
-    static integer mnsize[2], wksize[2];
+    static thread_local char pictur[320], tknerr[320];
+    static thread_local integer mnsize[2], wksize[2];
     extern /* Subroutine */ int zzmkpc_(char *, integer *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen);
-    static logical did;
-    static integer njd, get;
-    static char rep[64];
-    static doublereal hms[3];
-    static logical got;
+    static thread_local logical did;
+    static thread_local integer njd, get;
+    static thread_local char rep[64];
+    static thread_local doublereal hms[3];
+    static thread_local logical got;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer pto, ptr, put;
+    static thread_local integer pto, ptr, put;
 
 /* $ Abstract */
 

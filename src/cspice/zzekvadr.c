@@ -1,4 +1,4 @@
-/* zzekvadr.f -- translated by f2c (version 19980913).
+/* zzekvadr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,21 +21,21 @@ static integer c__10 = 10;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer rbas[200];
+    static thread_local integer rbas[200];
     extern /* Subroutine */ int zzekstop_(integer *);
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ntabs, svbas[200];
+    static thread_local integer ntabs, svbas[200];
     extern /* Subroutine */ int cleari_(integer *, integer *);
-    static integer begidx[200], reloff, addrss;
+    static thread_local integer begidx[200], reloff, addrss;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern integer lstlei_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen);
-    static integer jrsidx;
+    static thread_local integer jrsidx;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static integer maxrwv, svnjrs, top, nsv;
+    static thread_local integer maxrwv, svnjrs, top, nsv;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
 /* $ Abstract */

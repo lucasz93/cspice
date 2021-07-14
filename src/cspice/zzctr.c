@@ -1,4 +1,4 @@
-/* zzctr.f -- translated by f2c (version 19980913).
+/* zzctr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -14,12 +14,12 @@
     static logical first = TRUE_;
 
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ctrhgh;
+    static thread_local integer ctrhgh;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     extern integer intmin_(void), intmax_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer ctrlow;
+    static thread_local integer ctrlow;
     extern logical return_(void);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* stcc01.f -- translated by f2c (version 19980913).
+/* stcc01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,29 +34,29 @@ static integer c__4 = 4;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer nblen_(char *, ftnlen);
     extern /* Subroutine */ int ekcls_(integer *);
-    static logical found;
-    static integer ncols;
+    static thread_local logical found;
+    static thread_local integer ncols;
     extern /* Subroutine */ int ekopr_(char *, integer *, ftnlen);
-    static integer sizes[100], nrows;
-    static char cnames[32*100];
+    static thread_local integer sizes[100], nrows;
+    static thread_local char cnames[32*100];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    eknseg_(integer *);
-    static logical indexd[100];
-    static integer tmphnd, numseg;
+    static thread_local logical indexd[100];
+    static thread_local integer tmphnd, numseg;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static logical nullok[100];
+    static thread_local logical nullok[100];
     extern /* Subroutine */ int ekssum_(integer *, integer *, char *, integer 
 	    *, integer *, char *, char *, integer *, integer *, logical *, 
 	    logical *, ftnlen, ftnlen, ftnlen);
-    static char dtypes[4*100];
+    static thread_local char dtypes[4*100];
     extern logical return_(void);
-    static char tmptnm[64];
-    static integer strlns[100];
-    static char tnmprv[64];
+    static thread_local char tmptnm[64];
+    static thread_local integer strlns[100];
+    static thread_local char tnmprv[64];
 
 /* $ Abstract */
 

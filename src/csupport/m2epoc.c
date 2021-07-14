@@ -1,4 +1,4 @@
-/* m2epoc.f -- translated by f2c (version 19980913).
+/* m2epoc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -18,8 +18,8 @@ logical m2epoc_(char *word, ftnlen word_len)
     extern /* Subroutine */ int m2cal_(char *, char *, integer *, ftnlen, 
 	    ftnlen);
     extern logical m2mon_(char *, ftnlen);
-    static integer tcode;
-    static char error[80];
+    static thread_local integer tcode;
+    static thread_local char error[80];
     extern logical m2time_(char *, ftnlen), m2year_(char *, ftnlen);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* vnormg.f -- translated by f2c (version 19980913).
+/* vnormg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -156,11 +156,12 @@ doublereal vnormg_(doublereal *v1, integer *ndim)
     v1max = 0.;
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((d__1 = v1[(i__2 = i__ - 1) < v1_dim1 && 0 <= i__2 ? i__2 : 
+	if ((d__1 = v1[(i__2 = i__ - 1) < 1 * v1_dim1 && 0 <= i__2 ? i__2 : 
 		s_rnge("v1", i__2, "vnormg_", (ftnlen)148)], abs(d__1)) > 
 		v1max) {
-	    v1max = (d__2 = v1[(i__3 = i__ - 1) < v1_dim1 && 0 <= i__3 ? i__3 
-		    : s_rnge("v1", i__3, "vnormg_", (ftnlen)148)], abs(d__2));
+	    v1max = (d__2 = v1[(i__3 = i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? 
+		    i__3 : s_rnge("v1", i__3, "vnormg_", (ftnlen)148)], abs(
+		    d__2));
 	}
     }
 
@@ -175,8 +176,8 @@ doublereal vnormg_(doublereal *v1, integer *ndim)
 	ret_val = 0.;
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    a = v1[(i__2 = i__ - 1) < v1_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "v1", i__2, "vnormg_", (ftnlen)167)] / v1max;
+	    a = v1[(i__2 = i__ - 1) < 1 * v1_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("v1", i__2, "vnormg_", (ftnlen)167)] / v1max;
 	    ret_val += a * a;
 	}
 	ret_val = v1max * sqrt(ret_val);

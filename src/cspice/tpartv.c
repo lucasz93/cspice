@@ -1,4 +1,4 @@
-/* tpartv.f -- translated by f2c (version 19980913).
+/* tpartv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -35,43 +35,43 @@ static integer c__8 = 8;
 
     /* Local variables */
     extern logical zztokns_(char *, char *, ftnlen, ftnlen);
-    static integer begs[5], ends[5], from, b, e;
+    static thread_local integer begs[5], ends[5], from, b, e;
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer i__, r__;
-    static char delim[1*3];
+    static thread_local integer i__, r__;
+    static thread_local char delim[1*3];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    repmc_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    static integer mapto, b1, b2, e1, e2;
-    static char known[12*300];
+    static thread_local integer mapto, b1, b2, e1, e2;
+    static thread_local char known[12*300];
     extern integer rtrim_(char *, ftnlen);
     extern logical zzist_(char *, ftnlen);
-    static integer to;
+    static thread_local integer to;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char meanng[12*300];
-    static logical havera;
+    static thread_local char meanng[12*300];
+    static thread_local logical havera;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static logical havapm;
+    static thread_local logical havapm;
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     extern integer intmax_(void);
-    static logical havwdy;
+    static thread_local logical havwdy;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static logical havzon;
+    static thread_local logical havzon;
     extern logical zzcmbt_(char *, char *, logical *, ftnlen, ftnlen);
-    static integer nknown;
-    static logical resolv, havsys;
+    static thread_local integer nknown;
+    static thread_local logical resolv, havsys;
     extern logical zzgrep_(char *, ftnlen);
-    static logical l2r, r2l;
+    static thread_local logical l2r, r2l;
     extern logical zznote_(char *, integer *, integer *, ftnlen), zzvalt_(
 	    char *, integer *, integer *, char *, ftnlen, ftnlen), zzremt_(
 	    char *, ftnlen), zzrept_(char *, char *, logical *, ftnlen, 
 	    ftnlen), zzsubt_(char *, char *, logical *, ftnlen, ftnlen), 
 	    zzispt_(char *, integer *, integer *, ftnlen);
-    static char rep[12];
-    static integer use;
+    static thread_local char rep[12];
+    static thread_local integer use;
     extern logical zzunpck_(char *, logical *, doublereal *, integer *, char *
 	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), zztpats_(
 	    integer *, integer *, char *, char *, ftnlen, ftnlen);

@@ -1,4 +1,4 @@
-/* zzekjsrt.f -- translated by f2c (version 19980913).
+/* zzekjsrt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,9 +26,9 @@ static integer c__4 = 4;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char cdat[32*250000];
-    static doublereal ddat[250000];
-    static integer idat[250000];
+    static thread_local char cdat[32*250000];
+    static thread_local doublereal ddat[250000];
+    static thread_local integer idat[250000];
     integer ntab;
     logical nfjg, null;
     extern /* Subroutine */ int zzekvcal_(integer *, integer *, integer *);
@@ -48,12 +48,12 @@ static integer c__4 = 4;
     logical trunc;
     extern /* Subroutine */ int swapi_(integer *, integer *);
     integer nrows, jg;
-    static char nf[1*250000];
+    static thread_local char nf[1*250000];
     integer addrjg, handle, nr, rj;
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
     integer cprime, colptr, eltidx, gap;
-    static integer ordvec[250000];
+    static thread_local integer ordvec[250000];
     integer prvbas, row, rjg, rowvec[11], rvecjg[11], rvsize, rwvbas, seg, 
 	    segvec[10], sgvbas, svecjg[10], svsize, tabloc, tprime;
     logical jle, nfj;

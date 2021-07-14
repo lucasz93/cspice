@@ -1,4 +1,4 @@
-/* m2term.f -- translated by f2c (version 19980913).
+/* m2term.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,31 +21,31 @@ static integer c__0 = 0;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer mark;
-    static logical more;
-    static integer room, next;
+    static thread_local integer mark;
+    static thread_local logical more;
+    static thread_local integer room, next;
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen), upto_(
 	    char *, char *, integer *, ftnlen, ftnlen);
-    static integer b, e;
+    static thread_local integer b, e;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizec_(char *, ftnlen), ncpos_(char *, char *, integer *, 
 	    ftnlen, ftnlen), sizei_(integer *);
-    static integer nextg, d1, d2, count;
-    static logical group;
-    static integer nextt;
+    static thread_local integer nextg, d1, d2, count;
+    static thread_local logical group;
+    static thread_local integer nextt;
     extern /* Subroutine */ int m2begr_(char *, integer *, integer *, integer 
 	    *, integer *, ftnlen);
     extern logical m2keyw_(char *, ftnlen);
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), scardi_(
 	    integer *, integer *);
-    static logical mrkend, dothen;
+    static thread_local logical mrkend, dothen;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen);
     extern logical matchw_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static integer beg;
+    static thread_local integer beg;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* chgirf.f -- translated by f2c (version 19980913).
+/* chgirf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -72,34 +72,34 @@ static integer c__21 = 21;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer axis;
-    static char word[25];
+    static thread_local integer axis;
+    static thread_local char word[25];
     extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
 	    );
-    static integer b, i__, j, p;
-    static doublereal angle;
+    static thread_local integer b, i__, j, p;
+    static thread_local doublereal angle;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
     extern integer wdcnt_(char *, ftnlen);
     extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    static doublereal trans[189]	/* was [9][21] */;
-    static char error[25];
+    static thread_local doublereal trans[189]	/* was [9][21] */;
+    static thread_local char error[25];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal radang;
+    static thread_local doublereal radang;
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), nparsi_(char *, 
 	    integer *, char *, integer *, ftnlen, ftnlen), chkout_(char *, 
 	    ftnlen), rotate_(doublereal *, integer *, doublereal *);
-    static doublereal tmpmat[9]	/* was [3][3] */;
+    static thread_local doublereal tmpmat[9]	/* was [3][3] */;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), rotmat_(doublereal *, doublereal *, integer *,
 	     doublereal *), convrt_(doublereal *, char *, char *, doublereal *
 	    , ftnlen, ftnlen);
     extern logical return_(void);
-    static integer loc;
+    static thread_local integer loc;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 

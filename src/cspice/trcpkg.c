@@ -1,4 +1,4 @@
-/* trcpkg.f -- translated by f2c (version 19980913).
+/* trcpkg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,7 +39,7 @@ static integer c__0 = 0;
 
     /* Local variables */
     integer i__, l;
-    static char stack[32*100];
+    static thread_local char stack[32*100];
     integer first;
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
@@ -50,7 +50,7 @@ static integer c__0 = 0;
     char tmpnam[80];
     extern integer frstnb_(char *, ftnlen);
     extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
-    static char frozen[32*100];
+    static thread_local char frozen[32*100];
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     char string[11];

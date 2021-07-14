@@ -1,4 +1,4 @@
-/* etcal.f -- translated by f2c (version 19980913).
+/* etcal.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,36 +38,36 @@ static integer c__6 = 6;
 	     char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer dn2000;
-    static doublereal dp2000, frac;
-    static char date[180];
-    static doublereal remd, secs;
-    static integer year, mins;
-    static char dstr[16], hstr[16], mstr[16], sstr[16], ystr[16];
-    static doublereal halfd, q;
-    static integer tsecs, dofyr, month, hours;
+    static thread_local integer dn2000;
+    static thread_local doublereal dp2000, frac;
+    static thread_local char date[180];
+    static thread_local doublereal remd, secs;
+    static thread_local integer year, mins;
+    static thread_local char dstr[16], hstr[16], mstr[16], sstr[16], ystr[16];
+    static thread_local doublereal halfd, q;
+    static thread_local integer tsecs, dofyr, month, hours;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static doublereal mynum;
-    static integer bh, bm, iq;
-    static doublereal secspd;
-    static char messge[16];
-    static integer offset;
-    static doublereal dmnint;
-    static logical adjust;
-    static integer daynum;
+    static thread_local doublereal mynum;
+    static thread_local integer bh, bm, iq;
+    static thread_local doublereal secspd;
+    static thread_local char messge[16];
+    static thread_local integer offset;
+    static thread_local doublereal dmnint;
+    static thread_local logical adjust;
+    static thread_local integer daynum;
     extern integer intmin_(void), intmax_(void);
     extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
 	    *, ftnlen, ftnlen);
-    static doublereal dmxint, mydnom;
+    static thread_local doublereal dmxint, mydnom;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer lstlti_(integer *, integer *, integer *);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    static integer yr1, yr4;
-    static char era[16];
-    static integer day, rem;
+    static thread_local integer yr1, yr4;
+    static thread_local char era[16];
+    static thread_local integer day, rem;
     extern doublereal spd_(void);
-    static integer yr100, yr400;
+    static thread_local integer yr100, yr400;
 
 /* $ Abstract */
 
@@ -391,7 +391,7 @@ static integer c__6 = 6;
 	first = FALSE_;
 	halfd = spd_() / 2.;
 	secspd = spd_();
-	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
+	dn2000 = 365 * (c__2000 - 1) + (c__2000 - 1) / 4 - (c__2000 - 1) / 
 		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "etcal_", (ftnlen)
 		571)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 

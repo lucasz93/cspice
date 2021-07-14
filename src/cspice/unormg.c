@@ -1,4 +1,4 @@
-/* unormg.f -- translated by f2c (version 19980913).
+/* unormg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -171,16 +171,16 @@
     if (*vmag > 0.) {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vout", i__2, "unormg_", (ftnlen)161)] = v1[(i__3 = i__ - 
-		    1) < v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, 
-		    "unormg_", (ftnlen)161)] / *vmag;
+	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("vout", i__2, "unormg_", (ftnlen)161)] = v1[(i__3 =
+		     i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge(
+		    "v1", i__3, "unormg_", (ftnlen)161)] / *vmag;
 	}
     } else {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vout", i__2, "unormg_", (ftnlen)165)] = 0.;
+	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("vout", i__2, "unormg_", (ftnlen)165)] = 0.;
 	}
     }
 

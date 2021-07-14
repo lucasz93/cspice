@@ -1,4 +1,4 @@
-/* dskx02.f -- translated by f2c (version 19980913).
+/* dskx02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -49,7 +49,7 @@ static integer c__0 = 0;
     logical have;
     doublereal near__;
     integer cvid;
-    static integer ncgr;
+    static thread_local integer ncgr;
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal udir[3];
     integer vloc, vids[3];
@@ -58,7 +58,7 @@ static integer c__0 = 0;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    ), vequ_(doublereal *, doublereal *);
     integer pntr;
-    static doublereal xtol;
+    static thread_local doublereal xtol;
     extern /* Subroutine */ int zztogrid_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), zzinvelt_(doublereal *, integer *, 
 	    doublereal *, doublereal *, doublereal *, integer *, logical *), 
@@ -77,52 +77,53 @@ static integer c__0 = 0;
 	    doublereal *), filli_(integer *, integer *, integer *);
     logical inseg;
     doublereal coord[3];
-    static doublereal vbuff[600]	/* was [3][200] */;
+    static thread_local doublereal vbuff[600]	/* was [3][200] */;
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer nvbuf;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    static integer vxlcg[150000]	/* was [3][50000] */;
+    static thread_local integer vxlcg[150000]	/* was [3][50000] */;
     logical extra;
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
     integer group, start;
-    static integer vidxs[200];
+    static thread_local integer vidxs[200];
     logical invox;
     integer cgxyz[3];
     extern logical vzero_(doublereal *);
     doublereal xpnts[9]	/* was [3][3] */;
-    static integer cgscl2;
+    static thread_local integer cgscl2;
     extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     extern logical failed_(void);
-    static integer cgscal;
+    static thread_local integer cgscal;
     integer fx, fy, fz;
-    static integer np;
+    static thread_local integer np;
     doublereal greedm;
-    static integer nv;
+    static thread_local integer nv;
     integer grpbeg, to, vi;
     extern logical return_(void);
     extern integer isrchi_(integer *, integer *, integer *);
-    static doublereal dskdsc[24], grdtol;
+    static thread_local doublereal dskdsc[24], grdtol;
     doublereal hitcor[3], normal[3], obsmat[9]	/* was [3][3] */, points[9]	
 	    /* was [3][3] */;
-    static doublereal voxori[3], voxsiz, vtxbds[6]	/* was [2][3] */;
+    static thread_local doublereal voxori[3], voxsiz, vtxbds[6]	/* was [2][3] 
+	    */;
     doublereal vtxoff[3], xpdfrc;
-    static integer cgrext[3], cgrptr[100000], corsys;
+    static thread_local integer cgrext[3], cgrptr[100000], corsys;
     integer dim, grpend, grpsiz, minidx, ngroup, nplate, nvxout;
-    static integer nvxtot;
+    static thread_local integer nvxtot;
     integer offset;
-    static integer ordvec[256000], platid[256000];
+    static thread_local integer ordvec[256000], platid[256000];
     integer plroom;
-    static integer source[256000];
+    static thread_local integer source[256000];
     integer totplt;
-    static integer vgrext[3], voxlst[150000]	/* was [3][50000] */, voxnpl, 
-	    voxnpt;
+    static thread_local integer vgrext[3], voxlst[150000]	/* was [3][
+	    50000] */, voxnpl, voxnpt;
     integer voxptr;
-    static integer vtxnpl, vxlout[50000], vxlstr[50000];
+    static thread_local integer vtxnpl, vxlout[50000], vxlstr[50000];
     logical boxhit, newseg;
     extern /* Subroutine */ int cleari_(integer *, integer *), setmsg_(char *,
 	     ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
@@ -1793,8 +1794,8 @@ static integer c__0 = 0;
 		    * 3 - 4) < 150000 && 0 <= i__3 ? i__3 : s_rnge("voxlst", 
 		    i__3, "dskx02_", (ftnlen)1189)] - 1) / cgscal + 1;
 	}
-	cvid = cgxyz[0] + cgrext[0] * (cgxyz[1] + cgxyz[2] * cgrext[1] - (
-		cgrext[1] + 1));
+	cvid = cgxyz[0] + cgrext[0] * (cgxyz[1] + cgxyz[2] * cgrext[1] - (1 + 
+		cgrext[1]));
 	if (cgrptr[(i__2 = cvid - 1) < 100000 && 0 <= i__2 ? i__2 : s_rnge(
 		"cgrptr", i__2, "dskx02_", (ftnlen)1196)] > 0) {
 
@@ -1980,14 +1981,14 @@ static integer c__0 = 0;
 /*           The condition below uses absolute value because the plate */
 /*           ID at index I-1 may have been "marked" via negation. */
 
-	    if (platid[(i__3 = ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ?
-		     i__2 : s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1393)] 
-		    - 1) < 256000 && 0 <= i__3 ? i__3 : s_rnge("platid", i__3,
-		     "dskx02_", (ftnlen)1393)] == (i__6 = platid[(i__5 = 
-		    ordvec[(i__4 = i__ - 2) < 256000 && 0 <= i__4 ? i__4 : 
-		    s_rnge("ordvec", i__4, "dskx02_", (ftnlen)1393)] - 1) < 
-		    256000 && 0 <= i__5 ? i__5 : s_rnge("platid", i__5, "dsk"
-		    "x02_", (ftnlen)1393)], abs(i__6))) {
+	    if (platid[(i__6 = ordvec[(i__5 = i__ - 1) < 256000 && 0 <= i__5 ?
+		     i__5 : s_rnge("ordvec", i__5, "dskx02_", (ftnlen)1393)] 
+		    - 1) < 256000 && 0 <= i__6 ? i__6 : s_rnge("platid", i__6,
+		     "dskx02_", (ftnlen)1393)] == (i__4 = platid[(i__3 = 
+		    ordvec[(i__2 = i__ - 2) < 256000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1393)] - 1) < 
+		    256000 && 0 <= i__3 ? i__3 : s_rnge("platid", i__3, "dsk"
+		    "x02_", (ftnlen)1393)], abs(i__4))) {
 
 /*              The plates having indices ORDVEC(I-1) and ORDVEC(I) are */
 /*              duplicates. */

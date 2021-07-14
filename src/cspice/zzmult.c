@@ -1,4 +1,4 @@
-/* zzmult.f -- translated by f2c (version 19980913).
+/* zzmult.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -19,11 +19,11 @@ doublereal zzmult_(doublereal *a, doublereal *b)
     double d_lg10(doublereal *);
 
     /* Local variables */
-    static doublereal loga, logb;
+    static thread_local doublereal loga, logb;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal expnt;
+    static thread_local doublereal expnt;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
     extern logical return_(void);

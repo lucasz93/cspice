@@ -1,4 +1,4 @@
-/* zzddhmnm.f -- translated by f2c (version 19980913).
+/* zzddhmnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,14 +39,14 @@ doublereal zzddhmnm_(integer *unit)
     extern logical failed_(void);
     extern integer isrchi_(integer *, integer *, integer *);
     char idword[8], strbff[8*4];
-    static integer supbff[4];
+    static thread_local integer supbff[4];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     char stramh[8*4], strarc[8*2];
     integer intarr[20], iostat;
     char strbuf[80];
     integer supidx;
     extern logical return_(void);
-    static integer numsup;
+    static thread_local integer numsup;
     integer bff;
     doublereal mnm;
 

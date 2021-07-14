@@ -1,4 +1,4 @@
-/* edtcom.f -- translated by f2c (version 19980913).
+/* edtcom.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,57 +37,57 @@ static integer c__1 = 1;
     integer f_clos(cllist *), i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[132];
+    static thread_local char name__[132];
     extern logical have_(char *, ftnlen);
-    static char line[132], rest[1760];
-    static integer unit, i__;
+    static thread_local char line[132], rest[1760];
+    static thread_local integer unit, i__;
     extern integer cardc_(char *, ftnlen);
-    static integer r__;
-    static char space[1];
+    static thread_local integer r__;
+    static thread_local char space[1];
     extern logical match_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer depth;
+    static thread_local integer depth;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), reset_(void);
-    static integer b1, b2, e1, e2;
-    static char error[132*2];
-    static logical lstat[3];
+    static thread_local integer b1, b2, e1, e2;
+    static thread_local char error[132*2];
+    static thread_local logical lstat[3];
     extern integer rtrim_(char *, ftnlen);
-    static logical sstat[3];
+    static thread_local logical sstat[3];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical m2wmch_(char *, integer *, integer *, char *, ftnlen, 
 	    ftnlen), failed_(void);
     extern /* Subroutine */ int edtcmd_(char *, char *, ftnlen, ftnlen);
-    static char buffer[132*86];
+    static thread_local char buffer[132*86];
     extern /* Subroutine */ int dmpbuf_(void), getbuf_(integer *, char *, 
 	    ftnlen);
-    static char scndwd[32];
+    static thread_local char scndwd[32];
     extern /* Subroutine */ int prread_(char *, char *, ftnlen, ftnlen), 
 	    newfil_(char *, char *, char *, ftnlen, ftnlen, ftnlen), nspioa_(
 	    char *, ftnlen);
-    static logical gotone;
+    static thread_local logical gotone;
     extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen), sigerr_(char *, ftnlen);
-    static integer comnum;
+    static thread_local integer comnum;
     extern /* Subroutine */ int getbsz_(integer *);
-    static char dstrng[3];
+    static thread_local char dstrng[3];
     extern /* Subroutine */ int nspioh_(char *, ftnlen);
-    static integer iostat;
+    static thread_local integer iostat;
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), suffix_(
 	    char *, integer *, char *, ftnlen, ftnlen);
-    static char pattrn[132], frstwd[32];
+    static thread_local char pattrn[132], frstwd[32];
     extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen), setmsg_(char *, ftnlen), chkout_(char *, ftnlen),
 	     nspioc_(char *, ftnlen), nspgst_(char *, logical *, ftnlen), 
 	    prexit_(void), putcom_(char *, integer *, ftnlen);
-    static char errstr[132];
-    static logical status[3], svstat[3];
+    static thread_local char errstr[132];
+    static thread_local logical status[3], svstat[3];
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), nspwln_(
 	    char *, ftnlen), nsppst_(char *, logical *, ftnlen), rstbuf_(void)
 	    , putbuf_(char *, ftnlen), prstrt_(char *, char *, ftnlen, ftnlen)
 	    , txtopr_(char *, integer *, ftnlen);
-    static char tab[1];
-    static integer ptr;
+    static thread_local char tab[1];
+    static thread_local integer ptr;
 
 /* $ Abstract */
 

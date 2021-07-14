@@ -1,4 +1,4 @@
-/* dafah.f -- translated by f2c (version 19980913).
+/* dafah.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,10 +40,10 @@ static logical c_true = TRUE_;
     integer s_wdue(cilist *), do_uio(integer *, char *, ftnlen), e_wdue(void);
 
     /* Local variables */
-    static integer ibff;
-    static char crec[1000];
-    static doublereal drec[128];
-    static integer iarc, iamh, free, ftnd[5000], ftni[5000];
+    static thread_local integer ibff;
+    static thread_local char crec[1000];
+    static thread_local doublereal drec[128];
+    static thread_local integer iarc, iamh, free, ftnd[5000], ftni[5000];
     extern /* Subroutine */ int zzdafgfr_(integer *, char *, integer *, 
 	    integer *, char *, integer *, integer *, integer *, logical *, 
 	    ftnlen, ftnlen), zzddhfnh_(char *, integer *, logical *, ftnlen), 
@@ -55,38 +55,38 @@ static logical c_true = TRUE_;
 	    ftnlen), zzddhluh_(integer *, integer *, logical *), zzddhopn_(
 	    char *, char *, char *, integer *, ftnlen, ftnlen, ftnlen), 
 	    zzplatfm_(char *, char *, ftnlen, ftnlen);
-    static integer i__;
+    static thread_local integer i__;
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer bward, fthan[5000];
+    static thread_local integer bward, fthan[5000];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer fward;
+    static thread_local integer fward;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical found;
-    static integer ftlnk[5000];
+    static thread_local logical found;
+    static thread_local integer ftlnk[5000];
     extern /* Subroutine */ int copyi_(integer *, integer *);
     extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static char ttype[4];
+    static thread_local char ttype[4];
     extern logical failed_(void);
-    static char dafnam[255];
+    static thread_local char dafnam[255];
     extern /* Subroutine */ int cleard_(integer *, doublereal *), dafrwa_(
 	    integer *, integer *, integer *);
-    static integer findex;
+    static thread_local integer findex;
     extern integer isrchi_(integer *, integer *, integer *);
-    static char format[8], idword[8];
-    static integer fhlist[5006];
+    static thread_local char format[8], idword[8];
+    static thread_local integer fhlist[5006];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), errfnm_(char *, integer *, ftnlen), removi_(integer *, 
 	    integer *), setmsg_(char *, ftnlen);
-    static integer iostat;
+    static thread_local integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ssizei_(
 	    integer *, integer *), insrti_(integer *, integer *);
     extern logical return_(void);
-    static char acc[10];
-    static integer fnb, fnd;
-    static char ifn[60];
-    static integer fni, lun;
+    static thread_local char acc[10];
+    static thread_local integer fnb, fnd;
+    static thread_local char ifn[60];
+    static thread_local integer fni, lun;
 
     /* Fortran I/O blocks */
     static cilist io___25 = { 1, 0, 0, 0, 0 };

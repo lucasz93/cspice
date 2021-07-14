@@ -1,4 +1,4 @@
-/* m2name.f -- translated by f2c (version 19980913).
+/* m2name.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -12,11 +12,11 @@ logical m2name_(char *word, ftnlen word_len)
     logical ret_val;
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern integer ltrim_(char *, ftnlen);
-    static integer start, length;
+    static thread_local integer start, length;
     extern integer qrtrim_(char *, ftnlen);
-    static integer end;
+    static thread_local integer end;
 
 /* $ Abstract */
 

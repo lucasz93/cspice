@@ -1,4 +1,4 @@
-/* zzinrec.f -- translated by f2c (version 19980913).
+/* zzinrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -289,10 +289,10 @@
 
 /*           Create adjusted bounds for the Ith coordinate. */
 
-	    delta[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("delta", 
-		    i__1, "zzinrec_", (ftnlen)301)] = *margin * (d__1 = l[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("l", 
-		    i__2, "zzinrec_", (ftnlen)301)], abs(d__1));
+	    delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", 
+		    i__2, "zzinrec_", (ftnlen)301)] = *margin * (d__1 = l[(
+		    i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		    i__1, "zzinrec_", (ftnlen)301)], abs(d__1));
 	    amncor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("amncor",
 		     i__1, "zzinrec_", (ftnlen)303)] = mincor[(i__2 = i__ - 1)
 		     < 3 && 0 <= i__2 ? i__2 : s_rnge("mincor", i__2, "zzinr"

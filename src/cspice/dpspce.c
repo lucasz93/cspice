@@ -1,4 +1,4 @@
-/* dpspce.f -- translated by f2c (version 19980913).
+/* dpspce.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,46 +33,47 @@ static doublereal c_b25 = 0.;
 	    atan2(doublereal, doublereal);
 
     /* Local variables */
-    static doublereal coef, eeta, aodp, delo, capu, uang, xmdf, xinc, xmam, 
-	    aynl, elsq, temp;
-    static logical cont;
-    static doublereal rdot, cosu, sinu, coef1, t2cof, temp1, temp2, temp3, 
-	    temp4, temp5, cos2u, temp6;
+    static thread_local doublereal coef, eeta, aodp, delo, capu, uang, xmdf, 
+	    xinc, xmam, aynl, elsq, temp;
+    static thread_local logical cont;
+    static thread_local doublereal rdot, cosu, sinu, coef1, t2cof, temp1, 
+	    temp2, temp3, temp4, temp5, cos2u, temp6;
     extern /* Subroutine */ int zzdpinit_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static doublereal sin2u, a, e;
-    static integer i__;
-    static doublereal m[3], n[3], s, u[3], v[3], betal, scale, betao;
+    static thread_local doublereal sin2u, a, e;
+    static thread_local integer i__;
+    static thread_local doublereal m[3], n[3], s, u[3], v[3], betal, scale, 
+	    betao;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch, ecose, aycof, esine, a3ovk2, tempa, tempe, bstar,
-	     cosio, xincl, etasq, rfdot, sinio, a1, rdotk, c1, c2, cosuk, c4, 
-	    qoms24, sinuk, templ, x1m5th, x1mth2, x3thm1, x7thm1, psisq, 
-	    xinck, xlcof, xmdot, xnode, xnodp;
+    static thread_local doublereal epoch, ecose, aycof, esine, a3ovk2, tempa, 
+	    tempe, bstar, cosio, xincl, etasq, rfdot, sinio, a1, rdotk, c1, 
+	    c2, cosuk, c4, qoms24, sinuk, templ, x1m5th, x1mth2, x3thm1, 
+	    x7thm1, psisq, xinck, xlcof, xmdot, xnode, xnodp;
     extern doublereal twopi_(void);
-    static doublereal s4;
+    static thread_local doublereal s4;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    static doublereal betao2, theta2, ae, xhdot1, ao, em, eo, qoms2t, pl, 
-	    omgadf, rk, qo, uk, so;
+    static thread_local doublereal betao2, theta2, ae, xhdot1, ao, em, eo, 
+	    qoms2t, pl, omgadf, rk, qo, uk, so;
     extern doublereal halfpi_(void);
-    static doublereal xl, xn, omegao;
+    static thread_local doublereal xl, xn, omegao;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal perige, xnodcf, xnoddf, tsince, xnodek, omgdot, rfdotk, 
-	    xnodeo;
+    static thread_local doublereal perige, xnodcf, xnoddf, tsince, xnodek, 
+	    omgdot, rfdotk, xnodeo;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static doublereal ck2, lstelm[10], ck4, cosepw, sinepw, xkmper, xnodot, 
-	    lstphs[8];
+    static thread_local doublereal ck2, lstelm[10], ck4, cosepw, sinepw, 
+	    xkmper, xnodot, lstphs[8];
     extern logical return_(void);
-    static doublereal pinvsq, xj2, xj3, xj4, eta, axn, xke, ayn, epw, tsi, 
-	    xll, xmo, xno, tsq, xlt, del1;
+    static thread_local doublereal pinvsq, xj2, xj3, xj4, eta, axn, xke, ayn, 
+	    epw, tsi, xll, xmo, xno, tsq, xlt, del1;
     extern /* Subroutine */ int zzdpsec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    static doublereal pio2;
+    static thread_local doublereal pio2;
     extern /* Subroutine */ int zzdpper_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static doublereal pix2;
+    static thread_local doublereal pix2;
 
 /* $ Abstract */
 

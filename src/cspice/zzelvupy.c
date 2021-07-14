@@ -1,4 +1,4 @@
-/* zzelvupy.f -- translated by f2c (version 19980913).
+/* zzelvupy.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -35,7 +35,7 @@ static doublereal c_b90 = .5;
 	    doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    static doublereal work[30000]	/* was [3][10000] */;
+    static thread_local doublereal work[30000]	/* was [3][10000] */;
     doublereal edge1[3], edge2[3], a, b, d__;
     integer i__, j;
     doublereal vxpt1[3], vxpt2[3], scale, x, y;
@@ -586,7 +586,7 @@ static doublereal c_b90 = .5;
 /*        angular separation PASIZE as we go.  We'll use this variable */
 /*        later in a non-intersection test. */
 
-	asep = vsep_(axis, &bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 
+	asep = vsep_(axis, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 
 		0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_", (
 		ftnlen)550)]);
 	if (asep >= pi_() / 2) {
@@ -608,23 +608,23 @@ static doublereal c_b90 = .5;
 	} else {
 	    j = 1;
 	}
-	ucrss_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+	ucrss_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)577)], &
-		bounds[(i__3 = j * 3 - 3) < bounds_dim2 * 3 && 0 <= i__3 ? 
+		bounds[(i__3 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__3 ? 
 		i__3 : s_rnge("bounds", i__3, "zzelvupy_", (ftnlen)577)], cp);
 	if (vzero_(cp)) {
 
 /*           The cross product may be zero because one of the */
 /*           boundary vectors is zero.  Check this first. */
 
-	    if (vzero_(&bounds[(i__2 = j * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	    if (vzero_(&bounds[(i__2 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)
-		    584)]) || vzero_(&bounds[(i__3 = i__ * 3 - 3) < 
-		    bounds_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge("bounds", 
-		    i__3, "zzelvupy_", (ftnlen)584)])) {
+		    584)]) || vzero_(&bounds[(i__3 = i__ * 3 - 3) < 3 * 
+		    bounds_dim2 && 0 <= i__3 ? i__3 : s_rnge("bounds", i__3, 
+		    "zzelvupy_", (ftnlen)584)])) {
 		s_copy(errmsg, "The # boundary vector is the zero vector.", (
 			ftnlen)1840, (ftnlen)41);
-		if (vzero_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 
+		if (vzero_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 
 			0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_",
 			 (ftnlen)588)])) {
 		    j = i__;
@@ -709,7 +709,7 @@ static doublereal c_b90 = .5;
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    inrypl_(origin, &bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 
+	    inrypl_(origin, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 
 		    0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_", (
 		    ftnlen)686)], fovpln, &nxpts, &work[(i__3 = i__ * 3 - 3) <
 		     30000 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "zzelv"
@@ -760,7 +760,7 @@ static doublereal c_b90 = .5;
 /*     does scaling to prevent underflow. */
 
     psv2pl_(center, smajor, sminor, eplane);
-    inrypl_(apex, &bounds[(i__1 = 0) < bounds_dim2 * 3 ? i__1 : s_rnge("boun"
+    inrypl_(apex, &bounds[(i__1 = 0) < 3 * bounds_dim2 ? i__1 : s_rnge("boun"
 	    "ds", i__1, "zzelvupy_", (ftnlen)745)], eplane, &nxpts, xpt);
 
 /*     The routine INRYPL can return the NXPTS values 1, 0, or INF---a */
@@ -829,9 +829,9 @@ static doublereal c_b90 = .5;
 /*        because we've already ensured the cross product of */
 /*        these vectors is non-zero. */
 
-	psv2pl_(apex, &bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	psv2pl_(apex, &bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		i__1 ? i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)820)
-		], &bounds[(i__2 = j * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ?
+		], &bounds[(i__2 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ?
 		 i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)820)], 
 		plane);
 
@@ -849,10 +849,10 @@ static doublereal c_b90 = .5;
 /*           forming the edges of the currently considered side of the */
 /*           pyramid. */
 
-	    vhat_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 
+	    vhat_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 
 		    ? i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)837)]
 		    , edge1);
-	    vhat_(&bounds[(i__1 = j * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? 
+	    vhat_(&bounds[(i__1 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
 		    i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)838)], 
 		    edge2);
 

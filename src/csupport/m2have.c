@@ -1,4 +1,4 @@
-/* m2have.f -- translated by f2c (version 19980913).
+/* m2have.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -12,7 +12,7 @@ integer m2have_(char *name__, ftnlen name_len)
     integer ret_val;
 
     /* Local variables */
-    static integer size;
+    static thread_local integer size;
     extern /* Subroutine */ int m2vsiz_(char *, integer *, ftnlen);
 
 /* $ Abstract */

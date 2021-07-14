@@ -1,4 +1,4 @@
-/* zzekscan.f -- translated by f2c (version 19980913).
+/* zzekscan.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -56,26 +56,26 @@ static integer c__13 = 13;
 	    s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer last, cptr, room, i__, j, l;
+    static thread_local integer last, cptr, room, i__, j, l;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
     extern logical beint_(char *, ftnlen);
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), repmi_(char *, char *, integer *, char *
 	    , ftnlen, ftnlen, ftnlen);
-    static integer state;
+    static thread_local integer state;
     extern integer rtrim_(char *, ftnlen);
-    static integer nnums, nstrs, chcard;
+    static thread_local integer nnums, nstrs, chcard;
     extern /* Subroutine */ int lx4num_(char *, integer *, integer *, integer 
 	    *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer idspec[518];
+    static thread_local integer idspec[518];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char hdchrs[80];
-    static integer nchars, length;
+    static thread_local char hdchrs[80];
+    static thread_local integer nchars, length;
     extern integer frstpc_(char *, ftnlen);
     extern logical return_(void);
-    static char tlchrs[80], tquery[2000];
+    static thread_local char tlchrs[80], tquery[2000];
     extern /* Subroutine */ int ssizei_(integer *, integer *), lxcsid_(char *,
 	     char *, integer *, ftnlen, ftnlen), chkout_(char *, ftnlen), 
 	    lxqstr_(char *, char *, integer *, integer *, integer *, ftnlen, 
@@ -85,8 +85,8 @@ static integer c__13 = 13;
 	    , char *, integer *, ftnlen, ftnlen), lxidnt_(integer *, char *, 
 	    integer *, integer *, integer *, ftnlen), suffix_(char *, integer 
 	    *, char *, ftnlen, ftnlen);
-    static char chr[1];
-    static integer ptr;
+    static thread_local char chr[1];
+    static thread_local integer ptr;
 
 /* $ Abstract */
 

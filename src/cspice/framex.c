@@ -1,4 +1,4 @@
-/* framex.f -- translated by f2c (version 19980913).
+/* framex.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,10 +32,10 @@ static integer c__100 = 100;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[32*127], line[80*8];
-    static integer item;
-    static logical lnew;
-    static integer type__[127];
+    static thread_local char name__[32*127], line[80*8];
+    static thread_local integer item;
+    static thread_local logical lnew;
+    static thread_local integer type__[127];
     extern /* Subroutine */ int zzhscadd_(integer *, integer *, char *, char *
 	    , integer *, logical *, ftnlen, ftnlen), zzhsiadd_(integer *, 
 	    integer *, integer *, integer *, integer *, logical *), zzhscchk_(
@@ -43,44 +43,44 @@ static integer c__100 = 100;
 	    zzhsichk_(integer *, integer *, integer *, integer *, integer *), 
 	    zzdynbid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
 	    zzhscini_(integer *, integer *, integer *);
-    static char look2[32];
+    static thread_local char look2[32];
     extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *), 
 	    zzpctrck_(integer *, logical *), zzdynvai_(char *, integer *, 
 	    char *, integer *, integer *, integer *, ftnlen, ftnlen), 
 	    zzctruin_(integer *);
-    static integer i__, n;
-    static char kname[32*5209];
+    static thread_local integer i__, n;
+    static thread_local char kname[32*5209];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char pname[32];
+    static thread_local char pname[32];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
-    static integer kcent[5209];
+    static thread_local integer kcent[5209];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), repmi_(char *, char *, integer *, char *
 	    , ftnlen, ftnlen, ftnlen);
-    static logical gotit;
-    static integer start;
+    static thread_local logical gotit;
+    static thread_local integer start;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    bodc2n_(integer *, char *, logical *, ftnlen), bodn2c_(char *, 
 	    integer *, logical *, ftnlen);
-    static integer id;
+    static thread_local integer id;
     extern logical failed_(void);
-    static integer idcode[127], bidids[127];
-    static char lcname[36];
-    static integer bididx[127];
-    static char lcfram[32];
+    static thread_local integer idcode[127], bidids[127];
+    static thread_local char lcname[36];
+    static thread_local integer bididx[127];
+    static thread_local char lcfram[32];
     extern integer bschoi_(integer *, integer *, integer *, integer *);
-    static integer kidids[5209], kclsid[5209], kvclid, bidpol[133], centrd[
-	    127], center[127];
-    static char kvbuff[32*100];
-    static integer kidpol[5215], knmids[5209], kclass[5209], kidlst[5209], 
-	    bnmpol[133], typeid[127], values[8], knmpol[5215];
-    static logical lupdte;
-    static char knmnms[32*5209], dattyp[1], lookup[32];
-    static integer kvclss, pulctr[2], knmlst[5209], bnmlst[127];
+    static thread_local integer kidids[5209], kclsid[5209], kvclid, bidpol[
+	    133], centrd[127], center[127];
+    static thread_local char kvbuff[32*100];
+    static thread_local integer kidpol[5215], knmids[5209], kclass[5209], 
+	    kidlst[5209], bnmpol[133], typeid[127], values[8], knmpol[5215];
+    static thread_local logical lupdte;
+    static thread_local char knmnms[32*5209], dattyp[1], lookup[32];
+    static thread_local integer kvclss, pulctr[2], knmlst[5209], bnmlst[127];
     extern logical return_(void);
-    static char bnmnms[32*127];
-    static integer bnmidx[127], bidlst[127];
+    static thread_local char bnmnms[32*127];
+    static thread_local integer bnmidx[127], bidlst[127];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), zzfdat_(integer *, integer *, 
 	    char *, integer *, integer *, integer *, integer *, integer *, 
@@ -93,7 +93,7 @@ static integer c__100 = 100;
 	    gnpool_(char *, integer *, integer *, integer *, char *, logical *
 	    , ftnlen, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static logical fnd;
+    static thread_local logical fnd;
 
 /* $ Abstract */
 

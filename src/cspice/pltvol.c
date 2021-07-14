@@ -1,4 +1,4 @@
-/* pltvol.f -- translated by f2c (version 19980913).
+/* pltvol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -342,11 +342,11 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
     i__1 = *np;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    if (plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
+	    if (plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "pltvol_", (ftnlen)
-		    346)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 
-		    plates_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge("plates", 
-		    i__3, "pltvol_", (ftnlen)346)] > *nv) {
+		    346)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 3 * 
+		    plates_dim2 && 0 <= i__3 ? i__3 : s_rnge("plates", i__3, 
+		    "pltvol_", (ftnlen)346)] > *nv) {
 		chkin_("PLTVOL", (ftnlen)6);
 		setmsg_("Vertex indices must be in the range [1, NV] for all"
 			" SPICE language versions. The input value of NV was "
@@ -356,9 +356,9 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 		errint_("#", nv, (ftnlen)1);
 		errint_("#", &j, (ftnlen)1);
 		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 
-			3 && 0 <= i__2 ? i__2 : s_rnge("plates", i__2, "pltv"
-			"ol_", (ftnlen)359)], (ftnlen)1);
+		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < 3 * 
+			plates_dim2 && 0 <= i__2 ? i__2 : s_rnge("plates", 
+			i__2, "pltvol_", (ftnlen)359)], (ftnlen)1);
 		sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 		chkout_("PLTVOL", (ftnlen)6);
 		return ret_val;
@@ -573,10 +573,10 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 /*        Pack the vertices of the current plate into a 3x3 matrix. */
 
 	for (j = 1; j <= 3; ++j) {
-	    vequ_(&vrtces[(i__3 = plates[(i__2 = j + i__ * 3 - 4) < 
-		    plates_dim2 * 3 && 0 <= i__2 ? i__2 : s_rnge("plates", 
-		    i__2, "pltvol_", (ftnlen)579)] * 3 - 3) < vrtces_dim2 * 3 
-		    && 0 <= i__3 ? i__3 : s_rnge("vrtces", i__3, "pltvol_", (
+	    vequ_(&vrtces[(i__3 = plates[(i__2 = j + i__ * 3 - 4) < 3 * 
+		    plates_dim2 && 0 <= i__2 ? i__2 : s_rnge("plates", i__2, 
+		    "pltvol_", (ftnlen)579)] * 3 - 3) < 3 * vrtces_dim2 && 0 
+		    <= i__3 ? i__3 : s_rnge("vrtces", i__3, "pltvol_", (
 		    ftnlen)579)], &m[(i__4 = j * 3 - 3) < 9 && 0 <= i__4 ? 
 		    i__4 : s_rnge("m", i__4, "pltvol_", (ftnlen)579)]);
 	}

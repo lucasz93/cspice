@@ -1,4 +1,4 @@
-/* pxfrm2.f -- translated by f2c (version 19980913).
+/* pxfrm2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -17,7 +17,7 @@ static integer c__1 = 1;
 
     static logical first = TRUE_;
 
-    static char svto[32];
+    static thread_local char svto[32];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
 	    , integer *, ftnlen, ftnlen), zzctruin_(integer *);
     integer fcode;
@@ -25,14 +25,14 @@ static integer c__1 = 1;
     integer tcode;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal jf[9]	/* was [3][3] */;
-    static integer svctr1[2], svctr2[2];
+    static thread_local integer svctr1[2], svctr2[2];
     doublereal tj[9]	/* was [3][3] */;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    static integer svfcod, svtcde;
+    static thread_local integer svfcod, svtcde;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static char svfrom[32];
+    static thread_local char svfrom[32];
     extern logical return_(void);
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;

@@ -1,4 +1,4 @@
-/* zzvstrng.f -- translated by f2c (version 19980913).
+/* zzvstrng.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,13 +29,13 @@ static integer c__14 = 14;
     logical l_ge(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer code;
-    static logical incr;
-    static integer lsub, slot, code0, i__, j, blank, value;
-    static logical minus;
+    static thread_local integer code;
+    static thread_local logical incr;
+    static thread_local integer lsub, slot, code0, i__, j, blank, value;
+    static thread_local logical minus;
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
 	    ftnlen);
-    static char letter[1];
+    static thread_local char letter[1];
 
 /* $ Abstract */
 

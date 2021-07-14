@@ -1,4 +1,4 @@
-/* et2utc.f -- translated by f2c (version 19980913).
+/* et2utc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,24 +33,24 @@ static integer c__1 = 1;
 	    i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer bday, eday, year;
-    static doublereal tvec[8];
-    static integer hour, i__;
-    static doublereal scale;
+    static thread_local integer bday, eday, year;
+    static thread_local doublereal tvec[8];
+    static thread_local integer hour, i__;
+    static thread_local doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char fract[80];
+    static thread_local char fract[80];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
-    static integer month;
+    static thread_local integer month;
     extern logical failed_(void);
-    static doublereal frcsec;
-    static integer second;
-    static doublereal whlsec;
-    static integer bmonth, emonth;
+    static thread_local doublereal frcsec;
+    static thread_local integer second;
+    static thread_local doublereal whlsec;
+    static thread_local integer bmonth, emonth;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen);
-    static char endstr[80];
-    static integer myprec, minute;
+    static thread_local char endstr[80];
+    static thread_local integer myprec, minute;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), dpstrf_(doublereal *,
 	     integer *, char *, char *, ftnlen, ftnlen), suffix_(char *, 
 	    integer *, char *, ftnlen, ftnlen);
@@ -59,10 +59,10 @@ static integer c__1 = 1;
 	    char *, char *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    static integer bsc, esc, bhr, bmn;
-    static doublereal tai;
-    static integer day, ehr, emn;
-    static char fmt[4], str[80];
+    static thread_local integer bsc, esc, bhr, bmn;
+    static thread_local doublereal tai;
+    static thread_local integer day, ehr, emn;
+    static thread_local char fmt[4], str[80];
 
 /* $ Abstract */
 

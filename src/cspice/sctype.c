@@ -1,4 +1,4 @@
-/* sctype.f -- translated by f2c (version 19980913).
+/* sctype.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,7 +26,7 @@ integer sctype_(integer *sc)
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer type__;
+    static thread_local integer type__;
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
     integer n;
@@ -39,7 +39,7 @@ integer sctype_(integer *sc)
     extern /* Subroutine */ int chkout_(char *, ftnlen), suffix_(char *, 
 	    integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    static integer usrctr[2];
+    static thread_local integer usrctr[2];
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
 

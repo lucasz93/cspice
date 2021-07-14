@@ -1,4 +1,4 @@
-/* nspio.f -- translated by f2c (version 19980913).
+/* nspio.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -74,15 +74,15 @@ static integer c__6 = 6;
 
     /* Local variables */
     extern integer zznsppok_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer r__;
+    static thread_local integer r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), zztxtopn_(char *, 
 	    integer *, logical *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    static integer id;
+    static thread_local integer id;
     extern logical failed_(void);
-    static integer to;
-    static char messge[400];
-    static logical openok;
+    static thread_local integer to;
+    static thread_local char messge[400];
+    static thread_local logical openok;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), trnlat_(char *, char *, ftnlen, ftnlen);
     extern logical return_(void);

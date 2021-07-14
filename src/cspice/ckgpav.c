@@ -1,4 +1,4 @@
-/* ckgpav.f -- translated by f2c (version 19980913).
+/* ckgpav.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -41,12 +41,12 @@ static integer c__9 = 9;
 	     doublereal *, logical *), moved_(doublereal *, integer *, 
 	    doublereal *), cksns_(integer *, doublereal *, char *, logical *, 
 	    ftnlen);
-    static char svref[32];
+    static thread_local char svref[32];
     logical gotit;
     doublereal xform[36]	/* was [6][6] */;
     extern /* Subroutine */ int xf2rav_(doublereal *, doublereal *, 
 	    doublereal *);
-    static integer svctr1[2];
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
     doublereal et;
     integer handle;
@@ -59,7 +59,7 @@ static integer c__9 = 9;
     integer refreq, typeid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpmat[9]	/* was [3][3] */;
-    static integer svrefr;
+    static thread_local integer svrefr;
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];

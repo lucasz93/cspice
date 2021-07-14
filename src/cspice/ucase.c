@@ -1,4 +1,4 @@
-/* ucase.f -- translated by f2c (version 19980913).
+/* ucase.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,9 +21,9 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer lowa, lowz;
+    static thread_local integer lowa, lowz;
     integer i__;
-    static integer shift;
+    static thread_local integer shift;
     integer ich;
 
 /* $ Abstract */

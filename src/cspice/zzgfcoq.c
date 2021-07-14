@@ -1,4 +1,4 @@
-/* zzgfcoq.f -- translated by f2c (version 19980913).
+/* zzgfcoq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -61,7 +61,7 @@ static integer c__3 = 3;
     extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char ctrnam[36];
+    static thread_local char ctrnam[36];
     extern logical return_(void);
     char sysnam[32];
     doublereal coords[3], trgepc, srfvec[3];

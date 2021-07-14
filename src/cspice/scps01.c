@@ -1,4 +1,4 @@
-/* scps01.f -- translated by f2c (version 19980913).
+/* scps01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -30,22 +30,22 @@ static integer c__10 = 10;
     double d_nint(doublereal *);
 
     /* Local variables */
-    static integer pntr, i__, n;
+    static thread_local integer pntr, i__, n;
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
 	    *, doublereal *, ftnlen), scli01_(char *, integer *, integer *, 
 	    integer *, integer *, ftnlen), chkin_(char *, ftnlen), repmc_(
 	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), 
 	    repmi_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen);
     extern logical failed_(void);
-    static integer nfield;
-    static doublereal cmpval[10], moduli[10], offset[10];
+    static thread_local integer nfield;
+    static thread_local doublereal cmpval[10], moduli[10], offset[10];
     extern /* Subroutine */ int chkout_(char *, ftnlen), lparsm_(char *, char 
 	    *, integer *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    static doublereal cmptks[10];
+    static thread_local doublereal cmptks[10];
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
     extern logical return_(void);
-    static char strerr[240], cmp[30*10];
+    static thread_local char strerr[240], cmp[30*10];
 
 /* $ Abstract */
 

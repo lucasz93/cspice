@@ -1,4 +1,4 @@
-/* zzplatfm.f -- translated by f2c (version 19980913).
+/* zzplatfm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,9 +29,9 @@ static integer c__6 = 6;
     integer index;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char keyval[64*6];
+    static thread_local char keyval[64*6];
     char keycpy[64];
-    static char attcpy[32*7];
+    static thread_local char attcpy[32*7];
 
 /* $ Abstract */
 
@@ -348,7 +348,7 @@ static integer c__6 = 6;
 
 	s_copy(attcpy + 32, "PC", (ftnlen)32, (ftnlen)2);
 	s_copy(attcpy + 64, "LINUX", (ftnlen)32, (ftnlen)5);
-	s_copy(attcpy + 96, "GCC/64BIT", (ftnlen)32, (ftnlen)9);
+	s_copy(attcpy + 96, "GFORTRAN/64BIT", (ftnlen)32, (ftnlen)14);
 	s_copy(attcpy + 128, "LTL-IEEE", (ftnlen)32, (ftnlen)8);
 	s_copy(attcpy + 160, "LF", (ftnlen)32, (ftnlen)2);
 	s_copy(attcpy + 192, "BIG-IEEE LTL-IEEE", (ftnlen)32, (ftnlen)17);

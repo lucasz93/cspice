@@ -1,4 +1,4 @@
-/* zzgfspu.f -- translated by f2c (version 19980913).
+/* zzgfspu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,21 +40,21 @@ static integer c__2 = 2;
     integer class__;
     logical found;
     extern doublereal dvsep_(doublereal *, doublereal *);
-    static char svref[32];
-    static integer svobs;
+    static thread_local char svref[32];
+    static thread_local integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     integer fcode1, fcode2;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    bods2c_(char *, integer *, logical *, ftnlen);
-    static integer svbod1, svbod2;
-    static doublereal svrad1, svrad2;
-    static char svref1[32], svref2[32];
+    static thread_local integer svbod1, svbod2;
+    static thread_local doublereal svrad1, svrad2;
+    static thread_local char svref1[32], svref2[32];
     extern logical failed_(void);
-    static integer svshp1, svshp2;
+    static thread_local integer svshp1, svshp2;
     doublereal lt, dtheta;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char svabcr[32];
+    static thread_local char svabcr[32];
     logical attblk[15];
     integer clssid;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(

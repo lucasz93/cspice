@@ -1,4 +1,4 @@
-/* pckbsr.f -- translated by f2c (version 19980913).
+/* pckbsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,31 +33,31 @@ static integer c__2 = 2;
 
     /* Local variables */
     integer head;
-    static doublereal btlb[20];
+    static thread_local doublereal btlb[20];
     integer tail;
-    static doublereal btub[20];
+    static thread_local doublereal btub[20];
     integer cost, i__, j;
     extern /* Subroutine */ int dafgn_(char *, ftnlen);
     integer cheap, p;
-    static integer btbeg[20];
+    static thread_local integer btbeg[20];
     extern /* Subroutine */ int dafgs_(doublereal *);
-    static integer btbod[20];
+    static thread_local integer btbod[20];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer fthan[5000];
+    static thread_local integer fthan[5000];
     char doing[15];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     char stack[15*2];
-    static integer bthfs[20];
+    static thread_local integer bthfs[20];
     extern doublereal dpmin_(void);
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern doublereal dpmax_(void);
-    static integer btlfs[20];
+    static thread_local integer btlfs[20];
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer sthan[5000], btexp[20];
-    static doublereal stdes[25000]	/* was [5][5000] */;
+    static thread_local integer sthan[5000], btexp[20];
+    static thread_local doublereal stdes[25000]	/* was [5][5000] */;
     extern integer lnktl_(integer *, integer *);
-    static integer ftnum[5000];
+    static thread_local integer ftnum[5000];
     extern /* Subroutine */ int daffna_(logical *), dafbbs_(integer *), 
 	    daffpa_(logical *);
     extern logical failed_(void);
@@ -66,7 +66,7 @@ static integer c__2 = 2;
     logical fndhan;
     integer crflbg, bindex;
     extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    static logical btchkp[20];
+    static thread_local logical btchkp[20];
     integer findex;
     extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *);
@@ -76,17 +76,17 @@ static integer c__2 = 2;
     extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *), 
 	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
     extern integer intmax_(void);
-    static doublereal btprvd[100]	/* was [5][20] */;
-    static integer btprvh[20];
-    static char btprvi[40*20], stidnt[40*5000];
+    static thread_local doublereal btprvd[100]	/* was [5][20] */;
+    static thread_local integer btprvh[20];
+    static thread_local char btprvi[40*20], stidnt[40*5000];
     char urgent[15];
-    static integer btruex[20];
+    static thread_local integer btruex[20];
     integer minexp, nxtseg;
     extern integer lnkprv_(integer *, integer *);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer stpool[10012]	/* was [2][5006] */;
+    static thread_local integer stpool[10012]	/* was [2][5006] */;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char status[15];
     doublereal dcd[2];

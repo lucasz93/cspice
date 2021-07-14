@@ -1,4 +1,4 @@
-/* zzgfocu.f -- translated by f2c (version 19980913).
+/* zzgfocu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -69,7 +69,7 @@ static doublereal c_b199 = 1e-12;
     doublereal mtemp[9]	/* was [3][3] */, tdist;
     integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer svobs;
+    static thread_local integer svobs;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
 	    bods2c_(char *, integer *, logical *, ftnlen);
@@ -82,17 +82,18 @@ static doublereal c_b199 = 1e-12;
     doublereal bckfrt[3], bckobs[3];
     extern logical return_(void);
     char fixfrm[32], pntdef[20], posnam[10], shpstr[9], subtyp[20];
-    static char svbfrm[32], svbmth[500], svbnam[36], svbshp[9], svcorr[5], 
-	    svffrm[32], svfmth[500], svfnam[36], svfshp[9], svonam[36], 
-	    svtype[7];
+    static thread_local char svbfrm[32], svbmth[500], svbnam[36], svbshp[9], 
+	    svcorr[5], svffrm[32], svfmth[500], svfnam[36], svfshp[9], svonam[
+	    36], svtype[7];
     char trmtyp[20];
     doublereal bckpos[3], bsmaxs[9]	/* was [3][3] */, etbcor, etfcor, 
 	    frtbck[3], frtobs[3], frtpos[3], fsmaxs[9]	/* was [3][3] */, 
 	    ltback, ltfrnt, maxang, minang, spoint[3], srfvec[3];
-    static doublereal svbrad[3], svfrad[3], svmnbr, svmnfr, svmxbr, svmxfr;
+    static thread_local doublereal svbrad[3], svfrad[3], svmnbr, svmnfr, 
+	    svmxbr, svmxfr;
     doublereal trgepc, trgsep;
     integer center, clssid, ffrmid, frclss, idfrnt, loc, occnum, srflst[100];
-    static integer svback, svfrnt;
+    static thread_local integer svback, svfrnt;
     logical attblk[15], pntocc, pri;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 

@@ -1,4 +1,4 @@
-/* zzdbrgap.f -- translated by f2c (version 19980913).
+/* zzdbrgap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,33 +22,33 @@ static integer c_b18 = 1000000;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static logical grid[1000000];
-    static integer srcs[200000], ordx[200000], ordy[200000], vset[200006], 
-	    h__, i__, j, k;
+    static thread_local logical grid[1000000];
+    static thread_local integer srcs[200000], ordx[200000], ordy[200000], 
+	    vset[200006], h__, i__, j, k;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
-    static integer ncols, nrows;
+    static thread_local integer ncols, nrows;
     extern /* Subroutine */ int rc2grd_(integer *, doublereal *, doublereal *,
 	     integer *, integer *, logical *, integer *, integer *, integer *,
 	     integer *, integer *, integer *, integer *, integer *, logical *)
 	    ;
     extern logical failed_(void);
-    static integer nr;
+    static thread_local integer nr;
     extern /* Subroutine */ int fndcmp_(integer *, integer *, logical *, 
 	    integer *, logical *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static logical gapval, coverd;
+    static thread_local logical gapval, coverd;
     extern /* Subroutine */ int reglon_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *, doublereal *, doublereal *, integer *);
-    static doublereal minlon, maxlon;
+    static thread_local doublereal minlon, maxlon;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static doublereal outxbd[200000]	/* was [2][100000] */, outybd[200000]	
-	    /* was [2][100000] */;
-    static integer mrkset[200006], cmporx[200000], civorx[200000], civory[
-	    200000], cmpory[200000], tmpset[200006];
+    static thread_local doublereal outxbd[200000]	/* was [2][100000] */,
+	     outybd[200000]	/* was [2][100000] */;
+    static thread_local integer mrkset[200006], cmporx[200000], civorx[200000]
+	    , civory[200000], cmpory[200000], tmpset[200006];
     extern logical return_(void);
-    static integer minpxx[200000], maxpxx[200000], maxpxy[200000], minpxy[
-	    200000];
+    static thread_local integer minpxx[200000], maxpxx[200000], maxpxy[200000]
+	    , minpxy[200000];
     extern /* Subroutine */ int ssizei_(integer *, integer *);
 
 /* $ Abstract */
@@ -444,13 +444,13 @@ static integer c_b18 = 1000000;
 		    s_rnge("outybd", i__2, "zzdbrgap_", (ftnlen)287)] = bds2[(
 		    i__4 = (srcs[(i__3 = i__ - 1) < 200000 && 0 <= i__3 ? 
 		    i__3 : s_rnge("srcs", i__3, "zzdbrgap_", (ftnlen)287)] << 
-		    1) - 2) < bds2_dim2 << 1 && 0 <= i__4 ? i__4 : s_rnge(
+		    1) - 2) < 2 * bds2_dim2 && 0 <= i__4 ? i__4 : s_rnge(
 		    "bds2", i__4, "zzdbrgap_", (ftnlen)287)];
 	    outybd[(i__2 = (i__ << 1) - 1) < 200000 && 0 <= i__2 ? i__2 : 
 		    s_rnge("outybd", i__2, "zzdbrgap_", (ftnlen)288)] = bds2[(
 		    i__4 = (srcs[(i__3 = i__ - 1) < 200000 && 0 <= i__3 ? 
 		    i__3 : s_rnge("srcs", i__3, "zzdbrgap_", (ftnlen)288)] << 
-		    1) - 1) < bds2_dim2 << 1 && 0 <= i__4 ? i__4 : s_rnge(
+		    1) - 1) < 2 * bds2_dim2 && 0 <= i__4 ? i__4 : s_rnge(
 		    "bds2", i__4, "zzdbrgap_", (ftnlen)288)];
 	}
     } else {

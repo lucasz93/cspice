@@ -1,4 +1,4 @@
-/* zzwahr.f -- translated by f2c (version 19980913).
+/* zzwahr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -60,15 +60,15 @@ static doublereal c_b2 = 360.;
 	    ;
 
     /* Local variables */
-    static doublereal dddj;
-    static integer i__, j;
-    static doublereal t, angle[5], rasec, factr, angrt[5], argrt, d0, d1, d2, 
-	    d3, f0, f1, f2, f3, l0, l1, l2, l3;
+    static thread_local doublereal dddj;
+    static thread_local integer i__, j;
+    static thread_local doublereal t, angle[5], rasec, factr, angrt[5], argrt,
+	     d0, d1, d2, d3, f0, f1, f2, f3, l0, l1, l2, l3;
     extern doublereal twopi_(void);
-    static doublereal ce, dd, dj, cl;
+    static thread_local doublereal ce, dd, dj, cl;
     extern doublereal pi_(void);
-    static doublereal radian, cosang, oneday, sinang, dd2, mg0, mg1, dtwopi, 
-	    mg2, mg3, lp0, lp1, lp2, lp3, arg, dpi;
+    static thread_local doublereal radian, cosang, oneday, sinang, dd2, mg0, 
+	    mg1, dtwopi, mg2, mg3, lp0, lp1, lp2, lp3, arg, dpi;
     extern doublereal spd_(void);
 
 /* $ Abstract */

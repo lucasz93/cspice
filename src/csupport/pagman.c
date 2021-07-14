@@ -1,4 +1,4 @@
-/* pagman.f -- translated by f2c (version 19980913).
+/* pagman.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,17 +39,17 @@
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static char title[255*10];
+    static thread_local char title[255*10];
     extern integer rtrim_(char *, ftnlen);
-    static char header[255*15];
-    static integer pagmln;
-    static char pagmrk[32];
-    static logical keepsp[5], visibl[5];
-    static integer qlenth;
-    static char myline[255], footer[255*10], questn[255];
+    static thread_local char header[255*15];
+    static thread_local integer pagmln;
+    static thread_local char pagmrk[32];
+    static thread_local logical keepsp[5], visibl[5];
+    static thread_local integer qlenth;
+    static thread_local char myline[255], footer[255*10], questn[255];
     extern /* Subroutine */ int prompt_(char *, char *, ftnlen, ftnlen), 
 	    nspwln_(char *, ftnlen);
 

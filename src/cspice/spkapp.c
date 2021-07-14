@@ -1,4 +1,4 @@
-/* spkapp.f -- translated by f2c (version 19980913).
+/* spkapp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,16 +33,16 @@ static integer c__6 = 6;
 
     /* Local variables */
     char corr[5];
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer i__, refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *);
-    static logical usecn;
+    static thread_local logical usecn;
     doublereal sapos[3];
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
-    static logical uselt;
+    static thread_local logical uselt;
     extern doublereal vnorm_(doublereal *), clight_(void);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
@@ -56,7 +56,7 @@ static integer c__6 = 6;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), spkssb_(
 	    integer *, doublereal *, char *, doublereal *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
+    static thread_local logical usestl;
     extern logical odd_(integer *);
 
 /* $ Abstract */

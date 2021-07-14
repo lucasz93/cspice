@@ -1,4 +1,4 @@
-/* spke21.f -- translated by f2c (version 19980913).
+/* spke21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -25,27 +25,27 @@ static integer c__1 = 1;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal g[25];
-    static integer i__, j;
-    static doublereal w[27], delta;
+    static thread_local doublereal g[25];
+    static thread_local integer i__, j;
+    static thread_local doublereal w[27], delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
-    static integer kqmax1;
-    static doublereal dt[75]	/* was [25][3] */, wc[24];
-    static integer kq[3], ks;
-    static doublereal tl;
-    static integer jx;
-    static doublereal tp;
-    static integer maxdim;
-    static doublereal refvel[3];
+    static thread_local integer kqmax1;
+    static thread_local doublereal dt[75]	/* was [25][3] */, wc[24];
+    static thread_local integer kq[3], ks;
+    static thread_local doublereal tl;
+    static thread_local integer jx;
+    static thread_local doublereal tp;
+    static thread_local integer maxdim;
+    static thread_local doublereal refvel[3];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal refpos[3];
+    static thread_local doublereal refpos[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
     extern logical return_(void);
-    static integer mq2, ks1, kqq;
-    static doublereal sum;
+    static thread_local integer mq2, ks1, kqq;
+    static thread_local doublereal sum;
 
 /* $ Abstract */
 

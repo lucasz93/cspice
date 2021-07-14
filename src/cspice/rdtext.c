@@ -1,4 +1,4 @@
-/* rdtext.f -- translated by f2c (version 19980913).
+/* rdtext.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -41,7 +41,7 @@ static integer c__1 = 1;
     integer unit, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static integer index, units[96];
+    static thread_local integer index, units[96];
     extern integer isrchi_(integer *, integer *, integer *);
     integer number;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -50,7 +50,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
     extern logical return_(void);
-    static integer lstunt;
+    static thread_local integer lstunt;
 
 /* $ Abstract */
 

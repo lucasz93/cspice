@@ -1,4 +1,4 @@
-/* nspxcp.f -- translated by f2c (version 19980913).
+/* nspxcp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -56,15 +56,15 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int prclr_(void);
-    static char margin[128];
+    static thread_local char margin[128];
     extern /* Subroutine */ int nspioa_(char *, ftnlen), nspioh_(char *, 
 	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    trnlat_(char *, char *, ftnlen, ftnlen), nspmrg_(char *, ftnlen), 
 	    nspgst_(char *, logical *, ftnlen);
     extern /* Subroutine */ int nspwln_();
-    static logical scrstt[3], savstt[3];
+    static thread_local logical scrstt[3], savstt[3];
     extern /* Subroutine */ int nsppst_(char *, logical *, ftnlen), 
 	    nicepr_1__(char *, char *, U_fp, ftnlen, ftnlen);
 

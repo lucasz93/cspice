@@ -1,4 +1,4 @@
-/* zzsgp4.f -- translated by f2c (version 19980913).
+/* zzsgp4.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,55 +27,55 @@ static logical c_false = FALSE_;
 
     /* Local variables */
     doublereal eccm;
-    static doublereal ecco;
+    static thread_local doublereal ecco;
     doublereal eccp, coef, eeta;
-    static doublereal alta, dedt;
+    static thread_local doublereal alta, dedt;
     doublereal cnod;
-    static doublereal con41;
+    static thread_local doublereal con41;
     doublereal con42, delm;
-    static doublereal didt, dmdt;
+    static thread_local doublereal didt, dmdt;
     doublereal dndt;
-    static doublereal pgho;
+    static thread_local doublereal pgho;
     doublereal ainv, cosi;
-    static doublereal altp;
+    static thread_local doublereal altp;
     doublereal axnl;
-    static doublereal mdot;
+    static thread_local doublereal mdot;
     doublereal aynl, emsq;
-    static doublereal j3oj2;
+    static thread_local doublereal j3oj2;
     doublereal sini, snod, cosu, temp;
-    static doublereal gsto;
+    static thread_local doublereal gsto;
     doublereal sinu, tvec[8], xinc;
-    static doublereal zmol;
+    static thread_local doublereal zmol;
     doublereal posq, xmdf;
     integer iter;
-    static integer irez;
-    static doublereal zmos;
+    static thread_local integer irez;
+    static thread_local doublereal zmos;
     doublereal coef1, cc1sq;
-    static doublereal t2cof, t3cof, t4cof, t5cof;
+    static thread_local doublereal t2cof, t3cof, t4cof, t5cof;
     doublereal temp1, temp2, temp3, temp4, cos2u, sin2u;
-    static doublereal a;
+    static thread_local doublereal a;
     doublereal betal, u;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal eccsq;
-    static doublereal atime, aycof;
+    static thread_local doublereal atime, aycof;
     doublereal cnodm;
-    static doublereal inclo, xfact, pinco;
+    static thread_local doublereal inclo, xfact, pinco;
     doublereal argpm;
-    static doublereal argpo, xlcof, xmcof;
+    static thread_local doublereal argpo, xlcof, xmcof;
     doublereal argpp;
-    static doublereal bstar;
+    static thread_local doublereal bstar;
     doublereal cosim;
-    static doublereal xlamo;
+    static thread_local doublereal xlamo;
     doublereal cosio;
-    static doublereal x1mth2;
+    static thread_local doublereal x1mth2;
     doublereal cosip;
-    static doublereal delmo, d2, d3, x7thm1, e3, d4, dnodt;
+    static thread_local doublereal delmo, d2, d3, x7thm1, e3, d4, dnodt;
     doublereal cossu;
-    static doublereal domdt;
+    static thread_local doublereal domdt;
     doublereal ecose, epoch, esine, etasq, inclm;
-    static doublereal j2;
+    static thread_local doublereal j2;
     doublereal j3, j4, nodem;
-    static doublereal nodeo;
+    static thread_local doublereal nodeo;
     doublereal nodep, psisq, qzms24, rdotl, rvdot, s1, s2, s3, s4, s5, s6, s7,
 	     sfour, sinim, sinio, sinip, coseo1, sinsu, snodm, t2, t3, cosio2,
 	     sineo1, cosio4, t4, tempa, tempe, templ, tumin, tzero, xhdot1, 
@@ -85,51 +85,52 @@ static logical c_false = FALSE_;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal ao;
     extern logical failed_(void);
-    static doublereal er;
+    static thread_local doublereal er;
     doublereal tc;
     extern doublereal pi_(void);
     doublereal mm;
-    static doublereal mo;
+    static thread_local doublereal mo;
     doublereal mp;
-    static doublereal no;
+    static thread_local doublereal no;
     doublereal mr, omgadf, pl, mv, qzms2t, rl, delomg, rp;
-    static doublereal omgcof;
+    static thread_local doublereal omgcof;
     doublereal perige, ss, su, ux, uy;
-    static doublereal xnodcf;
+    static thread_local doublereal xnodcf;
     doublereal uz;
-    static doublereal cc1, sinmao;
+    static thread_local doublereal cc1, sinmao;
     doublereal cc2;
-    static doublereal cc4, cc5, ee2;
+    static thread_local doublereal cc4, cc5, ee2;
     doublereal cc3, cosomm, vx, cosisq, el2, eo1, omeosq, sinomm, vy, vz, 
 	    rvdotl, rtemsq;
-    static doublereal se2;
+    static thread_local doublereal se2;
     doublereal rteosq;
-    static doublereal se3, sh2;
+    static thread_local doublereal se3, sh2;
     doublereal pinvsq;
-    static doublereal sh3, xh2, xh3, xi2, xi3, xl2, xl3, xl4, si2, si3, sl2, 
-	    sl3, sl4;
+    static thread_local doublereal sh3, xh2, xh3, xi2, xi3, xl2, xl3, xl4, 
+	    si2, si3, sl2, sl3, sl4;
     doublereal ss1, ss2, ss3, ss4, ss5, ss6, ss7, sz1, sz2, sz3, xl;
-    static doublereal d2201, d2211, d3210;
+    static thread_local doublereal d2201, d2211, d3210;
     doublereal xn;
-    static doublereal d3222, d4410, d5220, d4422, d5232, d5421, d5433;
+    static thread_local doublereal d3222, d4410, d5220, d4422, d5232, d5421, 
+	    d5433;
     doublereal xnoddf, gam, xpidot, z11, z12, z13;
-    static doublereal eta;
+    static thread_local doublereal eta;
     doublereal z21, z22, z23, day, z31, z32, z33;
-    static integer svmode;
+    static thread_local integer svmode;
     logical doinit;
-    static doublereal peo;
-    static logical dosimp, dodeep;
-    static doublereal pho, xke, plo;
+    static thread_local doublereal peo;
+    static thread_local logical dosimp, dodeep;
+    static thread_local doublereal pho, xke, plo;
     doublereal x2o3;
-    static doublereal xli;
+    static thread_local doublereal xli;
     doublereal kps;
-    static doublereal xni;
+    static thread_local doublereal xni;
     doublereal sz11, sz12, sz13, sz21, sz22, sz23, sz31, sz32, sz33, tsi, xlm;
     extern logical return_(void);
-    static doublereal nodedot;
+    static thread_local doublereal nodedot;
     doublereal xmx, xmy;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal argpdot;
+    static thread_local doublereal argpdot;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), ttrans_(char *, char *, doublereal *, ftnlen, ftnlen), 
 	    zzinil_(doublereal *, integer *, doublereal *, doublereal *, 
@@ -137,7 +138,7 @@ static logical c_false = FALSE_;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    static doublereal del1, del2, del3;
+    static thread_local doublereal del1, del2, del3;
     extern /* Subroutine */ int zzdscm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -198,7 +199,7 @@ static logical c_false = FALSE_;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal sgh2, sgh3, sgh4, xgh2, xgh3, xgh4;
+    static thread_local doublereal sgh2, sgh3, sgh4, xgh2, xgh3, xgh4;
     doublereal tem5;
 
 /* $ Abstract */

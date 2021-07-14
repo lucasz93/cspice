@@ -1,4 +1,4 @@
-/* sgmeta.f -- translated by f2c (version 19980913).
+/* sgmeta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,7 +28,7 @@ static integer c__15 = 15;
     integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
 
     /* Local variables */
-    static integer meta[17];
+    static thread_local integer meta[17];
     integer begm1, i__, begin;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
 #define dtemp (equiv_0)
@@ -42,12 +42,12 @@ static integer c__15 = 15;
     integer ni;
     extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
     integer begmta, endmta, ametas;
-    static logical nieven;
-    static integer ioffst;
+    static thread_local logical nieven;
+    static thread_local integer ioffst;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     doublereal dmtasz;
-    static integer metasz;
+    static thread_local integer metasz;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
     extern logical return_(void);

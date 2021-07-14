@@ -1,4 +1,4 @@
-/* parcml.f -- translated by f2c (version 19980913).
+/* parcml.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,19 +26,19 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static char hkey[2048];
-    static integer i__;
+    static thread_local char hkey[2048];
+    static thread_local integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char hline[2048];
+    static thread_local char hline[2048];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer clidx;
-    static char lngwd[2048], uline[2048];
+    static thread_local integer clidx;
+    static thread_local char lngwd[2048], uline[2048];
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer begpos;
-    static char hlngwd[2048];
-    static integer pclidx, endpos;
+    static thread_local integer begpos;
+    static thread_local char hlngwd[2048];
+    static thread_local integer pclidx, endpos;
     extern /* Subroutine */ int chkout_(char *, ftnlen), nextwd_(char *, char 
 	    *, char *, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);

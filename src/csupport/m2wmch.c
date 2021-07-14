@@ -1,4 +1,4 @@
-/* m2wmch.f -- translated by f2c (version 19980913).
+/* m2wmch.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -18,17 +18,17 @@ logical m2wmch_(char *string, integer *wordb, integer *worde, char *class__,
 
     /* Local variables */
     extern logical zztokns_(char *, char *, ftnlen, ftnlen);
-    static char base[32];
+    static thread_local char base[32];
     extern /* Subroutine */ int convrt_3__(doublereal *, char *, char *, 
 	    doublereal *, integer *, ftnlen, ftnlen);
-    static logical temp;
-    static integer pntr;
-    static doublereal xout;
+    static thread_local logical temp;
+    static thread_local integer pntr;
+    static thread_local doublereal xout;
     extern logical m2day_(char *, ftnlen), m2mon_(char *, ftnlen), m2int_(
 	    char *, ftnlen);
-    static integer i__, l;
-    static doublereal v, x, y;
-    static char error[160];
+    static thread_local integer i__, l;
+    static thread_local doublereal v, x, y;
+    static thread_local char error[160];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen), m2name_(char *, 
 	    ftnlen), m2alph_(char *, ftnlen), m2engl_(char *, ftnlen), 
 	    m2epoc_(char *, ftnlen), m2body_(char *, ftnlen), m2time_(char *, 
@@ -38,16 +38,16 @@ logical m2wmch_(char *string, integer *wordb, integer *worde, char *class__,
 	    doublereal *, ftnlen, ftnlen), m2tran_(char *, integer *, integer 
 	    *, char *, logical *, logical *, ftnlen, ftnlen);
     extern logical m2unit_(char *, ftnlen);
-    static integer nb, ne, lbrace, wb, we, rbrace;
-    static logical namfnd;
+    static thread_local integer nb, ne, lbrace, wb, we, rbrace;
+    static thread_local logical namfnd;
     extern logical matchm_(char *, char *, char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
-    static logical tmplog;
-    static integer status, beg, end;
-    static logical key;
-    static doublereal xin;
+    static thread_local logical tmplog;
+    static thread_local integer status, beg, end;
+    static thread_local logical key;
+    static thread_local doublereal xin;
 
 /* $ Abstract */
 

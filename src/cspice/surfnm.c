@@ -1,4 +1,4 @@
-/* surfnm.f -- translated by f2c (version 19980913).
+/* surfnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,14 +32,14 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static doublereal m;
+    static thread_local doublereal m;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
-    static doublereal a1, b1, c1;
+    static thread_local doublereal a1, b1, c1;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
 	    , chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static integer bad;
+    static thread_local integer bad;
 
 /* $ Abstract */
 

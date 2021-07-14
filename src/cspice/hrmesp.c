@@ -1,4 +1,4 @@
-/* hrmesp.f -- translated by f2c (version 19980913).
+/* hrmesp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -274,9 +274,9 @@
 /*     Check in only if an error is detected. */
 
     /* Parameter adjustments */
-    work_dim1 = *n << 1;
-    work_offset = work_dim1 + 1;
-    yvals_dim1 = *n << 1;
+    work_dim1 = 2 * *n;
+    work_offset = 1 + work_dim1 * 1;
+    yvals_dim1 = 2 * *n;
 
     /* Function Body */
     if (return_()) {
@@ -321,17 +321,17 @@
 
     i__1 = (*n << 1) - 1;
     for (i__ = 1; i__ <= i__1; i__ += 2) {
-	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)331)] = 
-		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)331)];
+	work[(i__2 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 
+		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)331)]
+		 = yvals[(i__3 = i__ - 1) < 1 * yvals_dim1 && 0 <= i__3 ? 
+		i__3 : s_rnge("yvals", i__3, "hrmesp_", (ftnlen)331)];
     }
     i__1 = *n << 1;
     for (i__ = 2; i__ <= i__1; i__ += 2) {
-	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)335)] = 
-		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)335)] * *step;
+	work[(i__2 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 
+		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)335)]
+		 = yvals[(i__3 = i__ - 1) < 1 * yvals_dim1 && 0 <= i__3 ? 
+		i__3 : s_rnge("yvals", i__3, "hrmesp_", (ftnlen)335)] * *step;
     }
 
 /*     Compute the second column of the interpolation table: this */
@@ -358,60 +358,60 @@
 	prev = (i__ << 1) - 1;
 	this__ = prev + 1;
 	next = this__ + 1;
-	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < work_dim1 << 1 
-		&& 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-		366)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
-		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)366)];
+	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < 1 * work_dim1 <<
+		 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
+		ftnlen)366)] = work[(i__3 = this__ + work_dim1 - work_offset) 
+		< 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", 
+		i__3, "hrmesp_", (ftnlen)366)];
 
 /*        The even-indexed interpolated derivatives are the slopes of */
 /*        the linear interpolating polynomials for adjacent input */
 /*        abscissa/ordinate pairs. No scaling is needed here. */
 
-	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
-		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
+	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < 1 * work_dim1 
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
 		ftnlen)373)] = work[(i__3 = next + work_dim1 - work_offset) < 
-		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
+		1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
 		"hrmesp_", (ftnlen)373)] - work[(i__4 = prev + work_dim1 - 
-		work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmesp_", (ftnlen)373)];
+		work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		s_rnge("work", i__4, "hrmesp_", (ftnlen)373)];
 
 /*        The first column of WORK contains interpolated function values. */
 /*        The odd-indexed entries are the linear Taylor polynomials, */
 /*        each input abscissa value, evaluated at NEWX. */
 
-	temp = work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 
-		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
+	temp = work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
 		ftnlen)380)] * (newx - (doublereal) i__) + work[(i__3 = prev 
-		+ work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__3 ? 
-		i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)380)];
-	work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)383)]
-		 = c1 * work[(i__3 = prev + work_dim1 - work_offset) < 
-		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
+		+ work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ?
+		 i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)380)];
+	work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 &&
+		 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
+		383)] = c1 * work[(i__3 = prev + work_dim1 - work_offset) < 1 
+		* work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
 		"hrmesp_", (ftnlen)383)] + c2 * work[(i__4 = next + work_dim1 
-		- work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmesp_", (ftnlen)383)];
-	work[(i__2 = prev + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)386)] = 
-		temp;
+		- work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		s_rnge("work", i__4, "hrmesp_", (ftnlen)383)];
+	work[(i__2 = prev + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 
+		0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
+		386)] = temp;
     }
 
 /*     The last column entries were not computed by the preceding loop; */
 /*     compute them now. */
 
-    work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < work_dim1 
-	    << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (
-	    ftnlen)394)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
-	     work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrme"
-	    "sp_", (ftnlen)394)];
-    work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 && 
-	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)395)] =
-	     work[(i__2 = (*n << 1) + work_dim1 - work_offset) < work_dim1 << 
-	    1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-	    395)] * (newx - *n) + work[(i__3 = (*n << 1) - 1 + work_dim1 - 
-	    work_offset) < work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work",
-	     i__3, "hrmesp_", (ftnlen)395)];
+    work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < 1 * 
+	    work_dim1 << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmes"
+	    "p_", (ftnlen)394)] = work[(i__2 = (*n << 1) + work_dim1 - 
+	    work_offset) < 1 * work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge(
+	    "work", i__2, "hrmesp_", (ftnlen)394)];
+    work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < 1 * work_dim1 << 
+	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)
+	    395)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) < 1 * 
+	    work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmes"
+	    "p_", (ftnlen)395)] * (newx - *n) + work[(i__3 = (*n << 1) - 1 + 
+	    work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 
+	    : s_rnge("work", i__3, "hrmesp_", (ftnlen)395)];
 
 /*     Compute columns 3 through 2*N of the table. */
 
@@ -445,31 +445,31 @@
 /*           The derivative expression here corresponds to equation */
 /*           2.35 on page 64 in reference [2]. */
 
-	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
-		    1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (
-		    ftnlen)433)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
-		    - work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "hrmesp_", (ftnlen)433)] + c2 * work[
-		    (i__5 = i__ + 1 + (work_dim1 << 1) - work_offset) < 
-		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
-		    "hrmesp_", (ftnlen)433)] + (work[(i__6 = i__ + 1 + 
-		    work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__6 ? 
-		    i__6 : s_rnge("work", i__6, "hrmesp_", (ftnlen)433)] - 
-		    work[(i__7 = i__ + work_dim1 - work_offset) < work_dim1 <<
-		     1 && 0 <= i__7 ? i__7 : s_rnge("work", i__7, "hrmesp_", (
-		    ftnlen)433)])) / denom;
+	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < 1 * 
+		    work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
+		    "hrmesp_", (ftnlen)433)] = (c1 * work[(i__4 = i__ + (
+		    work_dim1 << 1) - work_offset) < 1 * work_dim1 << 1 && 0 
+		    <= i__4 ? i__4 : s_rnge("work", i__4, "hrmesp_", (ftnlen)
+		    433)] + c2 * work[(i__5 = i__ + 1 + (work_dim1 << 1) - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__5 ? i__5 : 
+		    s_rnge("work", i__5, "hrmesp_", (ftnlen)433)] + (work[(
+		    i__6 = i__ + 1 + work_dim1 - work_offset) < 1 * work_dim1 
+		    << 1 && 0 <= i__6 ? i__6 : s_rnge("work", i__6, "hrmesp_",
+		     (ftnlen)433)] - work[(i__7 = i__ + work_dim1 - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__7 ? i__7 : 
+		    s_rnge("work", i__7, "hrmesp_", (ftnlen)433)])) / denom;
 
 /*           Compute the interpolated function value at NEWX for the Ith */
 /*           interpolant. */
 
-	    work[(i__3 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		    <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)
-		    440)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
-		    < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", 
-		    i__4, "hrmesp_", (ftnlen)440)] + c2 * work[(i__5 = i__ + 
-		    1 + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		    i__5 ? i__5 : s_rnge("work", i__5, "hrmesp_", (ftnlen)440)
-		    ]) / denom;
+	    work[(i__3 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 
+		    && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (
+		    ftnlen)440)] = (c1 * work[(i__4 = i__ + work_dim1 - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		    s_rnge("work", i__4, "hrmesp_", (ftnlen)440)] + c2 * work[
+		    (i__5 = i__ + 1 + work_dim1 - work_offset) < 1 * 
+		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
+		    "hrmesp_", (ftnlen)440)]) / denom;
 	}
     }
 
@@ -478,11 +478,11 @@
 /*     We must undo the scaling of the derivative. We've already */
 /*     checked that STEP is non-zero. */
 
-    *f = work[(i__1 = work_dim1 + 1 - work_offset) < work_dim1 << 1 && 0 <= 
-	    i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)452)];
-    *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < work_dim1 << 1 &&
-	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)453)] 
-	    / *step;
+    *f = work[(i__1 = work_dim1 + 1 - work_offset) < 1 * work_dim1 << 1 && 0 
+	    <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)452)];
+    *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < 1 * work_dim1 << 
+	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)
+	    453)] / *step;
     return 0;
 } /* hrmesp_ */
 

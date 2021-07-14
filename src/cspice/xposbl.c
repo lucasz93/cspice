@@ -1,4 +1,4 @@
-/* xposbl.f -- translated by f2c (version 19980913).
+/* xposbl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -305,10 +305,10 @@
     /* Parameter adjustments */
     btmat_dim1 = *nrow;
     btmat_dim2 = *ncol;
-    btmat_offset = btmat_dim1 + 1;
+    btmat_offset = 1 + btmat_dim1 * 1;
     bmat_dim1 = *nrow;
     bmat_dim2 = *ncol;
-    bmat_offset = bmat_dim1 + 1;
+    bmat_offset = 1 + bmat_dim1 * 1;
 
     /* Function Body */
     if (*bsize < 1) {
@@ -372,28 +372,28 @@
 		for (j = 1; j <= i__6; ++j) {
 		    if (i__ == j) {
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)370)] = bmat[(i__8 = rb + i__ + 
-				(cb + j) * bmat_dim1 - bmat_offset) < 
-				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)370)] = bmat[(i__8 = rb + 
+				i__ + (cb + j) * bmat_dim1 - bmat_offset) < 1 
+				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
 				s_rnge("bmat", i__8, "xposbl_", (ftnlen)370)];
 		    } else {
 			temp = bmat[(i__7 = rb + i__ + (cb + j) * bmat_dim1 - 
-				bmat_offset) < bmat_dim1 * bmat_dim2 && 0 <= 
-				i__7 ? i__7 : s_rnge("bmat", i__7, "xposbl_", 
-				(ftnlen)372)];
+				bmat_offset) < 1 * bmat_dim1 * bmat_dim2 && 0 
+				<= i__7 ? i__7 : s_rnge("bmat", i__7, "xposb"
+				"l_", (ftnlen)372)];
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)373)] = bmat[(i__8 = rb + j + (
-				cb + i__) * bmat_dim1 - bmat_offset) < 
-				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)373)] = bmat[(i__8 = rb + 
+				j + (cb + i__) * bmat_dim1 - bmat_offset) < 1 
+				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
 				s_rnge("bmat", i__8, "xposbl_", (ftnlen)373)];
 			btmat[(i__7 = rb + j + (cb + i__) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)374)] = temp;
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)374)] = temp;
 		    }
 		}
 	    }

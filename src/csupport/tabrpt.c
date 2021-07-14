@@ -1,4 +1,4 @@
-/* tabrpt.f -- translated by f2c (version 19980913).
+/* tabrpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,43 +31,43 @@ static integer c__260 = 260;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char page[132*520];
-    static logical done[60];
-    static integer left;
-    static char long__[1024];
-    static logical full;
-    static integer last, wdth, room, i__, j;
+    static thread_local char page[132*520];
+    static thread_local logical done[60];
+    static thread_local integer left;
+    static thread_local char long__[1024];
+    static thread_local logical full;
+    static thread_local integer last, wdth, room, i__, j;
     extern integer cardc_(char *, ftnlen);
-    static integer l, r__;
+    static thread_local integer l, r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char value[32];
-    static integer right;
+    static thread_local char value[32];
+    static thread_local integer right;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer count[60], putat;
+    static thread_local integer count[60], putat;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static char style[80*60];
-    static integer nrows;
+    static thread_local char style[80*60];
+    static thread_local integer nrows;
     extern /* Subroutine */ int rjust_(char *, char *, ftnlen, ftnlen);
-    static integer id;
+    static thread_local integer id;
     extern logical failed_(void);
-    static logical filled;
-    static char buffer[132*266];
+    static thread_local logical filled;
+    static thread_local char buffer[132*266];
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static logical finish;
+    static thread_local logical finish;
     extern /* Subroutine */ int pagpmt_(integer *, char *, ftnlen), chkout_(
 	    char *, ftnlen), ssizec_(integer *, char *, ftnlen), pagput_(char 
 	    *, ftnlen);
     extern integer qlstnb_(char *, ftnlen);
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer toship;
-    static char getstr[1024];
-    static logical noroom;
-    static integer maxrow;
+    static thread_local integer toship;
+    static thread_local char getstr[1024];
+    static thread_local logical noroom;
+    static thread_local integer maxrow;
     extern logical return_(void);
-    static integer did, row[60];
+    static thread_local integer did, row[60];
     extern /* Subroutine */ int nicebt_1__(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
 

@@ -1,4 +1,4 @@
-/* dskw02.f -- translated by f2c (version 19980913).
+/* dskw02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -1906,7 +1906,7 @@ static integer c__1 = 1;
     i__1 = *np;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    k = plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
+	    k = plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "dskw02_", (ftnlen)
 		    1404)];
 	    if (k < 1 || k > *nv) {

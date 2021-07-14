@@ -1,4 +1,4 @@
-/* lcase.f -- translated by f2c (version 19980913).
+/* lcase.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,7 +22,7 @@
 
     /* Local variables */
     integer i__;
-    static integer shift, uppera, upperz;
+    static thread_local integer shift, uppera, upperz;
     integer ich;
 
 /* $ Abstract */

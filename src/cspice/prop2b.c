@@ -1,4 +1,4 @@
-/* prop2b.f -- translated by f2c (version 19980913).
+/* prop2b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,44 +29,45 @@ static integer c__6 = 6;
     double sqrt(doublereal), log(doublereal), exp(doublereal);
 
     /* Local variables */
-    static doublereal hvec[3], logf, maxc, kfun, oldx;
+    static thread_local doublereal hvec[3], logf, maxc, kfun, oldx;
     extern doublereal vdot_(doublereal *, doublereal *);
-    static doublereal sb2rv[3], b, e, f, qovr0;
-    static integer i__, k;
-    static doublereal q, x;
+    static thread_local doublereal sb2rv[3], b, e, f, qovr0;
+    static thread_local integer i__, k;
+    static thread_local doublereal q, x;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal fixed, eqvec[3], bound;
+    static thread_local doublereal fixed, eqvec[3], bound;
     extern doublereal dpmax_(void);
-    static doublereal pcdot;
+    static thread_local doublereal pcdot;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal kfunl, vcdot;
+    static thread_local doublereal kfunl, vcdot;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    static doublereal c0, c1, c2, c3;
-    static integer mostc;
-    static doublereal kfunu, lower, h2, upper, rootf;
+    static thread_local doublereal c0, c1, c2, c3;
+    static thread_local integer mostc;
+    static thread_local doublereal kfunu, lower, h2, upper, rootf;
     extern /* Subroutine */ int stmp03_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *), vequg_(doublereal *, 
 	    integer *, doublereal *), vcrss_(doublereal *, doublereal *, 
 	    doublereal *);
     extern doublereal vnorm_(doublereal *);
-    static doublereal r0;
+    static thread_local doublereal r0;
     extern logical vzero_(doublereal *);
-    static doublereal x2, x3, bq, br, pc, vc, sf[3], sqovr0[3], logbnd, rv;
+    static thread_local doublereal x2, x3, bq, br, pc, vc, sf[3], sqovr0[3], 
+	    logbnd, rv;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    static integer bumped;
+    static thread_local integer bumped;
     extern integer brckti_(integer *, integer *, integer *);
-    static doublereal savegm[3], logdpm, logmxc, sbound[3];
+    static thread_local doublereal savegm[3], logdpm, logmxc, sbound[3];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal tmpvec[3];
+    static thread_local doublereal tmpvec[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal br0, savepv[18]	/* was [6][3] */;
-    static integer lcount;
+    static thread_local doublereal br0, savepv[18]	/* was [6][3] */;
+    static thread_local integer lcount;
     extern logical return_(void);
-    static doublereal fx2, sbq[3], vel[3];
-    static logical new__;
-    static doublereal pos[3], sbr0[3], b2rv;
+    static thread_local doublereal fx2, sbq[3], vel[3];
+    static thread_local logical new__;
+    static thread_local doublereal pos[3], sbr0[3], b2rv;
 
 /* $ Abstract */
 

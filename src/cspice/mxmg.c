@@ -1,4 +1,4 @@
-/* mxmg.f -- translated by f2c (version 19980913).
+/* mxmg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -183,13 +183,13 @@
     /* Parameter adjustments */
     m1_dim1 = *row1;
     m1_dim2 = *col1;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
     mout_dim1 = *row1;
     mout_dim2 = *col2;
-    mout_offset = mout_dim1 + 1;
+    mout_offset = 1 + mout_dim1 * 1;
     m2_dim1 = *col1;
     m2_dim2 = *col2;
-    m2_offset = m2_dim1 + 1;
+    m2_offset = 1 + m2_dim1 * 1;
 
     /* Function Body */
     i__1 = *row1;
@@ -199,13 +199,14 @@
 	    sum = 0.;
 	    i__3 = *col1;
 	    for (k = 1; k <= i__3; ++k) {
-		sum += m1[(i__4 = i__ + k * m1_dim1 - m1_offset) < m1_dim1 * 
-			m1_dim2 && 0 <= i__4 ? i__4 : s_rnge("m1", i__4, 
-			"mxmg_", (ftnlen)183)] * m2[(i__5 = k + j * m2_dim1 - 
-			m2_offset) < m2_dim1 * m2_dim2 && 0 <= i__5 ? i__5 : 
-			s_rnge("m2", i__5, "mxmg_", (ftnlen)183)];
+		sum += m1[(i__4 = i__ + k * m1_dim1 - m1_offset) < 1 * 
+			m1_dim1 * m1_dim2 && 0 <= i__4 ? i__4 : s_rnge("m1", 
+			i__4, "mxmg_", (ftnlen)183)] * m2[(i__5 = k + j * 
+			m2_dim1 - m2_offset) < 1 * m2_dim1 * m2_dim2 && 0 <= 
+			i__5 ? i__5 : s_rnge("m2", i__5, "mxmg_", (ftnlen)183)
+			];
 	    }
-	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < mout_dim1 * 
+	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
 		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge("mout", i__3, 
 		    "mxmg_", (ftnlen)185)] = sum;
 	}

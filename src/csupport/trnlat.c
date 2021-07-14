@@ -1,4 +1,4 @@
-/* trnlat.f -- translated by f2c (version 19980913).
+/* trnlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -50,17 +50,17 @@ static integer c__28 = 28;
 	    char *, integer);
 
     /* Local variables */
-    static char lang[32];
-    static integer item;
-    static char title[32*28];
+    static thread_local char lang[32];
+    static thread_local integer item;
+    static thread_local char title[32*28];
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char french[400*28], german[400*28];
+    static thread_local char french[400*28], german[400*28];
     extern /* Subroutine */ int getlan_(char *, ftnlen), orderc_(char *, 
 	    integer *, integer *, ftnlen), reordc_(integer *, integer *, char 
 	    *, ftnlen);
-    static char englsh[400*28];
-    static integer iorder[28];
-    static char russan[400*28];
+    static thread_local char englsh[400*28];
+    static thread_local integer iorder[28];
+    static thread_local char russan[400*28];
 
 
 /* $ Version */

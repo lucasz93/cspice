@@ -1,4 +1,4 @@
-/* zzgetelm.f -- translated by f2c (version 19980913).
+/* zzgetelm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,49 +31,49 @@ static integer c__4 = 4;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static doublereal ndd60;
-    static char cday[32];
-    static doublereal incl, ndt20;
-    static integer bexp, year;
-    static doublereal tvec[8];
-    static char term[160*13];
-    static integer nexp;
-    static doublereal node0;
-    static integer i__, k;
-    static char cndd60[32], cincl[32];
-    static doublereal omega;
-    static char cndt20[32];
+    static thread_local doublereal ndd60;
+    static thread_local char cday[32];
+    static thread_local doublereal incl, ndt20;
+    static thread_local integer bexp, year;
+    static thread_local doublereal tvec[8];
+    static thread_local char term[160*13];
+    static thread_local integer nexp;
+    static thread_local doublereal node0;
+    static thread_local integer i__, k;
+    static thread_local char cndd60[32], cincl[32];
+    static thread_local doublereal omega;
+    static thread_local char cndt20[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char cyear[32];
+    static thread_local char cyear[32];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen);
-    static char ciexp[32];
-    static integer begyr;
-    static doublereal bstar;
+    static thread_local char ciexp[32];
+    static thread_local integer begyr;
+    static thread_local doublereal bstar;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static doublereal power[75];
+    static thread_local doublereal power[75];
     extern doublereal twopi_(void);
-    static char cnode0[32], comega[32];
-    static doublereal mo, no;
-    static char cibexp[32];
-    static integer yr;
-    static char cbstar[32];
+    static thread_local char cnode0[32], comega[32];
+    static thread_local doublereal mo, no;
+    static thread_local char cibexp[32];
+    static thread_local integer yr;
+    static thread_local char cbstar[32];
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen), nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen), chkout_(char *, ftnlen);
-    static doublereal d2r, pi2;
+    static thread_local doublereal d2r, pi2;
     extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
 	    ftnlen);
-    static char errprs[160*13];
+    static thread_local char errprs[160*13];
     extern logical return_(void);
-    static doublereal ecc, day;
-    static char cmo[32], cno[32];
+    static thread_local doublereal ecc, day;
+    static thread_local char cmo[32], cno[32];
     extern doublereal rpd_(void);
-    static integer ptr;
-    static char cecc[32];
+    static thread_local integer ptr;
+    static thread_local char cecc[32];
 
 /* $ Abstract */
 

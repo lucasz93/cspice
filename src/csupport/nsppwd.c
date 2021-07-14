@@ -1,4 +1,4 @@
-/* nsppwd.f -- translated by f2c (version 19980913).
+/* nsppwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,9 +27,9 @@ static integer c__1 = 1;
     /* Local variables */
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char strlft[16];
+    static thread_local char strlft[16];
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    static char strrht[16];
+    static thread_local char strrht[16];
 
 /* $ Abstract */
 

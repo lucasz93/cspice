@@ -1,4 +1,4 @@
-/* zzptpl02.f -- translated by f2c (version 19980913).
+/* zzptpl02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -42,7 +42,7 @@ static integer c__19 = 19;
 
     /* Local variables */
     doublereal dmin__, dist;
-    static doublereal maxr;
+    static thread_local doublereal maxr;
     extern doublereal vdot_(doublereal *, doublereal *);
     extern integer zzvox2id_(integer *, integer *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
@@ -69,14 +69,14 @@ static integer c__19 = 19;
     extern logical dlassg_(integer *, integer *, integer *, integer *), 
 	    return_(void);
     doublereal boxctr[3], offset[3], normal[3], pntoff[3], ptsrfm;
-    static doublereal voxori[3], voxsiz;
+    static thread_local doublereal voxori[3], voxsiz;
     doublereal vrttmp[9]	/* was [3][3] */, xpdfrc, xverts[9]	/* 
 	    was [3][3] */;
     integer cgrcor[3], cgrext[3], cgrptr;
-    static integer cgrscl, corsys;
+    static thread_local integer cgrscl, corsys;
     integer cgrvid, nplate, pidtmp, pltbuf[1000], pltptr, plttmp[3], ptrloc, 
 	    ptroff, remain, vgrcor[3];
-    static integer vgrext[3];
+    static thread_local integer vgrext[3];
     integer vid;
     logical inside;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 

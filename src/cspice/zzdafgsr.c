@@ -1,4 +1,4 @@
-/* zzdafgsr.f -- translated by f2c (version 19980913).
+/* zzdafgsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -53,7 +53,7 @@ static integer c__128 = 128;
     integer cindex;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer dindex;
-    static char strbff[8*4];
+    static thread_local char strbff[8*4];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
     integer iostat;

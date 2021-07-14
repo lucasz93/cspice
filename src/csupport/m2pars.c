@@ -1,4 +1,4 @@
-/* m2pars.f -- translated by f2c (version 19980913).
+/* m2pars.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,13 +22,13 @@ static integer c__400 = 400;
     integer i__1;
 
     /* Local variables */
-    static integer vals[406], temp[400], ptrs[106], i__, j, k;
+    static thread_local integer vals[406], temp[400], ptrs[106], i__, j, k;
     extern integer cardc_(char *, ftnlen);
-    static char names[32*106];
-    static integer avals[406], total;
-    static logical gotit;
-    static integer aptrs[106], begend[2];
-    static char anames[32*106], myname[32];
+    static thread_local char names[32*106];
+    static thread_local integer avals[406], total;
+    static thread_local logical gotit;
+    static thread_local integer aptrs[106], begend[2];
+    static thread_local char anames[32*106], myname[32];
     extern integer sydimi_(char *, char *, integer *, integer *, ftnlen, 
 	    ftnlen);
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), syfeti_(

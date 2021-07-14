@@ -1,4 +1,4 @@
-/* getfnm_1.f -- translated by f2c (version 19980913).
+/* getfnm_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,9 +37,9 @@ static integer c__6 = 6;
 	    void);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static char badchr[162];
+    static thread_local char badchr[162];
     extern logical failed_(void);
-    char oldact[10];
+    char oldact[10], nambuf[1000];
     extern /* Subroutine */ int cnfirm_(char *, logical *, ftnlen), erract_(
 	    char *, char *, ftnlen, ftnlen);
     integer length;
@@ -52,6 +52,7 @@ static integer c__6 = 6;
     extern /* Subroutine */ int prompt_(char *, char *, ftnlen, ftnlen), 
 	    writln_(char *, integer *, ftnlen);
     char status[3], myprmt[80];
+    extern /* Subroutine */ int expfnm_2__(char *, char *, ftnlen, ftnlen);
 
 /* $ Abstract */
 
@@ -451,6 +452,14 @@ static integer c__6 = 6;
 	    prompt_(ch__2, myfnam, lastnb_(myprmt, (ftnlen)80) + 1, (ftnlen)
 		    1000);
 	}
+	if (failed_()) {
+	    myvlid = FALSE_;
+	}
+
+/*        Translate the name if it's an environment variable. */
+
+	expfnm_2__(myfnam, nambuf, (ftnlen)1000, (ftnlen)1000);
+	s_copy(myfnam, nambuf, (ftnlen)1000, (ftnlen)1000);
 	if (failed_()) {
 	    myvlid = FALSE_;
 	}

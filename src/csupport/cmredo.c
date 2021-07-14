@@ -1,4 +1,4 @@
-/* cmredo.f -- translated by f2c (version 19980913).
+/* cmredo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -17,17 +17,17 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char exit[32], rest[300], stop[32];
+    static thread_local char exit[32], rest[300], stop[32];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer b1, b2, e1, e2;
+    static thread_local integer b1, b2, e1, e2;
     extern integer rtrim_(char *, ftnlen);
-    static char start[32];
+    static thread_local char start[32];
     extern logical m2wmch_(char *, integer *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char scndwd[32];
+    static thread_local char scndwd[32];
     extern /* Subroutine */ int trnlat_(char *, char *, ftnlen, ftnlen), 
 	    putcom_(char *, integer *, ftnlen);
-    static char frstwd[32];
+    static thread_local char frstwd[32];
     extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
 

@@ -1,4 +1,4 @@
-/* zzholdd.f -- translated by f2c (version 19980913).
+/* zzholdd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,11 +27,11 @@ static integer c__4 = 4;
     /* Local variables */
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static logical first[4];
+    static thread_local logical first[4];
     extern integer brckti_(integer *, integer *, integer *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal svalue[4];
+    static thread_local doublereal svalue[4];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
     extern logical return_(void);

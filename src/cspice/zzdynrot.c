@@ -1,4 +1,4 @@
-/* zzdynrot.f -- translated by f2c (version 19980913).
+/* zzdynrot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -87,12 +87,12 @@ static integer c__20 = 20;
 	    char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer earth;
+    static thread_local integer earth;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal pnear[3];
     integer frcls, iaxes[3];
     doublereal rprec[9]	/* was [3][3] */;
-    static char itmra[32*2];
+    static thread_local char itmra[32*2];
     integer cvobs, frctr;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
 	     errdp_(char *, doublereal *, ftnlen);
@@ -109,26 +109,26 @@ static integer c__20 = 20;
     logical meanec;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     char vecdef[80*2];
-    static char itmabc[32*2];
+    static thread_local char itmabc[32*2];
     char basnam[32];
     doublereal lt;
     logical negate;
-    static char itmdec[32*2];
+    static thread_local char itmdec[32*2];
     doublereal coeffs[60]	/* was [20][3] */;
     char inname__[32], abcorr[5], axname[80];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
     char cfrmnm[32], ctrnam[36], cvcorr[5], dynstl[80], dynfam[80];
-    static char itmaxe[32*2], itmfrm[32*2], itmlat[32*2], itmlon[32*2], 
-	    itmobs[32*2], itmspc[32*2], itmtrg[32*2], itmunt[32*2], itmvdf[32*
-	    2], itmvec[32*2];
+    static thread_local char itmaxe[32*2], itmfrm[32*2], itmlat[32*2], itmlon[
+	    32*2], itmobs[32*2], itmspc[32*2], itmtrg[32*2], itmunt[32*2], 
+	    itmvdf[32*2], itmvec[32*2];
     char nutmod[80], oblmod[80], prcmod[80], rotsta[80], timstr[50], tmpfam[
 	    80], velfrm[32];
     doublereal angles[2], ctrpos[3], dec, dirvec[3], eulang[3], alt, fet, lat,
 	     minsep, mob, precxf[36]	/* was [6][6] */, r2000[9]	/* 
 	    was [3][3] */, sep, lon;
     integer cfrmid;
-    static integer j2000;
+    static thread_local integer j2000;
     integer obs;
     logical corblk[15];
     doublereal vet;

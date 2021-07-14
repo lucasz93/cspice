@@ -1,4 +1,4 @@
-/* unitp.f -- translated by f2c (version 19980913).
+/* unitp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -30,25 +30,25 @@ logical unitp_(char *string, ftnlen string_len)
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    ftnlen, ftnlen);
     integer nest;
-    static integer mult;
+    static thread_local integer mult;
     integer b, e, i__;
-    static integer blank;
+    static thread_local integer blank;
     integer ident[32], class__;
     doublereal value;
-    static integer oplen[6];
+    static thread_local integer oplen[6];
     logical known;
     integer start;
-    static integer opptr[20];
+    static thread_local integer opptr[20];
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer lparen;
+    static thread_local integer lparen;
     extern /* Subroutine */ int fnducv_(char *, logical *, integer *, 
 	    doublereal *, ftnlen), scanpr_(integer *, char *, integer *, 
 	    integer *, ftnlen);
-    static integer rparen;
+    static thread_local integer rparen;
     integer lasttk, explev;
     logical physcl, expgrp;
     integer ntokns, beg[32], end[32];
-    static integer div, exp__;
+    static thread_local integer div, exp__;
 
 /* $ Abstract */
 

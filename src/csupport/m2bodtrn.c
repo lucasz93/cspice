@@ -1,4 +1,4 @@
-/* m2bodtrn.f -- translated by f2c (version 19980913).
+/* m2bodtrn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -230,7 +230,7 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer ncod, i__;
+    static thread_local integer ncod, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
@@ -238,9 +238,9 @@ static integer c__1 = 1;
 	    bodn2c_(char *, integer *, logical *, ftnlen);
     extern integer bschoc_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen), bschoi_(integer *, integer *, integer *, integer *);
-    static integer ordcod[415], ordnam[415];
+    static thread_local integer ordcod[415], ordnam[415];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static char tmpnam[32];
+    static thread_local char tmpnam[32];
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), errint_(char *, integer *, ftnlen), cmprss_(char *, 
 	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);

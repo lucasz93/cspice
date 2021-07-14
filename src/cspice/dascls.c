@@ -1,4 +1,4 @@
-/* dascls.f -- translated by f2c (version 19980913).
+/* dascls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,7 +29,7 @@ static logical c_false = FALSE_;
 	    integer *, ftnlen);
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer fhset[5006];
+    static thread_local integer fhset[5006];
     extern logical failed_(void);
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen), dasllc_(
 	    integer *), dashof_(integer *);

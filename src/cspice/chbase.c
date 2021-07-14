@@ -1,4 +1,4 @@
-/* chbase.f -- translated by f2c (version 19980913).
+/* chbase.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -406,16 +406,9 @@ integer chbase_(void)
 /*     are not portable; but then, neither are the values. */
 
 
-/*     VAX, VAX FORTRAN */
-/*     Sun, Sun FORTRAN */
-/*     IBM PC, Microsoft FORTRAN, Lahey EM/32 FORTRAN */
-/*     Macintosh, Language Systems FORTRAN */
-/*     HP-UX 9000/750, FORTRAN/9000 Series 700 computers */
-/*     Silicon Graphics, IRIX OS, SGI FORTRAN 77 */
-/*     DEC Alpha, OSF/1, DEC FORTRAN-77 */
-/*     NeXT, Mach OS, Absoft Fortran 77 */
+/*     PC Linux, g77 or fort77 */
 
-    ret_val = 256;
+    ret_val = 128;
     return ret_val;
 } /* chbase_ */
 

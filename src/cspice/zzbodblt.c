@@ -1,4 +1,4 @@
-/* zzbodblt.f -- translated by f2c (version 19980913).
+/* zzbodblt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,13 +38,13 @@ static integer c__3 = 3;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char zzint[36];
-    static integer bltcod[620];
-    static char bltnam[36*620];
+    static thread_local integer bltcod[620];
+    static thread_local char bltnam[36*620];
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *), 
 	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static char bltnor[36*620];
+    static thread_local char bltnor[36*620];
     extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen), 
 	    cmprss_(char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen)

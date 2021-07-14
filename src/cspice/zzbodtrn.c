@@ -1,4 +1,4 @@
-/* zzbodtrn.f -- translated by f2c (version 19980913).
+/* zzbodtrn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -45,24 +45,24 @@ static integer c__1 = 1;
 	    zzctrchk_(integer *, integer *, logical *), zzctrinc_(integer *), 
 	    zzctrsin_(integer *), zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static integer index;
+    static thread_local integer index;
     extern logical failed_(void);
-    static integer defcod[773];
-    static char defnam[36*773];
-    static integer didids[773], dididx[773], kercod[14983], kidids[14983], 
-	    codidx, didpol[779], kididx[14983];
-    static char defnor[36*773], kernam[36*14983];
-    static integer dnmidx[773], defsiz, didlst[773], kidpol[14989], dnmpol[
-	    779], knmidx[14983], kidlst[14983];
-    static char dnmnms[36*773], tmpnam[36];
-    static logical lupdte;
-    static char kernor[36*14983];
-    static integer dnmlst[773], knmpol[14989];
-    static char knmnms[36*14983];
-    static integer subctr[2], kersiz, knmlst[14983], pulctr[2];
+    static thread_local integer defcod[773];
+    static thread_local char defnam[36*773];
+    static thread_local integer didids[773], dididx[773], kercod[14983], 
+	    kidids[14983], codidx, didpol[779], kididx[14983];
+    static thread_local char defnor[36*773], kernam[36*14983];
+    static thread_local integer dnmidx[773], defsiz, didlst[773], kidpol[
+	    14989], dnmpol[779], knmidx[14983], kidlst[14983];
+    static thread_local char dnmnms[36*773], tmpnam[36];
+    static thread_local logical lupdte;
+    static thread_local char kernor[36*14983];
+    static thread_local integer dnmlst[773], knmpol[14989];
+    static thread_local char knmnms[36*14983];
+    static thread_local integer subctr[2], kersiz, knmlst[14983], pulctr[2];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), ljucrs_(integer *, char *, char *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen);

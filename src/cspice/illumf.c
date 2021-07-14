@@ -1,4 +1,4 @@
-/* illumf.f -- translated by f2c (version 19980913).
+/* illumf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -46,7 +46,7 @@ static doublereal c_b56 = 1.;
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer type__;
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int zzmaxrad_(doublereal *), zznamfrm_(integer *, 
 	    char *, integer *, char *, integer *, ftnlen, ftnlen), zzvalcor_(
 	    char *, logical *, ftnlen), zzsbfnrm_(integer *, integer *, 
@@ -66,31 +66,31 @@ static doublereal c_b56 = 1.;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical uselt, svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical uselt, svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
+    static thread_local integer svctr3[2], svctr4[2];
     doublereal lt;
     integer obscde;
     extern doublereal halfpi_(void);
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
 	    *, doublereal *, ftnlen);
     integer fixfid;
-    static integer trgcde;
+    static thread_local integer trgcde;
     doublereal maxrad;
     extern logical return_(void);
     char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
     doublereal normal[3], obspos[3], opstat[6], tistat[6], vertex[3];
-    static integer center, srflst[100];
+    static thread_local integer center, srflst[100];
     integer svnsrf, typeid;
     logical attblk[15], surfup;
-    static char svtarg[36];
+    static thread_local char svtarg[36];
     logical fnd;
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svrefc;
+    static thread_local integer svtcde;
+    static thread_local char svobsr[36];
+    static thread_local integer svobsc;
+    static thread_local char svfref[32];
+    static thread_local integer svrefc;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 

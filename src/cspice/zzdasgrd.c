@@ -1,4 +1,4 @@
-/* zzdasgrd.f -- translated by f2c (version 19980913).
+/* zzdasgrd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,9 +32,9 @@ static integer c__1 = 1;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern logical failed_(void);
-    static integer natbff;
+    static thread_local integer natbff;
     char chrrec[1024];
-    static integer intbff;
+    static thread_local integer intbff;
     integer intamh, intarc;
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);

@@ -1,4 +1,4 @@
-/* changu.f -- translated by f2c (version 19980913).
+/* changu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,25 +39,25 @@ static integer c__128 = 128;
     extern /* Subroutine */ int scan_(char *, char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    ftnlen, ftnlen);
-    static integer pass, nest, size[6];
-    static char type__[32*6];
-    static integer mult, b, e, f, i__;
-    static char o[256];
-    static integer s, blank, ident[128], class__;
-    static logical found;
-    static doublereal value;
-    static integer oplen[6], start, opptr[20];
+    static thread_local integer pass, nest, size[6];
+    static thread_local char type__[32*6];
+    static thread_local integer mult, b, e, f, i__;
+    static thread_local char o[256];
+    static thread_local integer s, blank, ident[128], class__;
+    static thread_local logical found;
+    static thread_local doublereal value;
+    static thread_local integer oplen[6], start, opptr[20];
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer lparen;
+    static thread_local integer lparen;
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int fnducv_(char *, logical *, integer *, 
 	    doublereal *, ftnlen), scanpr_(integer *, char *, integer *, 
 	    integer *, ftnlen);
-    static integer rparen;
+    static thread_local integer rparen;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char string[256];
-    static integer ntokns, beg[128], end[128], div, exp__;
+    static thread_local char string[256];
+    static thread_local integer ntokns, beg[128], end[128], div, exp__;
 
 /* $ Abstract */
 

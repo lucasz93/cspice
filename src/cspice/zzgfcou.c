@@ -1,4 +1,4 @@
-/* zzgfcou.f -- translated by f2c (version 19980913).
+/* zzgfcou.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -52,7 +52,7 @@ static integer c__3 = 3;
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    static doublereal svre;
+    static thread_local doublereal svre;
     extern /* Subroutine */ int zzgfcost_(char *, char *, integer *, 
 	    doublereal *, char *, char *, integer *, char *, integer *, 
 	    doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
@@ -69,8 +69,8 @@ static integer c__3 = 3;
     doublereal value;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal state[6];
-    static char svcrd[32], svref[32];
-    static integer svobs;
+    static thread_local char svcrd[32], svref[32];
+    static thread_local integer svobs;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen),
@@ -84,13 +84,13 @@ static integer c__3 = 3;
     integer frcode;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    static char svcorr[20], svcsys[32], svdref[32], svmeth[200], svrcnm[36], 
-	    svvdef[32];
+    static thread_local char svcorr[20], svcsys[32], svdref[32], svmeth[200], 
+	    svrcnm[36], svvdef[32];
     char timstr[40];
     doublereal coords[3];
-    static doublereal svdvec[3], svradi[3];
+    static thread_local doublereal svdvec[3], svradi[3];
     integer cdsign[3], clssid;
-    static integer svcidx, svdctr, svrctr, svsens, svtarg;
+    static thread_local integer svcidx, svdctr, svrctr, svsens, svtarg;
     integer sysidx;
     logical attblk[6];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -108,7 +108,7 @@ static integer c__3 = 3;
 	    doublereal *, doublereal *), recsph_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), reccyl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal svf;
+    static thread_local doublereal svf;
     extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *), zzgfcoq_(
 	    char *, char *, integer *, doublereal *, char *, char *, integer *

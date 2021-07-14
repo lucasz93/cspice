@@ -1,4 +1,4 @@
-/* limbpt.f -- translated by f2c (version 19980913).
+/* limbpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -81,7 +81,7 @@ static doublereal c_b129 = 1.;
 	    ftnlen), zzraysfx_(doublereal *, doublereal *, doublereal *, 
 	    doublereal *, logical *), chkin_(char *, ftnlen);
     doublereal epoch;
-    static integer shape;
+    static thread_local integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    errdp_(char *, doublereal *, ftnlen);
     doublereal ptarg[3];
@@ -92,7 +92,7 @@ static doublereal c_b129 = 1.;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
-    static integer nsurf;
+    static thread_local integer nsurf;
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
     extern logical vzero_(doublereal *);
@@ -102,11 +102,12 @@ static doublereal c_b129 = 1.;
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *), el2cgv_(doublereal *, doublereal *, doublereal *
 	    , doublereal *);
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2];
     doublereal cp[3];
     extern logical failed_(void);
-    static integer svctr2[2], svctr3[2], svctr4[2], svctr5[2], loccde;
+    static thread_local integer svctr2[2], svctr3[2], svctr4[2], svctr5[2], 
+	    loccde;
     extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal lt;
@@ -117,28 +118,28 @@ static doublereal c_b129 = 1.;
     extern doublereal touchd_(doublereal *);
     extern logical return_(void);
     char lmbstr[20], nrmloc[25], shpstr[9];
-    static char subtyp[20];
+    static thread_local char subtyp[20];
     char svlstr[20], trmstr[20];
     doublereal center[3], cortrg[3], cutnml[3], enorml[3], epoint[3], ipoint[
 	    3], isrfvc[3], plnvec[3];
-    static doublereal pntbuf[6000]	/* was [3][2000] */;
+    static thread_local doublereal pntbuf[6000]	/* was [3][2000] */;
     doublereal raydir[3], rayvtx[3], result[2006], smajor[3], sminor[3], 
 	    stloff[3], stlpos[3], ssbtrg[3], tmpvec[3], trgepc;
     integer fxcent, fxclss, fxtyid;
-    static integer lmbtyp;
+    static thread_local integer lmbtyp;
     integer numitr;
     doublereal pos[3];
-    static integer srflst[100];
+    static thread_local integer srflst[100];
     logical attblk[15], fnd;
-    static logical pri;
+    static thread_local logical pri;
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svradi[3];
+    static thread_local char svtarg[36];
+    static thread_local integer svtcde;
+    static thread_local char svobsr[36];
+    static thread_local integer svobsc;
+    static thread_local char svfref[32];
+    static thread_local integer svfxfc;
+    static thread_local doublereal svradi[3];
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 

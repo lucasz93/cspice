@@ -1,4 +1,4 @@
-/* srfxpt.f -- translated by f2c (version 19980913).
+/* srfxpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -61,10 +61,10 @@ static doublereal c_b45 = 1e-14;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     doublereal r2jmat[9]	/* was [3][3] */, j2tmat[9]	/* was [3][3] 
 	    */;
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
+    static thread_local integer svctr3[2];
     integer refcde;
     doublereal lt, etdiff;
     integer frcode;
@@ -84,20 +84,20 @@ static doublereal c_b45 = 1e-14;
 	    doublereal *);
     extern doublereal touchd_(doublereal *);
     doublereal ltcent;
-    static integer svtcde;
+    static thread_local integer svtcde;
     doublereal negpos[3], rayalt, trgdir[3];
     integer typeid;
     doublereal stldir[3];
-    static integer svobsc;
+    static thread_local integer svobsc;
     doublereal prevet;
-    static char svtarg[36], svdref[32];
-    static integer svrefc;
+    static thread_local char svtarg[36], svdref[32];
+    static thread_local integer svrefc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal stlerr[3];
     extern logical return_(void);
     doublereal prevlt, ssbost[6], ssbtst[6], stltmp[3];
     logical usestl;
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
 	    *, doublereal *, doublereal *, ftnlen, ftnlen), vminus_(

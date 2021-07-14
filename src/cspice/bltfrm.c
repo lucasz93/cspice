@@ -1,4 +1,4 @@
-/* bltfrm.f -- translated by f2c (version 19980913).
+/* bltfrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -25,20 +25,20 @@ static integer c__128 = 128;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, fcode[127];
+    static thread_local integer i__, j, fcode[127];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizei_(integer *);
     extern logical failed_(void);
-    static integer bidids[128], to, fclsid[127], bididx[128];
+    static thread_local integer bidids[128], to, fclsid[127], bididx[128];
     extern /* Subroutine */ int scardi_(integer *, integer *);
-    static char frname[32*127];
-    static integer bidpol[134], fclass[127], corder[127], center[127], bnmidx[
-	    128], bidlst[128];
+    static thread_local char frname[32*127];
+    static thread_local integer bidpol[134], fclass[127], corder[127], center[
+	    127], bnmidx[128], bidlst[128];
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    static integer bnmpol[134];
-    static char bnmnms[32*128];
+    static thread_local integer bnmpol[134];
+    static thread_local char bnmnms[32*128];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer ctrord[127], bnmlst[128];
+    static thread_local integer ctrord[127], bnmlst[128];
     extern /* Subroutine */ int chkout_(char *, ftnlen), zzfdat_(integer *, 
 	    integer *, char *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, integer *, integer *, 

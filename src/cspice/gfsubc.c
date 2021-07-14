@@ -1,4 +1,4 @@
-/* gfsubc.f -- translated by f2c (version 19980913).
+/* gfsubc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -1673,8 +1673,8 @@ static logical c_false = FALSE_;
 /*     Define no-use values for DVEC and DREF */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
 

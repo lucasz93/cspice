@@ -1,4 +1,4 @@
-/* wrencc.f -- translated by f2c (version 19980913).
+/* wrencc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,7 +22,7 @@ static integer c__1 = 1;
 
     /* System generated locals */
     address a__1[3];
-    integer i__1, i__2, i__3[3];
+    integer i__1, i__2, i__3, i__4, i__5[3];
     char ch__1[1], ch__2[66];
     cilist ci__1;
 
@@ -39,9 +39,9 @@ static integer c__1 = 1;
     integer intch;
     char ch[1], encchr[64];
     integer dtalen, dtalin, nchars, hibits;
-    static integer intfpc, intesc;
+    static thread_local integer intfpc, intesc;
     integer encpos;
-    static integer intlpc;
+    static thread_local integer intlpc;
     integer dtapos;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer lobits;
@@ -52,7 +52,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char lftovr[2];
     extern logical return_(void);
-    static integer intquo;
+    static thread_local integer intquo;
 
 /* $ Abstract */
 
@@ -523,9 +523,9 @@ static integer c__1 = 1;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This, however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -541,13 +541,29 @@ static integer c__1 = 1;
 
 	first = FALSE_;
 	*(unsigned char *)&ch__1[0] = '@';
-	intesc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intesc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = '\'';
-	intquo = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intquo = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = ' ';
-	intfpc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intfpc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = '~';
-	intlpc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intlpc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
     }
 
 /*     Get the length of a data ``line'' in the data buffer DATA. */
@@ -608,7 +624,11 @@ static integer c__1 = 1;
 	*(unsigned char *)ch = *(unsigned char *)&data[(dtalin - 1) * 
 		data_len + (dtapos - 1)];
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)ch;
-	intch = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intch = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 
 /*        If the character is a special character, then encode it and */
 /*        place it in the encoded character buffer. Otherwise the */
@@ -702,10 +722,10 @@ static integer c__1 = 1;
 		goto L100001;
 	    }
 /* Writing concatenation */
-	    i__3[0] = 1, a__1[0] = "'";
-	    i__3[1] = 64, a__1[1] = encchr;
-	    i__3[2] = 1, a__1[2] = "'";
-	    s_cat(ch__2, a__1, i__3, &c__3, (ftnlen)66);
+	    i__5[0] = 1, a__1[0] = "'";
+	    i__5[1] = 64, a__1[1] = encchr;
+	    i__5[2] = 1, a__1[2] = "'";
+	    s_cat(ch__2, a__1, i__5, &c__3, (ftnlen)66);
 	    iostat = do_fio(&c__1, ch__2, (ftnlen)66);
 	    if (iostat != 0) {
 		goto L100001;
@@ -769,10 +789,10 @@ L100001:
 	    goto L100002;
 	}
 /* Writing concatenation */
-	i__3[0] = 1, a__1[0] = "'";
-	i__3[1] = 64, a__1[1] = encchr;
-	i__3[2] = 1, a__1[2] = "'";
-	s_cat(ch__2, a__1, i__3, &c__3, (ftnlen)66);
+	i__5[0] = 1, a__1[0] = "'";
+	i__5[1] = 64, a__1[1] = encchr;
+	i__5[2] = 1, a__1[2] = "'";
+	s_cat(ch__2, a__1, i__5, &c__3, (ftnlen)66);
 	iostat = do_fio(&c__1, ch__2, (ftnlen)66);
 	if (iostat != 0) {
 	    goto L100002;

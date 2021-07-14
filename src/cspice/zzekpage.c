@@ -1,4 +1,4 @@
-/* zzekpage.f -- translated by f2c (version 19980913).
+/* zzekpage.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -44,31 +44,31 @@ static integer c__15 = 15;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer addr__;
+    static thread_local integer addr__;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    static integer e, l, freec, freed;
-    static char cfill[1024];
-    static doublereal dfill[128];
-    static integer freei;
+    static thread_local integer e, l, freec, freed;
+    static thread_local char cfill[1024];
+    static thread_local doublereal dfill[128];
+    static thread_local integer freei;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ifill[256];
+    static thread_local integer ifill[256];
     extern /* Subroutine */ int fillc_(char *, integer *, char *, ftnlen, 
 	    ftnlen), filld_(doublereal *, integer *, doublereal *), filli_(
 	    integer *, integer *, integer *), errch_(char *, char *, ftnlen, 
 	    ftnlen);
-    static integer lastc, lastd, lasti;
-    static doublereal dpptr;
+    static thread_local integer lastc, lastd, lasti;
+    static thread_local doublereal dpptr;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dasadc_(integer *, integer *, integer *, 
 	    integer *, char *, ftnlen), dasadd_(integer *, integer *, 
 	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    static char encpag[5];
-    static integer nfreec, nfreed;
+    static thread_local char encpag[5];
+    static thread_local integer nfreec, nfreed;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
 	    integer *);
-    static integer nfreei;
+    static thread_local integer nfreei;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
 	    dassih_(integer *, char *, ftnlen), dasrdc_(integer *, integer *, 
@@ -79,10 +79,10 @@ static integer c__15 = 15;
 	    dasudd_(integer *, integer *, integer *, doublereal *), sigerr_(
 	    char *, ftnlen), prtenc_(integer *, char *, ftnlen), chkout_(char 
 	    *, ftnlen);
-    static integer forwrd;
+    static thread_local integer forwrd;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static integer npc, npd, npi;
+    static thread_local integer npc, npd, npi;
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* pstack.f -- translated by f2c (version 19980913).
+/* pstack.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -23,13 +23,14 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer last, quit, i__, range, getat;
-    static char lines[132*400];
-    static integer bsize;
+    static thread_local integer last, quit, i__, range, getat;
+    static thread_local char lines[132*400];
+    static thread_local integer bsize;
     extern integer sizec_(char *, ftnlen);
-    static integer putat, start, begend[40]	/* was [2][20] */;
+    static thread_local integer putat, start, begend[40]	/* was [2][20]
+	     */;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer backup, gotten;
+    static thread_local integer backup, gotten;
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
 
 /* $ Abstract */

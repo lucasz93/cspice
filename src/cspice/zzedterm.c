@@ -1,4 +1,4 @@
-/* zzedterm.f -- translated by f2c (version 19980913).
+/* zzedterm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -551,14 +551,14 @@ static doublereal c_b35 = 1.;
 	    d__2 = *b * v[1];
 	    d__3 = *c__ * v[2];
 	    vpack_(&d__1, &d__2, &d__3, e);
-	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 
+	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 
 		    && 0 <= i__2 ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", 
 		    (ftnlen)582)]);
 
 /*           Make a new estimate of the plane rotation required to touch */
 /*           the target. */
 
-	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 && 0 <= i__2 
+	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 && 0 <= i__2 
 		    ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", (ftnlen)588)]
 		    , vtx, offset);
 

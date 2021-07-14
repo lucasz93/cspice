@@ -1,4 +1,4 @@
-/* zzekad06.f -- translated by f2c (version 19980913).
+/* zzekad06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,29 +28,29 @@ static logical c_false = FALSE_;
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer npad, nrec;
+    static thread_local integer npad, nrec;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    static integer room;
+    static thread_local integer room;
     extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *), 
 	    zzekglnk_(integer *, integer *, integer *, integer *), zzeksfwd_(
 	    integer *, integer *, integer *, integer *), zzekslnk_(integer *, 
 	    integer *, integer *, integer *);
-    static integer n, p, mbase, pbase;
+    static thread_local integer n, p, mbase, pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer recno, cvlen, nchrs, ncols, lastw, p2;
+    static thread_local integer recno, cvlen, nchrs, ncols, lastw, p2;
     extern logical failed_(void);
-    static integer np;
-    static char padbuf[100];
-    static integer padlen, colidx, datptr, eltidx, mnroom, nlinks, nwrite, 
-	    ptrloc, remain, strlen, wp;
-    static logical fstpag;
+    static thread_local integer np;
+    static thread_local char padbuf[100];
+    static thread_local integer padlen, colidx, datptr, eltidx, mnroom, 
+	    nlinks, nwrite, ptrloc, remain, strlen, wp;
+    static thread_local logical fstpag;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), dasudi_(integer *, integer *, integer *, integer *), 
 	    dasudc_(integer *, integer *, integer *, integer *, integer *, 
 	    char *, ftnlen);
-    static logical pad;
-    static integer pos;
+    static thread_local logical pad;
+    static thread_local integer pos;
     extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *), 
 	    zzekaps_(integer *, integer *, integer *, logical *, integer *, 
 	    integer *);

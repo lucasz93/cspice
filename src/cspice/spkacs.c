@@ -1,4 +1,4 @@
-/* spkacs.f -- translated by f2c (version 19980913).
+/* spkacs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -50,7 +50,7 @@ static doublereal c_b13 = 1.;
 	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
+    static thread_local logical usestl;
     doublereal acc[3];
 
 /* $ Abstract */

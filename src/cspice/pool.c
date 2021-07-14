@@ -1,4 +1,4 @@
-/* pool.f -- translated by f2c (version 19980913).
+/* pool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -41,25 +41,25 @@ static integer c__32 = 32;
 	    i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer head, code, need, free, node;
-    static char line[132];
-    static integer tail, hits;
+    static thread_local integer head, code, need, free, node;
+    static thread_local char line[132];
+    static thread_local integer tail, hits;
     extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *), 
 	    zzgapool_(char *, char *, integer *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen), zzctrinc_(integer *);
-    static integer i__, j, k;
+    static thread_local integer i__, j, k;
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int zznwpool_(char *, char *, integer *, integer *
 	    , char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer r__, begin;
+    static thread_local integer r__, begin;
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
-    static integer dnode, space, avail;
+    static thread_local integer dnode, space, avail;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer nnode;
+    static thread_local integer nnode;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    lnkan_(integer *, integer *);
-    static doublereal small;
+    static thread_local doublereal small;
     extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
 	    ftnlen), errdp_(char *, doublereal *, ftnlen);
     extern integer sizec_(char *, ftnlen);
@@ -67,53 +67,54 @@ static integer c__32 = 32;
 	    ioerr_(char *, char *, integer *, ftnlen, ftnlen), movei_(integer 
 	    *, integer *, integer *);
     extern integer lnktl_(integer *, integer *);
-    static logical gotit;
-    static integer nvars__;
+    static thread_local logical gotit;
+    static thread_local integer nvars__;
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzcln_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer nptrs;
+    static thread_local integer nptrs;
     extern logical failed_(void);
-    static integer datahd;
-    static char begdat[10];
-    static logical dp;
-    static integer agnode;
+    static thread_local integer datahd;
+    static thread_local char begdat[10];
+    static thread_local logical dp;
+    static thread_local integer agnode;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer chnode;
+    static thread_local integer chnode;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer nameat, nfetch, nw, dpnode;
+    static thread_local integer nameat, nfetch, nw, dpnode;
     extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    static char active[32*130021];
+    static thread_local char active[32*130021];
     extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
 	    integer *, ftnlen, ftnlen);
-    static integer margin;
+    static thread_local integer margin;
     extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
 	    integer *);
-    static char cvalue[132];
+    static thread_local char cvalue[132];
     extern integer lnknfn_(integer *), lastnb_(char *, ftnlen);
-    static char pnames[32*26003], begtxt[10];
+    static thread_local char pnames[32*26003], begtxt[10];
     extern integer intmax_(void), intmin_(void);
-    static integer namlst[26003], datlst[26003];
+    static thread_local integer namlst[26003], datlst[26003];
     extern integer lstltc_(char *, integer *, char *, ftnlen, ftnlen), 
 	    zzhash_(char *, ftnlen);
-    static integer nmpool[52018]	/* was [2][26009] */, chpool[30012]	
-	    /* was [2][15006] */, dppool[800012]	/* was [2][400006] */;
-    static char chvals[80*15000];
-    static doublereal dpvals[400000];
+    static thread_local integer nmpool[52018]	/* was [2][26009] */, chpool[
+	    30012]	/* was [2][15006] */, dppool[800012]	/* was [2][
+	    400006] */;
+    static thread_local char chvals[80*15000];
+    static thread_local doublereal dpvals[400000];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static char wtagnt[32*130015], agents[32*130021];
-    static integer wtpool[260042]	/* was [2][130021] */;
-    static char wtvars[32*26009], notify[32*130021];
-    static integer subctr[2];
-    static char finish[2], varnam[32];
-    static doublereal dvalue;
-    static integer iostat, iquote, linnum, lookat, nnodes, tofree, wtptrs[
-	    26003], varlen;
-    static logical noagnt, succes, vector;
+    static thread_local char wtagnt[32*130015], agents[32*130021];
+    static thread_local integer wtpool[260042]	/* was [2][130021] */;
+    static thread_local char wtvars[32*26009], notify[32*130021];
+    static thread_local integer subctr[2];
+    static thread_local char finish[2], varnam[32];
+    static thread_local doublereal dvalue;
+    static thread_local integer iostat, iquote, linnum, lookat, nnodes, 
+	    tofree, wtptrs[26003], varlen;
+    static thread_local logical noagnt, succes, vector;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen), chkout_(char *, ftnlen), zzpini_(logical *, integer *, 
 	    integer *, integer *, char *, char *, integer *, integer *, 
@@ -121,14 +122,14 @@ static integer c__32 = 32;
 	    integer *, integer *, char *, char *, char *, char *, integer *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), lnkini_(
 	    integer *, integer *), rdknew_(char *, ftnlen);
-    static doublereal big;
+    static thread_local doublereal big;
     extern /* Subroutine */ int zzrvar_(integer *, integer *, char *, integer 
 	    *, integer *, doublereal *, integer *, char *, char *, logical *, 
 	    ftnlen, ftnlen, ftnlen), cltext_(char *, ftnlen);
-    static logical eof;
+    static thread_local logical eof;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), inslai_(
 	    integer *, integer *, integer *, integer *, integer *);
-    static logical chr;
+    static thread_local logical chr;
     extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen), 
 	    removc_(char *, char *, ftnlen, ftnlen), zzgpnm_(integer *, 
 	    integer *, char *, integer *, integer *, doublereal *, integer *, 

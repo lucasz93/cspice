@@ -1,4 +1,4 @@
-/* zzektrlk.f -- translated by f2c (version 19980913).
+/* zzektrlk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,20 +40,20 @@
 	    char *, integer);
 
     /* Local variables */
-    static logical leaf;
-    static integer prev, plus;
+    static thread_local logical leaf;
+    static thread_local integer prev, plus;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    static integer child;
+    static thread_local integer child;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer depth;
-    static logical found;
-    static integer minus;
-    static char access[15];
-    static integer datbas;
+    static thread_local integer depth;
+    static thread_local logical found;
+    static thread_local integer minus;
+    static thread_local char access[15];
+    static thread_local integer datbas;
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
     extern integer lstlei_(integer *, integer *, integer *);
-    static integer newkey, prvkey, totkey;
-    static logical samkey, samtre, rdonly;
+    static thread_local integer newkey, prvkey, totkey;
+    static thread_local logical samkey, samtre, rdonly;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen);

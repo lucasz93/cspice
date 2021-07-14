@@ -1,4 +1,4 @@
-/* tisbod.f -- translated by f2c (version 19980913).
+/* tisbod.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -35,103 +35,104 @@ static integer c__100 = 100;
 	    ;
 
     /* Local variables */
-    static doublereal dphi;
-    static integer cent;
-    static char item[32];
-    static doublereal tipm[9]	/* was [3][3] */;
+    static thread_local doublereal dphi;
+    static thread_local integer cent;
+    static thread_local char item[32];
+    static thread_local doublereal tipm[9]	/* was [3][3] */;
     extern /* Subroutine */ int zzhsiadd_(integer *, integer *, integer *, 
 	    integer *, integer *, logical *), zzhsichk_(integer *, integer *, 
 	    integer *, integer *, integer *);
     extern integer zzbodbry_(integer *);
     extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *), 
 	    zzpctrck_(integer *, logical *), zzhsiavl_(integer *, integer *);
-    static doublereal d__;
+    static thread_local doublereal d__;
     extern /* Subroutine */ int zzctruin_(integer *);
-    static integer i__, j;
-    static doublereal dcoef[3], t, w;
+    static thread_local integer i__, j;
+    static thread_local doublereal dcoef[3], t, w;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    static doublereal delta;
-    static integer refid, avail;
+    static thread_local doublereal delta;
+    static thread_local integer refid, avail;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch, rcoef[3], tcoef[200]	/* was [2][100] */;
-    static integer pcref;
-    static doublereal wcoef[3];
+    static thread_local doublereal epoch, rcoef[3], tcoef[200]	/* was [2][
+	    100] */;
+    static thread_local integer pcref;
+    static thread_local doublereal wcoef[3];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static doublereal theta;
+    static thread_local doublereal theta;
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *), moved_(doublereal *, integer *, doublereal *), 
 	    repmi_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    static doublereal dtipm[9]	/* was [3][3] */;
+    static thread_local doublereal dtipm[9]	/* was [3][3] */;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal costh[100];
+    static thread_local doublereal costh[100];
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    static char dtype[1];
-    static doublereal sinth[100], xtipm[9]	/* was [3][3] */;
+    static thread_local char dtype[1];
+    static thread_local doublereal sinth[100], xtipm[9]	/* was [3][3] */;
     extern doublereal twopi_(void);
-    static integer j2code;
-    static doublereal req2pc[9]	/* was [3][3] */, ac[100];
+    static thread_local integer j2code;
+    static thread_local doublereal req2pc[9]	/* was [3][3] */, ac[100];
     extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
 	    integer *, doublereal *);
-    static doublereal dc[100];
-    static integer na, nd;
-    static doublereal ra;
+    static thread_local doublereal dc[100];
+    static thread_local integer na, nd;
+    static thread_local doublereal ra;
     extern logical failed_(void);
-    static doublereal bdcoef[471]	/* was [3][157] */;
-    static integer at;
-    static doublereal wc[100], dw;
+    static thread_local doublereal bdcoef[471]	/* was [3][157] */;
+    static thread_local integer at;
+    static thread_local doublereal wc[100], dw;
     extern logical bodfnd_(integer *, char *, ftnlen);
-    static doublereal ddelta;
-    static integer bidids[157];
-    static doublereal brcoef[471]	/* was [3][157] */;
-    static integer bpcref[157], frcode;
+    static thread_local doublereal ddelta;
+    static thread_local integer bidids[157];
+    static thread_local doublereal brcoef[471]	/* was [3][157] */;
+    static thread_local integer bpcref[157], frcode;
     extern doublereal halfpi_(void);
-    static doublereal bpckep[157], pckepc;
-    static integer nw;
-    static doublereal btcoef[31400]	/* was [2][100][157] */, bwcoef[471]	
-	    /* was [3][157] */, dtheta, pckref;
-    static integer bidpol[163], bnpair[157];
+    static thread_local doublereal bpckep[157], pckepc;
+    static thread_local integer nw;
+    static thread_local doublereal btcoef[31400]	/* was [2][100][157] 
+	    */, bwcoef[471]	/* was [3][157] */, dtheta, pckref;
+    static thread_local integer bidpol[163], bnpair[157];
     extern /* Subroutine */ int pckmat_(integer *, doublereal *, integer *, 
 	    doublereal *, logical *);
-    static integer bidlst[157];
-    static logical update;
-    static integer ntheta;
-    static doublereal dcosth[100];
-    static integer reqref;
-    static doublereal dsinth[100], tmpepc;
-    static char fixfrm[32], errmsg[1840];
-    static doublereal eulsta[6];
-    static integer npairs;
+    static thread_local integer bidlst[157];
+    static thread_local logical update;
+    static thread_local integer ntheta;
+    static thread_local doublereal dcosth[100];
+    static thread_local integer reqref;
+    static thread_local doublereal dsinth[100], tmpepc;
+    static thread_local char fixfrm[32], errmsg[1840];
+    static thread_local doublereal eulsta[6];
+    static thread_local integer npairs;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), dtpool_(
 	    char *, logical *, integer *, char *, ftnlen, ftnlen);
-    static doublereal xdtipm[9]	/* was [3][3] */, costmp;
+    static thread_local doublereal xdtipm[9]	/* was [3][3] */, costmp;
     extern /* Subroutine */ int ccifrm_(integer *, integer *, integer *, char 
 	    *, integer *, logical *, ftnlen), setmsg_(char *, ftnlen);
-    static integer pulctr[2];
-    static doublereal sintmp;
+    static thread_local integer pulctr[2];
+    static thread_local doublereal sintmp;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
 	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen), gdpool_(char *, 
 	    integer *, integer *, integer *, doublereal *, logical *, ftnlen);
-    static char timstr[35];
+    static thread_local char timstr[35];
     extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
 	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
 	    irfrot_(integer *, integer *, doublereal *);
-    static doublereal bac[15700]	/* was [100][157] */, bdc[15700]	
-	    /* was [100][157] */;
+    static thread_local doublereal bac[15700]	/* was [100][157] */, bdc[
+	    15700]	/* was [100][157] */;
     extern doublereal j2000_(void);
-    static doublereal dec;
-    static integer bna[157], bnd[157];
-    static doublereal dra;
-    static integer dim;
-    static doublereal bwc[15700]	/* was [100][157] */, phi;
+    static thread_local doublereal dec;
+    static thread_local integer bna[157], bnd[157];
+    static thread_local doublereal dra;
+    static thread_local integer dim;
+    static thread_local doublereal bwc[15700]	/* was [100][157] */, phi;
     extern doublereal rpd_(void), spd_(void);
-    static integer bnw[157];
-    static logical new__;
+    static thread_local integer bnw[157];
+    static thread_local logical new__;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
-    static doublereal ddec;
+    static thread_local doublereal ddec;
 
 /* $ Abstract */
 

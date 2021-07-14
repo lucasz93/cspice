@@ -1,4 +1,4 @@
-/* spke10.f -- translated by f2c (version 19980913).
+/* spke10.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,29 +27,29 @@ static integer c__6 = 6;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    static doublereal dwdt, mypi;
+    static thread_local doublereal dwdt, mypi;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *), mxvg_(
 	    doublereal *, doublereal *, integer *, integer *, doublereal *);
-    static doublereal my2pi, w;
+    static thread_local doublereal my2pi, w;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal denom, precm[36]	/* was [6][6] */;
+    static thread_local doublereal denom, precm[36]	/* was [6][6] */;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
 	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    static doublereal vcomp[3], numer;
+    static thread_local doublereal vcomp[3], numer;
     extern doublereal twopi_(void);
-    static doublereal s1[6], s2[6], t1, t2;
+    static thread_local doublereal s1[6], s2[6], t1, t2;
     extern logical failed_(void);
     extern doublereal pi_(void);
-    static doublereal dargdt;
+    static thread_local doublereal dargdt;
     extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *), chkout_(char *, 
 	    ftnlen);
-    static doublereal invprc[36]	/* was [6][6] */, tmpsta[6];
+    static thread_local doublereal invprc[36]	/* was [6][6] */, tmpsta[6];
     extern /* Subroutine */ int zzteme_(doublereal *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
-    static doublereal arg;
+    static thread_local doublereal arg;
     extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *), 
 	    xxsgp4i_(doublereal *, doublereal *, integer *);
 

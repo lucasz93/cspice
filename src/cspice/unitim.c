@@ -1,4 +1,4 @@
-/* unitim.f -- translated by f2c (version 19980913).
+/* unitim.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -46,21 +46,21 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
     integer i__;
-    static doublereal k, m[2];
+    static thread_local doublereal k, m[2];
     integer n;
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[8*13];
+    static thread_local char recog[8*13];
     logical intdb;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
     logical found[4], intdt;
     char types[8*8], myout[8];
-    static doublereal eb;
+    static thread_local doublereal eb;
     extern logical failed_(void);
     extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
-    static char bslash[1];
-    static doublereal secspd;
+    static thread_local char bslash[1];
+    static thread_local doublereal secspd;
     logical update;
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
 	    *, doublereal *, logical *, ftnlen), unionc_(char *, char *, char 
@@ -70,20 +70,20 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical somfls_(logical *, integer *);
     doublereal mytime;
-    static char typtdb[8*10];
+    static thread_local char typtdb[8*10];
     extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    static integer usrctr[2];
+    static thread_local integer usrctr[2];
     logical outtdt;
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char typtdt[8*9];
+    static thread_local char typtdt[8*9];
     extern doublereal j2000_(void);
-    static doublereal dta;
+    static thread_local doublereal dta;
     doublereal tdb;
     extern doublereal spd_(void);
     doublereal tdt;
-    static doublereal jd2000;
+    static thread_local doublereal jd2000;
 
 /* $ Abstract */
 

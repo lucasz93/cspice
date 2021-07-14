@@ -1,4 +1,4 @@
-/* zzrytlat.f -- translated by f2c (version 19980913).
+/* zzrytlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -455,7 +455,7 @@ static integer c__1 = 1;
 /*     want to have false negative tests for rays having */
 /*     vertices lying on the expanded element boundary. */
 
-    d__1 = *margin * 2;
+    d__1 = 2 * *margin;
     zzinlat_(vertex, bounds, &d__1, &c__0, &inside);
     if (failed_()) {
 	return 0;

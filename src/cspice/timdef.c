@@ -1,4 +1,4 @@
-/* timdef.f -- translated by f2c (version 19980913).
+/* timdef.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -36,19 +36,19 @@ static integer c__1 = 1;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal hoff, moff;
-    static integer last, zone;
+    static thread_local doublereal hoff, moff;
+    static thread_local integer last, zone;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static char myval[16];
+    static thread_local char myval[16];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static logical succes;
-    static char myactn[16];
+    static thread_local logical succes;
+    static thread_local char myactn[16];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    setmsg_(char *, ftnlen);
-    static char myitem[16];
+    static thread_local char myitem[16];
     extern logical return_(void);
     extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
 	    doublereal *, integer *, logical *, ftnlen);

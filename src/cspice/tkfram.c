@@ -1,4 +1,4 @@
-/* tkfram.f -- translated by f2c (version 19980913).
+/* tkfram.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -36,47 +36,47 @@ static integer c__14 = 14;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static char name__[32];
-    static integer tail;
-    static char spec[32], item[32*14];
-    static integer idnt[1], axes[3];
-    static logical full;
-    static integer pool[412]	/* was [2][206] */;
+    static thread_local char name__[32];
+    static thread_local integer tail;
+    static thread_local char spec[32], item[32*14];
+    static thread_local integer idnt[1], axes[3];
+    static thread_local logical full;
+    static thread_local integer pool[412]	/* was [2][206] */;
     extern doublereal vdot_(doublereal *, doublereal *);
-    static char type__[1];
-    static doublereal qtmp[4];
+    static thread_local char type__[1];
+    static thread_local doublereal qtmp[4];
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
 	    *, integer *, integer *, integer *, doublereal *);
-    static integer i__, n, r__;
-    static doublereal buffd[1800]	/* was [9][200] */;
-    static integer buffi[200]	/* was [1][200] */, oldid;
+    static thread_local integer i__, n, r__;
+    static thread_local doublereal buffd[1800]	/* was [9][200] */;
+    static thread_local integer buffi[200]	/* was [1][200] */, oldid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char agent[32];
+    static thread_local char agent[32];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    ident_(doublereal *), errch_(char *, char *, ftnlen, ftnlen);
-    static doublereal tempd;
+    static thread_local doublereal tempd;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
 	     repmi_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen)
 	    , vhatg_(doublereal *, integer *, doublereal *);
     extern integer lnktl_(integer *, integer *);
-    static char idstr[32];
+    static thread_local char idstr[32];
     extern integer rtrim_(char *, ftnlen);
-    static char versn[8], units[32];
-    static integer ar;
+    static thread_local char versn[8], units[32];
+    static thread_local integer ar;
     extern logical failed_(void), badkpv_(char *, char *, char *, integer *, 
 	    integer *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static char frname[32];
-    static doublereal angles[3];
-    static char oldagt[32];
-    static logical buffrd;
+    static thread_local char frname[32];
+    static thread_local doublereal angles[3];
+    static thread_local char oldagt[32];
+    static thread_local logical buffrd;
     extern /* Subroutine */ int locati_(integer *, integer *, integer *, 
 	    integer *, integer *, logical *), frmnam_(integer *, char *, 
 	    ftnlen), namfrm_(char *, integer *, ftnlen);
-    static logical update;
-    static char altnat[32];
+    static thread_local logical update;
+    static thread_local char altnat[32];
     extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer lnknfn_(integer *);
-    static integer idents[200]	/* was [1][200] */;
+    static thread_local integer idents[200]	/* was [1][200] */;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen), gdpool_(char *, integer *, 
 	    integer *, integer *, doublereal *, logical *, ftnlen), sigerr_(
@@ -84,19 +84,19 @@ static integer c__14 = 14;
 	    integer *, logical *, ftnlen), chkout_(char *, ftnlen), sharpr_(
 	    doublereal *), dtpool_(char *, logical *, integer *, char *, 
 	    ftnlen, ftnlen), setmsg_(char *, ftnlen);
-    static doublereal matrix[9]	/* was [3][3] */;
+    static thread_local doublereal matrix[9]	/* was [3][3] */;
     extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen), dwpool_(
 	    char *, ftnlen), errint_(char *, integer *, ftnlen), vsclip_(
 	    doublereal *, doublereal *);
-    static doublereal quatrn[4];
+    static thread_local doublereal quatrn[4];
     extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
 	    doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *), intstr_(
 	    integer *, char *, ftnlen), swpool_(char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    static logical fnd;
-    static char alt[32*14];
+    static thread_local logical fnd;
+    static thread_local char alt[32*14];
 
 /* $ Abstract */
 

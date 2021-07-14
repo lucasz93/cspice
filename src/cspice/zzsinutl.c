@@ -1,4 +1,4 @@
-/* zzsinutl.f -- translated by f2c (version 19980913).
+/* zzsinutl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -28,23 +28,23 @@ static integer c__100 = 100;
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
 	    integer *, char *, integer *, integer *, doublereal *, ftnlen);
-    static integer savfid;
-    static doublereal savrad[3];
+    static thread_local integer savfid;
+    static thread_local doublereal savrad[3];
     extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static integer savnsf;
+    static thread_local integer savnsf;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static integer savsrf[100];
-    static doublereal savmnr;
-    static integer savtrg;
+    static thread_local integer savsrf[100];
+    static thread_local doublereal savmnr;
+    static thread_local integer savtrg;
     extern logical return_(void);
-    static doublereal savmxr;
+    static thread_local doublereal savmxr;
     extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
 	    ;
-    static integer savtyp;
+    static thread_local integer savtyp;
     extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
 	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
 	     logical *);

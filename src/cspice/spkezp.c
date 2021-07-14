@@ -1,4 +1,4 @@
-/* spkezp.f -- translated by f2c (version 19980913).
+/* spkezp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -18,37 +18,37 @@
     doublereal d__1;
 
     /* Local variables */
-    static integer fj2000;
-    static doublereal temp[3], sobs[6];
-    static integer type__;
-    static logical xmit;
+    static thread_local integer fj2000;
+    static thread_local doublereal temp[3], sobs[6];
+    static thread_local integer type__;
+    static thread_local logical xmit;
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
 	    , integer *, ftnlen, ftnlen), zzctruin_(integer *);
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical eqchr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical found;
-    static char svref[32];
+    static thread_local logical found;
+    static thread_local char svref[32];
     extern integer ltrim_(char *, ftnlen);
-    static doublereal xform[9]	/* was [3][3] */;
+    static thread_local doublereal xform[9]	/* was [3][3] */;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal postn[3];
-    static integer svctr1[2];
+    static thread_local doublereal postn[3];
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    static integer center;
+    static thread_local integer center;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(
 	    integer *, integer *, integer *, integer *, logical *);
-    static doublereal ltcent;
+    static thread_local doublereal ltcent;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer reqfrm, typeid;
+    static thread_local integer reqfrm, typeid;
     extern /* Subroutine */ int chkout_(char *, ftnlen), spkapo_(integer *, 
 	    doublereal *, char *, doublereal *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen), setmsg_(char *, ftnlen), spkssb_(
 	    integer *, doublereal *, char *, doublereal *, ftnlen);
-    static integer svreqf;
+    static thread_local integer svreqf;
     extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);

@@ -1,4 +1,4 @@
-/* zzdskbsr.f -- translated by f2c (version 19980913).
+/* zzdskbsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,38 +39,38 @@ static integer c__24 = 24;
     extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *), 
 	    zzctrinc_(integer *), zzctrsin_(integer *);
     integer i__, j, cheap, p;
-    static integer btbeg[100], btbod[100];
+    static thread_local integer btbeg[100], btbod[100];
     extern /* Subroutine */ int chkin_(char *, ftnlen), dskgd_(integer *, 
 	    integer *, doublereal *);
-    static integer fthan[5000];
+    static thread_local integer fthan[5000];
     char doing[40];
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     char stack[40*2];
-    static integer bthfs[100], btlfs[100];
+    static thread_local integer bthfs[100], btlfs[100];
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer sthan[10000];
+    static thread_local integer sthan[10000];
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static integer btexp[100], ftnum[5000];
+    static thread_local integer btexp[100], ftnum[5000];
     extern logical failed_(void);
     extern /* Subroutine */ int dlabbs_(integer *, integer *, logical *);
-    static logical begsch;
+    static thread_local logical begsch;
     extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
     integer dlalds[8];
     extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
 	    logical *);
-    static integer bindex, findex;
+    static thread_local integer bindex, findex;
     extern integer intmax_(void), isrchi_(integer *, integer *, integer *), 
 	    lnknfn_(integer *), lnknxt_(integer *, integer *), lnkprv_(
 	    integer *, integer *);
     extern logical return_(void);
-    static integer dskctr[2];
-    static doublereal stdskd[240000]	/* was [24][10000] */;
-    static integer stdlad[80000]	/* was [8][10000] */, stpool[20012]	
-	    /* was [2][10006] */;
+    static thread_local integer dskctr[2];
+    static thread_local doublereal stdskd[240000]	/* was [24][10000] */;
+    static thread_local integer stdlad[80000]	/* was [8][10000] */, stpool[
+	    20012]	/* was [2][10006] */;
     char urgent[40];
     doublereal dsklds[24];
     integer dlanxt[8], dlaprv[8], minexp, nxtseg, prvnod;
-    static integer svbody;
+    static thread_local integer svbody;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), lnkini_(integer *, integer *), dasopr_(char *, integer *,
 	     ftnlen), dascls_(integer *), lnkfsl_(integer *, integer *, 
@@ -78,9 +78,9 @@ static integer c__24 = 24;
 	    ftnlen), dlafps_(integer *, integer *, integer *, logical *), 
 	    lnkilb_(integer *, integer *, integer *), lnkila_(integer *, 
 	    integer *, integer *);
-    static logical fnd;
+    static thread_local logical fnd;
     integer new__;
-    static integer top;
+    static thread_local integer top;
 
 /* $ Abstract */
 

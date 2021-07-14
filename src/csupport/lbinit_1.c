@@ -1,4 +1,4 @@
-/* lbinit_1.f -- translated by f2c (version 19980913).
+/* lbinit_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -174,7 +174,7 @@ static integer c__1 = 1;
 /*     Standard error handling. */
 
     /* Parameter adjustments */
-    ptrs_dim1 = *psize + 6;
+    ptrs_dim1 = *psize + 5 + 1;
 
     /* Function Body */
     if (return_()) {
@@ -200,10 +200,10 @@ static integer c__1 = 1;
     } else {
 	i__1 = maxln + 1 << 2;
 	ssizei_(&i__1, ptrs);
-	ptrs[(i__1 = 6) < ptrs_dim1 ? i__1 : s_rnge("ptrs", i__1, "lbinit_1__"
-		, (ftnlen)197)] = 1;
-	ptrs[(i__1 = 7) < ptrs_dim1 ? i__1 : s_rnge("ptrs", i__1, "lbinit_1__"
-		, (ftnlen)198)] = sizecb_1__(buffer, buffer_len);
+	ptrs[(i__1 = 6) < 1 * ptrs_dim1 ? i__1 : s_rnge("ptrs", i__1, "lbini"
+		"t_1__", (ftnlen)197)] = 1;
+	ptrs[(i__1 = 7) < 1 * ptrs_dim1 ? i__1 : s_rnge("ptrs", i__1, "lbini"
+		"t_1__", (ftnlen)198)] = sizecb_1__(buffer, buffer_len);
 	lbupd_1__(&c__0, &c__1, ptrs);
     }
     chkout_("LBINIT_1", (ftnlen)8);

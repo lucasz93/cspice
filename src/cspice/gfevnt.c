@@ -1,4 +1,4 @@
-/* gfevnt.f -- translated by f2c (version 19980913).
+/* gfevnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -211,7 +211,7 @@ static integer c__7 = 7;
     extern logical return_(void);
     char abcorr[80], angtyp[80], cornam[80], corsys[80], method[80], obsrvr[
 	    80], pnames[80*10], target[80], rptpre[55*2];
-    static char srcpre[55*2*8], srcsuf[13*2*8];
+    static thread_local char srcpre[55*2*8], srcsuf[13*2*8];
     logical localx;
     char ref[80];
     integer loc;
@@ -2095,8 +2095,8 @@ static integer c__7 = 7;
 /*     Initial values */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
 

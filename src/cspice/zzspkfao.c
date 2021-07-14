@@ -1,4 +1,4 @@
-/* zzspkfao.f -- translated by f2c (version 19980913).
+/* zzspkfao.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -54,7 +54,7 @@ static doublereal c_b15 = 1.;
 	    char *, doublereal *, ftnlen);
     doublereal stctro[6];
     extern logical return_(void);
-    static logical usestl;
+    static thread_local logical usestl;
     doublereal acc[3];
 
 /* $ Abstract */

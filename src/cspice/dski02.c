@@ -1,4 +1,4 @@
-/* dski02.f -- translated by f2c (version 19980913).
+/* dski02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,10 +20,11 @@
     integer ncgr, size, b, e, ibase, ibuff[10];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    static integer cgscal, np, nv;
+    static thread_local integer cgscal, np, nv;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer nvxtot, prvbas, prvhan, voxnpl, voxnpt, vtxnpl;
+    static thread_local integer nvxtot, prvbas, prvhan, voxnpl, voxnpt, 
+	    vtxnpl;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);

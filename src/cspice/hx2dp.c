@@ -1,4 +1,4 @@
-/* hx2dp.f -- translated by f2c (version 19980913).
+/* hx2dp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -30,23 +30,24 @@
     logical more;
     integer i__;
     extern doublereal dpmin_(void);
-    static doublereal mindp;
+    static thread_local doublereal mindp;
     extern doublereal dpmax_(void);
-    static doublereal maxdp;
+    static thread_local doublereal maxdp;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer iplus;
+    static thread_local integer iplus;
     extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
 	    ftnlen, ftnlen);
-    static integer lccbeg, digbeg, lccend, uccbeg, digend, uccend, ispace;
-    static doublereal scales[31];
+    static thread_local integer lccbeg, digbeg, lccend, uccbeg, digend, 
+	    uccend, ispace;
+    static thread_local doublereal scales[31];
     integer ndigit;
-    static integer iexpch;
+    static thread_local integer iexpch;
     logical fndexp;
     integer strbeg;
     logical negtiv;
     integer letter, strend, iexpon;
-    static integer iminus;
+    static thread_local integer iminus;
     integer positn;
     doublereal tmpnum;
 

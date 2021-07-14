@@ -1,4 +1,4 @@
-/* zzspkfzo.f -- translated by f2c (version 19980913).
+/* zzspkfzo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,9 +27,9 @@ static integer c__6 = 6;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer fj2000;
+    static thread_local integer fj2000;
     integer type__;
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *), zzspkfao_(integer *, doublereal *, char 
 	    *, char *, S_fp, doublereal *, doublereal *, doublereal *, ftnlen,
@@ -51,7 +51,7 @@ static integer c__6 = 6;
     logical attblk[15];
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(
 	    integer *, integer *, integer *, integer *, logical *);
-    static logical usegeo;
+    static thread_local logical usegeo;
     doublereal ltcent;
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);

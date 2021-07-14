@@ -1,4 +1,4 @@
-/* m2core.f -- translated by f2c (version 19980913).
+/* m2core.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,24 +33,24 @@ static integer c__2 = 2;
 	    char *, integer);
 
     /* Local variables */
-    static integer pbeg, pend, best[16], slen, nkey;
-    static char mssg[420], root[32];
+    static thread_local integer pbeg, pend, best[16], slen, nkey;
+    static thread_local char mssg[420], root[32];
     extern /* Subroutine */ int m2cal_(char *, char *, integer *, ftnlen, 
 	    ftnlen);
-    static integer i__;
+    static thread_local integer i__;
     extern integer cardc_(char *, ftnlen), cardi_(integer *);
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen), 
 	    chkin_(char *, ftnlen);
-    static integer tcode;
-    static logical endok;
-    static integer timeb;
-    static logical endit;
+    static thread_local integer tcode;
+    static thread_local logical endok;
+    static thread_local integer timeb;
+    static thread_local logical endit;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen), copyc_(char *, char *, ftnlen, ftnlen);
-    static integer lower;
-    static logical error;
-    static integer count, upper;
-    static char known[32*16];
+    static thread_local integer lower;
+    static thread_local logical error;
+    static thread_local integer count, upper;
+    static thread_local char known[32*16];
     extern /* Subroutine */ int m2begr_(char *, integer *, integer *, integer 
 	    *, integer *, ftnlen), m2mark_(char *, integer *, integer *, char 
 	    *, ftnlen, ftnlen);
@@ -58,35 +58,35 @@ static integer c__2 = 2;
 	    ftnlen);
     extern /* Subroutine */ int m2clss_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer db, de;
+    static thread_local integer db, de;
     extern /* Subroutine */ int m2trim_(char *, char *, ftnlen, ftnlen);
-    static integer kb;
+    static thread_local integer kb;
     extern logical m2keyw_(char *, ftnlen);
-    static integer ke, sb, tb, tc, se, te, endchk;
-    static logical cmatch;
+    static thread_local integer ke, sb, tb, tc, se, te, endchk;
+    static thread_local logical cmatch;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer tbegin, sbegin;
-    static char artcle[2];
-    static logical calwrd;
-    static integer bscore;
+    static thread_local integer tbegin, sbegin;
+    static thread_local char artcle[2];
+    static thread_local logical calwrd;
+    static thread_local integer bscore;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    static char phrase[120];
-    static logical keytbe, useend;
-    static integer begout, lastsb, suffsb, orignl, lastse, mspell, dcount, 
-	    suffse;
-    static char lowerc[64];
-    static integer oversb;
-    static char upperc[64], countc[64];
+    static thread_local char phrase[120];
+    static thread_local logical keytbe, useend;
+    static thread_local integer begout, lastsb, suffsb, orignl, lastse, 
+	    mspell, dcount, suffse;
+    static thread_local char lowerc[64];
+    static thread_local integer oversb;
+    static thread_local char upperc[64], countc[64];
     extern integer qlstnb_(char *, ftnlen);
-    static logical usekey;
-    static integer mcount, overse;
-    static logical keywrd;
-    static integer scores[16];
+    static thread_local logical usekey;
+    static thread_local integer mcount, overse;
+    static thread_local logical keywrd;
+    static thread_local integer scores[16];
     extern /* Subroutine */ int ssizei_(integer *, integer *);
     extern integer qrtrim_(char *, ftnlen);
-    static logical uselst;
+    static thread_local logical uselst;
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), setmsg_(
 	    char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen),
 	     suffix_(char *, integer *, char *, ftnlen, ftnlen), bestwd_(char 

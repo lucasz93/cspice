@@ -1,9 +1,13 @@
-/* zzldker.f -- translated by f2c (version 19980913).
+/* zzldker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
+/* Table of constant values */
+
+static logical c_true = TRUE_;
 
 /* $Procedure ZZLDKER ( Load a kernel ) */
 /* Subroutine */ int zzldker_(char *file, char *nofile, char *filtyp, integer 
@@ -22,12 +26,17 @@
     char versn[32];
     extern logical failed_(void);
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), pcklof_(char *, integer *, ftnlen), spklef_(char 
-	    *, integer *, ftnlen), ldpool_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+	    ftnlen, ftnlen), pcklof_(char *, integer *, ftnlen);
+    char kerlin[132];
+    extern /* Subroutine */ int spklef_(char *, integer *, ftnlen), ldpool_(
+	    char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
+    char termin[5];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical exists_(char *, ftnlen), return_(void);
     char mytype[32];
-    extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen), 
+	    zzascii_(char *, char *, logical *, char *, ftnlen, ftnlen, 
+	    ftnlen);
 
 /* $ Abstract */
 
@@ -363,6 +372,14 @@
 	}
 	s_copy(filtyp, mytype, filtyp_len, (ftnlen)32);
     } else {
+
+/*        Check for line terminator compatibility with this platform. */
+/*        .TRUE. means that ZZASCII will compare terminator */
+/*        detected with the one native to this platform and will */
+/*        stop if they don't match. */
+
+	zzascii_(file, kerlin, &c_true, termin, file_len, (ftnlen)132, (
+		ftnlen)5);
 
 /*        Load the file using the text file loader. */
 

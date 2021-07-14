@@ -1,4 +1,4 @@
-/* zznrmlon.f -- translated by f2c (version 19980913).
+/* zznrmlon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -23,7 +23,7 @@
     extern doublereal twopi_(void), touchd_(doublereal *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen);
-    static doublereal pi2;
+    static thread_local doublereal pi2;
     extern doublereal dpr_(void);
 
 /* $ Abstract */

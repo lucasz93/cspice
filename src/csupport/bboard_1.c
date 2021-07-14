@@ -1,4 +1,4 @@
-/* bboard_1.f -- translated by f2c (version 19980913).
+/* bboard_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,19 +26,19 @@ static integer c__50 = 50;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char nbuf[32*106];
-    static integer pbuf[410];
-    static char vbuf[100*51], what[32];
-    static integer i__;
-    static char cntab[32*106], dntab[32*106];
-    static integer cptab[106], dptab[106];
+    static thread_local char nbuf[32*106];
+    static thread_local integer pbuf[410];
+    static thread_local char vbuf[100*51], what[32];
+    static thread_local integer i__;
+    static thread_local char cntab[32*106], dntab[32*106];
+    static thread_local integer cptab[106], dptab[106];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char intab[32*106];
-    static integer iptab[106];
-    static doublereal dvtab[5006];
-    static char cvtab[255*306], which[32];
+    static thread_local char intab[32*106];
+    static thread_local integer iptab[106];
+    static thread_local doublereal dvtab[5006];
+    static thread_local char cvtab[255*306], which[32];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer ivtab[5006];
+    static thread_local integer ivtab[5006];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    sydelc_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen)
 	    , sydeld_(char *, char *, integer *, doublereal *, ftnlen, ftnlen)
@@ -81,8 +81,8 @@ static integer c__50 = 50;
 	    char *, integer *, integer *, ftnlen, ftnlen), sbset_1__(char *, 
 	    char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen, ftnlen)
 	    ;
-    static logical fnd;
-    static integer pos;
+    static thread_local logical fnd;
+    static thread_local integer pos;
     extern /* Subroutine */ int sbinit_1__(integer *, integer *, integer *, 
 	    char *, integer *, char *, ftnlen, ftnlen);
 

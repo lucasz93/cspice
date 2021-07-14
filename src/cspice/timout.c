@@ -1,4 +1,4 @@
-/* timout.f -- translated by f2c (version 19980913).
+/* timout.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -44,53 +44,53 @@ static doublereal c_b338 = 100.;
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    static doublereal frac, hoff;
+    static thread_local doublereal frac, hoff;
     extern /* Subroutine */ int scan_(char *, char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    ftnlen, ftnlen);
-    static logical have[51];
-    static doublereal moff;
-    static integer jday, gday;
-    static doublereal incr;
-    static integer last, dump[10];
-    static doublereal myet;
-    static integer part, type__;
-    static doublereal tvec[8];
-    static integer jdoy, gdoy, indx;
-    static char tsys[16];
-    static integer b, e, i__, j;
+    static thread_local logical have[51];
+    static thread_local doublereal moff;
+    static thread_local integer jday, gday;
+    static thread_local doublereal incr;
+    static thread_local integer last, dump[10];
+    static thread_local doublereal myet;
+    static thread_local integer part, type__;
+    static thread_local doublereal tvec[8];
+    static thread_local integer jdoy, gdoy, indx;
+    static thread_local char tsys[16];
+    static thread_local integer b, e, i__, j;
     extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
-    static doublereal x, delta;
-    static logical doera;
+    static thread_local doublereal x, delta;
+    static thread_local logical doera;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
-    static integer appnd, ident[100], class__[43], gyear;
-    static doublereal tempd;
-    static integer jyear;
-    static doublereal value;
-    static char marks[8*42];
+    static thread_local integer appnd, ident[100], class__[43], gyear;
+    static thread_local doublereal tempd;
+    static thread_local integer jyear;
+    static thread_local doublereal value;
+    static thread_local char marks[8*42];
     extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen);
-    static integer width, ndump;
-    static doublereal ntvec[8];
+    static thread_local integer width, ndump;
+    static thread_local doublereal ntvec[8];
     extern integer rtrim_(char *, ftnlen);
-    static integer start;
-    static doublereal ptvec[8];
-    static char mymon[9];
-    static integer mylen;
-    static char intyp[16], mywkd[9];
-    static integer pntrs[100];
-    static char ywfmt[8];
+    static thread_local integer start;
+    static thread_local doublereal ptvec[8];
+    static thread_local char mymon[9];
+    static thread_local integer mylen;
+    static thread_local char intyp[16], mywkd[9];
+    static thread_local integer pntrs[100];
+    static thread_local char ywfmt[8];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static char mystr[256];
-    static integer wktyp;
-    static logical go2jul;
+    static thread_local char mystr[256];
+    static thread_local integer wktyp;
+    static thread_local logical go2jul;
     extern /* Subroutine */ int gr2jul_(integer *, integer *, integer *, 
 	    integer *), jul2gr_(integer *, integer *, integer *, integer *);
-    static integer id[51];
-    static logical ok;
+    static thread_local integer id[51];
+    static thread_local logical ok;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static logical making;
+    static thread_local logical making;
     extern /* Subroutine */ int timdef_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
@@ -98,39 +98,39 @@ static doublereal c_b338 = 100.;
 	    doublereal *, doublereal *);
     extern integer brckti_(integer *, integer *, integer *), isrchi_(integer *
 	    , integer *, integer *);
-    static integer length[51];
-    static doublereal factor;
-    static integer mrklen[42];
-    static doublereal intmed;
-    static integer nmarks;
-    static char orignl[32*51];
-    static integer caltyp, timfmt;
-    static doublereal values[51];
-    static integer compnt[16]	/* was [8][2] */;
-    static char ymdfmt[8];
+    static thread_local integer length[51];
+    static thread_local doublereal factor;
+    static thread_local integer mrklen[42];
+    static thread_local doublereal intmed;
+    static thread_local integer nmarks;
+    static thread_local char orignl[32*51];
+    static thread_local integer caltyp, timfmt;
+    static thread_local doublereal values[51];
+    static thread_local integer compnt[16]	/* was [8][2] */;
+    static thread_local char ymdfmt[8];
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static char string[256], bastyp[16];
-    static logical dozone;
-    static integer stopat, trncat, ntokns;
-    static doublereal timpad;
+    static thread_local char string[256], bastyp[16];
+    static thread_local logical dozone;
+    static thread_local integer stopat, trncat, ntokns;
+    static thread_local doublereal timpad;
     extern logical return_(void);
-    static char substr[256];
-    static integer jmonth, gmonth, timtyp, montyp;
-    static logical unknwn, pumpup;
-    static integer numtyp;
-    static logical vanish;
+    static thread_local char substr[256];
+    static thread_local integer jmonth, gmonth, timtyp, montyp;
+    static thread_local logical unknwn, pumpup;
+    static thread_local integer numtyp;
+    static thread_local logical vanish;
     extern /* Subroutine */ int scanpr_(integer *, char *, integer *, integer 
 	    *, ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    scanrj_(integer *, integer *, integer *, integer *, integer *, 
 	    integer *), ttrans_(char *, char *, doublereal *, ftnlen, ftnlen),
 	     chkout_(char *, ftnlen);
     extern doublereal j2000_(void);
-    static integer beg[100];
-    static char cal[16];
-    static doublereal pad[51];
-    static integer end[100];
+    static thread_local integer beg[100];
+    static thread_local char cal[16];
+    static thread_local doublereal pad[51];
+    static thread_local integer end[100];
     extern doublereal j1950_(void), spd_(void);
-    static char fmt[32], zon[32];
+    static thread_local char fmt[32], zon[32];
     extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
 	    doublereal *, integer *, logical *, ftnlen);
 

@@ -1,4 +1,4 @@
-/* dskd02.f -- translated by f2c (version 19980913).
+/* dskd02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,10 +22,10 @@
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
 	    doublereal *);
-    static integer nv;
+    static thread_local integer nv;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer prvhan, prvbas;
+    static thread_local integer prvhan, prvbas;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);

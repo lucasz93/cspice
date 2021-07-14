@@ -1,4 +1,4 @@
-/* xdda.f -- translated by f2c (version 19980913).
+/* xdda.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -519,10 +519,10 @@ static doublereal c_b68 = 1.;
 /*     and of RAYDIR( IAXIS(3) ) for which we'll treat those components */
 /*     of the direction vector as non-zero. */
 
-    limit = 1e-20 / grdext[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("grdext", i__1, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
-	    i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-	    i__2, "xdda_", (ftnlen)523)], abs(d__1));
+    limit = 1e-20 / grdext[(i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : 
+	    s_rnge("grdext", i__2, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
+	    i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("raydir", 
+	    i__1, "xdda_", (ftnlen)523)], abs(d__1));
 
 /*     If the magnitude of RAYDIR( IAXIS(J) ), J = 2 or 3, is below */
 /*     LIMIT, then the ray can pass through the entire grid in the */

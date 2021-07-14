@@ -1,4 +1,4 @@
-/* dpgrdr.f -- translated by f2c (version 19980913).
+/* dpgrdr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,12 +38,12 @@ static integer c__0 = 0;
     integer sense;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static logical svfnd1;
-    static integer svctr1[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2];
     extern /* Subroutine */ int dgeodr_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     integer bodyid;
-    static integer svbdid;
+    static thread_local integer svbdid;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen);
     char kvalue[80];
@@ -51,7 +51,7 @@ static integer c__0 = 0;
 	    ftnlen);
     char pmkvar[32], pgrlon[4];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char svbody[36];
+    static thread_local char svbody[36];
     extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
 	    ftnlen);
     extern integer plnsns_(integer *);

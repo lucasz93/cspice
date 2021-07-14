@@ -1,4 +1,4 @@
-/* ev2lin.f -- translated by f2c (version 19980913).
+/* ev2lin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,49 +31,51 @@ static integer c__20 = 20;
 	    atan2(doublereal, doublereal);
 
     /* Local variables */
-    static integer head;
-    static doublereal coef, eeta, delm, aodp, delo, capu, xmdf, aynl, elsq, 
-	    temp;
-    static integer last;
-    static doublereal rdot, cosu, tokm;
-    static integer list[12]	/* was [2][6] */;
-    static doublereal sinu, coef1, t2cof, t3cof, t4cof, t5cof, temp1, temp2, 
-	    temp3, temp4, temp5, cos2u, temp6, mov1m, sin2u, a, e, f;
-    static integer i__, j;
-    static doublereal m;
-    static integer n;
-    static doublereal r__, s, u, betal, omega, betao;
+    static thread_local integer head;
+    static thread_local doublereal coef, eeta, delm, aodp, delo, capu, xmdf, 
+	    aynl, elsq, temp;
+    static thread_local integer last;
+    static thread_local doublereal rdot, cosu, tokm;
+    static thread_local integer list[12]	/* was [2][6] */;
+    static thread_local doublereal sinu, coef1, t2cof, t3cof, t4cof, t5cof, 
+	    temp1, temp2, temp3, temp4, temp5, cos2u, temp6, mov1m, sin2u, a, 
+	    e, f;
+    static thread_local integer i__, j;
+    static thread_local doublereal m;
+    static thread_local integer n;
+    static thread_local doublereal r__, s, u, betal, omega, betao;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch, ecose, aycof, delmo, esine, a3ovk2, tcube, cosik,
-	     tempa, bstar, cosio, xincl, etasq, rfdot, sinik, a1, rdotk, c1, 
-	    c2, c3, c4, c5, cosuk, d2, d3, j2, j3, j4, qomso, d4, lower;
+    static thread_local doublereal epoch, ecose, aycof, delmo, esine, a3ovk2, 
+	    tcube, cosik, tempa, bstar, cosio, xincl, etasq, rfdot, sinik, a1,
+	     rdotk, c1, c2, c3, c4, c5, cosuk, d2, d3, j2, j3, j4, qomso, d4, 
+	    lower;
     extern doublereal twopi_(void);
-    static doublereal q1, q2, psisq, qoms24, s4, sinio, sinmo, sinuk, tempe, 
-	    betao2, betao3, betao4, templ, tfour, upper, x1m5th, x1mth2, 
-	    x3thm1, x7thm1, fmod2p, theta2, theta4, xinck, xlcof, xmcof, 
-	    xmdot, xnode, xnodp;
-    static integer count;
-    static doublereal xndd6o;
-    static integer after;
-    static logical recog, unrec;
-    static doublereal ae, xhdot1;
+    static thread_local doublereal q1, q2, psisq, qoms24, s4, sinio, sinmo, 
+	    sinuk, tempe, betao2, betao3, betao4, templ, tfour, upper, x1m5th,
+	     x1mth2, x3thm1, x7thm1, fmod2p, theta2, theta4, xinck, xlcof, 
+	    xmcof, xmdot, xnode, xnodp;
+    static thread_local integer count;
+    static thread_local doublereal xndd6o;
+    static thread_local integer after;
+    static thread_local logical recog, unrec;
+    static thread_local doublereal ae, xhdot1;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal xndt2o, ke, ao, fl, eo, qoms2t, er, fu, pl, omgadf, rk, 
-	    qo, uk, so, xl;
-    static integer before;
-    static doublereal xn, omegao, delomg;
+    static thread_local doublereal xndt2o, ke, ao, fl, eo, qoms2t, er, fu, pl,
+	     omgadf, rk, qo, uk, so, xl;
+    static thread_local integer before;
+    static thread_local doublereal xn, omegao, delomg;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    static doublereal omgcof, perige, ux, uy, uz, fprime, elemnt[60]	/* 
-	    was [10][6] */, tsince, ae2, ae3, ae4, epsiln, xnodeo, cosnok, 
-	    lstgeo[8], omgdot, ck2, cosepw, ck4, prelim[174]	/* was [29][6]
-	     */, rfdotk, sinepw, sinnok, vx, tokmps, vy, pinvsq, vz, xnodcf, 
-	    xnoddf, xnodek, epwnxt, xnodot;
-    static logical newgeo;
+    static thread_local doublereal omgcof, perige, ux, uy, uz, fprime, elemnt[
+	    60]	/* was [10][6] */, tsince, ae2, ae3, ae4, epsiln, xnodeo, 
+	    cosnok, lstgeo[8], omgdot, ck2, cosepw, ck4, prelim[174]	/* 
+	    was [29][6] */, rfdotk, sinepw, sinnok, vx, tokmps, vy, pinvsq, 
+	    vz, xnodcf, xnoddf, xnodek, epwnxt, xnodot;
+    static thread_local logical newgeo;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static doublereal eta, axn, ayn, epw, est, tsi, xll, xmo, xno, xmp, tsq, 
-	    xlt, xmx, xmy, del1, c1sq, pix2;
+    static thread_local doublereal eta, axn, ayn, epw, est, tsi, xll, xmo, 
+	    xno, xmp, tsq, xlt, xmx, xmy, del1, c1sq, pix2;
 
 /* $ Abstract */
 

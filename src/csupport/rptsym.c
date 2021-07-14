@@ -1,4 +1,4 @@
-/* rptsym.f -- translated by f2c (version 19980913).
+/* rptsym.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,7 +39,7 @@
 
     /* Local variables */
     extern integer rtrim_(char *, ftnlen);
-    static char symdef[1000], symnam[32], symval[1000];
+    static thread_local char symdef[1000], symnam[32], symval[1000];
 
 
 /*     This routine is a utility for setting and retrieving symbol */

@@ -1,4 +1,4 @@
-/* zzeknrml.f -- translated by f2c (version 19980913).
+/* zzeknrml.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,40 +40,42 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer node, tail, rels[15000]	/* was [3][5000] */, skip;
-    static logical qual;
-    static integer head1, head2, next, prev, type__;
+    static thread_local integer node, tail, rels[15000]	/* was [3][5000] */, 
+	    skip;
+    static thread_local logical qual;
+    static thread_local integer head1, head2, next, prev, type__;
     extern /* Subroutine */ int zzekinqc_(char *, integer *, integer *, 
 	    integer *, integer *, char *, integer *, ftnlen, ftnlen), 
 	    zzektloc_(integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *), zzekinqn_(doublereal *, integer *, integer 
 	    *, integer *, integer *, doublereal *, integer *), zzekweqi_(char 
 	    *, integer *, integer *, ftnlen);
-    static integer b, e, i__, j, k;
+    static thread_local integer b, e, i__, j, k;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer nmeta, level;
+    static thread_local integer nmeta, level;
     extern integer lnkhl_(integer *, integer *);
-    static integer nconj, newcj;
+    static thread_local integer nconj, newcj;
     extern integer lnktl_(integer *, integer *);
-    static integer first, newdj, nrels, sizes[1000], start, state, third;
-    static logical donow;
+    static thread_local integer first, newdj, nrels, sizes[1000], start, 
+	    state, third;
+    static thread_local logical donow;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), lnkan_(integer *, integer *), repmc_(
 	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer cj[4], dj[2], op;
+    static thread_local integer cj[4], dj[2], op;
     extern integer isrchi_(integer *, integer *, integer *), lnknfn_(integer *
 	    ), lnknxt_(integer *, integer *), lnkprv_(integer *, integer *);
     extern logical return_(void);
-    static integer rlpool[10012]	/* was [2][5006] */, cjpool[10012]	
-	    /* was [2][5006] */, cjptrs[5000], djpool[10012]	/* was [2][
-	    5006] */, djptrs[5000], mtpool[1012]	/* was [2][506] */, 
-	    mtcode[500], mtexpr[500], mstart[500], popcnd[500], cjnode, 
-	    colptr, djnode, djtail, dspool[10012]	/* was [2][5006] */, 
-	    dscbuf[35000]	/* was [7][5000] */, endloc, exprhd, fourth, 
-	    lxb, lxe, metahd, newrel, rel[4], relptr, relset[5006], retcnd, 
-	    rhsptr, second, tabptr, whrbeg, whrend, whrsiz;
-    static logical fnd;
+    static thread_local integer rlpool[10012]	/* was [2][5006] */, cjpool[
+	    10012]	/* was [2][5006] */, cjptrs[5000], djpool[10012]	
+	    /* was [2][5006] */, djptrs[5000], mtpool[1012]	/* was [2][
+	    506] */, mtcode[500], mtexpr[500], mstart[500], popcnd[500], 
+	    cjnode, colptr, djnode, djtail, dspool[10012]	/* was [2][
+	    5006] */, dscbuf[35000]	/* was [7][5000] */, endloc, exprhd, 
+	    fourth, lxb, lxe, metahd, newrel, rel[4], relptr, relset[5006], 
+	    retcnd, rhsptr, second, tabptr, whrbeg, whrend, whrsiz;
+    static thread_local logical fnd;
     extern /* Subroutine */ int chkout_(char *, ftnlen), lnkini_(integer *, 
 	    integer *), lnkila_(integer *, integer *, integer *), lnkfsl_(
 	    integer *, integer *, integer *), cleari_(integer *, integer *), 

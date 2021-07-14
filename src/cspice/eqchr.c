@@ -1,4 +1,4 @@
-/* eqchr.f -- translated by f2c (version 19980913).
+/* eqchr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,7 +20,7 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, uvalue[256];
+    static thread_local integer i__, j, uvalue[256];
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* matchc.f -- translated by f2c (version 19980913).
+/* matchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -43,9 +43,9 @@ integer matchc_(char *word, char *guess, ftnlen word_len, ftnlen guess_len)
     integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer nsig, c__, i__, j;
-    static doublereal scard, ucard;
-    static integer total, mn, mx, scardi, ucardi, hit[94];
+    static thread_local integer nsig, c__, i__, j;
+    static thread_local doublereal scard, ucard;
+    static thread_local integer total, mn, mx, scardi, ucardi, hit[94];
 
 /* $ Abstract */
 

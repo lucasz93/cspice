@@ -1,4 +1,4 @@
-/* zzeksca.f -- translated by f2c (version 19980913).
+/* zzeksca.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,23 +26,23 @@ static integer c_b65 = 2500000;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer base, b, e, i__;
+    static thread_local integer base, b, e, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer lastc, lastd, lasti, numrd, start;
+    static thread_local integer lastc, lastd, lasti, numrd, start;
     extern logical failed_(void);
-    static integer rb;
+    static thread_local integer rb;
     extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
 	    cleari_(integer *, integer *), daslla_(integer *, integer *, 
 	    integer *, integer *), dasllc_(integer *);
-    static integer rt;
+    static thread_local integer rt;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer numadd;
+    static thread_local integer numadd;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer remain, scrhan;
+    static thread_local integer remain, scrhan;
     extern /* Subroutine */ int daswbr_(integer *);
-    static integer scrtch[2500000];
+    static thread_local integer scrtch[2500000];
     extern /* Subroutine */ int dasops_(integer *), sigerr_(char *, ftnlen), 
 	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);

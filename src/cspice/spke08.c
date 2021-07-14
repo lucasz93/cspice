@@ -1,4 +1,4 @@
-/* spke08.f -- translated by f2c (version 19980913).
+/* spke08.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,7 +34,7 @@ static integer c__6 = 6;
 
     /* Local variables */
     integer i__, n;
-    static doublereal locrec[198];
+    static thread_local doublereal locrec[198];
     extern doublereal lgresp_(integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int xposeg_(doublereal *, integer *, integer *, 

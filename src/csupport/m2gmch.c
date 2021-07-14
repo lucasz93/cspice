@@ -1,4 +1,4 @@
-/* m2gmch.f -- translated by f2c (version 19980913).
+/* m2gmch.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -36,27 +36,27 @@ static integer c__5 = 5;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer tbeg, tend, tlen;
-    static logical more;
-    static char last[8];
-    static integer size, tmpj, most;
+    static thread_local integer tbeg, tend, tlen;
+    static thread_local logical more;
+    static thread_local char last[8];
+    static thread_local integer size, tmpj, most;
     extern integer upto_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer a, b, e, i__, j, k;
+    static thread_local integer a, b, e, i__, j, k;
     extern integer cardc_(char *, ftnlen);
-    static integer bcode;
-    static char label[32];
+    static thread_local integer bcode;
+    static thread_local char label[32];
     extern integer cardi_(integer *);
     extern logical match_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizec_(char *, ftnlen);
     extern /* Subroutine */ int copyc_(char *, char *, ftnlen, ftnlen);
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
-    static char terms[32*70];
-    static logical group;
+    static thread_local char terms[32*70];
+    static thread_local logical group;
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int m2begr_(char *, integer *, integer *, integer 
 	    *, integer *, ftnlen);
-    static integer t1code;
+    static thread_local integer t1code;
     extern /* Subroutine */ int m2keep_(void), m2mark_(char *, integer *, 
 	    integer *, char *, ftnlen, ftnlen), m2mtch_(char *, integer *, 
 	    char *, char *, integer *, logical *, integer *, integer *, 
@@ -65,43 +65,44 @@ static integer c__5 = 5;
 	    , m2thnq_(char *, integer *, char *, ftnlen, ftnlen), m2trim_(
 	    char *, char *, ftnlen, ftnlen);
     extern logical m2keyw_(char *, ftnlen);
-    static integer bo, eo, bs, es, bw, begofg, bdiags, ew, ediags;
-    static logical rediag;
+    static thread_local integer bo, eo, bs, es, bw, begofg, bdiags, ew, 
+	    ediags;
+    static thread_local logical rediag;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer endofg, gmatch;
+    static thread_local integer endofg, gmatch;
     extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
 	    *, ftnlen), scardi_(integer *, integer *);
-    static integer afterg;
+    static thread_local integer afterg;
     extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
 	    integer *);
     extern integer bsrchi_(integer *, integer *, integer *);
-    static integer bscore;
+    static thread_local integer bscore;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen), fndptk_(char *, char *, integer *, integer *, integer 
 	    *, ftnlen, ftnlen);
-    static logical simple;
-    static integer indxes[70];
+    static thread_local logical simple;
+    static thread_local integer indxes[70];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer fewest;
+    static thread_local integer fewest;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static integer blstwd, clstwd;
-    static logical optdir;
-    static integer elstwd;
+    static thread_local integer blstwd, clstwd;
+    static thread_local logical optdir;
+    static thread_local integer elstwd;
     extern integer qlstnb_(char *, ftnlen);
-    static integer tscore;
+    static thread_local integer tscore;
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    static char keywds[32*70];
-    static logical vtempl;
-    static char subtmp[1024];
+    static thread_local char keywds[32*70];
+    static thread_local logical vtempl;
+    static thread_local char subtmp[1024];
     extern integer lstlti_(integer *, integer *, integer *);
-    static integer positn;
+    static thread_local integer positn;
     extern /* Subroutine */ int ssizei_(integer *, integer *), cmprss_(char *,
 	     integer *, char *, char *, ftnlen, ftnlen, ftnlen), suffix_(char 
 	    *, integer *, char *, ftnlen, ftnlen);
-    static char swords[32*70];
+    static thread_local char swords[32*70];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer loc;
+    static thread_local integer loc;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* zzrvar.f -- translated by f2c (version 19980913).
+/* zzrvar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,41 +29,42 @@ static integer c__132 = 132;
 	    s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer head, code, itab;
-    static char name__[132], file[255];
-    static integer free, begs[132], node;
-    static char line[132];
-    static integer tail, ends[132];
-    static logical even, full;
-    static integer type__[132], b, e, i__, j, badat;
+    static thread_local integer head, code, itab;
+    static thread_local char name__[132], file[255];
+    static thread_local integer free, begs[132], node;
+    static thread_local char line[132];
+    static thread_local integer tail, ends[132];
+    static thread_local logical even, full;
+    static thread_local integer type__[132], b, e, i__, j, badat;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen), lnkan_(integer *, integer *);
-    static logical found;
-    static integer ncomp, lstnb, count;
-    static char error[255];
-    static integer iplus;
+    static thread_local logical found;
+    static thread_local integer ncomp, lstnb, count;
+    static thread_local char error[255];
+    static thread_local integer iplus;
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int zzcln_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer r1, r2;
+    static thread_local integer r1, r2;
     extern logical failed_(void);
-    static integer at, datahd, iblank, chnode, icomma, nameat, dpnode;
+    static thread_local integer at, datahd, iblank, chnode, icomma, nameat, 
+	    dpnode;
     extern /* Subroutine */ int rdkdat_(char *, logical *, ftnlen), lnkila_(
 	    integer *, integer *, integer *);
-    static integer iequal;
+    static thread_local integer iequal;
     extern integer lastnb_(char *, ftnlen), lastpc_(char *, ftnlen), lnknfn_(
 	    integer *);
-    static integer ilparn, irparn, itmark;
-    static doublereal dvalue;
-    static integer dirctv, lookat, iquote;
+    static thread_local integer ilparn, irparn, itmark;
+    static thread_local doublereal dvalue;
+    static thread_local integer dirctv, lookat, iquote;
     extern integer zzhash_(char *, ftnlen);
-    static integer number, varlen;
-    static logical intokn, insepf;
+    static thread_local integer number, varlen;
+    static thread_local logical intokn, insepf;
     extern logical return_(void);
-    static logical inquot;
-    static integer status, vartyp;
+    static thread_local logical inquot;
+    static thread_local integer status, vartyp;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static integer nxttok;
+    static thread_local integer nxttok;
     extern /* Subroutine */ int rdklin_(char *, integer *, ftnlen), setmsg_(
 	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
 	    *, ftnlen), lnkfsl_(integer *, integer *, integer *), tparse_(

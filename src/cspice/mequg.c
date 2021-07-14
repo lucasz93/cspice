@@ -1,4 +1,4 @@
-/* mequg.f -- translated by f2c (version 19980913).
+/* mequg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -144,9 +144,9 @@
 /* -& */
     /* Parameter adjustments */
     mout_dim1 = *nr;
-    mout_offset = mout_dim1 + 1;
+    mout_offset = 1 + mout_dim1 * 1;
     m1_dim1 = *nr;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
 
     /* Function Body */
     i__1 = *nr * *nc;

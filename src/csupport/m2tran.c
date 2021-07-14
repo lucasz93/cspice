@@ -1,4 +1,4 @@
-/* m2tran.f -- translated by f2c (version 19980913).
+/* m2tran.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -41,9 +41,9 @@ static integer c__19 = 19;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__, j, k;
-    static logical match;
-    static char cword[4];
+    static thread_local integer i__, j, k;
+    static thread_local logical match;
+    static thread_local char cword[4];
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical matchw_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
@@ -251,7 +251,8 @@ static integer c__19 = 19;
 /*     First do a binary search on the abreviations of the META-KEYS */
 /*     to see if this is a key word. */
 
-    s_copy(cword, string + (*beg - 1), (ftnlen)4, *end - (*beg - 1));
+    s_copy(cword, string + (0 + (0 + (*beg - 1))), (ftnlen)4, *end - (*beg - 
+	    1));
     i__ = bsrchc_(cword, &c__19, quick, (ftnlen)4, (ftnlen)4);
     if (i__ == 0) {
 

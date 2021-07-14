@@ -1,4 +1,4 @@
-/* dasfm.f -- translated by f2c (version 19980913).
+/* dasfm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -656,9 +656,10 @@ static integer c__1 = 1;
 	    );
 
     /* Local variables */
-    static integer nrec;
-    static char tail[932];
-    static integer last, pool[10012]	/* was [2][5006] */, type__;
+    static thread_local integer nrec;
+    static thread_local char tail[932];
+    static thread_local integer last, pool[10012]	/* was [2][5006] */, 
+	    type__;
     extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
 	    ftnlen), zzddhcls_(integer *, char *, logical *, ftnlen), 
 	    zzddhhlu_(integer *, char *, logical *, integer *, ftnlen), 
@@ -669,44 +670,44 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen), zzdasrfr_(integer *, char *, char *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen), zzplatfm_(char *
 	    , char *, ftnlen, ftnlen);
-    static integer i__, ldrec[3];
+    static thread_local integer i__, ldrec[3];
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen), maxai_(integer *, 
 	    integer *, integer *, integer *), ucase_(char *, char *, ftnlen, 
 	    ftnlen), errch_(char *, char *, ftnlen, ftnlen), lnkan_(integer *,
 	     integer *);
-    static logical found;
+    static thread_local logical found;
     extern /* Subroutine */ int copyi_(integer *, integer *);
     extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
-    static integer ftsum[70000]	/* was [14][5000] */;
+    static thread_local integer ftsum[70000]	/* was [14][5000] */;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static char ttype[4];
+    static thread_local char ttype[4];
     extern logical failed_(void);
-    static integer endrec, loccch;
+    static thread_local integer endrec, loccch;
     extern /* Subroutine */ int cleari_(integer *, integer *);
-    static char locdas[255];
-    static integer loccrc, dirrec[256];
-    static char locifn[60];
+    static thread_local char locdas[255];
+    static thread_local integer loccrc, dirrec[256];
+    static thread_local char locifn[60];
     extern integer lnknfn_(integer *);
-    static char format[8], idword[8], locfmt[8];
-    static integer fhlist[5006], findex, inqsta, iostat, dsctyp, ldrmax, 
-	    locrrc, locrch, maxadr, number, nxtdir;
+    static thread_local char format[8], idword[8], locfmt[8];
+    static thread_local integer fhlist[5006], findex, inqsta, iostat, dsctyp, 
+	    ldrmax, locrrc, locrch, maxadr, number, nxtdir;
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer nxtrec;
+    static thread_local integer nxtrec;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), lnkini_(integer *, integer *);
-    static integer curtyp;
+    static thread_local integer curtyp;
     extern /* Subroutine */ int ssizei_(integer *, integer *), setmsg_(char *,
 	     ftnlen), errint_(char *, integer *, ftnlen), lnkilb_(integer *, 
 	    integer *, integer *), insrti_(integer *, integer *), dasioi_(
 	    char *, integer *, integer *, integer *, ftnlen), lnkfsl_(integer 
 	    *, integer *, integer *);
-    static integer prvtyp;
+    static thread_local integer prvtyp;
     extern /* Subroutine */ int removi_(integer *, integer *);
-    static char acc[10];
+    static thread_local char acc[10];
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    static integer fnb, loc, new__, pos;
+    static thread_local integer fnb, loc, new__, pos;
 
     /* Fortran I/O blocks */
     static cilist io___42 = { 1, 0, 0, 0, 0 };
@@ -2175,11 +2176,11 @@ L_dasopr:
 			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)1583)];
 		}
 		if (curtyp == type__) {
-		    last += nw[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("nw", i__1, "dasfm_", (ftnlen)1587)] * (
-			    i__3 = dirrec[(i__2 = pos - 1) < 256 && 0 <= i__2 
-			    ? i__2 : s_rnge("dirrec", i__2, "dasfm_", (ftnlen)
-			    1587)], abs(i__3));
+		    last += nw[(i__3 = type__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+			    s_rnge("nw", i__3, "dasfm_", (ftnlen)1587)] * (
+			    i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 
+			    ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)
+			    1587)], abs(i__2));
 		}
 		endrec += (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ?
 			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)1590)
@@ -2645,11 +2646,11 @@ L_dasopw:
 			    : s_rnge("prev", i__1, "dasfm_", (ftnlen)2082)];
 		}
 		if (curtyp == type__) {
-		    last += nw[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("nw", i__1, "dasfm_", (ftnlen)2086)] * (
-			    i__3 = dirrec[(i__2 = pos - 1) < 256 && 0 <= i__2 
-			    ? i__2 : s_rnge("dirrec", i__2, "dasfm_", (ftnlen)
-			    2086)], abs(i__3));
+		    last += nw[(i__3 = type__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+			    s_rnge("nw", i__3, "dasfm_", (ftnlen)2086)] * (
+			    i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 
+			    ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)
+			    2086)], abs(i__2));
 		}
 		endrec += (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ?
 			 i__1 : s_rnge("dirrec", i__1, "dasfm_", (ftnlen)2089)

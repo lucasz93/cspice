@@ -1,4 +1,4 @@
-/* m2day.f -- translated by f2c (version 19980913).
+/* m2day.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,9 +20,9 @@ logical m2day_(char *word, ftnlen word_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, value;
+    static thread_local integer i__, value;
     extern integer ltrim_(char *, ftnlen);
-    static integer i1, i2, i3, length, values[256];
+    static thread_local integer i1, i2, i3, length, values[256];
     extern integer qrtrim_(char *, ftnlen);
 
 /* $ Abstract */

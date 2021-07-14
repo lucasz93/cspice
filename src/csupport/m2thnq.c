@@ -1,4 +1,4 @@
-/* m2thnq.f -- translated by f2c (version 19980913).
+/* m2thnq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -22,10 +22,10 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern integer upto_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    static integer length;
+    static thread_local integer length;
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* sincpt.f -- translated by f2c (version 19980913).
+/* sincpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -54,37 +54,37 @@ static integer c__100 = 100;
 	    ftnlen, ftnlen, ftnlen, ftnlen), zzsrftrk_(integer *, logical *);
     extern /* Subroutine */ int zzraysfx_();
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer shape;
+    static thread_local integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static integer nsurf;
+    static thread_local integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen), vzero_(doublereal *
 	    );
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
+    static thread_local integer svctr3[2], svctr4[2];
     integer dfrcde;
-    static integer svctr5[2];
+    static thread_local integer svctr5[2];
     integer fxfcde, obscde, dclass, trgcde;
     extern logical return_(void);
     char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
     integer dcentr, dtypid, fxcent, fxclss, fxtyid;
-    static integer srflst[100];
+    static thread_local integer srflst[100];
     logical attblk[15], surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svfxfc;
+    static thread_local char svtarg[36];
+    static thread_local integer svtcde;
+    static thread_local char svobsr[36];
+    static thread_local integer svobsc;
+    static thread_local char svfref[32];
+    static thread_local integer svfxfc;
     logical fnd;
-    static char svdref[32];
-    static integer svdfrc;
+    static thread_local char svdref[32];
+    static thread_local integer svdfrc;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *), errint_(char *, integer *, 
 	    ftnlen);
-    static logical pri;
+    static thread_local logical pri;
     extern /* Subroutine */ int zzraynp_();
 
 /* $ Abstract */

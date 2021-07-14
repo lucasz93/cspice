@@ -1,4 +1,4 @@
-/* m2clss.f -- translated by f2c (version 19980913).
+/* m2clss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -30,24 +30,25 @@ static integer c__0 = 0;
 	    char *, integer);
 
     /* Local variables */
-    static char base[32], name__[80*2], body[80*2], time[80*2], year[80*2];
-    static integer b, c__, e;
-    static char alpha[80*2], epoch[80*2];
+    static thread_local char base[32], name__[80*2], body[80*2], time[80*2], 
+	    year[80*2];
+    static thread_local integer b, c__, e;
+    static thread_local char alpha[80*2], epoch[80*2];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static char other[80*2], gword[80*2], month[80*2];
-    static logical rtemp;
+    static thread_local char other[80*2], gword[80*2], month[80*2];
+    static thread_local logical rtemp;
     extern integer rtrim_(char *, ftnlen);
-    static char units[80*2];
+    static thread_local char units[80*2];
     extern /* Subroutine */ int m2tran_(char *, integer *, integer *, char *, 
 	    logical *, logical *, ftnlen, ftnlen);
-    static char dp[80*2], englsh[80*2];
-    static integer number;
+    static thread_local char dp[80*2], englsh[80*2];
+    static thread_local integer number;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char day[80*2];
-    static logical key;
-    static char int__[80*2];
+    static thread_local char day[80*2];
+    static thread_local logical key;
+    static thread_local char int__[80*2];
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
 /* $ Abstract */

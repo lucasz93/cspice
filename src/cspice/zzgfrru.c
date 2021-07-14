@@ -1,4 +1,4 @@
-/* zzgfrru.f -- translated by f2c (version 19980913).
+/* zzgfrru.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -25,7 +25,7 @@ static integer c__0 = 0;
     /* Local variables */
     doublereal dfdt[6];
     extern doublereal vdot_(doublereal *, doublereal *);
-    static doublereal svdt;
+    static thread_local doublereal svdt;
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
@@ -33,20 +33,20 @@ static integer c__0 = 0;
 	    doublereal *, doublereal *);
     logical found;
     doublereal drvel, state[6], srhat[6];
-    static char svref[32];
-    static integer svobs;
+    static thread_local char svref[32];
+    static thread_local integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen), bods2c_(
 	    char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     doublereal lt;
-    static char svabco[5];
+    static thread_local char svabco[5];
     logical attblk[15];
     extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
 	    char *, ftnlen), setmsg_(char *, ftnlen);
     doublereal states[12]	/* was [6][2] */;
-    static integer svtarg;
+    static thread_local integer svtarg;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);

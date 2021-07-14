@@ -1,4 +1,4 @@
-/* m2keyw.f -- translated by f2c (version 19980913).
+/* m2keyw.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,14 +38,14 @@ logical m2keyw_(char *word, ftnlen word_len)
     integer i_len(char *, ftnlen), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, k, l, blank;
-    static logical match;
-    static char cword[4];
-    static integer lbrace, rbrace;
+    static thread_local integer i__, j, k, l, blank;
+    static thread_local logical match;
+    static thread_local char cword[4];
+    static thread_local integer lbrace, rbrace;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical matchw_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer end;
+    static thread_local integer end;
 
 /* $ Abstract */
 

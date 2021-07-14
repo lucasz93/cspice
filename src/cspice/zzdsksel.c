@@ -1,4 +1,4 @@
-/* zzdsksel.f -- translated by f2c (version 19980913).
+/* zzdsksel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,33 +38,33 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
     doublereal r__, scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
-    static doublereal savet;
+    static thread_local doublereal savet;
     extern doublereal twopi_(void);
     doublereal co1min, co2min, co1max, co2max;
-    static doublereal savco1, savco2;
+    static thread_local doublereal savco1, savco2;
     doublereal re;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     integer segfid;
     extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static integer savbid;
+    static thread_local integer savbid;
     extern integer bsrchi_(integer *, integer *, integer *);
-    static integer savfid;
+    static thread_local integer savfid;
     extern /* Subroutine */ int shelli_(integer *, integer *);
     doublereal loccor[1];
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern integer touchi_(integer *);
     doublereal locpos[3];
-    static doublereal savpar[10];
-    static integer savcls, savnsf, savsrf[100], savtrg;
+    static thread_local doublereal savpar[10];
+    static thread_local integer savcls, savnsf, savsrf[100], savtrg;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static doublereal pi2, savpos[3];
+    static thread_local doublereal pi2, savpos[3];
     integer segsys;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen);
-    static integer savsys;
+    static thread_local integer savsys;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal alt, lat, lon;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)

@@ -1,4 +1,4 @@
-/* zzsrftrn.f -- translated by f2c (version 19980913).
+/* zzsrftrn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,27 +31,28 @@ static integer c__0 = 0;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer node;
+    static thread_local integer node;
     extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *), 
 	    zzctrinc_(integer *), zzsrfker_(char *, char *, integer *, 
 	    integer *, logical *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen), zzctrsin_(
 	    integer *), zzcvpool_(char *, integer *, logical *, ftnlen), 
 	    zzctruin_(integer *), chkin_(char *, ftnlen);
-    static integer nkvar;
+    static thread_local integer nkvar;
     extern logical failed_(void);
-    static integer kerbid[2000];
-    static char kernam[36*2000];
-    static integer kersid[2000], sididx[2003], sidhls[2003], itemat, lookat;
-    static char nornam[36*2000];
-    static integer sidpol[2009];
-    static logical lupdte;
+    static thread_local integer kerbid[2000];
+    static thread_local char kernam[36*2000];
+    static thread_local integer kersid[2000], sididx[2003], sidhls[2003], 
+	    itemat, lookat;
+    static thread_local char nornam[36*2000];
+    static thread_local integer sidpol[2009];
+    static thread_local logical lupdte;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer snmidx[2003];
-    static char nsrfnm[36];
-    static integer snmhls[2003], snmpol[2009];
-    static char sqshnm[36];
+    static thread_local integer snmidx[2003];
+    static thread_local char nsrfnm[36];
+    static thread_local integer snmhls[2003], snmpol[2009];
+    static thread_local char sqshnm[36];
     extern /* Subroutine */ int setmsg_(char *, ftnlen), ljucrs_(integer *, 
 	    char *, char *, ftnlen, ftnlen);
     extern logical return_(void);

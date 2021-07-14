@@ -1,4 +1,4 @@
-/* m2selb.f -- translated by f2c (version 19980913).
+/* m2selb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -13,11 +13,11 @@
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer b, e, f, l, p;
+    static thread_local integer b, e, f, l, p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer pnter;
-    static char error[80];
-    static integer myint;
+    static thread_local integer pnter;
+    static thread_local char error[80];
+    static thread_local integer myint;
     extern /* Subroutine */ int m2vget_(char *, integer *, logical *, integer 
 	    *, integer *, ftnlen), sigerr_(char *, ftnlen), nparsi_(char *, 
 	    integer *, char *, integer *, ftnlen, ftnlen), chkout_(char *, 

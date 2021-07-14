@@ -1,4 +1,4 @@
-/* illum.f -- translated by f2c (version 19980913).
+/* illum.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -33,8 +33,8 @@ static integer c__3 = 3;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     integer obscde;
     doublereal lt;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
@@ -45,18 +45,18 @@ static integer c__3 = 3;
     char frname[80];
     integer trgcde;
     doublereal offobs[3], obsvec[3], tepoch, normal[3];
-    static integer svtcde;
+    static thread_local integer svtcde;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer svobsc;
+    static thread_local integer svobsc;
     doublereal offsun[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal sstate[6], sunvec[3], tstate[6];
-    static char svtarg[36];
+    static thread_local char svtarg[36];
     extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     doublereal lts;
 

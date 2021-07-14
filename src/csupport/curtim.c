@@ -1,4 +1,4 @@
-/* curtim.f -- translated by f2c (version 19980913).
+/* curtim.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,16 +26,16 @@ static integer c__11 = 11;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer ivec[6];
-    static char year[4];
-    static doublereal tvec[6];
-    static char hour[2];
+    static thread_local integer ivec[6];
+    static thread_local char year[4];
+    static thread_local doublereal tvec[6];
+    static thread_local char hour[2];
     extern /* Subroutine */ int zzcputim_(doublereal *);
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int rjust_(char *, char *, ftnlen, ftnlen), 
 	    replch_(char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), intstr_(integer *, char *, ftnlen);
-    static char sec[2], day[2], min__[2];
+    static thread_local char sec[2], day[2], min__[2];
 
 /* $ Abstract */
 

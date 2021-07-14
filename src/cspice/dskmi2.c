@@ -1,4 +1,4 @@
-/* dskmi2.f -- translated by f2c (version 19980913).
+/* dskmi2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -1282,8 +1282,8 @@ static integer c_b20 = 32000000;
 
 /*     Set known values in spatial index arrays. */
 
-    spaixi[(i__1 = 3) < spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_",
-	     (ftnlen)898)] = *corscl;
+    spaixi[(i__1 = 3) < 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dsk"
+	    "mi2_", (ftnlen)898)] = *corscl;
 
 /*     Prepare indices in the spatial index arrays. */
 
@@ -1301,17 +1301,17 @@ static integer c_b20 = 32000000;
 /*     Create spatial index for plates. */
 
     zzmkspin_(np, plates, vrtces, finscl, corscl, voxpsz, worksz, voxlsz, 
-	    work, &spaixi[(i__1 = 0) < spaixi_dim1 ? i__1 : s_rnge("spaixi", 
-	    i__1, "dskmi2_", (ftnlen)917)], &spaixd[9], &spaixd[6], &nvxtot, &
-	    spaixi[(i__2 = 4) < spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, 
-	    "dskmi2_", (ftnlen)917)], &spaixi[(i__3 = vxpidx - 1) < 
-	    spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_"
-	    , (ftnlen)917)], &spaixi[(i__4 = 5) < spaixi_dim1 ? i__4 : s_rnge(
-	    "spaixi", i__4, "dskmi2_", (ftnlen)917)], &spaixi[(i__5 = vxlidx 
-	    - 1) < spaixi_dim1 && 0 <= i__5 ? i__5 : s_rnge("spaixi", i__5, 
-	    "dskmi2_", (ftnlen)917)], spaixd, &spaixi[(i__6 = 7) < 
-	    spaixi_dim1 ? i__6 : s_rnge("spaixi", i__6, "dskmi2_", (ftnlen)
-	    917)]);
+	    work, &spaixi[(i__1 = 0) < 1 * spaixi_dim1 ? i__1 : s_rnge("spai"
+	    "xi", i__1, "dskmi2_", (ftnlen)917)], &spaixd[9], &spaixd[6], &
+	    nvxtot, &spaixi[(i__2 = 4) < 1 * spaixi_dim1 ? i__2 : s_rnge(
+	    "spaixi", i__2, "dskmi2_", (ftnlen)917)], &spaixi[(i__3 = vxpidx 
+	    - 1) < 1 * spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge("spaixi", 
+	    i__3, "dskmi2_", (ftnlen)917)], &spaixi[(i__4 = 5) < 1 * 
+	    spaixi_dim1 ? i__4 : s_rnge("spaixi", i__4, "dskmi2_", (ftnlen)
+	    917)], &spaixi[(i__5 = vxlidx - 1) < 1 * spaixi_dim1 && 0 <= i__5 
+	    ? i__5 : s_rnge("spaixi", i__5, "dskmi2_", (ftnlen)917)], spaixd, 
+	    &spaixi[(i__6 = 7) < 1 * spaixi_dim1 ? i__6 : s_rnge("spaixi", 
+	    i__6, "dskmi2_", (ftnlen)917)]);
     if (failed_()) {
 	chkout_("DSKMI2", (ftnlen)6);
 	return 0;
@@ -1322,15 +1322,15 @@ static integer c_b20 = 32000000;
 /*     of the array. We need to shift the plate list so that */
 /*     it starts right after the end of the pointer array. */
 
-    nshift = *voxpsz - spaixi[(i__1 = 4) < spaixi_dim1 ? i__1 : s_rnge("spai"
-	    "xi", i__1, "dskmi2_", (ftnlen)942)];
-    i__2 = spaixi[(i__1 = 5) < spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, 
-	    "dskmi2_", (ftnlen)944)];
+    nshift = *voxpsz - spaixi[(i__1 = 4) < 1 * spaixi_dim1 ? i__1 : s_rnge(
+	    "spaixi", i__1, "dskmi2_", (ftnlen)942)];
+    i__2 = spaixi[(i__1 = 5) < 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1,
+	     "dskmi2_", (ftnlen)944)];
     for (i__ = 1; i__ <= i__2; ++i__) {
 	j = vxlidx - 1 + i__;
-	spaixi[(i__1 = j - nshift - 1) < spaixi_dim1 && 0 <= i__1 ? i__1 : 
-		s_rnge("spaixi", i__1, "dskmi2_", (ftnlen)948)] = spaixi[(
-		i__3 = j - 1) < spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge(
+	spaixi[(i__1 = j - nshift - 1) < 1 * spaixi_dim1 && 0 <= i__1 ? i__1 :
+		 s_rnge("spaixi", i__1, "dskmi2_", (ftnlen)948)] = spaixi[(
+		i__3 = j - 1) < 1 * spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge(
 		"spaixi", i__3, "dskmi2_", (ftnlen)948)];
     }
 
@@ -1345,7 +1345,7 @@ static integer c_b20 = 32000000;
 
 /*           VTPIDX is the start index of the vertex pointer array. */
 
-	vtpidx = vxlidx + spaixi[(i__2 = 5) < spaixi_dim1 ? i__2 : s_rnge(
+	vtpidx = vxlidx + spaixi[(i__2 = 5) < 1 * spaixi_dim1 ? i__2 : s_rnge(
 		"spaixi", i__2, "dskmi2_", (ftnlen)965)];
 
 /*           VXLIDX is the start index of the vertex-plate list. The */
@@ -1354,18 +1354,18 @@ static integer c_b20 = 32000000;
 
 	vtlidx = vtpidx + *nv;
 	zzvrtplt_(nv, np, plates, worksz, &vtxlsz, work, &spaixi[(i__2 = 
-		vtpidx - 1) < spaixi_dim1 && 0 <= i__2 ? i__2 : s_rnge("spai"
-		"xi", i__2, "dskmi2_", (ftnlen)973)], &spaixi[(i__1 = 6) < 
-		spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_", (
-		ftnlen)973)], &spaixi[(i__3 = vtlidx - 1) < spaixi_dim1 && 0 
-		<= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_", (ftnlen)
+		vtpidx - 1) < 1 * spaixi_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"spaixi", i__2, "dskmi2_", (ftnlen)973)], &spaixi[(i__1 = 6) <
+		 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_", (
+		ftnlen)973)], &spaixi[(i__3 = vtlidx - 1) < 1 * spaixi_dim1 &&
+		 0 <= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_", (ftnlen)
 		973)]);
     } else {
 
 /*        Zero out the size of the vertex-plate list. */
 
-	spaixi[(i__2 = 6) < spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, "dsk"
-		"mi2_", (ftnlen)983)] = 0;
+	spaixi[(i__2 = 6) < 1 * spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, 
+		"dskmi2_", (ftnlen)983)] = 0;
     }
     chkout_("DSKMI2", (ftnlen)6);
     return 0;

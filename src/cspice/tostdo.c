@@ -1,4 +1,4 @@
-/* tostdo.f -- translated by f2c (version 19980913).
+/* tostdo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -14,7 +14,7 @@
 
     extern /* Subroutine */ int stdio_(char *, integer *, ftnlen), writln_(
 	    char *, integer *, ftnlen);
-    static integer stdout;
+    static thread_local integer stdout;
 
 /* $ Abstract */
 

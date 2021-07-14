@@ -1,4 +1,4 @@
-/* spks19.f -- translated by f2c (version 19980913).
+/* spks19.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -26,42 +26,42 @@ static doublereal c_b118 = 1.;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal data[100];
-    static integer npad, isel, ndir, npkt, i__, l, nread;
-    static logical final;
+    static thread_local doublereal data[100];
+    static thread_local integer npad, isel, ndir, npkt, i__, l, nread;
+    static thread_local logical final;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer minib, minie;
+    static thread_local integer minib, minie;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    errdp_(char *, doublereal *, ftnlen);
-    static integer shift, nsdir, noivl, start;
-    static doublereal iv1beg, iv1end;
+    static thread_local integer shift, nsdir, noivl, start;
+    static thread_local doublereal iv1beg, iv1end;
     extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
 	    integer *, integer *, integer *, doublereal *);
-    static integer min1sz;
+    static thread_local integer min1sz;
     extern logical failed_(void);
     extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    static integer ub;
-    static doublereal ivfbeg;
-    static integer begidx, bufbas;
-    static doublereal ivlbeg;
-    static integer minbep;
-    static doublereal ivfend;
-    static integer bepidx, endidx, eepidx, remain, ivlbas;
-    static doublereal ivlend;
+    static thread_local integer ub;
+    static thread_local doublereal ivfbeg;
+    static thread_local integer begidx, bufbas;
+    static thread_local doublereal ivlbeg;
+    static thread_local integer minbep;
+    static thread_local doublereal ivfend;
+    static thread_local integer bepidx, endidx, eepidx, remain, ivlbas;
+    static thread_local doublereal ivlend;
     extern integer lstled_(doublereal *, integer *, doublereal *);
-    static integer minndr, ptrbas, minnpk;
+    static thread_local integer minndr, ptrbas, minnpk;
     extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen);
-    static doublereal contrl[3];
+    static thread_local doublereal contrl[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer curivl;
+    static thread_local integer curivl;
     extern integer lstltd_(doublereal *, integer *, doublereal *);
-    static integer minfsz;
+    static thread_local integer minfsz;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    static integer nintvl, wndsiz;
+    static thread_local integer nintvl, wndsiz;
     extern logical return_(void);
-    static integer pktsiz, subtyp;
-    static char spk[255];
+    static thread_local integer pktsiz, subtyp;
+    static thread_local char spk[255];
 
 /* $ Abstract */
 

@@ -1,4 +1,4 @@
-/* bodvrd.f -- translated by f2c (version 19980913).
+/* bodvrd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,14 +29,14 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzctruin_(integer *), chkin_(char *, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    static logical svfnd1;
-    static integer svctr1[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2];
     integer bodyid;
-    static integer svbdid;
+    static thread_local integer svbdid;
     char varnam[32];
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
 	    *, doublereal *, logical *, ftnlen);
-    static char svbdnm[36];
+    static thread_local char svbdnm[36];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), dtpool_(char *, logical *, integer *, char *, ftnlen, 
 	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 

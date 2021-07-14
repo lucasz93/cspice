@@ -1,4 +1,4 @@
-/* m2numb.f -- translated by f2c (version 19980913).
+/* m2numb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -18,15 +18,15 @@ logical m2numb_(char *word, ftnlen word_len)
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static doublereal x;
+    static thread_local doublereal x;
     extern integer ltrim_(char *, ftnlen);
-    static char error[80];
-    static integer start, length;
+    static thread_local char error[80];
+    static thread_local integer start, length;
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
-    static integer pointr;
+    static thread_local integer pointr;
     extern integer qrtrim_(char *, ftnlen);
-    static integer end;
+    static thread_local integer end;
 
 /* $ Abstract */
 

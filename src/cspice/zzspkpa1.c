@@ -1,4 +1,4 @@
-/* zzspkpa1.f -- translated by f2c (version 19980913).
+/* zzspkpa1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -35,13 +35,13 @@ static integer c__9 = 9;
     extern /* Subroutine */ int zzspkgp1_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen), vsub_(doublereal *
 	    , doublereal *, doublereal *);
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal tpos[3];
     integer i__, refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static logical usecn, uselt;
+    static thread_local logical usecn, uselt;
     extern doublereal vnorm_(doublereal *);
     extern logical failed_(void);
     extern doublereal clight_(void);
@@ -55,7 +55,7 @@ static integer c__9 = 9;
     integer maxitr;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
+    static thread_local logical usestl;
     extern logical odd_(integer *);
 
 /* $ Abstract */

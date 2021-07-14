@@ -1,4 +1,4 @@
-/* zzspkgp0.f -- translated by f2c (version 19980913).
+/* zzspkgp0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -50,13 +50,13 @@ static integer c__0 = 0;
 	    ftnlen, ftnlen, ftnlen);
     doublereal starg[120]	/* was [6][20] */;
     logical nofrm;
-    static char svref[32];
+    static thread_local char svref[32];
     doublereal stemp[6];
     integer ctpos;
     doublereal vtemp[6];
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
-    static integer svctr1[2];
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer handle, cframe;
@@ -65,7 +65,7 @@ static integer c__0 = 0;
     extern integer isrchi_(integer *, integer *, integer *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer svrefi;
+    static thread_local integer svrefi;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), prefix_(
 	    char *, integer *, char *, ftnlen, ftnlen), setmsg_(char *, 
 	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen);

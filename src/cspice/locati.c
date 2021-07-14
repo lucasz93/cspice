@@ -1,4 +1,4 @@
-/* locati.f -- translated by f2c (version 19980913).
+/* locati.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -334,7 +334,7 @@
 
     /* Parameter adjustments */
     list_dim1 = *idsz;
-    list_offset = list_dim1 + 1;
+    list_offset = 1 + list_dim1 * 1;
 
     /* Function Body */
     chkin_("LOCATI", (ftnlen)6);

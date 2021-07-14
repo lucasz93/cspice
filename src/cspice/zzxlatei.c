@@ -1,4 +1,4 @@
-/* zzxlatei.f -- translated by f2c (version 19980913).
+/* zzxlatei.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -19,7 +19,7 @@ static integer c__4 = 4;
     static integer natbff = 0;
 
     /* System generated locals */
-    integer i__1, i__2;
+    integer i__1, i__2, i__3, i__4, i__5, i__6;
     char ch__1[1];
 
     /* Builtin functions */
@@ -32,17 +32,17 @@ static integer c__4 = 4;
     integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer value;
+    integer value, osign;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer bigint;
-    static char strbff[8*4];
+    static thread_local integer bigint;
+    static thread_local char strbff[8*4];
     integer lenipt;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     extern integer intmin_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static integer smlint;
+    static thread_local integer smlint;
     integer numint;
     extern logical return_(void);
     char tmpstr[8];
@@ -597,9 +597,9 @@ static integer c__4 = 4;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -620,7 +620,7 @@ static integer c__4 = 4;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-		    366)) << 3), (ftnlen)3, (ftnlen)8);
+		    367)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
@@ -695,10 +695,10 @@ static integer c__4 = 4;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			461)) << 3), (ftnlen)1, (ftnlen)8);
+			462)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			462)) << 3), (ftnlen)1, (ftnlen)8);
+			463)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
 		return 0;
@@ -715,10 +715,10 @@ static integer c__4 = 4;
 		errint_("#", &numint, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			481)) << 3), (ftnlen)1, (ftnlen)8);
+			482)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			482)) << 3), (ftnlen)1, (ftnlen)8);
+			483)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
@@ -758,39 +758,109 @@ static integer c__4 = 4;
 /*                      OUTPUT(I) */
 
 
-/*              Utilize the military extension bit manipulation */
-/*              intrinsics to perform the necessary computations. */
-/*              It has been determined empirically that on this */
-/*              environment it is faster than arithmetic. */
+/*              Perform the necessary computations.  What is outlined */
+/*              above is implemented below using arithmetic operations. */
+/*              The last "shifted 24 bits to the MSb" is handled */
+/*              in a special way, since the sign bit can not be shifted */
+/*              into place through simple multiplication. */
 
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__4 = 0, i__5 = *(unsigned char *)&ch__1[0];
+		i__2 = -1, i__3 = min(i__4,i__5);
+		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
 		output[i__ - 1] = value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with OUTPUT(I). */
+
 		value <<= 24;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
+
+/*              Install the sign bit.  At the moment in OUTPUT(I) */
+/*              we have the bits precisely as they need to be */
+/*              arranged.  Perform the following computations: */
+
+/*                 OUTPUT(I) = (2**31-1) - OUTPUT(I) + 1 */
+
+/*              Break this up into steps since 2**31 is not */
+/*              representable with 32 bit integers that utilize */
+/*              2's complement. */
+
+/*              First negate the result: */
+
+/*                 OUTPUT(I) = -OUTPUT(I) */
+
+/*              But this negation is effectively: */
+
+/*                 OUTPUT(I) = 2**32 - OUTPUT(I) */
+
+/*              Which yields: */
+
+/*                 2**32 - (2**31) + OUTPUT(I) */
+
+/*              or */
+
+/*                 2**31 + OUTPUT(I) */
+
+/*              which is the desired quantity.  Note, 0 must be */
+/*              treated as a special case. */
+
+		if (osign == 1) {
+		    if (output[i__ - 1] == 0) {
+			output[i__ - 1] = smlint;
+		    } else {
+			output[i__ - 1] = bigint - output[i__ - 1];
+			++output[i__ - 1];
+			output[i__ - 1] = -output[i__ - 1];
+		    }
+		}
 	    }
 	} else {
 	    setmsg_("Unable to translate integers from binary file format # "
 		    "to #.  This error should never occur and is indicative o"
 		    "f a bug.  Contact NAIF.", (ftnlen)134);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)552)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)612)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)553)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)613)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATEI", (ftnlen)8);
@@ -813,10 +883,10 @@ static integer c__4 = 4;
 			"ur.", (ftnlen)158);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			580)) << 3), (ftnlen)1, (ftnlen)8);
+			640)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			581)) << 3), (ftnlen)1, (ftnlen)8);
+			641)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
 		return 0;
@@ -833,10 +903,10 @@ static integer c__4 = 4;
 		errint_("#", &numint, (ftnlen)1);
 		errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			600)) << 3), (ftnlen)1, (ftnlen)8);
+			660)) << 3), (ftnlen)1, (ftnlen)8);
 		errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
 			i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-			601)) << 3), (ftnlen)1, (ftnlen)8);
+			661)) << 3), (ftnlen)1, (ftnlen)8);
 		errint_("#", space, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZXLATEI", (ftnlen)8);
@@ -876,39 +946,110 @@ static integer c__4 = 4;
 /*                      OUTPUT(I) */
 
 
-/*              Utilize the military extension bit manipulation */
-/*              intrinsics to perform the necessary computations. */
-/*              It has been determined empirically that on this */
-/*              environment it is faster than arithmetic. */
+/*              Perform the necessary computations.  What is outlined */
+/*              above is implemented below using arithmetic operations. */
+/*              The last "shifted 24 bits to the MSb" is handled */
+/*              in a special way, since the sign bit can not be shifted */
+/*              into place through simple multiplication. */
 
 		i__2 = j + 2;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		output[i__ - 1] = value;
 		i__2 = j + 1;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
 		i__2 = j;
 		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
+		i__3 = -1, i__4 = min(i__5,i__6);
+		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
-		value = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+		i__4 = 0, i__5 = *(unsigned char *)&ch__1[0];
+		i__2 = -1, i__3 = min(i__4,i__5);
+		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
+
+/*              In order to properly install the last byte, */
+/*              the sign bit needs to be managed separately. */
+
+		osign = value / 128;
+
+/*              Strip the sign bit if necessary. */
+
+		if (osign == 1) {
+		    value += -128;
+		}
+
+/*              Shift the non-sign bits out to their appropriate */
+/*              positions and combine them with OUTPUT(I). */
+
 		value <<= 24;
-		output[i__ - 1] |= value;
+		output[i__ - 1] += value;
+
+/*              Install the sign bit.  At the moment in OUTPUT(I) */
+/*              we have the bits precisely as they need to be */
+/*              arranged.  Perform the following computations: */
+
+/*                 OUTPUT(I) = (2**31-1) - OUTPUT(I) + 1 */
+
+/*              Break this up into steps since 2**31 is not */
+/*              representable with 32 bit integers that utilize */
+/*              2's complement. */
+
+/*              First, negate the result: */
+
+/*                 OUTPUT(I) = -OUTPUT(I) */
+
+/*              But this negation is effectively: */
+
+/*                 OUTPUT(I) = 2**32 - OUTPUT(I) */
+
+/*              Which yields: */
+
+/*                 2**32 - (2**31) + OUTPUT(I) */
+
+/*              or */
+
+/*                 2**31 + OUTPUT(I) */
+
+/*              which is the desired quantity.  Note, 0 must be */
+/*              treated as a special case. */
+
+		if (osign == 1) {
+		    if (output[i__ - 1] == 0) {
+			output[i__ - 1] = smlint;
+		    } else {
+			output[i__ - 1] = bigint - output[i__ - 1];
+			++output[i__ - 1];
+			output[i__ - 1] = -output[i__ - 1];
+		    }
+		}
 	    }
 	} else {
 	    setmsg_("Unable to translate integers from binary file format # "
 		    "to #.  This error should never occur and is indicative o"
 		    "f a bug.  Contact NAIF.", (ftnlen)134);
 	    errch_("#", strbff + (((i__1 = *inbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)671)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)791)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)672)) 
+		    i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)792)) 
 		    << 3), (ftnlen)1, (ftnlen)8);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZXLATEI", (ftnlen)8);
@@ -924,7 +1065,7 @@ static integer c__4 = 4;
 		"not currently supported for translation of integers from non"
 		"-native formats.", (ftnlen)135);
 	errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)690)) << 3), (
+		s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)810)) << 3), (
 		ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZXLATEI", (ftnlen)8);

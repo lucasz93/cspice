@@ -1,4 +1,4 @@
-/* m2diag.f -- translated by f2c (version 19980913).
+/* m2diag.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -27,10 +27,10 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer bpad, b, e;
+    static thread_local integer bpad, b, e;
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer place;
+    static thread_local integer place;
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);

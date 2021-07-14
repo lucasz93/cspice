@@ -1,4 +1,4 @@
-/* m2begr.f -- translated by f2c (version 19980913).
+/* m2begr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,15 +20,15 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__;
-    static logical digit[256];
-    static integer colon;
-    static char error[80];
-    static integer start, lparen, rparen;
+    static thread_local integer i__;
+    static thread_local logical digit[256];
+    static thread_local integer colon;
+    static thread_local char error[80];
+    static thread_local integer start, lparen, rparen;
     extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     extern integer intmax_(void);
-    static integer pointr;
+    static thread_local integer pointr;
 
 /* $ Abstract */
 

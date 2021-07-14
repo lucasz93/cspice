@@ -1,4 +1,4 @@
-/* zzmkspin.f -- translated by f2c (version 19980913).
+/* zzmkspin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -31,44 +31,44 @@ static integer c_b53 = 100000;
     double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    static integer cvid, npcg;
-    static doublereal vmod[3], xmin, ymin, xmax;
+    static thread_local integer cvid, npcg;
+    static thread_local doublereal vmod[3], xmin, ymin, xmax;
     extern integer zzvox2id_(integer *, integer *);
-    static doublereal ymax, zmax, zmin;
+    static thread_local doublereal ymax, zmax, zmin;
     extern /* Subroutine */ int zzaddlnk_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *), zzinilnk_(integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer i__, j;
+    static thread_local integer i__, j;
     extern /* Subroutine */ int zzuntngl_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *), zzgetvox_(doublereal 
 	    *, doublereal *, integer *, doublereal *, logical *, integer *);
-    static integer q, r__, cgoff[3];
+    static thread_local integer q, r__, cgoff[3];
     extern /* Subroutine */ int zzvoxcvo_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *), chkin_(char *, ftnlen);
-    static integer ncell;
+    static thread_local integer ncell;
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
     extern doublereal dpmin_(void), dpmax_(void);
-    static doublereal bxmin, bymin, bxmax, bymax, bzmax, bzmin;
-    static integer gxmin, gxmax, gymax, gymin;
-    static doublereal avext;
-    static integer gzmax, gzmin;
-    static logical inbox;
+    static thread_local doublereal bxmin, bymin, bxmax, bymax, bzmax, bzmin;
+    static thread_local integer gxmin, gxmax, gymax, gymin;
+    static thread_local doublereal avext;
+    static thread_local integer gzmax, gzmin;
+    static thread_local logical inbox;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal xvmin, yvmin, xvmax, yvmax, zvmax, zvmin;
-    static integer cgof1d, cgxyz[3], ixptr, vixyz[3];
+    static thread_local doublereal xvmin, yvmin, xvmax, yvmax, zvmax, zvmin;
+    static thread_local integer cgof1d, cgxyz[3], ixptr, vixyz[3];
     extern logical failed_(void);
     extern /* Subroutine */ int cleari_(integer *, integer *);
-    static integer ncgflg, ix, iy, iz, to, cgrdim[3], nx;
-    static doublereal xp[3];
+    static thread_local integer ncgflg, ix, iy, iz, to, cgrdim[3], nx;
+    static thread_local doublereal xp[3];
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    static doublereal yp[3], zp[3];
-    static integer ny, nz;
-    static doublereal mdltol;
-    static integer vcoord[3];
+    static thread_local doublereal yp[3], zp[3];
+    static thread_local integer ny, nz;
+    static thread_local doublereal mdltol;
+    static thread_local integer vcoord[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static doublereal cvxsiz, xextnt[6];
+    static thread_local doublereal cvxsiz, xextnt[6];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen);
 

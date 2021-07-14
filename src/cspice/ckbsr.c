@@ -1,4 +1,4 @@
-/* ckbsr.f -- translated by f2c (version 19980913).
+/* ckbsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -40,69 +40,69 @@ static integer c__6 = 6;
 
     /* Local variables */
     integer head, tail;
-    static doublereal itlb[100], itub[100];
+    static thread_local doublereal itlb[100], itub[100];
     integer cost;
-    static doublereal reqt;
+    static thread_local doublereal reqt;
     integer i__, j;
     extern /* Subroutine */ int dafgn_(char *, ftnlen);
     integer cheap, p;
     extern /* Subroutine */ int dafgs_(doublereal *);
-    static doublereal alpha, omega;
-    static integer itbeg[100], slbeg;
+    static thread_local doublereal alpha, omega;
+    static thread_local integer itbeg[100], slbeg;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
 	    integer *, doublereal *, integer *, doublereal *);
-    static integer fthan[5000];
-    static doublereal stdcd[200000]	/* was [2][100000] */;
+    static thread_local integer fthan[5000];
+    static thread_local doublereal stdcd[200000]	/* was [2][100000] */;
     char doing[40], stack[40*2];
-    static integer sticd[600000]	/* was [6][100000] */;
+    static thread_local integer sticd[600000]	/* was [6][100000] */;
     extern doublereal dpmin_(void), dpmax_(void);
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer ithfs[100], sthan[100000];
+    static thread_local integer ithfs[100], sthan[100000];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
-    static integer itlfs[100];
+    static thread_local integer itlfs[100];
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern integer lnktl_(integer *, integer *);
-    static integer itins[100], ftnum[5000], itexp[100];
+    static thread_local integer itins[100], ftnum[5000], itexp[100];
     extern /* Subroutine */ int daffna_(logical *), dafbbs_(integer *), 
 	    daffpa_(logical *);
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *), cleard_(integer *, 
 	    doublereal *), dafcls_(integer *);
     logical fndhan;
-    static logical avneed;
+    static thread_local logical avneed;
     extern /* Subroutine */ int lnkila_(integer *, integer *, integer *), 
 	    dafopr_(char *, integer *, ftnlen);
-    static integer findex;
+    static thread_local integer findex;
     extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
     extern integer isrchi_(integer *, integer *, integer *);
-    static integer iindex;
-    static logical itchkp[100];
+    static thread_local integer iindex;
+    static thread_local logical itchkp[100];
     extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer lnknfn_(integer *);
-    static logical newsch;
+    static thread_local logical newsch;
     extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *), 
 	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
     extern integer intmax_(void);
     integer minexp;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char stidnt[40*100000];
+    static thread_local char stidnt[40*100000];
     char urgent[40];
-    static doublereal itprvd[500]	/* was [5][100] */;
-    static integer itprvf[100];
+    static thread_local doublereal itprvd[500]	/* was [5][100] */;
+    static thread_local integer itprvf[100];
     integer nxtseg;
     extern integer lnkprv_(integer *, integer *);
-    static char itprvi[40*100];
+    static thread_local char itprvi[40*100];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer itprvh[100], itruex[100], stpool[200012]	/* was [2][
-	    100006] */, scinst;
+    static thread_local integer itprvh[100], itruex[100], stpool[200012]	
+	    /* was [2][100006] */, scinst;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal dcd[2];
     integer icd[6];
-    static logical fnd;
+    static thread_local logical fnd;
     integer new__;
-    static integer top;
+    static thread_local integer top;
 
 /* $ Abstract */
 

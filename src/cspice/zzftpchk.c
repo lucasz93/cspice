@@ -1,4 +1,4 @@
-/* zzftpchk.f -- translated by f2c (version 19980913).
+/* zzftpchk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -23,12 +23,12 @@ static integer c__1 = 1;
     char delim[1];
     extern integer rtrim_(char *, ftnlen);
     integer length;
-    static char lftbkt[6];
+    static thread_local char lftbkt[6];
     integer fsmidx, msfidx;
-    static char rgtbkt[6];
+    static thread_local char rgtbkt[6];
     logical isther;
     char filstr[48];
-    static char memstr[16];
+    static thread_local char memstr[16];
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* zzftpstr.f -- translated by f2c (version 19980913).
+/* zzftpstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -37,7 +37,7 @@ static integer c__0 = 0;
     integer i__;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char locstr[16];
+    static thread_local char locstr[16];
     char testsq[5*6];
 
 /* $ Abstract */

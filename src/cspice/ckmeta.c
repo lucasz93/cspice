@@ -1,4 +1,4 @@
-/* ckmeta.f -- translated by f2c (version 19980913).
+/* ckmeta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -35,35 +35,35 @@ static integer c__2 = 2;
 	     s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer this__, spks[30];
+    static thread_local integer this__, spks[30];
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen), zzctruin_(integer *);
-    static integer n;
+    static thread_local integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char agent[32*30];
+    static thread_local char agent[32*30];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical found[2];
-    static integer sclks[30];
+    static thread_local logical found[2];
+    static thread_local integer sclks[30];
     extern logical failed_(void);
     extern /* Subroutine */ int clearc_(integer *, char *, ftnlen);
     extern integer bschoi_(integer *, integer *, integer *, integer *);
-    static logical update;
+    static thread_local logical update;
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    static integer cksord[30];
+    static thread_local integer cksord[30];
     extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
 	    *, integer *, logical *, ftnlen), sigerr_(char *, ftnlen);
-    static char mymeta[7];
+    static thread_local char mymeta[7];
     extern /* Subroutine */ int chkout_(char *, ftnlen), prefix_(char *, 
 	    integer *, char *, ftnlen, ftnlen), ljucrs_(integer *, char *, 
 	    char *, ftnlen, ftnlen), cvpool_(char *, logical *, ftnlen), 
 	    dwpool_(char *, ftnlen), suffix_(char *, integer *, char *, 
 	    ftnlen, ftnlen), setmsg_(char *, ftnlen);
-    static char lookup[32*2*30];
+    static thread_local char lookup[32*2*30];
     extern logical return_(void);
-    static integer usrctr[60]	/* was [2][30] */;
+    static thread_local integer usrctr[60]	/* was [2][30] */;
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), swpool_(
 	    char *, integer *, char *, ftnlen, ftnlen);
-    static integer cks[30];
+    static thread_local integer cks[30];
 
 /* $ Abstract */
 

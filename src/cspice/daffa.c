@@ -1,4 +1,4 @@
-/* daffa.f -- translated by f2c (version 19980913).
+/* daffa.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -585,52 +585,52 @@ static integer c__128 = 128;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer free;
-    static doublereal exdc[124];
-    static integer exic[250], stfh[5000], prev;
-    static char stnr[1000*5000];
-    static doublereal stsr[640000]	/* was [128][5000] */;
-    static integer i__, p;
+    static thread_local integer free;
+    static thread_local doublereal exdc[124];
+    static thread_local integer exic[250], stfh[5000], prev;
+    static thread_local char stnr[1000*5000];
+    static thread_local doublereal stsr[640000]	/* was [128][5000] */;
+    static thread_local integer i__, p;
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
 	    integer *, doublereal *, integer *, doublereal *);
-    static integer bward;
-    static doublereal newdc[124];
+    static thread_local integer bward;
+    static thread_local doublereal newdc[124];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
-    static integer fward, newic[250];
+    static thread_local integer fward, newic[250];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
 	    moved_(doublereal *, integer *, doublereal *), movei_(integer *, 
 	    integer *, integer *);
-    static integer nextp;
-    static doublereal exsum[124];
-    static integer nd;
+    static thread_local integer nextp;
+    static thread_local doublereal exsum[124];
+    static thread_local integer nd;
     extern logical failed_(void);
-    static char dafnam[255];
-    static integer ni;
+    static thread_local char dafnam[255];
+    static thread_local integer ni;
     extern /* Subroutine */ int dafhof_(integer *), dafhfn_(integer *, char *,
 	     ftnlen), dafhsf_(integer *, integer *, integer *), dafsih_(
 	    integer *, char *, ftnlen);
-    static char ifname[60];
+    static thread_local char ifname[60];
     extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen),
 	     dafrfr_(integer *, integer *, integer *, char *, integer *, 
 	    integer *, integer *, ftnlen), dafgsr_(integer *, integer *, 
 	    integer *, integer *, doublereal *, logical *), dafwdr_(integer *,
 	     integer *, doublereal *), dafwcr_(integer *, integer *, char *, 
 	    ftnlen);
-    static integer offset;
+    static thread_local integer offset;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer namsiz;
+    static thread_local integer namsiz;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer stnseg[5000];
+    static thread_local integer stnseg[5000];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ssizei_(
 	    integer *, integer *);
-    static integer opnset[5006];
+    static thread_local integer opnset[5006];
     extern logical return_(void);
-    static integer stthis[5000], stpool[5000], stcurr[5000], stprev[5000], 
-	    stnext[5000], sumsiz;
-    static logical fnd;
+    static thread_local integer stthis[5000], stpool[5000], stcurr[5000], 
+	    stprev[5000], stnext[5000], sumsiz;
+    static thread_local logical fnd;
 
 /* $ Abstract */
 

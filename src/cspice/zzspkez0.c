@@ -1,4 +1,4 @@
-/* zzspkez0.f -- translated by f2c (version 19980913).
+/* zzspkez0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,45 +29,45 @@ static integer c__6 = 6;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer fj2000;
+    static thread_local integer fj2000;
     extern /* Subroutine */ int zzfrmch0_(integer *, integer *, doublereal *, 
 	    doublereal *), zzspkac0_(integer *, doublereal *, char *, char *, 
 	    integer *, doublereal *, doublereal *, doublereal *, ftnlen, 
 	    ftnlen);
-    static doublereal temp[6];
+    static thread_local doublereal temp[6];
     extern /* Subroutine */ int zzspkgo0_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen), zzspksb0_(integer 
 	    *, doublereal *, char *, doublereal *, ftnlen), zzspklt0_(integer 
 	    *, doublereal *, char *, char *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, ftnlen, ftnlen);
-    static integer type__;
-    static logical xmit;
+    static thread_local integer type__;
+    static thread_local logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 
 	    char *, integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, 
 	    ftnlen), zzctruin_(integer *);
-    static integer i__;
+    static thread_local integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
-    static logical found;
-    static doublereal state[6];
-    static char svref[32];
-    static doublereal stobs[6], xform[36]	/* was [6][6] */;
-    static integer svctr1[2];
+    static thread_local logical found;
+    static thread_local doublereal state[6];
+    static thread_local char svref[32];
+    static thread_local doublereal stobs[6], xform[36]	/* was [6][6] */;
+    static thread_local integer svctr1[2];
     extern logical failed_(void);
-    static integer center;
-    static logical attblk[15];
+    static thread_local integer center;
+    static thread_local logical attblk[15];
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(
 	    integer *, integer *, integer *, integer *, logical *);
-    static logical usegeo;
-    static doublereal ltcent, dltctr;
-    static integer reqfrm, ltsign, typeid;
+    static thread_local logical usegeo;
+    static thread_local doublereal ltcent, dltctr;
+    static thread_local integer reqfrm, ltsign, typeid;
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), vsclip_(doublereal *, 
 	    doublereal *);
-    static integer svreqf;
+    static thread_local integer svreqf;
     extern logical return_(void);
-    static doublereal dlt;
+    static thread_local doublereal dlt;
 
 /* $ Abstract */
 

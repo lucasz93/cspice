@@ -1,4 +1,4 @@
-/* zzpini.f -- translated by f2c (version 19980913).
+/* zzpini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -328,9 +328,9 @@
 	chkin_("ZZPINI", (ftnlen)6);
 	i__1 = *maxvar;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    namlst[(i__2 = i__ - 1) < namlst_dim1 && 0 <= i__2 ? i__2 : 
+	    namlst[(i__2 = i__ - 1) < 1 * namlst_dim1 && 0 <= i__2 ? i__2 : 
 		    s_rnge("namlst", i__2, "zzpini_", (ftnlen)305)] = 0;
-	    datlst[(i__2 = i__ - 1) < datlst_dim1 && 0 <= i__2 ? i__2 : 
+	    datlst[(i__2 = i__ - 1) < 1 * datlst_dim1 && 0 <= i__2 ? i__2 : 
 		    s_rnge("datlst", i__2, "zzpini_", (ftnlen)306)] = 0;
 	}
 

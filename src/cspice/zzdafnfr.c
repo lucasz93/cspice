@@ -1,4 +1,4 @@
-/* zzdafnfr.f -- translated by f2c (version 19980913).
+/* zzdafnfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -45,10 +45,10 @@ static integer c__1 = 1;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char prenul[603];
+    static thread_local char prenul[603];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static char ftpstr[28], pstnul[297];
+    static thread_local char ftpstr[28], pstnul[297];
     char tststr[16];
 
     /* Fortran I/O blocks */

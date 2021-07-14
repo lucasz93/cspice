@@ -1,4 +1,4 @@
-/* dafec.f -- translated by f2c (version 19980913).
+/* dafec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -45,20 +45,20 @@ static integer c__5000 = 5000;
     integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char ifname[60];
-    static integer filhan[5000];
-    static char crecrd[1000];
+    static thread_local integer filhan[5000];
+    static thread_local char crecrd[1000];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
-    static integer filchr[5000];
+    static thread_local integer filchr[5000];
     integer daflun, nchars;
-    static integer filcnt[5000];
-    static char eocmrk[1];
+    static thread_local integer filcnt[5000];
+    static thread_local char eocmrk[1];
     extern integer isrchi_(integer *, integer *, integer *);
     integer linlen;
-    static integer nfiles;
+    static thread_local integer nfiles;
     integer eocpos;
-    static char eolmrk[1];
-    static integer lsthan, lstrec[5000];
+    static thread_local char eolmrk[1];
+    static thread_local integer lsthan, lstrec[5000];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer numcom;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
@@ -69,7 +69,7 @@ static integer c__5000 = 5000;
 	    integer *, ftnlen);
     integer curpos;
     extern logical return_(void);
-    static integer lstpos[5000];
+    static thread_local integer lstpos[5000];
     logical eol;
 
     /* Fortran I/O blocks */

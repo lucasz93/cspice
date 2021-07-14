@@ -1,4 +1,4 @@
-/* m2time.f -- translated by f2c (version 19980913).
+/* m2time.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,15 +20,15 @@ logical m2time_(char *word, ftnlen word_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer ubnd[4], comp, zero, i__, n, class__[256];
-    static logical colok[4];
-    static integer limit[4];
+    static thread_local integer ubnd[4], comp, zero, i__, n, class__[256];
+    static thread_local logical colok[4];
+    static thread_local integer limit[4];
     extern integer ltrim_(char *, ftnlen);
-    static integer count;
-    static logical pntok[4];
-    static integer start, factor[4];
+    static thread_local integer count;
+    static thread_local logical pntok[4];
+    static thread_local integer start, factor[4];
     extern integer qrtrim_(char *, ftnlen);
-    static integer end;
+    static thread_local integer end;
 
 /* $ Abstract */
 

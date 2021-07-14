@@ -1,4 +1,4 @@
-/* prcomf.f -- translated by f2c (version 19980913).
+/* prcomf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,13 +32,13 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern logical have_(char *, ftnlen);
-    static integer i__, j;
-    static char files[80*8];
-    static integer units[8];
+    static thread_local integer i__, j;
+    static thread_local char files[80*8];
+    static thread_local integer units[8];
     extern /* Subroutine */ int lbuild_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    static integer iostat;
+    static thread_local integer iostat;
     extern /* Subroutine */ int rstbuf_(void), putbuf_(char *, ftnlen), 
 	    txtopr_(char *, integer *, ftnlen);
 

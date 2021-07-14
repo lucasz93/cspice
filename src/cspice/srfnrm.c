@@ -1,4 +1,4 @@
-/* srfnrm.f -- translated by f2c (version 19980913).
+/* srfnrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -43,7 +43,7 @@ static doublereal c_b45 = .5;
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    static doublereal maxr;
+    static thread_local doublereal maxr;
     extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
 	    integer *, integer *, doublereal *, ftnlen), zznamfrm_(integer *, 
 	    char *, integer *, char *, integer *, ftnlen, ftnlen), zzsbfnrm_(
@@ -56,29 +56,29 @@ static doublereal c_b45 = .5;
     integer n;
     extern /* Subroutine */ int zzsrftrk_(integer *, logical *), chkin_(char *
 	    , ftnlen);
-    static integer shape;
+    static thread_local integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal level;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal limit, a2, b2, c2;
-    static integer nsurf;
+    static thread_local integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical svfnd1;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
+    static thread_local integer svctr3[2];
     integer trgcde;
     extern logical return_(void);
     char lmbtyp[20], shpstr[9], subtyp[20], trmtyp[20];
     doublereal ptsrfm;
     integer fixfid, fxcent, fxclss, fxclid;
-    static integer srfctr[2], srflst[100];
+    static thread_local integer srfctr[2], srflst[100];
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svradi[3];
+    static thread_local char svtarg[36];
+    static thread_local integer svtcde;
+    static thread_local char svfref[32];
+    static thread_local integer svfxfc;
+    static thread_local doublereal svradi[3];
     extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
 	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
 	    integer *, integer *, logical *);
@@ -86,7 +86,7 @@ static doublereal c_b45 = .5;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), dskgtl_(
 	    integer *, doublereal *), surfnm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *), vhatip_(doublereal *);
-    static logical pri;
+    static thread_local logical pri;
 
 /* $ Abstract */
 

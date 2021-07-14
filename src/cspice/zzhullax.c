@@ -1,4 +1,4 @@
-/* zzhullax.f -- translated by f2c (version 19980913).
+/* zzhullax.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -408,9 +408,9 @@ static doublereal c_b36 = .5;
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is exterior. */
 
-	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? 
+	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
 		i__1 : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)408)], &
-		bounds[(i__2 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+		bounds[(i__2 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)408)], cp);
 
 /*        We insist on consecutive boundary vectors being */
@@ -442,7 +442,7 @@ static doublereal c_b36 = .5;
 /*           latter is not an edge of the current face. */
 
 	    if (m != i__ && m != next) {
-		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < bounds_dim2 * 3 
+		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * bounds_dim2 
 			&& 0 <= i__1 ? i__1 : s_rnge("bounds", i__1, "zzhull"
 			"ax_", (ftnlen)446)]);
 		if (pass1) {
@@ -510,11 +510,11 @@ static doublereal c_b36 = .5;
 /*              or outward normal, depending on the ordering of the */
 /*              boundary vectors. */
 
-		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 			i__1 ? i__1 : s_rnge("bounds", i__1, "zzhullax_", (
-			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 
-			bounds_dim2 * 3 && 0 <= i__2 ? i__2 : s_rnge("bounds",
-			 i__2, "zzhullax_", (ftnlen)530)], cp);
+			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 3 * 
+			bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge("bounds", 
+			i__2, "zzhullax_", (ftnlen)530)], cp);
 
 /*              It's allowable for non-consecutive boundary vectors to */
 /*              be linearly dependent, but if we have such a pair, */
@@ -541,10 +541,10 @@ static doublereal c_b36 = .5;
 /*                    face. */
 
 			if (m != i__ && m != next) {
-			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 
-				    bounds_dim2 * 3 && 0 <= i__1 ? i__1 : 
-				    s_rnge("bounds", i__1, "zzhullax_", (
-				    ftnlen)560)]);
+			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * 
+				    bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(
+				    "bounds", i__1, "zzhullax_", (ftnlen)560)]
+				    );
 			    if (pass1) {
 
 /*                          Adjust CP if necessary so that it points */
@@ -645,9 +645,9 @@ static doublereal c_b36 = .5;
 /*     the "face frame." */
 
 
-    vhat_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 :
+    vhat_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 :
 	     s_rnge("bounds", i__1, "zzhullax_", (ftnlen)683)], ray1);
-    vhat_(&bounds[(i__1 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 
+    vhat_(&bounds[(i__1 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 
 	    : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)684)], ray2);
     vlcom_(&c_b36, ray1, &c_b36, ray2, xvec);
     vhatip_(xvec);
@@ -687,7 +687,7 @@ static doublereal c_b36 = .5;
 /*           The current vector is not a boundary of our edge, */
 /*           so find its longitude. */
 
-	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <=
+	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <=
 		     i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (
 		    ftnlen)720)], v);
 	    reclat_(v, &r__, &lon, &lat);
@@ -750,7 +750,7 @@ static doublereal c_b36 = .5;
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)794)
 		], axis);
 	if (sep > halfpi_() - 1e-12) {

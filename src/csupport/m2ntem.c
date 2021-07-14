@@ -1,4 +1,4 @@
-/* m2ntem.f -- translated by f2c (version 19980913).
+/* m2ntem.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -17,13 +17,13 @@
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer last, j, k, begin;
+    static thread_local integer last, j, k, begin;
     extern doublereal dpmin_(void), dpmax_(void);
-    static char error[80];
-    static doublereal minval;
+    static thread_local char error[80];
+    static thread_local doublereal minval;
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
-    static doublereal maxval;
+    static thread_local doublereal maxval;
     extern integer intmin_(void), intmax_(void);
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* zzddhppf.f -- translated by f2c (version 19980913).
+/* zzddhppf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,7 +20,7 @@ static integer c__4 = 4;
     static logical first = TRUE_;
 
     /* System generated locals */
-    integer i__1;
+    integer i__1, i__2, i__3, i__4;
     char ch__1[1];
 
     /* Builtin functions */
@@ -29,7 +29,7 @@ static integer c__4 = 4;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char null[1];
+    static thread_local char null[1];
     extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
 	    ftnlen), zzddhivf_(char *, integer *, logical *, ftnlen), 
 	    zzftpchk_(char *, logical *, ftnlen), zzplatfm_(char *, char *, 
@@ -44,9 +44,10 @@ static integer c__4 = 4;
 	    ftnlen, ftnlen);
     char filarc[4], bffidw[8], chrrec[1000];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char ftpdlm[1], ftpmem[16], ftplft[6], strarc[8*2], strbff[8*5];
+    static thread_local char ftpdlm[1], ftpmem[16], ftplft[6], strarc[8*2], 
+	    strbff[8*5];
     integer iostat, tstarc;
-    static char ftprgt[6];
+    static thread_local char ftprgt[6];
     char filtyp[4];
     logical ftperr;
     integer ftppos;
@@ -769,9 +770,9 @@ static integer c__4 = 4;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -1036,13 +1037,32 @@ L100001:
 /*        file.  Locate the first descriptor record. */
 
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[76];
-	fdrec = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[77];
-	fdrec = (*(unsigned char *)&ch__1[0] << 4) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 4) + 
+		fdrec;
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[78];
-	fdrec = (*(unsigned char *)&ch__1[0] << 8) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 8) + 
+		fdrec;
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[79];
-	fdrec = (*(unsigned char *)&ch__1[0] << 12) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 12) + 
+		fdrec;
 
 /*        Read the record into CHRREC. */
 

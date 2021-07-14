@@ -1,4 +1,4 @@
-/* nparsd.f -- translated by f2c (version 19980913).
+/* nparsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -43,40 +43,40 @@ static integer c__1 = 1;
 	    i_dnnt(doublereal *);
 
     /* Local variables */
-    static doublereal next;
-    static integer b;
+    static thread_local doublereal next;
+    static thread_local integer b;
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer i__, l, m;
-    static logical dodec;
-    static integer blank;
-    static logical bpiok, epiok;
+    static thread_local integer i__, l, m;
+    static thread_local logical dodec;
+    static thread_local integer blank;
+    static thread_local logical bpiok, epiok;
     extern doublereal dpmax_(void);
-    static doublereal value;
-    static logical doint, doexp;
-    static integer thisi;
-    static logical expok;
-    static integer nexti;
-    static logical zeroi, pntok;
-    static integer id;
+    static thread_local doublereal value;
+    static thread_local logical doint, doexp;
+    static thread_local integer thisi;
+    static thread_local logical expok;
+    static thread_local integer nexti;
+    static thread_local logical zeroi, pntok;
+    static thread_local integer id;
     extern doublereal pi_(void);
-    static integer nl;
-    static doublereal decval, factor, intbnd, smlbnd;
-    static logical sigchr;
-    static char toobig[160];
-    static doublereal dpsign[2];
-    static logical mantsa, signok, roundd;
-    static integer signdx;
-    static char blnkst[160];
-    static doublereal ecount, divisr, expval, intval, maxexp;
-    static char unxpch[160];
-    static doublereal minexp;
-    static logical roundi;
-    static char unrcst[160];
+    static thread_local integer nl;
+    static thread_local doublereal decval, factor, intbnd, smlbnd;
+    static thread_local logical sigchr;
+    static thread_local char toobig[160];
+    static thread_local doublereal dpsign[2];
+    static thread_local logical mantsa, signok, roundd;
+    static thread_local integer signdx;
+    static thread_local char blnkst[160];
+    static thread_local doublereal ecount, divisr, expval, intval, maxexp;
+    static thread_local char unxpch[160];
+    static thread_local doublereal minexp;
+    static thread_local logical roundi;
+    static thread_local char unrcst[160];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char unxpsn[160], unxppt[160];
-    static integer exp__;
+    static thread_local char unxpsn[160], unxppt[160];
+    static thread_local integer exp__;
 
 /* $ Abstract */
 

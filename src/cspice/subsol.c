@@ -1,4 +1,4 @@
-/* subsol.f -- translated by f2c (version 19980913).
+/* subsol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,8 +29,8 @@ static integer c__3 = 3;
     logical found;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal sunlt;
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2;
+    static thread_local integer svctr1[2], svctr2[2];
     integer obscde;
     doublereal lt;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
@@ -42,15 +42,15 @@ static integer c__3 = 3;
     char frname[80];
     integer trgcde;
     doublereal ettarg;
-    static integer svtcde;
+    static thread_local integer svtcde;
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen);
-    static integer svobsc;
+    static thread_local integer svobsc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char svtarg[36];
+    static thread_local char svtarg[36];
     extern logical return_(void);
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
 	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen), surfpt_(doublereal *, doublereal *, doublereal *, 

@@ -1,4 +1,4 @@
-/* matcho.f -- translated by f2c (version 19980913).
+/* matcho.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,15 +34,16 @@ integer matcho_(char *word, char *guess, ftnlen word_len, ftnlen guess_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer glen, wlen, g2seq[32], w2seq[32], i__, j, value, c1, c2;
+    static thread_local integer glen, wlen, g2seq[32], w2seq[32], i__, j, 
+	    value, c1, c2;
     extern integer ltrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer gf, gl, gp, wf, wl, wp;
+    static thread_local integer gf, gl, gp, wf, wl, wp;
     extern /* Subroutine */ int shelli_(integer *, integer *);
-    static integer gscore, gpairs[512], gmscor, g2c, gtally, gcount, wscore, 
-	    wpairs[512], wmscor, w2c, wtally;
+    static thread_local integer gscore, gpairs[512], gmscor, g2c, gtally, 
+	    gcount, wscore, wpairs[512], wmscor, w2c, wtally;
     extern integer qrtrim_(char *, ftnlen);
-    static integer wcount;
+    static thread_local integer wcount;
 
 /* $ Abstract */
 

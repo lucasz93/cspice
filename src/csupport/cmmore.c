@@ -1,4 +1,4 @@
-/* cmmore.f -- translated by f2c (version 19980913).
+/* cmmore.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -24,12 +24,12 @@ logical cmmore_(char *commnd, ftnlen commnd_len)
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char exit[32];
-    static integer i__, r__;
+    static thread_local char exit[32];
+    static thread_local integer i__, r__;
     extern logical nechr_(char *, char *, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer lc;
+    static thread_local integer lc;
     extern /* Subroutine */ int trnlat_(char *, char *, ftnlen, ftnlen), 
 	    cmprss_(char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen)
 	    ;

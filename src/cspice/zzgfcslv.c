@@ -1,4 +1,4 @@
-/* zzgfcslv.f -- translated by f2c (version 19980913).
+/* zzgfcslv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -1154,9 +1154,9 @@ static doublereal c_b36 = 0.;
 /*     Below we initialize the list of comparison operator names. */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
+    work_dim1 = *mw + 5 + 1;
     work_dim2 = *nw;
-    work_offset = work_dim1 - 5;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
 
@@ -1231,7 +1231,7 @@ static doublereal c_b36 = 0.;
 
     i__1 = *nw;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	ssized_(mw, &work[(i__2 = i__ * work_dim1 - 5 - work_offset) < 
+	ssized_(mw, &work[(i__2 = i__ * work_dim1 - 5 - work_offset) < 1 * 
 		work_dim1 * work_dim2 && 0 <= i__2 ? i__2 : s_rnge("work", 
 		i__2, "zzgfcslv_", (ftnlen)969)]);
     }
@@ -1282,7 +1282,7 @@ static doublereal c_b36 = 0.;
 
 /*        Initialize this window. */
 
-	ssized_(mw, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 
+	ssized_(mw, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * 
 		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
 		i__1, "zzgfcslv_", (ftnlen)1022)]);
 
@@ -1294,7 +1294,7 @@ static doublereal c_b36 = 0.;
 	    zzgfsolvx_((U_fp)udf_, (U_fp)zzgfcoex_, (U_fp)udstep, (U_fp)
 		    udrefn, bail, (L_fp)udbail, &c_false, &c_b36, &start, &
 		    finish, tol, rpt, (U_fp)udrepu, &work[(i__2 = work_dim1 * 
-		    13 - 5 - work_offset) < work_dim1 * work_dim2 && 0 <= 
+		    13 - 5 - work_offset) < 1 * work_dim1 * work_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("work", i__2, "zzgfcslv_", (ftnlen)
 		    1031)]);
 	    if (failed_()) {
@@ -1325,13 +1325,13 @@ static doublereal c_b36 = 0.;
 
 	excon = *tol + 1.;
 	wncond_(&excon, &excon, &work[(i__1 = work_dim1 * 13 - 5 - 
-		work_offset) < work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : 
-		s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1069)]);
+		work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__1 ? i__1 :
+		 s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1069)]);
     } else {
 
 /*        Simply copy the confinement window to the workspace. */
 
-	copyd_(cnfine, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 
+	copyd_(cnfine, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * 
 		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
 		i__1, "zzgfcslv_", (ftnlen)1075)]);
     }
@@ -1390,9 +1390,9 @@ static doublereal c_b36 = 0.;
 		crdsys, crdnam, relate, refval, tol, adjust, (U_fp)udstep, (
 		U_fp)udrefn, rpt, (S_fp)udrepi, (U_fp)udrepu, (S_fp)udrepf, 
 		bail, (L_fp)udbail, mw, nw, work, &work[(i__1 = work_dim1 * 
-		13 - 5 - work_offset) < work_dim1 * work_dim2 && 0 <= i__1 ? 
-		i__1 : s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1133)], 
-		result, vecdef_len, method_len, target_len, ref_len, 
+		13 - 5 - work_offset) < 1 * work_dim1 * work_dim2 && 0 <= 
+		i__1 ? i__1 : s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1133)]
+		, result, vecdef_len, method_len, target_len, ref_len, 
 		abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len, 
 		relate_len);
     } else {
@@ -1409,7 +1409,7 @@ static doublereal c_b36 = 0.;
 
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfcodc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfcog_, relate, refval, tol, adjust, &work[
-		(i__1 = work_dim1 * 13 - 5 - work_offset) < work_dim1 * 
+		(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * work_dim1 * 
 		work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "zzgfcs"
 		"lv_", (ftnlen)1154)], mw, nw, work, rpt, (S_fp)udrepi, (U_fp)
 		udrepu, (S_fp)udrepf, prebuf, rptsuf, bail, (L_fp)udbail, 

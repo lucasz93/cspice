@@ -1,4 +1,4 @@
-/* m2alph.f -- translated by f2c (version 19980913).
+/* m2alph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -16,7 +16,7 @@ logical m2alph_(char *word, ftnlen word_len)
 	     ftnlen);
 
     /* Local variables */
-    static integer i__;
+    static thread_local integer i__;
     extern integer ltrim_(char *, ftnlen);
 
 /* $ Abstract */

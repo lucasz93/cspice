@@ -1,4 +1,4 @@
-/* edterm.f -- translated by f2c (version 19980913).
+/* edterm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -39,35 +39,35 @@ static integer c__3 = 3;
     integer srcid, trgid;
     logical found;
     doublereal ltsrc;
-    static logical svfnd1, svfnd2, svfnd3;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2, svfnd3;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
+    static thread_local integer svctr3[2], svctr4[2];
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
 	    *, doublereal *, ftnlen);
     integer frcode, frclas;
     doublereal srcrad[3];
     integer center, clssid;
     doublereal trgrad[3];
-    static integer svfrcd;
+    static thread_local integer svfrcd;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
 	    integer *, logical *);
-    static char svfref[32];
+    static thread_local char svfref[32];
     doublereal lttarg;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static integer svtgid;
+    static thread_local integer svtgid;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
 	    integer *, ftnlen);
-    static char svtarg[36], svscre[36];
-    static integer svobsi;
+    static thread_local char svtarg[36], svscre[36];
+    static thread_local integer svobsi;
     doublereal srcpos[3];
-    static integer svsrci;
+    static thread_local integer svsrci;
     extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
 	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     doublereal trgpos[3];
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
 
 /* $ Abstract */

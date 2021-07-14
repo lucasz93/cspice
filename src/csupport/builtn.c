@@ -1,4 +1,4 @@
-/* builtn.f -- translated by f2c (version 19980913).
+/* builtn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -45,12 +45,12 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern logical have_(char *, ftnlen);
-    static integer rest, e, i__, l;
+    static thread_local integer rest, e, i__, l;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char names[32*3];
-    static logical found;
+    static thread_local char names[32*3];
+    static thread_local logical found;
     extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
-    static char myerr[512*2];
+    static thread_local char myerr[512*2];
     extern /* Subroutine */ int m2chck_(char *, char *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen), m2getc_(char *, char *, 
 	    logical *, char *, ftnlen, ftnlen, ftnlen), m2vget_(char *, 
@@ -64,17 +64,17 @@ static integer c__1 = 1;
     extern integer touchi_(integer *);
     extern /* Subroutine */ int nspioc_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    static char values[512*3];
-    static integer nitems;
+    static thread_local char values[512*3];
+    static thread_local integer nitems;
     extern /* Subroutine */ int flgrpt_(integer *, char *, char *, S_fp, 
 	    ftnlen, ftnlen), nsppfl_(char *, char *, ftnlen, ftnlen);
-    static char templt[80];
+    static thread_local char templt[80];
     extern /* Subroutine */ int nspsav_(char *, char *, ftnlen, ftnlen), 
 	    nspgst_(char *, logical *, ftnlen), nspwln_(char *, ftnlen);
-    static char synkey[32*11];
-    static logical status[3];
+    static thread_local char synkey[32*11];
+    static thread_local logical status[3];
     extern /* Subroutine */ int shosym_(char *, ftnlen);
-    static integer synptr[11];
+    static thread_local integer synptr[11];
 
 /* $ Abstract */
 

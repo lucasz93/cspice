@@ -1,4 +1,4 @@
-/* ekqmgr.f -- translated by f2c (version 19980913).
+/* ekqmgr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -110,16 +110,16 @@ static integer c__11000 = 11000;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer begidx, cdscrs[5500]	/* was [11][500] */, cjrows, cjsize, 
-	    cnstyp[1000], col, colptr, delseg, endidx, key, keydsc[11], 
-	    ldscrs[11000]	/* was [11][1000] */, ltbidx[1000], new__, 
-	    nmatch, norder, nsv, ops[1000], ordbas, ptroff, nact, ntab, rbas[
-	    10], rdscrs[11000]	/* was [11][1000] */, conj, resbas, rowidx, 
-	    nseg, rowvec[10], rtbidx[1000], rtotal, nsel, rwvbas, selcol[50], 
-	    selctp[50], seltab[50], seg, segdsc[24], segvec[10], sgvbas, tab, 
-	    tabidx, next, tbcurr, top, tptvec[16], unrows;
-    static logical activc[1000], activv[1000], attmch, dosort, fnd, indexd, 
-	    keyfnd, nulsok, presnt, sorted;
+    static thread_local integer begidx, cdscrs[5500]	/* was [11][500] */, 
+	    cjrows, cjsize, cnstyp[1000], col, colptr, delseg, endidx, key, 
+	    keydsc[11], ldscrs[11000]	/* was [11][1000] */, ltbidx[1000], 
+	    new__, nmatch, norder, nsv, ops[1000], ordbas, ptroff, nact, ntab,
+	     rbas[10], rdscrs[11000]	/* was [11][1000] */, conj, resbas, 
+	    rowidx, nseg, rowvec[10], rtbidx[1000], rtotal, nsel, rwvbas, 
+	    selcol[50], selctp[50], seltab[50], seg, segdsc[24], segvec[10], 
+	    sgvbas, tab, tabidx, next, tbcurr, top, tptvec[16], unrows;
+    static thread_local logical activc[1000], activv[1000], attmch, dosort, 
+	    fnd, indexd, keyfnd, nulsok, presnt, sorted;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), lnkini_(integer *, integer *), dascls_(integer *), 
 	    setmsg_(char *, ftnlen), errhan_(char *, integer *, ftnlen), 
@@ -165,26 +165,26 @@ static integer c__11000 = 11000;
 	    , integer *, integer *, integer *, integer *, integer *, integer *
 	    , integer *, integer *, integer *, integer *), zzekstop_(integer *
 	    );
-    static integer i__, cjbeg, j;
+    static thread_local integer i__, cjbeg, j;
     extern integer cardc_(char *, ftnlen);
-    static integer k, cbegs[1000], cjend, l, r__, t, cends[1000];
+    static thread_local integer k, cbegs[1000], cjend, l, r__, t, cends[1000];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static logical cmtch;
-    static integer ubase[200], fthan[20];
-    static char cnams[32*500];
-    static integer lxbeg, lcidx[1000];
+    static thread_local logical cmtch;
+    static thread_local integer ubase[200], fthan[20];
+    static thread_local char cnams[32*500];
+    static thread_local integer lxbeg, lcidx[1000];
     extern /* Subroutine */ int ekcls_(integer *);
-    static integer cvlen;
-    static doublereal dvals[1000];
-    static integer lxend, nconj, sthan[200], ivals[1000], ncols;
-    static char state[80];
-    static integer ctnew;
+    static thread_local integer cvlen;
+    static thread_local doublereal dvals[1000];
+    static thread_local integer lxend, nconj, sthan[200], ivals[1000], ncols;
+    static thread_local char state[80];
+    static thread_local integer ctnew;
     extern integer lnktl_(integer *, integer *);
-    static integer dtnew, dtype[1000], jsize;
+    static thread_local integer dtnew, dtype[1000], jsize;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer npcol, ocols[10], otabs[10], jbase1, jbase2, rcidx[1000], 
-	    rsize[200], sense[10], sizes[1000], stnew, usize;
-    static logical vmtch;
+    static thread_local integer npcol, ocols[10], otabs[10], jbase1, jbase2, 
+	    rcidx[1000], rsize[200], sense[10], sizes[1000], stnew, usize;
+    static thread_local logical vmtch;
     extern /* Subroutine */ int ekopr_(char *, integer *, ftnlen), lnkan_(
 	    integer *, integer *), movec_(char *, integer *, char *, ftnlen, 
 	    ftnlen), movei_(integer *, integer *, integer *), errch_(char *, 
@@ -196,27 +196,27 @@ static integer c__11000 = 11000;
 	    , integer *, integer *, integer *, integer *, integer *, logical *
 	    , logical *);
     extern logical failed_(void);
-    static integer ctclas[500];
+    static thread_local integer ctclas[500];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
     extern integer eknseg_(integer *), lnknxt_(integer *, integer *), lnknfn_(
 	    integer *);
-    static integer ftpool[52]	/* was [2][26] */, tbpool[212]	/* was [2][
-	    106] */, tbstpt[100], tbncol[100];
-    static char tbnams[64*100];
-    static integer tbctpt[100], tbfils[2000]	/* was [20][100] */, tbflsz[
-	    100], stpool[412]	/* was [2][206] */, stsidx[200], stdscs[4800]	
-	    /* was [24][200] */, stnrow[200], stncol[200], stdtpt[200], 
-	    dtpool[20012]	/* was [2][10006] */, dtdscs[110000]	/* 
-	    was [11][10000] */, ctpool[1012]	/* was [2][506] */;
-    static char ctnams[32*500];
-    static integer cttyps[500], ctlens[500];
-    static logical ctfixd[500];
-    static integer ctsizs[500];
-    static logical ctindx[500], ctnull[500];
-    static char cnmset[32*506], colnam[32], frmals[64*10], frmtab[64*10], 
-	    lcname[32], ltname[64], problm[80], rcname[32], rtname[64], 
-	    tabnam[64], tabvec[64*16];
+    static thread_local integer ftpool[52]	/* was [2][26] */, tbpool[212]
+	    	/* was [2][106] */, tbstpt[100], tbncol[100];
+    static thread_local char tbnams[64*100];
+    static thread_local integer tbctpt[100], tbfils[2000]	/* was [20][
+	    100] */, tbflsz[100], stpool[412]	/* was [2][206] */, stsidx[
+	    200], stdscs[4800]	/* was [24][200] */, stnrow[200], stncol[200],
+	     stdtpt[200], dtpool[20012]	/* was [2][10006] */, dtdscs[110000]	
+	    /* was [11][10000] */, ctpool[1012]	/* was [2][506] */;
+    static thread_local char ctnams[32*500];
+    static thread_local integer cttyps[500], ctlens[500];
+    static thread_local logical ctfixd[500];
+    static thread_local integer ctsizs[500];
+    static thread_local logical ctindx[500], ctnull[500];
+    static thread_local char cnmset[32*506], colnam[32], frmals[64*10], 
+	    frmtab[64*10], lcname[32], ltname[64], problm[80], rcname[32], 
+	    rtname[64], tabnam[64], tabvec[64*16];
 
 /* $ Abstract */
 

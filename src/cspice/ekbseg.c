@@ -1,4 +1,4 @@
-/* ekbseg.f -- translated by f2c (version 19980913).
+/* ekbseg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -42,7 +42,7 @@ static integer c__100 = 100;
     extern integer lastnb_(char *, ftnlen);
     extern logical return_(void);
     integer cdscrs[1100]	/* was [11][100] */;
-    static integer idspec[518];
+    static thread_local integer idspec[518];
     integer nchars;
     extern /* Subroutine */ int chkout_(char *, ftnlen), ssizei_(integer *, 
 	    integer *), lxdfid_(integer *), lxidnt_(integer *, char *, 

@@ -1,4 +1,4 @@
-/* zzcvstat.f -- translated by f2c (version 19980913).
+/* zzcvstat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -19,15 +19,15 @@ static integer c__6 = 6;
 
     /* Local variables */
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    static doublereal svet;
+    static thread_local doublereal svet;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *);
     doublereal delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *), vlcom_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    static char svref[32];
-    static integer svctr;
+    static thread_local char svref[32];
+    static thread_local integer svctr;
     extern logical failed_(void);
     doublereal xf[36]	/* was [6][6] */;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -36,7 +36,7 @@ static integer c__6 = 6;
     extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
-    static doublereal svstat[6];
+    static thread_local doublereal svstat[6];
 
 /* $ Abstract */
 

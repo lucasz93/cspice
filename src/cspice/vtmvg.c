@@ -1,4 +1,4 @@
-/* vtmvg.f -- translated by f2c (version 19980913).
+/* vtmvg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -178,7 +178,7 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     v2_dim1 = *ncol;
     matrix_dim1 = *nrow;
     matrix_dim2 = *ncol;
-    matrix_offset = matrix_dim1 + 1;
+    matrix_offset = 1 + matrix_dim1 * 1;
 
     /* Function Body */
     ret_val = 0.;
@@ -186,13 +186,13 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     for (k = 1; k <= i__1; ++k) {
 	i__2 = *ncol;
 	for (l = 1; l <= i__2; ++l) {
-	    ret_val += v1[(i__3 = k - 1) < v1_dim1 && 0 <= i__3 ? i__3 : 
+	    ret_val += v1[(i__3 = k - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : 
 		    s_rnge("v1", i__3, "vtmvg_", (ftnlen)171)] * matrix[(i__4 
-		    = k + l * matrix_dim1 - matrix_offset) < matrix_dim1 * 
-		    matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
-		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < v2_dim1 && 
-		    0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (ftnlen)
-		    171)];
+		    = k + l * matrix_dim1 - matrix_offset) < 1 * matrix_dim1 *
+		     matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
+		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < 1 * v2_dim1 
+		    && 0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (
+		    ftnlen)171)];
 	}
     }
     return ret_val;

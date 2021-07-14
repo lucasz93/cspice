@@ -1,4 +1,4 @@
-/* spkr10.f -- translated by f2c (version 19980913).
+/* spkr10.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -20,21 +20,21 @@ static integer c__14 = 14;
     integer i__1;
 
     /* Local variables */
-    static integer ends[2], indx, from, i__;
+    static thread_local integer ends[2], indx, from, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
-    static logical found;
-    static doublereal value;
-    static integer to, nepoch, getelm;
+    static thread_local logical found;
+    static thread_local doublereal value;
+    static thread_local integer to, nepoch, getelm;
     extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *), sgmeta_(integer *, doublereal *, 
 	    integer *, integer *), chkout_(char *, ftnlen), sgfpkt_(integer *,
 	     doublereal *, integer *, integer *, doublereal *, integer *), 
 	    sgfrvi_(integer *, doublereal *, doublereal *, doublereal *, 
 	    integer *, logical *);
-    static integer putelm;
+    static thread_local integer putelm;
     extern logical return_(void);
-    static integer set1, set2;
+    static thread_local integer set1, set2;
 
 /* $ Abstract */
 

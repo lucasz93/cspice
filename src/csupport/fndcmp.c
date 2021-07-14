@@ -1,4 +1,4 @@
-/* fndcmp.f -- translated by f2c (version 19980913).
+/* fndcmp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -232,7 +232,7 @@ static integer c__0 = 0;
     /* Parameter adjustments */
     grid_dim1 = *nrows;
     grid_dim2 = *ncols;
-    grid_offset = grid_dim1 + 1;
+    grid_offset = 1 + grid_dim1 * 1;
 
     /* Function Body */
     if (return_()) {
@@ -252,9 +252,9 @@ static integer c__0 = 0;
     for (col = 1; col <= i__1; ++col) {
 	i__2 = *nrows;
 	for (row = 1; row <= i__2; ++row) {
-	    if (grid[(i__3 = row + col * grid_dim1 - grid_offset) < grid_dim1 
-		    * grid_dim2 && 0 <= i__3 ? i__3 : s_rnge("grid", i__3, 
-		    "fndcmp_", (ftnlen)256)] == *value) {
+	    if (grid[(i__3 = row + col * grid_dim1 - grid_offset) < 1 * 
+		    grid_dim1 * grid_dim2 && 0 <= i__3 ? i__3 : s_rnge("grid",
+		     i__3, "fndcmp_", (ftnlen)256)] == *value) {
 
 /*              It's a match. */
 
@@ -321,8 +321,8 @@ static integer c__0 = 0;
 /*              loop termination. */
 
 		++row;
-		found = grid[(i__1 = row + col * grid_dim1 - grid_offset) < 
-			grid_dim1 * grid_dim2 && 0 <= i__1 ? i__1 : s_rnge(
+		found = grid[(i__1 = row + col * grid_dim1 - grid_offset) < 1 
+			* grid_dim1 * grid_dim2 && 0 <= i__1 ? i__1 : s_rnge(
 			"grid", i__1, "fndcmp_", (ftnlen)338)] == *value;
 	    }
 	    if (col == mincol) {
@@ -404,9 +404,9 @@ static integer c__0 = 0;
 /*                 match again. */
 
 		    grid[(i__2 = minrow - 1 + i__ + maxcol * grid_dim1 - 
-			    grid_offset) < grid_dim1 * grid_dim2 && 0 <= i__2 
-			    ? i__2 : s_rnge("grid", i__2, "fndcmp_", (ftnlen)
-			    432)] = ! (*value);
+			    grid_offset) < 1 * grid_dim1 * grid_dim2 && 0 <= 
+			    i__2 ? i__2 : s_rnge("grid", i__2, "fndcmp_", (
+			    ftnlen)432)] = ! (*value);
 		}
 
 /*              Note that we've added the IDs to MRKSET in increasing */

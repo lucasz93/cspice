@@ -1,4 +1,4 @@
-/* phaseq.f -- translated by f2c (version 19980913).
+/* phaseq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -29,21 +29,21 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 	    zzctruin_(integer *), chkin_(char *, ftnlen), errch_(char *, char 
 	    *, ftnlen, ftnlen);
     integer illum;
-    static logical svfnd1, svfnd2, svfnd3;
-    static integer svctr1[2], svctr2[2];
+    static thread_local logical svfnd1, svfnd2, svfnd3;
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svicde;
+    static thread_local integer svctr3[2], svicde;
     logical attblk[15];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
     char xbcorr[32];
-    static integer svtgid;
+    static thread_local integer svtgid;
     extern /* Subroutine */ int setmsg_(char *, ftnlen), ljucrs_(integer *, 
 	    char *, char *, ftnlen, ftnlen);
-    static char svtarg[36], svilmn[36];
-    static integer svobsn;
+    static thread_local char svtarg[36], svilmn[36];
+    static thread_local integer svobsn;
     extern logical return_(void);
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     logical fnd;
     integer obs;
     extern /* Subroutine */ int zzgfpaq_(doublereal *, integer *, integer *, 

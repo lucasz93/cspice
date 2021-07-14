@@ -1,4 +1,4 @@
-/* ana.f -- translated by f2c (version 19980913).
+/* ana.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,15 +38,15 @@ static integer c__22 = 22;
 	    char *, integer);
 
     /* Local variables */
-    static integer caps, i__;
-    static char begin[1];
+    static thread_local integer caps, i__;
+    static thread_local char begin[1];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char start[32*7];
+    static thread_local char start[32*7];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static char mycase[1], myword[32];
+    static thread_local char mycase[1], myword[32];
 
 /* $ Abstract */
 

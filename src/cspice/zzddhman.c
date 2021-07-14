@@ -1,4 +1,4 @@
-/* zzddhman.f -- translated by f2c (version 19980913).
+/* zzddhman.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -52,26 +52,27 @@ static integer c__0 = 0;
 	    integer *), zzddhrmu_(integer *, integer *, integer *, integer *, 
 	    logical *, integer *, integer *), zzpltchk_(logical *);
     integer i__;
-    static integer ftbff[5000];
+    static thread_local integer ftbff[5000];
     integer lchar;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ftabs[5000], ftamh[5000], ftarc[5000], fthan[5000];
+    static thread_local integer ftabs[5000], ftamh[5000], ftarc[5000], fthan[
+	    5000];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
 	    errch_(char *, char *, ftnlen, ftnlen);
-    static char ftnam[255*5000];
+    static thread_local char ftnam[255*5000];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer uthan[23];
-    static doublereal ftmnm[5000];
-    static logical utlck[23];
+    static thread_local integer uthan[23];
+    static thread_local doublereal ftmnm[5000];
+    static thread_local logical utlck[23];
     logical error;
-    static integer ftrtm[5000];
+    static thread_local integer ftrtm[5000];
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer utcst[23], utlun[23];
+    static thread_local integer utcst[23], utlun[23];
     extern logical failed_(void);
     integer accmet, filarc, locked;
-    static integer natbff;
+    static thread_local integer natbff;
     logical locfnd;
     extern integer bsrchi_(integer *, integer *, integer *), isrchc_(char *, 
 	    integer *, char *, ftnlen, ftnlen);
@@ -80,9 +81,9 @@ static integer c__0 = 0;
     extern integer isrchi_(integer *, integer *, integer *);
     logical platok;
     integer loclun;
-    static char strbff[8*4], stramh[8*4], strarc[8*2];
+    static thread_local char strbff[8*4], stramh[8*4], strarc[8*2];
     integer findex, uindex;
-    static integer supbff[4];
+    static thread_local integer supbff[4];
     integer iostat;
     logical inqopn, inqext;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
@@ -92,7 +93,7 @@ static integer c__0 = 0;
     extern logical return_(void);
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen), frelun_(
 	    integer *);
-    static integer numsup;
+    static thread_local integer numsup;
     char tmpstr[8];
     integer bff;
     doublereal mnm;

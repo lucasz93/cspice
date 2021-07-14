@@ -1,4 +1,4 @@
-/* spkw21.f -- translated by f2c (version 19980913).
+/* spkw21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -406,7 +406,7 @@ static integer c__1 = 1;
 
     /* Parameter adjustments */
     dlines_dim1 = *dlsize;
-    dlines_offset = dlines_dim1 + 1;
+    dlines_offset = 1 + dlines_dim1 * 1;
 
     /* Function Body */
     if (return_()) {

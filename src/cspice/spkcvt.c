@@ -1,4 +1,4 @@
-/* spkcvt.f -- translated by f2c (version 19980913).
+/* spkcvt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,7 +34,7 @@ static integer c__6 = 6;
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    static logical xmit;
+    static thread_local logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 
 	    char *, integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, 
@@ -50,32 +50,32 @@ static integer c__6 = 6;
 	    char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen), moved_(
 	    doublereal *, integer *, doublereal *);
     logical found;
-    static logical uselt;
-    static integer j2code;
-    static logical svfnd1, svfnd2;
+    static thread_local logical uselt;
+    static thread_local integer j2code;
+    static thread_local logical svfnd1, svfnd2;
     doublereal j2stat[6];
-    static integer svctr1[2], svctr2[2];
+    static thread_local integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
+    static thread_local integer svctr3[2];
     integer obscde, orfcde, ctrcde;
     extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer svccde;
+    static thread_local integer svccde;
     logical attblk[6];
     extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
 	    ftnlen);
-    static integer svobsc;
+    static thread_local integer svobsc;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    static integer svorfc;
-    static char svoref[32];
+    static thread_local integer svorfc;
+    static thread_local char svoref[32];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal tmpxfm[36]	/* was [6][6] */;
     extern logical return_(void);
     doublereal xtrans[36]	/* was [6][6] */;
-    static char svobsr[36];
+    static thread_local char svobsr[36];
     integer evltyp;
-    static char svtctr[36];
+    static thread_local char svtctr[36];
     doublereal dlt;
 
 /* $ Abstract */

@@ -1,4 +1,4 @@
-/* nxtcom.f -- translated by f2c (version 19980913).
+/* nxtcom.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -34,21 +34,22 @@ static integer c__3 = 3;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char file[128], exit[32], word[80], rest[128], stop[32];
+    static thread_local char file[128], exit[32], word[80], rest[128], stop[
+	    32];
     extern logical batch_(void);
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
-    static logical nocom;
+    static thread_local logical nocom;
     extern /* Subroutine */ int prclr_(void);
-    static char error[300], start[32], buffer[1024*20];
+    static thread_local char error[300], start[32], buffer[1024*20];
     extern integer brckti_(integer *, integer *, integer *);
     extern /* Subroutine */ int prread_(char *, char *, ftnlen, ftnlen);
-    static integer bufsrc[20];
-    static char lngmsg[300];
+    static thread_local integer bufsrc[20];
+    static thread_local char lngmsg[300];
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), nsplog_(char *, logical *, 
 	    ftnlen);
-    static char shtmsg[32];
+    static thread_local char shtmsg[32];
     extern /* Subroutine */ int trnlat_(char *, char *, ftnlen, ftnlen), 
 	    nextwd_(char *, char *, char *, ftnlen, ftnlen, ftnlen), prexit_(
 	    void), rdstmt_(char *, char *, char *, ftnlen, ftnlen, ftnlen);

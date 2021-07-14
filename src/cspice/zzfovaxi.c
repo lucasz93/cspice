@@ -1,4 +1,4 @@
-/* zzfovaxi.f -- translated by f2c (version 19980913).
+/* zzfovaxi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -320,9 +320,9 @@ static integer c__3 = 3;
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is is exterior. */
 
-	vcrss_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+	vcrss_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)313)], &
-		bounds[(i__3 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__3 ? 
+		bounds[(i__3 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__3 ? 
 		i__3 : s_rnge("bounds", i__3, "zzfovaxi_", (ftnlen)313)], cp);
 
 /*        We insist on consecutive boundary vectors being */
@@ -349,7 +349,7 @@ static integer c__3 = 3;
     cleard_(&c__3, axis);
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vhat_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+	vhat_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)346)], 
 		uvec);
 	vadd_(uvec, axis, v);
@@ -365,7 +365,7 @@ static integer c__3 = 3;
     ok = TRUE_;
     i__ = 1;
     while(i__ <= *n && ok) {
-	sep = vsep_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	sep = vsep_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		i__1 ? i__1 : s_rnge("bounds", i__1, "zzfovaxi_", (ftnlen)365)
 		], axis);
 	if (sep > limit) {

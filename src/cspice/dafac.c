@@ -1,4 +1,4 @@
-/* dafac.f -- translated by f2c (version 19980913).
+/* dafac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -49,9 +49,9 @@ static integer c__1 = 1;
 	    *, integer *, integer *, integer *, ftnlen);
     integer daflun, nchars;
     extern integer lastnb_(char *, ftnlen);
-    static char eocmrk[1];
+    static thread_local char eocmrk[1];
     integer length, newrec, eocpos;
-    static char eolmrk[1];
+    static thread_local char eolmrk[1];
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
 	    char *, ftnlen), chkout_(char *, ftnlen);
     integer nelpos;

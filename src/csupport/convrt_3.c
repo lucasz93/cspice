@@ -1,4 +1,4 @@
-/* convrt_3.f -- translated by f2c (version 19980913).
+/* convrt_3.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -32,46 +32,46 @@ static integer c_n1 = -1;
     double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    static doublereal diff;
+    static thread_local doublereal diff;
     extern /* Subroutine */ int scan_(char *, char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    ftnlen, ftnlen);
-    static doublereal keep;
-    static logical done, move;
-    static integer mult, b, e, i__, j, l, o, r__, blank;
-    static doublereal dimen[6];
+    static thread_local doublereal keep;
+    static thread_local logical done, move;
+    static thread_local integer mult, b, e, i__, j, l, o, r__, blank;
+    static thread_local doublereal dimen[6];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ident[128], class__;
-    static doublereal inval, value;
-    static integer oplen[6];
-    static doublereal opval[6];
-    static logical known;
-    static integer start, inout;
+    static thread_local integer ident[128], class__;
+    static thread_local doublereal inval, value;
+    static thread_local integer oplen[6];
+    static thread_local doublereal opval[6];
+    static thread_local logical known;
+    static thread_local integer start, inout;
     extern logical unitp_(char *, ftnlen);
-    static integer opptr[20];
+    static thread_local integer opptr[20];
     extern /* Subroutine */ int podbed_(doublereal *, integer *, integer *), 
 	    podbgd_(doublereal *), podegd_(doublereal *);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal dimeni[6];
-    static integer clas_s__[134];
+    static thread_local doublereal dimeni[6];
+    static thread_local integer clas_s__[134];
     extern /* Subroutine */ int appndd_(doublereal *, doublereal *), podbgi_(
 	    integer *), podegi_(integer *);
-    static doublereal dimeno[6];
-    static integer active;
+    static thread_local doublereal dimeno[6];
+    static thread_local integer active;
     extern /* Subroutine */ int appndi_(integer *, integer *);
-    static doublereal parsed[134];
-    static integer lparen;
+    static thread_local doublereal parsed[134];
+    static thread_local integer lparen;
     extern /* Subroutine */ int fnducv_(char *, logical *, integer *, 
 	    doublereal *, ftnlen), scanpr_(integer *, char *, integer *, 
 	    integer *, ftnlen);
-    static integer rparen;
+    static thread_local integer rparen;
     extern /* Subroutine */ int chkout_(char *, ftnlen), ssized_(integer *, 
 	    doublereal *), ssizei_(integer *, integer *);
-    static doublereal outval;
-    static integer ntokns;
-    static doublereal expont[134];
+    static thread_local doublereal outval;
+    static thread_local integer ntokns;
+    static thread_local doublereal expont[134];
     extern logical return_(void);
-    static integer beg[128], end[128], div, exp__;
+    static thread_local integer beg[128], end[128], div, exp__;
 
 /* $ Abstract */
 

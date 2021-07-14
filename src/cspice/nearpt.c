@@ -1,4 +1,4 @@
-/* nearpt.f -- translated by f2c (version 19980913).
+/* nearpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -970,10 +970,10 @@ static doublereal c_b108 = 1e-16;
 /*           term of the expression for Q isn't bigger than 4. */
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"tlambd", i__1, "nearpt_", (ftnlen)1011)] = ((d__1 = 
-			point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-			s_rnge("point", i__2, "nearpt_", (ftnlen)1011)], abs(
+		tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+			"tlambd", i__2, "nearpt_", (ftnlen)1011)] = ((d__1 = 
+			point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+			s_rnge("point", i__1, "nearpt_", (ftnlen)1011)], abs(
 			d__1)) * .5 - axis[(i__3 = i__ - 1) < 3 && 0 <= i__3 ?
 			 i__3 : s_rnge("axis", i__3, "nearpt_", (ftnlen)1011)]
 			) * axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
@@ -1045,13 +1045,13 @@ static doublereal c_b108 = 1e-16;
 				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
 				1080)] = -axisqr[2];
 		    } else {
-			tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
-				1082)] = axis[(i__2 = i__ - 1) < 3 && 0 <= 
-				i__2 ? i__2 : s_rnge("axis", i__2, "nearpt_", 
-				(ftnlen)1082)] * ((d__1 = point[(i__3 = i__ - 
-				1) < 3 && 0 <= i__3 ? i__3 : s_rnge("point", 
-				i__3, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
+			tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+				s_rnge("tlambd", i__2, "nearpt_", (ftnlen)
+				1082)] = axis[(i__3 = i__ - 1) < 3 && 0 <= 
+				i__3 ? i__3 : s_rnge("axis", i__3, "nearpt_", 
+				(ftnlen)1082)] * ((d__1 = point[(i__1 = i__ - 
+				1) < 3 && 0 <= i__1 ? i__1 : s_rnge("point", 
+				i__1, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
 				.5 - axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
 				i__4 : s_rnge("axis", i__4, "nearpt_", (
 				ftnlen)1082)]);

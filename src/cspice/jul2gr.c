@@ -1,4 +1,4 @@
-/* jul2gr.f -- translated by f2c (version 19980913).
+/* jul2gr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -38,13 +38,13 @@ static integer c__1461 = 1461;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer dayg, dayj, m, rdayg, rdayj, dofyr, yroff, m4, tmpyr, dy, 
-	    yr;
+    static thread_local integer dayg, dayj, m, rdayg, rdayj, dofyr, yroff, m4,
+	     tmpyr, dy, yr;
     extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
 	    integer *);
-    static integer offset, offstg, offstj, m100, tmpday, m400;
+    static thread_local integer offset, offstg, offstj, m100, tmpday, m400;
     extern integer lstlti_(integer *, integer *, integer *);
-    static integer mon;
+    static thread_local integer mon;
 
 /* $ Abstract */
 
@@ -362,20 +362,20 @@ static integer c__1461 = 1461;
     if (first) {
 	first = FALSE_;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
+	i__3 = 0, i__4 = 1 + abs(c__1582) / c__4 * c__4 - abs(c__1582);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__1582) / c__100 * c__100 + 1 - abs(c__1582);
+	i__5 = 0, i__6 = 1 + abs(c__1582) / c__100 * c__100 - abs(c__1582);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__1582) / c__400 * c__400 + 1 - abs(c__1582);
-	rdayg = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
+	i__7 = 0, i__8 = 1 + abs(c__1582) / c__400 * c__400 - abs(c__1582);
+	rdayg = 365 * (c__1582 - 1) + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
 		+ (c__1582 - 1) / 400 + (dpjan0[(i__1 = c__10 - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
 		535)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
 		s_rnge("extra", i__2, "jul2gr_", (ftnlen)535)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__15) - 1;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
-	rdayj = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
+	i__3 = 0, i__4 = 1 + abs(c__1582) / c__4 * c__4 - abs(c__1582);
+	rdayj = 365 * (c__1582 - 1) + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
 		c__10 - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, 
 		"jul2gr_", (ftnlen)536)] + extra[(i__2 = c__10 - 1) < 12 && 0 
 		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)536)
@@ -408,8 +408,8 @@ static integer c__1461 = 1461;
 /*     year month and day. */
 
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(yr) / c__4 * c__4 + 1 - abs(yr);
-    dayj = (yr - 1) * 365 + (yr - 1) / 4 + (dpjan0[(i__1 = mon - 1) < 12 && 0 
+    i__3 = 0, i__4 = 1 + abs(yr) / c__4 * c__4 - abs(yr);
+    dayj = 365 * (yr - 1) + (yr - 1) / 4 + (dpjan0[(i__1 = mon - 1) < 12 && 0 
 	    <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)574)] 
 	    + extra[(i__2 = mon - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge("extra"
 	    , i__2, "jul2gr_", (ftnlen)574)] * max(i__3,i__4) + dy) - 1 + 
@@ -448,11 +448,11 @@ static integer c__1461 = 1461;
 /*     How we do this depends on whether or not this is a leap year. */
 
 /* Computing MAX */
-    i__1 = 0, i__2 = abs(yr) / c__4 * c__4 + 1 - abs(yr);
+    i__1 = 0, i__2 = 1 + abs(yr) / c__4 * c__4 - abs(yr);
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(yr) / c__100 * c__100 + 1 - abs(yr);
+    i__3 = 0, i__4 = 1 + abs(yr) / c__100 * c__100 - abs(yr);
 /* Computing MAX */
-    i__5 = 0, i__6 = abs(yr) / c__400 * c__400 + 1 - abs(yr);
+    i__5 = 0, i__6 = 1 + abs(yr) / c__400 * c__400 - abs(yr);
     if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
 	mon = lstlti_(&dofyr, &c__12, dpjan0);
 	dy = dofyr - dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
@@ -682,20 +682,20 @@ L_gr2jul:
     if (first) {
 	first = FALSE_;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
+	i__3 = 0, i__4 = 1 + abs(c__1582) / c__4 * c__4 - abs(c__1582);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__1582) / c__100 * c__100 + 1 - abs(c__1582);
+	i__5 = 0, i__6 = 1 + abs(c__1582) / c__100 * c__100 - abs(c__1582);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__1582) / c__400 * c__400 + 1 - abs(c__1582);
-	rdayg = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
+	i__7 = 0, i__8 = 1 + abs(c__1582) / c__400 * c__400 - abs(c__1582);
+	rdayg = 365 * (c__1582 - 1) + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
 		+ (c__1582 - 1) / 400 + (dpjan0[(i__1 = c__10 - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
 		850)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
 		s_rnge("extra", i__2, "jul2gr_", (ftnlen)850)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__15) - 1;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
-	rdayj = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
+	i__3 = 0, i__4 = 1 + abs(c__1582) / c__4 * c__4 - abs(c__1582);
+	rdayj = 365 * (c__1582 - 1) + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
 		c__10 - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, 
 		"jul2gr_", (ftnlen)851)] + extra[(i__2 = c__10 - 1) < 12 && 0 
 		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)851)
@@ -728,12 +728,12 @@ L_gr2jul:
 /*     year month and day. */
 
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(yr) / c__4 * c__4 + 1 - abs(yr);
+    i__3 = 0, i__4 = 1 + abs(yr) / c__4 * c__4 - abs(yr);
 /* Computing MAX */
-    i__5 = 0, i__6 = abs(yr) / c__100 * c__100 + 1 - abs(yr);
+    i__5 = 0, i__6 = 1 + abs(yr) / c__100 * c__100 - abs(yr);
 /* Computing MAX */
-    i__7 = 0, i__8 = abs(yr) / c__400 * c__400 + 1 - abs(yr);
-    dayg = (yr - 1) * 365 + (yr - 1) / 4 - (yr - 1) / 100 + (yr - 1) / 400 + (
+    i__7 = 0, i__8 = 1 + abs(yr) / c__400 * c__400 - abs(yr);
+    dayg = 365 * (yr - 1) + (yr - 1) / 4 - (yr - 1) / 100 + (yr - 1) / 400 + (
 	    dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0"
 	    , i__1, "jul2gr_", (ftnlen)888)] + extra[(i__2 = mon - 1) < 12 && 
 	    0 <= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)888)] 
@@ -765,7 +765,7 @@ L_gr2jul:
 /*     How we do this depends on whether or not this is a leap year. */
 
 /* Computing MAX */
-    i__1 = 0, i__2 = abs(yr) / c__4 * c__4 + 1 - abs(yr);
+    i__1 = 0, i__2 = 1 + abs(yr) / c__4 * c__4 - abs(yr);
     if (max(i__1,i__2) == 0) {
 	mon = lstlti_(&dofyr, &c__12, dpjan0);
 	dy = dofyr - dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
