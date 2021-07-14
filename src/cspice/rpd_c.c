@@ -43,6 +43,7 @@
 
    #include <math.h>
    #include "SpiceUsr.h"
+   #include "f2c.h"
 
    SpiceDouble rpd_c ( void )
 
@@ -122,7 +123,7 @@
    Local Variables
    */
 
-   static SpiceDouble  value = 0.;
+   static thread_local SpiceDouble  value = 0.;
   
 
    if ( value == 0. )

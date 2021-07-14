@@ -20,11 +20,11 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer shape = 0;
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[80] = "                                              "
-	    "                                  ";
+    static thread_local integer shape = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local char prvmth[80] = "                                 "
+	    "                                               ";
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

@@ -11,8 +11,8 @@ integer zzphsh_0_(int n__, char *word, integer *m, integer *m2, ftnlen
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer divisr = -1;
+    static thread_local logical first = TRUE_;
+    static thread_local integer divisr = -1;
 
     /* System generated locals */
     integer ret_val, i__1, i__2, i__3, i__4;

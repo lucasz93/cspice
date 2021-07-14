@@ -15,9 +15,9 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal delta[9]	/* was [3][3] */ = { 0.,-1.,1.,1.,0.,-1.,-1.,
-	    1.,0. };
-    static integer next[3] = { 2,3,1 };
+    static thread_local doublereal delta[9]	/* was [3][3] */ = { 0.,-1.,
+	    1.,1.,0.,-1.,-1.,1.,0. };
+    static thread_local integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;

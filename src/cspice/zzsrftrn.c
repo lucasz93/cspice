@@ -17,10 +17,10 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical extker = FALSE_;
-    static integer polctr[2] = { 0,0 };
-    static integer srfctr[2] = { 0,0 };
-    static logical pass1 = TRUE_;
+    static thread_local logical extker = FALSE_;
+    static thread_local integer polctr[2] = { 0,0 };
+    static thread_local integer srfctr[2] = { 0,0 };
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

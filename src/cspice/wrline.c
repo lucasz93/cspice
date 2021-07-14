@@ -50,17 +50,17 @@ static integer c__2 = 2;
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___6 = { 0, 6, 0, 0, 0 };
-    static cilist io___7 = { 0, 6, 0, 0, 0 };
-    static cilist io___8 = { 0, 6, 0, 0, 0 };
-    static cilist io___9 = { 0, 6, 0, 0, 0 };
-    static cilist io___10 = { 0, 6, 0, 0, 0 };
-    static cilist io___11 = { 0, 6, 0, 0, 0 };
-    static cilist io___12 = { 0, 6, 0, 0, 0 };
-    static cilist io___15 = { 0, 6, 0, 0, 0 };
-    static cilist io___16 = { 0, 6, 0, 0, 0 };
-    static cilist io___17 = { 0, 6, 0, 0, 0 };
-    static cilist io___18 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___6 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___7 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___8 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___9 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___10 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___11 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___12 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___15 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___16 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___17 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___18 = { 0, 6, 0, 0, 0 };
 
 
 /* $ Abstract */

@@ -16,7 +16,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal fc[25] = { 1. };
+    static thread_local doublereal fc[25] = { 1. };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

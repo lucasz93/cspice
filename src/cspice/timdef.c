@@ -17,15 +17,15 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char defsys[16] = "UTC             ";
-    static char defzon[16] = "                ";
-    static char defcal[16] = "GREGORIAN       ";
-    static char zones[16*8] = "EST             " "EDT             " "CST    "
-	    "         " "CDT             " "MST             " "MDT           "
-	    "  " "PST             " "PDT             ";
-    static char trnslt[16*8] = "UTC-5           " "UTC-4           " "UTC-6 "
-	    "          " "UTC-5           " "UTC-7           " "UTC-6        "
-	    "   " "UTC-8           " "UTC-7           ";
+    static thread_local char defsys[16] = "UTC             ";
+    static thread_local char defzon[16] = "                ";
+    static thread_local char defcal[16] = "GREGORIAN       ";
+    static thread_local char zones[16*8] = "EST             " "EDT          "
+	    "   " "CST             " "CDT             " "MST             " 
+	    "MDT             " "PST             " "PDT             ";
+    static thread_local char trnslt[16*8] = "UTC-5           " "UTC-4       "
+	    "    " "UTC-6           " "UTC-5           " "UTC-7           " 
+	    "UTC-6           " "UTC-8           " "UTC-7           ";
 
     /* System generated locals */
     integer i__1;

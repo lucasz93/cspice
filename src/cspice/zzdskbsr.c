@@ -19,12 +19,13 @@ static integer c__24 = 24;
 {
     /* Initialized data */
 
-    static integer nft = 0;
-    static integer nbt = 0;
-    static integer next = 0;
-    static logical pass1 = TRUE_;
-    static integer savep = 0;
-    static char status[40] = "BOGUS ENTRY                             ";
+    static thread_local integer nft = 0;
+    static thread_local integer nbt = 0;
+    static thread_local integer next = 0;
+    static thread_local logical pass1 = TRUE_;
+    static thread_local integer savep = 0;
+    static thread_local char status[40] = "BOGUS ENTRY                      "
+	    "       ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

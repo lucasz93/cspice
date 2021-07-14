@@ -18,9 +18,9 @@ static integer c__400 = 400;
 {
     /* Initialized data */
 
-    static char missed[20*5] = "DELTET/DELTA_T_A, # " "DELTET/K, #         " 
-	    "DELTET/EB, #        " "DELTET/M, #         " "DELTET/DELTA_AT, "
-	    "#  ";
+    static thread_local char missed[20*5] = "DELTET/DELTA_T_A, # " "DELTET/K"
+	    ", #         " "DELTET/EB, #        " "DELTET/M, #         " "DEL"
+	    "TET/DELTA_AT, #  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

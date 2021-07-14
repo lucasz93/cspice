@@ -15,9 +15,9 @@ integer sctype_(integer *sc)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local logical nodata = TRUE_;
+    static thread_local integer oldsc = 0;
 
     /* System generated locals */
     integer ret_val, i__1;

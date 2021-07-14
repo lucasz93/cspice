@@ -40,44 +40,44 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char synval[150*32] = "                                          "
+    static thread_local logical first = TRUE_;
+    static thread_local char synval[150*32] = "                             "
 	    "                                                                "
-	    "                                            " "                 "
-	    "                                                                "
-	    "                                                                "
-	    "     " "                                                        "
-	    "                                                                "
-	    "                              " "                               "
-	    "                                                                "
-	    "                                                       " "      "
+	    "                                                         " "    "
 	    "                                                                "
 	    "                                                                "
-	    "                " "                                             "
+	    "                  " "                                           "
 	    "                                                                "
-	    "                                         ";
-    static char fmt[80*8] = "dict                                           "
-	    "                                 " "flag                        "
-	    "                                                    " "verbat   "
+	    "                                           " "                  "
 	    "                                                                "
-	    "       " "spaced                                                "
-	    "                          " "marked                             "
-	    "                                             " "plain           "
-	    "                                                                " 
-	    "delimited                                                      "
-	    "                 " "delimited                                   "
-	    "                                    ";
-    static char form[80*8] = "FLAGGED                                       "
-	    "                                  " "FLAGGED PRESERVED          "
-	    "                                                     " "VERBATIM"
 	    "                                                                "
-	    "        " "SPACED TABULAR                                       "
-	    "                           " "MARKED TABULAR                    "
-	    "                                              " "TABULAR        "
+	    "    " "                                                         "
+	    "                                                                "
+	    "                             " "                                "
+	    "                                                                "
+	    "                                                      ";
+    static thread_local char fmt[80*8] = "dict                              "
+	    "                                              " "flag           "
 	    "                                                                 "
-	     "DELIMITED                                                     "
-	    "                  " "DELIMITED                                  "
-	    "                                     ";
+	     "verbat                                                        "
+	    "                  " "spaced                                     "
+	    "                                     " "marked                  "
+	    "                                                        " "plain"
+	    "                                                                "
+	    "           " "delimited                                         "
+	    "                              " "delimited                      "
+	    "                                                 ";
+    static thread_local char form[80*8] = "FLAGGED                          "
+	    "                                               " "FLAGGED PRESER"
+	    "VED                                                             "
+	    "  " "VERBATIM                                                   "
+	    "                     " "SPACED TABULAR                          "
+	    "                                        " "MARKED TABULAR       "
+	    "                                                           " 
+	    "TABULAR                                                        "
+	    "                 " "DELIMITED                                   "
+	    "                                    " "DELIMITED                "
+	    "                                                       ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

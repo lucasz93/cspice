@@ -19,7 +19,7 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

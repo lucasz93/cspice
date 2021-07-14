@@ -10,7 +10,7 @@ logical batch_0_(int n__)
 {
     /* Initialized data */
 
-    static logical inbtch = FALSE_;
+    static thread_local logical inbtch = FALSE_;
 
     /* System generated locals */
     logical ret_val;

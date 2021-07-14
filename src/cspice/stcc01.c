@@ -15,13 +15,13 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static char cat1nm[32*7] = "CATALOG_NUMBER                  " "RA       "
-	    "                       " "DEC                             " "RA_"
-	    "SIGMA                        " "DEC_SIGMA                       " 
-	    "VISUAL_MAGNITUDE                " "SPECTRAL_TYPE               "
-	    "    ";
-    static char cat1dt[4*7] = "INT " "DP  " "DP  " "DP  " "DP  " "DP  " "CHR "
-	    ;
+    static thread_local char cat1nm[32*7] = "CATALOG_NUMBER                  "
+	     "RA                              " "DEC                        "
+	    "     " "RA_SIGMA                        " "DEC_SIGMA            "
+	    "           " "VISUAL_MAGNITUDE                " "SPECTRAL_TYPE  "
+	    "                 ";
+    static thread_local char cat1dt[4*7] = "INT " "DP  " "DP  " "DP  " "DP  " 
+	    "DP  " "CHR ";
 
     /* System generated locals */
     address a__1[4];

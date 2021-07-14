@@ -43,37 +43,37 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char synval[100*15] = "                                          "
-	    "                                                          " "   "
+    static thread_local logical first = TRUE_;
+    static thread_local char synval[100*15] = "                             "
 	    "                                                                "
-	    "                                 " "                            "
+	    "       " "                                                      "
+	    "                                              " "               "
 	    "                                                                "
-	    "        " "                                                     "
-	    "                                               " "              "
+	    "                     " "                                        "
+	    "                                                            " 
+	    "                                                               "
+	    "                                     " "                        "
 	    "                                                                "
-	    "                      " "                                       "
-	    "                                                             " 
-	    "FORMAT[format]                                                 "
-	    "                                     " "PAGE[page]              "
+	    "            " "FORMAT[format]                                   "
+	    "                                                   " "PAGE[page]"
 	    "                                                                "
-	    "            " "KERNELS[kernels]                                 "
-	    "                                                   " "COLUMN[col"
-	    "umn] #word[colnam]                                              "
-	    "                          " "INDEXES[indexed]                   "
+	    "                          " "KERNELS[kernels]                   "
 	    "                                                                 "
-	     "SUMMARY[summary]                                              "
-	    "                                      " "ENVIRONMENT[env]       "
+	     "COLUMN[column] #word[colnam]                                  "
+	    "                                      " "INDEXES[indexed]       "
 	    "                                                                "
-	    "             " "COMMENTS[comment] #word[file]                   "
-	    "                                                    " "COMMENTS["
-	    "comment]                                                        "
-	    "                           ";
-    static char freq[64*3] = "No page                                       "
-	    "                  " "First page only                            "
-	    "                     " "Every page                              "
-	    "                        ";
-    static char offon[3*3] = "OFF" "ASK" "ON ";
+	    "             " "SUMMARY[summary]                                "
+	    "                                                    " "ENVIRONME"
+	    "NT[env]                                                         "
+	    "                           " "COMMENTS[comment] #word[file]     "
+	    "                                                                "
+	    "  " "COMMENTS[comment]                                          "
+	    "                                         ";
+    static thread_local char freq[64*3] = "No page                          "
+	    "                               " "First page only               "
+	    "                                  " "Every page                 "
+	    "                                     ";
+    static thread_local char offon[3*3] = "OFF" "ASK" "ON ";
 
     /* System generated locals */
     address a__1[2], a__2[3];

@@ -10,7 +10,7 @@ doublereal twopi_(void)
 {
     /* Initialized data */
 
-    static doublereal value = 0.;
+    static thread_local doublereal value = 0.;
 
     /* System generated locals */
     doublereal ret_val;

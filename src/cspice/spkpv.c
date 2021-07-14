@@ -16,7 +16,7 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 

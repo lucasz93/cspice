@@ -20,9 +20,9 @@ static integer c__17 = 17;
 {
     /* Initialized data */
 
-    static integer numfxd = 0;
-    static integer numvar = 0;
-    static integer nft = 0;
+    static thread_local integer numfxd = 0;
+    static thread_local integer numvar = 0;
+    static thread_local integer nft = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

@@ -16,7 +16,7 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer pktszs[4] = { 8,4,14,7 };
+    static thread_local integer pktszs[4] = { 8,4,14,7 };
 
     /* System generated locals */
     integer i__1, i__2;

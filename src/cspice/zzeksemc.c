@@ -16,9 +16,9 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char typstr[32*4] = "CHARACTER                       " "DOUBLE PR"
-	    "ECISION                " "INTEGER                         " "TIM"
-	    "E                            ";
+    static thread_local char typstr[32*4] = "CHARACTER                       "
+	     "DOUBLE PRECISION                " "INTEGER                    "
+	    "     " "TIME                            ";
 
     /* System generated locals */
     integer i__1, i__2;

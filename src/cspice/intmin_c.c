@@ -43,6 +43,7 @@
 */
 
    #include "SpiceUsr.h"
+   #include "f2c.h"
 
    SpiceInt intmin_c () 
 
@@ -186,8 +187,8 @@
    Static variables
    */
 
-   static SpiceBoolean            first = SPICETRUE;
-   static SpiceInt                value;
+   static thread_local SpiceBoolean first = SPICETRUE;
+   static thread_local SpiceInt     value;
 
 
 

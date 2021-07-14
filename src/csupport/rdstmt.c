@@ -15,9 +15,9 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char blank[132] = "                                              "
+    static thread_local char blank[132] = "                                 "
 	    "                                                                "
-	    "                      ";
+	    "                                   ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

@@ -27,14 +27,14 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static logical aquery = FALSE_;
-    static logical first = TRUE_;
-    static logical unprep = TRUE_;
-    static char pvalue[64*4] = "CHARACTER*(#)                               "
-	    "                    " "DOUBLE PRECISION                         "
-	    "                       " "INTEGER                               "
-	    "                          " "TIME                               "
-	    "                             ";
+    static thread_local logical aquery = FALSE_;
+    static thread_local logical first = TRUE_;
+    static thread_local logical unprep = TRUE_;
+    static thread_local char pvalue[64*4] = "CHARACTER*(#)                  "
+	    "                                 " "DOUBLE PRECISION            "
+	    "                                    " "INTEGER                  "
+	    "                                       " "TIME                  "
+	    "                                          ";
 
     /* System generated locals */
     address a__1[2], a__2[4];

@@ -20,10 +20,11 @@ static integer c__8 = 8;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char zones[3*8] = "EST" "EDT" "CST" "CDT" "MST" "MDT" "PST" "PDT";
-    static char offset[6*8] = "UTC-5 " "UTC-4 " "UTC-6 " "UTC-5 " "UTC-7 " 
-	    "UTC-6 " "UTC-8 " "UTC-7 ";
+    static thread_local logical first = TRUE_;
+    static thread_local char zones[3*8] = "EST" "EDT" "CST" "CDT" "MST" "MDT" 
+	    "PST" "PDT";
+    static thread_local char offset[6*8] = "UTC-5 " "UTC-4 " "UTC-6 " "UTC-5 "
+	     "UTC-7 " "UTC-6 " "UTC-8 " "UTC-7 ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

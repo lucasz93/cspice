@@ -18,8 +18,8 @@ static logical c_true = TRUE_;
 {
     /* Initialized data */
 
-    static logical doit = FALSE_;
-    static logical first = TRUE_;
+    static thread_local logical doit = FALSE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3], a__2[2];

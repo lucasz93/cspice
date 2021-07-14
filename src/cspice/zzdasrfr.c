@@ -18,8 +18,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = -1;
+    static thread_local logical first = TRUE_;
+    static thread_local integer natbff = -1;
 
     /* Builtin functions */
     integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
@@ -44,8 +44,8 @@ static integer c__1 = 1;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___6 = { 1, 0, 1, 0, 1 };
-    static cilist io___9 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___6 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___9 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */

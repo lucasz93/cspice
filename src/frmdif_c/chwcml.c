@@ -34,20 +34,21 @@ static doublereal c_b1114 = 1e-8;
 {
     /* Initialized data */
 
-    static char clkeys[32*25] = "-k                              " "-t1     "
-	    "                        " "-f1                             " 
-	    "-c1                             " "-k1                         "
-	    "    " "-t2                             " "-f2                   "
-	    "          " "-c2                             " "-k2             "
-	    "                " "-a                              " "-m        "
-	    "                      " "-b                              " "-e  "
-	    "                            " "-n                              " 
-	    "-s                              " "-f                          "
-	    "    " "-t                              " "-o                    "
-	    "          " "-x                              " "-d              "
-	    "                " "-usage                          " "-u        "
-	    "                      " "-help                           " "-h  "
-	    "                            " "-v                              ";
+    static thread_local char clkeys[32*25] = "-k                            "
+	    "  " "-t1                             " "-f1                     "
+	    "        " "-c1                             " "-k1               "
+	    "              " "-t2                             " "-f2         "
+	    "                    " "-c2                             " "-k2   "
+	    "                          " "-a                              " 
+	    "-m                              " "-b                          "
+	    "    " "-e                              " "-n                    "
+	    "          " "-s                              " "-f              "
+	    "                " "-t                              " "-o        "
+	    "                      " "-x                              " "-d  "
+	    "                            " "-usage                          " 
+	    "-u                              " "-help                       "
+	    "    " "-h                              " "-v                    "
+	    "          ";
 
     /* System generated locals */
     address a__1[2], a__2[3], a__3[5], a__4[4];

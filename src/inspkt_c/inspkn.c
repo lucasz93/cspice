@@ -41,8 +41,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static struct {
+    static thread_local logical first = TRUE_;
+    static thread_local struct {
 	char fill_1[480];
 	char e_2[720];
 	} equiv_14 = { {0}, "SET[set]        (1:)#word[rest]                "
@@ -61,8 +61,8 @@ static integer c__1 = 1;
 
 #define synval ((char *)&equiv_14)
 
-    static char spcial[8*2] = "        " "?       ";
-    static logical off = FALSE_;
+    static thread_local char spcial[8*2] = "        " "?       ";
+    static thread_local logical off = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -96,7 +96,7 @@ static integer c__1 = 1;
     static thread_local integer synptr[15];
 
     /* Fortran I/O blocks */
-    static cilist io___13 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___13 = { 0, 6, 0, 0, 0 };
 
 
 /*     Nov 21, 1995 (WLT) */

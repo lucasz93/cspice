@@ -18,8 +18,8 @@ static doublereal c_b259 = 1.;
 {
     /* Initialized data */
 
-    static char alldlm[3*5] = "TAB" "EOL" ",  " "   " ";  ";
-    static logical floadd = FALSE_;
+    static thread_local char alldlm[3*5] = "TAB" "EOL" ",  " "   " ";  ";
+    static thread_local logical floadd = FALSE_;
 
     /* System generated locals */
     integer i__1;

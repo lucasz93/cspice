@@ -10,9 +10,9 @@
 {
     /* Initialized data */
 
-    static integer ctr[2] = { 0,0 };
-    static logical first = TRUE_;
-    static integer prvbod = 0;
+    static thread_local integer ctr[2] = { 0,0 };
+    static thread_local logical first = TRUE_;
+    static thread_local integer prvbod = 0;
 
     extern /* Subroutine */ int zzdskchk_(integer *, logical *), zzdskbss_(
 	    integer *);

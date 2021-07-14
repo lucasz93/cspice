@@ -18,10 +18,10 @@ static integer c__260 = 260;
 {
     /* Initialized data */
 
-    static char key[32] = "abort                           ";
-    static char hrd[60] = "                                                 "
-	    "           ";
-    static logical dohrd = FALSE_;
+    static thread_local char key[32] = "abort                           ";
+    static thread_local char hrd[60] = "                                    "
+	    "                        ";
+    static thread_local logical dohrd = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

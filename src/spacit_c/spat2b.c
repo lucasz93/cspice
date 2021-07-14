@@ -15,11 +15,11 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char messag[255] = "Converting from transfer file to binary file."
+    static thread_local char messag[255] = "Converting from transfer file to"
+	    " binary file.                                                   "
 	    "                                                                "
 	    "                                                                "
-	    "                                                                "
-	    "                  ";
+	    "                               ";
 
     /* System generated locals */
     integer i__1, i__2;

@@ -16,16 +16,16 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char maintl[20] = "SPACIT Options      ";
-    static char mainvl[20*6] = "QUIT                " "START_LOG_FILE      " 
-	    "TRANSFER_TO_BINARY  " "BINARY_TO_TRANSFER  " "SUMMARIZE        "
-	    "   " "READ_COMMENTS       ";
-    static char maintx[40*6] = "Quit.                                   " 
-	    "Log SPACIT output to a file.            " "Convert transfer fil"
-	    "e to binary file.   " "Convert binary file to transfer file.   " 
-	    "Summarize binary file.                  " "Read comment area of"
-	    " binary file.       ";
-    static char mainnm[1*6] = "Q" "L" "T" "B" "S" "R";
+    static thread_local char maintl[20] = "SPACIT Options      ";
+    static thread_local char mainvl[20*6] = "QUIT                " "START_LO"
+	    "G_FILE      " "TRANSFER_TO_BINARY  " "BINARY_TO_TRANSFER  " "SUM"
+	    "MARIZE           " "READ_COMMENTS       ";
+    static thread_local char maintx[40*6] = "Quit.                          "
+	    "         " "Log SPACIT output to a file.            " "Convert t"
+	    "ransfer file to binary file.   " "Convert binary file to transfe"
+	    "r file.   " "Summarize binary file.                  " "Read com"
+	    "ment area of binary file.       ";
+    static thread_local char mainnm[1*6] = "Q" "L" "T" "B" "S" "R";
 
     /* System generated locals */
     address a__1[3];

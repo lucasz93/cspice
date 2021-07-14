@@ -15,7 +15,7 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char coord[1*3] = "X" "Y" "Z";
+    static thread_local char coord[1*3] = "X" "Y" "Z";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

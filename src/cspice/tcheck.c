@@ -21,13 +21,14 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static logical dochck = FALSE_;
-    static doublereal dinmon[12] = { 31.,28.,31.,30.,31.,30.,31.,31.,30.,31.,
-	    30.,31. };
-    static char mnames[10*12] = "January   " "February  " "March     " "Apri"
-	    "l     " "May       " "June      " "July      " "August    " "Sep"
-	    "tember " "October   " "November  " "December  ";
-    static char cname[7*4] = "days   " "hours  " "minutes" "seconds";
+    static thread_local logical dochck = FALSE_;
+    static thread_local doublereal dinmon[12] = { 31.,28.,31.,30.,31.,30.,31.,
+	    31.,30.,31.,30.,31. };
+    static thread_local char mnames[10*12] = "January   " "February  " "Marc"
+	    "h     " "April     " "May       " "June      " "July      " "Aug"
+	    "ust    " "September " "October   " "November  " "December  ";
+    static thread_local char cname[7*4] = "days   " "hours  " "minutes" "sec"
+	    "onds";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

@@ -16,18 +16,19 @@ static integer c__22 = 22;
 {
     /* Initialized data */
 
-    static char a[2*3] = "A " "A " "a ";
-    static char an[2*3] = "AN" "An" "an";
-    static char anword[8*22] = "HEIR    " "HONEST  " "HONOR   " "H       " 
-	    "HOUR    " "HORS    " "HOMBRE  " "F       " "L       " "M       " 
-	    "N       " "R       " "S       " "X       " "UNIN    " "UNIM    " 
-	    "ONEI    " "ONER    " "SPK     " "EK      " "IK      " "SCLK    ";
-    static char aword[8*33] = "HORSE   " "ONE     " "ONE-    " "ONCE    " 
-	    "ONENESS " "UIG     " "UIN     " "UKA     " "UKE     " "UKO     " 
-	    "UKI     " "UKU     " "ULOT    " "UNANI   " "UNI     " "UNINU   " 
-	    "UPA     " "URA     " "URE     " "URO     " "USA     " "USE     " 
-	    "USU     " "UTE     " "UTI     " "UTO     " "UVA     " "UVE     " 
-	    "UVU     " "EU      " "EWE     " "UTRI    " "U       ";
+    static thread_local char a[2*3] = "A " "A " "a ";
+    static thread_local char an[2*3] = "AN" "An" "an";
+    static thread_local char anword[8*22] = "HEIR    " "HONEST  " "HONOR   " 
+	    "H       " "HOUR    " "HORS    " "HOMBRE  " "F       " "L       " 
+	    "M       " "N       " "R       " "S       " "X       " "UNIN    " 
+	    "UNIM    " "ONEI    " "ONER    " "SPK     " "EK      " "IK      " 
+	    "SCLK    ";
+    static thread_local char aword[8*33] = "HORSE   " "ONE     " "ONE-    " 
+	    "ONCE    " "ONENESS " "UIG     " "UIN     " "UKA     " "UKE     " 
+	    "UKO     " "UKI     " "UKU     " "ULOT    " "UNANI   " "UNI     " 
+	    "UNINU   " "UPA     " "URA     " "URE     " "URO     " "USA     " 
+	    "USE     " "USU     " "UTE     " "UTI     " "UTO     " "UVA     " 
+	    "UVE     " "UVU     " "EU      " "EWE     " "UTRI    " "U       ";
 
     /* System generated locals */
     integer i__1;

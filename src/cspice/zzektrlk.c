@@ -12,9 +12,9 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer oldval = 0;
-    static integer page[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    static thread_local logical first = TRUE_;
+    static thread_local integer oldval = 0;
+    static thread_local integer page[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -22,15 +22,15 @@
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0 };
-    static integer oldhan = 0;
-    static integer oldidx = 0;
-    static integer oldkey = 0;
-    static integer oldlvl = 0;
-    static integer oldmax = 0;
-    static integer oldnod = 0;
-    static integer oldnof = 0;
-    static integer oldtre = 0;
+	    0,0,0,0,0,0,0,0,0 };
+    static thread_local integer oldhan = 0;
+    static thread_local integer oldidx = 0;
+    static thread_local integer oldkey = 0;
+    static thread_local integer oldlvl = 0;
+    static thread_local integer oldmax = 0;
+    static thread_local integer oldnod = 0;
+    static thread_local integer oldnof = 0;
+    static thread_local integer oldtre = 0;
 
     /* System generated locals */
     integer i__1;

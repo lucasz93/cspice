@@ -15,8 +15,8 @@ doublereal zzddhmnm_(integer *unit)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer natbff = 0;
 
     /* System generated locals */
     integer i__1;
@@ -51,9 +51,9 @@ doublereal zzddhmnm_(integer *unit)
     doublereal mnm;
 
     /* Fortran I/O blocks */
-    static cilist io___10 = { 1, 0, 1, 0, 1 };
-    static cilist io___18 = { 1, 0, 1, 0, 1 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___10 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___18 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___20 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

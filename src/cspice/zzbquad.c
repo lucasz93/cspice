@@ -12,8 +12,8 @@
 {
     /* Initialized data */
 
-    static doublereal big = 0.;
-    static logical first = TRUE_;
+    static thread_local doublereal big = 0.;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;

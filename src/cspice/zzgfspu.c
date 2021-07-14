@@ -20,9 +20,9 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char svshap[32*2] = "POINT                           " "SPHERE   "
-	    "                       ";
-    static char ref[5] = "J2000";
+    static thread_local char svshap[32*2] = "POINT                           "
+	     "SPHERE                          ";
+    static thread_local char ref[5] = "J2000";
 
     /* System generated locals */
     doublereal d__1;

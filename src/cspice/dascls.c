@@ -15,7 +15,7 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     inlist ioin__1;

@@ -49,9 +49,9 @@ static integer c__1 = 1;
     static thread_local integer nrr;
 
     /* Fortran I/O blocks */
-    static cilist io___16 = { 1, 0, 1, 0, 0 };
-    static cilist io___21 = { 1, 0, 1, 0, 0 };
-    static cilist io___24 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___16 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___21 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___24 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

@@ -19,11 +19,12 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char shapid[32*4] = "CIRCLE                          " "ELLIPSE  "
-	    "                       " "POLYGON                         " "REC"
-	    "TANGLE                       ";
-    static char angshp[32*3] = "CIRCLE                          " "ELLIPSE  "
-	    "                       " "RECTANGLE                       ";
+    static thread_local char shapid[32*4] = "CIRCLE                          "
+	     "ELLIPSE                         " "POLYGON                    "
+	    "     " "RECTANGLE                       ";
+    static thread_local char angshp[32*3] = "CIRCLE                          "
+	     "ELLIPSE                         " "RECTANGLE                  "
+	    "     ";
 
     /* System generated locals */
     doublereal d__1;

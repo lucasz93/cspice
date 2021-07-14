@@ -16,9 +16,9 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char hexdig[1*16] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" 
-	    "B" "C" "D" "E" "F";
-    static logical first = TRUE_;
+    static thread_local char hexdig[1*16] = "0" "1" "2" "3" "4" "5" "6" "7" 
+	    "8" "9" "A" "B" "C" "D" "E" "F";
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3];

@@ -13,7 +13,7 @@
 {
     /* Initialized data */
 
-    static char typstr[4*4] = "CHR " "DP  " "INT " "TIME";
+    static thread_local char typstr[4*4] = "CHR " "DP  " "INT " "TIME";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

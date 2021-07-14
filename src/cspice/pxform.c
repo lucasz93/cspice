@@ -11,7 +11,7 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     static thread_local char svto[32];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *

@@ -45,8 +45,8 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static char optnam[2*19] = "P " "Q " "1 " "2 " "3 " "4 " "5 " "6 " "7 " 
-	    "8 " "9 " "A " "B " "C " "D " "E " "F " "G " "H ";
+    static thread_local char optnam[2*19] = "P " "Q " "1 " "2 " "3 " "4 " 
+	    "5 " "6 " "7 " "8 " "9 " "A " "B " "C " "D " "E " "F " "G " "H ";
 
     /* System generated locals */
     address a__1[2];

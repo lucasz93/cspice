@@ -16,10 +16,11 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char attkey[32*5] = "DATATYPE                        " "SIZE     "
-	    "                       " "INDEXED                         " "NUL"
-	    "LS_OK                        " "FIXED_COUNT                     ";
-    static integer reqkey[1] = { 1 };
+    static thread_local char attkey[32*5] = "DATATYPE                        "
+	     "SIZE                            " "INDEXED                    "
+	    "     " "NULLS_OK                        " "FIXED_COUNT          "
+	    "           ";
+    static thread_local integer reqkey[1] = { 1 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;

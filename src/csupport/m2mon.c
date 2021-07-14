@@ -14,11 +14,11 @@ logical m2mon_(char *word, ftnlen word_len)
 {
     /* Initialized data */
 
-    static char short__[3*12] = "APR" "AUG" "DEC" "FEB" "JAN" "JUL" "JUN" 
-	    "MAR" "MAY" "NOV" "OCT" "SEP";
-    static char months[9*12] = "APRIL    " "AUGUST   " "DECEMBER " "FEBRUARY "
-	     "JANUARY  " "JULY     " "JUNE     " "MARCH    " "MAY      " 
-	    "NOVEMBER " "OCTOBER  " "SEPTEMBER";
+    static thread_local char short__[3*12] = "APR" "AUG" "DEC" "FEB" "JAN" 
+	    "JUL" "JUN" "MAR" "MAY" "NOV" "OCT" "SEP";
+    static thread_local char months[9*12] = "APRIL    " "AUGUST   " "DECEMBE"
+	    "R " "FEBRUARY " "JANUARY  " "JULY     " "JUNE     " "MARCH    " 
+	    "MAY      " "NOVEMBER " "OCTOBER  " "SEPTEMBER";
 
     /* System generated locals */
     integer i__1;

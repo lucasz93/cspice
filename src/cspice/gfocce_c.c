@@ -59,6 +59,7 @@
    #include "SpiceZmc.h"
    #include "SpiceZfc.h"
    #include "SpiceZad.h"
+   #include "f2c.h"
 
 
    void gfocce_c ( ConstSpiceChar     * occtyp,
@@ -1274,7 +1275,7 @@
 
    SpiceBoolean              newHandler;
 
-   static const SpiceChar  * blankStr = " ";
+   static thread_local const SpiceChar  * blankStr = " ";
 
    SpiceChar               * bFrameStr;
    SpiceChar               * fFrameStr;

@@ -17,7 +17,7 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -59,8 +59,8 @@ static integer c__4 = 4;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___11 = { 1, 0, 1, 0, 1 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___11 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___20 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

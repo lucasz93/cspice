@@ -16,7 +16,7 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer nl = 0;
+    static thread_local integer nl = 0;
 
     /* System generated locals */
     address a__1[2];

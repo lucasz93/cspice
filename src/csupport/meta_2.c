@@ -24,12 +24,12 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char margns[128] = "LEFT 1 RIGHT 75                              "
+    static thread_local logical pass1 = TRUE_;
+    static thread_local char margns[128] = "LEFT 1 RIGHT 75                 "
 	    "                                                                "
-	    "                   ";
-    static char keynam[6*10] = "1     " "2     " "3     " "4     " "5     " 
-	    "6     " "7     " "8     " "9     " "10    ";
+	    "                                ";
+    static thread_local char keynam[6*10] = "1     " "2     " "3     " "4   "
+	    "  " "5     " "6     " "7     " "8     " "9     " "10    ";
 
     /* System generated locals */
     address a__1[5];
@@ -78,15 +78,15 @@ static integer c__3 = 3;
 	    ftnlen), cnfirm_1__(char *, logical *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___19 = { 0, 6, 0, 0, 0 };
-    static cilist io___20 = { 0, 6, 0, 0, 0 };
-    static cilist io___21 = { 0, 6, 0, 0, 0 };
-    static cilist io___22 = { 0, 6, 0, 0, 0 };
-    static cilist io___23 = { 0, 6, 0, 0, 0 };
-    static cilist io___27 = { 0, 6, 0, 0, 0 };
-    static cilist io___29 = { 0, 6, 0, 0, 0 };
-    static cilist io___30 = { 0, 6, 0, 0, 0 };
-    static cilist io___31 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___19 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___20 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___21 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___22 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___23 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___27 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___29 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___30 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___31 = { 0, 6, 0, 0, 0 };
 
 
 /* $ Abstract */

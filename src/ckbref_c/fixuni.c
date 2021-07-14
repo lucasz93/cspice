@@ -14,9 +14,9 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static char vars__[32*4] = "DELTET/DELTA_T_A                " "DELTET/K "
-	    "                       " "DELTET/EB                       " "DEL"
-	    "TET/M                        ";
+    static thread_local char vars__[32*4] = "DELTET/DELTA_T_A                "
+	     "DELTET/K                        " "DELTET/EB                  "
+	    "     " "DELTET/M                        ";
 
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);

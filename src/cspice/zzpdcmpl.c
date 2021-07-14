@@ -11,7 +11,7 @@
 {
     /* Initialized data */
 
-    static doublereal apex[3] = { 0.,0.,0. };
+    static thread_local doublereal apex[3] = { 0.,0.,0. };
 
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    ), zzelnaxx_(doublereal *, doublereal *, doublereal *, doublereal 

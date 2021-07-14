@@ -56,6 +56,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "zzalloc.h"
+   #include "f2c.h"
 
    void gfrr_c ( ConstSpiceChar     * target,
                  ConstSpiceChar     * abcorr,
@@ -845,7 +846,7 @@
    */
    doublereal            * work;
 
-   static SpiceInt         nw = SPICE_GF_NWRR;
+   static thread_local SpiceInt nw = SPICE_GF_NWRR;
    SpiceInt                nBytes;
 
    /*

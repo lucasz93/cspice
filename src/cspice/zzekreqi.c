@@ -15,16 +15,17 @@ static integer c__15 = 15;
 {
     /* Initialized data */
 
-    static char namlst[32*15] = "ARCHITECTURE                    " "INITIALI"
-	    "ZED                     " "PARSED                          " 
-	    "NAMES_RESOLVED                  " "TIMES_RESOLVED              "
-	    "    " "SEM_CHECKED                     " "NUM_TABLES            "
-	    "          " "NUM_CONJUNCTIONS                " "NUM_CONSTRAINTS "
-	    "                " "NUM_SELECT_COLS                 " "NUM_ORDERB"
-	    "Y_COLS                " "NUM_BUF_SIZE                    " "FREE"
-	    "_NUM                        " "CHR_BUF_SIZE                    " 
-	    "FREE_CHR                        ";
-    static integer namidx[15] = { 2,3,4,5,6,7,8,10,9,12,11,13,14,15,16 };
+    static thread_local char namlst[32*15] = "ARCHITECTURE                  "
+	    "  " "INITIALIZED                     " "PARSED                  "
+	    "        " "NAMES_RESOLVED                  " "TIMES_RESOLVED    "
+	    "              " "SEM_CHECKED                     " "NUM_TABLES  "
+	    "                    " "NUM_CONJUNCTIONS                " "NUM_CO"
+	    "NSTRAINTS                 " "NUM_SELECT_COLS                 " 
+	    "NUM_ORDERBY_COLS                " "NUM_BUF_SIZE                "
+	    "    " "FREE_NUM                        " "CHR_BUF_SIZE          "
+	    "          " "FREE_CHR                        ";
+    static thread_local integer namidx[15] = { 2,3,4,5,6,7,8,10,9,12,11,13,14,
+	    15,16 };
 
     /* System generated locals */
     integer i__1;

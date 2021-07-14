@@ -11,9 +11,9 @@
 {
     /* Initialized data */
 
-    static doublereal dpval[16] = { 0.,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.,
-	    13.,14.,15. };
-    static logical first = TRUE_;
+    static thread_local doublereal dpval[16] = { 0.,1.,2.,3.,4.,5.,6.,7.,8.,
+	    9.,10.,11.,12.,13.,14.,15. };
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

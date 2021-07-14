@@ -15,7 +15,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int zzrbrkst_(char *, char *, char *, char *, 
 	    integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen), zzftpstr_(

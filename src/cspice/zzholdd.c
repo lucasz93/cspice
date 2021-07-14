@@ -16,7 +16,7 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static logical init = TRUE_;
+    static thread_local logical init = TRUE_;
 
     /* System generated locals */
     integer i__1;

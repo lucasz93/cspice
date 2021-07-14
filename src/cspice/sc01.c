@@ -21,26 +21,26 @@ static integer c__30 = 30;
 {
     /* Initialized data */
 
-    static char bvlmsg[320] = "Invalid value of #. Value was #.             "
+    static thread_local char bvlmsg[320] = "Invalid value of #. Value was #."
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                   ";
-    static char del[1*5] = "." ":" "-" "," " ";
-    static logical first = TRUE_;
-    static char namlst[60*9] = "SCLK_KERNEL_ID                              "
-	    "                " "SCLK01_COEFFICIENTS                          "
-	    "               " "SCLK_PARTITION_START                          "
-	    "              " "SCLK_PARTITION_END                             "
-	    "             " "SCLK01_N_FIELDS                                 "
-	    "            " "SCLK01_OFFSETS                                   "
-	    "           " "SCLK01_MODULI                                     "
-	    "          " "SCLK01_OUTPUT_DELIM                                "
-	    "         " "SCLK01_TIME_SYSTEM                                  "
-	    "        ";
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
+	    "                                ";
+    static thread_local char del[1*5] = "." ":" "-" "," " ";
+    static thread_local logical first = TRUE_;
+    static thread_local char namlst[60*9] = "SCLK_KERNEL_ID                 "
+	    "                             " "SCLK01_COEFFICIENTS             "
+	    "                            " "SCLK_PARTITION_START             "
+	    "                           " "SCLK_PARTITION_END                "
+	    "                          " "SCLK01_N_FIELDS                    "
+	    "                         " "SCLK01_OFFSETS                      "
+	    "                        " "SCLK01_MODULI                        "
+	    "                       " "SCLK01_OUTPUT_DELIM                   "
+	    "                      " "SCLK01_TIME_SYSTEM                     "
+	    "                     ";
+    static thread_local logical nodata = TRUE_;
+    static thread_local integer oldsc = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

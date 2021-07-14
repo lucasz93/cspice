@@ -10,8 +10,8 @@
 {
     /* Initialized data */
 
-    static logical svinit = FALSE_;
-    static doublereal svstep = -1.;
+    static thread_local logical svinit = FALSE_;
+    static thread_local doublereal svstep = -1.;
 
     extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
 	    doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 

@@ -21,10 +21,10 @@ logical zztime_0_(int n__, char *string, char *transl, char *letter, char *
 {
     /* Initialized data */
 
-    static integer size = 0;
-    static logical first = TRUE_;
-    static char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
+    static thread_local integer size = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" 
+	    "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

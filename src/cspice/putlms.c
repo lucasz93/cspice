@@ -10,7 +10,7 @@
 {
     /* Initialized data */
 
-    static char savmsg[1840] = "                                            "
+    static thread_local char savmsg[1840] = "                               "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -39,7 +39,7 @@
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "    ";
+	    "                 ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

@@ -22,27 +22,27 @@ static integer c__1024 = 1024;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static integer hnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static logical upbufc[10] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical upbufd[10] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical upbufi[10] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer headc = 0;
-    static integer headd = 0;
-    static integer headi = 0;
-    static integer unit = -1;
-    static integer wrunit = -1;
-    static integer usedc = 0;
-    static integer usedd = 0;
-    static integer usedi = 0;
-    static integer rnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer rnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer rnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer hnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer hnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local logical pass1 = TRUE_;
+    static thread_local integer hnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local logical upbufc[10] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local logical upbufd[10] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local logical upbufi[10] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local integer headc = 0;
+    static thread_local integer headd = 0;
+    static thread_local integer headi = 0;
+    static thread_local integer unit = -1;
+    static thread_local integer wrunit = -1;
+    static thread_local integer usedc = 0;
+    static thread_local integer usedd = 0;
+    static thread_local integer usedi = 0;
+    static thread_local integer rnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer rnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer rnbufi[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer hnbufc[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer hnbufd[10] = { 0,0,0,0,0,0,0,0,0,0 };
 
     /* System generated locals */
     integer i__1, i__2;

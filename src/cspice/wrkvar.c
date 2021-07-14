@@ -46,10 +46,10 @@ static integer c__5 = 5;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___9 = { 1, 0, 0, 0, 0 };
-    static cilist io___10 = { 1, 0, 0, 0, 0 };
-    static cilist io___11 = { 1, 0, 0, 0, 0 };
-    static cilist io___12 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___9 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___10 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___11 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___12 = { 1, 0, 0, 0, 0 };
 
 
 /* $ Abstract */

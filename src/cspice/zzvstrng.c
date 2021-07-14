@@ -16,9 +16,9 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static char string[30] = " 0.0000000000000E+00          ";
-    static integer exp__ = 0;
-    static char myfill[1] = " ";
+    static thread_local char string[30] = " 0.0000000000000E+00          ";
+    static thread_local integer exp__ = 0;
+    static thread_local char myfill[1] = " ";
 
     /* System generated locals */
     integer i__1, i__2;

@@ -45,7 +45,7 @@
 {
     /* Initialized data */
 
-    static integer preset = 8;
+    static thread_local integer preset = 8;
 
     /* System generated locals */
     integer i__1;

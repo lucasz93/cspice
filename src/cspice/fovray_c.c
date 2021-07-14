@@ -54,6 +54,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
    #undef fovray_c
 
    void fovray_c ( ConstSpiceChar   * inst,
@@ -456,7 +457,7 @@
    /*
    Static variables
    */
-   static const SpiceChar  * blankStr = " ";
+   static thread_local const SpiceChar  * blankStr = " ";
    
    /*
    Participate in error tracing.

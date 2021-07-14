@@ -19,10 +19,10 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char evlflg[25*3] = "OBSERVER                 " "TARGET          "
-	    "         " "CENTER                   ";
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
+    static thread_local char evlflg[25*3] = "OBSERVER                 " "TAR"
+	    "GET                   " "CENTER                   ";
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1;

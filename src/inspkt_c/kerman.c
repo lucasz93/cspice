@@ -52,20 +52,21 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static integer nfiles = 0;
-    static logical first = TRUE_;
-    static char synval[80*9] = "                                            "
-	    "                                    " "                         "
-	    "                                                       " "      "
+    static thread_local integer nfiles = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local char synval[80*9] = "                               "
+	    "                                                 " "            "
 	    "                                                                "
-	    "          " "                                                   "
-	    "                             " "                                "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "EK #word[ekfile]                                          "
-	    "                      " "LEAPSECONDS #word[leapfile]            "
-	    "                                         " "SCLK KERNEL #word[sc"
-	    "lkfile]                                                     ";
+	    "    " "                                                         "
+	    "                       " "                                      "
+	    "                                          " "                   "
+	    "                                                             " 
+	    "                                                               "
+	    "                 " "EK #word[ekfile]                            "
+	    "                                    " "LEAPSECONDS #word[leapfil"
+	    "e]                                                     " "SCLK K"
+	    "ERNEL #word[sclkfile]                                           "
+	    "          ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

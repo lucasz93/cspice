@@ -25,12 +25,12 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static integer logops[3] = { 2,25,23 };
-    static integer logcde[3] = { -10,-11,-12 };
-    static integer cmpops[7] = { 10,12,14,17,19,22,18 };
-    static integer cmpcde[8] = { 1,2,3,4,5,6,7,8 };
-    static integer cmpneg[8] = { 6,5,4,3,2,1,8,7 };
-    static integer endkw[3] = { 11,26,27 };
+    static thread_local integer logops[3] = { 2,25,23 };
+    static thread_local integer logcde[3] = { -10,-11,-12 };
+    static thread_local integer cmpops[7] = { 10,12,14,17,19,22,18 };
+    static thread_local integer cmpcde[8] = { 1,2,3,4,5,6,7,8 };
+    static thread_local integer cmpneg[8] = { 6,5,4,3,2,1,8,7 };
+    static thread_local integer endkw[3] = { 11,26,27 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;

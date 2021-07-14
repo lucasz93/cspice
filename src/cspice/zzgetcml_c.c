@@ -47,6 +47,7 @@
 
    #include "SpiceUsr.h"
    #include "SpiceZpl.h"
+   #include "f2c.h"
 
    #ifdef CSPICE_MACPPC
    
@@ -223,10 +224,10 @@
 
    /* Local variables */
 
-   static SpiceInt          CML_argc;
-   static SpiceChar      ** CML_argv;
+   static thread_local SpiceInt          CML_argc;
+   static thread_local SpiceChar      ** CML_argv;
 
-   static SpiceBoolean      first    = SPICETRUE;
+   static thread_local SpiceBoolean      first    = SPICETRUE;
 
    SpiceInt                 i;
 

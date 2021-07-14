@@ -21,16 +21,16 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char menutl[20] = "CK Summary Options  ";
-    static char menuvl[20*6] = "QUIT                " "Skip                " 
-	    "ENTIRE_FILE         " "BY_INSTRUMENT_ID    " "BY_UTC_INTERVAL  "
-	    "   " "BY_SCLK_INTERVAL    ";
-    static char menutx[40*6] = "Quit, returning to main menu.           " 
-	    "Skip                                    " "Summarize entire fil"
-	    "e.                  " "Summarize by NAIF instrument ID code.   " 
-	    "Summarize by UTC time interval.         " "Summarize by SCLK ti"
-	    "me interval.        ";
-    static char menunm[1*6] = "Q" "." "F" "I" "U" "S";
+    static thread_local char menutl[20] = "CK Summary Options  ";
+    static thread_local char menuvl[20*6] = "QUIT                " "Skip    "
+	    "            " "ENTIRE_FILE         " "BY_INSTRUMENT_ID    " "BY_"
+	    "UTC_INTERVAL     " "BY_SCLK_INTERVAL    ";
+    static thread_local char menutx[40*6] = "Quit, returning to main menu.  "
+	    "         " "Skip                                    " "Summarize"
+	    " entire file.                  " "Summarize by NAIF instrument I"
+	    "D code.   " "Summarize by UTC time interval.         " "Summariz"
+	    "e by SCLK time interval.        ";
+    static thread_local char menunm[1*6] = "Q" "." "F" "I" "U" "S";
 
     /* System generated locals */
     integer i__1;
@@ -109,54 +109,54 @@ static integer c__0 = 0;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___23 = { 0, 6, 0, 0, 0 };
-    static cilist io___24 = { 0, 6, 0, 0, 0 };
-    static cilist io___25 = { 0, 6, 0, 0, 0 };
-    static cilist io___26 = { 0, 6, 0, 0, 0 };
-    static cilist io___27 = { 0, 6, 0, 0, 0 };
-    static cilist io___28 = { 0, 6, 0, 0, 0 };
-    static cilist io___29 = { 0, 6, 0, 0, 0 };
-    static cilist io___30 = { 0, 6, 0, 0, 0 };
-    static cilist io___32 = { 0, 6, 0, 0, 0 };
-    static cilist io___33 = { 0, 6, 0, 0, 0 };
-    static cilist io___34 = { 0, 6, 0, 0, 0 };
-    static cilist io___36 = { 0, 6, 0, 0, 0 };
-    static cilist io___37 = { 0, 6, 0, 0, 0 };
-    static cilist io___38 = { 0, 6, 0, 0, 0 };
-    static cilist io___39 = { 0, 6, 0, 0, 0 };
-    static cilist io___41 = { 0, 6, 0, 0, 0 };
-    static cilist io___42 = { 0, 6, 0, 0, 0 };
-    static cilist io___43 = { 0, 6, 0, 0, 0 };
-    static cilist io___44 = { 0, 6, 0, 0, 0 };
-    static cilist io___46 = { 0, 6, 0, 0, 0 };
-    static cilist io___47 = { 0, 6, 0, 0, 0 };
-    static cilist io___48 = { 0, 6, 0, 0, 0 };
-    static cilist io___49 = { 0, 6, 0, 0, 0 };
-    static cilist io___51 = { 0, 6, 0, 0, 0 };
-    static cilist io___52 = { 0, 6, 0, 0, 0 };
-    static cilist io___53 = { 0, 6, 0, 0, 0 };
-    static cilist io___54 = { 0, 6, 0, 0, 0 };
-    static cilist io___56 = { 0, 6, 0, 0, 0 };
-    static cilist io___57 = { 0, 6, 0, 0, 0 };
-    static cilist io___58 = { 0, 6, 0, 0, 0 };
-    static cilist io___59 = { 0, 6, 0, 0, 0 };
-    static cilist io___60 = { 0, 6, 0, 0, 0 };
-    static cilist io___61 = { 0, 6, 0, 0, 0 };
-    static cilist io___62 = { 0, 6, 0, 0, 0 };
-    static cilist io___63 = { 0, 6, 0, 0, 0 };
-    static cilist io___65 = { 0, 6, 0, 0, 0 };
-    static cilist io___66 = { 0, 6, 0, 0, 0 };
-    static cilist io___67 = { 0, 6, 0, 0, 0 };
-    static cilist io___68 = { 0, 6, 0, 0, 0 };
-    static cilist io___70 = { 0, 6, 0, 0, 0 };
-    static cilist io___71 = { 0, 6, 0, 0, 0 };
-    static cilist io___72 = { 0, 6, 0, 0, 0 };
-    static cilist io___73 = { 0, 6, 0, 0, 0 };
-    static cilist io___75 = { 0, 6, 0, 0, 0 };
-    static cilist io___76 = { 0, 6, 0, 0, 0 };
-    static cilist io___77 = { 0, 6, 0, 0, 0 };
-    static cilist io___78 = { 0, 6, 0, 0, 0 };
-    static cilist io___80 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___23 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___24 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___25 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___26 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___27 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___28 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___29 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___30 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___32 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___33 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___34 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___36 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___37 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___38 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___39 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___41 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___42 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___43 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___44 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___46 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___47 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___48 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___49 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___51 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___52 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___53 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___54 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___56 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___57 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___58 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___59 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___60 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___61 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___62 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___63 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___65 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___66 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___67 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___68 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___70 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___71 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___72 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___73 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___75 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___76 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___77 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___78 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___80 = { 0, 6, 0, 0, 0 };
 
 
 /* $ Abstract */

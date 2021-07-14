@@ -10,7 +10,7 @@
 {
     /* Initialized data */
 
-    static char savmsg[25] = "                         ";
+    static thread_local char savmsg[25] = "                         ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

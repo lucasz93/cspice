@@ -41,10 +41,10 @@ static logical c_true = TRUE_;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer thshld = 200;
-    static char rname[6] = "NSPFND";
-    static char synval[700*11] = "                                          "
+    static thread_local logical first = TRUE_;
+    static thread_local integer thshld = 200;
+    static thread_local char rname[6] = "NSPFND";
+    static thread_local char synval[700*11] = "                             "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -55,7 +55,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                  " "                                           "
+	    "                               " "                              "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -66,7 +66,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                 " "                                            "
+	    "                              " "                               "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -77,7 +77,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                " "                                             "
+	    "                             " "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -88,7 +88,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "               " "                                              "
+	    "                            " "                                 "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -99,7 +99,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "              " "                                               "
+	    "                           " "                                  "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -110,7 +110,7 @@ static logical c_true = TRUE_;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "             ";
+	    "                          ";
 
     /* System generated locals */
     integer i__1, i__2;

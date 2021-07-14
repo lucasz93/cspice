@@ -22,8 +22,8 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static integer at = 0;
-    static logical first = TRUE_;
+    static thread_local integer at = 0;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2];

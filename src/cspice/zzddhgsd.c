@@ -15,10 +15,12 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static char clslst[8*3] = "METHOD  " "ARCH    " "BFF     ";
-    static char stramh[8*4] = "READ    " "WRITE   " "SCRATCH " "NEW     ";
-    static char strarc[8*2] = "DAF     " "DAS     ";
-    static char strbff[8*4] = "BIG-IEEE" "LTL-IEEE" "VAX-GFLT" "VAX-DFLT";
+    static thread_local char clslst[8*3] = "METHOD  " "ARCH    " "BFF     ";
+    static thread_local char stramh[8*4] = "READ    " "WRITE   " "SCRATCH " 
+	    "NEW     ";
+    static thread_local char strarc[8*2] = "DAF     " "DAS     ";
+    static thread_local char strbff[8*4] = "BIG-IEEE" "LTL-IEEE" "VAX-GFLT" 
+	    "VAX-DFLT";
 
     /* System generated locals */
     integer i__1;

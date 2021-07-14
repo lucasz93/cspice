@@ -17,8 +17,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char mthnam[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
+    static thread_local char mthnam[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" 
+	    "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

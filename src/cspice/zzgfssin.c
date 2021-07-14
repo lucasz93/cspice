@@ -20,11 +20,13 @@ static doublereal c_b50 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer prvobs = 0;
-    static integer prvtrg = 0;
-    static char svobs[36] = "                                    ";
-    static char svtarg[36] = "                                    ";
+    static thread_local logical first = TRUE_;
+    static thread_local integer prvobs = 0;
+    static thread_local integer prvtrg = 0;
+    static thread_local char svobs[36] = "                                  "
+	    "  ";
+    static thread_local char svtarg[36] = "                                 "
+	    "   ";
 
     /* System generated locals */
     integer i__1;

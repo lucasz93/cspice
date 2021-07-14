@@ -17,17 +17,17 @@ static integer c__11 = 11;
 {
     /* Initialized data */
 
-    static char cktyp[80*6] = "Discrete Pointing                            "
-	    "                                   " "Continuous Pointing: Const"
-	    "ant Angular Velocity                                  " "Continu"
-	    "ous Pointing: Linear Interpolation                              "
-	    "         " "Continuous Pointing: Chebyshev, Variable Interval Le"
-	    "ngth                        " "Continuous Pointing: MEX/Rosetta "
-	    "Polynomial Interpolation                       " "Continuous Poi"
-	    "nting: ESOC/DDID Piecewise Interpolation                        "
-	    "  ";
-    static char pvstat[40*2] = "Pointing Only                           " 
-	    "Pointing and Angular Velocity           ";
+    static thread_local char cktyp[80*6] = "Discrete Pointing               "
+	    "                                                " "Continuous Po"
+	    "inting: Constant Angular Velocity                               "
+	    "   " "Continuous Pointing: Linear Interpolation                 "
+	    "                      " "Continuous Pointing: Chebyshev, Variabl"
+	    "e Interval Length                        " "Continuous Pointing:"
+	    " MEX/Rosetta Polynomial Interpolation                       " 
+	    "Continuous Pointing: ESOC/DDID Piecewise Interpolation         "
+	    "                 ";
+    static thread_local char pvstat[40*2] = "Pointing Only                  "
+	    "         " "Pointing and Angular Velocity           ";
 
     /* System generated locals */
     integer i__1;

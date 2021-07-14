@@ -17,7 +17,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3];
@@ -51,7 +51,7 @@ static integer c__1 = 1;
     char tststr[16];
 
     /* Fortran I/O blocks */
-    static cilist io___15 = { 1, 0, 0, 0, 1 };
+    static thread_local cilist io___15 = { 1, 0, 0, 0, 1 };
 
 
 /* $ Abstract */

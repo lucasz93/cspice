@@ -10,8 +10,8 @@
 {
     /* Initialized data */
 
-    static integer centry = 1900;
-    static integer lbound = 1969;
+    static thread_local integer centry = 1900;
+    static thread_local integer lbound = 1969;
 
 /* $ Abstract */
 

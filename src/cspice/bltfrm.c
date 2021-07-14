@@ -16,7 +16,7 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1;

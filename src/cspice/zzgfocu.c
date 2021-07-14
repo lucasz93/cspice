@@ -23,9 +23,10 @@ static doublereal c_b199 = 1e-12;
 {
     /* Initialized data */
 
-    static integer ncalls = 0;
-    static doublereal svorig[3] = { 0.,0.,0. };
-    static char svtyps[7*4] = "ANNULAR" "ANY    " "PARTIAL" "FULL   ";
+    static thread_local integer ncalls = 0;
+    static thread_local doublereal svorig[3] = { 0.,0.,0. };
+    static thread_local char svtyps[7*4] = "ANNULAR" "ANY    " "PARTIAL" 
+	    "FULL   ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

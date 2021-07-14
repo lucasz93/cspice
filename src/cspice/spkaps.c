@@ -12,8 +12,8 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

@@ -21,7 +21,7 @@ static integer c__5 = 5;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     address a__1[5];

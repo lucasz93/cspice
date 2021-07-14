@@ -20,20 +20,20 @@ static doublereal c_b20 = 100.;
 {
     /* Initialized data */
 
-    static integer calls = 0;
-    static integer stdout = 6;
-    static doublereal step = 0.;
-    static doublereal svincr = 0.;
-    static integer svunit = 6;
-    static integer check = 1;
-    static doublereal done = 0.;
-    static doublereal entire = 0.;
-    static char finish[13] = "             ";
-    static logical first = TRUE_;
-    static integer ls = 1;
-    static doublereal lstsec = 0.;
-    static char start[55] = "                                               "
-	    "        ";
+    static thread_local integer calls = 0;
+    static thread_local integer stdout = 6;
+    static thread_local doublereal step = 0.;
+    static thread_local doublereal svincr = 0.;
+    static thread_local integer svunit = 6;
+    static thread_local integer check = 1;
+    static thread_local doublereal done = 0.;
+    static thread_local doublereal entire = 0.;
+    static thread_local char finish[13] = "             ";
+    static thread_local logical first = TRUE_;
+    static thread_local integer ls = 1;
+    static thread_local doublereal lstsec = 0.;
+    static thread_local char start[55] = "                                  "
+	    "                     ";
 
     /* System generated locals */
     address a__1[5];

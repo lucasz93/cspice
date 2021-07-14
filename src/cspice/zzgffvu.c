@@ -26,7 +26,7 @@ static doublereal c_b130 = 2.;
 {
     /* Initialized data */
 
-    static doublereal svorig[3] = { 0.,0.,0. };
+    static thread_local doublereal svorig[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer i__1, i__2, i__3;

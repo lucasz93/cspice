@@ -11,24 +11,24 @@
 {
     /* Initialized data */
 
-    static integer pagesz = 24;
-    static logical doprmt = FALSE_;
-    static logical didpmt = FALSE_;
-    static integer wfactr = 0;
-    static char sectn[32] = "BODY                            ";
-    static char respns[255] = "                                             "
+    static thread_local integer pagesz = 24;
+    static thread_local logical doprmt = FALSE_;
+    static thread_local logical didpmt = FALSE_;
+    static thread_local integer wfactr = 0;
+    static thread_local char sectn[32] = "BODY                            ";
+    static thread_local char respns[255] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                  ";
-    static integer pagewd = 80;
-    static integer freq[5] = { -1,-1,-1,-1,-1 };
-    static integer need[5] = { 0,0,0,0,0 };
-    static integer size[5] = { 0,0,0,0,0 };
-    static integer row = 0;
-    static integer pageno = 0;
-    static logical body = TRUE_;
-    static logical domark = FALSE_;
+	    "                               ";
+    static thread_local integer pagewd = 80;
+    static thread_local integer freq[5] = { -1,-1,-1,-1,-1 };
+    static thread_local integer need[5] = { 0,0,0,0,0 };
+    static thread_local integer size[5] = { 0,0,0,0,0 };
+    static thread_local integer row = 0;
+    static thread_local integer pageno = 0;
+    static thread_local logical body = TRUE_;
+    static thread_local logical domark = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2;

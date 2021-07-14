@@ -21,13 +21,14 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical fresub = FALSE_;
-    static integer nft = 0;
-    static integer nit = 0;
-    static integer next = 0;
-    static integer savep = 0;
-    static doublereal savtol = 0.;
-    static char status[40] = "BOGUS ENTRY                             ";
+    static thread_local logical fresub = FALSE_;
+    static thread_local integer nft = 0;
+    static thread_local integer nit = 0;
+    static thread_local integer next = 0;
+    static thread_local integer savep = 0;
+    static thread_local doublereal savtol = 0.;
+    static thread_local char status[40] = "BOGUS ENTRY                      "
+	    "       ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

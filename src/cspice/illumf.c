@@ -21,11 +21,11 @@ static doublereal c_b56 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical pri = FALSE_;
-    static integer nsurf = 0;
-    static char prvcor[5] = "     ";
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local logical pri = FALSE_;
+    static thread_local integer nsurf = 0;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -33,8 +33,8 @@ static doublereal c_b56 = 1.;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static integer shape = 0;
+	    "                    ";
+    static thread_local integer shape = 0;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

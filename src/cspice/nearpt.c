@@ -18,16 +18,16 @@ static doublereal c_b108 = 1e-16;
 {
     /* Initialized data */
 
-    static char mssg[80*7] = "Axis A was nonpositive. ?                     "
-	    "                                  " "Axis B was nonpositive. ?  "
-	    "                                                     " "Axes A a"
-	    "nd B were nonpositive. ?                                        "
-	    "        " "Axis C was nonpositive. ?                            "
-	    "                           " "Axes A and C were nonpositive. ?  "
-	    "                                              " "Axes B and C we"
-	    "re nonpositive. ?                                                "
-	     "All three axes were nonpositive. ?                            "
-	    "                  ";
+    static thread_local char mssg[80*7] = "Axis A was nonpositive. ?        "
+	    "                                               " "Axis B was non"
+	    "positive. ?                                                     "
+	    "  " "Axes A and B were nonpositive. ?                           "
+	    "                     " "Axis C was nonpositive. ?               "
+	    "                                        " "Axes A and C were non"
+	    "positive. ?                                                " 
+	    "Axes B and C were nonpositive. ?                               "
+	    "                 " "All three axes were nonpositive. ?          "
+	    "                                    ";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

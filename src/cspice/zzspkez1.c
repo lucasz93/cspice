@@ -16,8 +16,8 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;

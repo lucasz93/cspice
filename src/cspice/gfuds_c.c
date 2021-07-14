@@ -52,6 +52,7 @@
    #include "SpiceZad.h"
    #include "SpiceZst.h"
    #include "zzalloc.h"
+   #include "f2c.h"
    #undef   gfuds_c
 
    void gfuds_c (  void             ( * udfuns ) ( SpiceDouble       et,
@@ -869,7 +870,7 @@
 
    doublereal              * work;
 
-   static SpiceInt           nw = SPICE_GF_NWMAX;
+   static thread_local SpiceInt nw = SPICE_GF_NWMAX;
 
    SpiceInt                  nBytes;
 

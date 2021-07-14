@@ -22,15 +22,15 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char menutl[20] = "PCK Summary Options ";
-    static char menuvl[20*5] = "QUIT                " "Skip                " 
-	    "ENTIRE_FILE         " "BY_BODY_ID          " "BY_TIME_INTERVAL "
-	    "   ";
-    static char menutx[40*5] = "Quit, returning to main menu.           " 
-	    "Skip                                    " "Summarize entire fil"
-	    "e.                  " "Summarize by NAIF body ID code.         " 
-	    "Summarize by time interval.             ";
-    static char menunm[1*5] = "Q" "." "F" "B" "T";
+    static thread_local char menutl[20] = "PCK Summary Options ";
+    static thread_local char menuvl[20*5] = "QUIT                " "Skip    "
+	    "            " "ENTIRE_FILE         " "BY_BODY_ID          " "BY_"
+	    "TIME_INTERVAL    ";
+    static thread_local char menutx[40*5] = "Quit, returning to main menu.  "
+	    "         " "Skip                                    " "Summarize"
+	    " entire file.                  " "Summarize by NAIF body ID code"
+	    ".         " "Summarize by time interval.             ";
+    static thread_local char menunm[1*5] = "Q" "." "F" "B" "T";
 
     /* System generated locals */
     integer i__1;
@@ -99,30 +99,30 @@ static integer c__0 = 0;
     static thread_local char typout[255];
 
     /* Fortran I/O blocks */
-    static cilist io___22 = { 0, 6, 0, 0, 0 };
-    static cilist io___23 = { 0, 6, 0, 0, 0 };
-    static cilist io___24 = { 0, 6, 0, 0, 0 };
-    static cilist io___25 = { 0, 6, 0, 0, 0 };
-    static cilist io___26 = { 0, 6, 0, 0, 0 };
-    static cilist io___27 = { 0, 6, 0, 0, 0 };
-    static cilist io___28 = { 0, 6, 0, 0, 0 };
-    static cilist io___29 = { 0, 6, 0, 0, 0 };
-    static cilist io___31 = { 0, 6, 0, 0, 0 };
-    static cilist io___32 = { 0, 6, 0, 0, 0 };
-    static cilist io___33 = { 0, 6, 0, 0, 0 };
-    static cilist io___35 = { 0, 6, 0, 0, 0 };
-    static cilist io___36 = { 0, 6, 0, 0, 0 };
-    static cilist io___37 = { 0, 6, 0, 0, 0 };
-    static cilist io___38 = { 0, 6, 0, 0, 0 };
-    static cilist io___40 = { 0, 6, 0, 0, 0 };
-    static cilist io___41 = { 0, 6, 0, 0, 0 };
-    static cilist io___42 = { 0, 6, 0, 0, 0 };
-    static cilist io___43 = { 0, 6, 0, 0, 0 };
-    static cilist io___45 = { 0, 6, 0, 0, 0 };
-    static cilist io___46 = { 0, 6, 0, 0, 0 };
-    static cilist io___47 = { 0, 6, 0, 0, 0 };
-    static cilist io___48 = { 0, 6, 0, 0, 0 };
-    static cilist io___50 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___22 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___23 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___24 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___25 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___26 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___27 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___28 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___29 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___31 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___32 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___33 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___35 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___36 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___37 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___38 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___40 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___41 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___42 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___43 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___45 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___46 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___47 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___48 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___50 = { 0, 6, 0, 0, 0 };
 
 
 /* $ Abstract */

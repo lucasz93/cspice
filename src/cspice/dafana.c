@@ -18,9 +18,9 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer sthead = -1;
-    static integer stfptr = -1;
+    static thread_local logical first = TRUE_;
+    static thread_local integer sthead = -1;
+    static thread_local integer stfptr = -1;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;

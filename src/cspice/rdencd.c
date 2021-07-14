@@ -38,7 +38,7 @@ static integer c__1 = 1;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___4 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

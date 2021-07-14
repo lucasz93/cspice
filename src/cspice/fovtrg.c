@@ -13,7 +13,7 @@
 {
     /* Initialized data */
 
-    static doublereal raydir[3] = { 0.,0.,0. };
+    static thread_local doublereal raydir[3] = { 0.,0.,0. };
 
     extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
 	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 

@@ -19,8 +19,8 @@ static doublereal c_b45 = .5;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -28,8 +28,8 @@ static doublereal c_b45 = .5;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static integer svprvt = 0;
+	    "                    ";
+    static thread_local integer svprvt = 0;
 
     /* System generated locals */
     integer i__1;

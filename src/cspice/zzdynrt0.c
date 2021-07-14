@@ -24,12 +24,13 @@ static integer c__20 = 20;
 {
     /* Initialized data */
 
-    static char axes[1*3] = "X" "Y" "Z";
-    static logical first = TRUE_;
-    static char itmcof[32*3] = "ANGLE_1_COEFFS                  " "ANGLE_2_C"
-	    "OEFFS                  " "ANGLE_3_COEFFS                  ";
-    static char itmsep[32] = "ANGLE_SEP_TOL                   ";
-    static char vname[4*2] = "PRI_" "SEC_";
+    static thread_local char axes[1*3] = "X" "Y" "Z";
+    static thread_local logical first = TRUE_;
+    static thread_local char itmcof[32*3] = "ANGLE_1_COEFFS                  "
+	     "ANGLE_2_COEFFS                  " "ANGLE_3_COEFFS             "
+	    "     ";
+    static thread_local char itmsep[32] = "ANGLE_SEP_TOL                   ";
+    static thread_local char vname[4*2] = "PRI_" "SEC_";
 
     /* System generated locals */
     address a__1[2];

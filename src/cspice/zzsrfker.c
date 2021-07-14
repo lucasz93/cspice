@@ -20,9 +20,10 @@ static integer c__2003 = 2003;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char names[32*3] = "NAIF_SURFACE_BODY               " "NAIF_SURFA"
-	    "CE_CODE               " "NAIF_SURFACE_NAME               ";
+    static thread_local logical pass1 = TRUE_;
+    static thread_local char names[32*3] = "NAIF_SURFACE_BODY               " 
+	    "NAIF_SURFACE_CODE               " "NAIF_SURFACE_NAME           "
+	    "    ";
 
     /* System generated locals */
     integer i__1;

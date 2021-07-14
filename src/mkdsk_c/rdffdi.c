@@ -17,11 +17,11 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char fmtsav[255] = "X                                            "
+    static thread_local char fmtsav[255] = "X                               "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                  ";
+	    "                               ";
 
     /* System generated locals */
     integer i__1, i__2;

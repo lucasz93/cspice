@@ -22,7 +22,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
+    static thread_local doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;

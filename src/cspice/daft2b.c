@@ -58,18 +58,18 @@ static integer c__5 = 5;
     doublereal sum[125];
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 0 };
-    static cilist io___6 = { 1, 0, 1, 0, 0 };
-    static cilist io___13 = { 1, 0, 1, 0, 0 };
-    static cilist io___15 = { 1, 0, 1, 0, 0 };
-    static cilist io___17 = { 1, 0, 1, 0, 0 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
-    static cilist io___23 = { 1, 0, 1, 0, 0 };
-    static cilist io___25 = { 1, 0, 1, 0, 0 };
-    static cilist io___27 = { 1, 0, 1, 0, 0 };
-    static cilist io___28 = { 1, 0, 1, 0, 0 };
-    static cilist io___29 = { 1, 0, 1, 0, 0 };
-    static cilist io___30 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___5 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___6 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___13 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___15 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___17 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___20 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___23 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___25 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___27 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___28 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___29 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___30 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

@@ -34,7 +34,7 @@
 {
     /* Initialized data */
 
-    static char equote[1] = "@";
+    static thread_local char equote[1] = "@";
 
 
 /*     This is simply a utility routine that sets the special */

@@ -20,7 +20,7 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2], a__2[3];

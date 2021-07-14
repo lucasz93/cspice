@@ -48,8 +48,8 @@ static integer c__1 = 1;
     integer nrr, pos;
 
     /* Fortran I/O blocks */
-    static cilist io___16 = { 1, 0, 1, 0, 0 };
-    static cilist io___18 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___16 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___18 = { 1, 0, 0, 0, 0 };
 
 
 /* $ Abstract */

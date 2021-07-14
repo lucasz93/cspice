@@ -54,6 +54,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
 
    void fovtrg_c ( ConstSpiceChar   * inst,
                    ConstSpiceChar   * target,
@@ -602,7 +603,7 @@
    /*
    Static variables
    */
-   static const SpiceChar  * blankStr = " ";
+   static thread_local const SpiceChar  * blankStr = " ";
    
    /*
    Participate in error tracing.

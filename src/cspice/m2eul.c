@@ -17,7 +17,7 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
+    static thread_local integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;

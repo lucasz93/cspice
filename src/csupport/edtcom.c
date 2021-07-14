@@ -19,10 +19,10 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char editor[132] = "emacs                                        "
+    static thread_local char editor[132] = "emacs                           "
 	    "                                                                "
-	    "                       ";
-    static logical first = TRUE_;
+	    "                                    ";
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2];

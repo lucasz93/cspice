@@ -62,6 +62,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZad.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
    #undef gffove_c
 
    void gffove_c ( ConstSpiceChar     * inst,
@@ -1474,7 +1475,7 @@
    /*
    Static variables
    */
-   static const SpiceChar  * blankStr = " ";
+   static thread_local const SpiceChar  * blankStr = " ";
 
 
 

@@ -56,6 +56,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "zzalloc.h"
+   #include "f2c.h"
 
    void gfsep_c (  ConstSpiceChar     * targ1,
                    ConstSpiceChar     * shape1,
@@ -922,7 +923,7 @@
    */
    doublereal            * work;
 
-   static SpiceInt         nw = SPICE_GF_NWSEP;
+   static thread_local SpiceInt nw = SPICE_GF_NWSEP;
    SpiceInt                nBytes;
 
 

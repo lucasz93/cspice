@@ -19,8 +19,8 @@ static doublereal c_b25 = 0.;
 {
     /* Initialized data */
 
-    static logical doinit = TRUE_;
-    static logical first = TRUE_;
+    static thread_local logical doinit = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

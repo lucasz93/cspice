@@ -11,13 +11,13 @@
 {
     /* Initialized data */
 
-    static logical frstim = TRUE_;
-    static char file[255] = "                                               "
+    static thread_local logical frstim = TRUE_;
+    static thread_local char file[255] = "                                  "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                ";
-    static integer linnum = 0;
+	    "                             ";
+    static thread_local integer linnum = 0;
 
     /* System generated locals */
     integer i__1;

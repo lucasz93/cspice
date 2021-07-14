@@ -16,7 +16,7 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2];

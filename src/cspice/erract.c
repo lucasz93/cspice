@@ -16,8 +16,8 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char actns[7*5] = "ABORT  " "REPORT " "RETURN " "IGNORE " "DEFAULT"
-	    ;
+    static thread_local char actns[7*5] = "ABORT  " "REPORT " "RETURN " "IGN"
+	    "ORE " "DEFAULT";
 
     /* System generated locals */
     address a__1[2];

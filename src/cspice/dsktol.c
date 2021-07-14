@@ -14,10 +14,12 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal dppars[6] = { 1e-10,1e-8,1e-10,1e-7,1e-12,1e-12 };
-    static logical isfixd[6] = { FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_ };
-    static char names[6*6] = "XFRACT" "SGREED" "SGPADM" "PTMEMM" "ANGMRG" 
-	    "LONALI";
+    static thread_local doublereal dppars[6] = { 1e-10,1e-8,1e-10,1e-7,1e-12,
+	    1e-12 };
+    static thread_local logical isfixd[6] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    TRUE_,TRUE_ };
+    static thread_local char names[6*6] = "XFRACT" "SGREED" "SGPADM" "PTMEMM" 
+	    "ANGMRG" "LONALI";
 
     /* System generated locals */
     integer i__1;

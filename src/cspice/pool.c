@@ -27,7 +27,7 @@ static integer c__32 = 32;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

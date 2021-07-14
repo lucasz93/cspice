@@ -17,11 +17,11 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static char pcktyp[80*3] = "***Not Used***                              "
-	    "                                    " "Fixed Width, Fixed Order "
-	    "Chebyshev Polynomials: Angles                          " "Variab"
-	    "le Width Chebyshev Polynomials Angles (in degrees!!!)           "
-	    "          ";
+    static thread_local char pcktyp[80*3] = "***Not Used***                 "
+	    "                                                 " "Fixed Width,"
+	    " Fixed Order Chebyshev Polynomials: Angles                      "
+	    "    " "Variable Width Chebyshev Polynomials Angles (in degrees!!"
+	    "!)                     ";
 
     /* System generated locals */
     integer i__1;

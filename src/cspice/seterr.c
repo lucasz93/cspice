@@ -10,7 +10,7 @@ logical seterr_0_(int n__, logical *status)
 {
     /* Initialized data */
 
-    static logical svstat = FALSE_;
+    static thread_local logical svstat = FALSE_;
 
     /* System generated locals */
     logical ret_val;

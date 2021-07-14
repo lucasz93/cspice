@@ -53,6 +53,7 @@
    #include "SpiceZad.h"
    #include "SpiceZst.h"
    #include "zzalloc.h"
+   #include "f2c.h"
    #undef gfevnt_c
 
    void gfevnt_c ( void             ( * udstep ) ( SpiceDouble       et,
@@ -1359,7 +1360,7 @@
    
    doublereal              * work;
 
-   static SpiceInt           nw = SPICE_GF_NWMAX;
+   static thread_local SpiceInt nw = SPICE_GF_NWMAX;
    
    SpiceInt                  nBytes;
    SpiceInt                  fstr_Len_qpnams;

@@ -76,8 +76,8 @@ static integer c__4 = 4;
     extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 1, 0, 0 };
-    static cilist io___7 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___3 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___7 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

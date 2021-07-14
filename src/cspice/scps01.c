@@ -15,10 +15,10 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static char namlst[60*3] = "SCLK01_N_FIELDS                             "
-	    "                " "SCLK01_OFFSETS                               "
-	    "               " "SCLK01_MODULI                                 "
-	    "              ";
+    static thread_local char namlst[60*3] = "SCLK01_N_FIELDS                "
+	    "                             " "SCLK01_OFFSETS                  "
+	    "                            " "SCLK01_MODULI                    "
+	    "                           ";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

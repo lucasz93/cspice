@@ -18,28 +18,28 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char units[16*31] = "RADIANS         " "DEGREES         " "ARCMIN"
-	    "UTES      " "ARCSECONDS      " "HOURANGLE       " "MINUTEANGLE  "
-	    "   " "SECONDANGLE     " "METERS          " "KM              " 
-	    "CM              " "MM              " "LIGHTSECS       " "AU    "
-	    "          " "M               " "KILOMETERS      " "CENTIMETERS  "
-	    "   " "MILLIMETERS     " "FEET            " "INCHES          " 
-	    "STATUTE_MILES   " "NAUTICAL_MILES  " "YARDS           " "LIGHTY"
-	    "EARS      " "PARSECS         " "SECONDS         " "MINUTES      "
-	    "   " "HOURS           " "DAYS            " "JULIAN_YEARS    " 
-	    "TROPICAL_YEARS  " "YEARS           ";
-    static doublereal cnvrtn[31] = { 0.0,1.,.016666666666666666,
+    static thread_local logical first = TRUE_;
+    static thread_local char units[16*31] = "RADIANS         " "DEGREES     "
+	    "    " "ARCMINUTES      " "ARCSECONDS      " "HOURANGLE       " 
+	    "MINUTEANGLE     " "SECONDANGLE     " "METERS          " "KM    "
+	    "          " "CM              " "MM              " "LIGHTSECS    "
+	    "   " "AU              " "M               " "KILOMETERS      " 
+	    "CENTIMETERS     " "MILLIMETERS     " "FEET            " "INCHES"
+	    "          " "STATUTE_MILES   " "NAUTICAL_MILES  " "YARDS        "
+	    "   " "LIGHTYEARS      " "PARSECS         " "SECONDS         " 
+	    "MINUTES         " "HOURS           " "DAYS            " "JULIAN"
+	    "_YEARS    " "TROPICAL_YEARS  " "YEARS           ";
+    static thread_local doublereal cnvrtn[31] = { 0.0,1.,.016666666666666666,
 	    2.7777777777777778e-4,15.,.25,.0041666666666666666,1.,1e3,.01,
 	    .001,299792458.,149597870613.68887,1.,1e3,.01,.001,.3048,.0254,
 	    1609.344,1852.,.9144,9460730472580800.,30856775797231604.,1.,60.,
 	    3600.,86400.,31557600.,31556925.976319999,31557600. };
-    static char type__[8*31] = "ANGLE   " "ANGLE   " "ANGLE   " "ANGLE   " 
-	    "ANGLE   " "ANGLE   " "ANGLE   " "DISTANCE" "DISTANCE" "DISTANCE" 
+    static thread_local char type__[8*31] = "ANGLE   " "ANGLE   " "ANGLE   " 
+	    "ANGLE   " "ANGLE   " "ANGLE   " "ANGLE   " "DISTANCE" "DISTANCE" 
 	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
 	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
-	    "DISTANCE" "DISTANCE" "TIME    " "TIME    " "TIME    " "TIME    " 
-	    "TIME    " "TIME    " "TIME    ";
+	    "DISTANCE" "DISTANCE" "DISTANCE" "TIME    " "TIME    " "TIME    " 
+	    "TIME    " "TIME    " "TIME    " "TIME    ";
 
     /* System generated locals */
     address a__1[5], a__2[3], a__3[9];

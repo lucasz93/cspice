@@ -27,9 +27,9 @@ static doublereal c_b70 = 0.;
 {
     /* Initialized data */
 
-    static char ops[6*7] = "<     " "=     " ">     " "LOCMIN" "ABSMIN" "LOC"
-	    "MAX" "ABSMAX";
-    static doublereal y[3] = { 0.,1.,0. };
+    static thread_local char ops[6*7] = "<     " "=     " ">     " "LOCMIN" 
+	    "ABSMIN" "LOCMAX" "ABSMAX";
+    static thread_local doublereal y[3] = { 0.,1.,0. };
 
     /* System generated locals */
     integer work_dim1, work_dim2, work_offset, i__1, i__2, i__3, i__4;

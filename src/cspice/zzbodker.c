@@ -19,8 +19,8 @@ static integer c__14983 = 14983;
 {
     /* Initialized data */
 
-    static char nbc[32] = "NAIF_BODY_CODE                  ";
-    static char nbn[32] = "NAIF_BODY_NAME                  ";
+    static thread_local char nbc[32] = "NAIF_BODY_CODE                  ";
+    static thread_local char nbn[32] = "NAIF_BODY_NAME                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

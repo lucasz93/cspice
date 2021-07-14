@@ -34,7 +34,7 @@
 {
     /* Initialized data */
 
-    static char delim[1] = ";";
+    static thread_local char delim[1] = ";";
 
 
 /*     This is simply a utility routine that sets the special */

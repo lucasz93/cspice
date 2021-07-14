@@ -10,7 +10,7 @@
 {
     /* Initialized data */
 
-    static integer savact = 5;
+    static thread_local integer savact = 5;
 
 /* $ Abstract */
 

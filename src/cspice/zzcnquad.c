@@ -15,8 +15,8 @@ static doublereal c_b8 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal invub = -1.;
+    static thread_local logical first = TRUE_;
+    static thread_local doublereal invub = -1.;
 
     /* System generated locals */
     integer i__1, i__2;

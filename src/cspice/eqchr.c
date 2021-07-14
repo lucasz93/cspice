@@ -10,7 +10,7 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

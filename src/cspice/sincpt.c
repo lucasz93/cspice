@@ -18,9 +18,9 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -28,11 +28,11 @@ static integer c__100 = 100;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
-    static logical usestl = FALSE_;
-    static logical xmit = FALSE_;
+	    "                    ";
+    static thread_local logical usecn = FALSE_;
+    static thread_local logical uselt = FALSE_;
+    static thread_local logical usestl = FALSE_;
+    static thread_local logical xmit = FALSE_;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

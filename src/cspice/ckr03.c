@@ -17,11 +17,11 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal prevs = -1.;
-    static doublereal prevn = -1.;
-    static integer lhand = 0;
-    static integer lbeg = -1;
-    static integer lend = -1;
+    static thread_local doublereal prevs = -1.;
+    static thread_local doublereal prevn = -1.;
+    static thread_local integer lhand = 0;
+    static thread_local integer lbeg = -1;
+    static thread_local integer lend = -1;
 
     /* System generated locals */
     integer i__1, i__2;

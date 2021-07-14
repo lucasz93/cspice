@@ -19,9 +19,9 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char optflg[2*5] = "-A" "-D" "-E" "-H" "-R";
-    static char optnam[16*5] = "ADD_COMMENTS    " "DELETE_COMMENTS " "EXTRAC"
-	    "T_COMMENTS" "HELP            " "READ_COMMENTS   ";
+    static thread_local char optflg[2*5] = "-A" "-D" "-E" "-H" "-R";
+    static thread_local char optnam[16*5] = "ADD_COMMENTS    " "DELETE_COMME"
+	    "NTS " "EXTRACT_COMMENTS" "HELP            " "READ_COMMENTS   ";
 
     /* System generated locals */
     integer i__1, i__2;

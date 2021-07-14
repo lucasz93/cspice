@@ -19,12 +19,12 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char typlst[80*4] = "<Not implemented>                           "
-	    "                                    " "Shape model using triangu"
-	    "lar plates                                             " "<Not i"
-	    "mplemented>                                                     "
-	    "          " "Packed integer DEM                                 "
-	    "                             ";
+    static thread_local char typlst[80*4] = "<Not implemented>              "
+	    "                                                 " "Shape model "
+	    "using triangular plates                                         "
+	    "    " "<Not implemented>                                        "
+	    "                       " "Packed integer DEM                    "
+	    "                                          ";
 
     /* System generated locals */
     address a__1[2];

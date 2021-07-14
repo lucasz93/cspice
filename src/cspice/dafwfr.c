@@ -40,8 +40,8 @@ static integer c__1 = 1;
     char ifn[60];
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 1 };
-    static cilist io___14 = { 1, 0, 0, 0, 1 };
+    static thread_local cilist io___4 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___14 = { 1, 0, 0, 0, 1 };
 
 
 /* $ Abstract */

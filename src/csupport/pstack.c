@@ -11,9 +11,9 @@
 {
     /* Initialized data */
 
-    static integer buffrd = 0;
-    static integer currnt = 1;
-    static logical first = TRUE_;
+    static thread_local integer buffrd = 0;
+    static thread_local integer currnt = 1;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

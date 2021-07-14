@@ -22,23 +22,24 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char itypes[32*4] = "STATES                          " "ELEMENTS "
-	    "                       " "EQ_ELEMENTS                     " "TL_"
-	    "ELEMENTS                     ";
-    static logical eosgmr = FALSE_;
-    static logical ettags = FALSE_;
-    static char timdlm[3*2] = ",  " "   ";
-    static integer otypes[8] = { 5,8,9,10,12,13,15,17 };
-    static logical iotype[32]	/* was [4][8] */ = { TRUE_,TRUE_,FALSE_,
-	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,
-	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,FALSE_ };
-    static logical cmntfl = FALSE_;
-    static logical rakey = FALSE_;
-    static logical dekey = FALSE_;
-    static logical onerun = TRUE_;
-    static logical staepo = TRUE_;
-    static logical stoepo = TRUE_;
+    static thread_local char itypes[32*4] = "STATES                          "
+	     "ELEMENTS                        " "EQ_ELEMENTS                "
+	    "     " "TL_ELEMENTS                     ";
+    static thread_local logical eosgmr = FALSE_;
+    static thread_local logical ettags = FALSE_;
+    static thread_local char timdlm[3*2] = ",  " "   ";
+    static thread_local integer otypes[8] = { 5,8,9,10,12,13,15,17 };
+    static thread_local logical iotype[32]	/* was [4][8] */ = { TRUE_,
+	    TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,
+	    TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,
+	    FALSE_ };
+    static thread_local logical cmntfl = FALSE_;
+    static thread_local logical rakey = FALSE_;
+    static thread_local logical dekey = FALSE_;
+    static thread_local logical onerun = TRUE_;
+    static thread_local logical staepo = TRUE_;
+    static thread_local logical stoepo = TRUE_;
 
     /* System generated locals */
     address a__1[2], a__2[8];

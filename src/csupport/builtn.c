@@ -17,13 +17,13 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical dosav = TRUE_;
-    static logical dodisc = TRUE_;
-    static logical doedit = TRUE_;
-    static logical dosym = TRUE_;
-    static logical doenv = TRUE_;
-    static struct {
+    static thread_local logical first = TRUE_;
+    static thread_local logical dosav = TRUE_;
+    static thread_local logical dodisc = TRUE_;
+    static thread_local logical doedit = TRUE_;
+    static thread_local logical dosym = TRUE_;
+    static thread_local logical doenv = TRUE_;
+    static thread_local struct {
 	char fill_1[480];
 	char e_2[400];
 	} equiv_22 = { {0}, "SET[set]   EDITOR[editor] (1:)@word[rest]      "
@@ -36,7 +36,7 @@ static integer c__1 = 1;
 
 #define synval ((char *)&equiv_22)
 
-    static char spcial[8*2] = "        " "?       ";
+    static thread_local char spcial[8*2] = "        " "?       ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

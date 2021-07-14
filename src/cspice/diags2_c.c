@@ -47,6 +47,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
    #undef   diags2_c
    
 
@@ -321,7 +322,7 @@
    /*
    Static variables
    */
-   static SpiceDouble      ident [2][2] = { {1., 0.}, {0., 1.} };
+   static thread_local SpiceDouble ident [2][2] = { {1., 0.}, {0., 1.} };
 
 
    /*

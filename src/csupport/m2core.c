@@ -20,7 +20,7 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

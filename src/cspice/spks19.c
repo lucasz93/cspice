@@ -16,7 +16,7 @@ static doublereal c_b118 = 1.;
 {
     /* Initialized data */
 
-    static integer pktszs[3] = { 12,6,6 };
+    static thread_local integer pktszs[3] = { 12,6,6 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;

@@ -15,17 +15,17 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer ctr[2] = { -1,-1 };
-    static logical first = TRUE_;
-    static integer prvfid = 0;
-    static integer prvbod = 0;
-    static integer prvlst[100] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    static thread_local integer ctr[2] = { -1,-1 };
+    static thread_local logical first = TRUE_;
+    static thread_local integer prvfid = 0;
+    static thread_local integer prvbod = 0;
+    static thread_local integer prvlst[100] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0 };
-    static integer prvnls = -1;
-    static doublereal svmaxr = -1.;
-    static doublereal svminr = -1.;
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer prvnls = -1;
+    static thread_local doublereal svmaxr = -1.;
+    static thread_local doublereal svminr = -1.;
 
     /* System generated locals */
     integer i__1;

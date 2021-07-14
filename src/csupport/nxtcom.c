@@ -18,12 +18,12 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer buffed = 0;
-    static logical first = TRUE_;
-    static logical readng = FALSE_;
-    static char savdlm[1] = ";";
-    static char savpmt[80] = "                                              "
-	    "                                  ";
+    static thread_local integer buffed = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local logical readng = FALSE_;
+    static thread_local char savdlm[1] = ";";
+    static thread_local char savpmt[80] = "                                 "
+	    "                                               ";
 
     /* System generated locals */
     integer i__1;

@@ -18,9 +18,9 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer nft = 0;
-    static integer nbt = 0;
-    static integer next = 0;
+    static thread_local integer nft = 0;
+    static thread_local integer nbt = 0;
+    static thread_local integer next = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

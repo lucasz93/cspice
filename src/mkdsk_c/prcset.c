@@ -30,24 +30,24 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static char csynms[255*4] = "LATITUDINAL                                "
+    static thread_local char csynms[255*4] = "LATITUDINAL                   "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                    " "CYLINDRICAL                              "
+	    "                                 " "CYLINDRICAL                 "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                      " "RECTANGULAR                            "
+	    "                                   " "RECTANGULAR               "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                        " "PLANETODETIC                         "
+	    "                                     " "PLANETODETIC            "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                          ";
-    static logical init = FALSE_;
+	    "                                       ";
+    static thread_local logical init = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2;

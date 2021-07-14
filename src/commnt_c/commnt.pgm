@@ -18,16 +18,16 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical insbln = TRUE_;
-    static char maintl[20] = "COMMNT Options      ";
-    static char mainvl[20*5] = "QUIT                " "ADD_COMMENTS        " 
-	    "READ_COMMENTS       " "EXTRACT_COMMENTS    " "DELETE_COMMENTS  "
-	    "   ";
-    static char maintx[40*5] = "Quit.                                   " 
-	    "Add comments to a binary file.          " "Read the comments in"
-	    " a binary file.     " "Extract comments from a binary file.    " 
-	    "Delete the comments in a binary file.   ";
-    static char mainnm[1*5] = "Q" "A" "R" "E" "D";
+    static thread_local logical insbln = TRUE_;
+    static thread_local char maintl[20] = "COMMNT Options      ";
+    static thread_local char mainvl[20*5] = "QUIT                " "ADD_COMM"
+	    "ENTS        " "READ_COMMENTS       " "EXTRACT_COMMENTS    " "DEL"
+	    "ETE_COMMENTS     ";
+    static thread_local char maintx[40*5] = "Quit.                          "
+	    "         " "Add comments to a binary file.          " "Read the "
+	    "comments in a binary file.     " "Extract comments from a binary"
+	    " file.    " "Delete the comments in a binary file.   ";
+    static thread_local char mainnm[1*5] = "Q" "A" "R" "E" "D";
 
     /* System generated locals */
     address a__1[3];

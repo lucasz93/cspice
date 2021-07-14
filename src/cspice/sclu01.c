@@ -18,37 +18,38 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static char namlst[80*9] = "SCLK01_COEFFICIENTS                         "
-	    "                                    " "SCLK_PARTITION_START     "
-	    "                                                       " "SCLK_P"
-	    "ARTITION_END                                                    "
-	    "          " "SCLK01_N_FIELDS                                    "
-	    "                             " "SCLK01_OFFSETS                  "
-	    "                                                " "SCLK01_MODULI"
-	    "                                                                "
-	    "   " "SCLK01_OUTPUT_DELIM                                       "
-	    "                      " "SCLK01_KERNEL_ID                       "
-	    "                                         " "SCLK01_TIME_SYSTEM  "
-	    "                                                            ";
-    static integer lb[9] = { 3,1,1,1,1,1,1,1,0 };
-    static char nfdmsg[320] = "# not found. Did you load the SCLK kernel?   "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                   ";
-    static char nummsg[320] = "Invalid number of values found for #:  #.    "
+    static thread_local char namlst[80*9] = "SCLK01_COEFFICIENTS            "
+	    "                                                 " "SCLK_PARTITI"
+	    "ON_START                                                        "
+	    "    " "SCLK_PARTITION_END                                       "
+	    "                       " "SCLK01_N_FIELDS                       "
+	    "                                          " "SCLK01_OFFSETS     "
+	    "                                                             " 
+	    "SCLK01_MODULI                                                  "
+	    "                 " "SCLK01_OUTPUT_DELIM                         "
+	    "                                    " "SCLK01_KERNEL_ID         "
+	    "                                                       " "SCLK01"
+	    "_TIME_SYSTEM                                                    "
+	    "          ";
+    static thread_local integer lb[9] = { 3,1,1,1,1,1,1,1,0 };
+    static thread_local char nfdmsg[320] = "# not found. Did you load the SC"
+	    "LK kernel?                                                      "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                                                                "
-	    "                   ";
-    static char bvlmsg[320] = "Invalid value found for #:  #.               "
-	    "                                                                "
-	    "                                                                "
+	    "                                ";
+    static thread_local char nummsg[320] = "Invalid number of values found f"
+	    "or #:  #.                                                       "
 	    "                                                                "
 	    "                                                                "
-	    "                   ";
+	    "                                                                "
+	    "                                ";
+    static thread_local char bvlmsg[320] = "Invalid value found for #:  #.  "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                                                "
+	    "                                ";
 
     /* System generated locals */
     integer i__1;

@@ -18,8 +18,10 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char binext[3*8] = "BSP" "BC " "BEE" "BPC" "BSP" "BC " "BEE" "BPC";
-    static char xfrext[3*8] = "TSP" "TC " "TEE" "TPC" "XSP" "XC " "XEE" "XPC";
+    static thread_local char binext[3*8] = "BSP" "BC " "BEE" "BPC" "BSP" 
+	    "BC " "BEE" "BPC";
+    static thread_local char xfrext[3*8] = "TSP" "TC " "TEE" "TPC" "XSP" 
+	    "XC " "XEE" "XPC";
 
     /* System generated locals */
     address a__1[2];

@@ -17,14 +17,14 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
-    static integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,273,304,334 }
-	    ;
-    static integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,274,305,335 }
-	    ;
-    static char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
+    static thread_local logical first = TRUE_;
+    static thread_local integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
+    static thread_local integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,
+	    273,304,334 };
+    static thread_local integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,
+	    274,305,335 };
+    static thread_local char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" 
+	    "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     address a__1[12];

@@ -17,8 +17,8 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical sthvnr[5000] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
+    static thread_local logical first = TRUE_;
+    static thread_local logical sthvnr[5000] = { FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
@@ -573,9 +573,10 @@ static integer c__128 = 128;
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer stfptr = -1;
-    static integer sthead = -1;
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_ };
+    static thread_local integer stfptr = -1;
+    static thread_local integer sthead = -1;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

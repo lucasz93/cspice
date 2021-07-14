@@ -16,8 +16,8 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
+    static thread_local logical pass1 = TRUE_;
+    static thread_local char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1;

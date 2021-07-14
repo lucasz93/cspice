@@ -19,25 +19,25 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer mxwnsz[4] = { 12,24,12,24 };
-    static integer svmiix = -1;
-    static integer svminb = -1;
-    static integer svn = -1;
-    static integer svnpkt = -1;
-    static integer svpkdb = -1;
-    static integer svpknd = -1;
-    static integer svpksz = -1;
-    static doublereal svrate = -1.;
-    static integer svstyp = -1;
-    static integer svwnsz = -1;
-    static logical pass1 = TRUE_;
-    static integer pktszs[4] = { 8,4,14,7 };
-    static integer svbeg = -1;
-    static doublereal svbtim = 0.;
-    static doublereal svetim = -1.;
-    static logical svfnd = FALSE_;
-    static integer svhan = 0;
-    static logical svlast = FALSE_;
+    static thread_local integer mxwnsz[4] = { 12,24,12,24 };
+    static thread_local integer svmiix = -1;
+    static thread_local integer svminb = -1;
+    static thread_local integer svn = -1;
+    static thread_local integer svnpkt = -1;
+    static thread_local integer svpkdb = -1;
+    static thread_local integer svpknd = -1;
+    static thread_local integer svpksz = -1;
+    static thread_local doublereal svrate = -1.;
+    static thread_local integer svstyp = -1;
+    static thread_local integer svwnsz = -1;
+    static thread_local logical pass1 = TRUE_;
+    static thread_local integer pktszs[4] = { 8,4,14,7 };
+    static thread_local integer svbeg = -1;
+    static thread_local doublereal svbtim = 0.;
+    static thread_local doublereal svetim = -1.;
+    static thread_local logical svfnd = FALSE_;
+    static thread_local integer svhan = 0;
+    static thread_local logical svlast = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2;

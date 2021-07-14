@@ -15,12 +15,14 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char tens[9*9] = "TEN      " "TWENTY   " "THIRTY   " "FORTY    " 
-	    "FIFTY    " "SIXTY    " "SEVENTY  " "EIGHTY   " "NINETY   ";
-    static char number[9*19] = "ONE      " "TWO      " "THREE    " "FOUR     "
-	     "FIVE     " "SIX      " "SEVEN    " "EIGHT    " "NINE     " 
-	    "TEN      " "ELEVEN   " "TWELVE   " "THIRTEEN " "FOURTEEN " "FIF"
-	    "TEEN  " "SIXTEEN  " "SEVENTEEN" "EIGHTEEN " "NINETEEN ";
+    static thread_local char tens[9*9] = "TEN      " "TWENTY   " "THIRTY   " 
+	    "FORTY    " "FIFTY    " "SIXTY    " "SEVENTY  " "EIGHTY   " "NIN"
+	    "ETY   ";
+    static thread_local char number[9*19] = "ONE      " "TWO      " "THREE  "
+	    "  " "FOUR     " "FIVE     " "SIX      " "SEVEN    " "EIGHT    " 
+	    "NINE     " "TEN      " "ELEVEN   " "TWELVE   " "THIRTEEN " "FOU"
+	    "RTEEN " "FIFTEEN  " "SIXTEEN  " "SEVENTEEN" "EIGHTEEN " "NINETEE"
+	    "N ";
 
     /* System generated locals */
     integer i__1;

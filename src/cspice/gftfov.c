@@ -20,7 +20,7 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static doublereal raydir[3] = { 0.,0.,0. };
+    static thread_local doublereal raydir[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer i__1;

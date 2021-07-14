@@ -40,12 +40,12 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char lstyle[128] = "LEFT 1 RIGHT 78                              "
+    static thread_local char lstyle[128] = "LEFT 1 RIGHT 78                 "
 	    "                                                                "
-	    "                   ";
-    static char sstyle[128] = "LEFT 1 RIGHT 78                              "
+	    "                                ";
+    static thread_local char sstyle[128] = "LEFT 1 RIGHT 78                 "
 	    "                                                                "
-	    "                   ";
+	    "                                ";
 
     /* System generated locals */
     integer i__1;

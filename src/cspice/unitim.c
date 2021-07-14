@@ -20,12 +20,12 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char missed[20*4] = "DELTET/DELTA_T_A, # " "DELTET/K, #         " 
-	    "DELTET/EB, #        " "DELTET/M, #         ";
-    static logical nodata = TRUE_;
-    static char vars__[16*4] = "DELTET/DELTA_T_A" "DELTET/K        " "DELTET"
-	    "/EB       " "DELTET/M        ";
+    static thread_local logical first = TRUE_;
+    static thread_local char missed[20*4] = "DELTET/DELTA_T_A, # " "DELTET/K"
+	    ", #         " "DELTET/EB, #        " "DELTET/M, #         ";
+    static thread_local logical nodata = TRUE_;
+    static thread_local char vars__[16*4] = "DELTET/DELTA_T_A" "DELTET/K    "
+	    "    " "DELTET/EB       " "DELTET/M        ";
 
     /* System generated locals */
     address a__1[14];

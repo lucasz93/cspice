@@ -21,16 +21,16 @@ static doublereal c_b338 = 100.;
 {
     /* Initialized data */
 
-    static char months[9*12] = "January  " "February " "March    " "April    "
-	     "May      " "June     " "July     " "August   " "September" 
-	    "October  " "November " "December ";
-    static integer mlen[12] = { 7,8,5,5,3,4,4,6,9,7,8,8 };
-    static char wkdays[9*7] = "Sunday   " "Monday   " "Tuesday  " "Wednesday" 
-	    "Thursday " "Friday   " "Saturday ";
-    static integer wklen[7] = { 6,6,7,9,8,6,8 };
-    static logical first = TRUE_;
-    static doublereal power[15] = { 1.,10.,100.,1e3,1e4,1e5,1e6,1e7,1e8,1e9,
-	    1e10,1e11,1e12,1e13,1e14 };
+    static thread_local char months[9*12] = "January  " "February " "March  "
+	    "  " "April    " "May      " "June     " "July     " "August   " 
+	    "September" "October  " "November " "December ";
+    static thread_local integer mlen[12] = { 7,8,5,5,3,4,4,6,9,7,8,8 };
+    static thread_local char wkdays[9*7] = "Sunday   " "Monday   " "Tuesday  "
+	     "Wednesday" "Thursday " "Friday   " "Saturday ";
+    static thread_local integer wklen[7] = { 6,6,7,9,8,6,8 };
+    static thread_local logical first = TRUE_;
+    static thread_local doublereal power[15] = { 1.,10.,100.,1e3,1e4,1e5,1e6,
+	    1e7,1e8,1e9,1e10,1e11,1e12,1e13,1e14 };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;

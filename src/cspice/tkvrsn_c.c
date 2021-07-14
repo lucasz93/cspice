@@ -46,6 +46,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
+   #include "f2c.h"
 
 
    ConstSpiceChar  * tkvrsn_c ( ConstSpiceChar * item ) 
@@ -174,7 +175,7 @@
    /*
    Static variables
    */
-   static SpiceChar        verStr [ MAXLEN ];
+   static thread_local SpiceChar verStr [ MAXLEN ];
 
    /*
    Local variables

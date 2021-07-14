@@ -16,22 +16,26 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char corlst[5*15] = "CN   " "CN+S " "LT   " "LT+S " "NONE " "RL   "
-	     "RL+S " "S    " "XCN  " "XCN+S" "XLT  " "XLT+S" "XRL  " "XRL+S" 
-	    "XS   ";
-    static logical geo[15] = { FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical lt[15] = { TRUE_,TRUE_,TRUE_,TRUE_,FALSE_,TRUE_,TRUE_,
-	    FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,FALSE_ };
-    static logical stl[15] = { FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,FALSE_,TRUE_,
-	    TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,TRUE_ };
-    static logical conv[15] = { TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical xmit[15] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_ };
-    static logical rel[15] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_ };
-    static logical first = TRUE_;
+    static thread_local char corlst[5*15] = "CN   " "CN+S " "LT   " "LT+S " 
+	    "NONE " "RL   " "RL+S " "S    " "XCN  " "XCN+S" "XLT  " "XLT+S" 
+	    "XRL  " "XRL+S" "XS   ";
+    static thread_local logical geo[15] = { FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_ };
+    static thread_local logical lt[15] = { TRUE_,TRUE_,TRUE_,TRUE_,FALSE_,
+	    TRUE_,TRUE_,FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,FALSE_ };
+    static thread_local logical stl[15] = { FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,
+	    FALSE_,TRUE_,TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,TRUE_ };
+    static thread_local logical conv[15] = { TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_ };
+    static thread_local logical xmit[15] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,
+	    TRUE_ };
+    static thread_local logical rel[15] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,
+	    FALSE_ };
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;

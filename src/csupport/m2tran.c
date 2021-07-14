@@ -15,22 +15,24 @@ static integer c__19 = 19;
 {
     /* Initialized data */
 
-    static char quick[4*19] = "@alp" "@bod" "@cal" "@day" "@end" "@eng" "@epo"
-	     "@int" "@mon" "@nam" "@num" "@the" "@tim" "@uni" "@wor" "@yea" 
-	    "{   " "|   " "}   ";
-    static integer temps[19] = { 6,5,0,0,0,8,0,4,6,5,7,5,0,5,5,0,0,0,0 };
-    static integer checks[19] = { 2,2,1,1,1,2,1,2,2,2,2,2,1,2,2,1,0,0,0 };
-    static integer pntrs[19] = { 1,3,5,6,7,8,10,11,13,15,17,19,21,22,24,26,26,
-	    26,26 };
-    static char full[16*26] = "@alpha          " "@alpha(%*)      " "@body  "
-	    "         " "@body(%*)       " "@calendar       " "@day          "
-	    "  " "@end            " "@english        " "@english(%*)    " 
-	    "@epoch          " "@int            " "@int(*:*)       " "@month"
-	    "          " "@month(%*)      " "@name           " "@name(%*)    "
-	    "   " "@number         " "@number(*:*)    " "@then           " 
-	    "@then(%*)       " "@time           " "@unit           " "@unit("
-	    "%*)       " "@word           " "@word(%*)       " "@year        "
-	    "   ";
+    static thread_local char quick[4*19] = "@alp" "@bod" "@cal" "@day" "@end" 
+	    "@eng" "@epo" "@int" "@mon" "@nam" "@num" "@the" "@tim" "@uni" 
+	    "@wor" "@yea" "{   " "|   " "}   ";
+    static thread_local integer temps[19] = { 6,5,0,0,0,8,0,4,6,5,7,5,0,5,5,0,
+	    0,0,0 };
+    static thread_local integer checks[19] = { 2,2,1,1,1,2,1,2,2,2,2,2,1,2,2,
+	    1,0,0,0 };
+    static thread_local integer pntrs[19] = { 1,3,5,6,7,8,10,11,13,15,17,19,
+	    21,22,24,26,26,26,26 };
+    static thread_local char full[16*26] = "@alpha          " "@alpha(%*)   "
+	    "   " "@body           " "@body(%*)       " "@calendar       " 
+	    "@day            " "@end            " "@english        " "@engli"
+	    "sh(%*)    " "@epoch          " "@int            " "@int(*:*)    "
+	    "   " "@month          " "@month(%*)      " "@name           " 
+	    "@name(%*)       " "@number         " "@number(*:*)    " "@then "
+	    "          " "@then(%*)       " "@time           " "@unit        "
+	    "   " "@unit(%*)       " "@word           " "@word(%*)       " 
+	    "@year           ";
 
     /* System generated locals */
     integer i__1, i__2;

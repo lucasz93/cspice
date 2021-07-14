@@ -10,11 +10,11 @@
 {
     /* Initialized data */
 
-    static char savdev[255] = "SCREEN                                       "
+    static thread_local char savdev[255] = "SCREEN                          "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                  ";
+	    "                               ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

@@ -17,10 +17,10 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char flags[5*9] = "NONE " "LT   " "LT+S " "CN   " "CN+S " "XLT  " 
-	    "XLT+S" "XCN  " "XCN+S";
-    static char prvcor[5] = "     ";
+    static thread_local logical first = TRUE_;
+    static thread_local char flags[5*9] = "NONE " "LT   " "LT+S " "CN   " 
+	    "CN+S " "XLT  " "XLT+S" "XCN  " "XCN+S";
+    static thread_local char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;

@@ -12,9 +12,9 @@
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
-    static doublereal y[3] = { 0.,1.,0. };
-    static doublereal z__[3] = { 0.,0.,1. };
+    static thread_local doublereal origin[3] = { 0.,0.,0. };
+    static thread_local doublereal y[3] = { 0.,1.,0. };
+    static thread_local doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     integer i__1, i__2;

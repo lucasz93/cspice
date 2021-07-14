@@ -11,7 +11,7 @@
 {
     /* System generated locals */
     integer i__1, i__2;
-    static doublereal equiv_0[125];
+    static thread_local doublereal equiv_0[125];
 
     /* Local variables */
     integer m, n;

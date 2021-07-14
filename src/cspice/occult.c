@@ -18,7 +18,8 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static char occtyp[9*3] = "PARTIAL  " "ANNULAR  " "FULL     ";
+    static thread_local char occtyp[9*3] = "PARTIAL  " "ANNULAR  " "FULL     "
+	    ;
 
     /* System generated locals */
     integer i__1;

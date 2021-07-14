@@ -13,11 +13,11 @@
 {
     /* Initialized data */
 
-    static char fill[80] = "                                                "
-	    "                                ";
-    static integer pad = 1;
-    static char bmark[16] = ".....<          ";
-    static char emark[16] = ">.....          ";
+    static thread_local char fill[80] = "                                   "
+	    "                                             ";
+    static thread_local integer pad = 1;
+    static thread_local char bmark[16] = ".....<          ";
+    static thread_local char emark[16] = ">.....          ";
 
     /* System generated locals */
     integer i__1, i__2;

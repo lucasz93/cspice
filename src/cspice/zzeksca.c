@@ -16,8 +16,8 @@ static integer c_b65 = 2500000;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer t = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer t = 0;
 
     /* System generated locals */
     integer i__1, i__2;

@@ -27,13 +27,13 @@ static doublereal c_b189 = 60.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
-    static integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,273,304,334 }
-	    ;
-    static integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,274,305,335 }
-	    ;
-    static logical nodata = TRUE_;
+    static thread_local logical first = TRUE_;
+    static thread_local integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
+    static thread_local integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,
+	    273,304,334 };
+    static thread_local integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,
+	    274,305,335 };
+    static thread_local logical nodata = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;

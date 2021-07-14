@@ -48,15 +48,15 @@ static integer c__4 = 4;
     char msg[80];
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 0, 6, 0, 0, 0 };
-    static cilist io___4 = { 0, 6, 0, 0, 0 };
-    static cilist io___5 = { 0, 6, 0, 0, 0 };
-    static cilist io___7 = { 0, 6, 0, 0, 0 };
-    static cilist io___8 = { 0, 6, 0, 0, 0 };
-    static cilist io___10 = { 0, 6, 0, 0, 0 };
-    static cilist io___11 = { 0, 6, 0, 0, 0 };
-    static cilist io___12 = { 0, 6, 0, 0, 0 };
-    static cilist io___13 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___3 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___4 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___5 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___7 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___8 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___10 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___11 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___12 = { 0, 6, 0, 0, 0 };
+    static thread_local cilist io___13 = { 0, 6, 0, 0, 0 };
 
 
 

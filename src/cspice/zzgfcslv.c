@@ -27,13 +27,14 @@ static doublereal c_b36 = 0.;
 {
     /* Initialized data */
 
-    static char cnames[6*7] = ">     " "=     " "<     " "ABSMAX" "ABSMIN" 
-	    "LOCMAX" "LOCMIN";
-    static char rptpre[55*3] = "Coordinate pass 1 of #                      "
-	    "           " "Coordinate pass 2 of #                            "
-	    "     " "Intercept existence pass 1 of 1                        ";
-    static char rptsuf[13*3] = "done.        " "done.        " "done.        "
-	    ;
+    static thread_local char cnames[6*7] = ">     " "=     " "<     " "ABSMAX"
+	     "ABSMIN" "LOCMAX" "LOCMIN";
+    static thread_local char rptpre[55*3] = "Coordinate pass 1 of #         "
+	    "                        " "Coordinate pass 2 of #               "
+	    "                  " "Intercept existence pass 1 of 1            "
+	    "            ";
+    static thread_local char rptsuf[13*3] = "done.        " "done.        " 
+	    "done.        ";
 
     /* System generated locals */
     integer work_dim1, work_dim2, work_offset, i__1, i__2, i__3;

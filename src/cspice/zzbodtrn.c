@@ -16,13 +16,13 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical bodchg = FALSE_;
-    static logical first = TRUE_;
-    static logical extker = FALSE_;
-    static logical nodata = TRUE_;
-    static integer nwatch = 2;
-    static char wnames[32*2] = "NAIF_BODY_NAME                  " "NAIF_BODY"
-	    "_CODE                  ";
+    static thread_local logical bodchg = FALSE_;
+    static thread_local logical first = TRUE_;
+    static thread_local logical extker = FALSE_;
+    static thread_local logical nodata = TRUE_;
+    static thread_local integer nwatch = 2;
+    static thread_local char wnames[32*2] = "NAIF_BODY_NAME                  "
+	     "NAIF_BODY_CODE                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

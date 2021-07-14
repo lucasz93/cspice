@@ -15,10 +15,10 @@ static doublereal c_b16 = 1.;
 {
     /* Initialized data */
 
-    static doublereal gradm[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
-    static doublereal m[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
+    static thread_local doublereal gradm[9]	/* was [3][3] */ = { 1.,0.,0.,
+	    0.,1.,0.,0.,0.,1. };
+    static thread_local doublereal m[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,
+	    0.,0.,0.,1. };
 
     /* System generated locals */
     integer i__1, i__2;

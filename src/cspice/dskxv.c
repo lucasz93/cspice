@@ -13,9 +13,9 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvfrm[32] = "                                ";
-    static integer prvtcd = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local char prvfrm[32] = "                                ";
+    static thread_local integer prvtcd = 0;
 
     /* System generated locals */
     integer i__1;

@@ -31,9 +31,9 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static doublereal grdext[3] = { -1.,-1.,-1. };
-    static integer prvhan = 0;
-    static integer prvdsc[8] = { 0,0,0,0,0,0,0,0 };
+    static thread_local doublereal grdext[3] = { -1.,-1.,-1. };
+    static thread_local integer prvhan = 0;
+    static thread_local integer prvdsc[8] = { 0,0,0,0,0,0,0,0 };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

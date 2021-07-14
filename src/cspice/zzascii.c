@@ -40,7 +40,7 @@ static integer c__1 = 1;
     integer unxcnt;
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___5 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */

@@ -16,17 +16,18 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char defzon[16] = "                ";
-    static char defsys[16] = "UTC             ";
-    static char mixed[16] = "MIXED           ";
-    static char juln[16] = "JULIAN          ";
-    static char gregrn[16] = "GREGORIAN       ";
-    static doublereal dhoff = 0.;
-    static doublereal dmoff = 0.;
-    static char mname[16*12] = "January         " "February        " "March "
-	    "          " "April           " "May             " "June         "
-	    "   " "July            " "August          " "September       " 
-	    "October         " "November        " "December        ";
+    static thread_local char defzon[16] = "                ";
+    static thread_local char defsys[16] = "UTC             ";
+    static thread_local char mixed[16] = "MIXED           ";
+    static thread_local char juln[16] = "JULIAN          ";
+    static thread_local char gregrn[16] = "GREGORIAN       ";
+    static thread_local doublereal dhoff = 0.;
+    static thread_local doublereal dmoff = 0.;
+    static thread_local char mname[16*12] = "January         " "February    "
+	    "    " "March           " "April           " "May             " 
+	    "June            " "July            " "August          " "Septem"
+	    "ber       " "October         " "November        " "December     "
+	    "   ";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;

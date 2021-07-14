@@ -19,7 +19,7 @@ static doublereal c_b45 = 1e-14;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1, d__2;

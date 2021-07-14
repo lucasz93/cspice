@@ -76,7 +76,7 @@ static integer c__2 = 2;
     doublereal summry[125];
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___4 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */

@@ -15,8 +15,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer myleft = 1;
-    static integer myrght = 80;
+    static thread_local integer myleft = 1;
+    static thread_local integer myrght = 80;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

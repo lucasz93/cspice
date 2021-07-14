@@ -25,8 +25,8 @@ static doublereal c_b511 = 1.;
 {
     /* Initialized data */
 
-    static integer nloops = 0;
-    static logical first = TRUE_;
+    static thread_local integer nloops = 0;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[4], a__2[2], a__3[3];

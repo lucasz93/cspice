@@ -39,20 +39,20 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char terms[32*24] = "|endliteral                     " "!endliter"
-	    "al                     " "@chapter                        " "@se"
-	    "ction                        " "@setvarsize                     " 
-	    "@var                            " "@setparamsize               "
-	    "    " "@param                          " "@literal              "
-	    "          " "@literalitem                    " "@literalparam   "
-	    "                " "@literalvar                     " "@exliteral"
-	    "                      " "@exliteralitem                  " "@exl"
-	    "iteralparam                 " "@exliteralvar                   " 
-	    "@newlist                        " "@newpage                    "
-	    "    " "@numitem                        " "@paritem              "
-	    "          " "@symitem                        " "@moreparam      "
-	    "                " "@morevar                        " "          "
-	    "                      ";
+    static thread_local char terms[32*24] = "|endliteral                     "
+	     "!endliteral                     " "@chapter                   "
+	    "     " "@section                        " "@setvarsize          "
+	    "           " "@var                            " "@setparamsize  "
+	    "                 " "@param                          " "@literal "
+	    "                       " "@literalitem                    " "@li"
+	    "teralparam                   " "@literalvar                     " 
+	    "@exliteral                      " "@exliteralitem              "
+	    "    " "@exliteralparam                 " "@exliteralvar         "
+	    "          " "@newlist                        " "@newpage        "
+	    "                " "@numitem                        " "@paritem  "
+	    "                      " "@symitem                        " "@mor"
+	    "eparam                      " "@morevar                        " 
+	    "                                ";
 
     /* System generated locals */
     integer i__1, i__2;

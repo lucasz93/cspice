@@ -11,7 +11,7 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     static thread_local integer ctrhgh;

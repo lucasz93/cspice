@@ -16,7 +16,7 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     doublereal ret_val;

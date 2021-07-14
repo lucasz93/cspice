@@ -15,9 +15,9 @@ static doublereal c_b12 = 1e-12;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal pi2 = -1.;
-    static doublereal hpi = -1.;
+    static thread_local logical first = TRUE_;
+    static thread_local doublereal pi2 = -1.;
+    static thread_local doublereal hpi = -1.;
 
     /* System generated locals */
     doublereal d__1, d__2;

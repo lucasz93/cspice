@@ -15,12 +15,12 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer n = 0;
-    static char lstfil[255] = "                                             "
+    static thread_local integer n = 0;
+    static thread_local char lstfil[255] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                  ";
+	    "                               ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;

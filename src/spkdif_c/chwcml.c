@@ -30,18 +30,18 @@ static doublereal c_b698 = 1e-8;
 {
     /* Initialized data */
 
-    static char clkeys[32*21] = "-b1                             " "-c1     "
-	    "                        " "-r1                             " 
-	    "-k1                             " "-b2                         "
-	    "    " "-c2                             " "-r2                   "
-	    "          " "-k2                             " "-k              "
-	    "                " "-b                              " "-e        "
-	    "                      " "-n                              " "-s  "
-	    "                            " "-f                              " 
-	    "-t                              " "-d                          "
-	    "    " "-usage                          " "-u                    "
-	    "          " "-help                           " "-h              "
-	    "                " "-v                              ";
+    static thread_local char clkeys[32*21] = "-b1                           "
+	    "  " "-c1                             " "-r1                     "
+	    "        " "-k1                             " "-b2               "
+	    "              " "-c2                             " "-r2         "
+	    "                    " "-k2                             " "-k    "
+	    "                          " "-b                              " 
+	    "-e                              " "-n                          "
+	    "    " "-s                              " "-f                    "
+	    "          " "-t                              " "-d              "
+	    "                " "-usage                          " "-u        "
+	    "                      " "-help                           " "-h  "
+	    "                            " "-v                              ";
 
     /* System generated locals */
     address a__1[2], a__2[3];

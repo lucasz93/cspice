@@ -34,7 +34,7 @@
 {
     /* Initialized data */
 
-    static char lang[32] = "ENGLISH                         ";
+    static thread_local char lang[32] = "ENGLISH                         ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

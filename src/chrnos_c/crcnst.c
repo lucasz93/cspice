@@ -13,83 +13,84 @@
 {
     /* Initialized data */
 
-    static char lsystm[32*4] = "UTC                             " "ET       "
-	    "                       " "SCLK                            " "LST"
-	    "                             ";
-    static char ltypes[32*10] = "SCET                            " "ERT     "
-	    "                        " "SCLK                            " 
-	    "HEX                             " "TICKS                       "
-	    "    " "LT                              " "SECONDS               "
-	    "          " "LST                             " "ETT             "
-	    "                " "LSUN                            ";
-    static char ldefty[32*4] = "SCET                            " "SCET     "
-	    "                       " "SCLK                            " "LST"
-	    "                             ";
-    static logical lsysty[40]	/* was [4][10] */ = { TRUE_,TRUE_,FALSE_,
-	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,TRUE_,TRUE_,
-	    FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    TRUE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_ };
-    static logical lfmtte[40]	/* was [4][10] */ = { TRUE_,TRUE_,FALSE_,
-	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,TRUE_,
-	    TRUE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    TRUE_ };
-    static char lfmtpi[64*4*10] = "YYYY-MM-DD HR:MN:SC.### ::RND            "
-	    "                       " "YYYY-MM-DD, HR:MN:SC.### ::TDB ::RND  "
+    static thread_local char lsystm[32*4] = "UTC                             "
+	     "ET                              " "SCLK                       "
+	    "     " "LST                             ";
+    static thread_local char ltypes[32*10] = "SCET                          "
+	    "  " "ERT                             " "SCLK                    "
+	    "        " "HEX                             " "TICKS             "
+	    "              " "LT                              " "SECONDS     "
+	    "                    " "LST                             " "ETT   "
+	    "                          " "LSUN                            ";
+    static thread_local char ldefty[32*4] = "SCET                            "
+	     "SCET                            " "SCLK                       "
+	    "     " "LST                             ";
+    static thread_local logical lsysty[40]	/* was [4][10] */ = { TRUE_,
+	    TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,
+	    FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,
+	    TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,TRUE_ };
+    static thread_local logical lfmtte[40]	/* was [4][10] */ = { TRUE_,
+	    TRUE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,
+	    FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,TRUE_ };
+    static thread_local char lfmtpi[64*4*10] = "YYYY-MM-DD HR:MN:SC.### ::RN"
+	    "D                                   " "YYYY-MM-DD, HR:MN:SC.### "
+	    "::TDB ::RND                            " "                      "
+	    "                                          " "                   "
+	    "                                             " "YYYY-MM-DD HR:MN"
+	    ":SC.### ::RND                                   " "YYYY-MM-DD, H"
+	    "R:MN:SC.### ::TDB ::RND                            " "          "
+	    "                                                      " "       "
+	    "                                                         " "    "
+	    "                                                            " 
+	    "                                                                "
+	     "                                                              "
+	    "  " "                                                           "
+	    "     " "                                                        "
+	    "        " "                                                     "
+	    "           " "                                                  "
+	    "              " "                                               "
+	    "                 " "                                            "
+	    "                    " "                                         "
+	    "                       " "xxxxxxxxxxxxxxxx                      "
 	    "                          " "                                   "
-	    "                             " "                                "
-	    "                                " "YYYY-MM-DD HR:MN:SC.### ::RND"
-	    "                                   " "YYYY-MM-DD, HR:MN:SC.### :"
-	    ":TDB ::RND                            " "                       "
+	    "                             " "xxxxxxxxxxxx.xxx                "
+	    "                                " "xxxxxxxxxxxx.xxx             "
+	    "                                   " "                          "
+	    "                                      " "                       "
 	    "                                         " "                    "
-	    "                                            " "                 "
-	    "                                               " "              "
+	    "                                            " "xxxxxxxxxxxxxxx.x"
+	    "xx                                             " "              "
 	    "                                                  " "           "
 	    "                                                     " "        "
 	    "                                                        " "     "
 	    "                                                           " 
 	    "                                                                "
 	     "                                                              "
-	    "  " "                                                           "
-	    "     " "                                                        "
+	    "  " "YYYY-MM-DD HR:MN:SC.### ::RND                              "
+	    "     " "YYYY-MM-DD, HR:MN:SC.### ::TDB ::RND                    "
 	    "        " "                                                     "
-	    "           " "xxxxxxxxxxxxxxxx                                  "
+	    "           " "                                                  "
 	    "              " "                                               "
-	    "                 " "xxxxxxxxxxxx.xxx                            "
-	    "                    " "xxxxxxxxxxxx.xxx                         "
-	    "                       " "                                      "
-	    "                          " "                                   "
-	    "                             " "                                "
-	    "                                " "xxxxxxxxxxxxxxx.xxx          "
-	    "                                   " "                          "
-	    "                                      " "                       "
-	    "                                         " "                    "
-	    "                                            " "                 "
-	    "                                               " "              "
-	    "                                                  " "           "
-	    "                                                     " "YYYY-MM-"
-	    "DD HR:MN:SC.### ::RND                                   " "YYYY-"
-	    "MM-DD, HR:MN:SC.### ::TDB ::RND                            " 
-	    "                                                                "
-	     "                                                              "
-	    "  " "                                                           "
-	    "     " "                                                        "
-	    "        " "                                                     "
-	    "           " "xxxxxx.xxx                                        "
-	    "              ";
-    static char lclkey[32*19] = "-SETUP                          " "-FROM   "
-	    "                        " "-FROMTYPE                       " 
-	    "-TO                             " "-TOTYPE                     "
-	    "    " "-FORMAT                         " "-TIME                 "
-	    "          " "-HELP                           " "-H              "
-	    "                " "-USAGE                          " "-U        "
-	    "                      " "-TEMPLATE                       " "-BAT"
-	    "CH                          " "-NOLABEL                        " 
-	    "-TRACE                          " "-SC                         "
-	    "    " "-CENTER                         " "-LANDINGTIME          "
-	    "          " "-SOL1INDEX                      ";
+	    "                 " "                                            "
+	    "                    " "                                         "
+	    "                       " "xxxxxx.xxx                            "
+	    "                          ";
+    static thread_local char lclkey[32*19] = "-SETUP                        "
+	    "  " "-FROM                           " "-FROMTYPE               "
+	    "        " "-TO                             " "-TOTYPE           "
+	    "              " "-FORMAT                         " "-TIME       "
+	    "                    " "-HELP                           " "-H    "
+	    "                          " "-USAGE                          " 
+	    "-U                              " "-TEMPLATE                   "
+	    "    " "-BATCH                          " "-NOLABEL              "
+	    "          " "-TRACE                          " "-SC             "
+	    "                " "-CENTER                         " "-LANDINGTI"
+	    "ME                    " "-SOL1INDEX                      ";
 
     /* System generated locals */
     integer i__1, i__2;

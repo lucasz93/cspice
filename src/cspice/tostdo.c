@@ -10,7 +10,7 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int stdio_(char *, integer *, ftnlen), writln_(
 	    char *, integer *, ftnlen);

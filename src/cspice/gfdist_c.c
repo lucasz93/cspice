@@ -54,6 +54,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
 
    void gfdist_c ( ConstSpiceChar     * target,
                    ConstSpiceChar     * abcorr,
@@ -1033,7 +1034,7 @@
    /*
    Static local variables 
    */
-   static SpiceInt         nw  =  SPICE_GF_NWDIST;
+   static thread_local SpiceInt nw  =  SPICE_GF_NWDIST;
 
    /*
    Local variables 

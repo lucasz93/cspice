@@ -16,7 +16,7 @@ static integer c__2 = 2;
     /* System generated locals */
     integer i__1;
     char ch__1[1];
-    static integer equiv_1[2];
+    static thread_local integer equiv_1[2];
 
     /* Local variables */
     integer ncom, i__;

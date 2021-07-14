@@ -18,7 +18,7 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);

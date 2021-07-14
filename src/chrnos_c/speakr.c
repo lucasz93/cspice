@@ -10,7 +10,7 @@
 {
     /* Initialized data */
 
-    static logical enabld = FALSE_;
+    static thread_local logical enabld = FALSE_;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

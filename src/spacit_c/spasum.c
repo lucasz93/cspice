@@ -14,8 +14,8 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical lpsldd = FALSE_;
-    static logical sclldd = FALSE_;
+    static thread_local logical lpsldd = FALSE_;
+    static thread_local logical sclldd = FALSE_;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

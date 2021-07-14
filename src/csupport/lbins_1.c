@@ -15,7 +15,7 @@ static integer c__2 = 2;
 {
     /* System generated locals */
     integer i__1, i__2;
-    static integer equiv_1[2];
+    static thread_local integer equiv_1[2];
 
     /* Local variables */
     integer ncom, f, l;

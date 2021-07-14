@@ -15,11 +15,11 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char mssg[32*7] = "Axis A was nonpositive.         " "Axis B was "
-	    "nonpositive.         " "Axes A and B were nonpositive.  " "Axis "
-	    "C was nonpositive.         " "Axes A and C were nonpositive.  " 
-	    "Axes B and C were nonpositive.  " "All three axes were nonposit"
-	    "ive.";
+    static thread_local char mssg[32*7] = "Axis A was nonpositive.         " 
+	    "Axis B was nonpositive.         " "Axes A and B were nonpositiv"
+	    "e.  " "Axis C was nonpositive.         " "Axes A and C were nonp"
+	    "ositive.  " "Axes B and C were nonpositive.  " "All three axes w"
+	    "ere nonpositive.";
 
     /* System generated locals */
     address a__1[2];

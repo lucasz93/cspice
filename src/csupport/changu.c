@@ -20,11 +20,11 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static char tclass[8*5] = "ANGLE   " "LENGTH  " "TIME    " "MASS    " 
-	    "CHARGE  ";
-    static logical first = TRUE_;
-    static integer nop = 6;
-    static char op[2*6] = "  " "( " ") " "* " "**" "/ ";
+    static thread_local char tclass[8*5] = "ANGLE   " "LENGTH  " "TIME    " 
+	    "MASS    " "CHARGE  ";
+    static thread_local logical first = TRUE_;
+    static thread_local integer nop = 6;
+    static thread_local char op[2*6] = "  " "( " ") " "* " "**" "/ ";
 
     /* System generated locals */
     address a__1[2];

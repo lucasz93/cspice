@@ -18,7 +18,7 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );

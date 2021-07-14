@@ -76,10 +76,10 @@ static integer c__3 = 3;
     doublereal summry[125];
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 0 };
-    static cilist io___9 = { 1, 0, 1, 0, 0 };
-    static cilist io___27 = { 1, 0, 1, 0, 0 };
-    static cilist io___32 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___5 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___9 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___27 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___32 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

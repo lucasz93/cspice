@@ -20,9 +20,9 @@ static integer c__32 = 32;
 {
     /* Initialized data */
 
-    static doublereal tbprev = 0.;
-    static doublereal teprev = 0.;
-    static integer idprev = 0;
+    static thread_local doublereal tbprev = 0.;
+    static thread_local doublereal teprev = 0.;
+    static thread_local integer idprev = 0;
 
     /* System generated locals */
     integer i__1;

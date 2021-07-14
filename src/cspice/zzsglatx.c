@@ -15,7 +15,7 @@ static doublereal c_b5 = 0.;
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
+    static thread_local doublereal z__[3] = { 0.,0.,1. };
 
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *

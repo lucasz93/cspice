@@ -27,10 +27,10 @@ static doublereal c_b129 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvloc[25] = "                         ";
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local char prvloc[25] = "                         ";
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -38,12 +38,12 @@ static doublereal c_b129 = 1.;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static integer prvtrg = 0;
-    static integer svnrad = 0;
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
-    static logical usestl = FALSE_;
+	    "                    ";
+    static thread_local integer prvtrg = 0;
+    static thread_local integer svnrad = 0;
+    static thread_local logical usecn = FALSE_;
+    static thread_local logical uselt = FALSE_;
+    static thread_local logical usestl = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

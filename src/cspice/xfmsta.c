@@ -19,12 +19,12 @@ static doublereal c_b65 = 0.;
 {
     /* Initialized data */
 
-    static char cosys[40*6] = "RECTANGULAR                             " 
-	    "CYLINDRICAL                             " "LATITUDINAL         "
-	    "                    " "SPHERICAL                               " 
-	    "GEODETIC                                " "PLANETOGRAPHIC      "
-	    "                    ";
-    static logical first = TRUE_;
+    static thread_local char cosys[40*6] = "RECTANGULAR                     "
+	    "        " "CYLINDRICAL                             " "LATITUDINA"
+	    "L                             " "SPHERICAL                      "
+	    "         " "GEODETIC                                " "PLANETOGR"
+	    "APHIC                          ";
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

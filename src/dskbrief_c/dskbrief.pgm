@@ -29,19 +29,19 @@ static integer c__24 = 24;
 {
     /* Initialized data */
 
-    static char optlst[32*10] = "-h                              " "-v      "
-	    "                        " "-ext                            " 
-	    "-full                           " "-a                          "
-	    "    " "-seg                            " "-gaps                 "
-	    "          " "-d                              " "-u              "
-	    "                " "-tg                             ";
-    static doublereal timtol = 0.;
-    static logical all = FALSE_;
-    static logical ext = FALSE_;
-    static logical full = FALSE_;
-    static logical gap = FALSE_;
-    static logical seg = FALSE_;
-    static logical ust = FALSE_;
+    static thread_local char optlst[32*10] = "-h                            "
+	    "  " "-v                              " "-ext                    "
+	    "        " "-full                           " "-a                "
+	    "              " "-seg                            " "-gaps       "
+	    "                    " "-d                              " "-u    "
+	    "                          " "-tg                             ";
+    static thread_local doublereal timtol = 0.;
+    static thread_local logical all = FALSE_;
+    static thread_local logical ext = FALSE_;
+    static thread_local logical full = FALSE_;
+    static thread_local logical gap = FALSE_;
+    static thread_local logical seg = FALSE_;
+    static thread_local logical ust = FALSE_;
 
     /* System generated locals */
     address a__1[2];

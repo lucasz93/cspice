@@ -14,9 +14,9 @@ logical unitp_(char *string, ftnlen string_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer nop = 6;
-    static char op[2*6] = "  " "( " ") " "* " "**" "/ ";
+    static thread_local logical first = TRUE_;
+    static thread_local integer nop = 6;
+    static thread_local char op[2*6] = "  " "( " ") " "* " "**" "/ ";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;

@@ -18,10 +18,10 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char locdlm[1] = ":";
-    static char loclnd[6] = "FTPSTR";
-    static char locrnd[6] = "ENDFTP";
+    static thread_local logical first = TRUE_;
+    static thread_local char locdlm[1] = ":";
+    static thread_local char loclnd[6] = "FTPSTR";
+    static thread_local char locrnd[6] = "ENDFTP";
 
     /* System generated locals */
     address a__1[3], a__2[2];

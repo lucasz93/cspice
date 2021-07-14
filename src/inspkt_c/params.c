@@ -23,7 +23,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical init = FALSE_;
+    static thread_local logical init = FALSE_;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

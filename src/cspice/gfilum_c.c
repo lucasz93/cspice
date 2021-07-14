@@ -56,6 +56,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
    #undef gfilum_c
 
 
@@ -1156,7 +1157,7 @@
    /*
    Static local variables
    */
-   static SpiceInt         nw  =  SPICE_GF_NWILUM;
+   static thread_local SpiceInt nw  =  SPICE_GF_NWILUM;
 
    /*
    Local variables

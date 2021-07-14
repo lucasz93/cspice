@@ -17,7 +17,7 @@ static doublereal c_b18 = 1e-10;
 {
     /* Initialized data */
 
-    static doublereal zvec[3] = { 0.,0.,1. };
+    static thread_local doublereal zvec[3] = { 0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;

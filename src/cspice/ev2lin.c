@@ -18,7 +18,7 @@ static integer c__20 = 20;
 {
     /* Initialized data */
 
-    static logical doinit = TRUE_;
+    static thread_local logical doinit = TRUE_;
 
     /* System generated locals */
     integer i__1;

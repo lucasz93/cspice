@@ -20,14 +20,16 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char kwds1[32*2] = "LEAPSECONDS_KERNEL  1  1        " "SPK_KERNEL"
-	    "          1  1000     ";
-    static char kwds2[32*5] = "SOURCE_SPK_KERNEL   1  1000     " "LOG_FILE  "
-	    "          0  1        " "BODIES              0  1        " "BEGI"
-	    "N_TIME          0  1000     " "INCLUDE_TEXT_FILE   0  1000     ";
-    static char kwds3[32*3] = "BODIES              0  1        " "BEGIN_TIME"
-	    "          0  1000     " "INCLUDE_COMMENTS    0  1        ";
-    static char kwds4[32*1] = "END_TIME            1  1        ";
+    static thread_local char kwds1[32*2] = "LEAPSECONDS_KERNEL  1  1        " 
+	    "SPK_KERNEL          1  1000     ";
+    static thread_local char kwds2[32*5] = "SOURCE_SPK_KERNEL   1  1000     " 
+	    "LOG_FILE            0  1        " "BODIES              0  1    "
+	    "    " "BEGIN_TIME          0  1000     " "INCLUDE_TEXT_FILE   0 "
+	    " 1000     ";
+    static thread_local char kwds3[32*3] = "BODIES              0  1        " 
+	    "BEGIN_TIME          0  1000     " "INCLUDE_COMMENTS    0  1    "
+	    "    ";
+    static thread_local char kwds4[32*1] = "END_TIME            1  1        ";
 
     /* System generated locals */
     cilist ci__1;

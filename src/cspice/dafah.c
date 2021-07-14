@@ -25,8 +25,8 @@ static logical c_true = TRUE_;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer nft = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer nft = 0;
 
     /* System generated locals */
     address a__1[2];
@@ -89,12 +89,12 @@ static logical c_true = TRUE_;
     static thread_local integer fni, lun;
 
     /* Fortran I/O blocks */
-    static cilist io___25 = { 1, 0, 0, 0, 0 };
-    static cilist io___26 = { 1, 0, 0, 0, 0 };
-    static cilist io___27 = { 1, 0, 0, 0, 0 };
-    static cilist io___28 = { 1, 0, 0, 0, 0 };
-    static cilist io___29 = { 1, 0, 0, 0, 0 };
-    static cilist io___30 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___25 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___26 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___27 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___28 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___29 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___30 = { 1, 0, 0, 0, 0 };
 
 
 /* $ Abstract */

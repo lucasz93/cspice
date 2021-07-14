@@ -15,8 +15,10 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static char defmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK, DEFAULT";
-    static char errmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK         ";
+    static thread_local char defmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK, "
+	    "DEFAULT";
+    static thread_local char errmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK  "
+	    "       ";
 
     static thread_local logical stat;
     extern logical failed_(void), accept_(logical *);

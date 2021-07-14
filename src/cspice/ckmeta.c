@@ -18,11 +18,11 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char base[7] = "CKMETA.";
-    static integer currnt = 0;
-    static logical first = TRUE_;
-    static integer last = 0;
-    static logical nodata = TRUE_;
+    static thread_local char base[7] = "CKMETA.";
+    static thread_local integer currnt = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer last = 0;
+    static thread_local logical nodata = TRUE_;
 
     /* System generated locals */
     address a__1[2];

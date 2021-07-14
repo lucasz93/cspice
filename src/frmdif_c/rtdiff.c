@@ -20,7 +20,7 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static char axisnm[1*3] = "X" "Y" "Z";
+    static thread_local char axisnm[1*3] = "X" "Y" "Z";
 
     /* System generated locals */
     integer i__1, i__2;

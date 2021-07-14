@@ -20,8 +20,8 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical found = FALSE_;
+    static thread_local logical first = TRUE_;
+    static thread_local logical found = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

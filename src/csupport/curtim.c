@@ -14,8 +14,8 @@ static integer c__11 = 11;
 {
     /* Initialized data */
 
-    static char month[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" "AUG" 
-	    "SEP" "OCT" "NOV" "DEC";
+    static thread_local char month[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" 
+	    "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     address a__1[11];

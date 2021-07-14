@@ -57,6 +57,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
+   #include "f2c.h"
 
    void gfoclt_c ( ConstSpiceChar   * occtyp,
                    ConstSpiceChar   * front,
@@ -1604,7 +1605,7 @@
    /*
    Local variables 
    */
-   static const SpiceChar  * blankStr = " ";
+   static thread_local const SpiceChar  * blankStr = " ";
 
    SpiceChar               * bFrameStr;
    SpiceChar               * fFrameStr;

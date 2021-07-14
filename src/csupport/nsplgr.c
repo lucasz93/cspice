@@ -40,7 +40,7 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char mystr[1025] = "                                             "
+    static thread_local char mystr[1025] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -56,14 +56,14 @@ static integer c__0 = 0;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                    ";
-    static char seen[120] = "LEFT 1 RIGHT 78                                "
+	    "                                 ";
+    static thread_local char seen[120] = "LEFT 1 RIGHT 78                   "
 	    "                                                                "
-	    "         ";
-    static char hide[120] = "LEADER ;^ LEFT 1 RIGHT 78 HARDSPACE ^          "
-	    "                                                                "
-	    "         ";
-    static char delim[1] = ";";
+	    "                      ";
+    static thread_local char hide[120] = "LEADER ;^ LEFT 1 RIGHT 78 HARDSPAC"
+	    "E ^                                                             "
+	    "                      ";
+    static thread_local char delim[1] = ";";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);

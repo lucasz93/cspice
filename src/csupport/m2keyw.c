@@ -14,20 +14,21 @@ logical m2keyw_(char *word, ftnlen word_len)
 {
     /* Initialized data */
 
-    static char quick[4*20] = ")   " "@alp" "@bod" "@cal" "@day" "@end" "@eng"
-	     "@epo" "@int" "@mon" "@nam" "@num" "@the" "@tim" "@uni" "@wor" 
-	    "@yea" "{   " "|   " "}   ";
-    static integer checks[20] = { 0,2,1,1,1,1,2,1,2,2,2,2,2,1,2,2,1,0,0,0 };
-    static integer pntrs[20] = { 0,1,3,4,5,6,7,9,10,12,14,16,18,20,21,23,25,
-	    25,25,25 };
-    static char slow[16*25] = "@alpha          " "@alpha(%*)      " "@body  "
-	    "         " "@calendar       " "@day            " "@end          "
-	    "  " "@english        " "@english(%*)    " "@epoch          " 
-	    "@int            " "@int(*:*)       " "@month          " "@month"
-	    "(%*)      " "@name           " "@name(%*)       " "@number      "
-	    "   " "@number(*:*)    " "@then           " "@then(%*)       " 
-	    "@time           " "@unit           " "@unit(%*)       " "@word "
-	    "          " "@word(%*)       " "@year           ";
+    static thread_local char quick[4*20] = ")   " "@alp" "@bod" "@cal" "@day" 
+	    "@end" "@eng" "@epo" "@int" "@mon" "@nam" "@num" "@the" "@tim" 
+	    "@uni" "@wor" "@yea" "{   " "|   " "}   ";
+    static thread_local integer checks[20] = { 0,2,1,1,1,1,2,1,2,2,2,2,2,1,2,
+	    2,1,0,0,0 };
+    static thread_local integer pntrs[20] = { 0,1,3,4,5,6,7,9,10,12,14,16,18,
+	    20,21,23,25,25,25,25 };
+    static thread_local char slow[16*25] = "@alpha          " "@alpha(%*)   "
+	    "   " "@body           " "@calendar       " "@day            " 
+	    "@end            " "@english        " "@english(%*)    " "@epoch"
+	    "          " "@int            " "@int(*:*)       " "@month       "
+	    "   " "@month(%*)      " "@name           " "@name(%*)       " 
+	    "@number         " "@number(*:*)    " "@then           " "@then("
+	    "%*)       " "@time           " "@unit           " "@unit(%*)    "
+	    "   " "@word           " "@word(%*)       " "@year           ";
 
     /* System generated locals */
     integer i__1;

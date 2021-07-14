@@ -10,7 +10,7 @@ logical m2day_(char *word, ftnlen word_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

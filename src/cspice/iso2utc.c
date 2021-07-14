@@ -33,10 +33,10 @@ static integer c__19 = 19;
 {
     /* Initialized data */
 
-    static char months[3*13] = "???" "JAN" "FEB" "MAR" "APR" "MAY" "JUN" 
-	    "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
-    static char imonth[2*12] = "01" "02" "03" "04" "05" "06" "07" "08" "09" 
-	    "10" "11" "12";
+    static thread_local char months[3*13] = "???" "JAN" "FEB" "MAR" "APR" 
+	    "MAY" "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
+    static thread_local char imonth[2*12] = "01" "02" "03" "04" "05" "06" 
+	    "07" "08" "09" "10" "11" "12";
 
     /* System generated locals */
     address a__1[3], a__2[5];

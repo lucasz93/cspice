@@ -23,17 +23,17 @@ static logical c_true = TRUE_;
 {
     /* Initialized data */
 
-    static char cnames[80*7] = "<                                           "
-	    "                                    " "=                        "
-	    "                                                       " ">     "
+    static thread_local char cnames[80*7] = "<                              "
+	    "                                                 " "=           "
 	    "                                                                "
-	    "          " "LOCMIN                                             "
-	    "                             " "ABSMIN                          "
-	    "                                                " "LOCMAX       "
-	    "                                                                "
-	    "   " "ABSMAX                                                    "
-	    "                      ";
-    static logical cstep = FALSE_;
+	    "    " ">                                                        "
+	    "                       " "LOCMIN                                "
+	    "                                          " "ABSMIN             "
+	    "                                                             " 
+	    "LOCMAX                                                         "
+	    "                 " "ABSMAX                                      "
+	    "                                    ";
+    static thread_local logical cstep = FALSE_;
 
     /* System generated locals */
     integer work_dim1, work_dim2, work_offset, i__1, i__2, i__3;

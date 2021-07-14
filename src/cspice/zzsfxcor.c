@@ -21,8 +21,8 @@ static doublereal c_b27 = 1e-14;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
+    static thread_local logical first = TRUE_;
+    static thread_local char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1, d__2;

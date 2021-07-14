@@ -21,30 +21,31 @@ static integer c__13 = 13;
 {
     /* Initialized data */
 
-    static char keywds[32*29] = "ALL                             " "AND     "
-	    "                        " "ASC                             " 
-	    "AVG                             " "BETWEEN                     "
-	    "    " "BY                              " "COUNT                 "
-	    "          " "DESC                            " "DISTINCT        "
-	    "                " "EQ                              " "FROM      "
-	    "                      " "GE                              " "GROU"
-	    "P                           " "GT                              " 
-	    "HAVING                          " "IS                          "
-	    "    " "LE                              " "LIKE                  "
-	    "          " "LT                              " "MAX             "
-	    "                " "MIN                             " "NE        "
-	    "                      " "NOT                             " "NULL"
-	    "                            " "OR                              " 
-	    "ORDER                           " "SELECT                      "
-	    "    " "SUM                             " "WHERE                 "
-	    "          ";
-    static integer kwvals[29] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,
-	    18,19,20,21,22,23,24,25,26,27,28,29 };
-    static char spcstr[2*13] = "!=" "^=" "<>" "<=" ">=" "< " "> " "= " "( " 
-	    ") " ", " ". " "* ";
-    static integer spctok[13] = { 1,1,1,1,1,1,1,1,6,7,8,9,10 };
-    static integer spcval[13] = { 22,22,22,17,12,19,14,10,0,0,0,0,0 };
-    static logical pass1 = TRUE_;
+    static thread_local char keywds[32*29] = "ALL                           "
+	    "  " "AND                             " "ASC                     "
+	    "        " "AVG                             " "BETWEEN           "
+	    "              " "BY                              " "COUNT       "
+	    "                    " "DESC                            " "DISTIN"
+	    "CT                        " "EQ                              " 
+	    "FROM                            " "GE                          "
+	    "    " "GROUP                           " "GT                    "
+	    "          " "HAVING                          " "IS              "
+	    "                " "LE                              " "LIKE      "
+	    "                      " "LT                              " "MAX "
+	    "                            " "MIN                             " 
+	    "NE                              " "NOT                         "
+	    "    " "NULL                            " "OR                    "
+	    "          " "ORDER                           " "SELECT          "
+	    "                " "SUM                             " "WHERE     "
+	    "                      ";
+    static thread_local integer kwvals[29] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,
+	    14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 };
+    static thread_local char spcstr[2*13] = "!=" "^=" "<>" "<=" ">=" "< " 
+	    "> " "= " "( " ") " ", " ". " "* ";
+    static thread_local integer spctok[13] = { 1,1,1,1,1,1,1,1,6,7,8,9,10 };
+    static thread_local integer spcval[13] = { 22,22,22,17,12,19,14,10,0,0,0,
+	    0,0 };
+    static thread_local logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;

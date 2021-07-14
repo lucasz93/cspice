@@ -17,52 +17,52 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char ports[32*8] = "SCREEN                          " "LOG       "
-	    "                      " "SAVE                            " "UTIL"
-	    "ITY                         " "ERROR                           " 
-	    "AUX1                            " "AUX2                        "
-	    "    " "AUX3                            ";
-    static char files[255*8] = "                                            "
+    static thread_local char ports[32*8] = "SCREEN                          " 
+	    "LOG                             " "SAVE                        "
+	    "    " "UTILITY                         " "ERROR                 "
+	    "          " "AUX1                            " "AUX2            "
+	    "                " "AUX3                            ";
+    static thread_local char files[255*8] = "                               "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                   " "                                          "
+	    "                                " "                             "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                     " "                                        "
+	    "                                  " "                           "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                       " "                                      "
+	    "                                    " "                         "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                         " "                                    "
+	    "                                      " "                       "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                           " "                                  "
+	    "                                        " "                     "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                             " "                                "
+	    "                                          " "                   "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                               " "                              "
+	    "                                            " "                 "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "                                 ";
-    static integer units[8] = { 6,0,0,0,0,0,0,0 };
-    static logical active[8] = { TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_ };
-    static logical open[8] = { TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_ };
-    static logical suspnd[8] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_ };
-    static logical erropf = FALSE_;
+	    "                                              ";
+    static thread_local integer units[8] = { 6,0,0,0,0,0,0,0 };
+    static thread_local logical active[8] = { TRUE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local logical open[8] = { TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_ };
+    static thread_local logical suspnd[8] = { FALSE_,FALSE_,FALSE_,FALSE_,
+	    FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local logical erropf = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

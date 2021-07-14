@@ -17,7 +17,7 @@ static doublereal c_b90 = .5;
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
+    static thread_local doublereal origin[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer bounds_dim2, i__1, i__2, i__3;

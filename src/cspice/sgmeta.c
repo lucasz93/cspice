@@ -17,12 +17,12 @@ static integer c__15 = 15;
 {
     /* Initialized data */
 
-    static integer lstbeg = -1;
-    static integer lsthan = 0;
+    static thread_local integer lstbeg = -1;
+    static thread_local integer lsthan = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
-    static doublereal equiv_0[2];
+    static thread_local doublereal equiv_0[2];
 
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);

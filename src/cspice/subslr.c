@@ -19,10 +19,10 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical near__ = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local logical near__ = TRUE_;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -30,8 +30,8 @@ static integer c__10 = 10;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static integer shape = 1;
+	    "                    ";
+    static thread_local integer shape = 1;
 
     /* System generated locals */
     doublereal d__1, d__2;

@@ -18,12 +18,12 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer natbff = 0;
 
     /* System generated locals */
     integer i__1, i__2;
-    static doublereal equiv_0[128];
+    static thread_local doublereal equiv_0[128];
 
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer), s_rdue(cilist *), 
@@ -63,8 +63,8 @@ static integer c__128 = 128;
     integer sumsiz, lun;
 
     /* Fortran I/O blocks */
-    static cilist io___15 = { 1, 0, 1, 0, 0 };
-    static cilist io___16 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___15 = { 1, 0, 1, 0, 0 };
+    static thread_local cilist io___16 = { 1, 0, 1, 0, 0 };
 
 
 /* $ Abstract */

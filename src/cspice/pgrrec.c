@@ -17,7 +17,7 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);

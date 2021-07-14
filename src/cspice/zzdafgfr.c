@@ -18,8 +18,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local integer natbff = 0;
 
     /* System generated locals */
     integer i__1;
@@ -63,8 +63,8 @@ static integer c__1 = 1;
     integer lun;
 
     /* Fortran I/O blocks */
-    static cilist io___13 = { 1, 0, 1, 0, 1 };
-    static cilist io___21 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___13 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___21 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */

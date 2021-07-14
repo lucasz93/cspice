@@ -20,29 +20,31 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char sysnms[32*7] = "RECTANGULAR                     " "LATITUDIN"
-	    "AL                     " "RA/DEC                          " "SPH"
-	    "ERICAL                       " "CYLINDRICAL                     " 
-	    "GEODETIC                        " "PLANETOGRAPHIC              "
-	    "    ";
-    static char crdnms[32*3*7] = "X                               " "Y      "
-	    "                         " "Z                               " 
-	    "RADIUS                          " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "RANGE                 "
-	    "          " "RIGHT ASCENSION                 " "DECLINATION     "
-	    "                " "RADIUS                          " "COLATITUDE"
-	    "                      " "LONGITUDE                       " "RADI"
-	    "US                          " "LONGITUDE                       " 
-	    "Z                               " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "ALTITUDE              "
-	    "          " "LONGITUDE                       " "LATITUDE        "
-	    "                " "ALTITUDE                        ";
-    static integer prvctr = 0;
-    static integer prvobs = 0;
-    static integer prvtrg = 0;
-    static char obsnam[36] = "                                    ";
-    static char trgnam[36] = "                                    ";
+    static thread_local logical first = TRUE_;
+    static thread_local char sysnms[32*7] = "RECTANGULAR                     "
+	     "LATITUDINAL                     " "RA/DEC                     "
+	    "     " "SPHERICAL                       " "CYLINDRICAL          "
+	    "           " "GEODETIC                        " "PLANETOGRAPHIC "
+	    "                 ";
+    static thread_local char crdnms[32*3*7] = "X                            "
+	    "   " "Y                               " "Z                      "
+	    "         " "RADIUS                          " "LONGITUDE        "
+	    "               " "LATITUDE                        " "RANGE      "
+	    "                     " "RIGHT ASCENSION                 " "DECLI"
+	    "NATION                     " "RADIUS                          " 
+	    "COLATITUDE                      " "LONGITUDE                   "
+	    "    " "RADIUS                          " "LONGITUDE             "
+	    "          " "Z                               " "LONGITUDE       "
+	    "                " "LATITUDE                        " "ALTITUDE  "
+	    "                      " "LONGITUDE                       " "LATI"
+	    "TUDE                        " "ALTITUDE                        ";
+    static thread_local integer prvctr = 0;
+    static thread_local integer prvobs = 0;
+    static thread_local integer prvtrg = 0;
+    static thread_local char obsnam[36] = "                                 "
+	    "   ";
+    static thread_local char trgnam[36] = "                                 "
+	    "   ";
 
     /* System generated locals */
     integer i__1;

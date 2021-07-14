@@ -16,7 +16,7 @@ static doublereal c_b4 = .33333333333333331;
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
+    static thread_local doublereal origin[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer i__1;

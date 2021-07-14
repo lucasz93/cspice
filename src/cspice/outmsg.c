@@ -18,13 +18,13 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char defmsg[80*4] = "Oh, by the way:  The SPICELIB error handling"
-	    " actions are USER-TAILORABLE.  You  " "can choose whether the To"
-	    "olkit aborts or continues when errors occur, which     " "error "
-	    "messages to output, and where to send the output.  Please read t"
-	    "he ERROR  " "\"Required Reading\" file, or see the routines ERRA"
-	    "CT, ERRDEV, and ERRPRT.        ";
-    static logical first = TRUE_;
+    static thread_local char defmsg[80*4] = "Oh, by the way:  The SPICELIB e"
+	    "rror handling actions are USER-TAILORABLE.  You  " "can choose w"
+	    "hether the Toolkit aborts or continues when errors occur, which "
+	    "    " "error messages to output, and where to send the output.  "
+	    "Please read the ERROR  " "\"Required Reading\" file, or see the "
+	    "routines ERRACT, ERRDEV, and ERRPRT.        ";
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2], a__2[3];

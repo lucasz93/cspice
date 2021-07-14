@@ -49,9 +49,10 @@
 
    #include <signal.h>
    #include "SpiceUsr.h"
+   #include "f2c.h"
  
 
-   static SpiceBoolean signalStatus = SPICEFALSE;
+   static thread_local SpiceBoolean signalStatus = SPICEFALSE;
 
 
    void zzgfsavh_c ( SpiceBoolean status ) 

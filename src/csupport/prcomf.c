@@ -17,7 +17,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer nest = 0;
+    static thread_local integer nest = 0;
 
     /* System generated locals */
     integer i__1;

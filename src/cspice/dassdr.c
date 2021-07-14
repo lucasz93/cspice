@@ -18,8 +18,8 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
-    static integer prev[3] = { 3,1,2 };
+    static thread_local integer next[3] = { 2,3,1 };
+    static thread_local integer prev[3] = { 3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;

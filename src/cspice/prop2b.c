@@ -17,8 +17,8 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer nsaved = 0;
-    static integer newest[3] = { 1,2,3 };
+    static thread_local integer nsaved = 0;
+    static thread_local integer newest[3] = { 1,2,3 };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;

@@ -18,7 +18,7 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static char chrtyp[4*4] = "CHR " "DP  " "INT " "TIME";
+    static thread_local char chrtyp[4*4] = "CHR " "DP  " "INT " "TIME";
 
     /* System generated locals */
     integer i__1, i__2;

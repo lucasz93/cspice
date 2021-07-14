@@ -55,6 +55,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "zzalloc.h"
+   #include "f2c.h"
 
    void gfposc_c ( ConstSpiceChar     * target,
                    ConstSpiceChar     * frame,
@@ -967,7 +968,7 @@
 
    SpiceInt                nBytes;
 
-   static SpiceInt         nw = SPICE_GF_NWMAX;
+   static thread_local SpiceInt nw = SPICE_GF_NWMAX;
 
    /*
    Participate in error tracing.

@@ -10,9 +10,9 @@
 {
     /* Initialized data */
 
-    static integer last = 1;
-    static logical first = TRUE_;
-    static integer resnum[3] = { 5,6,7 };
+    static thread_local integer last = 1;
+    static thread_local logical first = TRUE_;
+    static thread_local integer resnum[3] = { 5,6,7 };
 
     /* System generated locals */
     integer i__1, i__2;

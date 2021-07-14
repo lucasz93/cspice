@@ -14,11 +14,11 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char messag[255] = "Converting from binary file to transfer file."
+    static thread_local char messag[255] = "Converting from binary file to t"
+	    "ransfer file.                                                   "
 	    "                                                                "
 	    "                                                                "
-	    "                                                                "
-	    "                  ";
+	    "                               ";
 
     /* System generated locals */
     cllist cl__1;

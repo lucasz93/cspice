@@ -15,10 +15,10 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical eof = FALSE_;
-    static integer ntk = 0;
-    static logical newfil = TRUE_;
-    static integer from = 0;
+    static thread_local logical eof = FALSE_;
+    static thread_local integer ntk = 0;
+    static thread_local logical newfil = TRUE_;
+    static thread_local integer from = 0;
 
     /* System generated locals */
     integer i__1, i__2;

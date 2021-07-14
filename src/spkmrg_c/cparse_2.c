@@ -20,7 +20,7 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static integer nkwd = 0;
+    static thread_local integer nkwd = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;

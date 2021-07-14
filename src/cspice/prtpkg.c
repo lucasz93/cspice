@@ -15,11 +15,11 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 {
     /* Initialized data */
 
-    static logical svshrt = TRUE_;
-    static logical svexpl = TRUE_;
-    static logical svlong = TRUE_;
-    static logical svtrac = TRUE_;
-    static logical svdflt = TRUE_;
+    static thread_local logical svshrt = TRUE_;
+    static thread_local logical svexpl = TRUE_;
+    static thread_local logical svlong = TRUE_;
+    static thread_local logical svtrac = TRUE_;
+    static thread_local logical svdflt = TRUE_;
 
     /* System generated locals */
     address a__1[2];

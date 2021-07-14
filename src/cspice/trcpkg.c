@@ -19,12 +19,12 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical notrc = FALSE_;
-    static integer frzcnt = 0;
-    static integer frzovr = 0;
-    static integer maxdep = 0;
-    static integer modcnt = 0;
-    static integer ovrflw = 0;
+    static thread_local logical notrc = FALSE_;
+    static thread_local integer frzcnt = 0;
+    static thread_local integer frzovr = 0;
+    static thread_local integer maxdep = 0;
+    static thread_local integer modcnt = 0;
+    static thread_local integer ovrflw = 0;
 
     /* System generated locals */
     address a__1[5], a__2[3];

@@ -14,7 +14,7 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2];

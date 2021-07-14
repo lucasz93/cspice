@@ -18,7 +18,7 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     logical pfnd, sfnd;
     integer sclk;

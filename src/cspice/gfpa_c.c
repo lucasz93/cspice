@@ -57,6 +57,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "zzalloc.h"
+   #include "f2c.h"
 
    void gfpa_c ( ConstSpiceChar     * target,
                  ConstSpiceChar     * illmn,
@@ -819,7 +820,7 @@
    /*
    Static local variables
    */
-   static SpiceInt         nw  =  SPICE_GF_NWPA;
+   static thread_local SpiceInt nw  =  SPICE_GF_NWPA;
 
    /*
    Local variables

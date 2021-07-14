@@ -14,7 +14,7 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
+    static thread_local doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     integer i__1, i__2;

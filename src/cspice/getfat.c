@@ -60,7 +60,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzckspk_(integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___14 = { 1, 0, 1, 0, 1 };
+    static thread_local cilist io___14 = { 1, 0, 1, 0, 1 };
 
 
 /* $ Abstract */

@@ -43,7 +43,8 @@
 */
 
    #include "SpiceUsr.h"
-
+   #include "f2c.h"
+   
    SpiceDouble dpmax_c () 
 
 /*
@@ -168,8 +169,8 @@
    Static variables
    */
 
-   static SpiceBoolean            first = SPICETRUE;
-   static SpiceDouble             value;
+   static thread_local SpiceBoolean first = SPICETRUE;
+   static thread_local SpiceDouble  value;
 
 
 

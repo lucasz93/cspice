@@ -19,12 +19,12 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical opnfst = TRUE_;
-    static integer nft = 0;
-    static integer next = 0;
-    static integer nut = 0;
-    static integer reqcnt = 0;
+    static thread_local logical first = TRUE_;
+    static thread_local logical opnfst = TRUE_;
+    static thread_local integer nft = 0;
+    static thread_local integer next = 0;
+    static thread_local integer nut = 0;
+    static thread_local integer reqcnt = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

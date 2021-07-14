@@ -24,9 +24,9 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static doublereal dvec[3] = { 0.,0.,0. };
-    static char dref[80] = "                                                "
-	    "                                ";
+    static thread_local doublereal dvec[3] = { 0.,0.,0. };
+    static thread_local char dref[80] = "                                   "
+	    "                                             ";
 
     /* System generated locals */
     integer work_dim1, work_offset, i__1;

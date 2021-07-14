@@ -22,7 +22,7 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static char spcial[8*2] = "        " "?       ";
+    static thread_local char spcial[8*2] = "        " "?       ";
 
     /* System generated locals */
     address a__1[2], a__2[7], a__3[3];

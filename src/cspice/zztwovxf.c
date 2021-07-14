@@ -16,7 +16,7 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer seqnce[5] = { 1,2,3,1,2 };
+    static thread_local integer seqnce[5] = { 1,2,3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2;

@@ -15,9 +15,9 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer maxsav = 14;
-    static char fmtstr[10] = "(1PE20.13)";
+    static thread_local logical first = TRUE_;
+    static thread_local integer maxsav = 14;
+    static thread_local char fmtstr[10] = "(1PE20.13)";
 
     /* System generated locals */
     integer i__1, i__2;

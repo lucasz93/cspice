@@ -24,13 +24,13 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical usestl = FALSE_;
-    static integer nrad = 0;
-    static char prvcor[5] = "     ";
-    static integer prvilu = 0;
-    static char prvloc[25] = "                         ";
-    static char prvmth[500] = "                                             "
+    static thread_local logical first = TRUE_;
+    static thread_local logical usestl = FALSE_;
+    static thread_local integer nrad = 0;
+    static thread_local char prvcor[5] = "     ";
+    static thread_local integer prvilu = 0;
+    static thread_local char prvloc[25] = "                         ";
+    static thread_local char prvmth[500] = "                                "
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
@@ -38,10 +38,10 @@ static integer c__0 = 0;
 	    "                                                                "
 	    "                                                                "
 	    "                                                                "
-	    "       ";
-    static integer prvtrg = 0;
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
+	    "                    ";
+    static thread_local integer prvtrg = 0;
+    static thread_local logical usecn = FALSE_;
+    static thread_local logical uselt = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

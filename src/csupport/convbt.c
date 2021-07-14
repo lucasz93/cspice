@@ -44,8 +44,8 @@ static integer c__1 = 1;
     integer txtlun;
 
     /* Fortran I/O blocks */
-    static cilist io___7 = { 1, 0, 0, 0, 0 };
-    static cilist io___8 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___7 = { 1, 0, 0, 0, 0 };
+    static thread_local cilist io___8 = { 1, 0, 0, 0, 0 };
 
 
 /* $ Abstract */

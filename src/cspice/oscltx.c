@@ -22,8 +22,8 @@ static doublereal c_b15 = 1.5;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static doublereal limit = 0.;
+    static thread_local logical pass1 = TRUE_;
+    static thread_local doublereal limit = 0.;
 
     /* System generated locals */
     doublereal d__1;

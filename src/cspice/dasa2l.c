@@ -18,37 +18,38 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
-    static logical prvok = FALSE_;
-    static integer tbbase[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
+    static thread_local integer next[3] = { 2,3,1 };
+    static thread_local logical prvok = FALSE_;
+    static thread_local integer tbbase[60]	/* was [3][20] */ = { -1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static logical tbfast[20] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+    static thread_local logical tbfast[20] = { FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer tbfwrd[20] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1 };
-    static integer tbhan[20] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-    static integer tbmxad[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local integer tbfwrd[20] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+    static thread_local integer tbhan[20] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0 };
+    static thread_local integer tbmxad[60]	/* was [3][20] */ = { -1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static logical tbrdon[20] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
+	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+    static thread_local logical tbrdon[20] = { FALSE_,FALSE_,FALSE_,FALSE_,
 	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer tbsize[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
+	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
+    static thread_local integer tbsize[60]	/* was [3][20] */ = { -1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static integer prev[3] = { 3,1,2 };
-    static integer nw[3] = { 1024,128,256 };
-    static integer rngloc[3] = { 3,5,7 };
-    static logical fast = FALSE_;
-    static integer fidx = 0;
-    static logical known = FALSE_;
-    static integer nfiles = 0;
-    static integer prvhan = 0;
+	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+    static thread_local integer prev[3] = { 3,1,2 };
+    static thread_local integer nw[3] = { 1024,128,256 };
+    static thread_local integer rngloc[3] = { 3,5,7 };
+    static thread_local logical fast = FALSE_;
+    static thread_local integer fidx = 0;
+    static thread_local logical known = FALSE_;
+    static thread_local integer nfiles = 0;
+    static thread_local integer prvhan = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;

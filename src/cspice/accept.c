@@ -10,7 +10,7 @@ logical accept_0_(int n__, logical *ok)
 {
     /* Initialized data */
 
-    static logical savok = TRUE_;
+    static thread_local logical savok = TRUE_;
 
     /* System generated locals */
     logical ret_val;

@@ -23,24 +23,24 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static char sysnms[32*7] = "RECTANGULAR                     " "LATITUDIN"
-	    "AL                     " "RA/DEC                          " "SPH"
-	    "ERICAL                       " "CYLINDRICAL                     " 
-	    "GEODETIC                        " "PLANETOGRAPHIC              "
-	    "    ";
-    static char crdnms[32*3*7] = "X                               " "Y      "
-	    "                         " "Z                               " 
-	    "RADIUS                          " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "RANGE                 "
-	    "          " "RIGHT ASCENSION                 " "DECLINATION     "
-	    "                " "RADIUS                          " "COLATITUDE"
-	    "                      " "LONGITUDE                       " "RADI"
-	    "US                          " "LONGITUDE                       " 
-	    "Z                               " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "ALTITUDE              "
-	    "          " "LONGITUDE                       " "LATITUDE        "
-	    "                " "ALTITUDE                        ";
-    static doublereal y[3] = { 0.,1.,0. };
+    static thread_local char sysnms[32*7] = "RECTANGULAR                     "
+	     "LATITUDINAL                     " "RA/DEC                     "
+	    "     " "SPHERICAL                       " "CYLINDRICAL          "
+	    "           " "GEODETIC                        " "PLANETOGRAPHIC "
+	    "                 ";
+    static thread_local char crdnms[32*3*7] = "X                            "
+	    "   " "Y                               " "Z                      "
+	    "         " "RADIUS                          " "LONGITUDE        "
+	    "               " "LATITUDE                        " "RANGE      "
+	    "                     " "RIGHT ASCENSION                 " "DECLI"
+	    "NATION                     " "RADIUS                          " 
+	    "COLATITUDE                      " "LONGITUDE                   "
+	    "    " "RADIUS                          " "LONGITUDE             "
+	    "          " "Z                               " "LONGITUDE       "
+	    "                " "LATITUDE                        " "ALTITUDE  "
+	    "                      " "LONGITUDE                       " "LATI"
+	    "TUDE                        " "ALTITUDE                        ";
+    static thread_local doublereal y[3] = { 0.,1.,0. };
 
     /* System generated locals */
     integer i__1;

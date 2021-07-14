@@ -20,9 +20,9 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static char angnms[50*3] = "PHASE                                       "
-	    "      " "INCIDENCE                                         " 
-	    "EMISSION                                          ";
+    static thread_local char angnms[50*3] = "PHASE                          "
+	    "                   " "INCIDENCE                                 "
+	    "        " "EMISSION                                          ";
 
     /* System generated locals */
     integer i__1;

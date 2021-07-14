@@ -10,7 +10,7 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     /* System generated locals */
     doublereal ret_val, d__1;

@@ -1,4 +1,4 @@
-/* zzdsksbf.f -- translated by f2c (version 19980913).
+/* zzdsksbf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,11 +21,11 @@ static integer c__24 = 24;
 {
     /* Initialized data */
 
-    static integer btnbod = 0;
-    static integer btbody[10] = { 0,0,0,0,0,0,0,0,0,0 };
-    static integer bsrctr[2] = { 0,0 };
-    static logical first = TRUE_;
-    static integer stfree = 1;
+    static thread_local integer btnbod = 0;
+    static thread_local integer btbody[10] = { 0,0,0,0,0,0,0,0,0,0 };
+    static thread_local integer bsrctr[2] = { 0,0 };
+    static thread_local logical first = TRUE_;
+    static thread_local integer stfree = 1;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -54,18 +54,18 @@ static integer c__24 = 24;
     integer locic[1];
     extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
 	    integer *, doublereal *);
-    static integer sthan[10000];
-    static doublereal strad[10000];
+    static thread_local integer sthan[10000];
+    static thread_local doublereal strad[10000];
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static doublereal stoff[30000]	/* was [3][10000] */, stctr[30000]	
-	    /* was [3][10000] */;
+    static thread_local doublereal stoff[30000]	/* was [3][10000] */, stctr[
+	    30000]	/* was [3][10000] */;
     extern logical failed_(void);
-    static integer stdlad[80000]	/* was [8][10000] */;
+    static thread_local integer stdlad[80000]	/* was [8][10000] */;
     extern integer isrchi_(integer *, integer *, integer *);
-    static integer btsegp[10];
-    static doublereal stdscr[240000]	/* was [24][10000] */;
+    static thread_local integer btsegp[10];
+    static thread_local doublereal stdscr[240000]	/* was [24][10000] */;
     extern logical return_(void);
-    static integer btstsz[10];
+    static thread_local integer btstsz[10];
     integer segidx;
     logical update;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 

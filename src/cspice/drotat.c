@@ -11,7 +11,7 @@
 {
     /* Initialized data */
 
-    static integer indexs[5] = { 1,2,3,1,2 };
+    static thread_local integer indexs[5] = { 1,2,3,1,2 };
 
     /* System generated locals */
     integer i__1;

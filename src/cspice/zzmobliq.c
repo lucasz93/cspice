@@ -11,7 +11,7 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static thread_local logical first = TRUE_;
 
     static thread_local doublereal year, t;
     extern doublereal jyear_(void);

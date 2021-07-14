@@ -10,12 +10,12 @@
 {
     /* Initialized data */
 
-    static integer int1st[4] = { 1075576832,0,16444,16864 };
-    static integer int2nd[4] = { 0,1075576832,0,0 };
+    static thread_local integer int1st[4] = { 1075576832,0,16444,16864 };
+    static thread_local integer int2nd[4] = { 0,1075576832,0,0 };
 
     /* System generated locals */
     integer i__1, i__2;
-    static doublereal equiv_0[1];
+    static thread_local doublereal equiv_0[1];
 
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer);

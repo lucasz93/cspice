@@ -45,6 +45,7 @@
 
    #include "SpiceUsr.h"
    #include <math.h>
+   #include "f2c.h"
    #undef    rotvec_c
 
 
@@ -176,7 +177,7 @@
    Local constants
    */
 
-   static SpiceInt indexs[5] = { 3,1,2,3,1 };
+   static thread_local SpiceInt indexs[5] = { 3,1,2,3,1 };
 
 
    /*

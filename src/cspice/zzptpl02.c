@@ -28,10 +28,10 @@ static integer c__19 = 19;
 {
     /* Initialized data */
 
-    static doublereal limit = -1.;
-    static logical pass1 = TRUE_;
-    static integer prvdsc[8] = { 0,0,0,0,0,0,0,0 };
-    static integer prvhan = 0;
+    static thread_local doublereal limit = -1.;
+    static thread_local logical pass1 = TRUE_;
+    static thread_local integer prvdsc[8] = { 0,0,0,0,0,0,0,0 };
+    static thread_local integer prvhan = 0;
 
     /* System generated locals */
     integer i__1, i__2;

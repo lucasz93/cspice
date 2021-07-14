@@ -55,6 +55,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "zzalloc.h"
+   #include "f2c.h"
 
    void gfsubc_c ( ConstSpiceChar     * target,
                    ConstSpiceChar     * fixref,
@@ -988,7 +989,7 @@
 
    SpiceInt                nBytes;
 
-   static SpiceInt         nw = SPICE_GF_NWMAX;
+   static thread_local SpiceInt nw = SPICE_GF_NWMAX;
 
 
 
