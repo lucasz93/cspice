@@ -198,10 +198,7 @@ echo " "
 
 if ( $status == 0 ) then
 
-   foreach SRCFILE ( *.c )
-      echo "      Compiling: "   $SRCFILE
-      $TKCOMPILER $TKCOMPILEOPTIONS $SRCFILE
-   end
+   ls *.c | parallel --max-args=1 "echo '      Compiling: {1}';$TKCOMPILER $TKCOMPILEOPTIONS '{1}'"
 
 endif
 
