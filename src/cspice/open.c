@@ -86,6 +86,8 @@ extern integer f_clos();
 #undef max
 #include "stdlib.h"
 
+#include "__cspice_state.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -102,9 +104,6 @@ char *f__r_mode[2] = {"rb", "r"};
 char *f__w_mode[4] = {"wb", "w", "r+b", "r+"};
 #endif
 
- static char f__buf0[400], *f__buf = f__buf0;
- int f__buflen = (int)sizeof(f__buf0);
-
  static void
 #ifdef KR_headers
 
@@ -116,24 +115,25 @@ char *f__w_mode[4] = {"wb", "w", "r+b", "r+"};
 
 #endif
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    unsigned int len;
    char *nbuf, *s, *t, *te;
 
-   if (f__buf == f__buf0)
-      f__buflen = 1024;
-   while(f__buflen <= n)
-      f__buflen <<= 1;
-   len = (unsigned int)f__buflen;
-   if (len != f__buflen || !(nbuf = (char*)malloc(len)))
+   if (f2c->f__buf == f2c->f__buf0)
+      f2c->f__buflen = 1024;
+   while(f2c->f__buflen <= n)
+      f2c->f__buflen <<= 1;
+   len = (unsigned int)f2c->f__buflen;
+   if (len != f2c->f__buflen || !(nbuf = (char*)malloc(len)))
       f__fatal(113, "malloc failure");
    s = nbuf;
-   t = f__buf;
+   t = f2c->f__buf;
    te = t + c;
    while(t < te)
       *s++ = *t++;
-   if (f__buf != f__buf0)
-      free(f__buf);
-   f__buf = nbuf;
+   if (f2c->f__buf != f2c->f__buf0)
+      free(f2c->f__buf);
+   f2c->f__buf = nbuf;
    }
 
 int
@@ -147,25 +147,26 @@ int
 
 #endif
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    char *s, *se;
    int n;
 
-   if (f__hiwater > f__recpos)
-      f__recpos = f__hiwater;
-   n = f__recpos + 1;
-   if (n >= f__buflen)
-      f__bufadj(n, f__recpos);
-   s = f__buf;
-   se = s + f__recpos;
+   if (f2c->f__hiwater > f2c->f__recpos)
+      f2c->f__recpos = f2c->f__hiwater;
+   n = f2c->f__recpos + 1;
+   if (n >= f2c->f__buflen)
+      f__bufadj(n, f2c->f__recpos);
+   s = f2c->f__buf;
+   se = s + f2c->f__recpos;
    if (c)
       *se++ = c;
    *se = 0;
    for(;;) {
-      fputs(s, f__cf);
+      fputs(s, f2c->f__cf);
       s += strlen(s);
       if (s >= se)
          break;   /* normally happens the first time */
-      putc(*s++, f__cf);
+      putc(*s++, f2c->f__cf);
       }
    return 0;
    }
@@ -182,9 +183,10 @@ void
 
 #endif
    {
-   if (f__recpos >= f__buflen)
-      f__bufadj(f__recpos, f__buflen);
-   f__buf[f__recpos++] = c;
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   if (f2c->f__recpos >= f2c->f__buflen)
+      f__bufadj(f2c->f__recpos, f2c->f__buflen);
+   f2c->f__buf[f2c->f__recpos++] = c;
    }
 
 #define opnerr(f,m,s) {if(f) errno= m; else opn_err(m,s,a); return(m);}
@@ -200,12 +202,13 @@ static void
 
 #endif
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if (a->ofnm)
      {
      /* supply file name to error message */
-      if (a->ofnmlen >= f__buflen)
+      if (a->ofnmlen >= f2c->f__buflen)
          f__bufadj((int)a->ofnmlen, 0);
-      g_char(a->ofnm, a->ofnmlen, f__curunit->ufnm = f__buf);
+      g_char(a->ofnm, a->ofnmlen, f2c->f__curunit->ufnm = f2c->f__buf);
       }
    f__fatal(m, s);
    }
@@ -223,6 +226,7 @@ static void
 
 #endif
    {   
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    unit *b;
    integer rv;
    char buf[256], *s;
@@ -234,9 +238,9 @@ static void
 #endif
    if(a->ounit>=MXUNIT || a->ounit<0)
       err(a->oerr,101,"open")
-   if (!f__init)
+   if (!f2c->f__init)
       f_init();
-   f__curunit = b = &f__units[a->ounit];
+   f2c->f__curunit = b = &f2c->f__units[a->ounit];
    if(b->ufd) 
       {
       if(a->ofnm==0)

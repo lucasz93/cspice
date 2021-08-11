@@ -39,7 +39,6 @@ struct syl
 #define OM 34
 #define Z 35
 #define ZM 36
-extern int f__pc,f__parenlvl,f__revloc;
 typedef union
 {	real pf;
 	doublereal pd;
@@ -56,16 +55,12 @@ typedef union
 #endif
 } Uint;
 #ifdef KR_headers
-extern int (*f__doed)(),(*f__doned)();
-extern int (*f__dorevert)();
 extern int rd_ed(),rd_ned();
 extern int w_ed(),w_ned();
 #else
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern int (*f__doed)(struct syl*, char*, ftnlen),(*f__doned)(struct syl*);
-extern int (*f__dorevert)(void);
 extern void fmt_bg(void);
 extern int pars_f(char*);
 extern int rd_ed(struct syl*, char*, ftnlen),rd_ned(struct syl*);
@@ -77,13 +72,9 @@ extern int wrt_L(Uint*, int, ftnlen);
 	}
 #endif
 #endif
-extern flag f__cblank,f__cplus,f__workdone, f__nonl;
-extern char *f__fmtbuf;
-extern int f__scale;
-#define GET(x) if((x=(*f__getn)())<0) return(x)
+#define GET(f2c, x) if((x=(*f2c->f__getn)())<0) return(x)
 #define VAL(x) (x!='\n'?x:' ')
-#define PUT(x) (*f__putn)(x)
-extern int f__cursor;
+#define PUT(f2c, x) (*f2c->f__putn)(x)
 
 #undef TYQUAD
 #ifndef Allow_TYQUAD

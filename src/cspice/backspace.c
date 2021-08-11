@@ -1,16 +1,18 @@
 #include "f2c.h"
 #include "fio.h"
+#include "__cspice_state.h"
 #ifdef KR_headers
 integer f_back(a) alist *a;
 #else
 integer f_back(alist *a)
 #endif
-{	unit *b;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	unit *b;
 	long v, w, x, y, z;
 	uiolen n;
 	FILE *f;
 
-	f__curunit = b = &f__units[a->aunit];	/* curunit for error messages */
+	f2c->f__curunit = b = &f2c->f__units[a->aunit];	/* curunit for error messages */
 	if(a->aunit >= MXUNIT || a->aunit < 0)
 		err(a->aerr,101,"backspace")
 	if(b->useek==0) err(a->aerr,106,"backspace")

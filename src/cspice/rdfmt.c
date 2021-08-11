@@ -1,7 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
+#include "__cspice_state.h"
 
-extern int f__cursor;
 #ifdef KR_headers
 extern double atof();
 #else
@@ -22,11 +22,12 @@ rd_Z(n,w,len) Uint *n; ftnlen len;
 rd_Z(Uint *n, int w, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	long x[9];
 	char *s, *s0, *s1, *se, *t;
 	int ch, i, w1, w2;
-	static char hex[256];
-	static int one = 1;
+	static _Thread_local char hex[256];	/* MECHSOFT: Not critical state. Safe to keep thread local. */
+	static int one = 1;					/* MECHSOFT: Read only. Safe to keep static. */
 	int bad = 0;
 
 	if (!hex['0']) {
@@ -43,7 +44,7 @@ rd_Z(Uint *n, int w, ftnlen len)
 	if (len > 4*sizeof(long))
 		return errno = 117;
 	while (w) {
-		GET(ch);
+		GET(f2c,ch);
 		if (ch==',' || ch=='\n')
 			break;
 		w--;
@@ -99,13 +100,14 @@ rd_I(n,w,len, base) Uint *n; int w; ftnlen len; register int base;
 #else
 rd_I(Uint *n, int w, ftnlen len, register int base)
 #endif
-{	longint x;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	longint x;
 	int sign,ch;
 	char s[84], *ps;
 	ps=s; x=0;
 	while (w)
 	{
-		GET(ch);
+		GET(f2c,ch);
 		if (ch==',' || ch=='\n') break;
 		*ps=ch; ps++; w--;
 	}
@@ -115,7 +117,7 @@ rd_I(Uint *n, int w, ftnlen len, register int base)
 	if (*ps=='-') { sign=1; ps++; }
 	else { sign=0; if (*ps=='+') ps++; }
 loop:	while (*ps>='0' && *ps<='9') { x=x*base+(*ps-'0'); ps++; }
-	if (*ps==' ') {if (f__cblank) x *= base; ps++; goto loop;}
+	if (*ps==' ') {if (f2c->f__cblank) x *= base; ps++; goto loop;}
 	if(sign) x = -x;
 	if(len==sizeof(integer)) n->il=x;
 	else if(len == sizeof(char)) n->ic = (char)x;
@@ -135,7 +137,7 @@ rd_L(ftnint *n, int w, ftnlen len)
 	char s[84], *ps;
 	ps=s;
 	while (w) {
-		GET(ch);
+		GET(f2c,ch);
 		if (ch==','||ch=='\n') break;
 		*ps=ch;
 		ps++; w--;
@@ -163,6 +165,7 @@ rd_F(p, w, d, len) ufloat *p; ftnlen len;
 rd_F(ufloat *p, int w, int d, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char s[FMAX+EXPMAXDIGS+4];
 	register int ch;
 	register char *sp, *spe, *sp1;
@@ -176,7 +179,7 @@ rd_F(ufloat *p, int w, int d, ftnlen len)
 	x = 0.;
 
 	do {
-		GET(ch);
+		GET(f2c,ch);
 		w--;
 		} while (ch == ' ' && w);
 	switch(ch) {
@@ -184,43 +187,43 @@ rd_F(ufloat *p, int w, int d, ftnlen len)
 		case '+':
 			if (!w) goto zero;
 			--w;
-			GET(ch);
+			GET(f2c,ch);
 		}
 	while(ch == ' ') {
 blankdrop:
-		if (!w--) goto zero; GET(ch); }
+		if (!w--) goto zero; GET(f2c,ch); }
 	while(ch == '0')
-		{ if (!w--) goto zero; GET(ch); }
-	if (ch == ' ' && f__cblank)
+		{ if (!w--) goto zero; GET(f2c,ch); }
+	if (ch == ' ' && f2c->f__cblank)
 		goto blankdrop;
-	scale1 = f__scale;
+	scale1 = f2c->f__scale;
 	while(isdigit(ch)) {
 digloop1:
 		if (sp < spe) *sp++ = ch;
 		else ++exp;
 digloop1e:
 		if (!w--) goto done;
-		GET(ch);
+		GET(f2c,ch);
 		}
 	if (ch == ' ') {
-		if (f__cblank)
+		if (f2c->f__cblank)
 			{ ch = '0'; goto digloop1; }
 		goto digloop1e;
 		}
 	if (ch == '.') {
 		exp += d;
 		if (!w--) goto done;
-		GET(ch);
+		GET(f2c,ch);
 		if (sp == sp1) { /* no digits yet */
 			while(ch == '0') {
 skip01:
 				--exp;
 skip0:
 				if (!w--) goto done;
-				GET(ch);
+				GET(f2c,ch);
 				}
 			if (ch == ' ') {
-				if (f__cblank) goto skip01;
+				if (f2c->f__cblank) goto skip01;
 				goto skip0;
 				}
 			}
@@ -230,10 +233,10 @@ digloop2:
 				{ *sp++ = ch; --exp; }
 digloop2e:
 			if (!w--) goto done;
-			GET(ch);
+			GET(f2c,ch);
 			}
 		if (ch == ' ') {
-			if (f__cblank)
+			if (f2c->f__cblank)
 				{ ch = '0'; goto digloop2; }
 			goto digloop2e;
 			}
@@ -249,11 +252,11 @@ digloop2e:
 	  case 'D':
 		if (!w--)
 			goto bad;
-		GET(ch);
+		GET(f2c,ch);
 		while(ch == ' ') {
 			if (!w--)
 				goto bad;
-			GET(ch);
+			GET(f2c,ch);
 			}
 		se = 0;
 	  	switch(ch) {
@@ -262,12 +265,12 @@ digloop2e:
 signonly:
 			if (!w--)
 				goto bad;
-			GET(ch);
+			GET(f2c,ch);
 			}
 		while(ch == ' ') {
 			if (!w--)
 				goto bad;
-			GET(ch);
+			GET(f2c,ch);
 			}
 		if (!isdigit(ch))
 			goto bad;
@@ -276,10 +279,10 @@ signonly:
 		for(;;) {
 			if (!w--)
 				{ ch = '\n'; break; }
-			GET(ch);
+			GET(f2c,ch);
 			if (!isdigit(ch)) {
 				if (ch == ' ') {
-					if (f__cblank)
+					if (f2c->f__cblank)
 						ch = '0';
 					else continue;
 					}
@@ -329,9 +332,10 @@ rd_A(p,len) char *p; ftnlen len;
 #else
 rd_A(char *p, ftnlen len)
 #endif
-{	int i,ch;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i,ch;
 	for(i=0;i<len;i++)
-	{	GET(ch);
+	{	GET(f2c,ch);
 		*p++=VAL(ch);
 	}
 	return(0);
@@ -342,18 +346,19 @@ rd_AW(p,w,len) char *p; ftnlen len;
 #else
 rd_AW(char *p, int w, ftnlen len)
 #endif
-{	int i,ch;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i,ch;
 	if(w>=len)
 	{	for(i=0;i<w-len;i++)
-			GET(ch);
+			GET(f2c,ch);
 		for(i=0;i<len;i++)
-		{	GET(ch);
+		{	GET(f2c,ch);
 			*p++=VAL(ch);
 		}
 		return(0);
 	}
 	for(i=0;i<w;i++)
-	{	GET(ch);
+	{	GET(f2c,ch);
 		*p++=VAL(ch);
 	}
 	for(i=0;i<len-w;i++) *p++=' ';
@@ -365,9 +370,10 @@ rd_H(n,s) char *s;
 #else
 rd_H(int n, char *s)
 #endif
-{	int i,ch;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i,ch;
 	for(i=0;i<n;i++)
-		if((ch=(*f__getn)())<0) return(ch);
+		if((ch=(*f2c->f__getn)())<0) return(ch);
 		else *s++ = ch=='\n'?' ':ch;
 	return(1);
 }
@@ -377,12 +383,13 @@ rd_POS(s) char *s;
 #else
 rd_POS(char *s)
 #endif
-{	char quote;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	char quote;
 	int ch;
 	quote= *s++;
 	for(;*s;s++)
 		if(*s==quote && *(s+1)!=quote) break;
-		else if((ch=(*f__getn)())<0) return(ch);
+		else if((ch=(*f2c->f__getn)())<0) return(ch);
 		else *s = ch=='\n'?' ':ch;
 	return(1);
 }
@@ -391,26 +398,26 @@ rd_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
 #else
 rd_ed(struct syl *p, char *ptr, ftnlen len)
 #endif
-{	int ch;
-	for(;f__cursor>0;f__cursor--) if((ch=(*f__getn)())<0) return(ch);
-	if(f__cursor<0)
-	{	if(f__recpos+f__cursor < 0) /*err(elist->cierr,110,"fmt")*/
-			f__cursor = -f__recpos;	/* is this in the standard? */
-		if(f__external == 0) {
-			extern char *f__icptr;
-			f__icptr += f__cursor;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int ch;
+	for(;f2c->f__cursor>0;f2c->f__cursor--) if((ch=(*f2c->f__getn)())<0) return(ch);
+	if(f2c->f__cursor<0)
+	{	if(f2c->f__recpos+f2c->f__cursor < 0) /*err(elist->cierr,110,"fmt")*/
+			f2c->f__cursor = -f2c->f__recpos;	/* is this in the standard? */
+		if(f2c->f__external == 0) {
+			f2c->f__icptr += f2c->f__cursor;
 		}
-		else if(f__curunit && f__curunit->useek)
-			(void) fseek(f__cf,(long) f__cursor,SEEK_CUR);
+		else if(f2c->f__curunit && f2c->f__curunit->useek)
+			(void) fseek(f2c->f__cf,(long) f2c->f__cursor,SEEK_CUR);
 		else
-			err(f__elist->cierr,106,"fmt");
-		f__recpos += f__cursor;
-		f__cursor=0;
+			err(f2c->f__elist->cierr,106,"fmt");
+		f2c->f__recpos += f2c->f__cursor;
+		f2c->f__cursor=0;
 	}
 	switch(p->op)
 	{
 	default: fprintf(stderr,"rd_ed, unexpected code: %d\n", p->op);
-		sig_die(f__fmtbuf, 1);
+		sig_die(f2c->f__fmtbuf, 1);
 	case IM:
 	case I: ch = rd_I((Uint *)ptr,p->p1,len, 10);
 		break;
@@ -445,8 +452,8 @@ rd_ed(struct syl *p, char *ptr, ftnlen len)
 	}
 	if(ch == 0) return(ch);
 	else if(ch == EOF) return(EOF);
-	if (f__cf)
-		clearerr(f__cf);
+	if (f2c->f__cf)
+		clearerr(f2c->f__cf);
 	return(errno);
 }
 #ifdef KR_headers
@@ -455,22 +462,23 @@ rd_ned(p) struct syl *p;
 rd_ned(struct syl *p)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	switch(p->op)
 	{
 	default: fprintf(stderr,"rd_ned, unexpected code: %d\n", p->op);
-		sig_die(f__fmtbuf, 1);
+		sig_die(f2c->f__fmtbuf, 1);
 	case APOS:
 		return(rd_POS(p->p2.s));
 	case H:	return(rd_H(p->p1,p->p2.s));
-	case SLASH: return((*f__donewrec)());
+	case SLASH: return((*f2c->f__donewrec)());
 	case TR:
-	case X:	f__cursor += p->p1;
+	case X:	f2c->f__cursor += p->p1;
 		return(1);
-	case T: f__cursor=p->p1-f__recpos - 1;
+	case T: f2c->f__cursor=p->p1-f2c->f__recpos - 1;
 		return(1);
-	case TL: f__cursor -= p->p1;
-		if(f__cursor < -f__recpos)	/* TL1000, 1X */
-			f__cursor = -f__recpos;
+	case TL: f2c->f__cursor -= p->p1;
+		if(f2c->f__cursor < -f2c->f__recpos)	/* TL1000, 1X */
+			f2c->f__cursor = -f2c->f__recpos;
 		return(1);
 	}
 }

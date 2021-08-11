@@ -43,6 +43,7 @@
 
 #include "SpiceUsr.h"
 #include "zzerror.h"
+#include "__cspice_state.h"
 
 void zzerrorinit(void)
 
@@ -131,12 +132,12 @@ void zzerrorinit(void)
 */
    {
     
-   static SpiceBoolean     first = SPICETRUE;
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /*
    Prevent repeated executions of code with the 'first' flag.
    */
-   if ( first )
+   if ( user->zzerrorinit.first )
       {
 
       /*
@@ -146,6 +147,8 @@ void zzerrorinit(void)
 
       erract_c("SET", (SpiceInt) sizeof("RETURN"), "RETURN");
       errdev_c("SET", (SpiceInt) sizeof("NULL")  , "NULL"  );
+
+      user->zzerrorinit.first = SPICEFALSE;
 
       }
 

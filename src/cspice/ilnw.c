@@ -1,10 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "lio.h"
-extern char *f__icptr;
-extern char *f__icend;
-extern icilist *f__svic;
-extern int f__icnum;
+#include "__cspice_state.h"
 #ifdef KR_headers
 extern void z_putc();
 #else
@@ -14,6 +11,7 @@ extern void z_putc(int);
  static int
 z_wSL(Void)
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	while(f__recpos < f__svic->icirlen)
 		z_putc(' ');
 	return z_rnew();
@@ -26,20 +24,21 @@ c_liw(a) icilist *a;
 c_liw(icilist *a)
 #endif
 {
-	f__reading = 0;
-	f__external = 0;
-	f__formatted = 1;
-	f__putn = z_putc;
-	L_len = a->icirlen;
-	f__donewrec = z_wSL;
-	f__svic = a;
-	f__icnum = f__recpos = 0;
-	f__cursor = 0;
-	f__cf = 0;
-	f__curunit = 0;
-	f__icptr = a->iciunit;
-	f__icend = f__icptr + a->icirlen*a->icirnum;
-	f__elist = (cilist *)a;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__reading = 0;
+	f2c->f__external = 0;
+	f2c->f__formatted = 1;
+	f2c->f__putn = z_putc;
+	f2c->L_len = a->icirlen;
+	f2c->f__donewrec = z_wSL;
+	f2c->f__svic = a;
+	f2c->f__icnum = f2c->f__recpos = 0;
+	f2c->f__cursor = 0;
+	f2c->f__cf = 0;
+	f2c->f__curunit = 0;
+	f2c->f__icptr = a->iciunit;
+	f2c->f__icend = f2c->f__icptr + a->icirlen*a->icirnum;
+	f2c->f__elist = (cilist *)a;
 	}
 
  integer
@@ -65,7 +64,8 @@ s_wsli(a) icilist *a;
 s_wsli(icilist *a)
 #endif
 {
-	f__lioproc = l_write;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__lioproc = l_write;
 	c_liw(a);
 	return(0);
 	}

@@ -56,6 +56,7 @@
 #include <string.h>
 #include "SpiceUsr.h"
 #include "zzalloc.h"
+#include "__cspice_state.h"
 
    /*
    Define 'op' tags for zzalloc_count control.
@@ -286,12 +287,7 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 */
 int zzalloc_count ( int op )
    {
-
-   /*
-   Initialize the count to zero. Save the value
-   between calls.
-   */
-   static int            count = 0;
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /*
    Respond according to the op variable.
@@ -303,9 +299,9 @@ int zzalloc_count ( int op )
          /*
          An allocation, increment the count.
          */
-         ++count;
+         ++user->zzalloc.count;
 
-         return count;
+         return user->zzalloc.count;
          break;
 
 
@@ -314,9 +310,9 @@ int zzalloc_count ( int op )
          /*
          A free, decrement the count.
          */
-         --count;
+         --user->zzalloc.count;
 
-         return count;
+         return user->zzalloc.count;
          break;
 
       case ALLOC_EQU:
@@ -325,7 +321,7 @@ int zzalloc_count ( int op )
          Return the current count. Should equal zero at end of
          program run and NEVER have a negative value.
          */
-         return count;
+         return user->zzalloc.count;
          break;
 
       default:

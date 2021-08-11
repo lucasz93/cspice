@@ -58,11 +58,10 @@
 #include "SpiceZfc.h"
 #include "SpiceZst.h"
 #include "zzerror.h"
+#include "__cspice_state.h"
 
-#define     MSG_LEN             2024
 #define     TRC_LEN             32
 #define     MAXMOD              100
-#define     OUT_LEN             2*MSG_LEN
 
 const char * zzerror( long cnt )
 
@@ -225,6 +224,7 @@ const char * zzerror( long cnt )
 
 */
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /*
    Local variables. Tag the 'msg_short' as static so the memory
@@ -234,7 +234,6 @@ const char * zzerror( long cnt )
    largest size.
 
    */
-   static char msg_short [OUT_LEN];
    char        msg_long  [MSG_LEN];
    char        trname    [TRC_LEN];
 
@@ -259,9 +258,9 @@ const char * zzerror( long cnt )
    /*
    Zero out the char arrays, just-in-case.
    */
-   memset( msg_short, 0, 2 *MSG_LEN        );
-   memset( msg_long,  0,    MSG_LEN        );
-   memset( trlist,    0,    MAXMOD*TRC_LEN );
+   memset( user->zzerror.msg_short, 0, 2 *MSG_LEN        );
+   memset( msg_long,                0,    MSG_LEN        );
+   memset( trlist,                  0,    MAXMOD*TRC_LEN );
 
    /*
    Retrieve the depth of the call traceback stack.
@@ -276,8 +275,8 @@ const char * zzerror( long cnt )
       {
       reset_c();
 
-      sprintf(msg_short, depth_err, depth, MAXMOD );
-      return(msg_short);
+      sprintf(user->zzerror.msg_short, depth_err, depth, MAXMOD );
+      return(user->zzerror.msg_short);
       }
 
 
@@ -318,12 +317,12 @@ const char * zzerror( long cnt )
    Retrieve the short message from the error subsystem. The string has
    form "SPICE(MSGNAME)".
    */
-   (void) getsms_(msg_short, (SpiceInt) sizeof msg_short);
+   (void) getsms_(user->zzerror.msg_short, (SpiceInt) sizeof user->zzerror.msg_short);
 
    /* 
    Null terminate the FORTRAN 'msg_short' string for use in C routines.
    */
-   F2C_ConvertStr( 2*MSG_LEN, msg_short);
+   F2C_ConvertStr( 2*MSG_LEN, user->zzerror.msg_short);
 
    /*
    Obtain the long message string, a brief description of the error. 
@@ -344,7 +343,7 @@ const char * zzerror( long cnt )
    Combine the short, long and trace strings into a single string, then
    return the string.
    */
-   sprintf( msg_short + strlen(msg_short), 
+   sprintf( user->zzerror.msg_short + strlen(user->zzerror.msg_short), 
             ": [%s] %s", trlist, msg_long );
 
    /*
@@ -353,10 +352,10 @@ const char * zzerror( long cnt )
    */
    if ( cnt >= 0 )
       {
-      sprintf( msg_short + strlen(msg_short), 
+      sprintf( user->zzerror.msg_short + strlen(user->zzerror.msg_short), 
                " Failure occurred at input vector index %ld.", cnt);
       }
 
-   return(msg_short);
+   return(user->zzerror.msg_short);
    }
 

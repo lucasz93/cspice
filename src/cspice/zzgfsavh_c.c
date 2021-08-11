@@ -49,9 +49,7 @@
 
    #include <signal.h>
    #include "SpiceUsr.h"
- 
-
-   static SpiceBoolean signalStatus = SPICEFALSE;
+   #include "__cspice_state.h"
 
 
    void zzgfsavh_c ( SpiceBoolean status ) 
@@ -130,13 +128,13 @@
 */
 
 { /* Begin zzgfsavh_c */
-
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /*
    Simply save the input status value. 
    */
 
-   signalStatus = status;
+   user->zzgfsavh.signalStatus = status;
 
 
 } /* End zzgfsavh_c */
@@ -267,13 +265,13 @@
 */
 
 { /* Begin zzgfgeth_c */
-
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /*
    Simply return the saved status value. 
    */
 
-   return ( signalStatus );
+   return ( user->zzgfsavh.signalStatus );
 
 
 } /* End zzgfgeth_c */

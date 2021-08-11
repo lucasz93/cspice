@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "__cspice_state.h"
 
 #ifdef KR_headers
 extern char *strcpy();
@@ -20,11 +21,12 @@ integer f_end(a) alist *a;
 integer f_end(alist *a)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	unit *b;
 	FILE *tf;
 
 	if(a->aunit>=MXUNIT || a->aunit<0) err(a->aerr,101,"endfile");
-	b = &f__units[a->aunit];
+	b = &f2c->f__units[a->aunit];
 	if(b->ufd==NULL) {
 		char nbuf[10];
 		sprintf(nbuf,"fort.%ld",a->aunit);
@@ -62,12 +64,13 @@ t_runc(a) alist *a;
 t_runc(alist *a)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	long loc, len;
 	unit *b;
 	FILE *bf, *tf;
 	int rc = 0;
 
-	b = &f__units[a->aunit];
+	b = &f2c->f__units[a->aunit];
 	if(b->url)
 		return(0);	/*don't truncate direct files*/
 	loc=ftell(bf = b->ufd);
@@ -112,7 +115,7 @@ t_runc(alist *a)
 done1:
 	fclose(tf);
 done:
-	f__cf = b->ufd = bf;
+	f2c->f__cf = b->ufd = bf;
 	if (rc)
 		err(a->aerr,111,"endfile");
 	return 0;

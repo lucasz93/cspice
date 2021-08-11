@@ -2,25 +2,20 @@
 #include "fio.h"
 #include "lio.h"
 #include "fmt.h" /* for f__doend */
-
-extern flag f__lquit;
-extern int f__lcount;
-extern char *f__icptr;
-extern char *f__icend;
-extern icilist *f__svic;
-extern int f__icnum, f__recpos;
+#include "__cspice_state.h"
 
 static int i_getc(Void)
 {
-	if(f__recpos >= f__svic->icirlen) {
-		if (f__recpos++ == f__svic->icirlen)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if(f2c->f__recpos >= f2c->f__svic->icirlen) {
+		if (f2c->f__recpos++ == f2c->f__svic->icirlen)
 			return '\n';
 		z_rnew();
 		}
-	f__recpos++;
-	if(f__icptr >= f__icend)
+	f2c->f__recpos++;
+	if(f2c->f__icptr >= f2c->f__icend)
 		return EOF;
-	return(*f__icptr++);
+	return(*f2c->f__icptr++);
 	}
 
  static
@@ -30,12 +25,13 @@ int i_ungetc(ch, f) int ch; FILE *f;
 int i_ungetc(int ch, FILE *f)
 #endif
 {
-	if (--f__recpos == f__svic->icirlen)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if (--f2c->f__recpos == f2c->f__svic->icirlen)
 		return '\n';
-	if (f__recpos < -1)
-		err(f__svic->icierr,110,"recend");
+	if (f2c->f__recpos < -1)
+		err(f2c->f__svic->icierr,110,"recend");
 	/* *--icptr == ch, and icptr may point to read-only memory */
-	return *--f__icptr /* = ch */;
+	return *--f2c->f__icptr /* = ch */;
 	}
 
  static void
@@ -45,23 +41,24 @@ c_lir(a) icilist *a;
 c_lir(icilist *a)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	extern int l_eof;
-	f__reading = 1;
-	f__external = 0;
-	f__formatted = 1;
-	f__svic = a;
-	L_len = a->icirlen;
-	f__recpos = -1;
-	f__icnum = f__recpos = 0;
-	f__cursor = 0;
-	l_getc = i_getc;
-	l_ungetc = i_ungetc;
+	f2c->f__reading = 1;
+	f2c->f__external = 0;
+	f2c->f__formatted = 1;
+	f2c->f__svic = a;
+	f2c->L_len = a->icirlen;
+	f2c->f__recpos = -1;
+	f2c->f__icnum = f2c->f__recpos = 0;
+	f2c->f__cursor = 0;
+	f2c->l_getc = i_getc;
+	f2c->l_ungetc = i_ungetc;
 	l_eof = 0;
-	f__icptr = a->iciunit;
-	f__icend = f__icptr + a->icirlen*a->icirnum;
-	f__cf = 0;
-	f__curunit = 0;
-	f__elist = (cilist *)a;
+	f2c->f__icptr = a->iciunit;
+	f2c->f__icend = f2c->f__icptr + a->icirlen*a->icirnum;
+	f2c->f__cf = 0;
+	f2c->f__curunit = 0;
+	f2c->f__elist = (cilist *)a;
 	}
 
 
@@ -71,11 +68,12 @@ integer s_rsli(a) icilist *a;
 integer s_rsli(icilist *a)
 #endif
 {
-	f__lioproc = l_read;
-	f__lquit = 0;
-	f__lcount = 0;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__lioproc = l_read;
+	f2c->f__lquit = 0;
+	f2c->f__lcount = 0;
 	c_lir(a);
-	f__doend = 0;
+	f2c->f__doend = 0;
 	return(0);
 	}
 
@@ -90,7 +88,7 @@ extern int x_rsne(cilist*);
 integer s_rsni(icilist *a)
 #endif
 {
-	extern int nml_read;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	integer rv;
 	cilist ca;
 	ca.ciend = a->iciend;
@@ -98,6 +96,6 @@ integer s_rsni(icilist *a)
 	ca.cifmt = a->icifmt;
 	c_lir(a);
 	rv = x_rsne(&ca);
-	nml_read = 0;
+	f2c->nml_read = 0;
 	return rv;
 	}

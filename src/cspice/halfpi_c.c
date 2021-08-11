@@ -148,7 +148,8 @@
    Local Variables
    */
 
-   static SpiceDouble  value = 0.;
+   /* MECHSOFT: Not critical state. Safe to keep thread local. */
+   static _Thread_local SpiceDouble  value = 0.;
 
 
    if ( value == 0.)

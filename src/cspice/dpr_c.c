@@ -123,7 +123,8 @@
      Local Variables
      */
 
-     static SpiceDouble  value = 0.;
+     /* MECHSOFT: Safe to persist between contexts. */
+     static _Thread_local SpiceDouble  value = 0.;
 
      if (value == 0.)
         {

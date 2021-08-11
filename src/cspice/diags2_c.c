@@ -321,6 +321,7 @@
    /*
    Static variables
    */
+   /* MECHSOFT: Read only. Safe to keep static. */
    static SpiceDouble      ident [2][2] = { {1., 0.}, {0., 1.} };
 
 

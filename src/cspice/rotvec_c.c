@@ -176,6 +176,7 @@
    Local constants
    */
 
+   /* MECHSOFT: Read only. Safe to keep static. */
    static SpiceInt indexs[5] = { 3,1,2,3,1 };
 
 

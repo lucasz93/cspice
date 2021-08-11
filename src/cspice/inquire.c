@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "string.h"
+#include "__cspice_state.h"
 #ifdef KR_headers
 integer f_inqu(a) inlist *a;
 #else
@@ -12,7 +13,8 @@ integer f_inqu(a) inlist *a;
 #endif
 integer f_inqu(inlist *a)
 #endif
-{	flag byfile;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	flag byfile;
 	int i, n;
 	unit *p;
 	char buf[256];
@@ -23,19 +25,19 @@ integer f_inqu(inlist *a)
 #ifdef NON_UNIX_STDIO
 		x = access(buf,0) ? -1 : 0;
 		for(i=0,p=NULL;i<MXUNIT;i++)
-			if(f__units[i].ufd != NULL
-			 && f__units[i].ufnm != NULL
-			 && !strcmp(f__units[i].ufnm,buf)) {
-				p = &f__units[i];
+			if(f2c->f__units[i].ufd != NULL
+			 && f2c->f__units[i].ufnm != NULL
+			 && !strcmp(f2c->f__units[i].ufnm,buf)) {
+				p = &f2c->f__units[i];
 				break;
 				}
 #else
 		x=f__inode(buf, &n);
 		for(i=0,p=NULL;i<MXUNIT;i++)
-			if(f__units[i].uinode==x
-			&& f__units[i].ufd!=NULL
-			&& f__units[i].udev == n) {
-				p = &f__units[i];
+			if(f2c->f__units[i].uinode==x
+			&& f2c->f__units[i].ufd!=NULL
+			&& f2c->f__units[i].udev == n) {
+				p = &f2c->f__units[i];
 				break;
 				}
 #endif
@@ -45,7 +47,7 @@ integer f_inqu(inlist *a)
 		byfile=0;
 		if(a->inunit<MXUNIT && a->inunit>=0)
 		{
-			p= &f__units[a->inunit];
+			p= &f2c->f__units[a->inunit];
 		}
 		else
 		{
@@ -59,7 +61,7 @@ integer f_inqu(inlist *a)
 	if(a->inopen!=NULL)
 		if(byfile) *a->inopen=(p!=NULL);
 		else *a->inopen=(p!=NULL && p->ufd!=NULL);
-	if(a->innum!=NULL) *a->innum= p-f__units;
+	if(a->innum!=NULL) *a->innum= p-f2c->f__units;
 	if(a->innamed!=NULL)
 		if(byfile || p!=NULL && p->ufnm!=NULL)
 			*a->innamed=1;

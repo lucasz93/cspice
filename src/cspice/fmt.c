@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "fmt.h"
+#include "__cspice_state.h"
 #define skip(s) while(*s==' ') s++
 #ifdef interdata
 #define SYLMX 300
@@ -15,11 +16,6 @@
 #define SYLMX 300
 #endif
 #define GLITCH '\2'
-	/* special quote character for stu */
-extern int f__cursor,f__scale;
-extern flag f__cblank,f__cplus;	/*blanks in I and compulsory plus*/
-static struct syl f__syl[SYLMX];
-int f__parenlvl,f__pc,f__revloc;
 
  static
 #ifdef KR_headers
@@ -27,13 +23,14 @@ char *ap_end(s) char *s;
 #else
 char *ap_end(char *s)
 #endif
-{	char quote;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	char quote;
 	quote= *s++;
 	for(;*s;s++)
 	{	if(*s!=quote) continue;
 		if(*++s!=quote) return(s);
 	}
-	if(f__elist->cierr) {
+	if(f2c->f__elist->cierr) {
 		errno = 100;
 		return(NULL);
 	}
@@ -46,16 +43,17 @@ op_gen(a,b,c,d)
 #else
 op_gen(int a, int b, int c, int d)
 #endif
-{	struct syl *p= &f__syl[f__pc];
-	if(f__pc>=SYLMX)
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	struct syl *p= &f2c->f__syl[f2c->f__pc];
+	if(f2c->f__pc>=SYLMX)
 	{	fprintf(stderr,"format too complicated:\n");
-		sig_die(f__fmtbuf, 1);
+		sig_die(f2c->f__fmtbuf, 1);
 	}
 	p->op=a;
 	p->p1=b;
 	p->p2.i[0]=c;
 	p->p2.i[1]=d;
-	return(f__pc++);
+	return(f2c->f__pc++);
 }
 #ifdef KR_headers
 static char *f_list();
@@ -92,12 +90,13 @@ char *f_s(s,curloc) char *s;
 char *f_s(char *s, int curloc)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	skip(s);
 	if(*s++!='(')
 	{
 		return(NULL);
 	}
-	if(f__parenlvl++ ==1) f__revloc=curloc;
+	if(f2c->f__parenlvl++ ==1) f2c->f__revloc=curloc;
 	if(op_gen(RET1,curloc,0,0)<0 ||
 		(s=f_list(s))==NULL)
 	{
@@ -113,7 +112,8 @@ ne_d(s,p) char *s,**p;
 #else
 ne_d(char *s, char **p)
 #endif
-{	int n,x,sign=0;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int n,x,sign=0;
 	struct syl *sp;
 	switch(*s)
 	{
@@ -159,7 +159,7 @@ ne_d(char *s, char **p)
 		case 'x': (void) op_gen(X,n,0,0); break;
 		case 'H':
 		case 'h':
-			sp = &f__syl[op_gen(H,n,0,0)];
+			sp = &f2c->f__syl[op_gen(H,n,0,0)];
 			sp->p2.s = s + 1;
 			s+=n;
 			break;
@@ -168,7 +168,7 @@ ne_d(char *s, char **p)
 	case GLITCH:
 	case '"':
 	case '\'':
-		sp = &f__syl[op_gen(APOS,0,0,0)];
+		sp = &f2c->f__syl[op_gen(APOS,0,0,0)];
 		sp->p2.s = s;
 		if((*p = ap_end(s)) == NULL)
 			return(0);
@@ -205,7 +205,8 @@ e_d(s,p) char *s,**p;
 #else
 e_d(char *s, char **p)
 #endif
-{	int i,im,n,w,d,e,found=0,x=0;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i,im,n,w,d,e,found=0,x=0;
 	char *sv=s;
 	s=gt_num(s,&n,1);
 	(void) op_gen(STACK,n,0,0);
@@ -311,7 +312,7 @@ e_d(char *s, char **p)
 		break;
 	}
 	if(found==0)
-	{	f__pc--; /*unSTACK*/
+	{	f2c->f__pc--; /*unSTACK*/
 		*p=sv;
 		return(0);
 	}
@@ -341,15 +342,16 @@ char *f_list(s) char *s;
 char *f_list(char *s)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	for(;*s!=0;)
 	{	skip(s);
 		if((s=i_tem(s))==NULL) return(NULL);
 		skip(s);
 		if(*s==',') s++;
 		else if(*s==')')
-		{	if(--f__parenlvl==0)
+		{	if(--f2c->f__parenlvl==0)
 			{
-				(void) op_gen(REVERT,f__revloc,0,0);
+				(void) op_gen(REVERT,f2c->f__revloc,0,0);
 				return(++s);
 			}
 			(void) op_gen(GOTO,0,0,0);
@@ -365,16 +367,14 @@ pars_f(s) char *s;
 pars_f(char *s)
 #endif
 {
-	f__parenlvl=f__revloc=f__pc=0;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__parenlvl=f2c->f__revloc=f2c->f__pc=0;
 	if(f_s(s,0) == NULL)
 	{
 		return(-1);
 	}
 	return(0);
 }
-#define STKSZ 10
-int f__cnt[STKSZ],f__ret[STKSZ],f__cp,f__rp;
-flag f__workdone, f__nonl;
 
  static
 #ifdef KR_headers
@@ -414,91 +414,92 @@ integer do_fio(number,ptr,len) ftnint *number; ftnlen len; char *ptr;
 #else
 integer do_fio(ftnint *number, char *ptr, ftnlen len)
 #endif
-{	struct syl *p;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	struct syl *p;
 	int n,i;
 	for(i=0;i<*number;i++,ptr+=len)
 	{
-loop:	switch(type_f((p= &f__syl[f__pc])->op))
+loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 	{
 	default:
 		fprintf(stderr,"unknown code in do_fio: %d\n%s\n",
-			p->op,f__fmtbuf);
-		err(f__elist->cierr,100,"do_fio");
+			p->op,f2c->f__fmtbuf);
+		err(f2c->f__elist->cierr,100,"do_fio");
 	case NED:
-		if((*f__doned)(p))
-		{	f__pc++;
+		if((*f2c->f__doned)(p))
+		{	f2c->f__pc++;
 			goto loop;
 		}
-		f__pc++;
+		f2c->f__pc++;
 		continue;
 	case ED:
-		if(f__cnt[f__cp]<=0)
-		{	f__cp--;
-			f__pc++;
+		if(f2c->f__cnt[f2c->f__cp]<=0)
+		{	f2c->f__cp--;
+			f2c->f__pc++;
 			goto loop;
 		}
 		if(ptr==NULL)
-			return((*f__doend)());
-		f__cnt[f__cp]--;
-		f__workdone=1;
-		if((n=(*f__doed)(p,ptr,len))>0)
-			errfl(f__elist->cierr,errno,"fmt");
+			return((*f2c->f__doend)());
+		f2c->f__cnt[f2c->f__cp]--;
+		f2c->f__workdone=1;
+		if((n=(*f2c->f__doed)(p,ptr,len))>0)
+			errfl(f2c->f__elist->cierr,errno,"fmt");
 		if(n<0)
-			err(f__elist->ciend,(EOF),"fmt");
+			err(f2c->f__elist->ciend,(EOF),"fmt");
 		continue;
 	case STACK:
-		f__cnt[++f__cp]=p->p1;
-		f__pc++;
+		f2c->f__cnt[++f2c->f__cp]=p->p1;
+		f2c->f__pc++;
 		goto loop;
 	case RET1:
-		f__ret[++f__rp]=p->p1;
-		f__pc++;
+		f2c->f__ret[++f2c->f__rp]=p->p1;
+		f2c->f__pc++;
 		goto loop;
 	case GOTO:
-		if(--f__cnt[f__cp]<=0)
-		{	f__cp--;
-			f__rp--;
-			f__pc++;
+		if(--f2c->f__cnt[f2c->f__cp]<=0)
+		{	f2c->f__cp--;
+			f2c->f__rp--;
+			f2c->f__pc++;
 			goto loop;
 		}
-		f__pc=1+f__ret[f__rp--];
+		f2c->f__pc=1+f2c->f__ret[f2c->f__rp--];
 		goto loop;
 	case REVERT:
-		f__rp=f__cp=0;
-		f__pc = p->p1;
+		f2c->f__rp=f2c->f__cp=0;
+		f2c->f__pc = p->p1;
 		if(ptr==NULL)
-			return((*f__doend)());
-		if(!f__workdone) return(0);
-		if((n=(*f__dorevert)()) != 0) return(n);
+			return((*f2c->f__doend)());
+		if(!f2c->f__workdone) return(0);
+		if((n=(*f2c->f__dorevert)()) != 0) return(n);
 		goto loop;
 	case COLON:
 		if(ptr==NULL)
-			return((*f__doend)());
-		f__pc++;
+			return((*f2c->f__doend)());
+		f2c->f__pc++;
 		goto loop;
 	case NONL:
-		f__nonl = 1;
-		f__pc++;
+		f2c->f__nonl = 1;
+		f2c->f__pc++;
 		goto loop;
 	case S:
 	case SS:
-		f__cplus=0;
-		f__pc++;
+		f2c->f__cplus=0;
+		f2c->f__pc++;
 		goto loop;
 	case SP:
-		f__cplus = 1;
-		f__pc++;
+		f2c->f__cplus = 1;
+		f2c->f__pc++;
 		goto loop;
-	case P:	f__scale=p->p1;
-		f__pc++;
+	case P:	f2c->f__scale=p->p1;
+		f2c->f__pc++;
 		goto loop;
 	case BN:
-		f__cblank=0;
-		f__pc++;
+		f2c->f__cblank=0;
+		f2c->f__pc++;
 		goto loop;
 	case BZ:
-		f__cblank=1;
-		f__pc++;
+		f2c->f__cblank=1;
+		f2c->f__pc++;
 		goto loop;
 	}
 	}
@@ -511,6 +512,7 @@ en_fio(Void)
  VOID
 fmt_bg(Void)
 {
-	f__workdone=f__cp=f__rp=f__pc=f__cursor=0;
-	f__cnt[0]=f__ret[0]=0;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__workdone=f2c->f__cp=f2c->f__rp=f2c->f__pc=f2c->f__cursor=0;
+	f2c->f__cnt[0]=f2c->f__ret[0]=0;
 }

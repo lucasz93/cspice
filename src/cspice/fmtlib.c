@@ -2,6 +2,7 @@
 #define MAXINTLENGTH 23
 
 #include "f2c.h"
+#include "__cspice_state.h"
 #ifndef Allow_TYQUAD
 #undef longint
 #define longint long
@@ -15,8 +16,8 @@ char *f__icvt(value,ndigit,sign, base) longint value; int *ndigit,*sign;
 #else
 char *f__icvt(longint value, int *ndigit, int *sign, int base)
 #endif
-{
-	static char buf[MAXINTLENGTH+1];
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	char* buf = f2c->buf;
 	register int i;
 	ulongint uvalue;
 

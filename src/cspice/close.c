@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "__cspice_state.h"
 #ifdef KR_headers
 integer f_clos(a) cllist *a;
 #else
@@ -25,10 +26,11 @@ extern int unlink(const char*);
 
 integer f_clos(cllist *a)
 #endif
-{	unit *b;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	unit *b;
 
 	if(a->cunit >= MXUNIT) return(0);
-	b= &f__units[a->cunit];
+	b= &f2c->f__units[a->cunit];
 	if(b->ufd==NULL)
 		goto done;
 	if (b->uscrtch == 1)
@@ -69,14 +71,14 @@ f_exit()
 f_exit(void)
 #endif
 {	int i;
-	static cllist xx;
-	if (!xx.cerr) {
-		xx.cerr=1;
-		xx.csta=NULL;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if (!f2c->xx.cerr) {
+		f2c->xx.cerr=1;
+		f2c->xx.csta=NULL;
 		for(i=0;i<MXUNIT;i++)
 		{
-			xx.cunit=i;
-			(void) f_clos(&xx);
+			f2c->xx.cunit=i;
+			(void) f_clos(&f2c->xx);
 		}
 	}
 }
@@ -86,9 +88,10 @@ flush_()
 #else
 flush_(void)
 #endif
-{	int i;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i;
 	for(i=0;i<MXUNIT;i++)
-		if(f__units[i].ufd != NULL && f__units[i].uwrt)
-			fflush(f__units[i].ufd);
+		if(f2c->f__units[i].ufd != NULL && f2c->f__units[i].uwrt)
+			fflush(f2c->f__units[i].ufd);
 return 0;
 }

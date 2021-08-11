@@ -12,6 +12,7 @@ void pow_zi(doublecomplex *p, doublecomplex *a, integer *b) 	/* p = a**b  */
 	unsigned long u;
 	double t;
 	doublecomplex q, x;
+	/* MECHSOFT: Read only. Safe to keep static. */
 	static doublecomplex one = {1.0, 0.0};
 
 	n = *b;

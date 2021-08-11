@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "__cspice_state.h"
 
  static FILE *
 #ifdef KR_headers
@@ -8,9 +9,10 @@ unit_chk(Unit, who) integer Unit; char *who;
 unit_chk(integer Unit, char *who)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (Unit >= MXUNIT || Unit < 0)
 		f__fatal(101, who);
-	return f__units[Unit].ufd;
+	return f2c->f__units[Unit].ufd;
 	}
 
  integer
@@ -34,6 +36,7 @@ fseek_(integer *Unit, integer *offset, integer *whence)
 	FILE *f;
 	int w = (int)*whence;
 #ifdef SEEK_SET
+	/* MECHSOFT: Read only. Safe to keep static. */
 	static int wohin[3] = { SEEK_SET, SEEK_CUR, SEEK_END };
 #endif
 	if (w < 0 || w > 2)

@@ -1,6 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
-uiolen f__reclen;
+#include "__cspice_state.h"
 
 #ifdef KR_headers
 do_us(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
@@ -8,19 +8,20 @@ do_us(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
 do_us(ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	if(f__reading)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if(f2c->f__reading)
 	{
-		f__recpos += (int)(*number * len);
-		if(f__recpos>f__reclen)
-			err(f__elist->cierr, 110, "do_us");
-		if (fread(ptr,(int)len,(int)(*number),f__cf) != *number)
-			err(f__elist->ciend, EOF, "do_us");
+		f2c->f__recpos += (int)(*number * len);
+		if(f2c->f__recpos>f2c->f__reclen)
+			err(f2c->f__elist->cierr, 110, "do_us");
+		if (fread(ptr,(int)len,(int)(*number),f2c->f__cf) != *number)
+			err(f2c->f__elist->ciend, EOF, "do_us");
 		return(0);
 	}
 	else
 	{
-		f__reclen += *number * len;
-		(void) fwrite(ptr,(int)len,(int)(*number),f__cf);
+		f2c->f__reclen += *number * len;
+		(void) fwrite(ptr,(int)len,(int)(*number),f2c->f__cf);
 		return(0);
 	}
 }
@@ -30,10 +31,11 @@ integer do_ud(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
 integer do_ud(ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	f__recpos += (int)(*number * len);
-	if(f__recpos > f__curunit->url && f__curunit->url!=1)
-		err(f__elist->cierr,110,"do_ud");
-	if(f__reading)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c->f__recpos += (int)(*number * len);
+	if(f2c->f__recpos > f2c->f__curunit->url && f2c->f__curunit->url!=1)
+		err(f2c->f__elist->cierr,110,"do_ud");
+	if(f2c->f__reading)
 	{
 #ifdef Pad_UDread
 #ifdef KR_headers
@@ -41,19 +43,19 @@ integer do_ud(ftnint *number, char *ptr, ftnlen len)
 #else
 	size_t i;
 #endif
-		if (!(i = fread(ptr,(int)len,(int)(*number),f__cf))
-		 && !(f__recpos - *number*len))
-			err(f__elist->cierr,EOF,"do_ud")
+		if (!(i = fread(ptr,(int)len,(int)(*number),f2c->f__cf))
+		 && !(f2c->f__recpos - *number*len))
+			err(f2c->f__elist->cierr,EOF,"do_ud")
 		if (i < *number)
 			memset(ptr + i*len, 0, (*number - i)*len);
 		return 0;
 #else
-		if(fread(ptr,(int)len,(int)(*number),f__cf) != *number)
-			err(f__elist->cierr,EOF,"do_ud")
+		if(fread(ptr,(int)len,(int)(*number),f2c->f__cf) != *number)
+			err(f2c->f__elist->cierr,EOF,"do_ud")
 		else return(0);
 #endif
 	}
-	(void) fwrite(ptr,(int)len,(int)(*number),f__cf);
+	(void) fwrite(ptr,(int)len,(int)(*number),f2c->f__cf);
 	return(0);
 }
 #ifdef KR_headers
@@ -62,7 +64,8 @@ integer do_uio(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
 integer do_uio(ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	if(f__sequential)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if(f2c->f__sequential)
 		return(do_us(number,ptr,len));
 	else	return(do_ud(number,ptr,len));
 }

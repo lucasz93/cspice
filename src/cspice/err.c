@@ -58,6 +58,7 @@ extern char *malloc();
 
 #include "fio.h"
 #include "fmt.h"   /* for struct syl */
+#include "__cspice_state.h"
 
 /*
 -Brief_I/O
@@ -131,29 +132,6 @@ extern char *malloc();
 -&
 */
 
-
-/*global definitions*/
-unit f__units[MXUNIT];   /*unit table*/
-flag f__init;   /*0 on entry, 1 after initializations*/
-cilist *f__elist;   /*active external io list*/
-icilist *f__svic;   /*active internal io list*/
-flag f__reading;   /*1 if reading, 0 if writing*/
-flag f__cplus,f__cblank;
-char *f__fmtbuf;
-flag f__external;   /*1 if external io, 0 if internal */
-
-int (*f__getn)(void);   /* for formatted input */
-void (*f__putn)(int);   /* for formatted output */
-int (*f__doed)(struct syl*, char*, ftnlen),(*f__doned)(struct syl*);
-int (*f__dorevert)(void),(*f__donewrec)(void),(*f__doend)(void);
-
-flag f__sequential;   /*1 if sequential io, 0 if direct*/
-flag f__formatted;   /*1 if formatted io, 0 if unformatted*/
-FILE *f__cf;   /*current file*/
-unit *f__curunit;   /*current unit*/
-int f__recpos;   /*place in current record*/
-int f__cursor, f__hiwater, f__scale;
-char *f__icptr;
 
 /*error messages*/
 char *F_err[] =
@@ -249,6 +227,7 @@ int f__canseek(FILE *f) /*SYSDEP*/
 
 void f__fatal(int n, char *s)
 {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if(n<100 && n>=0) perror(s); /*SYSDEP*/
    else if(n >= (int)MAXERR || n < -1)
    {   fprintf(stderr,"%s: illegal error number %d\n",s,n);
@@ -256,8 +235,8 @@ void f__fatal(int n, char *s)
    else if(n == -1) fprintf(stderr,"%s: end of file\n",s);
    else
       fprintf(stderr,"%s: %s\n",s,F_err[n-100]);
-   if (f__curunit) {
-      fprintf(stderr,"apparent state: unit %ld ",f__curunit-f__units);
+   if (f2c->f__curunit) {
+      fprintf(stderr,"apparent state: unit %ld ",f2c->f__curunit-f2c->f__units);
 
       /*
       Edited line to include %s in "(unnamed)" portion of format string.
@@ -266,37 +245,38 @@ void f__fatal(int n, char *s)
 
       29-OCT-2015 (EDW)
       */
-      fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed) %s\n",
-         f__curunit->ufnm);
+      fprintf(stderr, f2c->f__curunit->ufnm ? "named %s\n" : "(unnamed) %s\n",
+         f2c->f__curunit->ufnm);
       }
    else
       fprintf(stderr,"apparent state: internal I/O\n");
-   if (f__fmtbuf)
-      fprintf(stderr,"last format: %s\n",f__fmtbuf);
-   fprintf(stderr,"lately %s %s %s %s",f__reading?"reading":"writing",
-      f__sequential?"sequential":"direct",
-      f__formatted?"formatted":"unformatted",
-      f__external?"external":"internal");
+   if (f2c->f__fmtbuf)
+      fprintf(stderr,"last format: %s\n",f2c->f__fmtbuf);
+   fprintf(stderr,"lately %s %s %s %s",f2c->f__reading?"reading":"writing",
+      f2c->f__sequential?"sequential":"direct",
+      f2c->f__formatted?"formatted":"unformatted",
+      f2c->f__external?"external":"internal");
    sig_die(" IO", 1);
 }
 
 
 /*initialization routine*/
 VOID f_init(Void)
-{   unit *p;
+{  f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   unit *p;
 
-   f__init=1;
-   p= &f__units[0];
+   f2c->f__init=1;
+   p= &f2c->f__units[0];
    p->ufd=stderr;
    p->useek=f__canseek(stderr);
    p->ufmt=1;
    p->uwrt=1;
-   p = &f__units[5];
+   p = &f2c->f__units[5];
    p->ufd=stdin;
    p->useek=f__canseek(stdin);
    p->ufmt=1;
    p->uwrt=0;
-   p= &f__units[6];
+   p= &f2c->f__units[6];
    p->ufd=stdout;
    p->useek=f__canseek(stdout);
    p->ufmt=1;
@@ -341,6 +321,7 @@ Added type identifier for routine.  29-OCT-2015 (EDW)
 */
 int f__nowwriting(unit *x)
 {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    long loc;
    int ufmt;
    extern char *f__w_mode[];
@@ -351,14 +332,14 @@ int f__nowwriting(unit *x)
       goto cantwrite;
    ufmt = x->url ? 0 : x->ufmt;
    if (x->uwrt == 3) { /* just did write, rewind */
-      if (!(f__cf = x->ufd =
+      if (!(f2c->f__cf = x->ufd =
             freopen(x->ufnm,f__w_mode[ufmt],x->ufd)))
          goto cantwrite;
       x->urw = 2;
       }
    else {
       loc=ftell(x->ufd);
-      if (!(f__cf = x->ufd =
+      if (!(f2c->f__cf = x->ufd =
          freopen(x->ufnm, f__w_mode[ufmt |= 2], x->ufd)))
          {
          x->ufd = NULL;
@@ -377,10 +358,11 @@ int f__nowwriting(unit *x)
 
 int err__fl(int f, int m, char *s)
 {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if (!f)
       f__fatal(m, s);
-   if (f__doend)
-      (*f__doend)();
+   if (f2c->f__doend)
+      (*f2c->f__doend)();
    return errno = m;
 }
 

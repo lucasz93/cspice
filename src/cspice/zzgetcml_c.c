@@ -47,6 +47,7 @@
 
    #include "SpiceUsr.h"
    #include "SpiceZpl.h"
+   #include "__cspice_state.h"
 
    #ifdef CSPICE_MACPPC
    
@@ -220,13 +221,9 @@
 */
 
 {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 
    /* Local variables */
-
-   static SpiceInt          CML_argc;
-   static SpiceChar      ** CML_argv;
-
-   static SpiceBoolean      first    = SPICETRUE;
 
    SpiceInt                 i;
 
@@ -245,7 +242,7 @@
    there is only one call to putcml_c.
    */
 
-   if ( first && init )
+   if ( user->zzgetcml.first && init )
       {
 
       /* 
@@ -260,22 +257,22 @@
 
       #endif
 
-      CML_argc = *argc;
+      user->zzgetcml.CML_argc = *argc;
    
       /*
       Allocate an array of pointers for the argv array.
       */
-      CML_argv = (SpiceChar**)malloc( sizeof(SpiceChar*) * CML_argc );
+      user->zzgetcml.CML_argv = (SpiceChar**)malloc( sizeof(SpiceChar*) * user->zzgetcml.CML_argc );
 
       /*
       Check for a malloc failure. Signal a SPICE error if error found.
       */
-      if ( CML_argv == NULL )
+      if ( user->zzgetcml.CML_argv == NULL )
          {
 
          setmsg_c ( "Malloc failed to allocate space for a "
                     "SpiceChar* array of length #. ");
-         errint_c ( "#", (SpiceInt) CML_argc );
+         errint_c ( "#", (SpiceInt) user->zzgetcml.CML_argc );
          sigerr_c ( "SPICE(MALLOCFAILED)"    );
          chkout_c ( "zzgetcml_c"             );
          return;
@@ -291,12 +288,12 @@
          /*
          Allocate the needed memory for each argv string.
          */
-         CML_argv[i] = (SpiceChar*)malloc( sizeof(SpiceChar) 
+         user->zzgetcml.CML_argv[i] = (SpiceChar*)malloc( sizeof(SpiceChar) 
                                            *
                                           (1 + len) 
                                           );
 
-         if ( CML_argv[i] == NULL )
+         if ( user->zzgetcml.CML_argv[i] == NULL )
             {
 
             setmsg_c ( "Malloc failed to allocate space for a "
@@ -307,18 +304,18 @@
             return;
             }
 
-         (void)strncpy( CML_argv[i], (*argv)[i], 1 + len );
+         (void)strncpy( user->zzgetcml.CML_argv[i], (*argv)[i], 1 + len );
          }
 
       /* 
       Set the first flag to false. This block needs run only once. 
       */
 
-      first     = SPICEFALSE;
+      user->zzgetcml.first     = SPICEFALSE;
 
       }
 
-   else if ( first && !init )
+   else if ( user->zzgetcml.first && !init )
       {
 
       /*
@@ -332,7 +329,7 @@
       return;
       }
 
-   else if ( !first && init )
+   else if ( !user->zzgetcml.first && init )
       {
 
       /* This is not the first call, but the call came from putcml_c */
@@ -348,8 +345,8 @@
 
       /* A non-first getcml_c call. return the stored values of argv and argc.*/
 
-      *argc     = CML_argc;
-      *argv     = CML_argv;
+      *argc     = user->zzgetcml.CML_argc;
+      *argv     = user->zzgetcml.CML_argv;
 
       }
 

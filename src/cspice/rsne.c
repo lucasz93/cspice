@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "lio.h"
+#include "__cspice_state.h"
 
 #define MAX_NL_CACHE 3	/* maximum number of namelist hash tables to cache */
 #define MAXDIM 20	/* maximum number of subscripts */
@@ -13,29 +14,6 @@
 	};
  typedef struct dimen dimen;
 
- struct hashentry {
-	struct hashentry *next;
-	char *name;
-	Vardesc *vd;
-	};
- typedef struct hashentry hashentry;
-
- struct hashtab {
-	struct hashtab *next;
-	Namelist *nl;
-	int htsize;
-	hashentry *tab[1];
-	};
- typedef struct hashtab hashtab;
-
- static hashtab *nl_cache;
- static int n_nlcache;
- static hashentry **zot;
- static int colonseen;
- extern ftnlen f__typesize[];
-
- extern flag f__lquit;
- extern int f__lcount, nml_read;
  extern t_getc(Void);
 
 #ifdef KR_headers
@@ -74,13 +52,14 @@ hash(ht, s) hashtab *ht; register char *s;
 hash(hashtab *ht, register char *s)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int c, x;
 	register hashentry *h;
 	char *s0 = s;
 
 	for(x = 0; c = *s++; x = x & 0x4000 ? ((x << 1) & 0x7fff) + 1 : x << 1)
 		x += c;
-	for(h = *(zot = ht->tab + x % ht->htsize); h; h = h->next)
+	for(h = *(f2c->zot = ht->tab + x % ht->htsize); h; h = h->next)
 		if (!strcmp(s0, h->name))
 			return h->vd;
 	return 0;
@@ -93,23 +72,24 @@ mk_hashtab(nl) Namelist *nl;
 mk_hashtab(Namelist *nl)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int nht, nv;
 	hashtab *ht;
 	Vardesc *v, **vd, **vde;
 	hashentry *he;
 
 	hashtab **x, **x0, *y;
-	for(x = &nl_cache; y = *x; x0 = x, x = &y->next)
+	for(x = &f2c->nl_cache; y = *x; x0 = x, x = &y->next)
 		if (nl == y->nl)
 			return y;
-	if (n_nlcache >= MAX_NL_CACHE) {
+	if (f2c->n_nlcache >= MAX_NL_CACHE) {
 		/* discard least recently used namelist hash table */
 		y = *x0;
 		free((char *)y->next);
 		y->next = 0;
 		}
 	else
-		n_nlcache++;
+		f2c->n_nlcache++;
 	nv = nl->nvars;
 	if (nv >= 0x4000)
 		nht = 0x7fff;
@@ -124,16 +104,16 @@ mk_hashtab(Namelist *nl)
 	he = (hashentry *)&ht->tab[nht];
 	ht->nl = nl;
 	ht->htsize = nht;
-	ht->next = nl_cache;
-	nl_cache = ht;
+	ht->next = f2c->nl_cache;
+	f2c->nl_cache = ht;
 	memset((char *)ht->tab, 0, nht*sizeof(hashentry *));
 	vd = nl->vars;
 	vde = vd + nv;
 	while(vd < vde) {
 		v = *vd++;
 		if (!hash(ht, v->name)) {
-			he->next = *zot;
-			*zot = he;
+			he->next = *f2c->zot;
+			*f2c->zot = he;
 			he->name = v->name;
 			he->vd = v;
 			he++;
@@ -142,14 +122,16 @@ mk_hashtab(Namelist *nl)
 	return ht;
 	}
 
-static char Alpha[256], Alphanum[256];
+/* MECHSOFT: Not critical state. Safe to keep thread local. */
+static _Thread_local char Alpha[256], Alphanum[256];
 
  static VOID
 nl_init(Void) {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register char *s;
 	register int c;
 
-	if(!f__init)
+	if(!f2c->f__init)
 		f_init();
 	for(s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; c = *s++; )
 		Alpha[c]
@@ -161,8 +143,8 @@ nl_init(Void) {
 		Alphanum[c] = c;
 	}
 
-#define GETC(x) (x=(*l_getc)())
-#define Ungetc(x,y) (*l_ungetc)(x,y)
+#define GETC(f2c,x) (x=(*f2c->l_getc)())
+#define Ungetc(f2c,x,y) (*f2c->l_ungetc)(x,y)
 
  static int
 #ifdef KR_headers
@@ -171,22 +153,23 @@ getname(s, slen) register char *s; int slen;
 getname(register char *s, int slen)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register char *se = s + slen - 1;
 	register int ch;
 
-	GETC(ch);
+	GETC(f2c, ch);
 	if (!(*s++ = Alpha[ch & 0xff])) {
 		if (ch != EOF)
 			ch = 115;
-		errfl(f__elist->cierr, ch, "namelist read");
+		errfl(f2c->f__elist->cierr, ch, "namelist read");
 		}
-	while(*s = Alphanum[GETC(ch) & 0xff])
+	while(*s = Alphanum[GETC(f2c, ch) & 0xff])
 		if (s < se)
 			s++;
 	if (ch == EOF)
-		err(f__elist->cierr, EOF, "namelist read");
+		err(f2c->f__elist->cierr, EOF, "namelist read");
 	if (ch > ' ')
-		Ungetc(ch,f__cf);
+		Ungetc(f2c, ch, f2c->f__cf);
 	return *s = 0;
 	}
 
@@ -197,26 +180,27 @@ getnum(chp, val) int *chp; ftnlen *val;
 getnum(int *chp, ftnlen *val)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int ch, sign;
 	register ftnlen x;
 
-	while(GETC(ch) <= ' ' && ch >= 0);
+	while(GETC(f2c, ch) <= ' ' && ch >= 0);
 	if (ch == '-') {
 		sign = 1;
-		GETC(ch);
+		GETC(f2c, ch);
 		}
 	else {
 		sign = 0;
 		if (ch == '+')
-			GETC(ch);
+			GETC(f2c, ch);
 		}
 	x = ch - '0';
 	if (x < 0 || x > 9)
 		return 115;
-	while(GETC(ch) >= '0' && ch <= '9')
+	while(GETC(f2c, ch) >= '0' && ch <= '9')
 		x = 10*x + ch - '0';
 	while(ch <= ' ' && ch >= 0)
-		GETC(ch);
+		GETC(f2c, ch);
 	if (ch == EOF)
 		return EOF;
 	*val = sign ? -x : x;
@@ -232,6 +216,7 @@ getdimen(chp, d, delta, extent, x1)
 getdimen(int *chp, dimen *d, ftnlen delta, ftnlen extent, ftnlen *x1)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int k;
 	ftnlen x2, x3;
 
@@ -248,7 +233,7 @@ getdimen(int *chp, dimen *d, ftnlen delta, ftnlen extent, ftnlen *x1)
 			if (!x3)
 				return 123;
 			x2 /= x3;
-			colonseen = 1;
+			f2c->colonseen = 1;
 			}
 		if (x2 < 0 || x2 >= extent)
 			return 123;
@@ -270,21 +255,22 @@ print_ne(a) cilist *a;
 print_ne(cilist *a)
 #endif
 {
-	flag intext = f__external;
-	int rpsave = f__recpos;
-	FILE *cfsave = f__cf;
-	unit *usave = f__curunit;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	flag intext = f2c->f__external;
+	int rpsave = f2c->f__recpos;
+	FILE *cfsave = f2c->f__cf;
+	unit *usave = f2c->f__curunit;
 	cilist t;
 	t = *a;
 	t.ciunit = 6;
 	s_wsne(&t);
-	fflush(f__cf);
-	f__external = intext;
-	f__reading = 1;
-	f__recpos = rpsave;
-	f__cf = cfsave;
-	f__curunit = usave;
-	f__elist = a;
+	fflush(f2c->f__cf);
+	f2c->f__external = intext;
+	f2c->f__reading = 1;
+	f2c->f__recpos = rpsave;
+	f2c->f__cf = cfsave;
+	f2c->f__curunit = usave;
+	f2c->f__elist = a;
 	}
 #endif
 
@@ -296,6 +282,8 @@ x_rsne(a) cilist *a;
 x_rsne(cilist *a)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch, got1, k, n, nd, quote, readall;
 	Namelist *nl;
 	static char where[] = "namelist read";
@@ -312,11 +300,11 @@ x_rsne(cilist *a)
 
 	if (!Alpha['a'])
 		nl_init();
-	f__reading=1;
-	f__formatted=1;
+	f2c->f__reading=1;
+	f2c->f__formatted=1;
 	got1 = 0;
  top:
-	for(;;) switch(GETC(ch)) {
+	for(;;) switch(GETC(f2c, ch)) {
 		case EOF:
  eof:
 			err(a->ciend,(EOF),where0);
@@ -332,7 +320,7 @@ x_rsne(cilist *a)
 			if (ch <= ' ' && ch >= 0)
 				continue;
 #ifndef No_Namelist_Comments
-			while(GETC(ch) != '\n')
+			while(GETC(f2c, ch) != '\n')
 				if (ch == EOF)
 					goto eof;
 #else
@@ -352,13 +340,13 @@ x_rsne(cilist *a)
 			"Skipping namelist \"%s\": seeking namelist \"%s\".\n",
 			buf, nl->name);
 		fflush(stderr);
-		for(;;) switch(GETC(ch)) {
+		for(;;) switch(GETC(f2c, ch)) {
 			case EOF:
 				err(a->ciend, EOF, where0);
 			case '/':
 			case '&':
 			case '$':
-				if (f__external)
+				if (f2c->f__external)
 					e_rsle();
 				else
 					z_rnew();
@@ -367,12 +355,12 @@ x_rsne(cilist *a)
 			case '\'':
 				quote = ch;
  more_quoted:
-				while(GETC(ch) != quote)
+				while(GETC(f2c, ch) != quote)
 					if (ch == EOF)
 						err(a->ciend, EOF, where0);
-				if (GETC(ch) == quote)
+				if (GETC(f2c, ch) == quote)
 					goto more_quoted;
-				Ungetc(ch,f__cf);
+				Ungetc(f2c,ch,f2c->f__cf);
 			default:
 				continue;
 			}
@@ -380,9 +368,9 @@ x_rsne(cilist *a)
 #endif
 	ht = mk_hashtab(nl);
 	if (!ht)
-		errfl(f__elist->cierr, 113, where0);
+		errfl(f2c->f__elist->cierr, 113, where0);
 	for(;;) {
-		for(;;) switch(GETC(ch)) {
+		for(;;) switch(GETC(f2c,ch)) {
 			case EOF:
 				if (got1)
 					return 0;
@@ -394,7 +382,7 @@ x_rsne(cilist *a)
 			default:
 				if (ch <= ' ' && ch >= 0 || ch == ',')
 					continue;
-				Ungetc(ch,f__cf);
+				Ungetc(f2c,ch,f2c->f__cf);
 				if (ch = getname(buf,sizeof(buf)))
 					return ch;
 				goto havename;
@@ -403,7 +391,7 @@ x_rsne(cilist *a)
 		v = hash(ht,buf);
 		if (!v)
 			errfl(a->cierr, 119, where);
-		while(GETC(ch) <= ' ' && ch >= 0);
+		while(GETC(f2c,ch) <= ' ' && ch >= 0);
 		vaddr = v->addr;
 		type = v->type;
 		if (type < 0) {
@@ -411,7 +399,7 @@ x_rsne(cilist *a)
 			type = TYCHAR;
 			}
 		else
-			size = f__typesize[type];
+			size = f2c->f__typesize[type];
 		ivae = size;
 		iva = readall = 0;
 		if (ch == '(' /*)*/ ) {
@@ -429,13 +417,13 @@ x_rsne(cilist *a)
 					return 124;
 				iva += b;
 				size = b1;
-				while(GETC(ch) <= ' ' && ch >= 0);
+				while(GETC(f2c, ch) <= ' ' && ch >= 0);
 				goto scalar;
 				}
 			nd = (int)dims[0];
 			nomax = span = dims[1];
 			ivae = iva + size*nomax;
-			colonseen = 0;
+			f2c->colonseen = 0;
 			if (k = getdimen(&ch, dn, size, nomax, &b))
 				errfl(a->cierr, k, where);
 			no = dn->extent;
@@ -457,13 +445,13 @@ x_rsne(cilist *a)
 				}
 			if (ch != ')')
 				errfl(a->cierr, 115, where);
-			readall = 1 - colonseen;
+			readall = 1 - f2c->colonseen;
 			b -= b0;
 			if (b < 0 || b >= nomax)
 				errfl(a->cierr, 125, where);
 			iva += size * b;
 			dims = dims1;
-			while(GETC(ch) <= ' ' && ch >= 0);
+			while(GETC(f2c,ch) <= ' ' && ch >= 0);
 			no1 = 1;
 			dn0 = dimens;
 			if (type == TYCHAR && ch == '(' /*)*/) {
@@ -477,7 +465,7 @@ x_rsne(cilist *a)
 				iva += b;
 				b0 = size;
 				size = b1;
-				while(GETC(ch) <= ' ' && ch >= 0);
+				while(GETC(f2c,ch) <= ' ' && ch >= 0);
 				if (b1 < b0)
 					goto delta_adj;
 				}
@@ -511,27 +499,27 @@ x_rsne(cilist *a)
 			no = no1 = 1;
 		if (ch != '=')
 			errfl(a->cierr, 115, where);
-		got1 = nml_read = 1;
-		f__lcount = 0;
+		got1 = f2c->nml_read = 1;
+		f2c->f__lcount = 0;
 	 readloop:
 		for(;;) {
 			if (iva >= ivae || iva < 0) {
-				f__lquit = 1;
+				f2c->f__lquit = 1;
 				goto mustend;
 				}
 			else if (iva + no1*size > ivae)
 				no1 = (ivae - iva)/size;
-			f__lquit = 0;
+			f2c->f__lquit = 0;
 			if (k = l_read(&no1, vaddr + iva, size, type))
 				return k;
-			if (f__lquit == 1)
+			if (f2c->f__lquit == 1)
 				return 0;
 			if (readall) {
 				iva += dn0->delta;
-				if (f__lcount > 0) {
+				if (f2c->f__lcount > 0) {
 					no1 = (ivae - iva)/size;
-					if (no1 > f__lcount)
-						no1 = f__lcount;
+					if (no1 > f2c->f__lcount)
+						no1 = f2c->f__lcount;
 					iva += no1 * dn0->delta;
 					if (k = l_read(&no1, vaddr + iva,
 							size, type))
@@ -539,7 +527,7 @@ x_rsne(cilist *a)
 					}
 				}
  mustend:
-			GETC(ch);
+			GETC(f2c, ch);
 			if (readall)
 				if (iva >= ivae)
 					readall = 0;
@@ -548,24 +536,24 @@ x_rsne(cilist *a)
 						case ' ':
 						case '\t':
 						case '\n':
-							GETC(ch);
+							GETC(f2c, ch);
 							continue;
 						}
 					break;
 					}
 			if (ch == '/' || ch == '$' || ch == '&') {
-				f__lquit = 1;
+				f2c->f__lquit = 1;
 				return 0;
 				}
-			else if (f__lquit) {
+			else if (f2c->f__lquit) {
 				while(ch <= ' ' && ch >= 0)
-					GETC(ch);
-				Ungetc(ch,f__cf);
+					GETC(f2c, ch);
+				Ungetc(f2c,ch,f2c->f__cf);
 				if (!Alpha[ch & 0xff] && ch >= 0)
 					errfl(a->cierr, 125, where);
 				break;
 				}
-			Ungetc(ch,f__cf);
+			Ungetc(f2c,ch,f2c->f__cf);
 			if (readall && !Alpha[ch & 0xff])
 				goto readloop;
 			if ((no -= no1) <= 0)
@@ -589,20 +577,20 @@ s_rsne(a) cilist *a;
 s_rsne(cilist *a)
 #endif
 {
-	extern int l_eof;
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 
-	f__external=1;
-	l_eof = 0;
+	f2c->f__external=1;
+	f2c->l_eof = 0;
 	if(n = c_le(a))
 		return n;
-	if(f__curunit->uwrt && f__nowreading(f__curunit))
+	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
 		err(a->cierr,errno,where0);
-	l_getc = t_getc;
-	l_ungetc = un_getc;
-	f__doend = xrd_SL;
+	f2c->l_getc = t_getc;
+	f2c->l_ungetc = un_getc;
+	f2c->f__doend = xrd_SL;
 	n = x_rsne(a);
-	nml_read = 0;
+	f2c->nml_read = 0;
 	if (n)
 		return n;
 	return e_rsle();

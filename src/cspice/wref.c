@@ -15,12 +15,15 @@
 #include "ctype.h"
 #endif
 
+#include "__cspice_state.h"
+
 #ifdef KR_headers
 wrt_E(p,w,d,e,len) ufloat *p; ftnlen len;
 #else
 wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char buf[FMAX+EXPMAXDIGS+4], *s, *se;
 	int d1, delta, e1, i, sign, signspace;
 	double dd;
@@ -33,11 +36,11 @@ wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
 
 	if(e <= 0)
 		e = 2;
-	if(f__scale) {
-		if(f__scale >= d + 2 || f__scale <= -d)
+	if(f2c->f__scale) {
+		if(f2c->f__scale >= d + 2 || f2c->f__scale <= -d)
 			goto nogood;
 		}
-	if(f__scale <= 0)
+	if(f2c->f__scale <= 0)
 		--d;
 	if (len == sizeof(real))
 		dd = p->pf;
@@ -49,7 +52,7 @@ wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
 		}
 	else {
 		sign = 0;
-		signspace = (int)f__cplus;
+		signspace = (int)f2c->f__cplus;
 #ifndef VAX
 		if (!dd)
 			dd = 0.;	/* avoid -0 */
@@ -58,7 +61,7 @@ wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
 	delta = w - (2 /* for the . and the d adjustment above */
 			+ 2 /* for the E+ */ + signspace + d + e);
 #ifdef WANT_LEAD_0
-	if (f__scale <= 0 && delta > 0) {
+	if (f2c->f__scale <= 0 && delta > 0) {
 		delta--;
 		insert0 = 1;
 		}
@@ -67,11 +70,11 @@ wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
 	if (delta < 0) {
 nogood:
 		while(--w >= 0)
-			PUT('*');
+			PUT(f2c,'*');
 		return(0);
 		}
-	if (f__scale < 0)
-		d += f__scale;
+	if (f2c->f__scale < 0)
+		d += f2c->f__scale;
 	if (d > FMAX) {
 		d1 = d - FMAX;
 		d = FMAX;
@@ -91,21 +94,21 @@ nogood:
 		if (delta < 0)
 			goto nogood;
 		while(--delta >= 0)
-			PUT(' ');
+			PUT(f2c, ' ');
 		if (signspace)
-			PUT(sign ? '-' : '+');
+			PUT(f2c, sign ? '-' : '+');
 		for(s = buf; *s; s++)
-			PUT(*s);
+			PUT(f2c, *s);
 		return 0;
 		}
 #endif
 	se = buf + d + 3;
 #ifdef GOOD_SPRINTF_EXPONENT /* When possible, exponent has 2 digits. */
-	if (f__scale != 1 && dd)
-		sprintf(se, "%+.2d", atoi(se) + 1 - f__scale);
+	if (f2c->f__scale != 1 && dd)
+		sprintf(se, "%+.2d", atoi(se) + 1 - f2c->f__scale);
 #else
 	if (dd)
-		sprintf(se, "%+.2d", atoi(se) + 1 - f__scale);
+		sprintf(se, "%+.2d", atoi(se) + 1 - f2c->f__scale);
 	else
 		strcpy(se, "+00");
 #endif
@@ -149,44 +152,44 @@ nogood:
 			if (e1 >= e)
 				goto nogood;
 	while(--delta >= 0)
-		PUT(' ');
+		PUT(f2c, ' ');
 	if (signspace)
-		PUT(sign ? '-' : '+');
+		PUT(f2c, sign ? '-' : '+');
 	s = buf;
-	i = f__scale;
-	if (f__scale <= 0) {
+	i = f2c->f__scale;
+	if (f2c->f__scale <= 0) {
 #ifdef WANT_LEAD_0
 		if (insert0)
 			PUT('0');
 #endif
-		PUT('.');
+		PUT(f2c, '.');
 		for(; i < 0; ++i)
-			PUT('0');
-		PUT(*s);
+			PUT(f2c, '0');
+		PUT(f2c, *s);
 		s += 2;
 		}
-	else if (f__scale > 1) {
-		PUT(*s);
+	else if (f2c->f__scale > 1) {
+		PUT(f2c, *s);
 		s += 2;
 		while(--i > 0)
-			PUT(*s++);
-		PUT('.');
+			PUT(f2c, *s++);
+		PUT(f2c, '.');
 		}
 	if (d1) {
 		se -= 2;
-		while(s < se) PUT(*s++);
+		while(s < se) PUT(f2c, *s++);
 		se += 2;
-		do PUT('0'); while(--d1 > 0);
+		do PUT(f2c, '0'); while(--d1 > 0);
 		}
 	while(s < se)
-		PUT(*s++);
+		PUT(f2c, *s++);
 	if (e < 2)
-		PUT(s[1]);
+		PUT(f2c, s[1]);
 	else {
 		while(++e1 <= e)
-			PUT('0');
+			PUT(f2c, '0');
 		while(*s)
-			PUT(*s++);
+			PUT(f2c, *s++);
 		}
 	return 0;
 	}
@@ -197,6 +200,7 @@ wrt_F(p,w,d,len) ufloat *p; ftnlen len;
 wrt_F(ufloat *p, int w, int d, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int d1, sign, n;
 	double x;
 	char *b, buf[MAXINTDIGS+MAXFRACDIGS+4], *s;
@@ -218,7 +222,7 @@ wrt_F(ufloat *p, int w, int d, ftnlen len)
 #endif
 		}
 
-	if (n = f__scale)
+	if (n = f2c->f__scale)
 		if (n > 0)
 			do x *= 10.; while(--n > 0);
 		else
@@ -248,7 +252,7 @@ wrt_F(ufloat *p, int w, int d, ftnlen len)
 			break;
 			}
 		}
-	if (sign || f__cplus)
+	if (sign || f2c->f__cplus)
 		++n;
 	if (n > w) {
 #ifdef WANT_LEAD_0
@@ -258,19 +262,19 @@ wrt_F(ufloat *p, int w, int d, ftnlen len)
 #endif
 		{
 			while(--w >= 0)
-				PUT('*');
+				PUT(f2c, '*');
 			return 0;
 			}
 		}
 	for(w -= n; --w >= 0; )
-		PUT(' ');
+		PUT(f2c, ' ');
 	if (sign)
-		PUT('-');
-	else if (f__cplus)
-		PUT('+');
+		PUT(f2c, '-');
+	else if (f2c->f__cplus)
+		PUT(f2c, '+');
 	while(n = *b++)
-		PUT(n);
+		PUT(f2c, n);
 	while(--d1 >= 0)
-		PUT('0');
+		PUT(f2c, '0');
 	return 0;
 	}

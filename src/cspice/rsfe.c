@@ -45,16 +45,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "fmt.h"
-
-/*
-   The variable read_non_native is set via the function zzsetnnread_.
-   This variable has file scope; functions in this file use it 
-   to decide whether to handle non-native line termination.
-   The functions rdknew_ and rdkdat_ should turn on non-native
-   line termination handling before calling rdtext_ and turn this
-   feature off immediately after rdtext_ returns.
-*/
-static logical read_non_native = 0;
+#include "__cspice_state.h"
 
 logical zzcheckeol ( int ch );
 void    zzsetnnread_( logical * on );
@@ -118,18 +109,18 @@ void    zzsetnnread_( logical * on );
 
 xrd_SL(Void)
    {
-
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int ch;
    
-   if(!f__curunit->uend)
+   if(!f2c->f__curunit->uend)
       {
 
-      while ( !zzcheckeol( ch = getc(f__cf) )  )
+      while ( !zzcheckeol( ch = getc(f2c->f__cf) )  )
          {
          
          if (ch == EOF) 
             {
-            f__curunit->uend = 1;
+            f2c->f__curunit->uend = 1;
             break;
             }
 
@@ -137,7 +128,7 @@ xrd_SL(Void)
 
       }
 
-   f__cursor=f__recpos=0;
+   f2c->f__cursor=f2c->f__recpos=0;
    
    return(1);
    }
@@ -145,15 +136,15 @@ xrd_SL(Void)
 
 x_getc(Void)
    {
-   
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int ch;
 
-   if( f__curunit->uend)
+   if( f2c->f__curunit->uend)
       {
       return(EOF);
       }
 
-   ch = getc(f__cf);
+   ch = getc(f2c->f__cf);
    
    /*
    Does 'ch' represent an end-of-file, a \n or \r?
@@ -161,7 +152,7 @@ x_getc(Void)
    */
    if(ch!=EOF && !zzcheckeol(ch) )
       {
-      f__recpos++;
+      f2c->f__recpos++;
       return(ch);
       }
    
@@ -171,14 +162,14 @@ x_getc(Void)
    */
    if( zzcheckeol(ch) )
       {
-      (void) ungetc( '\n',f__cf);
+      (void) ungetc( '\n',f2c->f__cf);
       return('\n');
       }
       
-   if(f__curunit->uend || feof(f__cf))
+   if(f2c->f__curunit->uend || feof(f2c->f__cf))
       {
-      errno            = 0;
-      f__curunit->uend = 1;
+      errno                      = 0;
+      f2c->f__curunit->uend = 1;
       return(-1);
       }
 
@@ -189,8 +180,9 @@ x_getc(Void)
 
 x_endp(Void)
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    xrd_SL();
-   return f__curunit->uend == 1 ? EOF : 0;
+   return f2c->f__curunit->uend == 1 ? EOF : 0;
    }
 
 x_rev(Void)
@@ -206,54 +198,55 @@ integer s_rsfe(a) cilist *a;
 integer s_rsfe(cilist *a)
 #endif
    {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int n;
    
-   if(!f__init) 
+   if(!f2c->f__init) 
       {
       f_init();
       }
    
-   f__reading          = 1;
-   f__sequential       = 1;
-   f__formatted        = 1;
-   f__external         = 1;
+   f2c->f__reading          = 1;
+   f2c->f__sequential       = 1;
+   f2c->f__formatted        = 1;
+   f2c->f__external         = 1;
 
    if(n=c_sfe(a)) 
       {
       return(n);
       }
 
-   f__elist            = a;
-   f__cursor=f__recpos = 0;
-   f__scale            = 0;
-   f__fmtbuf           = a->cifmt;
-   f__cf               = f__curunit->ufd;
+   f2c->f__elist                      = a;
+   f2c->f__cursor=f2c->f__recpos = 0;
+   f2c->f__scale                      = 0;
+   f2c->f__fmtbuf                     = a->cifmt;
+   f2c->f__cf                         = f2c->f__curunit->ufd;
 
-   if(pars_f(f__fmtbuf)<0) 
+   if(pars_f(f2c->f__fmtbuf)<0) 
       {
       err(a->cierr,100,"startio");
       }
 
-   f__getn             = x_getc;
-   f__doed             = rd_ed;
-   f__doned            = rd_ned;
+   f2c->f__getn             = x_getc;
+   f2c->f__doed             = rd_ed;
+   f2c->f__doned            = rd_ned;
    
    fmt_bg();
    
-   f__doend            = x_endp;
-   f__donewrec         = xrd_SL;
-   f__dorevert         = x_rev;
-   f__cblank           = f__curunit->ublnk;
-   f__cplus            = 0;
+   f2c->f__doend            = x_endp;
+   f2c->f__donewrec         = xrd_SL;
+   f2c->f__dorevert         = x_rev;
+   f2c->f__cblank           = f2c->f__curunit->ublnk;
+   f2c->f__cplus            = 0;
    
-   if( f__curunit->uwrt && f__nowreading(f__curunit) )
+   if( f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit) )
       {
       err(a->cierr,errno,"read start");
       }
    
-   if(f__curunit->uend)
+   if(f2c->f__curunit->uend)
       {
-      err(f__elist->ciend,(EOF),"read start");
+      err(f2c->f__elist->ciend,(EOF),"read start");
       }
    
    return(0);
@@ -262,8 +255,8 @@ integer s_rsfe(cilist *a)
 
 logical zzcheckeol ( int ch )
    {
-
-   if ( read_non_native )
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   if ( f2c->read_non_native )
       {
 
       /*
@@ -419,7 +412,8 @@ logical zzcheckeol ( int ch )
 
 void zzsetnnread_( logical * on )
    {
-   read_non_native = *on;
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   f2c->read_non_native = *on;
    }
 
 

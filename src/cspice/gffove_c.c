@@ -1474,6 +1474,7 @@
    /*
    Static variables
    */
+   /* MECHSOFT: Read only. Safe to keep static. */
    static const SpiceChar  * blankStr = " ";
 
 

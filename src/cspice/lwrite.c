@@ -2,15 +2,15 @@
 #include "fio.h"
 #include "fmt.h"
 #include "lio.h"
-
-ftnint L_len;
-int f__Aquote;
+#include "__cspice_state.h"
 
  static VOID
 donewrec(Void)
 {
-	if (f__recpos)
-		(*f__donewrec)();
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+
+	if (f2c->f__recpos)
+		(*f2c->f__donewrec)();
 	}
 
  static VOID
@@ -20,17 +20,18 @@ lwrt_I(n) longint n;
 lwrt_I(longint n)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char *p;
 	int ndigit, sign;
 
 	p = f__icvt(n, &ndigit, &sign, 10);
-	if(f__recpos + ndigit >= L_len)
+	if(f2c->f__recpos + ndigit >= f2c->L_len)
 		donewrec();
-	PUT(' ');
+	PUT(f2c, ' ');
 	if (sign)
-		PUT('-');
+		PUT(f2c, '-');
 	while(*p)
-		PUT(*p++);
+		PUT(f2c, *p++);
 }
  static VOID
 #ifdef KR_headers
@@ -39,7 +40,8 @@ lwrt_L(n, len) ftnint n; ftnlen len;
 lwrt_L(ftnint n, ftnlen len)
 #endif
 {
-	if(f__recpos+LLOGW>=L_len)
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	if(f2c->f__recpos+LLOGW>=f2c->L_len)
 		donewrec();
 	wrt_L((Uint *)&n,LLOGW, len);
 }
@@ -50,12 +52,13 @@ lwrt_A(p,len) char *p; ftnlen len;
 lwrt_A(char *p, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int a;
 	char *p1, *pe;
 
 	a = 0;
 	pe = p + len;
-	if (f__Aquote) {
+	if (f2c->f__Aquote) {
 		a = 3;
 		if (len > 1 && p[len-1] == ' ') {
 			while(--len > 1 && p[len-1] == ' ');
@@ -66,26 +69,26 @@ lwrt_A(char *p, ftnlen len)
 			if (*p1++ == '\'')
 				a++;
 		}
-	if(f__recpos+len+a >= L_len)
+	if(f2c->f__recpos+len+a >= f2c->L_len)
 		donewrec();
 	if (a
 #ifndef OMIT_BLANK_CC
-		|| !f__recpos
+		|| !f2c->f__recpos
 #endif
 		)
-		PUT(' ');
+		PUT(f2c, ' ');
 	if (a) {
-		PUT('\'');
+		PUT(f2c, '\'');
 		while(p < pe) {
 			if (*p == '\'')
-				PUT('\'');
-			PUT(*p++);
+				PUT(f2c, '\'');
+			PUT(f2c, *p++);
 			}
-		PUT('\'');
+		PUT(f2c, '\'');
 		}
 	else
 		while(p < pe)
-			PUT(*p++);
+			PUT(f2c, *p++);
 }
 
  static int
@@ -173,10 +176,11 @@ l_put(s) register char *s;
 l_put(register char *s)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 #ifdef KR_headers
-	register void (*pn)() = f__putn;
+	register void (*pn)() = f2c->f__putn;
 #else
-	register void (*pn)(int) = f__putn;
+	register void (*pn)(int) = f2c->f__putn;
 #endif
 	register int c;
 
@@ -191,9 +195,10 @@ lwrt_F(n) double n;
 lwrt_F(double n)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char buf[LEFBL];
 
-	if(f__recpos + l_g(buf,n) >= L_len)
+	if(f2c->f__recpos + l_g(buf,n) >= f2c->L_len)
 		donewrec();
 	l_put(buf);
 }
@@ -204,6 +209,7 @@ lwrt_C(a,b) double a,b;
 lwrt_C(double a, double b)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char *ba, *bb, bufa[LEFBL], bufb[LEFBL];
 	int al, bl;
 
@@ -213,23 +219,23 @@ lwrt_C(double a, double b)
 	bl = l_g(bufb, b) + 1;	/* intentionally high by 1 */
 	for(bb = bufb; *bb == ' '; bb++)
 		--bl;
-	if(f__recpos + al + bl + 3 >= L_len)
+	if(f2c->f__recpos + al + bl + 3 >= f2c->L_len)
 		donewrec();
 #ifdef OMIT_BLANK_CC
 	else
 #endif
-	PUT(' ');
-	PUT('(');
+	PUT(f2c, ' ');
+	PUT(f2c, '(');
 	l_put(ba);
-	PUT(',');
-	if (f__recpos + bl >= L_len) {
-		(*f__donewrec)();
+	PUT(f2c, ',');
+	if (f2c->f__recpos + bl >= f2c->L_len) {
+		(*f2c->f__donewrec)();
 #ifndef OMIT_BLANK_CC
-		PUT(' ');
+		PUT(f2c, ' ');
 #endif
 		}
 	l_put(bb);
-	PUT(')');
+	PUT(f2c, ')');
 }
 #ifdef KR_headers
 l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;

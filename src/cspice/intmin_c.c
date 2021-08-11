@@ -185,9 +185,9 @@
    /*
    Static variables
    */
-
-   static SpiceBoolean            first = SPICETRUE;
-   static SpiceInt                value;
+   /* MECHSOFT: Not critical state. Safe to keep thread local. */
+   static _Thread_local  SpiceBoolean first = SPICETRUE;
+   static _Thread_local  SpiceInt     value;
 
 
 

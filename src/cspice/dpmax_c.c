@@ -168,8 +168,9 @@
    Static variables
    */
 
-   static SpiceBoolean            first = SPICETRUE;
-   static SpiceDouble             value;
+   /* MECHSOFT: Safe to persist between contexts. */
+   static _Thread_local SpiceBoolean first = SPICETRUE;
+   static _Thread_local SpiceDouble  value;
 
 
 

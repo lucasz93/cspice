@@ -4,6 +4,7 @@
 #undef max
 #include "stdio.h"
 
+/* MECHSOFT: Read only. Safe to keep as static. */
 static integer memfailure = 3;
 
 #ifdef KR_headers

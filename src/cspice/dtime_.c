@@ -87,6 +87,8 @@
 #include "sys/times.h"
 #endif
 
+#include "__cspice_state.h"
+
 #undef Hz
 #ifdef CLK_TCK
 #define Hz CLK_TCK
@@ -105,24 +107,24 @@ dtime_(tarray) float *tarray;
 dtime_(float *tarray)
 #endif
 {
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   
 #ifdef USE_CLOCK
 #ifndef CLOCKS_PER_SECOND
 #define CLOCKS_PER_SECOND Hz
 #endif
-   static double t0;
    double t = clock();
    tarray[1] = 0;
-   tarray[0] = (t - t0) / CLOCKS_PER_SECOND;
-   t0 = t;
+   tarray[0] = (t - f2c->t0) / CLOCKS_PER_SECOND;
+   f2c->t0 = t;
    return tarray[0];
 #else
    struct tms t;
-   static struct tms t0;
 
    times(&t);
-   tarray[0] = (t.tms_utime - t0.tms_utime) / Hz;
-   tarray[1] = (t.tms_stime - t0.tms_stime) / Hz;
-   t0 = t;
+   tarray[0] = (t.tms_utime - f2c->t0.tms_utime) / Hz;
+   tarray[1] = (t.tms_stime - f2c->t0.tms_stime) / Hz;
+   f2c->t0 = t;
    return tarray[0] + tarray[1];
 #endif
    }

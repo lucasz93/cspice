@@ -174,6 +174,7 @@
    /*
    Static variables
    */
+   /* MECHSOFT: Not critical state. Safe to keep thread local. */
    static SpiceChar        verStr [ MAXLEN ];
 
    /*

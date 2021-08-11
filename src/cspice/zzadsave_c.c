@@ -50,17 +50,6 @@
    #include "SpiceZst.h"
    #include "SpiceZad.h"
 
-   /*
-   Static file scope variables 
-
-   The function pointer list is accessed by the functions
-
-      zzadsave_c ( Save a function pointer for adapter use )
-      zzadget_c  ( Get a function pointer for adapter use  )
-   
-   */
-   static void *     funcPtrList [ SPICE_N_PASSED_IN_FUNC ];
-
 
 
 
@@ -207,7 +196,7 @@
 */
 
 { /* Begin zzadsave_c */
-
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
   
 
    /*
@@ -237,7 +226,7 @@
    Store the function pointer at the index indicated by the 
    function ID.
    */   
-   funcPtrList[ funcID ] = funcPtr;
+   user->zzadsave.funcPtrList[ funcID ] = funcPtr;
 
 
    chkout_c ( "zzadsave_c" );
@@ -372,7 +361,7 @@
 */
 
 { /* Begin zzadget_c */
-
+   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
   
    /*
    Participate in error tracing.
@@ -406,7 +395,7 @@
    /*
    Return the function pointer as a void pointer.
    */   
-   return (  funcPtrList[ funcID ]  );
+   return (  user->zzadsave.funcPtrList[ funcID ]  );
 
 
 } /* End zzadget_c */

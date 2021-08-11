@@ -1359,6 +1359,7 @@
    
    doublereal              * work;
 
+   /* MECHSOFT: Read only. Safe to keep static. */
    static SpiceInt           nw = SPICE_GF_NWMAX;
    
    SpiceInt                  nBytes;

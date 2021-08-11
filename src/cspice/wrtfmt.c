@@ -1,65 +1,64 @@
 #include "f2c.h"
 #include "fio.h"
 #include "fmt.h"
-
-extern icilist *f__svic;
-extern char *f__icptr;
+#include "__cspice_state.h"
 
  static int
 mv_cur(Void)	/* shouldn't use fseek because it insists on calling fflush */
 		/* instead we know too much about stdio */
 {
-	int cursor = f__cursor;
-	f__cursor = 0;
-	if(f__external == 0) {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int cursor = f2c->f__cursor;
+	f2c->f__cursor = 0;
+	if(f2c->f__external == 0) {
 		if(cursor < 0) {
-			if(f__hiwater < f__recpos)
-				f__hiwater = f__recpos;
-			f__recpos += cursor;
-			f__icptr += cursor;
-			if(f__recpos < 0)
-				err(f__elist->cierr, 110, "left off");
+			if(f2c->f__hiwater < f2c->f__recpos)
+				f2c->f__hiwater = f2c->f__recpos;
+			f2c->f__recpos += cursor;
+			f2c->f__icptr += cursor;
+			if(f2c->f__recpos < 0)
+				err(f2c->f__elist->cierr, 110, "left off");
 		}
 		else if(cursor > 0) {
-			if(f__recpos + cursor >= f__svic->icirlen)
-				err(f__elist->cierr, 110, "recend");
-			if(f__hiwater <= f__recpos)
+			if(f2c->f__recpos + cursor >= f2c->f__svic->icirlen)
+				err(f2c->f__elist->cierr, 110, "recend");
+			if(f2c->f__hiwater <= f2c->f__recpos)
 				for(; cursor > 0; cursor--)
-					(*f__putn)(' ');
-			else if(f__hiwater <= f__recpos + cursor) {
-				cursor -= f__hiwater - f__recpos;
-				f__icptr += f__hiwater - f__recpos;
-				f__recpos = f__hiwater;
+					(*f2c->f__putn)(' ');
+			else if(f2c->f__hiwater <= f2c->f__recpos + cursor) {
+				cursor -= f2c->f__hiwater - f2c->f__recpos;
+				f2c->f__icptr += f2c->f__hiwater - f2c->f__recpos;
+				f2c->f__recpos = f2c->f__hiwater;
 				for(; cursor > 0; cursor--)
-					(*f__putn)(' ');
+					(*f2c->f__putn)(' ');
 			}
 			else {
-				f__icptr += cursor;
-				f__recpos += cursor;
+				f2c->f__icptr += cursor;
+				f2c->f__recpos += cursor;
 			}
 		}
 		return(0);
 	}
 	if (cursor > 0) {
-		if(f__hiwater <= f__recpos)
-			for(;cursor>0;cursor--) (*f__putn)(' ');
-		else if(f__hiwater <= f__recpos + cursor) {
-			cursor -= f__hiwater - f__recpos;
-			f__recpos = f__hiwater;
+		if(f2c->f__hiwater <= f2c->f__recpos)
+			for(;cursor>0;cursor--) (*f2c->f__putn)(' ');
+		else if(f2c->f__hiwater <= f2c->f__recpos + cursor) {
+			cursor -= f2c->f__hiwater - f2c->f__recpos;
+			f2c->f__recpos = f2c->f__hiwater;
 			for(; cursor > 0; cursor--)
-				(*f__putn)(' ');
+				(*f2c->f__putn)(' ');
 		}
 		else {
-			f__recpos += cursor;
+			f2c->f__recpos += cursor;
 		}
 	}
 	else if (cursor < 0)
 	{
-		if(cursor + f__recpos < 0)
-			err(f__elist->cierr,110,"left off");
-		if(f__hiwater < f__recpos)
-			f__hiwater = f__recpos;
-		f__recpos += cursor;
+		if(cursor + f2c->f__recpos < 0)
+			err(f2c->f__elist->cierr,110,"left off");
+		if(f2c->f__hiwater < f2c->f__recpos)
+			f2c->f__hiwater = f2c->f__recpos;
+		f2c->f__recpos += cursor;
 	}
 	return(0);
 }
@@ -71,10 +70,11 @@ wrt_Z(n,w,minlen,len) Uint *n; int w, minlen; ftnlen len;
 wrt_Z(Uint *n, int w, int minlen, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register char *s, *se;
 	register int i, w1;
-	static int one = 1;
-	static char hex[] = "0123456789ABCDEF";
+	static int one = 1;						/* MECHSOFT: Read only. Safe to keep static. */
+	static char hex[] = "0123456789ABCDEF";	/* MECHSOFT: Not critical state. Safe to keep thread local. */
 	s = (char *)n;
 	--len;
 	if (*(char *)&one) {
@@ -95,23 +95,23 @@ wrt_Z(Uint *n, int w, int minlen, ftnlen len)
 		w1++;
 	if (w1 > w)
 		for(i = 0; i < w; i++)
-			(*f__putn)('*');
+			(*f2c->f__putn)('*');
 	else {
 		if ((minlen -= w1) > 0)
 			w1 += minlen;
 		while(--w >= w1)
-			(*f__putn)(' ');
+			(*f2c->f__putn)(' ');
 		while(--minlen >= 0)
-			(*f__putn)('0');
+			(*f2c->f__putn)('0');
 		if (!(*s & 0xf0)) {
-			(*f__putn)(hex[*s & 0xf]);
+			(*f2c->f__putn)(hex[*s & 0xf]);
 			if (s == se)
 				return 0;
 			s += i;
 			}
 		for(;; s += i) {
-			(*f__putn)(hex[*s >> 4 & 0xf]);
-			(*f__putn)(hex[*s & 0xf]);
+			(*f2c->f__putn)(hex[*s >> 4 & 0xf]);
+			(*f2c->f__putn)(hex[*s & 0xf]);
 			if (s == se)
 				break;
 			}
@@ -125,7 +125,8 @@ wrt_I(n,w,len, base) Uint *n; ftnlen len; register int base;
 #else
 wrt_I(Uint *n, int w, ftnlen len, register int base)
 #endif
-{	int ndigit,sign,spare,i;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int ndigit,sign,spare,i;
 	longint x;
 	char *ans;
 	if(len==sizeof(integer)) x=n->il;
@@ -136,14 +137,14 @@ wrt_I(Uint *n, int w, ftnlen len, register int base)
 	else x=n->is;
 	ans=f__icvt(x,&ndigit,&sign, base);
 	spare=w-ndigit;
-	if(sign || f__cplus) spare--;
+	if(sign || f2c->f__cplus) spare--;
 	if(spare<0)
-		for(i=0;i<w;i++) (*f__putn)('*');
+		for(i=0;i<w;i++) (*f2c->f__putn)('*');
 	else
-	{	for(i=0;i<spare;i++) (*f__putn)(' ');
-		if(sign) (*f__putn)('-');
-		else if(f__cplus) (*f__putn)('+');
-		for(i=0;i<ndigit;i++) (*f__putn)(*ans++);
+	{	for(i=0;i<spare;i++) (*f2c->f__putn)(' ');
+		if(sign) (*f2c->f__putn)('-');
+		else if(f2c->f__cplus) (*f2c->f__putn)('+');
+		for(i=0;i<ndigit;i++) (*f2c->f__putn)(*ans++);
 	}
 	return(0);
 }
@@ -153,7 +154,8 @@ wrt_IM(n,w,m,len,base) Uint *n; ftnlen len; int base;
 #else
 wrt_IM(Uint *n, int w, int m, ftnlen len, int base)
 #endif
-{	int ndigit,sign,spare,i,xsign;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int ndigit,sign,spare,i,xsign;
 	longint x;
 	char *ans;
 	if(sizeof(integer)==len) x=n->il;
@@ -163,25 +165,25 @@ wrt_IM(Uint *n, int w, int m, ftnlen len, int base)
 #endif
 	else x=n->is;
 	ans=f__icvt(x,&ndigit,&sign, base);
-	if(sign || f__cplus) xsign=1;
+	if(sign || f2c->f__cplus) xsign=1;
 	else xsign=0;
 	if(ndigit+xsign>w || m+xsign>w)
-	{	for(i=0;i<w;i++) (*f__putn)('*');
+	{	for(i=0;i<w;i++) (*f2c->f__putn)('*');
 		return(0);
 	}
 	if(x==0 && m==0)
-	{	for(i=0;i<w;i++) (*f__putn)(' ');
+	{	for(i=0;i<w;i++) (*f2c->f__putn)(' ');
 		return(0);
 	}
 	if(ndigit>=m)
 		spare=w-ndigit-xsign;
 	else
 		spare=w-m-xsign;
-	for(i=0;i<spare;i++) (*f__putn)(' ');
-	if(sign) (*f__putn)('-');
-	else if(f__cplus) (*f__putn)('+');
-	for(i=0;i<m-ndigit;i++) (*f__putn)('0');
-	for(i=0;i<ndigit;i++) (*f__putn)(*ans++);
+	for(i=0;i<spare;i++) (*f2c->f__putn)(' ');
+	if(sign) (*f2c->f__putn)('-');
+	else if(f2c->f__cplus) (*f2c->f__putn)('+');
+	for(i=0;i<m-ndigit;i++) (*f2c->f__putn)('0');
+	for(i=0;i<ndigit;i++) (*f2c->f__putn)(*ans++);
 	return(0);
 }
  static int
@@ -190,15 +192,16 @@ wrt_AP(s) char *s;
 #else
 wrt_AP(char *s)
 #endif
-{	char quote;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	char quote;
 	int i;
 
-	if(f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur()))
 		return i;
 	quote = *s++;
 	for(;*s;s++)
-	{	if(*s!=quote) (*f__putn)(*s);
-		else if(*++s==quote) (*f__putn)(*s);
+	{	if(*s!=quote) (*f2c->f__putn)(*s);
+		else if(*++s==quote) (*f2c->f__putn)(*s);
 		else return(1);
 	}
 	return(1);
@@ -210,11 +213,12 @@ wrt_H(a,s) char *s;
 wrt_H(int a, char *s)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int i;
 
-	if(f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur()))
 		return i;
-	while(a--) (*f__putn)(*s++);
+	while(a--) (*f2c->f__putn)(*s++);
 	return(1);
 }
 #ifdef KR_headers
@@ -222,15 +226,16 @@ wrt_L(n,len, sz) Uint *n; ftnlen sz;
 #else
 wrt_L(Uint *n, int len, ftnlen sz)
 #endif
-{	int i;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int i;
 	long x;
 	if(sizeof(long)==sz) x=n->il;
 	else if(sz == sizeof(char)) x = n->ic;
 	else x=n->is;
 	for(i=0;i<len-1;i++)
-		(*f__putn)(' ');
-	if(x) (*f__putn)('T');
-	else (*f__putn)('F');
+		(*f2c->f__putn)(' ');
+	if(x) (*f2c->f__putn)('T');
+	else (*f2c->f__putn)('F');
 	return(0);
 }
  static int
@@ -240,7 +245,8 @@ wrt_A(p,len) char *p; ftnlen len;
 wrt_A(char *p, ftnlen len)
 #endif
 {
-	while(len-- > 0) (*f__putn)(*p++);
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	while(len-- > 0) (*f2c->f__putn)(*p++);
 	return(0);
 }
  static int
@@ -250,12 +256,13 @@ wrt_AW(p,w,len) char * p; ftnlen len;
 wrt_AW(char * p, int w, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	while(w>len)
 	{	w--;
-		(*f__putn)(' ');
+		(*f2c->f__putn)(' ');
 	}
 	while(w-- > 0)
-		(*f__putn)(*p++);
+		(*f2c->f__putn)(*p++);
 	return(0);
 }
 
@@ -265,7 +272,8 @@ wrt_G(p,w,d,e,len) ufloat *p; ftnlen len;
 #else
 wrt_G(ufloat *p, int w, int d, int e, ftnlen len)
 #endif
-{	double up = 1,x;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	double up = 1,x;
 	int i=0,oldscale,n,j;
 	x = len==sizeof(real)?p->pf:p->pd;
 	if(x < 0 ) x = -x;
@@ -278,13 +286,13 @@ wrt_G(ufloat *p, int w, int d, int e, ftnlen len)
 	for(;i<=d;i++,up*=10)
 	{	if(x>=up) continue;
  have_i:
-		oldscale = f__scale;
-		f__scale = 0;
+		oldscale = f2c->f__scale;
+		f2c->f__scale = 0;
 		if(e==0) n=4;
 		else	n=e+2;
 		i=wrt_F(p,w-n,d-i,len);
-		for(j=0;j<n;j++) (*f__putn)(' ');
-		f__scale=oldscale;
+		for(j=0;j<n;j++) (*f2c->f__putn)(' ');
+		f2c->f__scale=oldscale;
 		return(i);
 	}
 	return(wrt_E(p,w,d,e,len));
@@ -295,15 +303,16 @@ w_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
 w_ed(struct syl *p, char *ptr, ftnlen len)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int i;
 
-	if(f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur()))
 		return i;
 	switch(p->op)
 	{
 	default:
 		fprintf(stderr,"w_ed, unexpected code: %d\n", p->op);
-		sig_die(f__fmtbuf, 1);
+		sig_die(f2c->f__fmtbuf, 1);
 	case I:	return(wrt_I((Uint *)ptr,p->p1,len, 10));
 	case IM:
 		return(wrt_IM((Uint *)ptr,p->p1,p->p2.i[0],len,10));
@@ -341,21 +350,22 @@ w_ned(p) struct syl *p;
 w_ned(struct syl *p)
 #endif
 {
+	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	switch(p->op)
 	{
 	default: fprintf(stderr,"w_ned, unexpected code: %d\n", p->op);
-		sig_die(f__fmtbuf, 1);
+		sig_die(f2c->f__fmtbuf, 1);
 	case SLASH:
-		return((*f__donewrec)());
-	case T: f__cursor = p->p1-f__recpos - 1;
+		return((*f2c->f__donewrec)());
+	case T: f2c->f__cursor = p->p1-f2c->f__recpos - 1;
 		return(1);
-	case TL: f__cursor -= p->p1;
-		if(f__cursor < -f__recpos)	/* TL1000, 1X */
-			f__cursor = -f__recpos;
+	case TL: f2c->f__cursor -= p->p1;
+		if(f2c->f__cursor < -f2c->f__recpos)	/* TL1000, 1X */
+			f2c->f__cursor = -f2c->f__recpos;
 		return(1);
 	case TR:
 	case X:
-		f__cursor += p->p1;
+		f2c->f__cursor += p->p1;
 		return(1);
 	case APOS:
 		return(wrt_AP(p->p2.s));
