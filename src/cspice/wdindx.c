@@ -1,9 +1,17 @@
-/* wdindx.f -- translated by f2c (version 19980913).
+/* wdindx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wdindx_state_t;
+static wdindx_state_t* get_wdindx_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            WDINDX ( Index of a Word Within a String ) */
 integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
@@ -15,12 +23,21 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, begwd, endwd, wdlen, bgtond;
+    integer i__;
+    integer j;
+    integer begwd;
+    integer endwd;
+    integer wdlen;
+    integer bgtond;
     extern integer lastnb_(char *, ftnlen);
     integer begstr;
     extern integer frstnb_(char *, ftnlen);
-    integer endstr, strlen;
+    integer endstr;
+    integer strlen;
 
+
+    /* Module state */
+    wdindx_state_t* __state = get_wdindx_state();
 /* $ Abstract */
 
 /*     Find the index of a word within a string.  If the word does not */

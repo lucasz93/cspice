@@ -1,9 +1,17 @@
-/* dlafns.f -- translated by f2c (version 19980913).
+/* dlafns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dlafns_state_t;
+static dlafns_state_t* get_dlafns_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DLAFNS ( DLA, find next segment ) */
 /* Subroutine */ int dlafns_(integer *handle, integer *descr, integer *nxtdsc,
@@ -13,11 +21,16 @@
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dasrdi_(integer *, 
-	    integer *, integer *, integer *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer fwd;
 
+
+    /* Module state */
+    dlafns_state_t* __state = get_dlafns_state();
 /* $ Abstract */
 
 /*     Find the segment following a specified segment in a DLA file. */

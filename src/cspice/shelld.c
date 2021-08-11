@@ -1,9 +1,17 @@
-/* shelld.f -- translated by f2c (version 19980913).
+/* shelld.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int shelld_state_t;
+static shelld_state_t* get_shelld_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SHELLD ( Shell sort a double precision array ) */
 /* Subroutine */ int shelld_(integer *ndim, doublereal *array)
@@ -12,10 +20,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapd_(doublereal *, doublereal *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    shelld_state_t* __state = get_shelld_state();
 /* $ Abstract */
 
 /*      Sort a double precision array using the Shell Sort algorithm. */

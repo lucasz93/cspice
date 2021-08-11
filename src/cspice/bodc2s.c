@@ -1,20 +1,32 @@
-/* bodc2s.f -- translated by f2c (version 19980913).
+/* bodc2s.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bodc2s_state_t;
+static bodc2s_state_t* get_bodc2s_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure BODC2S ( Body ID code to string translation ) */
 /* Subroutine */ int bodc2s_(integer *code, char *name__, ftnlen name_len)
 {
     extern /* Subroutine */ int zzbodc2n_(integer *, char *, logical *, 
-	    ftnlen), chkin_(char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    bodc2s_state_t* __state = get_bodc2s_state();
 /* $ Abstract */
 
 /*     Translate a body ID code to either the corresponding name */

@@ -1,15 +1,21 @@
-/* gfocce.f -- translated by f2c (version 19980913).
+/* gfocce.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static logical c_false = FALSE_;
-static doublereal c_b21 = 1.;
+extern gfocce_init_t __gfocce_init;
+static gfocce_state_t* get_gfocce_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfocce)
+		state->gfocce = __cspice_allocate_module(sizeof(
+	gfocce_state_t), &__gfocce_init, sizeof(__gfocce_init));
+	return state->gfocce;
+
+}
 
 /* $Procedure      GFOCCE ( GF, occultation event ) */
 /* Subroutine */ int gfocce_(char *occtyp, char *front, char *fshape, char *
@@ -36,8 +42,9 @@ static doublereal c_b21 = 1.;
 	    logical *, doublereal *, doublereal *, doublereal *, doublereal *,
 	     logical *, U_fp, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sized_(doublereal *);
     integer count;
     doublereal start;
@@ -49,11 +56,16 @@ static doublereal c_b21 = 1.;
     extern integer wncard_(doublereal *);
     doublereal finish;
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), wnfetd_(doublereal *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
+	     doublereal *);
 
+
+    /* Module state */
+    gfocce_state_t* __state = get_gfocce_state();
 /* $ Abstract */
 
 /*     Determine time intervals when an observer sees one target */
@@ -1464,7 +1476,7 @@ static doublereal c_b21 = 1.;
 
 /*     Empty the RESULT window. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Check the convergence tolerance. */
 
@@ -1525,8 +1537,8 @@ static doublereal c_b21 = 1.;
 
 	wnfetd_(cnfine, &i__, &start, &finish);
 	zzgfsolv_((U_fp)zzgfocst_, (U_fp)udstep, (U_fp)udrefn, bail, (L_fp)
-		udbail, &c_false, &c_b21, &start, &finish, tol, rpt, (U_fp)
-		udrepu, result);
+		udbail, &__state->c_false, &__state->c_b21, &start, &finish, 
+		tol, rpt, (U_fp)udrepu, result);
 	if (failed_()) {
 	    chkout_("GFOCCE", (ftnlen)6);
 	    return 0;

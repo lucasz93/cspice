@@ -1,9 +1,17 @@
-/* zztknerr.f -- translated by f2c (version 19980913).
+/* zztknerr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zztknerr_state_t;
+static zztknerr_state_t* get_zztknerr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZTKNERR ( Create ZZTOKNS overflow error message ) */
 /* Subroutine */ int zztknerr_(char *templt, char *string, char *token, char *
@@ -13,6 +21,9 @@
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zztknerr_state_t* __state = get_zztknerr_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */

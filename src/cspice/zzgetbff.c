@@ -1,30 +1,41 @@
-/* zzgetbff.f -- translated by f2c (version 19980913).
+/* zzgetbff.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzgetbff_init_t __zzgetbff_init;
+static zzgetbff_state_t* get_zzgetbff_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgetbff)
+		state->zzgetbff = __cspice_allocate_module(sizeof(
+	zzgetbff_state_t), &__zzgetbff_init, sizeof(__zzgetbff_init));
+	return state->zzgetbff;
+
+}
 
 /* $Procedure ZZGETBFF ( Private --- Get Binary File Format ) */
 /* Subroutine */ int zzgetbff_(integer *bffid)
 {
     /* Initialized data */
 
-    static integer int1st[4] = { 1075576832,0,16444,16864 };
-    static integer int2nd[4] = { 0,1075576832,0,0 };
 
     /* System generated locals */
     integer i__1, i__2;
-    static doublereal equiv_0[1];
 
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-#define dequiv (equiv_0)
-#define iequiv ((integer *)equiv_0)
+#define dequiv (__state->equiv_0)
+#define iequiv ((integer *)__state->equiv_0)
 
+    /* Module state */
+    zzgetbff_state_t* __state = get_zzgetbff_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -462,10 +473,11 @@
 
     *bffid = 0;
     for (i__ = 1; i__ <= 4; ++i__) {
-	if (iequiv[0] == int1st[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("int1st", i__1, "zzgetbff_", (ftnlen)215)] && iequiv[1]
-		 == int2nd[(i__2 = i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"int2nd", i__2, "zzgetbff_", (ftnlen)215)]) {
+	if (iequiv[0] == __state->int1st[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? 
+		i__1 : s_rnge("int1st", i__1, "zzgetbff_", (ftnlen)215)] && 
+		iequiv[1] == __state->int2nd[(i__2 = i__ - 1) < 4 && 0 <= 
+		i__2 ? i__2 : s_rnge("int2nd", i__2, "zzgetbff_", (ftnlen)215)
+		]) {
 	    *bffid = i__;
 	}
     }

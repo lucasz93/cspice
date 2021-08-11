@@ -1,9 +1,17 @@
-/* prodai.f -- translated by f2c (version 19980913).
+/* prodai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prodai_state_t;
+static prodai_state_t* get_prodai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             PRODAI ( Product of an integer array ) */
 integer prodai_(integer *array, integer *n)
@@ -12,8 +20,12 @@ integer prodai_(integer *array, integer *n)
     integer ret_val, i__1;
 
     /* Local variables */
-    integer prod, i__;
+    integer prod;
+    integer i__;
 
+
+    /* Module state */
+    prodai_state_t* __state = get_prodai_state();
 /* $ Abstract */
 
 /*      Return the product of the elements of an integer array. */

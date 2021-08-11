@@ -1,19 +1,31 @@
-/* spks12.f -- translated by f2c (version 19980913).
+/* spks12.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spks12_state_t;
+static spks12_state_t* get_spks12_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SPKS12 ( S/P Kernel, subset, type 12 ) */
 /* Subroutine */ int spks12_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spks08_(integer *, 
-	    integer *, integer *, doublereal *, doublereal *), chkout_(char *,
-	     ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int spks08_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spks12_state_t* __state = get_spks12_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 12 */

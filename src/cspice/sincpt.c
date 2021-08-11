@@ -1,13 +1,21 @@
-/* sincpt.f -- translated by f2c (version 19980913).
+/* sincpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
+extern sincpt_init_t __sincpt_init;
+static sincpt_state_t* get_sincpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sincpt)
+		state->sincpt = __cspice_allocate_module(sizeof(
+	sincpt_state_t), &__sincpt_init, sizeof(__sincpt_init));
+	return state->sincpt;
+
+}
 
 /* $Procedure SINCPT ( Surface intercept ) */
 /* Subroutine */ int sincpt_(char *method, char *target, doublereal *et, char 
@@ -18,21 +26,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[500] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "       ";
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
-    static logical usestl = FALSE_;
-    static logical xmit = FALSE_;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -43,50 +36,56 @@ static integer c__100 = 100;
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzmaxrad_();
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen)
-	    , zzsuelin_(integer *), zzsudski_(integer *, integer *, integer *,
-	     integer *), zzctruin_(integer *), zzsfxcor_(U_fp, U_fp, U_fp, 
-	    integer *, doublereal *, char *, logical *, logical *, logical *, 
-	    logical *, char *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
-	     ftnlen, ftnlen), zzprsmet_(integer *, char *, integer *, char *, 
-	    char *, logical *, integer *, integer *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen), zzsrftrk_(integer *, logical *);
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzsuelin_(integer *);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzsfxcor_(U_fp, U_fp, U_fp, integer *, 
+	    doublereal *, char *, logical *, logical *, logical *, logical *, 
+	    char *, integer *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
     extern /* Subroutine */ int zzraysfx_();
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer shape;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static integer nsurf;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), vzero_(doublereal *
-	    );
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical vzero_(doublereal *);
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
     integer dfrcde;
-    static integer svctr5[2];
-    integer fxfcde, obscde, dclass, trgcde;
+    integer fxfcde;
+    integer obscde;
+    integer dclass;
+    integer trgcde;
     extern logical return_(void);
-    char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
-    integer dcentr, dtypid, fxcent, fxclss, fxtyid;
-    static integer srflst[100];
-    logical attblk[15], surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svfxfc;
+    char pntdef[20];
+    char shpstr[9];
+    char subtyp[20];
+    char trmstr[20];
+    integer dcentr;
+    integer dtypid;
+    integer fxcent;
+    integer fxclss;
+    integer fxtyid;
+    logical attblk[15];
+    logical surfup;
     logical fnd;
-    static char svdref[32];
-    static integer svdfrc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen);
-    static logical pri;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern /* Subroutine */ int zzraynp_();
 
+
+    /* Module state */
+    sincpt_state_t* __state = get_sincpt_state();
 /* $ Abstract */
 
 /*     Given an observer and a direction vector defining a ray, compute */
@@ -2363,22 +2362,23 @@ static integer c__100 = 100;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	zzctruin_(svctr4);
-	zzctruin_(svctr5);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	zzctruin_(__state->svctr4);
+	zzctruin_(__state->svctr5);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -2406,20 +2406,20 @@ static integer c__100 = 100;
 /*        The above definitions are consistent with those used by */
 /*        ZZPRSCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
-	usecn = attblk[3];
-	usestl = attblk[2];
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
+	__state->usestl = attblk[2];
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -2431,8 +2431,8 @@ static integer c__100 = 100;
 	chkout_("SINCPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -2459,8 +2459,8 @@ static integer c__100 = 100;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr3, svfref, &svfxfc, fixref, &fxfcde, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr3, __state->svfref, &__state->svfxfc, fixref, &
+	    fxfcde, (ftnlen)32, fixref_len);
     frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
     if (failed_()) {
 	chkout_("SINCPT", (ftnlen)6);
@@ -2501,7 +2501,8 @@ static integer c__100 = 100;
 
 /*     Determine the attributes of the frame designated by DREF. */
 
-    zznamfrm_(svctr4, svdref, &svdfrc, dref, &dfrcde, (ftnlen)32, dref_len);
+    zznamfrm_(__state->svctr4, __state->svdref, &__state->svdfrc, dref, &
+	    dfrcde, (ftnlen)32, dref_len);
     frinfo_(&dfrcde, &dcentr, &dclass, &dtypid, &fnd);
     if (failed_()) {
 	chkout_("SINCPT", (ftnlen)6);
@@ -2519,14 +2520,14 @@ static integer c__100 = 100;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(svctr5, &surfup);
+    zzsrftrk_(__state->svctr5, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
-	    0) {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2534,7 +2535,7 @@ static integer c__100 = 100;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2543,17 +2544,18 @@ static integer c__100 = 100;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, subtyp, &
+		__state->pri, &__state->nsurf, __state->srflst, pntdef, 
+		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
+		ftnlen)20);
 	if (failed_()) {
 	    chkout_("SINCPT", (ftnlen)6);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -2580,19 +2582,19 @@ static integer c__100 = 100;
 	    chkout_("SINCPT", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(prvmth, method, (ftnlen)500, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
-    if (shape == 1) {
+    __state->first = FALSE_;
+    if (__state->shape == 1) {
 
 /*        Initialize the intercept algorithm to use the reference */
 /*        ellipsoid of the target body. */
 
 	zzsuelin_(&trgcde);
-    } else if (shape == 2) {
+    } else if (__state->shape == 2) {
 
 /*        This is the DSK case. */
 
@@ -2602,7 +2604,7 @@ static integer c__100 = 100;
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &nsurf, srflst, &fxfcde);
+	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fxfcde);
     } else {
 
 /*        This is a backstop check. */
@@ -2618,9 +2620,9 @@ static integer c__100 = 100;
 /*     Perform the intercept computation. */
 
     zzsfxcor_((U_fp)zzraynp_, (U_fp)zzmaxrad_, (U_fp)zzraysfx_, &trgcde, et, 
-	    abcorr, &uselt, &usecn, &usestl, &xmit, fixref, &obscde, &dfrcde, 
-	    &dclass, &dcentr, dvec, spoint, trgepc, srfvec, found, abcorr_len,
-	     fixref_len);
+	    abcorr, &__state->uselt, &__state->usecn, &__state->usestl, &
+	    __state->xmit, fixref, &obscde, &dfrcde, &dclass, &dcentr, dvec, 
+	    spoint, trgepc, srfvec, found, abcorr_len, fixref_len);
     chkout_("SINCPT", (ftnlen)6);
     return 0;
 } /* sincpt_ */

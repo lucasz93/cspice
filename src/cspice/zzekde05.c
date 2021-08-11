@@ -1,14 +1,21 @@
-/* zzekde05.f -- translated by f2c (version 19980913).
+/* zzekde05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__2 = 2;
+extern zzekde05_init_t __zzekde05_init;
+static zzekde05_state_t* get_zzekde05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekde05)
+		state->zzekde05 = __cspice_allocate_module(sizeof(
+	zzekde05_state_t), &__zzekde05_init, sizeof(__zzekde05_init));
+	return state->zzekde05;
+
+}
 
 /* $Procedure      ZZEKDE05 ( EK, delete column entry, class 5 ) */
 /* Subroutine */ int zzekde05_(integer *handle, integer *segdsc, integer *
@@ -24,26 +31,43 @@ static integer c__2 = 2;
     integer base;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     integer next;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekgfwd_(integer *, integer *, integer *, integer *), zzekglnk_(
-	    integer *, integer *, integer *, integer *), zzekpgpg_(integer *, 
-	    integer *, integer *, integer *), zzekslnk_(integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekgfwd_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
     integer p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, nseen, nelts;
+    integer recno;
+    integer nseen;
+    integer nelts;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
-	    , dasudi_(integer *, integer *, integer *, integer *);
+	    doublereal *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
     extern logical return_(void);
     doublereal dpnelt;
-    integer datptr, nlinks, ptrloc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), errhan_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), zzekdps_(integer *, 
-	    integer *, integer *, integer *);
+    integer datptr;
+    integer nlinks;
+    integer ptrloc;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int zzekdps_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    zzekde05_state_t* __state = get_zzekde05_state();
 /* $ Abstract */
 
 /*     Delete a specified class 5 column entry from an EK record. */
@@ -771,33 +795,33 @@ static integer c__2 = 2;
 
 /*        Set the data pointer to indicate the item is uninitialized. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n1);
+	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n1);
 
 /*        Find the number of the page containing the column entry. */
 
-	zzekpgpg_(&c__2, &datptr, &p, &base);
+	zzekpgpg_(&__state->c__2, &datptr, &p, &base);
 
 /*        Look up the forward pointer.  This pointer will be valid */
 /*        if the column entry is continued on another page. */
 
-	zzekgfwd_(handle, &c__2, &p, &next);
+	zzekgfwd_(handle, &__state->c__2, &p, &next);
 
 /*        Get the link count for the current page.  If we have more */
 /*        than one link to the page, decrement the link count.  If */
 /*        we're down to one link, this deletion will finish off the */
 /*        page:  we'll deallocate it. */
 
-	zzekglnk_(handle, &c__2, &p, &nlinks);
+	zzekglnk_(handle, &__state->c__2, &p, &nlinks);
 	if (nlinks > 1) {
 	    i__1 = nlinks - 1;
-	    zzekslnk_(handle, &c__2, &p, &i__1);
+	    zzekslnk_(handle, &__state->c__2, &p, &i__1);
 	} else {
 
 /*           If we removed the last item from the page, we can delete */
 /*           the page.  ZZEKDPS adjusts the segment's metadata */
 /*           to reflect the deallocation. */
 
-	    zzekdps_(handle, segdsc, &c__2, &p);
+	    zzekdps_(handle, segdsc, &__state->c__2, &p);
 	}
 /* Computing MIN */
 	i__1 = nelts, i__2 = base + 126 - datptr;
@@ -813,18 +837,18 @@ static integer c__2 = 2;
 /*           page:  we'll deallocate it. */
 
 	    p = next;
-	    zzekgfwd_(handle, &c__2, &p, &next);
-	    zzekglnk_(handle, &c__2, &p, &nlinks);
+	    zzekgfwd_(handle, &__state->c__2, &p, &next);
+	    zzekglnk_(handle, &__state->c__2, &p, &nlinks);
 	    if (nlinks > 1) {
 		i__1 = nlinks - 1;
-		zzekslnk_(handle, &c__2, &p, &i__1);
+		zzekslnk_(handle, &__state->c__2, &p, &i__1);
 	    } else {
 
 /*              If we removed the last item from the page, we can delete */
 /*              the page.  ZZEKDPS adjusts the segment's metadata */
 /*              to reflect the deallocation. */
 
-		zzekdps_(handle, segdsc, &c__2, &p);
+		zzekdps_(handle, segdsc, &__state->c__2, &p);
 	    }
 /* Computing MIN */
 	    i__1 = nelts, i__2 = nseen + 126;
@@ -834,7 +858,7 @@ static integer c__2 = 2;
 
 /*        Mark the entry as `uninitialized'. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n1);
+	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n1);
     } else if (datptr != -1) {
 
 /*        UNINIT was the last valid possibility.  The data pointer is */
@@ -856,7 +880,7 @@ static integer c__2 = 2;
 
     i__1 = *recptr + 1;
     i__2 = *recptr + 1;
-    dasudi_(handle, &i__1, &i__2, &c__2);
+    dasudi_(handle, &i__1, &i__2, &__state->c__2);
     chkout_("ZZEKDE05", (ftnlen)8);
     return 0;
 } /* zzekde05_ */

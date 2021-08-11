@@ -1,14 +1,25 @@
-/* vupack.f -- translated by f2c (version 19980913).
+/* vupack.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vupack_state_t;
+static vupack_state_t* get_vupack_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VUPACK ( Unpack three scalar components from a vector ) */
 /* Subroutine */ int vupack_(doublereal *v, doublereal *x, doublereal *y, 
 	doublereal *z__)
 {
+
+    /* Module state */
+    vupack_state_t* __state = get_vupack_state();
 /* $ Abstract */
 
 /*      Unpack three scalar components from a vector. */

@@ -1,19 +1,21 @@
-/* sgfrvi.f -- translated by f2c (version 19980913).
+/* sgfrvi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__12 = 12;
-static integer c__7 = 7;
-static integer c__5 = 5;
-static integer c__6 = 6;
-static integer c__0 = 0;
-static integer c__4 = 4;
-static integer c__3 = 3;
+extern sgfrvi_init_t __sgfrvi_init;
+static sgfrvi_state_t* get_sgfrvi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sgfrvi)
+		state->sgfrvi = __cspice_allocate_module(sizeof(
+	sgfrvi_state_t), &__sgfrvi_init, sizeof(__sgfrvi_init));
+	return state->sgfrvi;
+
+}
 
 /* $Procedure      SGFRVI ( Generic Segments: Fetch ref. value and index ) */
 /* Subroutine */ int sgfrvi_(integer *handle, doublereal *descr, doublereal *
@@ -21,7 +23,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -31,36 +32,46 @@ static integer c__3 = 3;
 
     /* Local variables */
     logical done;
-    integer i__, begin;
+    integer i__;
+    integer begin;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical myfnd;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     extern logical failed_(void);
     doublereal endref;
     integer nfetch;
     doublereal buffer[101];
-    integer bfindx, remain;
+    integer bfindx;
+    integer remain;
     extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
 	    integer *);
     doublereal dpimax;
     integer myrefb;
     extern integer lstled_(doublereal *, integer *, doublereal *);
     doublereal dptemp;
-    integer fullrd, rdridx, myrdrb;
+    integer fullrd;
+    integer rdridx;
+    integer myrdrb;
     extern integer intmax_(void);
     integer mynref;
     logical isdirv;
     integer myindx;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer mynrdr;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal myvalu;
     extern logical return_(void);
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer myrdrt, mynpkt, end;
+    integer myrdrt;
+    integer mynpkt;
+    integer end;
 
+
+    /* Module state */
+    sgfrvi_state_t* __state = get_sgfrvi_state();
 /* $ Abstract */
 
 /*     Given the handle of a DAF and the descriptor associated with */
@@ -653,17 +664,17 @@ static integer c__3 = 3;
 /*     Set the value for the maximum index as a double precision number, */
 /*     but only do it the first time into the subroutine. */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 	dpimax = (doublereal) intmax_();
     }
 
 /*     Collect the necessary meta data values common to all cases. */
 
-    sgmeta_(handle, descr, &c__12, &mynpkt);
-    sgmeta_(handle, descr, &c__7, &mynref);
-    sgmeta_(handle, descr, &c__5, &myrdrt);
-    sgmeta_(handle, descr, &c__6, &myrefb);
+    sgmeta_(handle, descr, &__state->c__12, &mynpkt);
+    sgmeta_(handle, descr, &__state->c__7, &mynref);
+    sgmeta_(handle, descr, &__state->c__5, &myrdrt);
+    sgmeta_(handle, descr, &__state->c__6, &myrefb);
     if (failed_()) {
 	chkout_("SGFRVI", (ftnlen)6);
 	return 0;
@@ -682,8 +693,8 @@ static integer c__3 = 3;
 		" of SPICELIB needs updating. Contact your system administrat"
 		"or or NAIF for a toolkit update.", (ftnlen)331);
 	errint_("#", &myrdrt, (ftnlen)1);
-	errint_("#", &c__0, (ftnlen)1);
-	errint_("#", &c__4, (ftnlen)1);
+	errint_("#", &__state->c__0, (ftnlen)1);
+	errint_("#", &__state->c__4, (ftnlen)1);
 	sigerr_("SPICE(UNKNOWNREFDIR)", (ftnlen)20);
 	chkout_("SGFRVI", (ftnlen)6);
 	return 0;
@@ -735,8 +746,8 @@ static integer c__3 = 3;
 /*        In addition to the meta data items we already have, we also */
 /*        need these. */
 
-	sgmeta_(handle, descr, &c__4, &mynrdr);
-	sgmeta_(handle, descr, &c__3, &myrdrb);
+	sgmeta_(handle, descr, &__state->c__4, &mynrdr);
+	sgmeta_(handle, descr, &__state->c__3, &myrdrb);
 	if (failed_()) {
 	    chkout_("SGFRVI", (ftnlen)6);
 	    return 0;

@@ -1,28 +1,41 @@
-/* dasdc.f -- translated by f2c (version 19980913).
+/* dasdc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dasdc_state_t;
+static dasdc_state_t* get_dasdc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DASDC    ( DAS delete comments ) */
 /* Subroutine */ int dasdc_(integer *handle)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, ncomr;
+    integer ncomc;
+    integer ncomr;
     extern logical failed_(void);
     char ifname[60];
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen), dasrcr_(
-	    integer *, integer *), dasrfr_(integer *, char *, char *, integer 
-	    *, integer *, integer *, integer *, ftnlen, ftnlen), daswfr_(
-	    integer *, char *, char *, integer *, integer *, integer *, 
-	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrcr_(integer *, integer *);
+    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nresvc;
     extern logical return_(void);
     integer nresvr;
 
+
+    /* Module state */
+    dasdc_state_t* __state = get_dasdc_state();
 /* $ Abstract */
 
 /*     Delete the entire comment area of a previously opened binary */

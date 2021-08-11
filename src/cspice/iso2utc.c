@@ -1,31 +1,21 @@
-/* iso2utc.f -- translated by f2c (version 19980913).
+/* iso2utc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__4 = 4;
-static integer c__5 = 5;
-static integer c__6 = 6;
-static integer c__7 = 7;
-static integer c__8 = 8;
-static integer c__9 = 9;
-static integer c__10 = 10;
-static integer c__12 = 12;
-static integer c__11 = 11;
-static integer c__13 = 13;
-static integer c__14 = 14;
-static integer c__15 = 15;
-static integer c__16 = 16;
-static integer c__17 = 17;
-static integer c__18 = 18;
-static integer c__19 = 19;
+extern iso2utc_init_t __iso2utc_init;
+static iso2utc_state_t* get_iso2utc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->iso2utc)
+		state->iso2utc = __cspice_allocate_module(sizeof(
+	iso2utc_state_t), &__iso2utc_init, sizeof(__iso2utc_init));
+	return state->iso2utc;
+
+}
 
 /* $Procedure ISO2UTC ( Convert ISO time strings to UTC strings. ) */
 /* Subroutine */ int iso2utc_(char *tstrng, char *utcstr, char *error, ftnlen 
@@ -33,10 +23,6 @@ static integer c__19 = 19;
 {
     /* Initialized data */
 
-    static char months[3*13] = "???" "JAN" "FEB" "MAR" "APR" "MAY" "JUN" 
-	    "JUL" "AUG" "SEP" "OCT" "NOV" "DEC";
-    static char imonth[2*12] = "01" "02" "03" "04" "05" "06" "07" "08" "09" 
-	    "10" "11" "12";
 
     /* System generated locals */
     address a__1[3], a__2[5];
@@ -50,10 +36,12 @@ static integer c__19 = 19;
 	     ftnlen);
 
     /* Local variables */
-    integer l, m;
+    integer l;
+    integer m;
     char ascii[100];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char mystr[128];
@@ -62,6 +50,9 @@ static integer c__19 = 19;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    iso2utc_state_t* __state = get_iso2utc_state();
 /* $ Abstract */
 
 /*     This routine converts date-time strings represented in */
@@ -282,23 +273,26 @@ static integer c__19 = 19;
 /*        match construct the corresponding SPICE day of */
 /*        year format using JAN  (e.g. 1991-JAN-261). */
 
-	if (*(unsigned char *)&ascii[c__1 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__1 - 1] <= '9' && (*(unsigned char *)&ascii[c__2 - 1] 
-		>= '0' && *(unsigned char *)&ascii[c__2 - 1] <= '9') && (*(
-		unsigned char *)&ascii[c__3 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__3 - 1] <= '9') && (*(unsigned char *)&ascii[c__4 - 1]
-		 >= '0' && *(unsigned char *)&ascii[c__4 - 1] <= '9') && *(
-		unsigned char *)&ascii[c__5 - 1] == '-' && (*(unsigned char *)
-		&ascii[c__6 - 1] >= '0' && *(unsigned char *)&ascii[c__6 - 1] 
-		<= '9') && (*(unsigned char *)&ascii[c__7 - 1] >= '0' && *(
-		unsigned char *)&ascii[c__7 - 1] <= '9') && (*(unsigned char *
-		)&ascii[c__8 - 1] >= '0' && *(unsigned char *)&ascii[c__8 - 1]
-		 <= '9')) {
+	if (*(unsigned char *)&ascii[__state->c__1 - 1] >= '0' && *(unsigned 
+		char *)&ascii[__state->c__1 - 1] <= '9' && (*(unsigned char *)
+		&ascii[__state->c__2 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__2 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__3 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__3 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__4 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__4 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__5 - 1] == '-' && (*(unsigned char *)&ascii[
+		__state->c__6 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__6 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__7 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__7 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__8 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__8 - 1] <= '9')) {
 /* Writing concatenation */
 	    i__1[0] = 5, a__1[0] = ascii;
 	    i__1[1] = 3, a__1[1] = "JAN";
 	    i__1[2] = 96, a__1[2] = ascii + 4;
-	    s_cat(mystr, a__1, i__1, &c__3, (ftnlen)128);
+	    s_cat(mystr, a__1, i__1, &__state->c__3, (ftnlen)128);
 	    change = TRUE_;
 	}
     } else if (l == 10) {
@@ -306,28 +300,33 @@ static integer c__19 = 19;
 /*        The possible format is: yyyy-mm-dd. If we get a match */
 /*        construct the corresponding SPICE yyyy-mm-dd format. */
 
-	if (*(unsigned char *)&ascii[c__1 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__1 - 1] <= '9' && (*(unsigned char *)&ascii[c__2 - 1] 
-		>= '0' && *(unsigned char *)&ascii[c__2 - 1] <= '9') && (*(
-		unsigned char *)&ascii[c__3 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__3 - 1] <= '9') && (*(unsigned char *)&ascii[c__4 - 1]
-		 >= '0' && *(unsigned char *)&ascii[c__4 - 1] <= '9') && *(
-		unsigned char *)&ascii[c__5 - 1] == '-' && (*(unsigned char *)
-		&ascii[c__6 - 1] >= '0' && *(unsigned char *)&ascii[c__6 - 1] 
-		<= '9') && (*(unsigned char *)&ascii[c__7 - 1] >= '0' && *(
-		unsigned char *)&ascii[c__7 - 1] <= '9') && *(unsigned char *)
-		&ascii[c__8 - 1] == '-' && (*(unsigned char *)&ascii[c__9 - 1]
-		 >= '0' && *(unsigned char *)&ascii[c__9 - 1] <= '9') && (*(
-		unsigned char *)&ascii[c__10 - 1] >= '0' && *(unsigned char *)
-		&ascii[c__10 - 1] <= '9')) {
-	    m = bsrchc_(ascii + 5, &c__12, imonth, (ftnlen)2, (ftnlen)2);
+	if (*(unsigned char *)&ascii[__state->c__1 - 1] >= '0' && *(unsigned 
+		char *)&ascii[__state->c__1 - 1] <= '9' && (*(unsigned char *)
+		&ascii[__state->c__2 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__2 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__3 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__3 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__4 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__4 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__5 - 1] == '-' && (*(unsigned char *)&ascii[
+		__state->c__6 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__6 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__7 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__7 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__8 - 1] == '-' && (*(unsigned char *)&ascii[
+		__state->c__9 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__9 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__10 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__10 - 1] <= '9')) {
+	    m = bsrchc_(ascii + 5, &__state->c__12, __state->imonth, (ftnlen)
+		    2, (ftnlen)2);
 /* Writing concatenation */
 	    i__1[0] = 5, a__1[0] = ascii;
-	    i__1[1] = 3, a__1[1] = months + ((i__2 = m) < 13 && 0 <= i__2 ? 
-		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)318)) * 
-		    3;
+	    i__1[1] = 3, a__1[1] = __state->months + ((i__2 = m) < 13 && 0 <= 
+		    i__2 ? i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)
+		    318)) * 3;
 	    i__1[2] = 93, a__1[2] = ascii + 7;
-	    s_cat(mystr, a__1, i__1, &c__3, (ftnlen)128);
+	    s_cat(mystr, a__1, i__1, &__state->c__3, (ftnlen)128);
 	    change = TRUE_;
 	}
     } else if (l >= 17) {
@@ -337,75 +336,90 @@ static integer c__19 = 19;
 /*        As above, if we get a match up to the first character following */
 /*        a 'T', convert this to a standard SPICE time string. */
 
-	if (*(unsigned char *)&ascii[c__1 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__1 - 1] <= '9' && (*(unsigned char *)&ascii[c__2 - 1] 
-		>= '0' && *(unsigned char *)&ascii[c__2 - 1] <= '9') && (*(
-		unsigned char *)&ascii[c__3 - 1] >= '0' && *(unsigned char *)&
-		ascii[c__3 - 1] <= '9') && (*(unsigned char *)&ascii[c__4 - 1]
-		 >= '0' && *(unsigned char *)&ascii[c__4 - 1] <= '9') && *(
-		unsigned char *)&ascii[c__5 - 1] == '-' && (*(unsigned char *)
-		&ascii[c__6 - 1] >= '0' && *(unsigned char *)&ascii[c__6 - 1] 
-		<= '9') && (*(unsigned char *)&ascii[c__7 - 1] >= '0' && *(
-		unsigned char *)&ascii[c__7 - 1] <= '9') && (*(unsigned char *
-		)&ascii[c__8 - 1] >= '0' && *(unsigned char *)&ascii[c__8 - 1]
-		 <= '9') && (*(unsigned char *)&ascii[c__9 - 1] == 'T' || *(
-		unsigned char *)&ascii[c__9 - 1] == 't') && (*(unsigned char *
-		)&ascii[c__10 - 1] >= '0' && *(unsigned char *)&ascii[c__10 - 
-		1] <= '9') && (*(unsigned char *)&ascii[c__11 - 1] >= '0' && *
-		(unsigned char *)&ascii[c__11 - 1] <= '9') && *(unsigned char 
-		*)&ascii[c__12 - 1] == ':' && (*(unsigned char *)&ascii[c__13 
-		- 1] >= '0' && *(unsigned char *)&ascii[c__13 - 1] <= '9') && 
-		(*(unsigned char *)&ascii[c__14 - 1] >= '0' && *(unsigned 
-		char *)&ascii[c__14 - 1] <= '9') && *(unsigned char *)&ascii[
-		c__15 - 1] == ':' && (*(unsigned char *)&ascii[c__16 - 1] >= 
-		'0' && *(unsigned char *)&ascii[c__16 - 1] <= '9') && (*(
-		unsigned char *)&ascii[c__17 - 1] >= '0' && *(unsigned char *)
-		&ascii[c__17 - 1] <= '9')) {
+	if (*(unsigned char *)&ascii[__state->c__1 - 1] >= '0' && *(unsigned 
+		char *)&ascii[__state->c__1 - 1] <= '9' && (*(unsigned char *)
+		&ascii[__state->c__2 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__2 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__3 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__3 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__4 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__4 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__5 - 1] == '-' && (*(unsigned char *)&ascii[
+		__state->c__6 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__6 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__7 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__7 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__8 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__8 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__9 - 1] == 'T' || *(unsigned char *)&ascii[
+		__state->c__9 - 1] == 't') && (*(unsigned char *)&ascii[
+		__state->c__10 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__10 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__11 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__11 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__12 - 1] == ':' && (*(unsigned char *)&ascii[
+		__state->c__13 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__13 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__14 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__14 - 1] <= '9') && *(unsigned char *)&ascii[
+		__state->c__15 - 1] == ':' && (*(unsigned char *)&ascii[
+		__state->c__16 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__16 - 1] <= '9') && (*(unsigned char *)&ascii[
+		__state->c__17 - 1] >= '0' && *(unsigned char *)&ascii[
+		__state->c__17 - 1] <= '9')) {
 /* Writing concatenation */
 	    i__3[0] = 5, a__2[0] = ascii;
 	    i__3[1] = 3, a__2[1] = "JAN";
 	    i__3[2] = 4, a__2[2] = ascii + 4;
 	    i__3[3] = 1, a__2[3] = " ";
 	    i__3[4] = 91, a__2[4] = ascii + 9;
-	    s_cat(mystr, a__2, i__3, &c__5, (ftnlen)128);
+	    s_cat(mystr, a__2, i__3, &__state->c__5, (ftnlen)128);
 	    change = TRUE_;
-	} else if (*(unsigned char *)&ascii[c__1 - 1] >= '0' && *(unsigned 
-		char *)&ascii[c__1 - 1] <= '9' && (*(unsigned char *)&ascii[
-		c__2 - 1] >= '0' && *(unsigned char *)&ascii[c__2 - 1] <= '9')
-		 && (*(unsigned char *)&ascii[c__3 - 1] >= '0' && *(unsigned 
-		char *)&ascii[c__3 - 1] <= '9') && (*(unsigned char *)&ascii[
-		c__4 - 1] >= '0' && *(unsigned char *)&ascii[c__4 - 1] <= '9')
-		 && *(unsigned char *)&ascii[c__5 - 1] == '-' && (*(unsigned 
-		char *)&ascii[c__6 - 1] >= '0' && *(unsigned char *)&ascii[
-		c__6 - 1] <= '9') && (*(unsigned char *)&ascii[c__7 - 1] >= 
-		'0' && *(unsigned char *)&ascii[c__7 - 1] <= '9') && *(
-		unsigned char *)&ascii[c__8 - 1] == '-' && (*(unsigned char *)
-		&ascii[c__9 - 1] >= '0' && *(unsigned char *)&ascii[c__9 - 1] 
-		<= '9') && (*(unsigned char *)&ascii[c__10 - 1] >= '0' && *(
-		unsigned char *)&ascii[c__10 - 1] <= '9') && (*(unsigned char 
-		*)&ascii[c__11 - 1] == 'T' || *(unsigned char *)&ascii[c__11 
-		- 1] == 't') && (*(unsigned char *)&ascii[c__12 - 1] >= '0' &&
-		 *(unsigned char *)&ascii[c__12 - 1] <= '9') && (*(unsigned 
-		char *)&ascii[c__13 - 1] >= '0' && *(unsigned char *)&ascii[
-		c__13 - 1] <= '9') && *(unsigned char *)&ascii[c__14 - 1] == 
-		':' && (*(unsigned char *)&ascii[c__15 - 1] >= '0' && *(
-		unsigned char *)&ascii[c__15 - 1] <= '9') && (*(unsigned char 
-		*)&ascii[c__16 - 1] >= '0' && *(unsigned char *)&ascii[c__16 
-		- 1] <= '9') && *(unsigned char *)&ascii[c__17 - 1] == ':' && 
-		(*(unsigned char *)&ascii[c__18 - 1] >= '0' && *(unsigned 
-		char *)&ascii[c__18 - 1] <= '9') && (*(unsigned char *)&ascii[
-		c__19 - 1] >= '0' && *(unsigned char *)&ascii[c__19 - 1] <= 
-		'9')) {
-	    m = bsrchc_(ascii + 5, &c__12, imonth, (ftnlen)2, (ftnlen)2);
+	} else if (*(unsigned char *)&ascii[__state->c__1 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__1 - 1] <= '9' && (*(
+		unsigned char *)&ascii[__state->c__2 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__2 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__3 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__3 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__4 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__4 - 1] <= '9') && *(
+		unsigned char *)&ascii[__state->c__5 - 1] == '-' && (*(
+		unsigned char *)&ascii[__state->c__6 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__6 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__7 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__7 - 1] <= '9') && *(
+		unsigned char *)&ascii[__state->c__8 - 1] == '-' && (*(
+		unsigned char *)&ascii[__state->c__9 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__9 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__10 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__10 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__11 - 1] == 'T' || *(
+		unsigned char *)&ascii[__state->c__11 - 1] == 't') && (*(
+		unsigned char *)&ascii[__state->c__12 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__12 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__13 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__13 - 1] <= '9') && *(
+		unsigned char *)&ascii[__state->c__14 - 1] == ':' && (*(
+		unsigned char *)&ascii[__state->c__15 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__15 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__16 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__16 - 1] <= '9') && *(
+		unsigned char *)&ascii[__state->c__17 - 1] == ':' && (*(
+		unsigned char *)&ascii[__state->c__18 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__18 - 1] <= '9') && (*(
+		unsigned char *)&ascii[__state->c__19 - 1] >= '0' && *(
+		unsigned char *)&ascii[__state->c__19 - 1] <= '9')) {
+	    m = bsrchc_(ascii + 5, &__state->c__12, __state->imonth, (ftnlen)
+		    2, (ftnlen)2);
 /* Writing concatenation */
 	    i__3[0] = 5, a__2[0] = ascii;
-	    i__3[1] = 3, a__2[1] = months + ((i__2 = m) < 13 && 0 <= i__2 ? 
-		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)365)) * 
-		    3;
+	    i__3[1] = 3, a__2[1] = __state->months + ((i__2 = m) < 13 && 0 <= 
+		    i__2 ? i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)
+		    365)) * 3;
 	    i__3[2] = 3, a__2[2] = ascii + 7;
 	    i__3[3] = 1, a__2[3] = " ";
 	    i__3[4] = 89, a__2[4] = ascii + 11;
-	    s_cat(mystr, a__2, i__3, &c__5, (ftnlen)128);
+	    s_cat(mystr, a__2, i__3, &__state->c__5, (ftnlen)128);
 	    change = TRUE_;
 	}
     }

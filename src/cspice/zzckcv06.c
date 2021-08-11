@@ -1,9 +1,17 @@
-/* zzckcv06.f -- translated by f2c (version 19980913).
+/* zzckcv06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzckcv06_state_t;
+static zzckcv06_state_t* get_zzckcv06_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCKCV06 ( Private --- C-kernel segment coverage, type 06 ) */
 /* Subroutine */ int zzckcv06_(integer *handle, integer *arrbeg, integer *
@@ -18,7 +26,8 @@
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    integer nrec, ndir;
+    integer nrec;
+    integer ndir;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     integer i__;
     doublereal begin;
@@ -33,16 +42,24 @@
     extern logical failed_(void);
     doublereal et;
     integer epaddr;
-    doublereal buffer[4], finish;
+    doublereal buffer[4];
+    doublereal finish;
     integer ivlbas;
-    doublereal ivlbds[2], lstepc;
-    integer nivdir, ptrbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), wninsd_(doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal ivlbds[2];
+    doublereal lstepc;
+    integer nivdir;
+    integer ptrbas;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
     integer nintvl;
     extern logical return_(void);
 
+
+    /* Module state */
+    zzckcv06_state_t* __state = get_zzckcv06_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

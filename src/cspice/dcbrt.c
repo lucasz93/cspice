@@ -1,13 +1,21 @@
-/* dcbrt.f -- translated by f2c (version 19980913).
+/* dcbrt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = .33333333333333331;
+extern dcbrt_init_t __dcbrt_init;
+static dcbrt_state_t* get_dcbrt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dcbrt)
+		state->dcbrt = __cspice_allocate_module(sizeof(dcbrt_state_t),
+	 &__dcbrt_init, sizeof(__dcbrt_init));
+	return state->dcbrt;
+
+}
 
 /* $Procedure  DCBRT ( Double precision cube root ) */
 doublereal dcbrt_(doublereal *x)
@@ -19,6 +27,9 @@ doublereal dcbrt_(doublereal *x)
     double pow_dd(doublereal *, doublereal *), d_sign(doublereal *, 
 	    doublereal *);
 
+
+    /* Module state */
+    dcbrt_state_t* __state = get_dcbrt_state();
 /* $ Abstract */
 
 /*      Return the cube root of a double precision number. */
@@ -134,7 +145,7 @@ doublereal dcbrt_(doublereal *x)
 /* -& */
 
     d__2 = abs(*x);
-    d__1 = pow_dd(&d__2, &c_b2);
+    d__1 = pow_dd(&d__2, &__state->c_b2);
     ret_val = d_sign(&d__1, x);
 
     return ret_val;

@@ -1,9 +1,17 @@
-/* dafra.f -- translated by f2c (version 19980913).
+/* dafra.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafra_state_t;
+static dafra_state_t* get_dafra_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DAFRA ( DAF, Re-order arrays ) */
 /* Subroutine */ int dafra_(integer *handle, integer *iorder, integer *n)
@@ -12,9 +20,12 @@
     integer i__1, i__2;
 
     /* Local variables */
-    integer hold, i__;
-    extern /* Subroutine */ int dafgn_(char *, ftnlen), dafgs_(doublereal *), 
-	    dafrn_(char *, ftnlen), chkin_(char *, ftnlen);
+    integer hold;
+    integer i__;
+    extern /* Subroutine */ int dafgn_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int dafrn_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     char holdn[1000];
     extern /* Subroutine */ int dafws_(doublereal *);
     integer index;
@@ -26,11 +37,17 @@
     integer start;
     extern /* Subroutine */ int daffna_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    extern logical isordv_(integer *, integer *), return_(void);
+    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical isordv_(integer *, integer *);
+    extern logical return_(void);
 
+
+    /* Module state */
+    dafra_state_t* __state = get_dafra_state();
 /* $ Abstract */
 
 /*     Re-order the arrays in a DAF according to a given order */

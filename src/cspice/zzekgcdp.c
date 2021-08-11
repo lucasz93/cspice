@@ -1,9 +1,17 @@
-/* zzekgcdp.f -- translated by f2c (version 19980913).
+/* zzekgcdp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekgcdp_state_t;
+static zzekgcdp_state_t* get_zzekgcdp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKGCDP ( EK, get column data pointer ) */
 /* Subroutine */ int zzekgcdp_(integer *handle, integer *segdsc, integer *
@@ -11,14 +19,21 @@
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols;
+    integer recno;
+    integer ncols;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    integer colidx, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer colidx;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekgcdp_state_t* __state = get_zzekgcdp_state();
 /* $ Abstract */
 
 /*     Return the data pointer for a specified EK column entry. */

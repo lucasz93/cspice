@@ -1,23 +1,38 @@
-/* spcdc.f -- translated by f2c (version 19980913).
+/* spcdc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spcdc_state_t;
+static spcdc_state_t* get_spcdc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SPCDC ( SPK and CK, delete comments ) */
 /* Subroutine */ int spcdc_(integer *handle)
 {
     integer free;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer bward, fward, nd, ni;
+    integer bward;
+    integer fward;
+    integer nd;
+    integer ni;
     char ifname[60];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen), dafrrr_(integer *, 
-	    integer *), chkout_(char *, ftnlen);
+	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrrr_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer nrr;
 
+
+    /* Module state */
+    spcdc_state_t* __state = get_spcdc_state();
 /* $ Abstract */
 
 /*     Empty the comment area of a binary SPK or CK file. */

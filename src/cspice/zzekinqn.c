@@ -1,13 +1,21 @@
-/* zzekinqn.f -- translated by f2c (version 19980913).
+/* zzekinqn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern zzekinqn_init_t __zzekinqn_init;
+static zzekinqn_state_t* get_zzekinqn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekinqn)
+		state->zzekinqn = __cspice_allocate_module(sizeof(
+	zzekinqn_state_t), &__zzekinqn_init, sizeof(__zzekinqn_init));
+	return state->zzekinqn;
+
+}
 
 /* $Procedure   ZZEKINQN ( Private: EK, insert into query, numeric ) */
 /* Subroutine */ int zzekinqn_(doublereal *value, integer *type__, integer *
@@ -18,13 +26,24 @@ static integer c__6 = 6;
     integer i__1;
 
     /* Local variables */
-    integer free, init, size, room;
+    integer free;
+    integer init;
+    integer size;
+    integer room;
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen), zzekweqi_(char *, integer *, integer *, ftnlen), chkin_(
-	    char *, ftnlen), cleari_(integer *, integer *), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekinqn_state_t* __state = get_zzekinqn_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -642,7 +661,7 @@ static integer c__6 = 6;
 
 /*     Fill in the descriptor. */
 
-    cleari_(&c__6, descr);
+    cleari_(&__state->c__6, descr);
     descr[0] = *type__;
     descr[1] = *lexbeg;
     descr[2] = *lexend;

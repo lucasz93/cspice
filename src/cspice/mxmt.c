@@ -1,13 +1,21 @@
-/* mxmt.f -- translated by f2c (version 19980913).
+/* mxmt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
+extern mxmt_init_t __mxmt_init;
+static mxmt_state_t* get_mxmt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->mxmt)
+		state->mxmt = __cspice_allocate_module(sizeof(mxmt_state_t), &
+	__mxmt_init, sizeof(__mxmt_init));
+	return state->mxmt;
+
+}
 
 /* $Procedure      MXMT ( Matrix times matrix transpose, 3x3 ) */
 /* Subroutine */ int mxmt_(doublereal *m1, doublereal *m2, doublereal *mout)
@@ -19,10 +27,14 @@ static integer c__9 = 9;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal prodm[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    mxmt_state_t* __state = get_mxmt_state();
 /* $ Abstract */
 
 /*      Multiply a 3x3 matrix and the transpose of another 3x3 matrix. */
@@ -197,7 +209,7 @@ static integer c__9 = 9;
 
 /*  Move the result into MOUT */
 
-    moved_(prodm, &c__9, mout);
+    moved_(prodm, &__state->c__9, mout);
     return 0;
 } /* mxmt_ */
 

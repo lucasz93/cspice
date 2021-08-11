@@ -1,13 +1,21 @@
-/* locln.f -- translated by f2c (version 19980913).
+/* locln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern locln_init_t __locln_init;
+static locln_state_t* get_locln_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->locln)
+		state->locln = __cspice_allocate_module(sizeof(locln_state_t),
+	 &__locln_init, sizeof(__locln_init));
+	return state->locln;
+
+}
 
 /* $Procedure LOCLN ( Locate lines in a text file ) */
 /* Subroutine */ int locln_(integer *unit, char *bmark, char *emark, char *
@@ -23,19 +31,26 @@ static integer c__1 = 1;
 	     s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer ltrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    logical bfound, efound;
-    integer bltemp, eltemp;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    logical bfound;
+    logical efound;
+    integer bltemp;
+    integer eltemp;
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     logical eof;
 
+
+    /* Module state */
+    locln_state_t* __state = get_locln_state();
 /* $ Abstract */
 
 /*     Locate a group of lines in a text file delimited by markers. */
@@ -485,7 +500,7 @@ static integer c__1 = 1;
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_fio(&c__1, line, line_len);
+	iostat = do_fio(&__state->c__1, line, line_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}
@@ -545,7 +560,7 @@ L100001:
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_fio(&c__1, line, line_len);
+	iostat = do_fio(&__state->c__1, line, line_len);
 	if (iostat != 0) {
 	    goto L100002;
 	}

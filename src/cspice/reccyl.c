@@ -1,9 +1,17 @@
-/* reccyl.f -- translated by f2c (version 19980913).
+/* reccyl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reccyl_state_t;
+static reccyl_state_t* get_reccyl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RECCYL ( Rectangular to cylindrical coordinates ) */
 /* Subroutine */ int reccyl_(doublereal *rectan, doublereal *r__, doublereal *
@@ -16,10 +24,14 @@
     double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal x, y;
+    doublereal x;
+    doublereal y;
     extern doublereal twopi_(void);
     doublereal big;
 
+
+    /* Module state */
+    reccyl_state_t* __state = get_reccyl_state();
 /* $ Abstract */
 
 /*     Convert from rectangular to cylindrical coordinates. */

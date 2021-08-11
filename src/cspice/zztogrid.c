@@ -1,9 +1,17 @@
-/* zztogrid.f -- translated by f2c (version 19980913).
+/* zztogrid.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zztogrid_state_t;
+static zztogrid_state_t* get_zztogrid_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZTOGRID ( Model coordinates to voxel grid coordinates ) */
 /* Subroutine */ int zztogrid_(doublereal *modxyz, doublereal *voxori, 
@@ -17,11 +25,16 @@
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zztogrid_state_t* __state = get_zztogrid_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

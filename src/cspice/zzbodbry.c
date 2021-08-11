@@ -1,9 +1,17 @@
-/* zzbodbry.f -- translated by f2c (version 19980913).
+/* zzbodbry.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzbodbry_state_t;
+static zzbodbry_state_t* get_zzbodbry_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZBODBRY ( Return barycenter code for a body ) */
 integer zzbodbry_(integer *body)
@@ -11,6 +19,9 @@ integer zzbodbry_(integer *body)
     /* System generated locals */
     integer ret_val;
 
+
+    /* Module state */
+    zzbodbry_state_t* __state = get_zzbodbry_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

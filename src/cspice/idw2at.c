@@ -1,13 +1,21 @@
-/* idw2at.f -- translated by f2c (version 19980913).
+/* idw2at.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern idw2at_init_t __idw2at_init;
+static idw2at_state_t* get_idw2at_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->idw2at)
+		state->idw2at = __cspice_allocate_module(sizeof(
+	idw2at_state_t), &__idw2at_init, sizeof(__idw2at_init));
+	return state->idw2at;
+
+}
 
 /* $Procedure      IDW2AT ( Get file architecture and type from ID word ) */
 /* Subroutine */ int idw2at_(char *idword, char *arch, char *type__, ftnlen 
@@ -21,13 +29,17 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char part1[8], part2[8];
+    char part1[8];
+    char part2[8];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer slash;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    idw2at_state_t* __state = get_idw2at_state();
 /* $ Abstract */
 
 /*     Extract the architecture and type of a SPICE binary kernel file */
@@ -278,7 +290,7 @@ static integer c__1 = 1;
 /*     recognize the architecture or the type, so set the architecture */
 /*     and type to unknown. */
 
-    slash = pos_(idword, "/", &c__1, idword_len, (ftnlen)1);
+    slash = pos_(idword, "/", &__state->c__1, idword_len, (ftnlen)1);
     if (slash == 0) {
 	s_copy(arch, "?", arch_len, (ftnlen)1);
 	s_copy(type__, "?", type_len, (ftnlen)1);

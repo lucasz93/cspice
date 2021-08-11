@@ -1,9 +1,17 @@
-/* beint.f -- translated by f2c (version 19980913).
+/* beint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int beint_state_t;
+static beint_state_t* get_beint_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            BEINT  ( Be an Integer? ) */
 logical beint_(char *string, ftnlen string_len)
@@ -15,11 +23,15 @@ logical beint_(char *string, ftnlen string_len)
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, l;
+    integer i__;
+    integer l;
     extern logical beuns_(char *, ftnlen);
     extern integer frstnb_(char *, ftnlen);
     char letter[1];
 
+
+    /* Module state */
+    beint_state_t* __state = get_beint_state();
 /* $ Abstract */
 
 /*     Determine whether a string represents an integer. */

@@ -1,14 +1,21 @@
-/* zzbodtrn.f -- translated by f2c (version 19980913).
+/* zzbodtrn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__773 = 773;
-static integer c__1 = 1;
+extern zzbodtrn_init_t __zzbodtrn_init;
+static zzbodtrn_state_t* get_zzbodtrn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzbodtrn)
+		state->zzbodtrn = __cspice_allocate_module(sizeof(
+	zzbodtrn_state_t), &__zzbodtrn_init, sizeof(__zzbodtrn_init));
+	return state->zzbodtrn;
+
+}
 
 /* $Procedure ZZBODTRN ( Private --- Body name and code translation ) */
 /* Subroutine */ int zzbodtrn_0_(int n__, char *name__, integer *code, 
@@ -16,13 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical bodchg = FALSE_;
-    static logical first = TRUE_;
-    static logical extker = FALSE_;
-    static logical nodata = TRUE_;
-    static integer nwatch = 2;
-    static char wnames[32*2] = "NAIF_BODY_NAME                  " "NAIF_BODY"
-	    "_CODE                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -34,42 +34,39 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int zzhscchk_(integer *, integer *, char *, char *
-	    , integer *, ftnlen, ftnlen), zzbodget_(integer *, char *, char *,
-	     integer *, integer *, ftnlen, ftnlen), zzbodini_(char *, char *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    integer *, integer *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen, ftnlen), zzbodker_(char *, char *, integer *, integer *, 
-	    logical *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen), 
-	    zzhsichk_(integer *, integer *, integer *, integer *, integer *), 
-	    zzctrchk_(integer *, integer *, logical *), zzctrinc_(integer *), 
-	    zzctrsin_(integer *), zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
-    static integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    static integer index;
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodget_(integer *, char *, char *, integer *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodini_(char *, char *, integer *, integer *
+	    , integer *, integer *, integer *, char *, integer *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodker_(char *, char *, integer *, integer *
+	    , logical *, integer *, integer *, char *, integer *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzhsichk_(integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
+    extern /* Subroutine */ int zzctrinc_(integer *);
+    extern /* Subroutine */ int zzctrsin_(integer *);
+    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static integer defcod[773];
-    static char defnam[36*773];
-    static integer didids[773], dididx[773], kercod[14983], kidids[14983], 
-	    codidx, didpol[779], kididx[14983];
-    static char defnor[36*773], kernam[36*14983];
-    static integer dnmidx[773], defsiz, didlst[773], kidpol[14989], dnmpol[
-	    779], knmidx[14983], kidlst[14983];
-    static char dnmnms[36*773], tmpnam[36];
-    static logical lupdte;
-    static char kernor[36*14983];
-    static integer dnmlst[773], knmpol[14989];
-    static char knmnms[36*14983];
-    static integer subctr[2], kersiz, knmlst[14983], pulctr[2];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ljucrs_(integer *, char *, char *, ftnlen, ftnlen), 
-	    setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), swpool_(
-	    char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
 
+
+    /* Module state */
+    zzbodtrn_state_t* __state = get_zzbodtrn_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1233,21 +1230,21 @@ L_zzbodn2c:
 /*     built-in arrays, set the kernel pool watchers, and state */
 /*     counters. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. Set ZZBODTRN state counter, for */
 /*        which this umbrella is the owner, to subsystem values. Set */
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(subctr);
-	zzctruin_(pulctr);
+	zzctrsin_(__state->subctr);
+	zzctruin_(__state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code-name list. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODN2C", (ftnlen)8);
 	    return 0;
@@ -1255,9 +1252,11 @@ L_zzbodn2c:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODN2C", (ftnlen)8);
 	    return 0;
@@ -1266,7 +1265,8 @@ L_zzbodn2c:
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &nwatch, wnames, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZBODN2C", (ftnlen)8);
 	    return 0;
@@ -1274,7 +1274,7 @@ L_zzbodn2c:
 
 /*        Set FIRST to .FALSE. to not repeat initialization again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Check for updates to the kernel pool variables. Note: the first */
@@ -1282,46 +1282,49 @@ L_zzbodn2c:
 /*     LUPDTE.  This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", pulctr, &lupdte, (ftnlen)8);
-    if (lupdte || nodata) {
+    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(subctr);
+	zzctrinc_(__state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(kernam, kernor, kercod, &kersiz, &extker, knmlst, knmpol, 
-		knmnms, knmidx, kidlst, kidpol, kidids, kididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
+		__state->kersiz, &__state->extker, __state->knmlst, 
+		__state->knmpol, __state->knmnms, __state->knmidx, 
+		__state->kidlst, __state->kidpol, __state->kidids, 
+		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
     }
 
 /*     Normalize the input argument NAME. We will look this normalized */
 /*     name up in the built-in and kernel pool names hashes. */
 
-    ljucrs_(&c__1, name__, tmpnam, name_len, (ftnlen)36);
+    ljucrs_(&__state->c__1, name__, __state->tmpnam, name_len, (ftnlen)36);
 
 /*     If necessary, first examine the contents of the kernel pool */
 /*     name-code mapping list. */
 
-    if (extker) {
+    if (__state->extker) {
 
 /*        Check if this name is in the kernel pool names hash. */
 
-	zzhscchk_(knmlst, knmpol, knmnms, tmpnam, &i__, (ftnlen)36, (ftnlen)
-		36);
-	if (i__ != 0) {
-	    *code = kercod[(i__2 = knmidx[(i__1 = i__ - 1) < 14983 && 0 <= 
-		    i__1 ? i__1 : s_rnge("knmidx", i__1, "zzbodtrn_", (ftnlen)
-		    1196)] - 1) < 14983 && 0 <= i__2 ? i__2 : s_rnge("kercod",
-		     i__2, "zzbodtrn_", (ftnlen)1196)];
+	zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+	if (__state->i__ != 0) {
+	    *code = __state->kercod[(i__2 = __state->knmidx[(i__1 = 
+		    __state->i__ - 1) < 14983 && 0 <= i__1 ? i__1 : s_rnge(
+		    "knmidx", i__1, "zzbodtrn_", (ftnlen)1196)] - 1) < 14983 
+		    && 0 <= i__2 ? i__2 : s_rnge("kercod", i__2, "zzbodtrn_", 
+		    (ftnlen)1196)];
 	    *found = TRUE_;
 	    chkout_("ZZBODN2C", (ftnlen)8);
 	    return 0;
@@ -1331,12 +1334,13 @@ L_zzbodn2c:
 /*     If we reach here, we did not find this name in the kernel pool */
 /*     names hash. Check the built-in names hash. */
 
-    zzhscchk_(dnmlst, dnmpol, dnmnms, tmpnam, &i__, (ftnlen)36, (ftnlen)36);
-    if (i__ != 0) {
-	*code = defcod[(i__2 = dnmidx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? 
-		i__1 : s_rnge("dnmidx", i__1, "zzbodtrn_", (ftnlen)1212)] - 1)
-		 < 773 && 0 <= i__2 ? i__2 : s_rnge("defcod", i__2, "zzbodtr"
-		"n_", (ftnlen)1212)];
+    zzhscchk_(__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+	    __state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+    if (__state->i__ != 0) {
+	*code = __state->defcod[(i__2 = __state->dnmidx[(i__1 = __state->i__ 
+		- 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("dnmidx", i__1, "zzb"
+		"odtrn_", (ftnlen)1212)] - 1) < 773 && 0 <= i__2 ? i__2 : 
+		s_rnge("defcod", i__2, "zzbodtrn_", (ftnlen)1212)];
 	*found = TRUE_;
     }
     chkout_("ZZBODN2C", (ftnlen)8);
@@ -1589,21 +1593,21 @@ L_zzbodc2n:
 /*     built-in arrays, set the kernel pool watchers, and state */
 /*     counters. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. Set ZZBODTRN state counter, for */
 /*        which this umbrella is the owner, to subsystem values. Set */
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(subctr);
-	zzctruin_(pulctr);
+	zzctrsin_(__state->subctr);
+	zzctruin_(__state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODC2N", (ftnlen)8);
 	    return 0;
@@ -1611,9 +1615,11 @@ L_zzbodc2n:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODC2N", (ftnlen)8);
 	    return 0;
@@ -1622,7 +1628,8 @@ L_zzbodc2n:
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &nwatch, wnames, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZBODC2N", (ftnlen)8);
 	    return 0;
@@ -1630,7 +1637,7 @@ L_zzbodc2n:
 
 /*        Set FIRST to .FALSE. to not repeat initialization again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Check for updates to the kernel pool variables. Note: the first */
@@ -1638,41 +1645,44 @@ L_zzbodc2n:
 /*     LUPDTE. This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", pulctr, &lupdte, (ftnlen)8);
-    if (lupdte || nodata) {
+    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(subctr);
+	zzctrinc_(__state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(kernam, kernor, kercod, &kersiz, &extker, knmlst, knmpol, 
-		knmnms, knmidx, kidlst, kidpol, kidids, kididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
+		__state->kersiz, &__state->extker, __state->knmlst, 
+		__state->knmpol, __state->knmnms, __state->knmidx, 
+		__state->kidlst, __state->kidpol, __state->kidids, 
+		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
     }
 
 /*     If necessary, first examine the contents of the kernel pool */
 /*     name-code mapping list. */
 
-    if (extker) {
+    if (__state->extker) {
 
 /*        Check if this code is in the kernel pool codes hash. */
 
-	zzhsichk_(kidlst, kidpol, kidids, code, &i__);
-	if (i__ != 0) {
-	    s_copy(name__, kernam + ((i__2 = kididx[(i__1 = i__ - 1) < 14983 
-		    && 0 <= i__1 ? i__1 : s_rnge("kididx", i__1, "zzbodtrn_", 
-		    (ftnlen)1574)] - 1) < 14983 && 0 <= i__2 ? i__2 : s_rnge(
-		    "kernam", i__2, "zzbodtrn_", (ftnlen)1574)) * 36, 
-		    name_len, (ftnlen)36);
+	zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, code, &
+		__state->i__);
+	if (__state->i__ != 0) {
+	    s_copy(name__, __state->kernam + ((i__2 = __state->kididx[(i__1 = 
+		    __state->i__ - 1) < 14983 && 0 <= i__1 ? i__1 : s_rnge(
+		    "kididx", i__1, "zzbodtrn_", (ftnlen)1574)] - 1) < 14983 
+		    && 0 <= i__2 ? i__2 : s_rnge("kernam", i__2, "zzbodtrn_", 
+		    (ftnlen)1574)) * 36, name_len, (ftnlen)36);
 	    *found = TRUE_;
 	    chkout_("ZZBODC2N", (ftnlen)8);
 	    return 0;
@@ -1682,23 +1692,25 @@ L_zzbodc2n:
 /*     If we reach here, we did not find this code in the kernel pool */
 /*     codes hash. Check the built-in codes hash. */
 
-    zzhsichk_(didlst, didpol, didids, code, &i__);
+    zzhsichk_(__state->didlst, __state->didpol, __state->didids, code, &
+	    __state->i__);
 
 /*     If we find a match, verify that it is not masked by a kernel pool */
 /*     entry before returning. */
 
-    if (i__ != 0) {
-	if (extker) {
+    if (__state->i__ != 0) {
+	if (__state->extker) {
 
 /*           Only bother performing this check if there are actually */
 /*           mappings present in the kernel pool lists. */
 
-	    zzhscchk_(knmlst, knmpol, knmnms, defnor + ((i__2 = dididx[(i__1 =
-		     i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("dididx", 
-		    i__1, "zzbodtrn_", (ftnlen)1600)] - 1) < 773 && 0 <= i__2 
-		    ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)1600)
-		    ) * 36, &j, (ftnlen)36, (ftnlen)36);
-	    if (j != 0) {
+	    zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
+		    __state->defnor + ((i__2 = __state->dididx[(i__1 = 
+		    __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
+		    "dididx", i__1, "zzbodtrn_", (ftnlen)1600)] - 1) < 773 && 
+		    0 <= i__2 ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (
+		    ftnlen)1600)) * 36, &__state->j, (ftnlen)36, (ftnlen)36);
+	    if (__state->j != 0) {
 
 /*              This name is defined in the kernel pool mappings. Set */
 /*              FOUND to .FALSE., as the contents of the kernel pool */
@@ -1711,11 +1723,12 @@ L_zzbodc2n:
 /*              No match for this name in the kernel pool mapping list. */
 /*              Return the name. */
 
-		s_copy(name__, defnam + ((i__2 = dididx[(i__1 = i__ - 1) < 
-			773 && 0 <= i__1 ? i__1 : s_rnge("dididx", i__1, 
-			"zzbodtrn_", (ftnlen)1619)] - 1) < 773 && 0 <= i__2 ? 
-			i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)
-			1619)) * 36, name_len, (ftnlen)36);
+		s_copy(name__, __state->defnam + ((i__2 = __state->dididx[(
+			i__1 = __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : 
+			s_rnge("dididx", i__1, "zzbodtrn_", (ftnlen)1619)] - 
+			1) < 773 && 0 <= i__2 ? i__2 : s_rnge("defnam", i__2, 
+			"zzbodtrn_", (ftnlen)1619)) * 36, name_len, (ftnlen)
+			36);
 		*found = TRUE_;
 	    }
 	} else {
@@ -1723,11 +1736,11 @@ L_zzbodc2n:
 /*           No kernel pool mappings were defined, simply return */
 /*           return the name. */
 
-	    s_copy(name__, defnam + ((i__2 = dididx[(i__1 = i__ - 1) < 773 && 
-		    0 <= i__1 ? i__1 : s_rnge("dididx", i__1, "zzbodtrn_", (
-		    ftnlen)1630)] - 1) < 773 && 0 <= i__2 ? i__2 : s_rnge(
-		    "defnam", i__2, "zzbodtrn_", (ftnlen)1630)) * 36, 
-		    name_len, (ftnlen)36);
+	    s_copy(name__, __state->defnam + ((i__2 = __state->dididx[(i__1 = 
+		    __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
+		    "dididx", i__1, "zzbodtrn_", (ftnlen)1630)] - 1) < 773 && 
+		    0 <= i__2 ? i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (
+		    ftnlen)1630)) * 36, name_len, (ftnlen)36);
 	    *found = TRUE_;
 	}
     }
@@ -2026,21 +2039,21 @@ L_zzboddef:
 /*     built-in arrays, set the kernel pool watchers, and state */
 /*     counters. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. Set ZZBODTRN state counter, for */
 /*        which this umbrella is the owner, to subsystem values. Set */
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(subctr);
-	zzctruin_(pulctr);
+	zzctrsin_(__state->subctr);
+	zzctruin_(__state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODDEF", (ftnlen)8);
 	    return 0;
@@ -2048,9 +2061,11 @@ L_zzboddef:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODDEF", (ftnlen)8);
 	    return 0;
@@ -2059,7 +2074,8 @@ L_zzboddef:
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &nwatch, wnames, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZBODDEF", (ftnlen)8);
 	    return 0;
@@ -2067,7 +2083,7 @@ L_zzboddef:
 
 /*        Set FIRST to .FALSE. to not repeat initialization again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Begin by verifying that the user is not attempting to assign a */
@@ -2077,7 +2093,7 @@ L_zzboddef:
 	setmsg_("An attempt to assign the code, #, to a blank string was mad"
 		"e.  Check loaded text kernels for a blank string in the NAIF"
 		"_BODY_NAME array.", (ftnlen)136);
-	errint_("#", &i__, (ftnlen)1);
+	errint_("#", &__state->i__, (ftnlen)1);
 	sigerr_("SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
 	chkout_("ZZBODDEF", (ftnlen)8);
 	return 0;
@@ -2086,19 +2102,21 @@ L_zzboddef:
 /*     Conservatively increment the ZZBODTRN state counter in */
 /*     expectation of successful addition. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Get normalized form of the input NAME. */
 
-    ljucrs_(&c__1, name__, tmpnam, name_len, (ftnlen)36);
+    ljucrs_(&__state->c__1, name__, __state->tmpnam, name_len, (ftnlen)36);
 
 /*     Determine if we are going to replace an entry currently present */
 /*     in the DEF* lists. */
 
-    zzhscchk_(dnmlst, dnmpol, dnmnms, tmpnam, &i__, (ftnlen)36, (ftnlen)36);
-    if (i__ != 0) {
-	index = dnmidx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
-		"dnmidx", i__1, "zzbodtrn_", (ftnlen)2026)];
+    zzhscchk_(__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+	    __state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+    if (__state->i__ != 0) {
+	__state->index = __state->dnmidx[(i__1 = __state->i__ - 1) < 773 && 0 
+		<= i__1 ? i__1 : s_rnge("dnmidx", i__1, "zzbodtrn_", (ftnlen)
+		2026)];
 
 /*        We are going to replace an existing entry.  There are */
 /*        two possible ways in which a replace operation can */
@@ -2117,25 +2135,27 @@ L_zzboddef:
 
 /*        See if we should handle 1) first. */
 
-	zzhsichk_(didlst, didpol, didids, code, &i__);
-	if (i__ != 0) {
-	    codidx = dididx[(i__1 = i__ - 1) < 773 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dididx", i__1, "zzbodtrn_", (ftnlen)2049)];
+	zzhsichk_(__state->didlst, __state->didpol, __state->didids, code, &
+		__state->i__);
+	if (__state->i__ != 0) {
+	    __state->codidx = __state->dididx[(i__1 = __state->i__ - 1) < 773 
+		    && 0 <= i__1 ? i__1 : s_rnge("dididx", i__1, "zzbodtrn_", 
+		    (ftnlen)2049)];
 	} else {
-	    codidx = 0;
+	    __state->codidx = 0;
 	}
 
 /*        If CODIDX matches INDEX, then we simply have to replace the */
 /*        entry in DEFNAM and return. */
 
-	if (codidx == index) {
+	if (__state->codidx == __state->index) {
 
 /*           We altered the built-in body list. Set BODCHG to .TRUE. */
 
-	    bodchg = TRUE_;
-	    s_copy(defnam + ((i__1 = index - 1) < 773 && 0 <= i__1 ? i__1 : 
-		    s_rnge("defnam", i__1, "zzbodtrn_", (ftnlen)2065)) * 36, 
-		    name__, (ftnlen)36, name_len);
+	    __state->bodchg = TRUE_;
+	    s_copy(__state->defnam + ((i__1 = __state->index - 1) < 773 && 0 
+		    <= i__1 ? i__1 : s_rnge("defnam", i__1, "zzbodtrn_", (
+		    ftnlen)2065)) * 36, name__, (ftnlen)36, name_len);
 	    chkout_("ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
@@ -2145,35 +2165,37 @@ L_zzboddef:
 /*        DEFCOD. This will require recomputing the hashes. First */
 /*        compress out the existing entry. */
 
-	i__1 = defsiz;
-	for (i__ = index + 1; i__ <= i__1; ++i__) {
-	    s_copy(defnam + ((i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : 
-		    s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)2080)) * 36, 
-		    defnam + ((i__3 = i__ - 1) < 773 && 0 <= i__3 ? i__3 : 
-		    s_rnge("defnam", i__3, "zzbodtrn_", (ftnlen)2080)) * 36, (
-		    ftnlen)36, (ftnlen)36);
-	    s_copy(defnor + ((i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : 
-		    s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)2081)) * 36, 
-		    defnor + ((i__3 = i__ - 1) < 773 && 0 <= i__3 ? i__3 : 
-		    s_rnge("defnor", i__3, "zzbodtrn_", (ftnlen)2081)) * 36, (
-		    ftnlen)36, (ftnlen)36);
-	    defcod[(i__2 = i__ - 2) < 773 && 0 <= i__2 ? i__2 : s_rnge("defc"
-		    "od", i__2, "zzbodtrn_", (ftnlen)2082)] = defcod[(i__3 = 
-		    i__ - 1) < 773 && 0 <= i__3 ? i__3 : s_rnge("defcod", 
-		    i__3, "zzbodtrn_", (ftnlen)2082)];
+	i__1 = __state->defsiz;
+	for (__state->i__ = __state->index + 1; __state->i__ <= i__1; 
+		++__state->i__) {
+	    s_copy(__state->defnam + ((i__2 = __state->i__ - 2) < 773 && 0 <= 
+		    i__2 ? i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)
+		    2080)) * 36, __state->defnam + ((i__3 = __state->i__ - 1) 
+		    < 773 && 0 <= i__3 ? i__3 : s_rnge("defnam", i__3, "zzbo"
+		    "dtrn_", (ftnlen)2080)) * 36, (ftnlen)36, (ftnlen)36);
+	    s_copy(__state->defnor + ((i__2 = __state->i__ - 2) < 773 && 0 <= 
+		    i__2 ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)
+		    2081)) * 36, __state->defnor + ((i__3 = __state->i__ - 1) 
+		    < 773 && 0 <= i__3 ? i__3 : s_rnge("defnor", i__3, "zzbo"
+		    "dtrn_", (ftnlen)2081)) * 36, (ftnlen)36, (ftnlen)36);
+	    __state->defcod[(i__2 = __state->i__ - 2) < 773 && 0 <= i__2 ? 
+		    i__2 : s_rnge("defcod", i__2, "zzbodtrn_", (ftnlen)2082)] 
+		    = __state->defcod[(i__3 = __state->i__ - 1) < 773 && 0 <= 
+		    i__3 ? i__3 : s_rnge("defcod", i__3, "zzbodtrn_", (ftnlen)
+		    2082)];
 	}
     } else {
 
 /*        We need to add this entry to the list.  See if there */
 /*        is room; signal an error and return if there is not. */
 
-	if (defsiz >= 773) {
+	if (__state->defsiz >= 773) {
 	    setmsg_("There is no room available for adding '#'  to the list "
 		    "of name/code pairs. The number of names that can be supp"
 		    "orted is #.  This number has been reached. ", (ftnlen)154)
 		    ;
 	    errch_("#", name__, (ftnlen)1, name_len);
-	    errint_("#", &defsiz, (ftnlen)1);
+	    errint_("#", &__state->defsiz, (ftnlen)1);
 	    sigerr_("SPICE(TOOMANYPAIRS)", (ftnlen)19);
 	    chkout_("ZZBODDEF", (ftnlen)8);
 	    return 0;
@@ -2182,31 +2204,33 @@ L_zzboddef:
 /*        If we reach here, then there is room in the list. Increase */
 /*        it's size counter. */
 
-	++defsiz;
+	++__state->defsiz;
     }
 
 /*     We are changing the body list, inform ZZBODRST by setting BODCHG */
 /*     to .TRUE. */
 
-    bodchg = TRUE_;
+    __state->bodchg = TRUE_;
 
 /*     Now, we need to add the new entry on to the end of the */
 /*     DEFNAM, DEFNOR, and DEFCOD lists. */
 
-    s_copy(defnam + ((i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
-	    "defnam", i__1, "zzbodtrn_", (ftnlen)2125)) * 36, name__, (ftnlen)
-	    36, name_len);
-    s_copy(defnor + ((i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
-	    "defnor", i__1, "zzbodtrn_", (ftnlen)2126)) * 36, tmpnam, (ftnlen)
-	    36, (ftnlen)36);
-    defcod[(i__1 = defsiz - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("defcod", 
-	    i__1, "zzbodtrn_", (ftnlen)2127)] = *code;
+    s_copy(__state->defnam + ((i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 
+	    ? i__1 : s_rnge("defnam", i__1, "zzbodtrn_", (ftnlen)2125)) * 36, 
+	    name__, (ftnlen)36, name_len);
+    s_copy(__state->defnor + ((i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 
+	    ? i__1 : s_rnge("defnor", i__1, "zzbodtrn_", (ftnlen)2126)) * 36, 
+	    __state->tmpnam, (ftnlen)36, (ftnlen)36);
+    __state->defcod[(i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 ? i__1 : 
+	    s_rnge("defcod", i__1, "zzbodtrn_", (ftnlen)2127)] = *code;
 
 /*     Reset the built-in/BODDEF hashes. */
 
-    zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-	    dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-	    ftnlen)36, (ftnlen)36);
+    zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+	    __state->defsiz, &__state->c__773, __state->dnmlst, 
+	    __state->dnmpol, __state->dnmnms, __state->dnmidx, 
+	    __state->didlst, __state->didpol, __state->didids, 
+	    __state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
     chkout_("ZZBODDEF", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODKIK ( Private --- Run the kernel read block ) */
@@ -2358,21 +2382,21 @@ L_zzbodkik:
 /*     built-in arrays, set the kernel pool watchers, and state */
 /*     counters. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. Set ZZBODTRN state counter, for */
 /*        which this umbrella is the owner, to subsystem values. Set */
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(subctr);
-	zzctruin_(pulctr);
+	zzctrsin_(__state->subctr);
+	zzctruin_(__state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODKIK", (ftnlen)8);
 	    return 0;
@@ -2380,9 +2404,11 @@ L_zzbodkik:
 
 /*        Populate the initial built-in/BODDEF hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODKIK", (ftnlen)8);
 	    return 0;
@@ -2391,7 +2417,8 @@ L_zzbodkik:
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &nwatch, wnames, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZBODKIK", (ftnlen)8);
 	    return 0;
@@ -2399,7 +2426,7 @@ L_zzbodkik:
 
 /*        Set FIRST to .FALSE. to not repeat initialization again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Check for updates to the kernel pool variables. Note: the first */
@@ -2407,25 +2434,27 @@ L_zzbodkik:
 /*     LUPDTE. This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", pulctr, &lupdte, (ftnlen)8);
-    if (lupdte || nodata) {
+    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(subctr);
+	zzctrinc_(__state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(kernam, kernor, kercod, &kersiz, &extker, knmlst, knmpol, 
-		knmnms, knmidx, kidlst, kidpol, kidids, kididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
+		__state->kersiz, &__state->extker, __state->knmlst, 
+		__state->knmpol, __state->knmnms, __state->knmidx, 
+		__state->kidlst, __state->kidpol, __state->kidids, 
+		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("ZZBODKIK", (ftnlen)8);
 	    return 0;
 	}
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
     }
     chkout_("ZZBODKIK", (ftnlen)8);
     return 0;
@@ -2553,21 +2582,21 @@ L_zzbodrst:
 /*     built-in arrays, set the kernel pool watchers, and state */
 /*     counters. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. Set ZZBODTRN state counter, for */
 /*        which this umbrella is the owner, to subsystem values. Set */
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(subctr);
-	zzctruin_(pulctr);
+	zzctrsin_(__state->subctr);
+	zzctruin_(__state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODRST", (ftnlen)8);
 	    return 0;
@@ -2575,9 +2604,11 @@ L_zzbodrst:
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZBODRST", (ftnlen)8);
 	    return 0;
@@ -2586,7 +2617,8 @@ L_zzbodrst:
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &nwatch, wnames, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZBODRST", (ftnlen)8);
 	    return 0;
@@ -2594,32 +2626,34 @@ L_zzbodrst:
 
 /*        Set FIRST to .FALSE. to not repeat initialization again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     See if the body list needs to be reset. */
 
-    if (bodchg) {
-	bodchg = FALSE_;
+    if (__state->bodchg) {
+	__state->bodchg = FALSE_;
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(subctr);
+	zzctrinc_(__state->subctr);
 
 /*        Fetch the initial body name-code mapping list. Note: we need */
 /*        not check FAILED() here, because if an error had occurred due */
 /*        to the improper specification of MAXE it would have been */
 /*        signaled already to the user. */
 
-	zzbodget_(&c__773, defnam, defnor, defcod, &defsiz, (ftnlen)36, (
-		ftnlen)36);
+	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
 
 /*        Reset the built-in/BODDEF hashes. */
 
-	zzbodini_(defnam, defnor, defcod, &defsiz, &c__773, dnmlst, dnmpol, 
-		dnmnms, dnmidx, didlst, didpol, didids, dididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
+		__state->defsiz, &__state->c__773, __state->dnmlst, 
+		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
+		__state->didlst, __state->didpol, __state->didids, 
+		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
     }
     chkout_("ZZBODRST", (ftnlen)8);
     return 0;
@@ -2820,8 +2854,8 @@ L_zzbctrck:
 
 /*     Check for updates to the kernel pool variables. */
 
-    zzcvpool_("ZZBODTRN", pulctr, &lupdte, (ftnlen)8);
-    if (lupdte || nodata) {
+    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte || __state->nodata) {
 
 /*        Check in because ZZBODKER can fail. */
 
@@ -2830,25 +2864,27 @@ L_zzbctrck:
 /*        Conservatively increment the ZZBODTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(subctr);
+	zzctrinc_(__state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(kernam, kernor, kercod, &kersiz, &extker, knmlst, knmpol, 
-		knmnms, knmidx, kidlst, kidpol, kidids, kididx, (ftnlen)36, (
-		ftnlen)36, (ftnlen)36);
+	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
+		__state->kersiz, &__state->extker, __state->knmlst, 
+		__state->knmpol, __state->knmnms, __state->knmidx, 
+		__state->kidlst, __state->kidpol, __state->kidids, 
+		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("ZZBCTRCK", (ftnlen)8);
 	    return 0;
 	}
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 	chkout_("ZZBCTRCK", (ftnlen)8);
     }
 
 /*     Check the input counter against the ZZBODTRN counter. */
 
-    zzctrchk_(subctr, usrctr, update);
+    zzctrchk_(__state->subctr, usrctr, update);
     return 0;
 } /* zzbodtrn_ */
 

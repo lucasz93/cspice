@@ -1,18 +1,31 @@
-/* bodn2c.f -- translated by f2c (version 19980913).
+/* bodn2c.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bodn2c_state_t;
+static bodn2c_state_t* get_bodn2c_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure BODN2C ( Body name to ID code translation ) */
 /* Subroutine */ int bodn2c_(char *name__, integer *code, logical *found, 
 	ftnlen name_len)
 {
     extern /* Subroutine */ int zzbodn2c_(char *, integer *, logical *, 
-	    ftnlen), chkin_(char *, ftnlen), chkout_(char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    bodn2c_state_t* __state = get_bodn2c_state();
 /* $ Abstract */
 
 /*    Translate the name of a body or object to the corresponding SPICE */

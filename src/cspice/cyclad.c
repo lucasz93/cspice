@@ -1,9 +1,17 @@
-/* cyclad.f -- translated by f2c (version 19980913).
+/* cyclad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cyclad_state_t;
+static cyclad_state_t* get_cyclad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYCLAD ( Cycle the elements of a DP array ) */
 /* Subroutine */ int cyclad_(doublereal *array, integer *nelt, char *dir, 
@@ -13,15 +21,26 @@
     integer i__1, i__2;
 
     /* Local variables */
-    doublereal last, temp;
-    integer g, i__, j, k, l, m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    doublereal last;
+    doublereal temp;
+    integer g;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer m;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern integer gcd_(integer *, integer *);
 
+
+    /* Module state */
+    cyclad_state_t* __state = get_cyclad_state();
 /* $ Abstract */
 
 /*     Cycle the elements of a double precision array forward */

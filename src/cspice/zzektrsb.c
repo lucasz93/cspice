@@ -1,26 +1,48 @@
-/* zzektrsb.f -- translated by f2c (version 19980913).
+/* zzektrsb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrsb_state_t;
+static zzektrsb_state_t* get_zzektrsb_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRSB ( EK tree, identify siblings ) */
 /* Subroutine */ int zzektrsb_(integer *handle, integer *tree, integer *key, 
 	integer *lsib, integer *lkey, integer *rsib, integer *rkey)
 {
-    integer base, pkey;
+    integer base;
+    integer pkey;
     extern integer zzektrbs_(integer *);
     extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *);
-    integer nkbas, lpidx, lpkey, rpidx, rpkey;
+    integer nkbas;
+    integer lpidx;
+    integer lpkey;
+    integer rpidx;
+    integer rpkey;
     extern logical failed_(void);
     integer kidbas;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    integer keybas, addrss, parent, llpidx, loffst, poffst, roffst;
+    integer keybas;
+    integer addrss;
+    integer parent;
+    integer llpidx;
+    integer loffst;
+    integer poffst;
+    integer roffst;
 
+
+    /* Module state */
+    zzektrsb_state_t* __state = get_zzektrsb_state();
 /* $ Abstract */
 
 /*     Identify the immediate siblings of a node:  return a key in each */

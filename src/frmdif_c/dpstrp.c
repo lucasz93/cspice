@@ -1,9 +1,10 @@
-/* dpstrp.f -- translated by f2c (version 19980913).
+/* dpstrp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      DPSTRP ( DP Number to Character, With Plus ) */
 /* Subroutine */ int dpstrp_(doublereal *x, integer *sigdig, char *string, 

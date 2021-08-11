@@ -1,15 +1,21 @@
-/* latsrf.f -- translated by f2c (version 19980913).
+/* latsrf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__3 = 3;
-static doublereal c_b43 = 1.;
+extern latsrf_init_t __latsrf_init;
+static latsrf_state_t* get_latsrf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->latsrf)
+		state->latsrf = __cspice_allocate_module(sizeof(
+	latsrf_state_t), &__latsrf_init, sizeof(__latsrf_init));
+	return state->latsrf;
+
+}
 
 /* $Procedure LATSRF ( Latitudinal grid to surface points ) */
 /* Subroutine */ int latsrf_(char *method, char *target, doublereal *et, char 
@@ -18,17 +24,6 @@ static doublereal c_b43 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvmth[500] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "       ";
-    static integer svprvt = 0;
 
     /* System generated locals */
     integer i__1;
@@ -43,54 +38,56 @@ static doublereal c_b43 = 1.;
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
-	    integer *, integer *, doublereal *, ftnlen), zzmaxrad_(doublereal 
-	    *), zznamfrm_(integer *, char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), zzsudski_(integer *, integer *, integer *, 
-	    integer *), zzctruin_(integer *);
+	    integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
     extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
 	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen, ftnlen);
     integer n;
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *), zzraysfx_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
-    doublereal r__, x[3];
+    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    doublereal r__;
+    doublereal x[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer shape;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    edpnt_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), errdp_(char *, doublereal *, ftnlen);
-    static integer nsurf;
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int edpnt_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical svfnd1;
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
-    integer trgcde, fixfid, fxclid;
+    integer trgcde;
+    integer fixfid;
+    integer fxclid;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern logical return_(void);
-    char lmbtyp[20], shpstr[9], subtyp[20];
+    char lmbtyp[20];
+    char shpstr[9];
+    char subtyp[20];
     doublereal raydir[3];
     integer fxcent;
     char trmtyp[20];
     integer fxclss;
-    static integer srfctr[2], srflst[100];
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svradi[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     logical fnd;
     extern doublereal dpr_(void);
-    static logical pri;
 
+    /* Module state */
+    latsrf_state_t* __state = get_latsrf_state();
 /* $ Abstract */
 
 /*     Map array of planetocentric longitude/latitude coordinate pairs */
@@ -1210,23 +1207,23 @@ static doublereal c_b43 = 1.;
 	return 0;
     }
     chkin_("LATSRF", (ftnlen)6);
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize local surface counter. */
 
-	zzctruin_(srfctr);
+	zzctruin_(__state->srfctr);
 
 /*        Initialize target, frame, and radius counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
     }
 
 /*     Obtain integer code for the target. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -1241,8 +1238,8 @@ static doublereal c_b43 = 1.;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr2, svfref, &svfxfc, fixref, &fixfid, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr2, __state->svfref, &__state->svfxfc, fixref, &
+	    fixfid, (ftnlen)32, fixref_len);
     frinfo_(&fixfid, &fxcent, &fxclss, &fxclid, &fnd);
     if (failed_()) {
 	chkout_("LATSRF", (ftnlen)6);
@@ -1273,14 +1270,14 @@ static doublereal c_b43 = 1.;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(srfctr, &surfup);
+    zzsrftrk_(__state->srfctr, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
-	    0) {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -1288,7 +1285,7 @@ static doublereal c_b43 = 1.;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -1297,17 +1294,18 @@ static doublereal c_b43 = 1.;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, lmbtyp, trmtyp, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, subtyp, &
+		__state->pri, &__state->nsurf, __state->srflst, lmbtyp, 
+		trmtyp, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
+		ftnlen)20);
 	if (failed_()) {
 	    chkout_("LATSRF", (ftnlen)6);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -1334,39 +1332,40 @@ static doublereal c_b43 = 1.;
 	    chkout_("LATSRF", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(prvmth, method, (ftnlen)500, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
+    __state->first = FALSE_;
 
 /*     Check the target body shape. */
 
-    if (shape == 1) {
-	if (trgcde != svprvt) {
+    if (__state->shape == 1) {
+	if (trgcde != __state->svprvt) {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(svctr3);
+	    zzctruin_(__state->svctr3);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&trgcde, "RADII", &c__3, svctr3, &n, svradi, (ftnlen)5);
+	zzbodvcd_(&trgcde, "RADII", &__state->c__3, __state->svctr3, &n, 
+		__state->svradi, (ftnlen)5);
 	if (failed_()) {
 	    chkout_("LATSRF", (ftnlen)6);
 	    return 0;
 	}
 /* Computing MIN */
-	d__1 = min(svradi[0],svradi[1]);
-	if (min(d__1,svradi[2]) <= 0.) {
+	d__1 = min(__state->svradi[0],__state->svradi[1]);
+	if (min(d__1,__state->svradi[2]) <= 0.) {
 	    setmsg_("Body # radii should be positive but were # # #.", (
 		    ftnlen)47);
 	    errch_("#", target, (ftnlen)1, target_len);
-	    errdp_("#", svradi, (ftnlen)1);
-	    errdp_("#", &svradi[1], (ftnlen)1);
-	    errdp_("#", &svradi[2], (ftnlen)1);
+	    errdp_("#", __state->svradi, (ftnlen)1);
+	    errdp_("#", &__state->svradi[1], (ftnlen)1);
+	    errdp_("#", &__state->svradi[2], (ftnlen)1);
 	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
 	    chkout_("LATSRF", (ftnlen)6);
 	    return 0;
@@ -1374,7 +1373,7 @@ static doublereal c_b43 = 1.;
 
 /*        The radii are valid. Update the previous target ID. */
 
-	svprvt = trgcde;
+	__state->svprvt = trgcde;
 
 /*        Generate surface points. */
 
@@ -1384,23 +1383,24 @@ static doublereal c_b43 = 1.;
 /*           Let X be a point having norm 1 and located at the Ith input */
 /*           longitude and latitude. */
 
-	    latrec_(&c_b43, &lonlat[(i__ << 1) - 2], &lonlat[(i__ << 1) - 1], 
-		    x);
+	    latrec_(&__state->c_b43, &lonlat[(i__ << 1) - 2], &lonlat[(i__ << 
+		    1) - 1], x);
 
 /*           Scale X to place it on the ellipsoid surface. */
 
-	    edpnt_(x, svradi, &svradi[1], &svradi[2], &srfpts[i__ * 3 - 3]);
+	    edpnt_(x, __state->svradi, &__state->svradi[1], &__state->svradi[
+		    2], &srfpts[i__ * 3 - 3]);
 	    if (failed_()) {
 		chkout_("LATSRF", (ftnlen)6);
 		return 0;
 	    }
 	}
-    } else if (shape == 2) {
+    } else if (__state->shape == 2) {
 
 /*        Initialize the DSK ray-surface intercept algorithm to use a */
 /*        DSK model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &nsurf, srflst, &fixfid);
+	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fixfid);
 
 /*        Get the radius of an outer bounding sphere for the body. Scale */
 /*        up to avoid getting too close to the target surface. */

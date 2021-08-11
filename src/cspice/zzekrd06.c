@@ -1,13 +1,21 @@
-/* zzekrd06.f -- translated by f2c (version 19980913).
+/* zzekrd06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekrd06_init_t __zzekrd06_init;
+static zzekrd06_state_t* get_zzekrd06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrd06)
+		state->zzekrd06 = __cspice_allocate_module(sizeof(
+	zzekrd06_state_t), &__zzekrd06_init, sizeof(__zzekrd06_init));
+	return state->zzekrd06;
+
+}
 
 /* $Procedure   ZZEKRD06 ( EK, read class 6 column entry elements ) */
 /* Subroutine */ int zzekrd06_(integer *handle, integer *segdsc, integer *
@@ -22,29 +30,54 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, nelt;
+    integer base;
+    integer nelt;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
-	    integer *, integer *, integer *, integer *);
-    integer d__, p, delta, nread, avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer recno, cvlen, ncols, nskip, start;
+	    ftnlen);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    integer d__;
+    integer p;
+    integer delta;
+    integer nread;
+    integer avail;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer recno;
+    integer cvlen;
+    integer ncols;
+    integer nskip;
+    integer start;
     extern logical failed_(void);
     integer pg;
     extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen), dasrdi_(integer *, integer 
-	    *, integer *, integer *);
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     integer remain;
     char column[32];
-    integer colidx, datptr, eltidx, eltoff, maxelt, offset, pagnum, ptrloc, 
-	    ptroff, strlen;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errhan_(char *, integer *, ftnlen), zzekgei_(integer *, 
-	    integer *, integer *);
+    integer colidx;
+    integer datptr;
+    integer eltidx;
+    integer eltoff;
+    integer maxelt;
+    integer offset;
+    integer pagnum;
+    integer ptrloc;
+    integer ptroff;
+    integer strlen;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekgei_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekrd06_state_t* __state = get_zzekrd06_state();
 /* $ Abstract */
 
 /*     Read a specified element range from a column entry in a specified */
@@ -907,7 +940,7 @@ static integer c__1 = 1;
 /*        of the element from the base of the page on which the column */
 /*        entry starts. */
 
-	zzekpgpg_(&c__1, &datptr, &p, &base);
+	zzekpgpg_(&__state->c__1, &datptr, &p, &base);
 	ptroff = datptr - base;
 	offset = ptroff + 5 + strlen * (*beg - 1);
 	if (offset <= 1014) {
@@ -931,7 +964,7 @@ static integer c__1 = 1;
 
 	    i__1 = base + 1015;
 	    zzekgei_(handle, &i__1, &p);
-	    zzekpgbs_(&c__1, &p, &base);
+	    zzekpgbs_(&__state->c__1, &p, &base);
 	    ++pg;
 	}
 
@@ -972,7 +1005,7 @@ static integer c__1 = 1;
 
 		    i__1 = base + 1015;
 		    zzekgei_(handle, &i__1, &p);
-		    zzekpgbs_(&c__1, &p, &base);
+		    zzekpgbs_(&__state->c__1, &p, &base);
 		    datptr = base + 1;
 		}
 	    }
@@ -999,7 +1032,7 @@ static integer c__1 = 1;
 
 			i__1 = base + 1015;
 			zzekgei_(handle, &i__1, &p);
-			zzekpgbs_(&c__1, &p, &base);
+			zzekpgbs_(&__state->c__1, &p, &base);
 			datptr = base + 1;
 		    }
 		}

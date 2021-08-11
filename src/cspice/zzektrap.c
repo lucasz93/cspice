@@ -1,9 +1,17 @@
-/* zzektrap.f -- translated by f2c (version 19980913).
+/* zzektrap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrap_state_t;
+static zzektrap_state_t* get_zzektrap_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRAP ( EK tree, append item ) */
 /* Subroutine */ int zzektrap_(integer *handle, integer *tree, integer *value,
@@ -13,6 +21,9 @@
 	    integer *);
     extern integer zzektrsz_(integer *, integer *);
 
+
+    /* Module state */
+    zzektrap_state_t* __state = get_zzektrap_state();
 /* $ Abstract */
 
 /*     Append an item to a tree.  The key indicating the location of */

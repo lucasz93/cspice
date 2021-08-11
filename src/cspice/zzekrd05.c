@@ -1,13 +1,21 @@
-/* zzekrd05.f -- translated by f2c (version 19980913).
+/* zzekrd05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern zzekrd05_init_t __zzekrd05_init;
+static zzekrd05_state_t* get_zzekrd05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrd05)
+		state->zzekrd05 = __cspice_allocate_module(sizeof(
+	zzekrd05_state_t), &__zzekrd05_init, sizeof(__zzekrd05_init));
+	return state->zzekrd05;
+
+}
 
 /* $Procedure   ZZEKRD05 ( EK, read class 5 column entry elements ) */
 /* Subroutine */ int zzekrd05_(integer *handle, integer *segdsc, integer *
@@ -21,25 +29,42 @@ static integer c__2 = 2;
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    integer base, nelt;
+    integer base;
+    integer nelt;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzekgfwd_(integer *, integer *, integer *, 
-	    integer *), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
-	    integer *, integer *, integer *, integer *);
-    integer p, nread;
+	    integer *);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer nread;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, ptemp, start;
+    integer recno;
+    integer ncols;
+    integer ptemp;
+    integer start;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
-	    ;
+	    doublereal *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     integer remain;
     doublereal dpnelt;
-    integer colidx, datptr, maxidx, minidx, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errhan_(char *, integer *, ftnlen);
+    integer colidx;
+    integer datptr;
+    integer maxidx;
+    integer minidx;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekrd05_state_t* __state = get_zzekrd05_state();
 /* $ Abstract */
 
 /*     Read a specified element range from a column entry in a specified */
@@ -770,7 +795,7 @@ static integer c__2 = 2;
 /*        The request is valid, so read the data.  The first step is to */
 /*        locate the element at index BEG. */
 
-	zzekpgpg_(&c__2, &datptr, &p, &base);
+	zzekpgpg_(&__state->c__2, &datptr, &p, &base);
 	minidx = 1;
 	maxidx = base + 126 - datptr;
 	datptr += *beg;
@@ -778,9 +803,9 @@ static integer c__2 = 2;
 
 /*           Locate the page on which the element is continued. */
 
-	    zzekgfwd_(handle, &c__2, &p, &ptemp);
+	    zzekgfwd_(handle, &__state->c__2, &p, &ptemp);
 	    p = ptemp;
-	    zzekpgbs_(&c__2, &p, &base);
+	    zzekpgbs_(&__state->c__2, &p, &base);
 
 /*           Determine the highest-indexed element of the column entry */
 /*           located on the current page. */
@@ -816,9 +841,9 @@ static integer c__2 = 2;
 
 /*           Locate the page on which the element is continued. */
 
-	    zzekgfwd_(handle, &c__2, &p, &ptemp);
+	    zzekgfwd_(handle, &__state->c__2, &p, &ptemp);
 	    p = ptemp;
-	    zzekpgbs_(&c__2, &p, &base);
+	    zzekpgbs_(&__state->c__2, &p, &base);
 	    datptr = base + 1;
 	    start += nread;
 	    nread = min(remain,126);

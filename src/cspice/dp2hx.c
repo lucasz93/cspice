@@ -1,13 +1,21 @@
-/* dp2hx.f -- translated by f2c (version 19980913).
+/* dp2hx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern dp2hx_init_t __dp2hx_init;
+static dp2hx_state_t* get_dp2hx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dp2hx)
+		state->dp2hx = __cspice_allocate_module(sizeof(dp2hx_state_t),
+	 &__dp2hx_init, sizeof(__dp2hx_init));
+	return state->dp2hx;
+
+}
 
 /* $Procedure  DP2HX  ( D.p. number to hexadecimal string ) */
 /* Subroutine */ int dp2hx_(doublereal *number, char *string, integer *length,
@@ -15,8 +23,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char digits[1*16] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" 
-	    "B" "C" "D" "E" "F";
 
     /* System generated locals */
     address a__1[2];
@@ -32,11 +38,17 @@ static integer c__2 = 2;
     doublereal remndr;
     integer explen;
     logical negtiv;
-    integer intexp, positn, result;
+    integer intexp;
+    integer positn;
+    integer result;
     doublereal tmpnum;
     logical postiv;
-    char expstr[255], tmpstr[255];
+    char expstr[255];
+    char tmpstr[255];
 
+
+    /* Module state */
+    dp2hx_state_t* __state = get_dp2hx_state();
 /* $ Abstract */
 
 /*     Convert a double precision number to an equivalent character */
@@ -490,9 +502,9 @@ static integer c__2 = 2;
 	    tmpnum = remndr * 16.;
 	    result = (integer) tmpnum;
 	    remndr = tmpnum - (doublereal) result;
-	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&digits[
-		    (i__1 = -result) < 16 && 0 <= i__1 ? i__1 : s_rnge("digi"
-		    "ts", i__1, "dp2hx_", (ftnlen)554)];
+	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = -result) < 16 && 0 <= i__1 ? i__1 
+		    : s_rnge("digits", i__1, "dp2hx_", (ftnlen)554)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
@@ -503,7 +515,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 	i__2[0] = 1, a__1[0] = "^";
 	i__2[1] = explen, a__1[1] = expstr;
-	s_cat(tmpstr + i__1, a__1, i__2, &c__2, 255 - i__1);
+	s_cat(tmpstr + i__1, a__1, i__2, &__state->c__2, 255 - i__1);
 	positn = positn + explen + 1;
     } else if (postiv) {
 
@@ -529,9 +541,9 @@ static integer c__2 = 2;
 	    tmpnum = remndr * 16.;
 	    result = (integer) tmpnum;
 	    remndr = tmpnum - (doublereal) result;
-	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&digits[
-		    (i__1 = result) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits"
-		    , i__1, "dp2hx_", (ftnlen)589)];
+	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = result) < 16 && 0 <= i__1 ? i__1 :
+		     s_rnge("digits", i__1, "dp2hx_", (ftnlen)589)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
@@ -542,7 +554,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 	i__2[0] = 1, a__1[0] = "^";
 	i__2[1] = explen, a__1[1] = expstr;
-	s_cat(tmpstr + i__1, a__1, i__2, &c__2, 255 - i__1);
+	s_cat(tmpstr + i__1, a__1, i__2, &__state->c__2, 255 - i__1);
 	positn = positn + explen + 1;
     } else {
 

@@ -1,14 +1,21 @@
-/* sphsd.f -- translated by f2c (version 19980913).
+/* sphsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b7 = -1.;
-static doublereal c_b8 = 1.;
+extern sphsd_init_t __sphsd_init;
+static sphsd_state_t* get_sphsd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sphsd)
+		state->sphsd = __cspice_allocate_module(sizeof(sphsd_state_t),
+	 &__sphsd_init, sizeof(__sphsd_init));
+	return state->sphsd;
+
+}
 
 /* $Procedure  SPHSD ( Spherical surface distance ) */
 doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1, 
@@ -21,15 +28,19 @@ doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1,
     double sin(doublereal), cos(doublereal), acos(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal sl1sl2;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     doublereal cosang;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sphsd_state_t* __state = get_sphsd_state();
 /* $ Abstract */
 
 /*     Return the distance between two points on a sphere, measured */
@@ -248,7 +259,8 @@ doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1,
 
     sl1sl2 = sin(*lat1) * sin(*lat2);
     cosang = cos(*long1 - *long2) * (cos(*lat1 - *lat2) - sl1sl2) + sl1sl2;
-    ret_val = *radius * acos(brcktd_(&cosang, &c_b7, &c_b8));
+    ret_val = *radius * acos(brcktd_(&cosang, &__state->c_b7, &__state->c_b8))
+	    ;
     return ret_val;
 } /* sphsd_ */
 

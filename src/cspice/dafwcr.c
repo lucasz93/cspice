@@ -1,14 +1,21 @@
-/* dafwcr.f -- translated by f2c (version 19980913).
+/* dafwcr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern dafwcr_init_t __dafwcr_init;
+static dafwcr_state_t* get_dafwcr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafwcr)
+		state->dafwcr = __cspice_allocate_module(sizeof(
+	dafwcr_state_t), &__dafwcr_init, sizeof(__dafwcr_init));
+	return state->dafwcr;
+
+}
 
 /* $Procedure DAFWCR ( DAF, write character record ) */
 /* Subroutine */ int dafwcr_(integer *handle, integer *recno, char *crec, 
@@ -24,17 +31,22 @@ static integer c__1 = 1;
     /* Local variables */
     integer unit;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen), dafsih_(integer *, 
-	    char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen),
-	     setmsg_(char *, ftnlen);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    dafwcr_state_t* __state = get_dafwcr_state();
 /* $ Abstract */
 
 /*     Write or rewrite the contents of a character record to */
@@ -197,7 +209,7 @@ static integer c__1 = 1;
     } else {
 	chkin_("DAFWCR", (ftnlen)6);
     }
-    zzddhhlu_(handle, "DAF", &c_false, &unit, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &unit, (ftnlen)3);
 
 /*     Look out for */
 
@@ -215,13 +227,13 @@ static integer c__1 = 1;
 	errint_("#", &i__1, (ftnlen)1);
 	sigerr_("SPICE(DAFBADCRECLEN)", (ftnlen)20);
     } else {
-	io___3.ciunit = unit;
-	io___3.cirec = *recno;
-	iostat = s_wdue(&io___3);
+	__state->io___3.ciunit = unit;
+	__state->io___3.cirec = *recno;
+	iostat = s_wdue(&__state->io___3);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, crec, crec_len);
+	iostat = do_uio(&__state->c__1, crec, crec_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}

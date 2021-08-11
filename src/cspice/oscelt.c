@@ -1,15 +1,21 @@
-/* oscelt.f -- translated by f2c (version 19980913).
+/* oscelt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b16 = 0.;
-static doublereal c_b17 = 1.;
-static doublereal c_b18 = 1e-10;
+extern oscelt_init_t __oscelt_init;
+static oscelt_state_t* get_oscelt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->oscelt)
+		state->oscelt = __cspice_allocate_module(sizeof(
+	oscelt_state_t), &__oscelt_init, sizeof(__oscelt_init));
+	return state->oscelt;
+
+}
 
 /* $Procedure      OSCELT ( Determine conic elements from state ) */
 /* Subroutine */ int oscelt_(doublereal *state, doublereal *et, doublereal *
@@ -17,7 +23,6 @@ static doublereal c_b18 = 1e-10;
 {
     /* Initialized data */
 
-    static doublereal zvec[3] = { 0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;
@@ -28,33 +33,57 @@ static doublereal c_b18 = 1e-10;
 	    doublereal), tan(doublereal);
 
     /* Local variables */
-    doublereal rmag, argp, vmag;
+    doublereal rmag;
+    doublereal argp;
+    doublereal vmag;
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal e[3], h__[3], n[3], p, r__[3], v[3], cosea;
+    doublereal e[3];
+    doublereal h__[3];
+    doublereal n[3];
+    doublereal p;
+    doublereal r__[3];
+    doublereal v[3];
+    doublereal cosea;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal sinea, lnode, coshf;
+    doublereal sinea;
+    doublereal lnode;
+    doublereal coshf;
     extern doublereal exact_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *), errdp_(char *, doublereal *, ftnlen), vlcom_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    doublereal perix[3], periy[3], xprod[3], m0;
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    doublereal perix[3];
+    doublereal periy[3];
+    doublereal xprod[3];
+    doublereal m0;
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *), vcrss_(doublereal *, doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *), twopi_(void);
+	    *);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
     extern logical vzero_(doublereal *);
     doublereal ea;
-    extern doublereal pi_(void), dacosh_(doublereal *);
-    doublereal nu, rp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
-	    ftnlen);
+    extern doublereal pi_(void);
+    extern doublereal dacosh_(doublereal *);
+    doublereal nu;
+    doublereal rp;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    doublereal ecc, inc;
+    doublereal ecc;
+    doublereal inc;
 
+
+    /* Module state */
+    oscelt_state_t* __state = get_oscelt_state();
 /* $ Abstract */
 
 /*     Determine the set of osculating conic orbital elements that */
@@ -486,7 +515,7 @@ static doublereal c_b18 = 1e-10;
 	return 0;
     }
     d__1 = -h__[1];
-    vpack_(&d__1, h__, &c_b16, n);
+    vpack_(&d__1, h__, &__state->c_b16, n);
 /* Computing 2nd power */
     d__2 = vmag;
     d__1 = d__2 * d__2 - *mu / rmag;
@@ -506,7 +535,7 @@ static doublereal c_b18 = 1e-10;
 /*     specific angular momentum of the orbiting object. */
 
     d__1 = vnorm_(e);
-    ecc = exact_(&d__1, &c_b17, &c_b18);
+    ecc = exact_(&d__1, &__state->c_b17, &__state->c_b18);
     p = vdot_(h__, h__) / *mu;
     rp = p / (ecc + 1.);
 
@@ -519,13 +548,13 @@ static doublereal c_b18 = 1e-10;
 /*     If close to zero or pi, make it exact. In either case, the node */
 /*     vector becomes undefined. */
 
-    inc = vsep_(h__, zvec);
+    inc = vsep_(h__, __state->zvec);
     if ((d__1 = inc + 0., abs(d__1)) < 1e-10) {
 	inc = 0.;
-	vpack_(&c_b17, &c_b16, &c_b16, n);
+	vpack_(&__state->c_b17, &__state->c_b16, &__state->c_b16, n);
     } else if ((d__1 = inc - pi_(), abs(d__1)) < 1e-10) {
 	inc = pi_();
-	vpack_(&c_b17, &c_b16, &c_b16, n);
+	vpack_(&__state->c_b17, &__state->c_b16, &__state->c_b16, n);
     }
 
 /*                                                              ^ */

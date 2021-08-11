@@ -1,9 +1,17 @@
-/* zzekue04.f -- translated by f2c (version 19980913).
+/* zzekue04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekue04_state_t;
+static zzekue04_state_t* get_zzekue04_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKUE04 ( EK, update column entry, class 4 ) */
 /* Subroutine */ int zzekue04_(integer *handle, integer *segdsc, integer *
@@ -11,11 +19,17 @@
 	isnull)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void), return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), zzekad04_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *),
-	     zzekde04_(integer *, integer *, integer *, integer *);
+    extern logical failed_(void);
+    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekad04_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekde04_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    zzekue04_state_t* __state = get_zzekue04_state();
 /* $ Abstract */
 
 /*     Update a specified class 4 column entry in an EK record. */

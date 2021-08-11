@@ -1,9 +1,17 @@
-/* ordd.f -- translated by f2c (version 19980913).
+/* ordd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ordd_state_t;
+static ordd_state_t* get_ordd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ORDD ( The ordinal position of an element in a set ) */
 integer ordd_(doublereal *item, doublereal *set)
@@ -18,6 +26,9 @@ integer ordd_(doublereal *item, doublereal *set)
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ordd_state_t* __state = get_ordd_state();
 /* $ Abstract */
 
 /*     The function returns the ordinal position of any given item in a */

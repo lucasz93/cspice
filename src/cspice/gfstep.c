@@ -1,22 +1,37 @@
-/* gfstep.f -- translated by f2c (version 19980913).
+/* gfstep.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern gfstep_init_t __gfstep_init;
+static gfstep_state_t* get_gfstep_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfstep)
+		state->gfstep = __cspice_allocate_module(sizeof(
+	gfstep_state_t), &__gfstep_init, sizeof(__gfstep_init));
+	return state->gfstep;
+
+}
 
 /* $Procedure GFSTEP ( GF, step size ) */
 /* Subroutine */ int gfstep_0_(int n__, doublereal *time, doublereal *step)
 {
     /* Initialized data */
 
-    static logical svinit = FALSE_;
-    static doublereal svstep = -1.;
 
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    gfstep_state_t* __state = get_gfstep_state();
 /* $ Abstract */
 
 /*     Return the time step set by the most recent call to GFSSTP. */
@@ -190,7 +205,7 @@
 
 /*     Discovery check-in. */
 
-    if (! svinit) {
+    if (! __state->svinit) {
 	chkin_("GFSTEP", (ftnlen)6);
 	setmsg_("Step size was never initialized.", (ftnlen)32);
 	sigerr_("SPICE(NOTINITIALIZED)", (ftnlen)21);
@@ -200,7 +215,7 @@
 
 /*     Set STEP to the saved value from the last call to GFSSTP. */
 
-    *step = svstep;
+    *step = __state->svstep;
     *time = *time;
     return 0;
 /* $Procedure GFSSTP ( Geometry finder set step size ) */
@@ -334,8 +349,8 @@ L_gfsstp:
 	chkout_("GFSSTP", (ftnlen)6);
 	return 0;
     }
-    svstep = *step;
-    svinit = TRUE_;
+    __state->svstep = *step;
+    __state->svinit = TRUE_;
     return 0;
 } /* gfstep_ */
 

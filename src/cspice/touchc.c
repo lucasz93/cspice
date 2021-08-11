@@ -1,14 +1,25 @@
-/* touchc.f -- translated by f2c (version 19980913).
+/* touchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int touchc_state_t;
+static touchc_state_t* get_touchc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TOUCHC ( Touch a variable ) */
 /* Character */ VOID touchc_(char *ret_val, ftnlen ret_val_len, char *string, 
 	ftnlen string_len)
 {
+
+    /* Module state */
+    touchc_state_t* __state = get_touchc_state();
 /* $ Abstract */
 
 /*     Return the first character of a string */

@@ -1,9 +1,17 @@
-/* pos.f -- translated by f2c (version 19980913).
+/* pos.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pos_state_t;
+static pos_state_t* get_pos_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            POS ( Position of substring ) */
 integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen 
@@ -18,8 +26,13 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
     /* Local variables */
     integer b;
     logical found;
-    integer lchnce, offset, lenstr;
+    integer lchnce;
+    integer offset;
+    integer lenstr;
 
+
+    /* Module state */
+    pos_state_t* __state = get_pos_state();
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a substring, starting at */

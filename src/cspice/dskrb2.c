@@ -1,13 +1,21 @@
-/* dskrb2.f -- translated by f2c (version 19980913).
+/* dskrb2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b4 = .33333333333333331;
+extern dskrb2_init_t __dskrb2_init;
+static dskrb2_state_t* get_dskrb2_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskrb2)
+		state->dskrb2 = __cspice_allocate_module(sizeof(
+	dskrb2_state_t), &__dskrb2_init, sizeof(__dskrb2_init));
+	return state->dskrb2;
+
+}
 
 /* $Procedure DSKRB2 ( DSK, determine range bounds for plate set ) */
 /* Subroutine */ int dskrb2_(integer *nv, doublereal *vrtces, integer *np, 
@@ -16,19 +24,21 @@ static doublereal c_b4 = .33333333333333331;
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
 
     /* Local variables */
-    doublereal maxd, dist, f;
+    doublereal maxd;
+    doublereal dist;
+    doublereal f;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal pnear[3];
-    extern doublereal dpmin_(void), dpmax_(void), vdist_(doublereal *, 
-	    doublereal *);
+    extern doublereal dpmin_(void);
+    extern doublereal dpmax_(void);
+    extern doublereal vdist_(doublereal *, doublereal *);
     extern /* Subroutine */ int pltnp_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *, doublereal *);
     extern doublereal vnorm_(doublereal *);
@@ -40,12 +50,18 @@ static doublereal c_b4 = .33333333333333331;
     extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal center[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern logical return_(void);
-    doublereal alt, lat, lon;
+    doublereal alt;
+    doublereal lat;
+    doublereal lon;
 
+
+    /* Module state */
+    dskrb2_state_t* __state = get_dskrb2_state();
 /* $ Abstract */
 
 /*     Determine range bounds for a set of triangular plates to */
@@ -722,9 +738,9 @@ static doublereal c_b4 = .33333333333333331;
 	*mncor3 = dpmax_();
 	i__1 = *np;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    pltnp_(origin, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &vrtces[
-		    plates[i__ * 3 - 2] * 3 - 3], &vrtces[plates[i__ * 3 - 1] 
-		    * 3 - 3], pnear, &dist);
+	    pltnp_(__state->origin, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &
+		    vrtces[plates[i__ * 3 - 2] * 3 - 3], &vrtces[plates[i__ * 
+		    3 - 1] * 3 - 3], pnear, &dist);
 	    *mncor3 = min(dist,*mncor3);
 	}
     } else if (*corsys == 3) {
@@ -777,9 +793,10 @@ static doublereal c_b4 = .33333333333333331;
 
 	i__1 = *np;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vlcom3_(&c_b4, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &c_b4, &
-		    vrtces[plates[i__ * 3 - 2] * 3 - 3], &c_b4, &vrtces[
-		    plates[i__ * 3 - 1] * 3 - 3], center);
+	    vlcom3_(&__state->c_b4, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &
+		    __state->c_b4, &vrtces[plates[i__ * 3 - 2] * 3 - 3], &
+		    __state->c_b4, &vrtces[plates[i__ * 3 - 1] * 3 - 3], 
+		    center);
 /* Computing MAX */
 	    d__1 = vdist_(&vrtces[plates[i__ * 3 - 3] * 3 - 3], center), d__2 
 		    = vdist_(&vrtces[plates[i__ * 3 - 2] * 3 - 3], center), 

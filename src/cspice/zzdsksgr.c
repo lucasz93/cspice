@@ -1,13 +1,21 @@
-/* zzdsksgr.f -- translated by f2c (version 19980913).
+/* zzdsksgr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern zzdsksgr_init_t __zzdsksgr_init;
+static zzdsksgr_state_t* get_zzdsksgr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksgr)
+		state->zzdsksgr = __cspice_allocate_module(sizeof(
+	zzdsksgr_state_t), &__zzdsksgr_init, sizeof(__zzdsksgr_init));
+	return state->zzdsksgr;
+
+}
 
 /* $Procedure ZZDSKSGR ( DSK, return segment bounding radius ) */
 doublereal zzdsksgr_(doublereal *dskdsc)
@@ -23,17 +31,25 @@ doublereal zzdsksgr_(doublereal *dskdsc)
     doublereal minr;
     integer b;
     doublereal f;
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), errdp_(char *, doublereal *, ftnlen);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal vnorm_(doublereal *);
-    doublereal re, rp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal re;
+    doublereal rp;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer corsys;
-    doublereal mag[3], bds[6]	/* was [2][3] */;
+    doublereal mag[3];
+    doublereal bds[6]	/* was [2][3] */;
 
+
+    /* Module state */
+    zzdsksgr_state_t* __state = get_zzdsksgr_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -492,7 +508,7 @@ doublereal zzdsksgr_(doublereal *dskdsc)
 /*        First copy the bounds into an appropriately dimensioned */
 /*        array. */
 
-	moved_(&dskdsc[16], &c__6, bds);
+	moved_(&dskdsc[16], &__state->c__6, bds);
 	b = 16;
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    j = b + (i__ << 1) - 1;

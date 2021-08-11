@@ -1,9 +1,17 @@
-/* lx4sgn.f -- translated by f2c (version 19980913).
+/* lx4sgn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lx4sgn_state_t;
+static lx4sgn_state_t* get_lx4sgn_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LX4SGN (Scan for signed integer) */
 /* Subroutine */ int lx4sgn_(char *string, integer *first, integer *last, 
@@ -13,10 +21,15 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer f, i__, l;
+    integer f;
+    integer i__;
+    integer l;
     extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
 	    *, ftnlen);
 
+
+    /* Module state */
+    lx4sgn_state_t* __state = get_lx4sgn_state();
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */

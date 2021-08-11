@@ -1,17 +1,31 @@
-/* putact.f -- translated by f2c (version 19980913).
+/* putact.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern putact_init_t __putact_init;
+static putact_state_t* get_putact_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->putact)
+		state->putact = __cspice_allocate_module(sizeof(
+	putact_state_t), &__putact_init, sizeof(__putact_init));
+	return state->putact;
+
+}
 
 /* $Procedure      PUTACT ( Store Error Response Action ) */
 /* Subroutine */ int putact_0_(int n__, integer *action)
 {
     /* Initialized data */
 
-    static integer savact = 5;
 
+
+    /* Module state */
+    putact_state_t* __state = get_putact_state();
 /* $ Abstract */
 
 /*     PUTACT is a low-level data structure access routine which */
@@ -186,7 +200,7 @@
 
 /*     Executable Code: */
 
-    savact = *action;
+    __state->savact = *action;
     return 0;
 /* $Procedure  GETACT ( Get Error Response Action ) */
 
@@ -339,7 +353,7 @@ L_getact:
 
 /*     Grab saved error response action: */
 
-    *action = savact;
+    *action = __state->savact;
     return 0;
 } /* putact_ */
 

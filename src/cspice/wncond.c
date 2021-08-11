@@ -1,9 +1,17 @@
-/* wncond.f -- translated by f2c (version 19980913).
+/* wncond.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wncond_state_t;
+static wncond_state_t* get_wncond_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNCOND ( Contract the intervals of a DP window ) */
 /* Subroutine */ int wncond_(doublereal *left, doublereal *right, doublereal *
@@ -13,10 +21,15 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), wnexpd_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int wnexpd_(doublereal *, doublereal *, 
+	    doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    wncond_state_t* __state = get_wncond_state();
 /* $ Abstract */
 
 /*     Contract each of the intervals of a double precision window. */

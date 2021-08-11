@@ -1,17 +1,21 @@
-/* dpspce.f -- translated by f2c (version 19980913).
+/* dpspce.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b19 = .66666666666666663;
-static doublereal c_b20 = 3.5;
-static doublereal c_b22 = 1.5;
-static doublereal c_b23 = 1.;
-static doublereal c_b25 = 0.;
+extern dpspce_init_t __dpspce_init;
+static dpspce_state_t* get_dpspce_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpspce)
+		state->dpspce = __cspice_allocate_module(sizeof(
+	dpspce_state_t), &__dpspce_init, sizeof(__dpspce_init));
+	return state->dpspce;
+
+}
 
 /* $Procedure DPSPCE ( Propagate a two line element set for deep space ) */
 /* Subroutine */ int dpspce_(doublereal *time, doublereal *geophs, doublereal 
@@ -19,8 +23,6 @@ static doublereal c_b25 = 0.;
 {
     /* Initialized data */
 
-    static logical doinit = TRUE_;
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -33,47 +35,25 @@ static doublereal c_b25 = 0.;
 	    atan2(doublereal, doublereal);
 
     /* Local variables */
-    static doublereal coef, eeta, aodp, delo, capu, uang, xmdf, xinc, xmam, 
-	    aynl, elsq, temp;
-    static logical cont;
-    static doublereal rdot, cosu, sinu, coef1, t2cof, temp1, temp2, temp3, 
-	    temp4, temp5, cos2u, temp6;
     extern /* Subroutine */ int zzdpinit_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static doublereal sin2u, a, e;
-    static integer i__;
-    static doublereal m[3], n[3], s, u[3], v[3], betal, scale, betao;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal epoch, ecose, aycof, esine, a3ovk2, tempa, tempe, bstar,
-	     cosio, xincl, etasq, rfdot, sinio, a1, rdotk, c1, c2, cosuk, c4, 
-	    qoms24, sinuk, templ, x1m5th, x1mth2, x3thm1, x7thm1, psisq, 
-	    xinck, xlcof, xmdot, xnode, xnodp;
     extern doublereal twopi_(void);
-    static doublereal s4;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    static doublereal betao2, theta2, ae, xhdot1, ao, em, eo, qoms2t, pl, 
-	    omgadf, rk, qo, uk, so;
     extern doublereal halfpi_(void);
-    static doublereal xl, xn, omegao;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal perige, xnodcf, xnoddf, tsince, xnodek, omgdot, rfdotk, 
-	    xnodeo;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static doublereal ck2, lstelm[10], ck4, cosepw, sinepw, xkmper, xnodot, 
-	    lstphs[8];
     extern logical return_(void);
-    static doublereal pinvsq, xj2, xj3, xj4, eta, axn, xke, ayn, epw, tsi, 
-	    xll, xmo, xno, tsq, xlt, del1;
     extern /* Subroutine */ int zzdpsec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    static doublereal pio2;
     extern /* Subroutine */ int zzdpper_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static doublereal pix2;
 
+    /* Module state */
+    dpspce_state_t* __state = get_dpspce_state();
 /* $ Abstract */
 
 /*     This routine propagates NORAD two-line element data for */
@@ -415,36 +395,36 @@ static doublereal c_b25 = 0.;
 /*     If this is the very first time into this routine, set these */
 /*     values. */
 
-    if (first) {
-	pix2 = twopi_();
-	pio2 = halfpi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pix2 = twopi_();
+	__state->pio2 = halfpi_();
+	__state->first = FALSE_;
     }
 
 /*     If initialization flag is FALSE, then this is not the first */
 /*     call to this routine.  Check the stuff. */
 
-    if (! doinit) {
+    if (! __state->doinit) {
 
 /*        Check whether the current and last constants and elements */
 /*        match.  If not, we need to reinitialize everything */
 /*        since the propagation is dependent on the value of these */
 /*        arrays. */
 
-	for (i__ = 1; i__ <= 8; ++i__) {
-	    if (lstphs[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstphs", i__1, "dpspce_", (ftnlen)547)] != geophs[(i__2 =
-		     i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge("geophs", i__2,
-		     "dpspce_", (ftnlen)547)]) {
-		doinit = TRUE_;
+	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
+	    if (__state->lstphs[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge("lstphs", i__1, "dpspce_", (ftnlen)547)] != 
+		    geophs[(i__2 = __state->i__ - 1) < 8 && 0 <= i__2 ? i__2 :
+		     s_rnge("geophs", i__2, "dpspce_", (ftnlen)547)]) {
+		__state->doinit = TRUE_;
 	    }
 	}
-	for (i__ = 1; i__ <= 10; ++i__) {
-	    if (lstelm[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstelm", i__1, "dpspce_", (ftnlen)556)] != elems[(i__2 = 
-		    i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("elems", i__2, 
-		    "dpspce_", (ftnlen)556)]) {
-		doinit = TRUE_;
+	for (__state->i__ = 1; __state->i__ <= 10; ++__state->i__) {
+	    if (__state->lstelm[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? 
+		    i__1 : s_rnge("lstelm", i__1, "dpspce_", (ftnlen)556)] != 
+		    elems[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 :
+		     s_rnge("elems", i__2, "dpspce_", (ftnlen)556)]) {
+		__state->doinit = TRUE_;
 	    }
 	}
     }
@@ -452,47 +432,47 @@ static doublereal c_b25 = 0.;
 /*     Initialization block.  Always called on the initial entry and */
 /*     anytime the geophysical or elements array changes. */
 
-    if (doinit) {
-	doinit = FALSE_;
+    if (__state->doinit) {
+	__state->doinit = FALSE_;
 
 /*        Retrieve the geophysical constants from the GEOPHS array */
 
-	xj2 = geophs[0];
-	xj3 = geophs[1];
-	xj4 = geophs[2];
-	xke = geophs[3];
-	qo = geophs[4];
-	so = geophs[5];
-	xkmper = geophs[6];
-	ae = geophs[7];
+	__state->xj2 = geophs[0];
+	__state->xj3 = geophs[1];
+	__state->xj4 = geophs[2];
+	__state->xke = geophs[3];
+	__state->qo = geophs[4];
+	__state->so = geophs[5];
+	__state->xkmper = geophs[6];
+	__state->ae = geophs[7];
 
 /*        Save the geophysical constants for later comparison */
 
-	for (i__ = 1; i__ <= 8; ++i__) {
-	    lstphs[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("lstphs",
-		     i__1, "dpspce_", (ftnlen)590)] = geophs[(i__2 = i__ - 1) 
-		    < 8 && 0 <= i__2 ? i__2 : s_rnge("geophs", i__2, "dpspce_"
-		    , (ftnlen)590)];
+	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
+	    __state->lstphs[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? i__1 
+		    : s_rnge("lstphs", i__1, "dpspce_", (ftnlen)590)] = 
+		    geophs[(i__2 = __state->i__ - 1) < 8 && 0 <= i__2 ? i__2 :
+		     s_rnge("geophs", i__2, "dpspce_", (ftnlen)590)];
 	}
 
 /*        Unpack the elements array. */
 
-	bstar = elems[2];
-	xincl = elems[3];
-	xnodeo = elems[4];
-	eo = elems[5];
-	omegao = elems[6];
-	xmo = elems[7];
-	xno = elems[8];
-	epoch = elems[9];
+	__state->bstar = elems[2];
+	__state->xincl = elems[3];
+	__state->xnodeo = elems[4];
+	__state->eo = elems[5];
+	__state->omegao = elems[6];
+	__state->xmo = elems[7];
+	__state->xno = elems[8];
+	__state->epoch = elems[9];
 
 /*        Save the elements for later comparison */
 
-	for (i__ = 1; i__ <= 10; ++i__) {
-	    lstelm[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("lstelm"
-		    , i__1, "dpspce_", (ftnlen)610)] = elems[(i__2 = i__ - 1) 
-		    < 10 && 0 <= i__2 ? i__2 : s_rnge("elems", i__2, "dpspce_"
-		    , (ftnlen)610)];
+	for (__state->i__ = 1; __state->i__ <= 10; ++__state->i__) {
+	    __state->lstelm[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? 
+		    i__1 : s_rnge("lstelm", i__1, "dpspce_", (ftnlen)610)] = 
+		    elems[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 :
+		     s_rnge("elems", i__2, "dpspce_", (ftnlen)610)];
 	}
 
 /*        Set common variables, the init flag and calculate the */
@@ -505,151 +485,174 @@ static doublereal c_b25 = 0.;
 /*        future access. */
 
 /* Computing 2nd power */
-	d__1 = ae;
-	ck2 = xj2 * .5 * (d__1 * d__1);
+	d__1 = __state->ae;
+	__state->ck2 = __state->xj2 * .5 * (d__1 * d__1);
 /* Computing 4th power */
-	d__1 = ae, d__1 *= d__1;
-	ck4 = xj4 * -.375 * (d__1 * d__1);
+	d__1 = __state->ae, d__1 *= d__1;
+	__state->ck4 = __state->xj4 * -.375 * (d__1 * d__1);
 /* Computing 4th power */
-	d__1 = (qo - so) * ae / xkmper, d__1 *= d__1;
-	qoms2t = d__1 * d__1;
-	s = ae * (so / xkmper + 1.);
+	d__1 = (__state->qo - __state->so) * __state->ae / __state->xkmper, 
+		d__1 *= d__1;
+	__state->qoms2t = d__1 * d__1;
+	__state->s = __state->ae * (__state->so / __state->xkmper + 1.);
 
 /*        Recover original mean motion (XNODP) and semimajor axis (AODP) */
 /*        from input elements */
 
-	d__1 = xke / xno;
-	a1 = pow_dd(&d__1, &c_b19);
-	cosio = cos(xincl);
+	d__1 = __state->xke / __state->xno;
+	__state->a1 = pow_dd(&d__1, &__state->c_b19);
+	__state->cosio = cos(__state->xincl);
 /* Computing 2nd power */
-	d__1 = cosio;
-	theta2 = d__1 * d__1;
-	x3thm1 = theta2 * 3. - 1.;
+	d__1 = __state->cosio;
+	__state->theta2 = d__1 * d__1;
+	__state->x3thm1 = __state->theta2 * 3. - 1.;
 /* Computing 2nd power */
-	d__1 = eo;
-	betao2 = 1. - d__1 * d__1;
-	betao = sqrt(betao2);
+	d__1 = __state->eo;
+	__state->betao2 = 1. - d__1 * d__1;
+	__state->betao = sqrt(__state->betao2);
 /* Computing 2nd power */
-	d__1 = a1;
-	del1 = ck2 * 1.5 * x3thm1 / (d__1 * d__1 * betao * betao2);
-	ao = a1 * (1. - del1 * (del1 * (del1 * 1.654320987654321 + 1.) + 
-		.33333333333333331));
+	d__1 = __state->a1;
+	__state->del1 = __state->ck2 * 1.5 * __state->x3thm1 / (d__1 * d__1 * 
+		__state->betao * __state->betao2);
+	__state->ao = __state->a1 * (1. - __state->del1 * (__state->del1 * (
+		__state->del1 * 1.654320987654321 + 1.) + .33333333333333331))
+		;
 /* Computing 2nd power */
-	d__1 = ao;
-	delo = ck2 * 1.5 * x3thm1 / (d__1 * d__1 * betao * betao2);
-	xnodp = xno / (delo + 1.);
-	aodp = ao / (1. - delo);
+	d__1 = __state->ao;
+	__state->delo = __state->ck2 * 1.5 * __state->x3thm1 / (d__1 * d__1 * 
+		__state->betao * __state->betao2);
+	__state->xnodp = __state->xno / (__state->delo + 1.);
+	__state->aodp = __state->ao / (1. - __state->delo);
 
 /*        For perigee below 156 km, the values of S and QOMS2T are */
 /*        altered */
 
-	s4 = s;
-	qoms24 = qoms2t;
-	perige = (aodp * (1. - eo) - ae) * xkmper;
-	if (perige < 156.) {
-	    s4 = perige - 78.;
-	    if (perige > 98.) {
+	__state->s4 = __state->s;
+	__state->qoms24 = __state->qoms2t;
+	__state->perige = (__state->aodp * (1. - __state->eo) - __state->ae) *
+		 __state->xkmper;
+	if (__state->perige < 156.) {
+	    __state->s4 = __state->perige - 78.;
+	    if (__state->perige > 98.) {
 /* Computing 4th power */
-		d__1 = (120. - s4) * ae / xkmper, d__1 *= d__1;
-		qoms24 = d__1 * d__1;
-		s4 = s4 / xkmper + ae;
+		d__1 = (120. - __state->s4) * __state->ae / __state->xkmper, 
+			d__1 *= d__1;
+		__state->qoms24 = d__1 * d__1;
+		__state->s4 = __state->s4 / __state->xkmper + __state->ae;
 	    } else {
-		s4 = 20.;
+		__state->s4 = 20.;
 	    }
 	}
 /* Computing 2nd power */
-	d__1 = aodp;
+	d__1 = __state->aodp;
 /* Computing 2nd power */
-	d__2 = betao2;
-	pinvsq = 1. / (d__1 * d__1 * (d__2 * d__2));
-	tsi = 1. / (aodp - s4);
-	eta = aodp * eo * tsi;
+	d__2 = __state->betao2;
+	__state->pinvsq = 1. / (d__1 * d__1 * (d__2 * d__2));
+	__state->tsi = 1. / (__state->aodp - __state->s4);
+	__state->eta = __state->aodp * __state->eo * __state->tsi;
 /* Computing 2nd power */
-	d__1 = eta;
-	etasq = d__1 * d__1;
-	eeta = eo * eta;
-	psisq = (d__1 = 1. - etasq, abs(d__1));
+	d__1 = __state->eta;
+	__state->etasq = d__1 * d__1;
+	__state->eeta = __state->eo * __state->eta;
+	__state->psisq = (d__1 = 1. - __state->etasq, abs(d__1));
 /* Computing 4th power */
-	d__1 = tsi, d__1 *= d__1;
-	coef = qoms24 * (d__1 * d__1);
-	coef1 = coef / pow_dd(&psisq, &c_b20);
-	c2 = coef1 * xnodp * (aodp * (etasq * 1.5 + 1. + eeta * (etasq + 4.)) 
-		+ ck2 * .75 * tsi / psisq * x3thm1 * (etasq * 3. * (etasq + 
-		8.) + 8.));
-	c1 = bstar * c2;
-	sinio = sin(xincl);
+	d__1 = __state->tsi, d__1 *= d__1;
+	__state->coef = __state->qoms24 * (d__1 * d__1);
+	__state->coef1 = __state->coef / pow_dd(&__state->psisq, &
+		__state->c_b20);
+	__state->c2 = __state->coef1 * __state->xnodp * (__state->aodp * (
+		__state->etasq * 1.5 + 1. + __state->eeta * (__state->etasq + 
+		4.)) + __state->ck2 * .75 * __state->tsi / __state->psisq * 
+		__state->x3thm1 * (__state->etasq * 3. * (__state->etasq + 8.)
+		 + 8.));
+	__state->c1 = __state->bstar * __state->c2;
+	__state->sinio = sin(__state->xincl);
 /* Computing 3rd power */
-	d__1 = ae;
-	a3ovk2 = -xj3 / ck2 * (d__1 * (d__1 * d__1));
-	x1mth2 = 1. - theta2;
-	c4 = xnodp * 2. * coef1 * aodp * betao2 * (eta * (etasq * .5 + 2.) + 
-		eo * (etasq * 2. + .5) - ck2 * 2. * tsi / (aodp * psisq) * (
-		x3thm1 * -3. * (1. - eeta * 2. + etasq * (1.5 - eeta * .5)) + 
-		x1mth2 * .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(
-		omegao * 2.)));
-	temp1 = ck2 * 3. * pinvsq * xnodp;
-	temp2 = temp1 * ck2 * pinvsq;
-	temp3 = ck4 * 1.25 * pinvsq * pinvsq * xnodp;
-	xmdot = xnodp + temp1 * .5 * betao * x3thm1 + temp2 * .0625 * betao * 
-		(theta2 * (theta2 * 137. - 78.) + 13.);
-	x1m5th = 1. - theta2 * 5.;
-	omgdot = temp1 * -.5 * x1m5th + temp2 * .0625 * (theta2 * (theta2 * 
-		395. - 114.) + 7.) + temp3 * (theta2 * (theta2 * 49. - 36.) + 
-		3.);
-	xhdot1 = -temp1 * cosio;
-	xnodot = xhdot1 + (temp2 * .5 * (4. - theta2 * 19.) + temp3 * 2. * (
-		3. - theta2 * 7.)) * cosio;
-	xnodcf = betao2 * 3.5 * xhdot1 * c1;
-	t2cof = c1 * 1.5;
-	xlcof = a3ovk2 * .125 * sinio * (cosio * 5. + 3.) / (cosio + 1.);
-	aycof = a3ovk2 * .25 * sinio;
-	x7thm1 = theta2 * 7. - 1.;
+	d__1 = __state->ae;
+	__state->a3ovk2 = -__state->xj3 / __state->ck2 * (d__1 * (d__1 * d__1)
+		);
+	__state->x1mth2 = 1. - __state->theta2;
+	__state->c4 = __state->xnodp * 2. * __state->coef1 * __state->aodp * 
+		__state->betao2 * (__state->eta * (__state->etasq * .5 + 2.) 
+		+ __state->eo * (__state->etasq * 2. + .5) - __state->ck2 * 
+		2. * __state->tsi / (__state->aodp * __state->psisq) * (
+		__state->x3thm1 * -3. * (1. - __state->eeta * 2. + 
+		__state->etasq * (1.5 - __state->eeta * .5)) + 
+		__state->x1mth2 * .75 * (__state->etasq * 2. - __state->eeta *
+		 (__state->etasq + 1.)) * cos(__state->omegao * 2.)));
+	__state->temp1 = __state->ck2 * 3. * __state->pinvsq * __state->xnodp;
+	__state->temp2 = __state->temp1 * __state->ck2 * __state->pinvsq;
+	__state->temp3 = __state->ck4 * 1.25 * __state->pinvsq * 
+		__state->pinvsq * __state->xnodp;
+	__state->xmdot = __state->xnodp + __state->temp1 * .5 * 
+		__state->betao * __state->x3thm1 + __state->temp2 * .0625 * 
+		__state->betao * (__state->theta2 * (__state->theta2 * 137. - 
+		78.) + 13.);
+	__state->x1m5th = 1. - __state->theta2 * 5.;
+	__state->omgdot = __state->temp1 * -.5 * __state->x1m5th + 
+		__state->temp2 * .0625 * (__state->theta2 * (__state->theta2 *
+		 395. - 114.) + 7.) + __state->temp3 * (__state->theta2 * (
+		__state->theta2 * 49. - 36.) + 3.);
+	__state->xhdot1 = -__state->temp1 * __state->cosio;
+	__state->xnodot = __state->xhdot1 + (__state->temp2 * .5 * (4. - 
+		__state->theta2 * 19.) + __state->temp3 * 2. * (3. - 
+		__state->theta2 * 7.)) * __state->cosio;
+	__state->xnodcf = __state->betao2 * 3.5 * __state->xhdot1 * 
+		__state->c1;
+	__state->t2cof = __state->c1 * 1.5;
+	__state->xlcof = __state->a3ovk2 * .125 * __state->sinio * (
+		__state->cosio * 5. + 3.) / (__state->cosio + 1.);
+	__state->aycof = __state->a3ovk2 * .25 * __state->sinio;
+	__state->x7thm1 = __state->theta2 * 7. - 1.;
     }
-    zzdpinit_(&aodp, &xmdot, &omgdot, &xnodot, &xnodp, elems);
+    zzdpinit_(&__state->aodp, &__state->xmdot, &__state->omgdot, &
+	    __state->xnodot, &__state->xnodp, elems);
 
 /*     Get the time since the EPOCH in minutes. */
 
-    tsince = (*time - epoch) / 60.;
+    __state->tsince = (*time - __state->epoch) / 60.;
 
 /*     Update for secular gravity and atmospheric drag */
 
-    xmdf = xmo + xmdot * tsince;
-    omgadf = omegao + omgdot * tsince;
-    xnoddf = xnodeo + xnodot * tsince;
-    tsq = tsince * tsince;
-    xnode = xnoddf + xnodcf * tsq;
-    tempa = 1. - c1 * tsince;
-    tempe = bstar * c4 * tsince;
-    templ = t2cof * tsq;
-    xn = xnodp;
+    __state->xmdf = __state->xmo + __state->xmdot * __state->tsince;
+    __state->omgadf = __state->omegao + __state->omgdot * __state->tsince;
+    __state->xnoddf = __state->xnodeo + __state->xnodot * __state->tsince;
+    __state->tsq = __state->tsince * __state->tsince;
+    __state->xnode = __state->xnoddf + __state->xnodcf * __state->tsq;
+    __state->tempa = 1. - __state->c1 * __state->tsince;
+    __state->tempe = __state->bstar * __state->c4 * __state->tsince;
+    __state->templ = __state->t2cof * __state->tsq;
+    __state->xn = __state->xnodp;
 
 /*     Calculate the secular terms. */
 
-    zzdpsec_(&xmdf, &omgadf, &xnode, &em, &xinc, &xn, &tsince, elems, &omgdot)
-	    ;
-    d__1 = xke / xn;
+    zzdpsec_(&__state->xmdf, &__state->omgadf, &__state->xnode, &__state->em, 
+	    &__state->xinc, &__state->xn, &__state->tsince, elems, &
+	    __state->omgdot);
+    d__1 = __state->xke / __state->xn;
 /* Computing 2nd power */
-    d__2 = tempa;
-    a = pow_dd(&d__1, &c_b19) * (d__2 * d__2);
-    e = em - tempe;
-    xmam = xmdf + xnodp * templ;
+    d__2 = __state->tempa;
+    __state->a = pow_dd(&d__1, &__state->c_b19) * (d__2 * d__2);
+    __state->e = __state->em - __state->tempe;
+    __state->xmam = __state->xmdf + __state->xnodp * __state->templ;
 
 /*     Calculate the periodic terms. */
 
-    zzdpper_(&tsince, &e, &xinc, &omgadf, &xnode, &xmam);
-    xl = xmam + omgadf + xnode;
-    xn = xke / pow_dd(&a, &c_b22);
+    zzdpper_(&__state->tsince, &__state->e, &__state->xinc, &__state->omgadf, 
+	    &__state->xnode, &__state->xmam);
+    __state->xl = __state->xmam + __state->omgadf + __state->xnode;
+    __state->xn = __state->xke / pow_dd(&__state->a, &__state->c_b22);
 
 /*      Long period periodics */
 
-    axn = e * cos(omgadf);
+    __state->axn = __state->e * cos(__state->omgadf);
 /* Computing 2nd power */
-    d__1 = e;
-    temp = 1. / (a * (1. - d__1 * d__1));
-    xll = temp * xlcof * axn;
-    aynl = temp * aycof;
-    xlt = xl + xll;
-    ayn = e * sin(omgadf) + aynl;
+    d__1 = __state->e;
+    __state->temp = 1. / (__state->a * (1. - d__1 * d__1));
+    __state->xll = __state->temp * __state->xlcof * __state->axn;
+    __state->aynl = __state->temp * __state->aycof;
+    __state->xlt = __state->xl + __state->xll;
+    __state->ayn = __state->e * sin(__state->omgadf) + __state->aynl;
 
 /*     Solve Kepler's equation */
 
@@ -667,74 +670,85 @@ static doublereal c_b25 = 0.;
 
 /*     Get the mod division of CAPU with 2 Pi */
 
-    d__1 = xlt - xnode;
-    capu = d_mod(&d__1, &pix2);
-    if (capu < 0.) {
-	capu += pix2;
+    d__1 = __state->xlt - __state->xnode;
+    __state->capu = d_mod(&d__1, &__state->pix2);
+    if (__state->capu < 0.) {
+	__state->capu += __state->pix2;
     }
 
 /*     Set initial states for the Kepler solution */
 
-    epw = capu;
-    cont = TRUE_;
-    while(cont) {
-	temp2 = epw;
-	sinepw = sin(temp2);
-	cosepw = cos(temp2);
-	temp3 = axn * sinepw;
-	temp4 = ayn * cosepw;
-	temp5 = axn * cosepw;
-	temp6 = ayn * sinepw;
-	epw = (capu - temp4 + temp3 - temp2) / (1. - temp5 - temp6) + temp2;
+    __state->epw = __state->capu;
+    __state->cont = TRUE_;
+    while(__state->cont) {
+	__state->temp2 = __state->epw;
+	__state->sinepw = sin(__state->temp2);
+	__state->cosepw = cos(__state->temp2);
+	__state->temp3 = __state->axn * __state->sinepw;
+	__state->temp4 = __state->ayn * __state->cosepw;
+	__state->temp5 = __state->axn * __state->cosepw;
+	__state->temp6 = __state->ayn * __state->sinepw;
+	__state->epw = (__state->capu - __state->temp4 + __state->temp3 - 
+		__state->temp2) / (1. - __state->temp5 - __state->temp6) + 
+		__state->temp2;
 
 /*        Test for convergence against the defined tolerance */
 
-	if ((d__1 = epw - temp2, abs(d__1)) <= 1e-6) {
-	    cont = FALSE_;
+	if ((d__1 = __state->epw - __state->temp2, abs(d__1)) <= 1e-6) {
+	    __state->cont = FALSE_;
 	}
     }
 
 /*     Short period preliminary quantities */
 
-    ecose = temp5 + temp6;
-    esine = temp3 - temp4;
-    elsq = axn * axn + ayn * ayn;
-    temp = 1. - elsq;
-    pl = a * temp;
-    rk = a * (1. - ecose);
-    temp1 = 1. / rk;
-    rdot = xke * sqrt(a) * esine * temp1;
-    rfdot = xke * sqrt(pl) * temp1;
-    temp2 = a * temp1;
-    betal = sqrt(temp);
-    temp3 = 1. / (betal + 1.);
-    cosu = temp2 * (cosepw - axn + ayn * esine * temp3);
-    sinu = temp2 * (sinepw - ayn - axn * esine * temp3);
+    __state->ecose = __state->temp5 + __state->temp6;
+    __state->esine = __state->temp3 - __state->temp4;
+    __state->elsq = __state->axn * __state->axn + __state->ayn * __state->ayn;
+    __state->temp = 1. - __state->elsq;
+    __state->pl = __state->a * __state->temp;
+    __state->rk = __state->a * (1. - __state->ecose);
+    __state->temp1 = 1. / __state->rk;
+    __state->rdot = __state->xke * sqrt(__state->a) * __state->esine * 
+	    __state->temp1;
+    __state->rfdot = __state->xke * sqrt(__state->pl) * __state->temp1;
+    __state->temp2 = __state->a * __state->temp1;
+    __state->betal = sqrt(__state->temp);
+    __state->temp3 = 1. / (__state->betal + 1.);
+    __state->cosu = __state->temp2 * (__state->cosepw - __state->axn + 
+	    __state->ayn * __state->esine * __state->temp3);
+    __state->sinu = __state->temp2 * (__state->sinepw - __state->ayn - 
+	    __state->axn * __state->esine * __state->temp3);
 
 /*     Compute the angle from the x-axis of the point ( COSU, SINU ) */
 
-    if (sinu != 0. || cosu != 0.) {
-	uang = atan2(sinu, cosu);
-	if (uang < 0.) {
-	    uang += pix2;
+    if (__state->sinu != 0. || __state->cosu != 0.) {
+	__state->uang = atan2(__state->sinu, __state->cosu);
+	if (__state->uang < 0.) {
+	    __state->uang += __state->pix2;
 	}
     } else {
-	uang = 0.;
+	__state->uang = 0.;
     }
-    sin2u = sinu * 2. * cosu;
-    cos2u = cosu * 2. * cosu - 1.;
-    temp1 = ck2 * (1. / pl);
-    temp2 = temp1 * (1. / pl);
+    __state->sin2u = __state->sinu * 2. * __state->cosu;
+    __state->cos2u = __state->cosu * 2. * __state->cosu - 1.;
+    __state->temp1 = __state->ck2 * (1. / __state->pl);
+    __state->temp2 = __state->temp1 * (1. / __state->pl);
 
 /*     Update for short periodics */
 
-    rk = rk * (1. - temp2 * 1.5 * betal * x3thm1) + temp1 * .5 * x1mth2 * 
-	    cos2u;
-    uk = uang - temp2 * .25 * x7thm1 * sin2u;
-    xnodek = xnode + temp2 * 1.5 * cosio * sin2u;
-    xinck = xinc + temp2 * 1.5 * cosio * sinio * cos2u;
-    rdotk = rdot - xn * temp1 * x1mth2 * sin2u;
-    rfdotk = rfdot + xn * temp1 * (x1mth2 * cos2u + x3thm1 * 1.5);
+    __state->rk = __state->rk * (1. - __state->temp2 * 1.5 * __state->betal * 
+	    __state->x3thm1) + __state->temp1 * .5 * __state->x1mth2 * 
+	    __state->cos2u;
+    __state->uk = __state->uang - __state->temp2 * .25 * __state->x7thm1 * 
+	    __state->sin2u;
+    __state->xnodek = __state->xnode + __state->temp2 * 1.5 * __state->cosio *
+	     __state->sin2u;
+    __state->xinck = __state->xinc + __state->temp2 * 1.5 * __state->cosio * 
+	    __state->sinio * __state->cos2u;
+    __state->rdotk = __state->rdot - __state->xn * __state->temp1 * 
+	    __state->x1mth2 * __state->sin2u;
+    __state->rfdotk = __state->rfdot + __state->xn * __state->temp1 * (
+	    __state->x1mth2 * __state->cos2u + __state->x3thm1 * 1.5);
 
 /*     Orientation vectors are calculated by */
 
@@ -746,21 +760,22 @@ static doublereal c_b25 = 0.;
 /*     M = (-sin(xnodek)cos(xinck), cos(xnodek)cos(xinck), sin(xinck) ) */
 /*     N = (           cos(xnodek), sin(xnodek)          , 0          ) */
 
-    sinuk = sin(uk);
-    cosuk = cos(uk);
+    __state->sinuk = sin(__state->uk);
+    __state->cosuk = cos(__state->uk);
 
 /*     Use LATREC to generate M and N.  M is a latitude to rectangle */
 /*     conversion of a unit vector where PI/2 + XNODEK is the longitude */
 
-    d__1 = pio2 + xnodek;
-    latrec_(&c_b23, &d__1, &xinck, m);
-    latrec_(&c_b23, &xnodek, &c_b25, n);
+    d__1 = __state->pio2 + __state->xnodek;
+    latrec_(&__state->c_b23, &d__1, &__state->xinck, __state->m);
+    latrec_(&__state->c_b23, &__state->xnodek, &__state->c_b25, __state->n);
 
 /*     Sum the components to obtain U and V */
 
-    vlcom_(&sinuk, m, &cosuk, n, u);
-    d__1 = -sinuk;
-    vlcom_(&cosuk, m, &d__1, n, v);
+    vlcom_(&__state->sinuk, __state->m, &__state->cosuk, __state->n, 
+	    __state->u);
+    d__1 = -__state->sinuk;
+    vlcom_(&__state->cosuk, __state->m, &d__1, __state->n, __state->v);
 
 /*     Determine the position and velocity then pack the STATE vector */
 /*     with value scaled to KM and KPS. */
@@ -768,16 +783,16 @@ static doublereal c_b25 = 0.;
 /*     R = RK    U +        0 V */
 /*     V = RKDOT U + RK RFDOT V */
 
-    scale = xkmper / ae;
-    d__1 = rk * scale;
-    vlcom_(&d__1, u, &c_b25, v, state);
+    __state->scale = __state->xkmper / __state->ae;
+    d__1 = __state->rk * __state->scale;
+    vlcom_(&d__1, __state->u, &__state->c_b25, __state->v, state);
 
 /*     Now scale to KPS for the velocity component */
 
-    scale /= 60.;
-    d__1 = rdotk * scale;
-    d__2 = rfdotk * scale;
-    vlcom_(&d__1, u, &d__2, v, &state[3]);
+    __state->scale /= 60.;
+    d__1 = __state->rdotk * __state->scale;
+    d__2 = __state->rfdotk * __state->scale;
+    vlcom_(&d__1, __state->u, &d__2, __state->v, &state[3]);
 
 /*     All done now.... */
 

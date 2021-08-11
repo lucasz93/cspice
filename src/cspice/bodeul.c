@@ -1,16 +1,21 @@
-/* bodeul.f -- translated by f2c (version 19980913).
+/* bodeul.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__200 = 200;
-static integer c__100 = 100;
+extern bodeul_init_t __bodeul_init;
+static bodeul_state_t* get_bodeul_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->bodeul)
+		state->bodeul = __cspice_allocate_module(sizeof(
+	bodeul_state_t), &__bodeul_init, sizeof(__bodeul_init));
+	return state->bodeul;
+
+}
 
 /* $Procedure      BODEUL ( Return Euler angles for a body ) */
 /* Subroutine */ int bodeul_(integer *body, doublereal *et, doublereal *ra, 
@@ -18,8 +23,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical found = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -32,52 +35,74 @@ static integer c__100 = 100;
     double sin(doublereal), cos(doublereal);
 
     /* Local variables */
-    char bref[32], item[32];
-    doublereal j2ref[9]	/* was [3][3] */, j2bfx[9]	/* was [3][3] */;
+    char bref[32];
+    char item[32];
+    doublereal j2ref[9]	/* was [3][3] */;
+    doublereal j2bfx[9]	/* was [3][3] */;
     extern integer zzbodbry_(integer *);
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *), m2eul_(
-	    doublereal *, integer *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *);
+	    *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int m2eul_(doublereal *, integer *, integer *, 
+	    integer *, doublereal *, doublereal *, doublereal *);
     doublereal d__;
     integer i__;
-    doublereal dcoef[3], t;
+    doublereal dcoef[3];
+    doublereal t;
     integer refid;
     doublereal delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal epoch, rcoef[3], tcoef[200]	/* was [2][100] */, wcoef[3], 
-	    theta;
+    doublereal epoch;
+    doublereal rcoef[3];
+    doublereal tcoef[200]	/* was [2][100] */;
+    doublereal wcoef[3];
+    doublereal theta;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal costh[100];
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
     doublereal sinth[100];
     extern doublereal twopi_(void);
-    static integer j2code;
-    doublereal rf2bfx[9]	/* was [3][3] */, ac[100], dc[100];
-    integer na, nd, nl;
+    doublereal rf2bfx[9]	/* was [3][3] */;
+    doublereal ac[100];
+    doublereal dc[100];
+    integer na;
+    integer nd;
+    integer nl;
     doublereal wc[100];
     extern logical bodfnd_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
-	    integer *, char *, integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
     extern doublereal halfpi_(void);
     integer nw;
-    doublereal conepc, conref, eulang[6];
+    doublereal conepc;
+    doublereal conref;
+    doublereal eulang[6];
     integer ntheta;
     extern /* Subroutine */ int pckeul_(integer *, doublereal *, logical *, 
-	    char *, doublereal *, ftnlen), gdpool_(char *, integer *, integer 
-	    *, integer *, doublereal *, logical *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), irfnum_(char *, integer *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), irfrot_(integer *, integer *, doublereal *);
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
+	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
     extern logical return_(void);
     extern doublereal j2000_(void);
-    integer dim, ref;
+    integer dim;
+    integer ref;
     doublereal phi;
-    extern doublereal rpd_(void), spd_(void);
+    extern doublereal rpd_(void);
+    extern doublereal spd_(void);
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    bodeul_state_t* __state = get_bodeul_state();
 /* $ Abstract */
 
 /*     Return the Euler angles needed to compute the transformation from */
@@ -463,15 +488,15 @@ static integer c__100 = 100;
 
 /*     Get the code for the J2000 frame, if we don't have it yet. */
 
-    if (first) {
-	irfnum_("J2000", &j2code, (ftnlen)5);
-	first = FALSE_;
+    if (__state->first) {
+	irfnum_("J2000", &__state->j2code, (ftnlen)5);
+	__state->first = FALSE_;
     }
 
 /*     Get Euler angles from high precision data file. */
 
-    pckeul_(body, et, &found, bref, eulang, (ftnlen)32);
-    if (found) {
+    pckeul_(body, et, &__state->found, bref, eulang, (ftnlen)32);
+    if (__state->found) {
 	phi = eulang[0];
 	delta = eulang[1];
 	*w = eulang[2];
@@ -481,7 +506,7 @@ static integer c__100 = 100;
 
 	s_copy(item, "LONG_AXIS", (ftnlen)32, (ftnlen)9);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__1, &nl, lambda, (ftnlen)32);
+	    bodvcd_(body, item, &__state->c__1, &nl, lambda, (ftnlen)32);
 	    *lambda *= rpd_();
 	    d__1 = twopi_();
 	    *lambda = d_mod(lambda, &d__1);
@@ -506,8 +531,9 @@ static integer c__100 = 100;
 
 	s_copy(item, "BODY#_CONSTANTS_JED_EPOCH", (ftnlen)32, (ftnlen)25);
 	repmi_(item, "#", &refid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gdpool_(item, &c__1, &c__1, &dim, &conepc, &found, (ftnlen)32);
-	if (found) {
+	gdpool_(item, &__state->c__1, &__state->c__1, &dim, &conepc, &
+		__state->found, (ftnlen)32);
+	if (__state->found) {
 
 /*           The reference epoch is returned as a JED.  Convert to */
 /*           ephemeris seconds past J2000.  Then convert the input ET to */
@@ -523,14 +549,15 @@ static integer c__100 = 100;
 /*        frame is specified by a code recognized by CHGIRF.  The */
 /*        default frame is J2000, symbolized by the code J2CODE. */
 
-	irfnum_("J2000", &j2code, (ftnlen)5);
+	irfnum_("J2000", &__state->j2code, (ftnlen)5);
 	s_copy(item, "BODY#_CONSTANTS_REF_FRAME", (ftnlen)32, (ftnlen)25);
 	repmi_(item, "#", &refid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gdpool_(item, &c__1, &c__1, &dim, &conref, &found, (ftnlen)32);
-	if (found) {
+	gdpool_(item, &__state->c__1, &__state->c__1, &dim, &conref, &
+		__state->found, (ftnlen)32);
+	if (__state->found) {
 	    ref = i_dnnt(&conref);
 	} else {
-	    ref = j2code;
+	    ref = __state->j2code;
 	}
 
 /*        Whatever the body, it has quadratic time polynomials for */
@@ -538,20 +565,20 @@ static integer c__100 = 100;
 /*        Prime Meridian. */
 
 	s_copy(item, "POLE_RA", (ftnlen)32, (ftnlen)7);
-	cleard_(&c__3, rcoef);
-	bodvcd_(body, item, &c__3, &na, rcoef, (ftnlen)32);
+	cleard_(&__state->c__3, rcoef);
+	bodvcd_(body, item, &__state->c__3, &na, rcoef, (ftnlen)32);
 	s_copy(item, "POLE_DEC", (ftnlen)32, (ftnlen)8);
-	cleard_(&c__3, dcoef);
-	bodvcd_(body, item, &c__3, &nd, dcoef, (ftnlen)32);
+	cleard_(&__state->c__3, dcoef);
+	bodvcd_(body, item, &__state->c__3, &nd, dcoef, (ftnlen)32);
 	s_copy(item, "PM", (ftnlen)32, (ftnlen)2);
-	cleard_(&c__3, wcoef);
-	bodvcd_(body, item, &c__3, &nw, wcoef, (ftnlen)32);
+	cleard_(&__state->c__3, wcoef);
+	bodvcd_(body, item, &__state->c__3, &nw, wcoef, (ftnlen)32);
 
 /*        The offset of the prime meridian is optional. */
 
 	s_copy(item, "LONG_AXIS", (ftnlen)32, (ftnlen)9);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__1, &nl, lambda, (ftnlen)32);
+	    bodvcd_(body, item, &__state->c__1, &nl, lambda, (ftnlen)32);
 	} else {
 	    *lambda = 0.;
 	}
@@ -564,20 +591,21 @@ static integer c__100 = 100;
 	nw = 0;
 	s_copy(item, "NUT_PREC_ANGLES", (ftnlen)32, (ftnlen)15);
 	if (bodfnd_(&refid, item, (ftnlen)32)) {
-	    bodvcd_(&refid, item, &c__200, &ntheta, tcoef, (ftnlen)32);
+	    bodvcd_(&refid, item, &__state->c__200, &ntheta, tcoef, (ftnlen)
+		    32);
 	    ntheta /= 2;
 	}
 	s_copy(item, "NUT_PREC_RA", (ftnlen)32, (ftnlen)11);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &na, ac, (ftnlen)32);
+	    bodvcd_(body, item, &__state->c__100, &na, ac, (ftnlen)32);
 	}
 	s_copy(item, "NUT_PREC_DEC", (ftnlen)32, (ftnlen)12);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &nd, dc, (ftnlen)32);
+	    bodvcd_(body, item, &__state->c__100, &nd, dc, (ftnlen)32);
 	}
 	s_copy(item, "NUT_PREC_PM", (ftnlen)32, (ftnlen)11);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &nw, wc, (ftnlen)32);
+	    bodvcd_(body, item, &__state->c__100, &nw, wc, (ftnlen)32);
 	}
 /* Computing MAX */
 	i__1 = max(na,nd);
@@ -640,7 +668,7 @@ static integer c__100 = 100;
 /*        Convert the angles to the J2000 frame if they are not already */
 /*        referenced to J2000. */
 
-    if (ref != j2code) {
+    if (ref != __state->j2code) {
 
 /*        Find the transformation from the J2000 frame to the frame */
 /*        designated by REF.  Form the transformation from `REF' */
@@ -649,10 +677,12 @@ static integer c__100 = 100;
 /*        transformation.  Decompose this transformation into Euler */
 /*        angles. */
 
-	irfrot_(&j2code, &ref, j2ref);
-	eul2m_(w, &delta, &phi, &c__3, &c__1, &c__3, rf2bfx);
+	irfrot_(&__state->j2code, &ref, j2ref);
+	eul2m_(w, &delta, &phi, &__state->c__3, &__state->c__1, &
+		__state->c__3, rf2bfx);
 	mxm_(rf2bfx, j2ref, j2bfx);
-	m2eul_(j2bfx, &c__3, &c__1, &c__3, w, &delta, &phi);
+	m2eul_(j2bfx, &__state->c__3, &__state->c__1, &__state->c__3, w, &
+		delta, &phi);
     }
 
 /*     The Euler angles now give the transformation from J2000 to */

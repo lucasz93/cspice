@@ -1,9 +1,10 @@
-/* m2begr.f -- translated by f2c (version 19980913).
+/* m2begr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2BEGR ( See if a word begins with a range template ) */
 /* Subroutine */ int m2begr_(char *string, integer *beg, integer *end, 

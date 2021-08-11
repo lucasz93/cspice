@@ -1,14 +1,21 @@
-/* ana.f -- translated by f2c (version 19980913).
+/* ana.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__33 = 33;
-static integer c__22 = 22;
+extern ana_init_t __ana_init;
+static ana_state_t* get_ana_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ana)
+		state->ana = __cspice_allocate_module(sizeof(ana_state_t), &
+	__ana_init, sizeof(__ana_init));
+	return state->ana;
+
+}
 
 /* $Procedure ANA ( AN or A ? ) */
 /* Character */ VOID ana_(char *ret_val, ftnlen ret_val_len, char *word, char 
@@ -16,18 +23,6 @@ static integer c__22 = 22;
 {
     /* Initialized data */
 
-    static char a[2*3] = "A " "A " "a ";
-    static char an[2*3] = "AN" "An" "an";
-    static char anword[8*22] = "HEIR    " "HONEST  " "HONOR   " "H       " 
-	    "HOUR    " "HORS    " "HOMBRE  " "F       " "L       " "M       " 
-	    "N       " "R       " "S       " "X       " "UNIN    " "UNIM    " 
-	    "ONEI    " "ONER    " "SPK     " "EK      " "IK      " "SCLK    ";
-    static char aword[8*33] = "HORSE   " "ONE     " "ONE-    " "ONCE    " 
-	    "ONENESS " "UIG     " "UIN     " "UKA     " "UKE     " "UKO     " 
-	    "UKI     " "UKU     " "ULOT    " "UNANI   " "UNI     " "UNINU   " 
-	    "UPA     " "URA     " "URE     " "URO     " "USA     " "USE     " 
-	    "USU     " "UTE     " "UTI     " "UTO     " "UVA     " "UVE     " 
-	    "UVU     " "EU      " "EWE     " "UTRI    " "U       ";
 
     /* System generated locals */
     integer i__1;
@@ -38,16 +33,14 @@ static integer c__22 = 22;
 	    char *, integer);
 
     /* Local variables */
-    static integer caps, i__;
-    static char begin[1];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char start[32*7];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    static char mycase[1], myword[32];
 
+    /* Module state */
+    ana_state_t* __state = get_ana_state();
 /* $ Abstract */
 
 /*     Return the correct article "a" or "an" used to modify a word */
@@ -200,34 +193,35 @@ static integer c__22 = 22;
 /*     GET THE CORRECT INDEFINITE ARTICLE */
 
 /* -& */
-    ucase_(word, myword, word_len, (ftnlen)32);
-    replch_(myword, "'", " ", myword, (ftnlen)32, (ftnlen)1, (ftnlen)1, (
-	    ftnlen)32);
-    replch_(myword, "\"", " ", myword, (ftnlen)32, (ftnlen)1, (ftnlen)1, (
-	    ftnlen)32);
-    ljust_(myword, myword, (ftnlen)32, (ftnlen)32);
-    ucase_(case__, mycase, case_len, (ftnlen)1);
+    ucase_(word, __state->myword, word_len, (ftnlen)32);
+    replch_(__state->myword, "'", " ", __state->myword, (ftnlen)32, (ftnlen)1,
+	     (ftnlen)1, (ftnlen)32);
+    replch_(__state->myword, "\"", " ", __state->myword, (ftnlen)32, (ftnlen)
+	    1, (ftnlen)1, (ftnlen)32);
+    ljust_(__state->myword, __state->myword, (ftnlen)32, (ftnlen)32);
+    ucase_(case__, __state->mycase, case_len, (ftnlen)1);
     s_copy(ret_val, " ", ret_val_len, (ftnlen)1);
-    if (*(unsigned char *)mycase == 'U') {
-	caps = 1;
-    } else if (*(unsigned char *)mycase == 'C') {
-	caps = 2;
+    if (*(unsigned char *)__state->mycase == 'U') {
+	__state->caps = 1;
+    } else if (*(unsigned char *)__state->mycase == 'C') {
+	__state->caps = 2;
     } else {
-	caps = 3;
+	__state->caps = 3;
     }
 
 /*     Handle the obvious things first. */
 
-    *(unsigned char *)begin = *(unsigned char *)myword;
-    if (i_indx("AI", begin, (ftnlen)2, (ftnlen)1) > 0) {
-	s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("an", i__1, "ana_", (ftnlen)235)) << 1), ret_val_len, (
-		ftnlen)2);
+    *(unsigned char *)__state->begin = *(unsigned char *)__state->myword;
+    if (i_indx("AI", __state->begin, (ftnlen)2, (ftnlen)1) > 0) {
+	s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 0 <=
+		 i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)235)) << 1),
+		 ret_val_len, (ftnlen)2);
 	return ;
-    } else if (i_indx("BCDGJKPQTVWYZ", begin, (ftnlen)13, (ftnlen)1) > 0) {
-	s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("a", i__1, "ana_", (ftnlen)240)) << 1), ret_val_len, (
-		ftnlen)2);
+    } else if (i_indx("BCDGJKPQTVWYZ", __state->begin, (ftnlen)13, (ftnlen)1) 
+	    > 0) {
+	s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)240)) << 1), 
+		ret_val_len, (ftnlen)2);
 	return ;
     }
 
@@ -236,30 +230,32 @@ static integer c__22 = 22;
 
 /*     Get the beginnings of the input word. */
 
-    for (i__ = 1; i__ <= 7; ++i__) {
-	s_copy(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"start", i__1, "ana_", (ftnlen)252)) << 5), myword, (ftnlen)
-		32, i__);
+    for (__state->i__ = 1; __state->i__ <= 7; ++__state->i__) {
+	s_copy(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= i__1 ?
+		 i__1 : s_rnge("start", i__1, "ana_", (ftnlen)252)) << 5), 
+		__state->myword, (ftnlen)32, __state->i__);
     }
 
 /*     Now see if the start of the input word belongs to */
 /*     one of the special collections. */
 
-    for (i__ = 7; i__ >= 2; --i__) {
-	if (isrchc_(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("start", i__1, "ana_", (ftnlen)261)) << 5), &c__33, 
-		aword, (ftnlen)32, (ftnlen)8) != 0) {
-	    s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("a", i__1, "ana_", (ftnlen)263)) << 1), 
-		    ret_val_len, (ftnlen)2);
+    for (__state->i__ = 7; __state->i__ >= 2; --__state->i__) {
+	if (isrchc_(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
+		i__1 ? i__1 : s_rnge("start", i__1, "ana_", (ftnlen)261)) << 
+		5), &__state->c__33, __state->aword, (ftnlen)32, (ftnlen)8) !=
+		 0) {
+	    s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 
+		    0 <= i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)263))
+		     << 1), ret_val_len, (ftnlen)2);
 	    return ;
 	}
-	if (isrchc_(start + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("start", i__1, "ana_", (ftnlen)268)) << 5), &c__22, 
-		anword, (ftnlen)32, (ftnlen)8) != 0) {
-	    s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 :
-		     s_rnge("an", i__1, "ana_", (ftnlen)270)) << 1), 
-		    ret_val_len, (ftnlen)2);
+	if (isrchc_(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
+		i__1 ? i__1 : s_rnge("start", i__1, "ana_", (ftnlen)268)) << 
+		5), &__state->c__22, __state->anword, (ftnlen)32, (ftnlen)8) 
+		!= 0) {
+	    s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 
+		    0 <= i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)270)
+		    ) << 1), ret_val_len, (ftnlen)2);
 	    return ;
 	}
     }
@@ -267,14 +263,14 @@ static integer c__22 = 22;
 /*     If we got this far we can determine the ANAe by */
 /*     just looking at the beginning of the string. */
 
-    if (i_indx("AEIOU", myword, (ftnlen)5, (ftnlen)1) > 0) {
-	s_copy(ret_val, an + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("an", i__1, "ana_", (ftnlen)282)) << 1), ret_val_len, (
-		ftnlen)2);
+    if (i_indx("AEIOU", __state->myword, (ftnlen)5, (ftnlen)1) > 0) {
+	s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 0 <=
+		 i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)282)) << 1),
+		 ret_val_len, (ftnlen)2);
     } else {
-	s_copy(ret_val, a + (((i__1 = caps - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("a", i__1, "ana_", (ftnlen)286)) << 1), ret_val_len, (
-		ftnlen)2);
+	s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)286)) << 1), 
+		ret_val_len, (ftnlen)2);
     }
     return ;
 } /* ana_ */

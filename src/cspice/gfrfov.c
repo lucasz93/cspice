@@ -1,15 +1,21 @@
-/* gfrfov.f -- translated by f2c (version 19980913).
+/* gfrfov.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
+extern gfrfov_init_t __gfrfov_init;
+static gfrfov_state_t* get_gfrfov_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfrfov)
+		state->gfrfov = __cspice_allocate_module(sizeof(
+	gfrfov_state_t), &__gfrfov_init, sizeof(__gfrfov_init));
+	return state->gfrfov;
+
+}
 
 /* $Procedure GFRFOV ( GF, is ray in FOV? ) */
 /* Subroutine */ int gfrfov_(char *inst, doublereal *raydir, char *rframe, 
@@ -25,21 +31,28 @@ static logical c_false = FALSE_;
     extern integer sized_(doublereal *);
     extern logical gfbail_();
     logical ok;
-    extern /* Subroutine */ int gfrefn_(), gfrepf_(), gfrepi_();
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfrepi_();
     extern /* Subroutine */ int gffove_(char *, char *, doublereal *, char *, 
 	    char *, char *, char *, doublereal *, U_fp, U_fp, logical *, U_fp,
 	     U_fp, U_fp, logical *, L_fp, doublereal *, doublereal *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int gfrepu_(), gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), gfsstp_(doublereal *)
-	    ;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfrfov_state_t* __state = get_gfrfov_state();
 /* $ Abstract */
 
 /*     Determine time intervals when a specified ray intersects the */
@@ -1237,7 +1250,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1248,9 +1261,10 @@ static logical c_false = FALSE_;
 /*     Look for solutions. */
 
     gffove_(inst, "RAY", raydir, " ", rframe, abcorr, obsrvr, &tol, (U_fp)
-	    gfstep_, (U_fp)gfrefn_, &c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
-	    U_fp)gfrepf_, &c_false, (L_fp)gfbail_, cnfine, result, inst_len, (
-	    ftnlen)3, (ftnlen)1, rframe_len, abcorr_len, obsrvr_len);
+	    gfstep_, (U_fp)gfrefn_, &__state->c_false, (U_fp)gfrepi_, (U_fp)
+	    gfrepu_, (U_fp)gfrepf_, &__state->c_false, (L_fp)gfbail_, cnfine, 
+	    result, inst_len, (ftnlen)3, (ftnlen)1, rframe_len, abcorr_len, 
+	    obsrvr_len);
     chkout_("GFRFOV", (ftnlen)6);
     return 0;
 } /* gfrfov_ */

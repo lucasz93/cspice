@@ -1,9 +1,17 @@
-/* frstpc.f -- translated by f2c (version 19980913).
+/* frstpc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int frstpc_state_t;
+static frstpc_state_t* get_frstpc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            FRSTPC ( First printable character ) */
 integer frstpc_(char *string, ftnlen string_len)
@@ -17,6 +25,9 @@ integer frstpc_(char *string, ftnlen string_len)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    frstpc_state_t* __state = get_frstpc_state();
 /* $ Abstract */
 
 /*     Return the index of the first printable character in a character */

@@ -1,13 +1,21 @@
-/* nparsd.f -- translated by f2c (version 19980913).
+/* nparsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern nparsd_init_t __nparsd_init;
+static nparsd_state_t* get_nparsd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->nparsd)
+		state->nparsd = __cspice_allocate_module(sizeof(
+	nparsd_state_t), &__nparsd_init, sizeof(__nparsd_init));
+	return state->nparsd;
+
+}
 
 /* $Procedure      NPARSD ( Double Precision parsing of a string ) */
 /* Subroutine */ int nparsd_(char *string, doublereal *x, char *error, 
@@ -15,21 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal lookup[11] = { 1.,10.,100.,1e3,1e4,1e5,1e6,1e7,1e8,1e9,
-	    1e10 };
-    static logical first = TRUE_;
-    static doublereal values[128] = { 0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0. };
-    static integer class__[129] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -43,41 +36,15 @@ static integer c__1 = 1;
 	    i_dnnt(doublereal *);
 
     /* Local variables */
-    static doublereal next;
-    static integer b;
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer i__, l, m;
-    static logical dodec;
-    static integer blank;
-    static logical bpiok, epiok;
     extern doublereal dpmax_(void);
-    static doublereal value;
-    static logical doint, doexp;
-    static integer thisi;
-    static logical expok;
-    static integer nexti;
-    static logical zeroi, pntok;
-    static integer id;
     extern doublereal pi_(void);
-    static integer nl;
-    static doublereal decval, factor, intbnd, smlbnd;
-    static logical sigchr;
-    static char toobig[160];
-    static doublereal dpsign[2];
-    static logical mantsa, signok, roundd;
-    static integer signdx;
-    static char blnkst[160];
-    static doublereal ecount, divisr, expval, intval, maxexp;
-    static char unxpch[160];
-    static doublereal minexp;
-    static logical roundi;
-    static char unrcst[160];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char unxpsn[160], unxppt[160];
-    static integer exp__;
 
+    /* Module state */
+    nparsd_state_t* __state = get_nparsd_state();
 /* $ Abstract */
 
 /*     Parse a character string that represents a number and return */
@@ -391,95 +358,96 @@ static integer c__1 = 1;
 /*     Save everything.  It's easier than tracking down every */
 /*     little variable that might need to be saved. */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 
 /*        Set up the error messages */
 
-	s_copy(toobig, "The number represented by the input string is too la"
-		"rge to be stored as a double precision number. ", (ftnlen)160,
-		 (ftnlen)99);
-	s_copy(unxpch, "An unexpected character was found while attempting t"
-		"o parse the input string. ", (ftnlen)160, (ftnlen)78);
-	s_copy(unxppt, "An unexpected decimal point was found in the input s"
-		"tring. ", (ftnlen)160, (ftnlen)59);
-	s_copy(unxpsn, "An unexpected sign character was found in the input "
-		"string. ", (ftnlen)160, (ftnlen)60);
-	s_copy(blnkst, "The input string is blank. Blank strings are not con"
-		"sidered to be numbers. ", (ftnlen)160, (ftnlen)75);
-	s_copy(unrcst, "The input string could not be recognized as a number"
-		". ", (ftnlen)160, (ftnlen)54);
-	blank = ' ';
-	values[(i__1 = '0' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)476)] = 0.;
-	values[(i__1 = '1' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)477)] = 1.;
-	values[(i__1 = '2' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)478)] = 2.;
-	values[(i__1 = '3' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)479)] = 3.;
-	values[(i__1 = '4' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)480)] = 4.;
-	values[(i__1 = '5' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)481)] = 5.;
-	values[(i__1 = '6' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)482)] = 6.;
-	values[(i__1 = '7' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)483)] = 7.;
-	values[(i__1 = '8' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)484)] = 8.;
-	values[(i__1 = '9' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)485)] = 9.;
-	values[(i__1 = '-' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)486)] = -1.;
-	values[(i__1 = '+' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)487)] = 1.;
-	class__[(i__1 = ' ') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)489)] = 4;
-	class__[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)490)] = 4;
-	class__[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)492)] = 2;
-	class__[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)494)] = 3;
-	class__[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)495)] = 3;
-	class__[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)496)] = 3;
-	class__[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)497)] = 3;
-	class__[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)499)] = 7;
-	class__[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)500)] = 7;
-	class__[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)502)] = 1;
-	class__[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)503)] = 1;
-	class__[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)504)] = 1;
-	class__[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)505)] = 1;
-	class__[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)506)] = 1;
-	class__[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)507)] = 1;
-	class__[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)508)] = 1;
-	class__[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)509)] = 1;
-	class__[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)510)] = 1;
-	class__[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)511)] = 1;
-	class__[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)513)] = 5;
-	class__[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)514)] = 5;
-	class__[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)515)] = 6;
-	class__[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)516)] = 6;
+	s_copy(__state->toobig, "The number represented by the input string "
+		"is too large to be stored as a double precision number. ", (
+		ftnlen)160, (ftnlen)99);
+	s_copy(__state->unxpch, "An unexpected character was found while att"
+		"empting to parse the input string. ", (ftnlen)160, (ftnlen)78)
+		;
+	s_copy(__state->unxppt, "An unexpected decimal point was found in th"
+		"e input string. ", (ftnlen)160, (ftnlen)59);
+	s_copy(__state->unxpsn, "An unexpected sign character was found in t"
+		"he input string. ", (ftnlen)160, (ftnlen)60);
+	s_copy(__state->blnkst, "The input string is blank. Blank strings ar"
+		"e not considered to be numbers. ", (ftnlen)160, (ftnlen)75);
+	s_copy(__state->unrcst, "The input string could not be recognized as"
+		" a number. ", (ftnlen)160, (ftnlen)54);
+	__state->blank = ' ';
+	__state->values[(i__1 = '0' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)476)] = 0.;
+	__state->values[(i__1 = '1' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)477)] = 1.;
+	__state->values[(i__1 = '2' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)478)] = 2.;
+	__state->values[(i__1 = '3' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)479)] = 3.;
+	__state->values[(i__1 = '4' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)480)] = 4.;
+	__state->values[(i__1 = '5' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)481)] = 5.;
+	__state->values[(i__1 = '6' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)482)] = 6.;
+	__state->values[(i__1 = '7' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)483)] = 7.;
+	__state->values[(i__1 = '8' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)484)] = 8.;
+	__state->values[(i__1 = '9' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)485)] = 9.;
+	__state->values[(i__1 = '-' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)486)] = -1.;
+	__state->values[(i__1 = '+' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
+		"values", i__1, "nparsd_", (ftnlen)487)] = 1.;
+	__state->class__[(i__1 = ' ') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)489)] = 4;
+	__state->class__[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)490)] = 4;
+	__state->class__[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)492)] = 2;
+	__state->class__[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)494)] = 3;
+	__state->class__[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)495)] = 3;
+	__state->class__[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)496)] = 3;
+	__state->class__[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)497)] = 3;
+	__state->class__[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)499)] = 7;
+	__state->class__[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)500)] = 7;
+	__state->class__[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)502)] = 1;
+	__state->class__[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)503)] = 1;
+	__state->class__[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)504)] = 1;
+	__state->class__[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)505)] = 1;
+	__state->class__[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)506)] = 1;
+	__state->class__[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)507)] = 1;
+	__state->class__[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)508)] = 1;
+	__state->class__[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)509)] = 1;
+	__state->class__[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)510)] = 1;
+	__state->class__[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)511)] = 1;
+	__state->class__[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)513)] = 5;
+	__state->class__[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)514)] = 5;
+	__state->class__[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)515)] = 6;
+	__state->class__[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge(
+		"class", i__1, "nparsd_", (ftnlen)516)] = 6;
 
 /*        Finally create the numbers that will be used for checking */
 /*        for floating point overflow. */
@@ -491,16 +459,16 @@ static integer c__1 = 1;
 
 	d__2 = dpmax_();
 	d__1 = d_lg10(&d__2);
-	maxexp = d_int(&d__1);
-	minexp = -(maxexp + 1);
-	smlbnd = dpmax_() / lookup[10];
-	intbnd = 10.;
-	next = intbnd + 1.;
-	while(intbnd != next) {
-	    intbnd *= 10.;
-	    next = intbnd + 1.;
+	__state->maxexp = d_int(&d__1);
+	__state->minexp = -(__state->maxexp + 1);
+	__state->smlbnd = dpmax_() / __state->lookup[10];
+	__state->intbnd = 10.;
+	__state->next = __state->intbnd + 1.;
+	while(__state->intbnd != __state->next) {
+	    __state->intbnd *= 10.;
+	    __state->next = __state->intbnd + 1.;
 	}
-	intbnd /= 10.;
+	__state->intbnd /= 10.;
 
 /*        That takes care of the first pass initializations. */
 
@@ -520,13 +488,13 @@ static integer c__1 = 1;
 
     s_copy(error, " ", error_len, (ftnlen)1);
     *ptr = 0;
-    pntok = TRUE_;
-    signok = TRUE_;
-    expok = TRUE_;
-    bpiok = TRUE_;
-    doint = TRUE_;
-    roundd = TRUE_;
-    roundi = TRUE_;
+    __state->pntok = TRUE_;
+    __state->signok = TRUE_;
+    __state->expok = TRUE_;
+    __state->bpiok = TRUE_;
+    __state->doint = TRUE_;
+    __state->roundd = TRUE_;
+    __state->roundi = TRUE_;
 
 /*     Here's some other facts. */
 
@@ -536,35 +504,35 @@ static integer c__1 = 1;
 /*     We have not encountered any significant characters. */
 /*     It's not ok for the next character to be the end of pi (i). */
 
-    dodec = FALSE_;
-    doexp = FALSE_;
-    mantsa = FALSE_;
-    sigchr = FALSE_;
-    epiok = FALSE_;
+    __state->dodec = FALSE_;
+    __state->doexp = FALSE_;
+    __state->mantsa = FALSE_;
+    __state->sigchr = FALSE_;
+    __state->epiok = FALSE_;
 
 /*     So far there is no integer, decimal or exponent part to this */
 /*     string. */
 
-    intval = 0.;
-    decval = 0.;
-    expval = 0.;
-    divisr = 1.;
-    factor = 1.;
-    ecount = 0.;
+    __state->intval = 0.;
+    __state->decval = 0.;
+    __state->expval = 0.;
+    __state->divisr = 1.;
+    __state->factor = 1.;
+    __state->ecount = 0.;
 
 /*     Right now if we encounter a sign, it's part of the mantissa. */
 /*     And until we know better the sign of both the mantissa and */
 /*     exponent are +1 (as opposed to -1). */
 
-    signdx = 1;
-    dpsign[0] = 1.;
-    dpsign[1] = 1.;
+    __state->signdx = 1;
+    __state->dpsign[0] = 1.;
+    __state->dpsign[1] = 1.;
 
 /*     Before doing anything else we determine whether or not */
 /*     the input string is empty. */
 
     if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
-	s_copy(error, blnkst, error_len, (ftnlen)160);
+	s_copy(error, __state->blnkst, error_len, (ftnlen)160);
 	*ptr = 1;
 	return 0;
     }
@@ -583,14 +551,14 @@ static integer c__1 = 1;
 /*     character that we are concerned with and M is the middle of */
 /*     the current search interval ( from B to NL ). */
 
-    l = i_len(string, string_len);
-    b = 1;
-    nl = l - 1;
+    __state->l = i_len(string, string_len);
+    __state->b = 1;
+    __state->nl = __state->l - 1;
 
 /*     We want M to be ( B + NL ) / 2   but right now that's L/2 */
 
-    m = l / 2;
-    while(l - b > 16) {
+    __state->m = __state->l / 2;
+    while(__state->l - __state->b > 16) {
 
 /*        What is true right now?  The string from L+1 on out */
 /*        is blank.  L > B; L-1 = NL >= B;  M = (B + NL) / 2; */
@@ -598,10 +566,10 @@ static integer c__1 = 1;
 /*        there must be a non-blank character between B and the */
 /*        end of the string. */
 
-	if (*(unsigned char *)&string[l - 1] != blank) {
-	    b = l;
-	} else if (s_cmp(string + (m - 1), " ", nl - (m - 1), (ftnlen)1) == 0)
-		 {
+	if (*(unsigned char *)&string[__state->l - 1] != __state->blank) {
+	    __state->b = __state->l;
+	} else if (s_cmp(string + (__state->m - 1), " ", __state->nl - (
+		__state->m - 1), (ftnlen)1) == 0) {
 
 /*           If you got here, the STRING(L:L) is a blank. */
 /*           The string from L+1 on out is blank. */
@@ -616,7 +584,7 @@ static integer c__1 = 1;
 /*           have to worry about the reference STRING(M:NL) */
 /*           giving us an access violation. */
 
-	    l = m - 1;
+	    __state->l = __state->m - 1;
 
 /*           With the new value of L, we now know that STRING(L+1:) */
 /*           is blank. */
@@ -631,8 +599,8 @@ static integer c__1 = 1;
 /*           we don't have to worry about STRING(M:NL) being */
 /*           an ill formed string. */
 
-	    l = nl;
-	    b = m;
+	    __state->l = __state->nl;
+	    __state->b = __state->m;
 
 /*           With the new value of L, we now know that STRING(L+1:) */
 /*           is blank. */
@@ -642,8 +610,8 @@ static integer c__1 = 1;
 /*        Finally compute NL,the index of the character that precedes */
 /*        L and the new midpoint of the stuff from B to NL. */
 
-	nl = l - 1;
-	m = (b + nl) / 2;
+	__state->nl = __state->l - 1;
+	__state->m = (__state->b + __state->nl) / 2;
 
 /*        What's true now?  The string from L+1 on out is blank. */
 
@@ -653,57 +621,59 @@ static integer c__1 = 1;
 /*     of the input string.  We simply search backward from L to */
 /*     locate this last non-blank. */
 
-    while(*(unsigned char *)&string[l - 1] == blank) {
-	--l;
+    while(*(unsigned char *)&string[__state->l - 1] == __state->blank) {
+	--__state->l;
     }
 
 /*     Begin to collect the number in its various parts: an integer */
 /*     portion, a fractional portion, and an exponent. */
 
-    i__1 = l;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	id = *(unsigned char *)&string[i__ - 1];
-	if (id > 128 || id < 0) {
+    i__1 = __state->l;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	__state->id = *(unsigned char *)&string[__state->i__ - 1];
+	if (__state->id > 128 || __state->id < 0) {
 
 /*           This is definitely not expected.  Set the error message */
 /*           and return. */
 
-	    nexti = i__ + 1;
-	    thisi = i__;
-	    zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+	    __state->nexti = __state->i__ + 1;
+	    __state->thisi = __state->i__;
+	    zzinssub_(string, "]", &__state->nexti, error, string_len, (
+		    ftnlen)1, error_len);
+	    zzinssub_(error, "[", &__state->thisi, error, error_len, (ftnlen)
+		    1, error_len);
+	    prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 		    error_len);
-	    zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-		    error_len);
-	    prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-	    *ptr = i__;
+	    *ptr = __state->i__;
 	    return 0;
 
 /*        The action taken depends upon the class of the token. */
 
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)739)] == 1) {
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)739)] == 1) {
 
 /*           Once a digit has been encountered, we can no longer */
 /*           allow the string 'PI' or a sign until an exponent */
 /*           character is hit and resets the SIGNOK flag. */
 
-	    bpiok = FALSE_;
-	    epiok = FALSE_;
-	    signok = FALSE_;
-	    sigchr = TRUE_;
+	    __state->bpiok = FALSE_;
+	    __state->epiok = FALSE_;
+	    __state->signok = FALSE_;
+	    __state->sigchr = TRUE_;
 
 /*           If we are constructing the integer part ... */
 
-	    if (doint) {
-		mantsa = TRUE_;
+	    if (__state->doint) {
+		__state->mantsa = TRUE_;
 
 /*              Check the current value of the integer part to */
 /*              make sure we don't overflow. */
 
-		if (intval < intbnd) {
-		    intval = intval * 10. + values[(i__2 = id - 1) < 128 && 0 
-			    <= i__2 ? i__2 : s_rnge("values", i__2, "nparsd_",
-			     (ftnlen)761)];
+		if (__state->intval < __state->intbnd) {
+		    __state->intval = __state->intval * 10. + __state->values[
+			    (i__2 = __state->id - 1) < 128 && 0 <= i__2 ? 
+			    i__2 : s_rnge("values", i__2, "nparsd_", (ftnlen)
+			    761)];
 		} else {
 
 /*                 Once the integer exceeds a given bound, */
@@ -713,27 +683,27 @@ static integer c__1 = 1;
 /*                 appropriately.  We also keep track of the number */
 /*                 we will need to add to the exponent part. */
 
-		    ecount += 1;
-		    factor /= 10.;
-		    if (roundi) {
-			roundi = FALSE_;
-			if (values[(i__2 = id - 1) < 128 && 0 <= i__2 ? i__2 :
-				 s_rnge("values", i__2, "nparsd_", (ftnlen)
-				779)] > 5.) {
-			    intval += 1.;
+		    __state->ecount += 1;
+		    __state->factor /= 10.;
+		    if (__state->roundi) {
+			__state->roundi = FALSE_;
+			if (__state->values[(i__2 = __state->id - 1) < 128 && 
+				0 <= i__2 ? i__2 : s_rnge("values", i__2, 
+				"nparsd_", (ftnlen)779)] > 5.) {
+			    __state->intval += 1.;
 			}
 		    }
 		}
 
 /*           ... or the decimal part ... */
 
-	    } else if (dodec) {
-		mantsa = TRUE_;
+	    } else if (__state->dodec) {
+		__state->mantsa = TRUE_;
 
 /*              There are two cases to consider.  The case in which */
 /*              the integer portion of the string has value 0... */
 
-		if (zeroi) {
+		if (__state->zeroi) {
 
 /*                 We can just keep accumulating the decimal part */
 /*                 as an integer.  But we keep track of how many */
@@ -743,17 +713,18 @@ static integer c__1 = 1;
 /*                 anything.  The remaining digits cannot contribute */
 /*                 to the value of the decimal part. */
 
-		    if (decval < intbnd) {
-			decval = decval * 10. + values[(i__2 = id - 1) < 128 
-				&& 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)808)];
-			ecount += -1;
-		    } else if (roundd) {
-			roundd = FALSE_;
-			if (values[(i__2 = id - 1) < 128 && 0 <= i__2 ? i__2 :
-				 s_rnge("values", i__2, "nparsd_", (ftnlen)
-				815)] >= 5.) {
-			    decval += 1.;
+		    if (__state->decval < __state->intbnd) {
+			__state->decval = __state->decval * 10. + 
+				__state->values[(i__2 = __state->id - 1) < 
+				128 && 0 <= i__2 ? i__2 : s_rnge("values", 
+				i__2, "nparsd_", (ftnlen)808)];
+			__state->ecount += -1;
+		    } else if (__state->roundd) {
+			__state->roundd = FALSE_;
+			if (__state->values[(i__2 = __state->id - 1) < 128 && 
+				0 <= i__2 ? i__2 : s_rnge("values", i__2, 
+				"nparsd_", (ftnlen)815)] >= 5.) {
+			    __state->decval += 1.;
 			}
 		    }
 
@@ -769,18 +740,19 @@ static integer c__1 = 1;
 /*                 the extra digits can't make any contribution to */
 /*                 the double precision value given to the string. */
 
-		    if (divisr < intbnd) {
-			decval = decval * 10. + values[(i__2 = id - 1) < 128 
-				&& 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)835)];
-			divisr *= 10.;
+		    if (__state->divisr < __state->intbnd) {
+			__state->decval = __state->decval * 10. + 
+				__state->values[(i__2 = __state->id - 1) < 
+				128 && 0 <= i__2 ? i__2 : s_rnge("values", 
+				i__2, "nparsd_", (ftnlen)835)];
+			__state->divisr *= 10.;
 		    }
 		}
 
 /*           ...or the exponent part of the string. */
 
-	    } else if (doexp) {
-		if (expval + ecount > maxexp) {
+	    } else if (__state->doexp) {
+		if (__state->expval + __state->ecount > __state->maxexp) {
 
 /*                 This number is too big to put into a double */
 /*                 precision number. The marginal case where */
@@ -789,10 +761,11 @@ static integer c__1 = 1;
 /*                 of the double precision number are built */
 /*                 at the end of this routine. */
 
-		    s_copy(error, toobig, error_len, (ftnlen)160);
-		    *ptr = i__;
+		    s_copy(error, __state->toobig, error_len, (ftnlen)160);
+		    *ptr = __state->i__;
 		    return 0;
-		} else if (expval + ecount < minexp) {
+		} else if (__state->expval + __state->ecount < 
+			__state->minexp) {
 
 /*                 This number is going to underflow, we can */
 /*                 just stop accumulating exponent. But we don't */
@@ -810,139 +783,147 @@ static integer c__1 = 1;
 /*                 This is the case we expect.  Just add on the */
 /*                 next part of the exponent. */
 
-		    expval = expval * 10. + dpsign[1] * values[(i__2 = id - 1)
-			     < 128 && 0 <= i__2 ? i__2 : s_rnge("values", 
-			    i__2, "nparsd_", (ftnlen)877)];
+		    __state->expval = __state->expval * 10. + __state->dpsign[
+			    1] * __state->values[(i__2 = __state->id - 1) < 
+			    128 && 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
+			    "nparsd_", (ftnlen)877)];
 		}
 
 /*           Even though this character is a digit, its not expected */
 /*           for some reason.  Set the error flag and return. */
 
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)898)] == 2) {
-	    if (pntok) {
-		bpiok = FALSE_;
-		epiok = FALSE_;
-		pntok = FALSE_;
-		signok = FALSE_;
-		dodec = TRUE_;
-		doint = FALSE_;
-		doexp = FALSE_;
-		zeroi = intval == 0.;
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)898)] == 2) {
+	    if (__state->pntok) {
+		__state->bpiok = FALSE_;
+		__state->epiok = FALSE_;
+		__state->pntok = FALSE_;
+		__state->signok = FALSE_;
+		__state->dodec = TRUE_;
+		__state->doint = FALSE_;
+		__state->doexp = FALSE_;
+		__state->zeroi = __state->intval == 0.;
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxppt, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxppt, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)925)] == 3) {
-	    sigchr = TRUE_;
-	    if (expok) {
-		bpiok = FALSE_;
-		epiok = FALSE_;
-		expok = FALSE_;
-		pntok = FALSE_;
-		dodec = FALSE_;
-		doint = FALSE_;
-		doexp = TRUE_;
-		signok = TRUE_;
-		signdx = 2;
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)925)] == 3) {
+	    __state->sigchr = TRUE_;
+	    if (__state->expok) {
+		__state->bpiok = FALSE_;
+		__state->epiok = FALSE_;
+		__state->expok = FALSE_;
+		__state->pntok = FALSE_;
+		__state->dodec = FALSE_;
+		__state->doint = FALSE_;
+		__state->doexp = TRUE_;
+		__state->signok = TRUE_;
+		__state->signdx = 2;
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)955)] == 7) {
-	    if (signok) {
-		dpsign[(i__2 = signdx - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-			"dpsign", i__2, "nparsd_", (ftnlen)959)] = values[(
-			i__3 = id - 1) < 128 && 0 <= i__3 ? i__3 : s_rnge(
-			"values", i__3, "nparsd_", (ftnlen)959)];
-		signok = FALSE_;
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)955)] == 7) {
+	    if (__state->signok) {
+		__state->dpsign[(i__2 = __state->signdx - 1) < 2 && 0 <= i__2 
+			? i__2 : s_rnge("dpsign", i__2, "nparsd_", (ftnlen)
+			959)] = __state->values[(i__3 = __state->id - 1) < 
+			128 && 0 <= i__3 ? i__3 : s_rnge("values", i__3, 
+			"nparsd_", (ftnlen)959)];
+		__state->signok = FALSE_;
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxpsn, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxpsn, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)976)] == 5) {
-	    sigchr = TRUE_;
-	    if (bpiok) {
-		doint = FALSE_;
-		dodec = FALSE_;
-		doexp = FALSE_;
-		expok = FALSE_;
-		pntok = FALSE_;
-		bpiok = FALSE_;
-		signok = FALSE_;
-		epiok = TRUE_;
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)976)] == 5) {
+	    __state->sigchr = TRUE_;
+	    if (__state->bpiok) {
+		__state->doint = FALSE_;
+		__state->dodec = FALSE_;
+		__state->doexp = FALSE_;
+		__state->expok = FALSE_;
+		__state->pntok = FALSE_;
+		__state->bpiok = FALSE_;
+		__state->signok = FALSE_;
+		__state->epiok = TRUE_;
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)1005)] == 6) {
-	    if (epiok) {
-		doint = FALSE_;
-		dodec = FALSE_;
-		doexp = FALSE_;
-		expok = FALSE_;
-		pntok = FALSE_;
-		bpiok = FALSE_;
-		signok = FALSE_;
-		epiok = FALSE_;
-		mantsa = TRUE_;
-		intval = pi_();
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)1005)] == 6) {
+	    if (__state->epiok) {
+		__state->doint = FALSE_;
+		__state->dodec = FALSE_;
+		__state->doexp = FALSE_;
+		__state->expok = FALSE_;
+		__state->pntok = FALSE_;
+		__state->bpiok = FALSE_;
+		__state->signok = FALSE_;
+		__state->epiok = FALSE_;
+		__state->mantsa = TRUE_;
+		__state->intval = pi_();
 	    } else {
-		nexti = i__ + 1;
-		thisi = i__;
-		zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+		__state->nexti = __state->i__ + 1;
+		__state->thisi = __state->i__;
+		zzinssub_(string, "]", &__state->nexti, error, string_len, (
+			ftnlen)1, error_len);
+		zzinssub_(error, "[", &__state->thisi, error, error_len, (
+			ftnlen)1, error_len);
+		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 			error_len);
-		zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-			error_len);
-		prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-		*ptr = i__;
+		*ptr = __state->i__;
 		return 0;
 	    }
-	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)1035)] == 4) {
+	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
+		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)1035)] == 4) {
 
 /*           We don't do anything. */
 
@@ -951,14 +932,15 @@ static integer c__1 = 1;
 /*           This is definitely not expected.  Set the error message */
 /*           and return. */
 
-	    nexti = i__ + 1;
-	    thisi = i__;
-	    zzinssub_(string, "]", &nexti, error, string_len, (ftnlen)1, 
+	    __state->nexti = __state->i__ + 1;
+	    __state->thisi = __state->i__;
+	    zzinssub_(string, "]", &__state->nexti, error, string_len, (
+		    ftnlen)1, error_len);
+	    zzinssub_(error, "[", &__state->thisi, error, error_len, (ftnlen)
+		    1, error_len);
+	    prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
 		    error_len);
-	    zzinssub_(error, "[", &thisi, error, error_len, (ftnlen)1, 
-		    error_len);
-	    prefix_(unxpch, &c__1, error, (ftnlen)160, error_len);
-	    *ptr = i__;
+	    *ptr = __state->i__;
 	    return 0;
 	}
     }
@@ -966,9 +948,9 @@ static integer c__1 = 1;
 /*     If we got through the loop and it's OK to end PI, then we started */
 /*     it but never finished.  This is an error. */
 
-    if (epiok) {
-	s_copy(error, unrcst, error_len, (ftnlen)160);
-	*ptr = l;
+    if (__state->epiok) {
+	s_copy(error, __state->unrcst, error_len, (ftnlen)160);
+	*ptr = __state->l;
 	return 0;
     }
 
@@ -991,19 +973,20 @@ static integer c__1 = 1;
 /*                routine emulates an RPN calculator of popular repute, */
 /*                not because it is inherently a good idea. */
 
-    if (mantsa) {
+    if (__state->mantsa) {
 
 /*        We had an integer part of the number, a fractional part, or */
 /*        both, so we need to put them together in an appropriate */
 /*        fashion. */
 
-	value = intval + decval / divisr * factor;
-    } else if (sigchr) {
+	__state->value = __state->intval + __state->decval / __state->divisr *
+		 __state->factor;
+    } else if (__state->sigchr) {
 
 /*        We do not have a mantissa, so we had an  implicit mantissa, */
 /*        see above, so we need to set the value to one. */
 
-	value = 1.;
+	__state->value = 1.;
     } else {
 
 /*        We have an error. There were no significant characters in the */
@@ -1011,7 +994,7 @@ static integer c__1 = 1;
 /*        a number. An example of such a string would be: '+  ,,.,,'. */
 /*        So, we will set an appropriate error message and return. */
 
-	s_copy(error, unrcst, error_len, (ftnlen)160);
+	s_copy(error, __state->unrcst, error_len, (ftnlen)160);
 	*ptr = i_len(string, string_len) + 1;
 	return 0;
     }
@@ -1020,53 +1003,56 @@ static integer c__1 = 1;
 /*     we "shifted" the decimal point when we were computing */
 /*     the integer and decimal values. */
 
-    expval += ecount;
+    __state->expval += __state->ecount;
 
 /*     Now take care of the exponent contribution to the answer. */
 
 /*     If the exponent is negative ... */
 
-    if (expval < 0.) {
-	while(expval < -10.) {
-	    value /= lookup[10];
-	    expval += 10.;
+    if (__state->expval < 0.) {
+	while(__state->expval < -10.) {
+	    __state->value /= __state->lookup[10];
+	    __state->expval += 10.;
 	}
-	value /= lookup[(i__1 = -((integer) expval)) < 11 && 0 <= i__1 ? i__1 
-		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1139)];
+	__state->value /= __state->lookup[(i__1 = -((integer) __state->expval)
+		) < 11 && 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "nparsd_",
+		 (ftnlen)1139)];
 
 /*     If the exponent is positive ... */
 
-    } else if (expval > 0.) {
-	while(expval > 10.) {
+    } else if (__state->expval > 0.) {
+	while(__state->expval > 10.) {
 
 /*           Make sure that a multiply isn't going to create */
 /*           a number that overflows. */
 
-	    if (value >= smlbnd) {
-		s_copy(error, toobig, error_len, (ftnlen)160);
+	    if (__state->value >= __state->smlbnd) {
+		s_copy(error, __state->toobig, error_len, (ftnlen)160);
 		*ptr = i_len(string, string_len) + 1;
 		return 0;
 	    } else {
-		value *= lookup[10];
-		expval += -10.;
+		__state->value *= __state->lookup[10];
+		__state->expval += -10.;
 	    }
 	}
-	exp__ = i_dnnt(&expval);
+	__state->exp__ = i_dnnt(&__state->expval);
 
 /*        Again, make sure that a floating point overflow isn't */
 /*        going to happen. */
 
-	if (value < dpmax_() / lookup[(i__1 = exp__) < 11 && 0 <= i__1 ? i__1 
-		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1172)]) {
-	    value *= lookup[(i__1 = exp__) < 11 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lookup", i__1, "nparsd_", (ftnlen)1174)];
+	if (__state->value < dpmax_() / __state->lookup[(i__1 = 
+		__state->exp__) < 11 && 0 <= i__1 ? i__1 : s_rnge("lookup", 
+		i__1, "nparsd_", (ftnlen)1172)]) {
+	    __state->value *= __state->lookup[(i__1 = __state->exp__) < 11 && 
+		    0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "nparsd_", (
+		    ftnlen)1174)];
 	} else {
-	    s_copy(error, toobig, error_len, (ftnlen)160);
+	    s_copy(error, __state->toobig, error_len, (ftnlen)160);
 	    *ptr = i_len(string, string_len) + 1;
 	    return 0;
 	}
     }
-    *x = dpsign[0] * value;
+    *x = __state->dpsign[0] * __state->value;
     return 0;
 } /* nparsd_ */
 

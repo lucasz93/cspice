@@ -1,13 +1,21 @@
-/* zztanslv.f -- translated by f2c (version 19980913).
+/* zztanslv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1000 = 1000;
+extern zztanslv_init_t __zztanslv_init;
+static zztanslv_state_t* get_zztanslv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zztanslv)
+		state->zztanslv = __cspice_allocate_module(sizeof(
+	zztanslv_state_t), &__zztanslv_init, sizeof(__zztanslv_init));
+	return state->zztanslv;
+
+}
 
 /* $Procedure ZZTANSLV ( Private --- tangent point solver ) */
 /* Subroutine */ int zztanslv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical 
@@ -25,33 +33,44 @@ static integer c__1000 = 1000;
     /* Local variables */
     integer room;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal curx, svdx;
+    doublereal curx;
+    doublereal svdx;
     extern /* Subroutine */ int zzwninsd_(doublereal *, doublereal *, char *, 
 	    doublereal *, ftnlen);
     logical s;
-    doublereal begin, t;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    doublereal begin;
+    doublereal t;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sized_(doublereal *);
     integer nloop;
-    doublereal xstep, x1, x2;
-    logical state1, state2;
+    doublereal xstep;
+    doublereal x1;
+    doublereal x2;
+    logical state1;
+    logical state2;
     extern logical failed_(void);
     integer to;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     doublereal maxmag;
     extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    logical cursta, instat, savsta;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    logical cursta;
+    logical instat;
+    logical savsta;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char contxt[256];
     doublereal xpoint[3];
     logical prvset;
-    doublereal trnstn, prvpnt[3];
+    doublereal trnstn;
+    doublereal prvpnt[3];
 
+
+    /* Module state */
+    zztanslv_state_t* __state = get_zztanslv_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -756,7 +775,7 @@ static integer c__1000 = 1000;
 			    "converge to TOL value #1 within MXLOOP value #2 "
 			    "iterations.", (ftnlen)106);
 		    errdp_("#1", tol, (ftnlen)2);
-		    errint_("#2", &c__1000, (ftnlen)2);
+		    errint_("#2", &__state->c__1000, (ftnlen)2);
 		    sigerr_("SPICE(NOCONVERGENCE)", (ftnlen)20);
 		    chkout_("ZZTANSLV", (ftnlen)8);
 		    return 0;

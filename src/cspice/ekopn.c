@@ -1,13 +1,21 @@
-/* ekopn.f -- translated by f2c (version 19980913).
+/* ekopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern ekopn_init_t __ekopn_init;
+static ekopn_state_t* get_ekopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekopn)
+		state->ekopn = __cspice_allocate_module(sizeof(ekopn_state_t),
+	 &__ekopn_init, sizeof(__ekopn_init));
+	return state->ekopn;
+
+}
 
 /* $Procedure   EKOPN ( EK, open new file ) */
 /* Subroutine */ int ekopn_(char *fname, char *ifname, integer *ncomch, 
@@ -19,18 +27,26 @@ static integer c__3 = 3;
     /* Local variables */
     integer base;
     extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *), zzekpgin_(integer *), zzektrit_(integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgin_(integer *);
+    extern /* Subroutine */ int zzektrit_(integer *, integer *);
     integer p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *), sigerr_(char *, ftnlen), dasonw_(char *, char *, char 
-	    *, integer *, integer *, ftnlen, ftnlen, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+	    integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer ncr;
 
+
+    /* Module state */
+    ekopn_state_t* __state = get_ekopn_state();
 /* $ Abstract */
 
 /*     Open a new E-kernel file and prepare the file for writing. */
@@ -335,7 +351,7 @@ static integer c__3 = 3;
 /*     Allocate the first integer page for the file's metadata.  We */
 /*     don't need to examine the page number; it's 1. */
 
-    zzekpgan_(handle, &c__3, &p, &base);
+    zzekpgan_(handle, &__state->c__3, &p, &base);
 
 /*     Initialize a new tree.  This tree will point to the file's */
 /*     segments. */

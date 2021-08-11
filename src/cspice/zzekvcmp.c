@@ -1,14 +1,21 @@
-/* zzekvcmp.f -- translated by f2c (version 19980913).
+/* zzekvcmp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__11 = 11;
-static integer c__24 = 24;
+extern zzekvcmp_init_t __zzekvcmp_init;
+static zzekvcmp_state_t* get_zzekvcmp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekvcmp)
+		state->zzekvcmp = __cspice_allocate_module(sizeof(
+	zzekvcmp_state_t), &__zzekvcmp_init, sizeof(__zzekvcmp_init));
+	return state->zzekvcmp;
+
+}
 
 /* $Procedure      ZZEKVCMP ( EK, row vector comparison ) */
 logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols, 
@@ -24,20 +31,33 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer hans[2], segs[2], rows[2];
+    integer hans[2];
+    integer segs[2];
+    integer rows[2];
     extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
 	    integer *);
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer dtype[2];
     extern integer lnknxt_(integer *, integer *);
-    integer cldscs[22]	/* was [11][2] */, col, colidx, colptr[2], elidxs[2], 
-	    rel, sgdscs[48]	/* was [24][2] */, tabidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer cldscs[22]	/* was [11][2] */;
+    integer col;
+    integer colidx;
+    integer colptr[2];
+    integer elidxs[2];
+    integer rel;
+    integer sgdscs[48]	/* was [24][2] */;
+    integer tabidx;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekvcmp_state_t* __state = get_zzekvcmp_state();
 /* $ Abstract */
 
 /*     Compare two row vectors, using dictionary ordering on a */
@@ -1142,14 +1162,14 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 	    }
 	    movei_(&dtdscs[colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 		    s_rnge("colptr", i__1, "zzekvcmp_", (ftnlen)363)] * 11 - 
-		    11], &c__11, &cldscs[(i__2 = i__ * 11 - 11) < 22 && 0 <= 
-		    i__2 ? i__2 : s_rnge("cldscs", i__2, "zzekvcmp_", (ftnlen)
-		    363)]);
+		    11], &__state->c__11, &cldscs[(i__2 = i__ * 11 - 11) < 22 
+		    && 0 <= i__2 ? i__2 : s_rnge("cldscs", i__2, "zzekvcmp_", 
+		    (ftnlen)363)]);
 	    movei_(&stsdsc[segs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 		    s_rnge("segs", i__1, "zzekvcmp_", (ftnlen)364)] * 24 - 24]
-		    , &c__24, &sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= 
-		    i__2 ? i__2 : s_rnge("sgdscs", i__2, "zzekvcmp_", (ftnlen)
-		    364)]);
+		    , &__state->c__24, &sgdscs[(i__2 = i__ * 24 - 24) < 48 && 
+		    0 <= i__2 ? i__2 : s_rnge("sgdscs", i__2, "zzekvcmp_", (
+		    ftnlen)364)]);
 	    dtype[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dtype", 
 		    i__1, "zzekvcmp_", (ftnlen)366)] = dtdscs[colptr[(i__2 = 
 		    i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("colptr", i__2, 

@@ -1,9 +1,17 @@
-/* vtmv.f -- translated by f2c (version 19980913).
+/* vtmv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vtmv_state_t;
+static vtmv_state_t* get_vtmv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  VTMV ( Vector transpose times matrix times vector, 3 dim ) */
 doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2)
@@ -16,8 +24,12 @@ doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer k, l;
+    integer k;
+    integer l;
 
+
+    /* Module state */
+    vtmv_state_t* __state = get_vtmv_state();
 /* $ Abstract */
 
 /*      Multiply the transpose of a 3-dimensional column vector, */

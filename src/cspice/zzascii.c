@@ -1,13 +1,21 @@
-/* zzascii.f -- translated by f2c (version 19980913).
+/* zzascii.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzascii_init_t __zzascii_init;
+static zzascii_state_t* get_zzascii_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzascii)
+		state->zzascii = __cspice_allocate_module(sizeof(
+	zzascii_state_t), &__zzascii_init, sizeof(__zzascii_init));
+	return state->zzascii;
+
+}
 
 /* $Procedure ZZASCII ( determine/verify EOL terminators in a text file ) */
 /* Subroutine */ int zzascii_(char *file, char *line, logical *check, char *
@@ -25,24 +33,30 @@ static integer c__1 = 1;
     /* Local variables */
     extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    integer maccnt, reclen;
+    integer maccnt;
+    integer reclen;
     char native[5];
-    integer number, doscnt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), getlun_(integer *), setmsg_(char *, ftnlen);
+    integer number;
+    integer doscnt;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer unxcnt;
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 1 };
 
 
+
+    /* Module state */
+    zzascii_state_t* __state = get_zzascii_state();
 /* $ Abstract */
 
 /*     Returns a string indicating the line terminators of an ASCII file */
@@ -402,12 +416,12 @@ static integer c__1 = 1;
 /*     Read a line into the LINE variable assigned by the user. */
 
     s_copy(line, " ", line_len, (ftnlen)1);
-    io___5.ciunit = number;
-    iostat = s_rdue(&io___5);
+    __state->io___5.ciunit = number;
+    iostat = s_rdue(&__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, line, line_len);
+    iostat = do_uio(&__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }

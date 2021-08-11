@@ -1,14 +1,21 @@
-/* zzspkflt.f -- translated by f2c (version 19980913).
+/* zzspkflt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static doublereal c_b19 = -1.;
+extern zzspkflt_init_t __zzspkflt_init;
+static zzspkflt_state_t* get_zzspkflt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkflt)
+		state->zzspkflt = __cspice_allocate_module(sizeof(
+	zzspkflt_state_t), &__zzspkflt_init, sizeof(__zzspkflt_init));
+	return state->zzspkflt;
+
+}
 
 /* $Procedure ZZSPKFLT ( SPK function, light time and rate ) */
 /* Subroutine */ int zzspkflt_(S_fp trgsub, doublereal *et, char *ref, char *
@@ -17,8 +24,6 @@ static doublereal c_b19 = -1.;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
@@ -30,9 +35,10 @@ static doublereal c_b19 = -1.;
     /* Local variables */
     doublereal dist;
     extern doublereal vdot_(doublereal *, doublereal *);
-    static logical xmit;
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    doublereal a, b, c__;
+    doublereal a;
+    doublereal b;
+    doublereal c__;
     integer i__;
     extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
@@ -40,24 +46,23 @@ static doublereal c_b19 = -1.;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical usecn;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *), vsubg_(doublereal *, doublereal *,
-	     integer *, doublereal *);
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
     doublereal lterr;
-    static logical uselt;
     extern doublereal vnorm_(doublereal *);
     doublereal prvlt;
     extern logical failed_(void);
     extern doublereal clight_(void);
     logical attblk[15];
     extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal ctrssb[6];
     integer ltsign;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), setmsg_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal ssbtrg[6];
     integer trgctr;
     extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
@@ -67,6 +72,9 @@ static doublereal c_b19 = -1.;
     logical usestl;
     doublereal sttctr[6];
 
+
+    /* Module state */
+    zzspkflt_state_t* __state = get_zzspkflt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -555,7 +563,8 @@ static doublereal c_b19 = -1.;
 	return 0;
     }
     chkin_("ZZSPKFLT", (ftnlen)8);
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -568,7 +577,7 @@ static doublereal c_b19 = -1.;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -584,11 +593,11 @@ static doublereal c_b19 = -1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
-	usecn = attblk[3];
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
 	usestl = attblk[2];
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -614,8 +623,8 @@ static doublereal c_b19 = -1.;
 	chkout_("ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
-    vaddg_(ctrssb, sttctr, &c__6, ssbtrg);
-    vsubg_(ssbtrg, stobs, &c__6, starg);
+    vaddg_(ctrssb, sttctr, &__state->c__6, ssbtrg);
+    vsubg_(ssbtrg, stobs, &__state->c__6, starg);
     dist = vnorm_(starg);
     *lt = dist / clight_();
     if (*lt == 0.) {
@@ -628,7 +637,7 @@ static doublereal c_b19 = -1.;
 	chkout_("ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
-    if (! uselt) {
+    if (! __state->uselt) {
 
 /*        This is a special case: we're not using light time */
 /*        corrections, so the derivative */
@@ -650,7 +659,7 @@ static doublereal c_b19 = -1.;
 
 /*     Determine the sign of the light time offset. */
 
-    if (xmit) {
+    if (__state->xmit) {
 	ltsign = 1;
     } else {
 	ltsign = -1;
@@ -659,7 +668,7 @@ static doublereal c_b19 = -1.;
 /*     Let NUMITR be the number of iterations we'll perform to */
 /*     compute the light time. */
 
-    if (usecn) {
+    if (__state->usecn) {
 	numitr = 5;
     } else {
 	numitr = 1;
@@ -679,8 +688,8 @@ static doublereal c_b19 = -1.;
 	    chkout_("ZZSPKFLT", (ftnlen)8);
 	    return 0;
 	}
-	vaddg_(ctrssb, sttctr, &c__6, ssbtrg);
-	vsubg_(ssbtrg, stobs, &c__6, starg);
+	vaddg_(ctrssb, sttctr, &__state->c__6, ssbtrg);
+	vsubg_(ssbtrg, stobs, &__state->c__6, starg);
 	prvlt = *lt;
 	d__1 = vnorm_(starg) / clight_();
 	*lt = touchd_(&d__1);
@@ -802,7 +811,7 @@ static doublereal c_b19 = -1.;
 /*     with the light-time corrected velocity. */
 
     d__1 = ltsign * *dlt + 1.;
-    vlcom_(&d__1, &ssbtrg[3], &c_b19, &stobs[3], &starg[3]);
+    vlcom_(&d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &starg[3]);
     chkout_("ZZSPKFLT", (ftnlen)8);
     return 0;
 } /* zzspkflt_ */

@@ -1,9 +1,17 @@
-/* frstnp.f -- translated by f2c (version 19980913).
+/* frstnp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int frstnp_state_t;
+static frstnp_state_t* get_frstnp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  FRSTNP ( First non-printable character ) */
 integer frstnp_(char *string, ftnlen string_len)
@@ -17,6 +25,9 @@ integer frstnp_(char *string, ftnlen string_len)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    frstnp_state_t* __state = get_frstnp_state();
 /* $ Abstract */
 
 /*     Return the index of the first non-printable character in a */

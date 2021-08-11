@@ -1,16 +1,21 @@
-/* getfov.f -- translated by f2c (version 19980913).
+/* getfov.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__4 = 4;
-static integer c__3 = 3;
-static integer c__0 = 0;
+extern getfov_init_t __getfov_init;
+static getfov_state_t* get_getfov_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->getfov)
+		state->getfov = __cspice_allocate_module(sizeof(
+	getfov_state_t), &__getfov_init, sizeof(__getfov_init));
+	return state->getfov;
+
+}
 
 /* $Procedure GETFOV ( Get instrument FOV parameters ) */
 /* Subroutine */ int getfov_(integer *instid, integer *room, char *shape, 
@@ -19,11 +24,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char shapid[32*4] = "CIRCLE                          " "ELLIPSE  "
-	    "                       " "POLYGON                         " "REC"
-	    "TANGLE                       ";
-    static char angshp[32*3] = "CIRCLE                          " "ELLIPSE  "
-	    "                       " "RECTANGLE                       ";
 
     /* System generated locals */
     doublereal d__1;
@@ -37,19 +37,23 @@ static integer c__0 = 0;
     doublereal bmag;
     char spec[80];
     doublereal vmag;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vscl_(
-	    doublereal *, doublereal *, doublereal *), vequ_(doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     char type__[1];
     doublereal b[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen), vlcom_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    doublereal b1[3], b2[3];
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    doublereal b1[3];
+    doublereal b2[3];
     integer mxcmp;
     char kword[32];
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
@@ -59,32 +63,51 @@ static integer c__0 = 0;
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
     extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    unorm_(doublereal *, doublereal *, doublereal *), vrotv_(
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
     doublereal refang;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     doublereal coscan;
     char kwcang[32];
-    doublereal refvec[3], sincan, crsang;
+    doublereal refvec[3];
+    doublereal sincan;
+    doublereal crsang;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen), gdpool_(char *, integer *, 
-	    integer *, integer *, doublereal *, logical *, ftnlen);
-    doublereal cosran, tmpang;
-    char kwfram[32], kwbore[32], angunt[80], kwrang[32], kwrvec[32], kwshap[
-	    32], kwboun[32], kwspec[32];
-    doublereal normal[12]	/* was [3][4] */, sinran;
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
+	    *, doublereal *, logical *, ftnlen);
+    doublereal cosran;
+    doublereal tmpang;
+    char kwfram[32];
+    char kwbore[32];
+    char angunt[80];
+    char kwrang[32];
+    char kwrvec[32];
+    char kwshap[32];
+    char kwboun[32];
+    char kwspec[32];
+    doublereal normal[12]	/* was [3][4] */;
+    doublereal sinran;
     char kwaunt[32];
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen), convrt_(doublereal *, char *, char *, doublereal *, 
 	    ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
+	    doublereal *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    getfov_state_t* __state = get_getfov_state();
 /* $ Abstract */
 
 /*     Return the field-of-view (FOV) parameters for a specified */
@@ -758,7 +781,8 @@ static integer c__0 = 0;
 /*     complain if not. */
 
     repmi_(kwfram, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &c__1, &c__1, &i__, frame, &found, (ftnlen)32, frame_len);
+    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, frame, &found, (
+	    ftnlen)32, frame_len);
     if (! found) {
 	setmsg_("The variable, '#', specifying the frame which instrument # "
 		"FOV components are defined relative to was not found in the "
@@ -776,7 +800,8 @@ static integer c__0 = 0;
 /*     complain if not. */
 
     repmi_(kwshap, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &c__1, &c__1, &i__, shape, &found, (ftnlen)32, shape_len);
+    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, shape, &found, (
+	    ftnlen)32, shape_len);
     if (! found) {
 	setmsg_("The variable, '#', specifying the shape of the instrument #"
 		" FOV was not found in the kernel pool. Check whether IK file"
@@ -798,8 +823,8 @@ static integer c__0 = 0;
 /*     Check whether shape identified that we got is one from the list */
 /*     of supported, complain if not. */
 
-    if (bsrchc_(shape, &c__4, shapid, rtrim_(shape, shape_len), (ftnlen)32) ==
-	     0) {
+    if (bsrchc_(shape, &__state->c__4, __state->shapid, rtrim_(shape, 
+	    shape_len), (ftnlen)32) == 0) {
 	setmsg_("The FOV shape, '#', specified in the keyword, '#', for the "
 		"instrument # is not supported. See GETFOV subroutine header "
 		"for the list of supported instrument FOV shapes.", (ftnlen)
@@ -850,7 +875,8 @@ static integer c__0 = 0;
 	chkout_("GETFOV", (ftnlen)6);
 	return 0;
     }
-    gdpool_(kword, &c__1, &c__3, &i__, bsight, &found, (ftnlen)32);
+    gdpool_(kword, &__state->c__1, &__state->c__3, &i__, bsight, &found, (
+	    ftnlen)32);
 
 /*     At this point we have gotten all the specification independent */
 /*     information.  Now check for the presence of the FOV class */
@@ -858,7 +884,8 @@ static integer c__0 = 0;
 
     s_copy(spec, "CORNERS", (ftnlen)80, (ftnlen)7);
     repmi_(kwspec, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &c__1, &c__1, &i__, spec, &found, (ftnlen)32, (ftnlen)80);
+    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, spec, &found, (
+	    ftnlen)32, (ftnlen)80);
     if (eqstr_("CORNERS", spec, (ftnlen)7, (ftnlen)80)) {
 
 /*        Look for the FOV boundary vectors, check whether output array */
@@ -867,7 +894,7 @@ static integer c__0 = 0;
 	repmi_(kwboun, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
 	dtpool_(kword, &found, n, type__, (ftnlen)32, (ftnlen)1);
 	if (! found) {
-	    suffix_("_CORNERS", &c__0, kword, (ftnlen)8, (ftnlen)32);
+	    suffix_("_CORNERS", &__state->c__0, kword, (ftnlen)8, (ftnlen)32);
 	    dtpool_(kword, &found, n, type__, (ftnlen)32, (ftnlen)1);
 	}
 	if (! found) {
@@ -915,7 +942,7 @@ static integer c__0 = 0;
 
 /*        Boundaries are OK. Get them. */
 
-	gdpool_(kword, &c__1, &mxcmp, n, bounds, &found, (ftnlen)32);
+	gdpool_(kword, &__state->c__1, &mxcmp, n, bounds, &found, (ftnlen)32);
 	*n /= 3;
 	if (s_cmp(shape, "CIRCLE", shape_len, (ftnlen)6) == 0 && *n != 1) {
 	    setmsg_("The boundary is specified to be circular, and as such, "
@@ -967,8 +994,8 @@ static integer c__0 = 0;
 /*        of supported shapes for the ANGLE specification; complain */
 /*        if not. */
 
-	if (bsrchc_(shape, &c__3, angshp, rtrim_(shape, shape_len), (ftnlen)
-		32) == 0) {
+	if (bsrchc_(shape, &__state->c__3, __state->angshp, rtrim_(shape, 
+		shape_len), (ftnlen)32) == 0) {
 	    setmsg_("The FOV shape, '#', specified in the keyword, '#', for "
 		    "the instrument # is not supported for the ANGLES specifi"
 		    "cation.", (ftnlen)118);
@@ -1020,7 +1047,8 @@ static integer c__0 = 0;
 	    chkout_("GETFOV", (ftnlen)6);
 	    return 0;
 	}
-	gdpool_(kword, &c__1, &c__3, &i__, refvec, &found, (ftnlen)32);
+	gdpool_(kword, &__state->c__1, &__state->c__3, &i__, refvec, &found, (
+		ftnlen)32);
 
 /*        We require that the reference vector is not parallel */
 /*        to the boresight vector. Use NORMAL(1,1) to temporarily */
@@ -1040,7 +1068,8 @@ static integer c__0 = 0;
 /*        Retrieve the reference angle from the kernel pool. */
 
 	repmi_(kwrang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gdpool_(kword, &c__1, &c__1, &i__, &refang, &found, (ftnlen)32);
+	gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &refang, &found, 
+		(ftnlen)32);
 	if (! found) {
 	    setmsg_("The variable, '#', specifying the reference angle which"
 		    " describes instrument # FOV angular extent was not found"
@@ -1057,8 +1086,8 @@ static integer c__0 = 0;
 /*        Retrieve the angle units from the kernel pool. */
 
 	repmi_(kwaunt, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gcpool_(kword, &c__1, &c__1, &i__, angunt, &found, (ftnlen)32, (
-		ftnlen)80);
+	gcpool_(kword, &__state->c__1, &__state->c__1, &i__, angunt, &found, (
+		ftnlen)32, (ftnlen)80);
 	if (! found) {
 	    setmsg_("The variable, '#', specifying the angular units in whic"
 		    "h instrument # FOV extent is defined was not found in th"
@@ -1119,7 +1148,8 @@ static integer c__0 = 0;
 
 	    repmi_(kwcang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)
 		    32);
-	    gdpool_(kword, &c__1, &c__1, &i__, &crsang, &found, (ftnlen)32);
+	    gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &crsang, &
+		    found, (ftnlen)32);
 	    if (! found) {
 		setmsg_("The variable, '#', specifying the cross angle which"
 			" describes instrument # FOV angular extent was not f"
@@ -1192,7 +1222,8 @@ static integer c__0 = 0;
 
 	    repmi_(kwcang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)
 		    32);
-	    gdpool_(kword, &c__1, &c__1, &i__, &crsang, &found, (ftnlen)32);
+	    gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &crsang, &
+		    found, (ftnlen)32);
 	    if (! found) {
 		setmsg_("The variable, '#', specifying the cross angle which"
 			" describes instrument # FOV angular extent was not f"

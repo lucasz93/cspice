@@ -1,9 +1,10 @@
-/* wrdnln.f -- translated by f2c (version 19980913).
+/* wrdnln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      WRDNLN (Write a definition line) */
 /* Subroutine */ int wrdnln_(char *k, char *v, integer *i__, integer *unit, 

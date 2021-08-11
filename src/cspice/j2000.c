@@ -1,9 +1,17 @@
-/* j2000.f -- translated by f2c (version 19980913).
+/* j2000.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int j2000_state_t;
+static j2000_state_t* get_j2000_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure                     J2000 ( Julian Date of 2000 JAN 1.5 ) */
 doublereal j2000_(void)
@@ -11,6 +19,9 @@ doublereal j2000_(void)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    j2000_state_t* __state = get_j2000_state();
 /* $ Abstract */
 
 /*     Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5). */

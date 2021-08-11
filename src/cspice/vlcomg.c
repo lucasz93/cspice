@@ -1,9 +1,17 @@
-/* vlcomg.f -- translated by f2c (version 19980913).
+/* vlcomg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vlcomg_state_t;
+static vlcomg_state_t* get_vlcomg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VLCOMG ( Vector linear combination, general dimension ) */
 /* Subroutine */ int vlcomg_(integer *n, doublereal *a, doublereal *v1, 
@@ -18,6 +26,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    vlcomg_state_t* __state = get_vlcomg_state();
 /* $ Abstract */
 
 /*      Compute a vector linear combination of two double precision */
@@ -156,11 +167,12 @@
     /* Function Body */
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	sum[(i__2 = i__ - 1) < sum_dim1 && 0 <= i__2 ? i__2 : s_rnge("sum", 
-		i__2, "vlcomg_", (ftnlen)150)] = *a * v1[(i__3 = i__ - 1) < 
-		v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, "vlcomg_", (
-		ftnlen)150)] + *b * v2[(i__4 = i__ - 1) < v2_dim1 && 0 <= 
-		i__4 ? i__4 : s_rnge("v2", i__4, "vlcomg_", (ftnlen)150)];
+	sum[(i__2 = i__ - 1) < 1 * sum_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"sum", i__2, "vlcomg_", (ftnlen)150)] = *a * v1[(i__3 = i__ - 
+		1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, 
+		"vlcomg_", (ftnlen)150)] + *b * v2[(i__4 = i__ - 1) < 1 * 
+		v2_dim1 && 0 <= i__4 ? i__4 : s_rnge("v2", i__4, "vlcomg_", (
+		ftnlen)150)];
     }
     return 0;
 } /* vlcomg_ */

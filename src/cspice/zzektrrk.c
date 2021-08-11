@@ -1,14 +1,21 @@
-/* zzektrrk.f -- translated by f2c (version 19980913).
+/* zzektrrk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__40 = 40;
-static integer c__63 = 63;
+extern zzektrrk_init_t __zzektrrk_init;
+static zzektrrk_state_t* get_zzektrrk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrrk)
+		state->zzektrrk = __cspice_allocate_module(sizeof(
+	zzektrrk_state_t), &__zzektrrk_init, sizeof(__zzektrrk_init));
+	return state->zzektrrk;
+
+}
 
 /* $Procedure      ZZEKTRRK ( EK tree, rotate keys ) */
 /* Subroutine */ int zzektrrk_(integer *handle, integer *tree, integer *left, 
@@ -21,19 +28,40 @@ static integer c__63 = 63;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer dpar, lsib, rsib, root;
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *), 
-	    zzekpgwi_(integer *, integer *, integer *);
-    integer i__, lpage[256], ppage[256], rpage[256];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
+    integer dpar;
+    integer lsib;
+    integer rsib;
+    integer root;
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    integer i__;
+    integer lpage[256];
+    integer ppage[256];
+    integer rpage[256];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical failed_(void);
-    integer datbas, kidbas, remain, keybas, dshift, schlep;
+    integer datbas;
+    integer kidbas;
+    integer remain;
+    integer keybas;
+    integer dshift;
+    integer schlep;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer drotat, futrpk, lnkeys, lnsize, nvopar, rnkeys, subsiz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    integer drotat;
+    integer futrpk;
+    integer lnkeys;
+    integer lnsize;
+    integer nvopar;
+    integer rnkeys;
+    integer subsiz;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzektrrk_state_t* __state = get_zzektrrk_state();
 /* $ Abstract */
 
 /*     Rotate a specified number of keys from one node, through */
@@ -613,8 +641,8 @@ static integer c__63 = 63;
 	    errint_("#", &lnkeys, (ftnlen)1);
 	    errint_("#", &rnkeys, (ftnlen)1);
 	    errint_("#", nrot, (ftnlen)1);
-	    errint_("#", &c__40, (ftnlen)1);
-	    errint_("#", &c__63, (ftnlen)1);
+	    errint_("#", &__state->c__40, (ftnlen)1);
+	    errint_("#", &__state->c__63, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZEKTRRK", (ftnlen)8);
 	    return 0;
@@ -631,8 +659,8 @@ static integer c__63 = 63;
 	    errint_("#", &rnkeys, (ftnlen)1);
 	    i__1 = -(*nrot);
 	    errint_("#", &i__1, (ftnlen)1);
-	    errint_("#", &c__40, (ftnlen)1);
-	    errint_("#", &c__63, (ftnlen)1);
+	    errint_("#", &__state->c__40, (ftnlen)1);
+	    errint_("#", &__state->c__63, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	    chkout_("ZZEKTRRK", (ftnlen)8);
 	    return 0;

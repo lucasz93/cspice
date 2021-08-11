@@ -1,9 +1,17 @@
-/* dvdot.f -- translated by f2c (version 19980913).
+/* dvdot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dvdot_state_t;
+static dvdot_state_t* get_dvdot_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DVDOT  ( Derivative of Vector Dot Product, 3-D ) */
 doublereal dvdot_(doublereal *s1, doublereal *s2)
@@ -11,6 +19,9 @@ doublereal dvdot_(doublereal *s1, doublereal *s2)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    dvdot_state_t* __state = get_dvdot_state();
 /* $ Abstract */
 
 /*     Compute the derivative of the dot product of two double */

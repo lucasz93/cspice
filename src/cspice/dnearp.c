@@ -1,13 +1,21 @@
-/* dnearp.f -- translated by f2c (version 19980913).
+/* dnearp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b16 = 1.;
+extern dnearp_init_t __dnearp_init;
+static dnearp_state_t* get_dnearp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dnearp)
+		state->dnearp = __cspice_allocate_module(sizeof(
+	dnearp_state_t), &__dnearp_init, sizeof(__dnearp_init));
+	return state->dnearp;
+
+}
 
 /* $Procedure      DNEARP ( Derivative of near point ) */
 /* Subroutine */ int dnearp_(doublereal *state, doublereal *a, doublereal *b, 
@@ -15,10 +23,6 @@ static doublereal c_b16 = 1.;
 {
     /* Initialized data */
 
-    static doublereal gradm[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
-    static doublereal m[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,7 +32,8 @@ static doublereal c_b16 = 1.;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal grad[3], temp[3];
+    doublereal grad[3];
+    doublereal temp[3];
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
@@ -36,22 +41,27 @@ static doublereal c_b16 = 1.;
     integer i__;
     doublereal l;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal denom, dterm[3];
+    doublereal denom;
+    doublereal dterm[3];
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     doublereal norml[3];
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
 	    *);
     extern logical failed_(void);
-    doublereal length, lprime;
+    doublereal length;
+    doublereal lprime;
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), chkout_(
-	    char *, ftnlen);
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal zenith[3];
     extern logical return_(void);
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    dnearp_state_t* __state = get_dnearp_state();
 /* $ Abstract */
 
 /*     Compute the ellipsoid surface point nearest to a specified */
@@ -390,11 +400,11 @@ static doublereal c_b16 = 1.;
 /*     diagonal values have been established in the data statement */
 /*     following the declaration section of this routine. */
 
-    gradm[0] = 1. / (*a * *a);
-    gradm[4] = 1. / (*b * *b);
-    gradm[8] = 1. / (*c__ * *c__);
+    __state->gradm[0] = 1. / (*a * *a);
+    __state->gradm[4] = 1. / (*b * *b);
+    __state->gradm[8] = 1. / (*c__ * *c__);
     vsub_(state, dnear, zenith);
-    mxv_(gradm, dnear, grad);
+    mxv_(__state->gradm, dnear, grad);
     unorm_(grad, norml, &length);
     l = vdot_(zenith, norml) / length;
 
@@ -452,30 +462,30 @@ static doublereal c_b16 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", i__1,
-		 "dnearp_", (ftnlen)458)] = l * gradm[(i__2 = i__ + i__ * 3 - 
-		4) < 9 && 0 <= i__2 ? i__2 : s_rnge("gradm", i__2, "dnearp_", 
-		(ftnlen)458)] + 1.;
+		 "dnearp_", (ftnlen)458)] = l * __state->gradm[(i__2 = i__ + 
+		i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("gradm", i__2, 
+		"dnearp_", (ftnlen)458)] + 1.;
     }
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", 
 		i__1, "dnearp_", (ftnlen)463)] != 0.) {
-	    m[(i__1 = i__ + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "m", i__1, "dnearp_", (ftnlen)464)] = 1. / dterm[(i__2 = 
-		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("dterm", i__2, 
-		    "dnearp_", (ftnlen)464)];
+	    __state->m[(i__1 = i__ + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
+		    s_rnge("m", i__1, "dnearp_", (ftnlen)464)] = 1. / dterm[(
+		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("dterm", 
+		    i__2, "dnearp_", (ftnlen)464)];
 	} else {
 	    *found = FALSE_;
 	    chkout_("DNEARP", (ftnlen)6);
 	    return 0;
 	}
     }
-    denom = vtmv_(grad, m, grad);
+    denom = vtmv_(grad, __state->m, grad);
     if (denom == 0.) {
 	*found = FALSE_;
 	chkout_("DNEARP", (ftnlen)6);
 	return 0;
     }
-    lprime = vtmv_(grad, m, &state[3]) / denom;
+    lprime = vtmv_(grad, __state->m, &state[3]) / denom;
 
 /*     Now that we have L' we can easily compute N'. Rewriting */
 /*     equation (2) from above we have. */
@@ -483,8 +493,8 @@ static doublereal c_b16 = 1.;
 /*        N'  = M * ( P' - L'*GRAD ) */
 
     d__1 = -lprime;
-    vlcom_(&c_b16, &state[3], &d__1, grad, temp);
-    mxv_(m, temp, &dnear[3]);
+    vlcom_(&__state->c_b16, &state[3], &d__1, grad, temp);
+    mxv_(__state->m, temp, &dnear[3]);
 
 /*     Only one thing left to do.  Compute the derivative */
 /*     of the altitude ALT.  Recall that */

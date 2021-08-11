@@ -1,16 +1,27 @@
-/* zzdiv.f -- translated by f2c (version 19980913).
+/* zzdiv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzdiv_init_t __zzdiv_init;
+static zzdiv_state_t* get_zzdiv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdiv)
+		state->zzdiv = __cspice_allocate_module(sizeof(zzdiv_state_t),
+	 &__zzdiv_init, sizeof(__zzdiv_init));
+	return state->zzdiv;
+
+}
 
 /* $Procedure ZZDIV ( Safer division ) */
 doublereal zzdiv_(doublereal *numr, doublereal *denom)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal ret_val, d__1;
@@ -22,13 +33,14 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal expnt, logden;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static doublereal lognum;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzdiv_state_t* __state = get_zzdiv_state();
 /* $ Abstract */
 
 /*     Safely calculate the value NUMR/DENOM, avoiding the possibility */
@@ -351,13 +363,13 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 /*     The double precision maximum value has the form */
 /*     "d*(10**EXPNT)." The value of interest is "EXPNT." */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 
 /*        A "floor" evaluation. */
 
 	d__1 = dpmax_();
-	expnt = (doublereal) ((integer) d_lg10(&d__1));
+	__state->expnt = (doublereal) ((integer) d_lg10(&d__1));
     }
 
 /*     If the denominator is zero, return zero and signal an error. */
@@ -393,13 +405,13 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 /*     return value defeats the purpose of this routine. */
 
     d__1 = abs(*numr);
-    lognum = d_lg10(&d__1);
+    __state->lognum = d_lg10(&d__1);
     d__1 = abs(*denom);
-    logden = d_lg10(&d__1);
+    __state->logden = d_lg10(&d__1);
 
 /*     Local possible overflow check. */
 
-    if (lognum - logden > expnt) {
+    if (__state->lognum - __state->logden > __state->expnt) {
 	ret_val = 0.;
 	setmsg_("Numerical overflow event. Numerator value #1, denominator v"
 		"alue #2.", (ftnlen)67);
@@ -413,7 +425,7 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 /*     Local possible underflow check. Accept this may occur, */
 /*     return a zero. */
 
-    if (lognum - logden < -(expnt - 1.)) {
+    if (__state->lognum - __state->logden < -(__state->expnt - 1.)) {
 	ret_val = 0.;
 	chkout_("ZZDIV", (ftnlen)5);
 	return ret_val;

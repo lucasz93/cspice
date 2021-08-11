@@ -1,9 +1,17 @@
-/* cyllat.f -- translated by f2c (version 19980913).
+/* cyllat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cyllat_state_t;
+static cyllat_state_t* get_cyllat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYLLAT ( Cylindrical to latitudinal ) */
 /* Subroutine */ int cyllat_(doublereal *r__, doublereal *longc, doublereal *
@@ -16,8 +24,15 @@
     double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal x, y, lattud, big, rho;
+    doublereal x;
+    doublereal y;
+    doublereal lattud;
+    doublereal big;
+    doublereal rho;
 
+
+    /* Module state */
+    cyllat_state_t* __state = get_cyllat_state();
 /* $ Abstract */
 
 /*     Convert from cylindrical to latitudinal coordinates. */

@@ -1,9 +1,17 @@
-/* zzrept.f -- translated by f2c (version 19980913).
+/* zzrept.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzrept_state_t;
+static zzrept_state_t* get_zzrept_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZREPT ( Private --- replace tokens ) */
 logical zzrept_(char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen 
@@ -14,9 +22,12 @@ logical zzrept_(char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen
 
     /* Local variables */
     logical ok;
-    extern logical zzremt_(char *, ftnlen), zzsubt_(char *, char *, logical *,
-	     ftnlen, ftnlen);
+    extern logical zzremt_(char *, ftnlen);
+    extern logical zzsubt_(char *, char *, logical *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzrept_state_t* __state = get_zzrept_state();
 /* $ Abstract */
 
 /*    SPICE Private routine intended solely for the support of SPICE */

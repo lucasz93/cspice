@@ -1,18 +1,21 @@
-/* framex.f -- translated by f2c (version 19980913).
+/* framex.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5209 = 5209;
-static integer c__127 = 127;
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__8 = 8;
-static integer c__100 = 100;
+extern framex_init_t __framex_init;
+static framex_state_t* get_framex_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->framex)
+		state->framex = __cspice_allocate_module(sizeof(
+	framex_state_t), &__framex_init, sizeof(__framex_init));
+	return state->framex;
+
+}
 
 /* $Procedure FRAMEX ( FRAMe EXpert ) */
 /* Subroutine */ int framex_0_(int n__, char *cname, char *frname, integer *
@@ -21,7 +24,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -32,69 +34,57 @@ static integer c__100 = 100;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char name__[32*127], line[80*8];
-    static integer item;
-    static logical lnew;
-    static integer type__[127];
     extern /* Subroutine */ int zzhscadd_(integer *, integer *, char *, char *
-	    , integer *, logical *, ftnlen, ftnlen), zzhsiadd_(integer *, 
-	    integer *, integer *, integer *, integer *, logical *), zzhscchk_(
-	    integer *, integer *, char *, char *, integer *, ftnlen, ftnlen), 
-	    zzhsichk_(integer *, integer *, integer *, integer *, integer *), 
-	    zzdynbid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzhscini_(integer *, integer *, integer *);
-    static char look2[32];
-    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *), 
-	    zzpctrck_(integer *, logical *), zzdynvai_(char *, integer *, 
-	    char *, integer *, integer *, integer *, ftnlen, ftnlen), 
-	    zzctruin_(integer *);
-    static integer i__, n;
-    static char kname[32*5209];
+	    , integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzhsiadd_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int zzhscchk_(integer *, integer *, char *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzhsichk_(integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzdynbid_(char *, integer *, char *, integer *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzhscini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
+    extern /* Subroutine */ int zzdynvai_(char *, integer *, char *, integer *
+	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char pname[32];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
-    static integer kcent[5209];
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen), repmi_(char *, char *, integer *, char *
-	    , ftnlen, ftnlen, ftnlen);
-    static logical gotit;
-    static integer start;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    bodc2n_(integer *, char *, logical *, ftnlen), bodn2c_(char *, 
-	    integer *, logical *, ftnlen);
-    static integer id;
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
-    static integer idcode[127], bidids[127];
-    static char lcname[36];
-    static integer bididx[127];
-    static char lcfram[32];
     extern integer bschoi_(integer *, integer *, integer *, integer *);
-    static integer kidids[5209], kclsid[5209], kvclid, bidpol[133], centrd[
-	    127], center[127];
-    static char kvbuff[32*100];
-    static integer kidpol[5215], knmids[5209], kclass[5209], kidlst[5209], 
-	    bnmpol[133], typeid[127], values[8], knmpol[5215];
-    static logical lupdte;
-    static char knmnms[32*5209], dattyp[1], lookup[32];
-    static integer kvclss, pulctr[2], knmlst[5209], bnmlst[127];
     extern logical return_(void);
-    static char bnmnms[32*127];
-    static integer bnmidx[127], bidlst[127];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), zzfdat_(integer *, integer *, 
-	    char *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, char *, integer *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen), prefix_(char *, integer *, 
-	    char *, ftnlen, ftnlen), gipool_(char *, integer *, integer *, 
-	    integer *, integer *, logical *, ftnlen), gcpool_(char *, integer 
-	    *, integer *, integer *, char *, logical *, ftnlen, ftnlen), 
-	    dtpool_(char *, logical *, integer *, char *, ftnlen, ftnlen), 
-	    gnpool_(char *, integer *, integer *, integer *, char *, logical *
-	    , ftnlen, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzfdat_(integer *, integer *, char *, integer 
+	    *, integer *, integer *, integer *, integer *, integer *, integer 
+	    *, char *, integer *, integer *, integer *, integer *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static logical fnd;
+    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
+	    *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int gnpool_(char *, integer *, integer *, integer 
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
 
+    /* Module state */
+    framex_state_t* __state = get_framex_state();
 /* $ Abstract */
 
 /*     This is an umbrella routine for the entry points available for */
@@ -1002,88 +992,97 @@ L_namfrm:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("NAMFRM", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Determine the location of the requested item in the array */
 /*     of names. */
 
-    ljust_(frname, pname, frname_len, (ftnlen)32);
-    ucase_(pname, pname, (ftnlen)32, (ftnlen)32);
-    zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (ftnlen)32);
-    if (item != 0) {
-	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)736)];
+    ljust_(frname, __state->pname, frname_len, (ftnlen)32);
+    ucase_(__state->pname, __state->pname, (ftnlen)32, (ftnlen)32);
+    zzhscchk_(__state->bnmlst, __state->bnmpol, __state->bnmnms, 
+	    __state->pname, &__state->item, (ftnlen)32, (ftnlen)32);
+    if (__state->item != 0) {
+	__state->item = __state->bnmidx[(i__1 = __state->item - 1) < 127 && 0 
+		<= i__1 ? i__1 : s_rnge("bnmidx", i__1, "framex_", (ftnlen)
+		736)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
-    if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)745)];
+    if (__state->item > 0) {
+	*frcode = __state->idcode[(i__1 = __state->item - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (ftnlen)745)];
     } else {
 
 /*        See if this frame is in the kernel pool frame name-based hash. */
 /*        First reset the hash if POOL has changed. */
 
-	zzpctrck_(pulctr, &lupdte);
-	if (lupdte) {
-	    zzhscini_(&c__5209, knmlst, knmpol);
-	    zzhsiini_(&c__5209, kidlst, kidpol);
+	zzpctrck_(__state->pulctr, &__state->lupdte);
+	if (__state->lupdte) {
+	    zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
+	    zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
 	}
 
 /*        Check if this name is in the hash. */
 
-	zzhscchk_(knmlst, knmpol, knmnms, pname, &item, (ftnlen)32, (ftnlen)
-		32);
-	if (item != 0) {
-	    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("knmids", i__1, "framex_", (ftnlen)767)];
+	zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->pname, &__state->item, (ftnlen)32, (ftnlen)32);
+	if (__state->item != 0) {
+	    *frcode = __state->knmids[(i__1 = __state->item - 1) < 5209 && 0 
+		    <= i__1 ? i__1 : s_rnge("knmids", i__1, "framex_", (
+		    ftnlen)767)];
 	} else {
 
 /*           The name wasn't in the hash, see if we can find this frame */
 /*           in the kernel pool. */
 
-	    prefix_("FRAME_", &c__0, pname, (ftnlen)6, (ftnlen)32);
-	    gipool_(pname, &c__1, &c__8, &n, values, &gotit, (ftnlen)32);
+	    prefix_("FRAME_", &__state->c__0, __state->pname, (ftnlen)6, (
+		    ftnlen)32);
+	    gipool_(__state->pname, &__state->c__1, &__state->c__8, &
+		    __state->n, __state->values, &__state->gotit, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("NAMFRM", (ftnlen)6);
 		return 0;
 	    }
-	    if (n == 1 && gotit) {
-		*frcode = values[0];
+	    if (__state->n == 1 && __state->gotit) {
+		*frcode = __state->values[0];
 
 /*              If we made it to this point, we successfully mapped the */
 /*              kernel frame name to its ID. Add this pair to the */
 /*              name-based hash. */
 
-		zzhscadd_(knmlst, knmpol, knmnms, pname, &item, &lnew, (
+		zzhscadd_(__state->knmlst, __state->knmpol, __state->knmnms, 
+			__state->pname, &__state->item, &__state->lnew, (
 			ftnlen)32, (ftnlen)32);
-		if (! failed_() && item != 0) {
-		    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("knmids", i__1, "framex_", (ftnlen)797)] = 
-			    *frcode;
+		if (! failed_() && __state->item != 0) {
+		    __state->knmids[(i__1 = __state->item - 1) < 5209 && 0 <= 
+			    i__1 ? i__1 : s_rnge("knmids", i__1, "framex_", (
+			    ftnlen)797)] = *frcode;
 		}
 	    } else {
 		*frcode = 0;
@@ -1305,67 +1304,74 @@ L_frmnam:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("FRMNAM", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
-    zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
-    if (item != 0) {
-	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1068)];
+    zzhsichk_(__state->bidlst, __state->bidpol, __state->bidids, frcode, &
+	    __state->item);
+    if (__state->item != 0) {
+	__state->item = __state->bididx[(i__1 = __state->item - 1) < 127 && 0 
+		<= i__1 ? i__1 : s_rnge("bididx", i__1, "framex_", (ftnlen)
+		1068)];
     }
-    if (item != 0) {
-	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)1073)) << 5), 
-		frname_len, (ftnlen)32);
+    if (__state->item != 0) {
+	s_copy(frname, __state->name__ + (((i__1 = __state->item - 1) < 127 &&
+		 0 <= i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
+		1073)) << 5), frname_len, (ftnlen)32);
     } else {
 
 /*        See if this frame is in the kernel pool frame ID-based hash. */
 /*        First reset the hash if POOL has changed. */
 
-	zzpctrck_(pulctr, &lupdte);
-	if (lupdte) {
-	    zzhscini_(&c__5209, knmlst, knmpol);
-	    zzhsiini_(&c__5209, kidlst, kidpol);
+	zzpctrck_(__state->pulctr, &__state->lupdte);
+	if (__state->lupdte) {
+	    zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
+	    zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
 	}
 
 /*        Check if this ID is in the hash. */
 
-	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
-	if (item != 0) {
-	    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-		    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)1095)) << 
-		    5), frname_len, (ftnlen)32);
+	zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, frcode, &
+		__state->item);
+	if (__state->item != 0) {
+	    s_copy(frname, __state->kname + (((i__1 = __state->item - 1) < 
+		    5209 && 0 <= i__1 ? i__1 : s_rnge("kname", i__1, "framex_"
+		    , (ftnlen)1095)) << 5), frname_len, (ftnlen)32);
 	} else {
 
 /*           The ID wasn't in the hash, see if we can find this frame in */
 /*           the kernel pool. */
 
-	    s_copy(pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
-	    repmi_(pname, "#", frcode, pname, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    gcpool_(pname, &c__1, &c__8, &n, line, &gotit, (ftnlen)32, (
+	    s_copy(__state->pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
+	    repmi_(__state->pname, "#", frcode, __state->pname, (ftnlen)32, (
+		    ftnlen)1, (ftnlen)32);
+	    gcpool_(__state->pname, &__state->c__1, &__state->c__8, &
+		    __state->n, __state->line, &__state->gotit, (ftnlen)32, (
 		    ftnlen)80);
-	    if (n == 1 && gotit) {
-		ljust_(line, frname, (ftnlen)80, frname_len);
+	    if (__state->n == 1 && __state->gotit) {
+		ljust_(__state->line, frname, (ftnlen)80, frname_len);
 
 /*              Note that since we did not collect all needed */
 /*              information about this frame, we will not try to add it */
@@ -1622,27 +1628,30 @@ L_frinfo:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("FRINFO", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     No frame information has been found yet. */
@@ -1652,77 +1661,86 @@ L_frinfo:
 /*     Determine the location of the requested item in the array */
 /*     of ID codes. */
 
-    zzhsichk_(bidlst, bidpol, bidids, frcode, &item);
-    if (item != 0) {
-	item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bididx", i__1, "framex_", (ftnlen)1424)];
+    zzhsichk_(__state->bidlst, __state->bidpol, __state->bidids, frcode, &
+	    __state->item);
+    if (__state->item != 0) {
+	__state->item = __state->bididx[(i__1 = __state->item - 1) < 127 && 0 
+		<= i__1 ? i__1 : s_rnge("bididx", i__1, "framex_", (ftnlen)
+		1424)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code in */
 /*     the parallel array. */
 
-    if (item > 0) {
-	*cent = center[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"center", i__1, "framex_", (ftnlen)1433)];
-	*class__ = type__[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-		s_rnge("type", i__1, "framex_", (ftnlen)1434)];
-	*clssid = typeid[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"typeid", i__1, "framex_", (ftnlen)1435)];
+    if (__state->item > 0) {
+	*cent = __state->center[(i__1 = __state->item - 1) < 127 && 0 <= i__1 
+		? i__1 : s_rnge("center", i__1, "framex_", (ftnlen)1433)];
+	*class__ = __state->type__[(i__1 = __state->item - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("type", i__1, "framex_", (ftnlen)1434)];
+	*clssid = __state->typeid[(i__1 = __state->item - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("typeid", i__1, "framex_", (ftnlen)1435)]
+		;
 	*found = TRUE_;
     } else {
 
 /*        See if this frame is in the kernel pool frame ID-based hash. */
 /*        First reset the hash if POOL has changed. */
 
-	zzpctrck_(pulctr, &lupdte);
-	if (lupdte) {
-	    zzhscini_(&c__5209, knmlst, knmpol);
-	    zzhsiini_(&c__5209, kidlst, kidpol);
+	zzpctrck_(__state->pulctr, &__state->lupdte);
+	if (__state->lupdte) {
+	    zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
+	    zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
 	}
 
 /*        Check if this ID is in the hash. */
 
-	zzhsichk_(kidlst, kidpol, kidids, frcode, &item);
-	if (item != 0) {
-	    *cent = kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kcent", i__1, "framex_", (ftnlen)1458)];
-	    *class__ = kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclass", i__1, "framex_", (ftnlen)1459)];
-	    *clssid = kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kclsid", i__1, "framex_", (ftnlen)1460)];
+	zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, frcode, &
+		__state->item);
+	if (__state->item != 0) {
+	    *cent = __state->kcent[(i__1 = __state->item - 1) < 5209 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kcent", i__1, "framex_", (ftnlen)
+		    1458)];
+	    *class__ = __state->kclass[(i__1 = __state->item - 1) < 5209 && 0 
+		    <= i__1 ? i__1 : s_rnge("kclass", i__1, "framex_", (
+		    ftnlen)1459)];
+	    *clssid = __state->kclsid[(i__1 = __state->item - 1) < 5209 && 0 
+		    <= i__1 ? i__1 : s_rnge("kclsid", i__1, "framex_", (
+		    ftnlen)1460)];
 	    *found = TRUE_;
 	} else {
 
 /*           The ID wasn't in the hash, see if we can find this frame in */
 /*           the kernel pool. */
 
-	    s_copy(pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
-	    repmi_(pname, "#", frcode, pname, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    gcpool_(pname, &c__1, &c__8, &n, line, &gotit, (ftnlen)32, (
+	    s_copy(__state->pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
+	    repmi_(__state->pname, "#", frcode, __state->pname, (ftnlen)32, (
+		    ftnlen)1, (ftnlen)32);
+	    gcpool_(__state->pname, &__state->c__1, &__state->c__8, &
+		    __state->n, __state->line, &__state->gotit, (ftnlen)32, (
 		    ftnlen)80);
-	    if (gotit) {
-		if (n > 1) {
+	    if (__state->gotit) {
+		if (__state->n > 1) {
 
 /*                 We have an array-valued variable that looks like */
 /*                 a frame name. We consider this an error. */
 
 		    setmsg_("Kernel variable # is array-valued; Frame name v"
 			    "ariables must be scalar-valued.", (ftnlen)78);
-		    errch_("#", pname, (ftnlen)1, (ftnlen)32);
+		    errch_("#", __state->pname, (ftnlen)1, (ftnlen)32);
 		    sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
 		    chkout_("FRINFO", (ftnlen)6);
 		    return 0;
 		}
-		ljust_(line, lcfram, (ftnlen)80, (ftnlen)32);
+		ljust_(__state->line, __state->lcfram, (ftnlen)80, (ftnlen)32)
+			;
 
 /*              Start by looking up the central body of the frame. The */
 /*              name of the kernel variable for the body could refer to */
 /*              the frame by name or frame ID; the body itself could be */
 /*              specified by name or body ID. */
 
-		zzdynbid_(lcfram, frcode, "CENTER", cent, (ftnlen)32, (ftnlen)
-			6);
+		zzdynbid_(__state->lcfram, frcode, "CENTER", cent, (ftnlen)32,
+			 (ftnlen)6);
 		if (failed_()) {
 		    chkout_("FRINFO", (ftnlen)6);
 		    return 0;
@@ -1734,12 +1752,12 @@ L_frinfo:
 
 /*              Next look up the frame class and class ID. */
 
-		zzdynvai_(lcfram, frcode, "CLASS", &c__1, &n, values, (ftnlen)
-			32, (ftnlen)5);
-		*class__ = values[0];
-		zzdynvai_(lcfram, frcode, "CLASS_ID", &c__1, &n, values, (
-			ftnlen)32, (ftnlen)8);
-		*clssid = values[0];
+		zzdynvai_(__state->lcfram, frcode, "CLASS", &__state->c__1, &
+			__state->n, __state->values, (ftnlen)32, (ftnlen)5);
+		*class__ = __state->values[0];
+		zzdynvai_(__state->lcfram, frcode, "CLASS_ID", &__state->c__1,
+			 &__state->n, __state->values, (ftnlen)32, (ftnlen)8);
+		*clssid = __state->values[0];
 		if (failed_()) {
 		    chkout_("FRINFO", (ftnlen)6);
 		    return 0;
@@ -1748,29 +1766,32 @@ L_frinfo:
 /*              all items for this frame. Add this frame to the */
 /*              ID-based hash. */
 
-		zzhsiadd_(kidlst, kidpol, kidids, frcode, &item, &lnew);
-		if (! failed_() && item != 0) {
-		    s_copy(kname + (((i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-			    i__1 : s_rnge("kname", i__1, "framex_", (ftnlen)
-			    1534)) << 5), lcfram, (ftnlen)32, (ftnlen)32);
-		    kcent[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kcent", i__1, "framex_", (ftnlen)1535)] = 
-			    *cent;
-		    kclass[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclass", i__1, "framex_", (ftnlen)1536)] =
-			     *class__;
-		    kclsid[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-			    s_rnge("kclsid", i__1, "framex_", (ftnlen)1537)] =
-			     *clssid;
+		zzhsiadd_(__state->kidlst, __state->kidpol, __state->kidids, 
+			frcode, &__state->item, &__state->lnew);
+		if (! failed_() && __state->item != 0) {
+		    s_copy(__state->kname + (((i__1 = __state->item - 1) < 
+			    5209 && 0 <= i__1 ? i__1 : s_rnge("kname", i__1, 
+			    "framex_", (ftnlen)1534)) << 5), __state->lcfram, 
+			    (ftnlen)32, (ftnlen)32);
+		    __state->kcent[(i__1 = __state->item - 1) < 5209 && 0 <= 
+			    i__1 ? i__1 : s_rnge("kcent", i__1, "framex_", (
+			    ftnlen)1535)] = *cent;
+		    __state->kclass[(i__1 = __state->item - 1) < 5209 && 0 <= 
+			    i__1 ? i__1 : s_rnge("kclass", i__1, "framex_", (
+			    ftnlen)1536)] = *class__;
+		    __state->kclsid[(i__1 = __state->item - 1) < 5209 && 0 <= 
+			    i__1 ? i__1 : s_rnge("kclsid", i__1, "framex_", (
+			    ftnlen)1537)] = *clssid;
 
 /*                 Also, try to add this frame to the name-based hash. */
 
-		    zzhscadd_(knmlst, knmpol, knmnms, lcfram, &item, &lnew, (
-			    ftnlen)32, (ftnlen)32);
-		    if (! failed_() && item != 0) {
-			knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? i__1 : 
-				s_rnge("knmids", i__1, "framex_", (ftnlen)
-				1547)] = *frcode;
+		    zzhscadd_(__state->knmlst, __state->knmpol, 
+			    __state->knmnms, __state->lcfram, &__state->item, 
+			    &__state->lnew, (ftnlen)32, (ftnlen)32);
+		    if (! failed_() && __state->item != 0) {
+			__state->knmids[(i__1 = __state->item - 1) < 5209 && 
+				0 <= i__1 ? i__1 : s_rnge("knmids", i__1, 
+				"framex_", (ftnlen)1547)] = *frcode;
 		    }
 		}
 	    }
@@ -1992,55 +2013,61 @@ L_cidfrm:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("CIDFRM", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     First look up in the kernel pool the frame associated with this */
 /*     center. */
 
-    s_copy(lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
-    repmi_(lookup, "#", cent, lookup, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    dtpool_(lookup, &gotit, &n, dattyp, (ftnlen)32, (ftnlen)1);
+    s_copy(__state->lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
+    repmi_(__state->lookup, "#", cent, __state->lookup, (ftnlen)32, (ftnlen)1,
+	     (ftnlen)32);
+    dtpool_(__state->lookup, &__state->gotit, &__state->n, __state->dattyp, (
+	    ftnlen)32, (ftnlen)1);
 
 /*     If we didn't find this object in the form OBJECT_<number>_FRAME */
 /*     maybe it is present in the form OBJECT_<name>_FRAME. It's */
 /*     worth a try. */
 
-    if (! gotit) {
+    if (! __state->gotit) {
 
 /*        See if we can get the name for this center's ID code. */
 
-	bodc2n_(cent, lcname, &gotit, (ftnlen)36);
-	if (gotit) {
+	bodc2n_(cent, __state->lcname, &__state->gotit, (ftnlen)36);
+	if (__state->gotit) {
 
 /*           Construct and look up the alternative name in the */
 /*           kernel pool. */
 
-	    s_copy(lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
-	    repmc_(lookup, "#", lcname, lookup, (ftnlen)32, (ftnlen)1, (
-		    ftnlen)36, (ftnlen)32);
-	    ucase_(lookup, lookup, (ftnlen)32, (ftnlen)32);
-	    dtpool_(lookup, &gotit, &n, dattyp, (ftnlen)32, (ftnlen)1);
+	    s_copy(__state->lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
+	    repmc_(__state->lookup, "#", __state->lcname, __state->lookup, (
+		    ftnlen)32, (ftnlen)1, (ftnlen)36, (ftnlen)32);
+	    ucase_(__state->lookup, __state->lookup, (ftnlen)32, (ftnlen)32);
+	    dtpool_(__state->lookup, &__state->gotit, &__state->n, 
+		    __state->dattyp, (ftnlen)32, (ftnlen)1);
 	}
     }
 
@@ -2049,45 +2076,51 @@ L_cidfrm:
 /*     an object. We assume they'll opt for the character string */
 /*     form so we test that case first. */
 
-    if (gotit) {
-	if (*(unsigned char *)dattyp == 'C') {
-	    gcpool_(lookup, &c__1, &c__1, &n, pname, &gotit, (ftnlen)32, (
+    if (__state->gotit) {
+	if (*(unsigned char *)__state->dattyp == 'C') {
+	    gcpool_(__state->lookup, &__state->c__1, &__state->c__1, &
+		    __state->n, __state->pname, &__state->gotit, (ftnlen)32, (
 		    ftnlen)32);
 
 /*           We've got the name:  See if we have this in our handy hash */
 /*           of built-in names. */
 
-	    zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (
-		    ftnlen)32);
-	    if (item != 0) {
-		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)1867)];
+	    zzhscchk_(__state->bnmlst, __state->bnmpol, __state->bnmnms, 
+		    __state->pname, &__state->item, (ftnlen)32, (ftnlen)32);
+	    if (__state->item != 0) {
+		__state->item = __state->bnmidx[(i__1 = __state->item - 1) < 
+			127 && 0 <= i__1 ? i__1 : s_rnge("bnmidx", i__1, 
+			"framex_", (ftnlen)1867)];
 	    }
-	    if (item > 0) {
-		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)1873)];
+	    if (__state->item > 0) {
+		s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		*frcode = __state->idcode[(i__1 = __state->item - 1) < 127 && 
+			0 <= i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (
+			ftnlen)1873)];
 		*found = TRUE_;
 	    } else {
 
 /*              See if this frame is in the kernel pool frame name-based */
 /*              hash. First reset the hash if POOL has changed. */
 
-		zzpctrck_(pulctr, &lupdte);
-		if (lupdte) {
-		    zzhscini_(&c__5209, knmlst, knmpol);
-		    zzhsiini_(&c__5209, kidlst, kidpol);
+		zzpctrck_(__state->pulctr, &__state->lupdte);
+		if (__state->lupdte) {
+		    zzhscini_(&__state->c__5209, __state->knmlst, 
+			    __state->knmpol);
+		    zzhsiini_(&__state->c__5209, __state->kidlst, 
+			    __state->kidpol);
 		}
 
 /*              Check if this name is in the hash. */
 
-		zzhscchk_(knmlst, knmpol, knmnms, pname, &item, (ftnlen)32, (
-			ftnlen)32);
-		if (item != 0) {
-		    s_copy(frname, pname, frname_len, (ftnlen)32);
-		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    1897)];
+		zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
+			__state->pname, &__state->item, (ftnlen)32, (ftnlen)
+			32);
+		if (__state->item != 0) {
+		    s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		    *frcode = __state->knmids[(i__1 = __state->item - 1) < 
+			    5209 && 0 <= i__1 ? i__1 : s_rnge("knmids", i__1, 
+			    "framex_", (ftnlen)1897)];
 		    *found = TRUE_;
 		} else {
 
@@ -2097,28 +2130,31 @@ L_cidfrm:
 /*                 Capture the frame name now, since we're going to */
 /*                 modify PNAME. */
 
-		    s_copy(frname, pname, frname_len, (ftnlen)32);
-		    prefix_("FRAME_", &c__0, pname, (ftnlen)6, (ftnlen)32);
-		    gipool_(pname, &c__1, &c__8, &n, values, &gotit, (ftnlen)
-			    32);
+		    s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		    prefix_("FRAME_", &__state->c__0, __state->pname, (ftnlen)
+			    6, (ftnlen)32);
+		    gipool_(__state->pname, &__state->c__1, &__state->c__8, &
+			    __state->n, __state->values, &__state->gotit, (
+			    ftnlen)32);
 		    if (failed_()) {
 			chkout_("CIDFRM", (ftnlen)6);
 			return 0;
 		    }
-		    if (n == 1 && gotit) {
-			*frcode = values[0];
+		    if (__state->n == 1 && __state->gotit) {
+			*frcode = __state->values[0];
 			*found = TRUE_;
 
 /*                    If we made it to this point, we successfully */
 /*                    mapped the kernel frame name to its ID. Add this */
 /*                    pair to the name-based hash. */
 
-			zzhscadd_(knmlst, knmpol, knmnms, frname, &item, &
-				lnew, (ftnlen)32, frname_len);
-			if (! failed_() && item != 0) {
-			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)1934)] = *frcode;
+			zzhscadd_(__state->knmlst, __state->knmpol, 
+				__state->knmnms, frname, &__state->item, &
+				__state->lnew, (ftnlen)32, frname_len);
+			if (! failed_() && __state->item != 0) {
+			    __state->knmids[(i__1 = __state->item - 1) < 5209 
+				    && 0 <= i__1 ? i__1 : s_rnge("knmids", 
+				    i__1, "framex_", (ftnlen)1934)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2127,14 +2163,15 @@ L_cidfrm:
 		    }
 		}
 	    }
-	} else if (*(unsigned char *)dattyp == 'N') {
+	} else if (*(unsigned char *)__state->dattyp == 'N') {
 
 /*           Ok. They decided to use the numeric form to specify */
 /*           the frame ID. We need to figure out the name of the frame. */
 /*           First we retrieve the frame ID they've loaded into the */
 /*           kernel pool. */
 
-	    gipool_(lookup, &c__1, &c__1, &n, values, &gotit, (ftnlen)32);
+	    gipool_(__state->lookup, &__state->c__1, &__state->c__1, &
+		    __state->n, __state->values, &__state->gotit, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("CIDFRM", (ftnlen)6);
 		return 0;
@@ -2143,53 +2180,63 @@ L_cidfrm:
 /*           We've got the frame ID, see if we already know about this */
 /*           ID code. */
 
-	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
-	    if (item != 0) {
-		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)1971)];
+	    zzhsichk_(__state->bidlst, __state->bidpol, __state->bidids, 
+		    __state->values, &__state->item);
+	    if (__state->item != 0) {
+		__state->item = __state->bididx[(i__1 = __state->item - 1) < 
+			127 && 0 <= i__1 ? i__1 : s_rnge("bididx", i__1, 
+			"framex_", (ftnlen)1971)];
 	    }
-	    if (item != 0) {
+	    if (__state->item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
-			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			1978)) << 5), frname_len, (ftnlen)32);
-		*frcode = values[0];
+		s_copy(frname, __state->name__ + (((i__1 = __state->item - 1) 
+			< 127 && 0 <= i__1 ? i__1 : s_rnge("name", i__1, 
+			"framex_", (ftnlen)1978)) << 5), frname_len, (ftnlen)
+			32);
+		*frcode = __state->values[0];
 		*found = TRUE_;
 	    } else {
 
 /*              See if this frame is in the kernel pool frame ID-based */
 /*              hash. First reset the hash if POOL has changed. */
 
-		zzpctrck_(pulctr, &lupdte);
-		if (lupdte) {
-		    zzhscini_(&c__5209, knmlst, knmpol);
-		    zzhsiini_(&c__5209, kidlst, kidpol);
+		zzpctrck_(__state->pulctr, &__state->lupdte);
+		if (__state->lupdte) {
+		    zzhscini_(&__state->c__5209, __state->knmlst, 
+			    __state->knmpol);
+		    zzhsiini_(&__state->c__5209, __state->kidlst, 
+			    __state->kidpol);
 		}
 
 /*              Check if this ID is in the hash. */
 
-		zzhsichk_(kidlst, kidpol, kidids, values, &item);
-		if (item != 0) {
-		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
-			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)2002)) << 5), frname_len, (ftnlen)32);
-		    *frcode = values[0];
+		zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, 
+			__state->values, &__state->item);
+		if (__state->item != 0) {
+		    s_copy(frname, __state->kname + (((i__1 = __state->item - 
+			    1) < 5209 && 0 <= i__1 ? i__1 : s_rnge("kname", 
+			    i__1, "framex_", (ftnlen)2002)) << 5), frname_len,
+			     (ftnlen)32);
+		    *frcode = __state->values[0];
 		    *found = TRUE_;
 		} else {
 
 /*                 It is not in the hash. See if it's in the kernel pool */
 /*                 somewhere. */
 
-		    s_copy(pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
-		    repmi_(pname, "#", values, pname, (ftnlen)32, (ftnlen)1, (
-			    ftnlen)32);
-		    gcpool_(pname, &c__1, &c__8, &n, line, &gotit, (ftnlen)32,
-			     (ftnlen)80);
-		    if (n == 1 && gotit) {
-			ljust_(line, frname, (ftnlen)80, frname_len);
-			*frcode = values[0];
+		    s_copy(__state->pname, "FRAME_#_NAME", (ftnlen)32, (
+			    ftnlen)12);
+		    repmi_(__state->pname, "#", __state->values, 
+			    __state->pname, (ftnlen)32, (ftnlen)1, (ftnlen)32)
+			    ;
+		    gcpool_(__state->pname, &__state->c__1, &__state->c__8, &
+			    __state->n, __state->line, &__state->gotit, (
+			    ftnlen)32, (ftnlen)80);
+		    if (__state->n == 1 && __state->gotit) {
+			ljust_(__state->line, frname, (ftnlen)80, frname_len);
+			*frcode = __state->values[0];
 			*found = TRUE_;
 
 /*                    Note that since we did not collect all needed */
@@ -2198,7 +2245,7 @@ L_cidfrm:
 /*                    FRINFO. */
 
 		    } else {
-			*frcode = values[0];
+			*frcode = __state->values[0];
 			s_copy(frname, " ", frname_len, (ftnlen)1);
 			*found = FALSE_;
 		    }
@@ -2229,17 +2276,19 @@ L_cidfrm:
 /*     Determine the location of the requested item in the array */
 /*     of centers. */
 
-    item = bschoi_(cent, &c__127, center, centrd);
+    __state->item = bschoi_(cent, &__state->c__127, __state->center, 
+	    __state->centrd);
 
 /*     If the name is in our list, we can just look up its ID code and */
 /*     name in the parallel array. */
 
-    if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2078)];
-	s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 
-		: s_rnge("name", i__1, "framex_", (ftnlen)2079)) << 5), 
-		frname_len, (ftnlen)32);
+    if (__state->item > 0) {
+	*frcode = __state->idcode[(i__1 = __state->item - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (ftnlen)2078)]
+		;
+	s_copy(frname, __state->name__ + (((i__1 = __state->item - 1) < 127 &&
+		 0 <= i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
+		2079)) << 5), frname_len, (ftnlen)32);
 	*found = TRUE_;
     } else {
 
@@ -2457,56 +2506,61 @@ L_cnmfrm:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("CNMFRM", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     First look up in the kernel pool the frame associated with this */
 /*     center. */
 
-    s_copy(lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
-    repmc_(lookup, "#", cname, lookup, (ftnlen)32, (ftnlen)1, cname_len, (
-	    ftnlen)32);
-    ucase_(lookup, lookup, (ftnlen)32, (ftnlen)32);
-    dtpool_(lookup, &gotit, &n, dattyp, (ftnlen)32, (ftnlen)1);
+    s_copy(__state->lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
+    repmc_(__state->lookup, "#", cname, __state->lookup, (ftnlen)32, (ftnlen)
+	    1, cname_len, (ftnlen)32);
+    ucase_(__state->lookup, __state->lookup, (ftnlen)32, (ftnlen)32);
+    dtpool_(__state->lookup, &__state->gotit, &__state->n, __state->dattyp, (
+	    ftnlen)32, (ftnlen)1);
 
 /*     If we didn't find this object in the form OBJECT_<name>_FRAME */
 /*     maybe it is present in the form OBJECT_<number>_FRAME. It's */
 /*     worth a try. */
 
-    if (! gotit) {
+    if (! __state->gotit) {
 
 /*        See if we can get the name for this center's ID code. */
 
-	bodn2c_(cname, &id, &gotit, cname_len);
-	if (gotit) {
+	bodn2c_(cname, &__state->id, &__state->gotit, cname_len);
+	if (__state->gotit) {
 
 /*           Construct and look up the alternative name in the */
 /*           kernel pool. */
 
-	    s_copy(lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
-	    repmi_(lookup, "#", &id, lookup, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    dtpool_(lookup, &gotit, &n, dattyp, (ftnlen)32, (ftnlen)1);
+	    s_copy(__state->lookup, "OBJECT_#_FRAME", (ftnlen)32, (ftnlen)14);
+	    repmi_(__state->lookup, "#", &__state->id, __state->lookup, (
+		    ftnlen)32, (ftnlen)1, (ftnlen)32);
+	    dtpool_(__state->lookup, &__state->gotit, &__state->n, 
+		    __state->dattyp, (ftnlen)32, (ftnlen)1);
 	}
     }
 
@@ -2515,45 +2569,51 @@ L_cnmfrm:
 /*     an object. We assume they'll opt for the character string */
 /*     form so we test that case first. */
 
-    if (gotit) {
-	if (*(unsigned char *)dattyp == 'C') {
-	    gcpool_(lookup, &c__1, &c__1, &n, pname, &gotit, (ftnlen)32, (
+    if (__state->gotit) {
+	if (*(unsigned char *)__state->dattyp == 'C') {
+	    gcpool_(__state->lookup, &__state->c__1, &__state->c__1, &
+		    __state->n, __state->pname, &__state->gotit, (ftnlen)32, (
 		    ftnlen)32);
 
 /*           We've got the name:  See if we have this in our handy hash */
 /*           of built-in names. */
 
-	    zzhscchk_(bnmlst, bnmpol, bnmnms, pname, &item, (ftnlen)32, (
-		    ftnlen)32);
-	    if (item != 0) {
-		item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bnmidx", i__1, "framex_", (ftnlen)2389)];
+	    zzhscchk_(__state->bnmlst, __state->bnmpol, __state->bnmnms, 
+		    __state->pname, &__state->item, (ftnlen)32, (ftnlen)32);
+	    if (__state->item != 0) {
+		__state->item = __state->bnmidx[(i__1 = __state->item - 1) < 
+			127 && 0 <= i__1 ? i__1 : s_rnge("bnmidx", i__1, 
+			"framex_", (ftnlen)2389)];
 	    }
-	    if (item > 0) {
-		s_copy(frname, pname, frname_len, (ftnlen)32);
-		*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 :
-			 s_rnge("idcode", i__1, "framex_", (ftnlen)2395)];
+	    if (__state->item > 0) {
+		s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		*frcode = __state->idcode[(i__1 = __state->item - 1) < 127 && 
+			0 <= i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (
+			ftnlen)2395)];
 		*found = TRUE_;
 	    } else {
 
 /*              See if this frame is in the kernel pool frame name-based */
 /*              hash. First reset the hash if POOL has changed. */
 
-		zzpctrck_(pulctr, &lupdte);
-		if (lupdte) {
-		    zzhscini_(&c__5209, knmlst, knmpol);
-		    zzhsiini_(&c__5209, kidlst, kidpol);
+		zzpctrck_(__state->pulctr, &__state->lupdte);
+		if (__state->lupdte) {
+		    zzhscini_(&__state->c__5209, __state->knmlst, 
+			    __state->knmpol);
+		    zzhsiini_(&__state->c__5209, __state->kidlst, 
+			    __state->kidpol);
 		}
 
 /*              Check if this name is in the hash. */
 
-		zzhscchk_(knmlst, knmpol, knmnms, pname, &item, (ftnlen)32, (
-			ftnlen)32);
-		if (item != 0) {
-		    s_copy(frname, pname, frname_len, (ftnlen)32);
-		    *frcode = knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-			    i__1 : s_rnge("knmids", i__1, "framex_", (ftnlen)
-			    2419)];
+		zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
+			__state->pname, &__state->item, (ftnlen)32, (ftnlen)
+			32);
+		if (__state->item != 0) {
+		    s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		    *frcode = __state->knmids[(i__1 = __state->item - 1) < 
+			    5209 && 0 <= i__1 ? i__1 : s_rnge("knmids", i__1, 
+			    "framex_", (ftnlen)2419)];
 		    *found = TRUE_;
 		} else {
 
@@ -2563,28 +2623,31 @@ L_cnmfrm:
 /*                 Capture the frame name now, since we're going to */
 /*                 modify PNAME. */
 
-		    s_copy(frname, pname, frname_len, (ftnlen)32);
-		    prefix_("FRAME_", &c__0, pname, (ftnlen)6, (ftnlen)32);
-		    gipool_(pname, &c__1, &c__8, &n, values, &gotit, (ftnlen)
-			    32);
+		    s_copy(frname, __state->pname, frname_len, (ftnlen)32);
+		    prefix_("FRAME_", &__state->c__0, __state->pname, (ftnlen)
+			    6, (ftnlen)32);
+		    gipool_(__state->pname, &__state->c__1, &__state->c__8, &
+			    __state->n, __state->values, &__state->gotit, (
+			    ftnlen)32);
 		    if (failed_()) {
 			chkout_("CNMFRM", (ftnlen)6);
 			return 0;
 		    }
-		    if (n == 1 && gotit) {
-			*frcode = values[0];
+		    if (__state->n == 1 && __state->gotit) {
+			*frcode = __state->values[0];
 			*found = TRUE_;
 
 /*                    If we made it to this point, we successfully */
 /*                    mapped the kernel frame name to its ID. Add this */
 /*                    pair to the name-based hash. */
 
-			zzhscadd_(knmlst, knmpol, knmnms, frname, &item, &
-				lnew, (ftnlen)32, frname_len);
-			if (! failed_() && item != 0) {
-			    knmids[(i__1 = item - 1) < 5209 && 0 <= i__1 ? 
-				    i__1 : s_rnge("knmids", i__1, "framex_", (
-				    ftnlen)2456)] = *frcode;
+			zzhscadd_(__state->knmlst, __state->knmpol, 
+				__state->knmnms, frname, &__state->item, &
+				__state->lnew, (ftnlen)32, frname_len);
+			if (! failed_() && __state->item != 0) {
+			    __state->knmids[(i__1 = __state->item - 1) < 5209 
+				    && 0 <= i__1 ? i__1 : s_rnge("knmids", 
+				    i__1, "framex_", (ftnlen)2456)] = *frcode;
 			}
 		    } else {
 			*frcode = 0;
@@ -2593,14 +2656,15 @@ L_cnmfrm:
 		    }
 		}
 	    }
-	} else if (*(unsigned char *)dattyp == 'N') {
+	} else if (*(unsigned char *)__state->dattyp == 'N') {
 
 /*           Ok. They decided to use the numeric form to specify */
 /*           the frame ID. We need to figure out the name of the frame. */
 /*           First we retrieve the frame ID they've loaded into the */
 /*           kernel pool. */
 
-	    gipool_(lookup, &c__1, &c__1, &n, values, &gotit, (ftnlen)32);
+	    gipool_(__state->lookup, &__state->c__1, &__state->c__1, &
+		    __state->n, __state->values, &__state->gotit, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("CNMFRM", (ftnlen)6);
 		return 0;
@@ -2609,53 +2673,63 @@ L_cnmfrm:
 /*           We've got the frame ID, see if we already know about this */
 /*           ID code. */
 
-	    zzhsichk_(bidlst, bidpol, bidids, values, &item);
-	    if (item != 0) {
-		item = bididx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : 
-			s_rnge("bididx", i__1, "framex_", (ftnlen)2493)];
+	    zzhsichk_(__state->bidlst, __state->bidpol, __state->bidids, 
+		    __state->values, &__state->item);
+	    if (__state->item != 0) {
+		__state->item = __state->bididx[(i__1 = __state->item - 1) < 
+			127 && 0 <= i__1 ? i__1 : s_rnge("bididx", i__1, 
+			"framex_", (ftnlen)2493)];
 	    }
-	    if (item != 0) {
+	    if (__state->item != 0) {
 
 /*              Just look up the name and set the frame code. */
 
-		s_copy(frname, name__ + (((i__1 = item - 1) < 127 && 0 <= 
-			i__1 ? i__1 : s_rnge("name", i__1, "framex_", (ftnlen)
-			2500)) << 5), frname_len, (ftnlen)32);
-		*frcode = values[0];
+		s_copy(frname, __state->name__ + (((i__1 = __state->item - 1) 
+			< 127 && 0 <= i__1 ? i__1 : s_rnge("name", i__1, 
+			"framex_", (ftnlen)2500)) << 5), frname_len, (ftnlen)
+			32);
+		*frcode = __state->values[0];
 		*found = TRUE_;
 	    } else {
 
 /*              See if this frame is in the kernel pool frame ID-based */
 /*              hash. First reset the hash if POOL has changed. */
 
-		zzpctrck_(pulctr, &lupdte);
-		if (lupdte) {
-		    zzhscini_(&c__5209, knmlst, knmpol);
-		    zzhsiini_(&c__5209, kidlst, kidpol);
+		zzpctrck_(__state->pulctr, &__state->lupdte);
+		if (__state->lupdte) {
+		    zzhscini_(&__state->c__5209, __state->knmlst, 
+			    __state->knmpol);
+		    zzhsiini_(&__state->c__5209, __state->kidlst, 
+			    __state->kidpol);
 		}
 
 /*              Check if this ID is in the hash. */
 
-		zzhsichk_(kidlst, kidpol, kidids, values, &item);
-		if (item != 0) {
-		    s_copy(frname, kname + (((i__1 = item - 1) < 5209 && 0 <= 
-			    i__1 ? i__1 : s_rnge("kname", i__1, "framex_", (
-			    ftnlen)2524)) << 5), frname_len, (ftnlen)32);
-		    *frcode = values[0];
+		zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, 
+			__state->values, &__state->item);
+		if (__state->item != 0) {
+		    s_copy(frname, __state->kname + (((i__1 = __state->item - 
+			    1) < 5209 && 0 <= i__1 ? i__1 : s_rnge("kname", 
+			    i__1, "framex_", (ftnlen)2524)) << 5), frname_len,
+			     (ftnlen)32);
+		    *frcode = __state->values[0];
 		    *found = TRUE_;
 		} else {
 
 /*                 It is not in the hash. See if it's in the kernel pool */
 /*                 somewhere. */
 
-		    s_copy(pname, "FRAME_#_NAME", (ftnlen)32, (ftnlen)12);
-		    repmi_(pname, "#", values, pname, (ftnlen)32, (ftnlen)1, (
-			    ftnlen)32);
-		    gcpool_(pname, &c__1, &c__8, &n, line, &gotit, (ftnlen)32,
-			     (ftnlen)80);
-		    if (n == 1 && gotit) {
-			ljust_(line, frname, (ftnlen)80, frname_len);
-			*frcode = values[0];
+		    s_copy(__state->pname, "FRAME_#_NAME", (ftnlen)32, (
+			    ftnlen)12);
+		    repmi_(__state->pname, "#", __state->values, 
+			    __state->pname, (ftnlen)32, (ftnlen)1, (ftnlen)32)
+			    ;
+		    gcpool_(__state->pname, &__state->c__1, &__state->c__8, &
+			    __state->n, __state->line, &__state->gotit, (
+			    ftnlen)32, (ftnlen)80);
+		    if (__state->n == 1 && __state->gotit) {
+			ljust_(__state->line, frname, (ftnlen)80, frname_len);
+			*frcode = __state->values[0];
 			*found = TRUE_;
 
 /*                    Note that since we did not collect all needed */
@@ -2664,7 +2738,7 @@ L_cnmfrm:
 /*                    FRINFO. */
 
 		    } else {
-			*frcode = values[0];
+			*frcode = __state->values[0];
 			s_copy(frname, " ", frname_len, (ftnlen)1);
 			*found = FALSE_;
 		    }
@@ -2691,18 +2765,21 @@ L_cnmfrm:
 /*     Determine the location of the requested item in the array */
 /*     of centers. */
 
-    zzhscchk_(bnmlst, bnmpol, bnmnms, frname, &item, (ftnlen)32, frname_len);
-    if (item != 0) {
-	item = bnmidx[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"bnmidx", i__1, "framex_", (ftnlen)2587)];
+    zzhscchk_(__state->bnmlst, __state->bnmpol, __state->bnmnms, frname, &
+	    __state->item, (ftnlen)32, frname_len);
+    if (__state->item != 0) {
+	__state->item = __state->bnmidx[(i__1 = __state->item - 1) < 127 && 0 
+		<= i__1 ? i__1 : s_rnge("bnmidx", i__1, "framex_", (ftnlen)
+		2587)];
     }
 
 /*     If the name is in our hash, we can just look up its ID code and */
 /*     name in the parallel array. */
 
-    if (item > 0) {
-	*frcode = idcode[(i__1 = item - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge(
-		"idcode", i__1, "framex_", (ftnlen)2596)];
+    if (__state->item > 0) {
+	*frcode = __state->idcode[(i__1 = __state->item - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (ftnlen)2596)]
+		;
 	*found = TRUE_;
     } else {
 
@@ -2924,27 +3001,30 @@ L_ccifrm:
 
 /*     Perform any needed first pass initializations. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(pulctr);
+	zzctruin_(__state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&c__5209, kidlst, kidpol);
-	zzhscini_(&c__5209, knmlst, knmpol);
+	zzhsiini_(&__state->c__5209, __state->kidlst, __state->kidpol);
+	zzhscini_(&__state->c__5209, __state->knmlst, __state->knmpol);
 
 /*        Initialize built-in frame tables and hashes. */
 
-	zzfdat_(&c__127, &c__127, name__, idcode, center, type__, typeid, 
-		centrd, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+	zzfdat_(&__state->c__127, &__state->c__127, __state->name__, 
+		__state->idcode, __state->center, __state->type__, 
+		__state->typeid, __state->centrd, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("CCIFRM", (ftnlen)6);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     No frame found so far. */
@@ -2955,21 +3035,24 @@ L_ccifrm:
 /*     with the input class and class ID. Unfortunately, this is a */
 /*     linear search. */
 
-    for (i__ = 1; i__ <= 127; ++i__) {
-	if (type__[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("type",
-		 i__1, "framex_", (ftnlen)2871)] == *class__ && typeid[(i__2 =
-		 i__ - 1) < 127 && 0 <= i__2 ? i__2 : s_rnge("typeid", i__2, 
-		"framex_", (ftnlen)2871)] == *clssid) {
+    for (__state->i__ = 1; __state->i__ <= 127; ++__state->i__) {
+	if (__state->type__[(i__1 = __state->i__ - 1) < 127 && 0 <= i__1 ? 
+		i__1 : s_rnge("type", i__1, "framex_", (ftnlen)2871)] == *
+		class__ && __state->typeid[(i__2 = __state->i__ - 1) < 127 && 
+		0 <= i__2 ? i__2 : s_rnge("typeid", i__2, "framex_", (ftnlen)
+		2871)] == *clssid) {
 
 /*           We have a match. Assign the output arguments and return. */
 
-	    s_copy(frname, name__ + (((i__1 = i__ - 1) < 127 && 0 <= i__1 ? 
-		    i__1 : s_rnge("name", i__1, "framex_", (ftnlen)2876)) << 
-		    5), frname_len, (ftnlen)32);
-	    *frcode = idcode[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("idcode", i__1, "framex_", (ftnlen)2877)];
-	    *cent = center[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("center", i__1, "framex_", (ftnlen)2878)];
+	    s_copy(frname, __state->name__ + (((i__1 = __state->i__ - 1) < 
+		    127 && 0 <= i__1 ? i__1 : s_rnge("name", i__1, "framex_", 
+		    (ftnlen)2876)) << 5), frname_len, (ftnlen)32);
+	    *frcode = __state->idcode[(i__1 = __state->i__ - 1) < 127 && 0 <= 
+		    i__1 ? i__1 : s_rnge("idcode", i__1, "framex_", (ftnlen)
+		    2877)];
+	    *cent = __state->center[(i__1 = __state->i__ - 1) < 127 && 0 <= 
+		    i__1 ? i__1 : s_rnge("center", i__1, "framex_", (ftnlen)
+		    2878)];
 	    *found = TRUE_;
 	    chkout_("CCIFRM", (ftnlen)6);
 	    return 0;
@@ -2983,58 +3066,65 @@ L_ccifrm:
 /*     the frame specifications in the kernel pool. Start out by looking */
 /*     the frame class assignments from any loaded frame specifications. */
 
-    s_copy(lookup, "FRAME_*_CLASS", (ftnlen)32, (ftnlen)13);
-    start = 1;
-    gnpool_(lookup, &start, &c__100, &n, kvbuff, &fnd, (ftnlen)32, (ftnlen)32)
-	    ;
-    while(fnd && n > 0) {
+    s_copy(__state->lookup, "FRAME_*_CLASS", (ftnlen)32, (ftnlen)13);
+    __state->start = 1;
+    gnpool_(__state->lookup, &__state->start, &__state->c__100, &__state->n, 
+	    __state->kvbuff, &__state->fnd, (ftnlen)32, (ftnlen)32);
+    while(__state->fnd && __state->n > 0) {
 
 /*        For each kernel variable name found in the buffer, look up the */
 /*        associated class. If the class matches the input class, look */
 /*        up the class ID as well. Set the output arguments and return */
 /*        if we get a complete match. */
 
-	i__1 = n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    gipool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "framex_", (ftnlen)2910)) << 5), &
-		    c__1, &c__1, &n, &kvclss, &fnd, (ftnlen)32);
+	i__1 = __state->n;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    gipool_(__state->kvbuff + (((i__2 = __state->i__ - 1) < 100 && 0 
+		    <= i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_", (
+		    ftnlen)2910)) << 5), &__state->c__1, &__state->c__1, &
+		    __state->n, &__state->kvclss, &__state->fnd, (ftnlen)32);
 	    if (failed_()) {
 		chkout_("CCIFRM", (ftnlen)6);
 		return 0;
 	    }
-	    if (! fnd) {
+	    if (! __state->fnd) {
 		setmsg_("Invalid frame specification found in kernel pool: f"
 			"rame class keyword is # but integer class was not as"
 			"sociated with this keyword.", (ftnlen)130);
-		errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)2923)
-			) << 5), (ftnlen)1, (ftnlen)32);
+		errch_("#", __state->kvbuff + (((i__2 = __state->i__ - 1) < 
+			100 && 0 <= i__2 ? i__2 : s_rnge("kvbuff", i__2, 
+			"framex_", (ftnlen)2923)) << 5), (ftnlen)1, (ftnlen)
+			32);
 		sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		chkout_("CCIFRM", (ftnlen)6);
 		return 0;
 	    }
-	    if (kvclss == *class__) {
+	    if (__state->kvclss == *class__) {
 
 /*              Get the class ID for the current frame. */
 
-		s_copy(look2, kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ?
-			 i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			2934)) << 5), (ftnlen)32, (ftnlen)32);
-		suffix_("_ID", &c__0, look2, (ftnlen)3, (ftnlen)32);
-		gipool_(look2, &c__1, &c__1, &n, &kvclid, &fnd, (ftnlen)32);
+		s_copy(__state->look2, __state->kvbuff + (((i__2 = 
+			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
+			"kvbuff", i__2, "framex_", (ftnlen)2934)) << 5), (
+			ftnlen)32, (ftnlen)32);
+		suffix_("_ID", &__state->c__0, __state->look2, (ftnlen)3, (
+			ftnlen)32);
+		gipool_(__state->look2, &__state->c__1, &__state->c__1, &
+			__state->n, &__state->kvclid, &__state->fnd, (ftnlen)
+			32);
 		if (failed_()) {
 		    chkout_("CCIFRM", (ftnlen)6);
 		    return 0;
 		}
-		if (! fnd) {
+		if (! __state->fnd) {
 		    setmsg_("Invalid frame specification found in kernel poo"
 			    "l: frame class keyword is # but associated integ"
 			    "er class ID assignment was not found.", (ftnlen)
 			    132);
-		    errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
-			    i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_", (
-			    ftnlen)2952)) << 5), (ftnlen)1, (ftnlen)32);
+		    errch_("#", __state->kvbuff + (((i__2 = __state->i__ - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("kvbuff", i__2,
+			     "framex_", (ftnlen)2952)) << 5), (ftnlen)1, (
+			    ftnlen)32);
 		    sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 		    chkout_("CCIFRM", (ftnlen)6);
 		    return 0;
@@ -3043,7 +3133,7 @@ L_ccifrm:
 /*              Check the class ID for the current kernel variable */
 /*              against the input value. */
 
-		if (kvclid == *clssid) {
+		if (__state->kvclid == *clssid) {
 
 /*                 We have a match. We need to return the frame */
 /*                 ID, frame name, and center. As long as we're */
@@ -3053,21 +3143,23 @@ L_ccifrm:
 /*                 Look up the frame name first. Create the frame */
 /*                 name keyword. */
 
-		    repmc_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			    i__2 : s_rnge("kvbuff", i__2, "framex_", (ftnlen)
-			    2973)) << 5), "_CLASS", "_NAME", look2, (ftnlen)
-			    32, (ftnlen)6, (ftnlen)5, (ftnlen)32);
-		    gcpool_(look2, &c__1, &c__1, &n, frname, &fnd, (ftnlen)32,
-			     frname_len);
-		    if (! fnd) {
+		    repmc_(__state->kvbuff + (((i__2 = __state->i__ - 1) < 
+			    100 && 0 <= i__2 ? i__2 : s_rnge("kvbuff", i__2, 
+			    "framex_", (ftnlen)2973)) << 5), "_CLASS", "_NAME"
+			    , __state->look2, (ftnlen)32, (ftnlen)6, (ftnlen)
+			    5, (ftnlen)32);
+		    gcpool_(__state->look2, &__state->c__1, &__state->c__1, &
+			    __state->n, frname, &__state->fnd, (ftnlen)32, 
+			    frname_len);
+		    if (! __state->fnd) {
 			setmsg_("Invalid frame specification found in kernel"
 				" pool: frame class keyword is # but associat"
 				"ed frame name assignment was not found.", (
 				ftnlen)126);
-			errch_("#", kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("kvbuff", i__2, "framex_"
-				, (ftnlen)2983)) << 5), (ftnlen)1, (ftnlen)32)
-				;
+			errch_("#", __state->kvbuff + (((i__2 = __state->i__ 
+				- 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("kvb"
+				"uff", i__2, "framex_", (ftnlen)2983)) << 5), (
+				ftnlen)1, (ftnlen)32);
 			sigerr_("SPICE(INVALIDFRAMEDEF)", (ftnlen)22);
 			chkout_("CCIFRM", (ftnlen)6);
 			return 0;
@@ -3077,15 +3169,16 @@ L_ccifrm:
 /*                 instead we'll make sure that the ID is defined in the */
 /*                 kernel pool. */
 
-		    s_copy(look2, frname, (ftnlen)32, frname_len);
-		    prefix_("FRAME_", &c__0, look2, (ftnlen)6, (ftnlen)32);
-		    gipool_(look2, &c__1, &c__1, &n, frcode, &fnd, (ftnlen)32)
-			    ;
+		    s_copy(__state->look2, frname, (ftnlen)32, frname_len);
+		    prefix_("FRAME_", &__state->c__0, __state->look2, (ftnlen)
+			    6, (ftnlen)32);
+		    gipool_(__state->look2, &__state->c__1, &__state->c__1, &
+			    __state->n, frcode, &__state->fnd, (ftnlen)32);
 		    if (failed_()) {
 			chkout_("CCIFRM", (ftnlen)6);
 			return 0;
 		    }
-		    if (! fnd) {
+		    if (! __state->fnd) {
 			setmsg_("Invalid frame specification found in kernel"
 				" pool: frame name is is # but associated fra"
 				"me ID assignment was not found.", (ftnlen)118)
@@ -3125,8 +3218,9 @@ L_ccifrm:
 
 /*        Get the next buffer full of frame class keywords. */
 
-	start += n;
-	gnpool_(lookup, &start, &c__100, &n, kvbuff, &fnd, (ftnlen)32, (
+	__state->start += __state->n;
+	gnpool_(__state->lookup, &__state->start, &__state->c__100, &
+		__state->n, __state->kvbuff, &__state->fnd, (ftnlen)32, (
 		ftnlen)32);
     }
 

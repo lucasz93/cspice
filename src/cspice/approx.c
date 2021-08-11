@@ -1,9 +1,17 @@
-/* approx.f -- translated by f2c (version 19980913).
+/* approx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int approx_state_t;
+static approx_state_t* get_approx_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            APPROX ( Approximate equality ) */
 logical approx_(doublereal *x, doublereal *y, doublereal *tol)
@@ -12,6 +20,9 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
     doublereal d__1;
     logical ret_val;
 
+
+    /* Module state */
+    approx_state_t* __state = get_approx_state();
 /* $ Abstract */
 
 /*     True if two double precision numbers are equal to within some */

@@ -1,9 +1,21 @@
-/* ljucrs.f -- translated by f2c (version 19980913).
+/* ljucrs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern ljucrs_init_t __ljucrs_init;
+static ljucrs_state_t* get_ljucrs_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ljucrs)
+		state->ljucrs = __cspice_allocate_module(sizeof(
+	ljucrs_state_t), &__ljucrs_init, sizeof(__ljucrs_init));
+	return state->ljucrs;
+
+}
 
 /* $Procedure      LJUCRS ( Left-justify, Uppercase, Compress ) */
 /* Subroutine */ int ljucrs_(integer *n, char *input, char *output, ftnlen 
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -21,11 +32,16 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer lowa, lowz;
-    integer i__, j, inlen;
-    static integer shift;
-    integer count, outlen, ich;
+    integer i__;
+    integer j;
+    integer inlen;
+    integer count;
+    integer outlen;
+    integer ich;
 
+
+    /* Module state */
+    ljucrs_state_t* __state = get_ljucrs_state();
 /* $ Abstract */
 
 /*     Left-justify, uppercase, and space-compress a character string. */
@@ -156,11 +172,11 @@
 /*     need to reinitialize the boundary values used for comparisons */
 /*     and the shift on each call. */
 
-    if (first) {
-	first = FALSE_;
-	lowa = 'a';
-	lowz = 'z';
-	shift = 'A' - lowa;
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->lowa = 'a';
+	__state->lowz = 'z';
+	__state->shift = 'A' - __state->lowa;
     }
 
 /*     Find out how much space there is in the INPUT and OUTPUT strings */
@@ -207,8 +223,9 @@
 
 		++j;
 		ich = *(unsigned char *)&input[i__ - 1];
-		if (ich >= lowa && ich <= lowz) {
-		    *(unsigned char *)&output[j - 1] = (char) (ich + shift);
+		if (ich >= __state->lowa && ich <= __state->lowz) {
+		    *(unsigned char *)&output[j - 1] = (char) (ich + 
+			    __state->shift);
 		} else {
 		    *(unsigned char *)&output[j - 1] = *(unsigned char *)&
 			    input[i__ - 1];

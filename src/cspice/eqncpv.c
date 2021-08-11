@@ -1,13 +1,21 @@
-/* eqncpv.f -- translated by f2c (version 19980913).
+/* eqncpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b13 = 1.;
+extern eqncpv_init_t __eqncpv_init;
+static eqncpv_state_t* get_eqncpv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->eqncpv)
+		state->eqncpv = __cspice_allocate_module(sizeof(
+	eqncpv_state_t), &__eqncpv_init, sizeof(__eqncpv_init));
+	return state->eqncpv;
+
+}
 
 /* $Procedure      EQNCPV (Equinoctial Elements to position and velocity) */
 /* Subroutine */ int eqncpv_(doublereal *et, doublereal *epoch, doublereal *
@@ -15,7 +23,6 @@ static doublereal c_b13 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;
@@ -25,31 +32,68 @@ static doublereal c_b13 = 1.;
 	    doublereal *, doublereal *);
 
     /* Local variables */
-    doublereal nfac, node, mldt, temp[3], a, b, h__, k, l, eecan, p, q, r__;
+    doublereal nfac;
+    doublereal node;
+    doublereal mldt;
+    doublereal temp[3];
+    doublereal a;
+    doublereal b;
+    doublereal h__;
+    doublereal k;
+    doublereal l;
+    doublereal eecan;
+    doublereal p;
+    doublereal q;
+    doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal dlpdt, prate;
+    doublereal dlpdt;
+    doublereal prate;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal xhold[6];
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     doublereal trans[9]	/* was [3][3] */;
     extern doublereal twopi_(void);
-    doublereal x1, y1;
+    doublereal x1;
+    doublereal y1;
     extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    doublereal ca, cd, cf, di, cn, ra, sa, rb, sd, dt, sf, ml, dx, dy, vf[3], 
-	    vg[3], sn, nodedt;
+    doublereal ca;
+    doublereal cd;
+    doublereal cf;
+    doublereal di;
+    doublereal cn;
+    doublereal ra;
+    doublereal sa;
+    doublereal rb;
+    doublereal sd;
+    doublereal dt;
+    doublereal sf;
+    doublereal ml;
+    doublereal dx;
+    doublereal dy;
+    doublereal vf[3];
+    doublereal vg[3];
+    doublereal sn;
+    doublereal nodedt;
     extern doublereal kepleq_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    static doublereal pi2;
-    doublereal dx1, dy1;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    doublereal dx1;
+    doublereal dy1;
     extern logical return_(void);
-    doublereal ecc, can, dlp, san;
+    doublereal ecc;
+    doublereal can;
+    doublereal dlp;
+    doublereal san;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    eqncpv_state_t* __state = get_eqncpv_state();
 /* $ Abstract */
 
 /*     Compute the state (position and velocity of an object whose */
@@ -334,9 +378,9 @@ static doublereal c_b13 = 1.;
 /*     The first time through this routine we fetch the various */
 /*     constants we need for this routine. */
 
-    if (first) {
-	first = FALSE_;
-	pi2 = twopi_();
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->pi2 = twopi_();
     }
 
 /*     Take care of the various errors that can arise with the */
@@ -486,7 +530,7 @@ static doublereal c_b13 = 1.;
 /*     Compute the mean longitude */
 
     d__1 = mldt * dt;
-    ml = l + d_mod(&d__1, &pi2);
+    ml = l + d_mod(&d__1, &__state->pi2);
 
 /*     Obtain the eccentric longitude from Kepler's equation */
 
@@ -536,7 +580,7 @@ static doublereal c_b13 = 1.;
     temp[0] = -nodedt * xhold[1];
     temp[1] = nodedt * xhold[0];
     temp[2] = 0.;
-    vlcom3_(&c_b13, temp, &dx, vf, &dy, vg, &xhold[3]);
+    vlcom3_(&__state->c_b13, temp, &dx, vf, &dy, vg, &xhold[3]);
 
 /*     Transform to an inertial state vector */
 

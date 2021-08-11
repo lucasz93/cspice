@@ -1,15 +1,21 @@
-/* sgmeta.f -- translated by f2c (version 19980913).
+/* sgmeta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__15 = 15;
+extern sgmeta_init_t __sgmeta_init;
+static sgmeta_state_t* get_sgmeta_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sgmeta)
+		state->sgmeta = __cspice_allocate_module(sizeof(
+	sgmeta_state_t), &__sgmeta_init, sizeof(__sgmeta_init));
+	return state->sgmeta;
+
+}
 
 /* $Procedure      SGMETA ( Generic segments: Fetch meta data value ) */
 /* Subroutine */ int sgmeta_(integer *handle, doublereal *descr, integer *
@@ -17,42 +23,43 @@ static integer c__15 = 15;
 {
     /* Initialized data */
 
-    static integer lstbeg = -1;
-    static integer lsthan = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
-    static doublereal equiv_0[2];
 
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
 
     /* Local variables */
-    static integer meta[17];
-    integer begm1, i__, begin;
+    integer begm1;
+    integer i__;
+    integer begin;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-#define dtemp (equiv_0)
+#define dtemp (__state->equiv_0)
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal xmeta[17];
-#define itemp ((integer *)equiv_0)
+#define itemp ((integer *)__state->equiv_0)
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
-    integer niovr2, nd;
+    integer niovr2;
+    integer nd;
     extern logical failed_(void);
     integer ni;
     extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
-    integer begmta, endmta, ametas;
-    static logical nieven;
-    static integer ioffst;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer begmta;
+    integer endmta;
+    integer ametas;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal dmtasz;
-    static integer metasz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer end;
 
+
+    /* Module state */
+    sgmeta_state_t* __state = get_sgmeta_state();
 /* $ Abstract */
 
 /*     Obtain the value of a specified generic segment meta data item. */
@@ -701,17 +708,17 @@ static integer c__15 = 15;
 /*     worry about the first time through, since LSTHAN and LSTBEG are */
 /*     set to values that are bogus for actual DAF files. */
 
-    if (*handle == lsthan) {
+    if (*handle == __state->lsthan) {
 
 /*        Get the begin and end values from the descriptor. They are */
 /*        located in the last two "integer" positions of the descriptor. */
 
-	if (nieven) {
-	    moved_(&descr[ioffst - 1], &c__1, dtemp);
+	if (__state->nieven) {
+	    moved_(&descr[__state->ioffst - 1], &__state->c__1, dtemp);
 	    begin = itemp[0];
 	    end = itemp[1];
 	} else {
-	    moved_(&descr[ioffst - 1], &c__2, dtemp);
+	    moved_(&descr[__state->ioffst - 1], &__state->c__2, dtemp);
 	    begin = itemp[1];
 	    end = itemp[2];
 	}
@@ -719,14 +726,14 @@ static integer c__15 = 15;
 /*        Check the segment start address. This will tell us whether we */
 /*        are looking at the same segment. */
 
-	if (lstbeg == begin) {
+	if (__state->lstbeg == begin) {
 
 /*        The only acceptable integer mnemonics at this point are 1 */
 /*        through METASZ inclusive, and NMETA.  All other requests */
 /*        should signal the SPICE(UNKNOWNMETAITEM) error, since the */
 /*        current segment has no knowledge of these values. */
 
-	    if (*mnemon <= 0 || *mnemon > metasz && *mnemon != 17) {
+	    if (*mnemon <= 0 || *mnemon > __state->metasz && *mnemon != 17) {
 		chkin_("SGMETA", (ftnlen)6);
 		*value = -1;
 		setmsg_("The item requested, #, is not one of the recognized"
@@ -740,8 +747,8 @@ static integer c__15 = 15;
 
 /*           Set the value for the desired meta data item and return. */
 
-	    *value = meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : 
-		    s_rnge("meta", i__1, "sgmeta_", (ftnlen)364)];
+	    *value = __state->meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? 
+		    i__1 : s_rnge("meta", i__1, "sgmeta_", (ftnlen)364)];
 	    return 0;
 	}
     }
@@ -752,26 +759,26 @@ static integer c__15 = 15;
 /*     we need to fetch them.  First check in. */
 
     chkin_("SGMETA", (ftnlen)6);
-    if (*handle != lsthan) {
+    if (*handle != __state->lsthan) {
 	dafhsf_(handle, &nd, &ni);
 	if (failed_()) {
 	    chkout_("SGMETA", (ftnlen)6);
 	    return 0;
 	}
 	niovr2 = ni / 2;
-	nieven = niovr2 << 1 == ni;
-	ioffst = nd + niovr2;
-	lsthan = *handle;
+	__state->nieven = niovr2 << 1 == ni;
+	__state->ioffst = nd + niovr2;
+	__state->lsthan = *handle;
 
 /*        Get the begin and end values from the descriptor. They are */
 /*        located in the last two "integer" positions of the descriptor. */
 
-	if (nieven) {
-	    moved_(&descr[ioffst - 1], &c__1, dtemp);
+	if (__state->nieven) {
+	    moved_(&descr[__state->ioffst - 1], &__state->c__1, dtemp);
 	    begin = itemp[0];
 	    end = itemp[1];
 	} else {
-	    moved_(&descr[ioffst - 1], &c__2, dtemp);
+	    moved_(&descr[__state->ioffst - 1], &__state->c__2, dtemp);
 	    begin = itemp[1];
 	    end = itemp[2];
 	}
@@ -781,7 +788,7 @@ static integer c__15 = 15;
 /*     this from the IF block above, or we computed it in the very */
 /*     first IF block. */
 
-    lstbeg = begin;
+    __state->lstbeg = begin;
 
 /*     Compute the begin address of the meta data and compute the */
 /*     end address of the number we will be collecting. */
@@ -791,22 +798,22 @@ static integer c__15 = 15;
 	chkout_("SGMETA", (ftnlen)6);
 	return 0;
     }
-    metasz = i_dnnt(&dmtasz);
+    __state->metasz = i_dnnt(&dmtasz);
 
 /*     Store the actual meta size in AMETAS, in case METASZ ends up */
 /*     being modified to conform to our current understanding of */
 /*     meta data items. */
 
-    ametas = metasz;
+    ametas = __state->metasz;
 
 /*     Check to see if METASZ is an unacceptable value. */
 
-    if (metasz < 15) {
+    if (__state->metasz < 15) {
 	*value = -1;
 	setmsg_("This segment reports that it has # meta data items. Every g"
 		"eneric segment must have at least #.", (ftnlen)95);
-	errint_("#", &metasz, (ftnlen)1);
-	errint_("#", &c__15, (ftnlen)1);
+	errint_("#", &__state->metasz, (ftnlen)1);
+	errint_("#", &__state->c__15, (ftnlen)1);
 	sigerr_("SPICE(INVALIDMETADATA)", (ftnlen)22);
 	chkout_("SGMETA", (ftnlen)6);
 	return 0;
@@ -819,21 +826,21 @@ static integer c__15 = 15;
 /*     meta data size by 1. The number of meta data items is always */
 /*     after all of the meta data items, so we can do this. */
 
-    } else if (metasz == 15) {
-	++metasz;
-	ametas = metasz;
+    } else if (__state->metasz == 15) {
+	++__state->metasz;
+	ametas = __state->metasz;
 
 /*     If not check to see if METASZ is greater than the known MXMETA. */
 /*     If it is then this segment most likely was constructed from */
 /*     some newer version of the toolkit.  Load what meta data we */
 /*     currently know about as laid out in sgparam.inc. */
 
-    } else if (metasz > 17) {
+    } else if (__state->metasz > 17) {
 
 /*        Leave AMETAS alone, since we need to know how far back */
 /*        into the DAF file to begin reading. */
 
-	metasz = 17;
+	__state->metasz = 17;
     }
 
 /*     The address computations that follow are precisely the same */
@@ -841,7 +848,7 @@ static integer c__15 = 15;
 /*     METASZ.  This only happens when METASZ is greater than MXMETA. */
 
     begmta = end - ametas + 1;
-    endmta = begmta + metasz - 1;
+    endmta = begmta + __state->metasz - 1;
     dafgda_(handle, &begmta, &endmta, xmeta);
     if (failed_()) {
 	chkout_("SGMETA", (ftnlen)6);
@@ -850,12 +857,12 @@ static integer c__15 = 15;
 
 /*     Convert all of the meta data values into integers. */
 
-    i__1 = metasz;
+    i__1 = __state->metasz;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("meta", i__2, 
-		"sgmeta_", (ftnlen)503)] = i_dnnt(&xmeta[(i__3 = i__ - 1) < 
-		17 && 0 <= i__3 ? i__3 : s_rnge("xmeta", i__3, "sgmeta_", (
-		ftnlen)503)]);
+	__state->meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(
+		"meta", i__2, "sgmeta_", (ftnlen)503)] = i_dnnt(&xmeta[(i__3 =
+		 i__ - 1) < 17 && 0 <= i__3 ? i__3 : s_rnge("xmeta", i__3, 
+		"sgmeta_", (ftnlen)503)]);
     }
 
 /*     The kludge continues... NMETA and MXMETA are ALWAYS the same */
@@ -863,29 +870,29 @@ static integer c__15 = 15;
 /*     value, META(METASZ-1), and the end value, META(NMETA), so we zero */
 /*     them out. */
 
-    meta[16] = metasz;
-    for (i__ = metasz; i__ <= 16; ++i__) {
-	meta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge("meta", i__1, 
-		"sgmeta_", (ftnlen)515)] = 0;
+    __state->meta[16] = __state->metasz;
+    for (i__ = __state->metasz; i__ <= 16; ++i__) {
+	__state->meta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(
+		"meta", i__1, "sgmeta_", (ftnlen)515)] = 0;
     }
 
 /*     Adjust the bases so that the N'th item of a partition is at */
 /*     address META(PARTITION_BASE) + N */
 
     begm1 = begin - 1;
-    meta[0] += begm1;
-    meta[5] += begm1;
-    meta[2] += begm1;
-    meta[7] += begm1;
-    meta[10] += begm1;
-    meta[12] += begm1;
+    __state->meta[0] += begm1;
+    __state->meta[5] += begm1;
+    __state->meta[2] += begm1;
+    __state->meta[7] += begm1;
+    __state->meta[10] += begm1;
+    __state->meta[12] += begm1;
 
 /*     The only acceptable integer mnemonics at this point are 1 through */
 /*     METASZ inclusive, and NMETA.  All other requests should signal */
 /*     the SPICE(UNKNOWNMETAITEM) error, since the current segment has */
 /*     no knowledge of these values. */
 
-    if (*mnemon <= 0 || *mnemon > metasz && *mnemon != 17) {
+    if (*mnemon <= 0 || *mnemon > __state->metasz && *mnemon != 17) {
 	*value = -1;
 	setmsg_("The item requested, #, is not one of the recognized meta da"
 		"ta items associated with this generic segment.", (ftnlen)105);
@@ -898,8 +905,8 @@ static integer c__15 = 15;
 /*     Set the value for the desired meta data item, check out if we */
 /*     need to, and return. */
 
-    *value = meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(
-	    "meta", i__1, "sgmeta_", (ftnlen)555)];
+    *value = __state->meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : 
+	    s_rnge("meta", i__1, "sgmeta_", (ftnlen)555)];
     chkout_("SGMETA", (ftnlen)6);
     return 0;
 } /* sgmeta_ */

@@ -1,9 +1,17 @@
-/* zzspksb0.f -- translated by f2c (version 19980913).
+/* zzspksb0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzspksb0_state_t;
+static zzspksb0_state_t* get_zzspksb0_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZSPKSB0 ( S/P Kernel, solar system barycenter ) */
 /* Subroutine */ int zzspksb0_(integer *targ, doublereal *et, char *ref, 
@@ -11,12 +19,15 @@
 {
     integer bary;
     extern /* Subroutine */ int zzspkgo0_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), chkin_(char *, 
-	    ftnlen);
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal lt;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzspksb0_state_t* __state = get_zzspksb0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

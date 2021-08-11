@@ -1,14 +1,21 @@
-/* dskb02.f -- translated by f2c (version 19980913).
+/* dskb02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__6 = 6;
+extern dskb02_init_t __dskb02_init;
+static dskb02_state_t* get_dskb02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskb02)
+		state->dskb02 = __cspice_allocate_module(sizeof(
+	dskb02_state_t), &__dskb02_init, sizeof(__dskb02_init));
+	return state->dskb02;
+
+}
 
 /* $Procedure DSKB02 ( DSK, fetch type 2 bookkeeping data ) */
 /* Subroutine */ int dskb02_(integer *handle, integer *dladsc, integer *nv, 
@@ -21,18 +28,25 @@ static integer c__6 = 6;
 
     /* Local variables */
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    integer b, e, ibase;
+    integer b;
+    integer e;
+    integer ibase;
     doublereal dbuff[10];
     integer ibuff[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer dpbase;
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
-	    ;
+	    doublereal *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskb02_state_t* __state = get_dskb02_state();
 /* $ Abstract */
 
 /*     Return bookkeeping data from a DSK type 2 segment. */
@@ -891,14 +905,14 @@ static integer c__6 = 6;
     *voxnpt = ibuff[7];
     *voxnpl = ibuff[8];
     *vtxnpl = ibuff[9];
-    movei_(&ibuff[3], &c__3, vgrext);
+    movei_(&ibuff[3], &__state->c__3, vgrext);
 
 /*     Read the d.p. parameters. */
 
     b = dpbase + 25;
     e = dpbase + 34;
     dasrdd_(handle, &b, &e, dbuff);
-    moved_(dbuff, &c__6, vtxbds);
+    moved_(dbuff, &__state->c__6, vtxbds);
     vequ_(&dbuff[6], voxori);
     *voxsiz = dbuff[9];
     chkout_("DSKB02", (ftnlen)6);

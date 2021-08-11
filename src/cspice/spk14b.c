@@ -1,15 +1,21 @@
-/* spk14b.f -- translated by f2c (version 19980913).
+/* spk14b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__14 = 14;
-static integer c__1 = 1;
-static integer c__3 = 3;
+extern spk14b_init_t __spk14b_init;
+static spk14b_state_t* get_spk14b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spk14b)
+		state->spk14b = __cspice_allocate_module(sizeof(
+	spk14b_state_t), &__spk14b_init, sizeof(__spk14b_init));
+	return state->spk14b;
+
+}
 
 /* $Procedure      SPK14B ( SPK type 14: Begin a segment.) */
 /* Subroutine */ int spk14b_(integer *handle, char *segid, integer *body, 
@@ -21,15 +27,20 @@ static integer c__3 = 3;
     extern logical failed_(void);
     doublereal dcoeff;
     integer ncoeff;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), sgbwfs_(integer *, doublereal *, char *, integer *, 
-	    doublereal *, integer *, integer *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), spkpds_(integer *, 
-	    integer *, char *, integer *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
     integer pktsiz;
 
+
+    /* Module state */
+    spk14b_state_t* __state = get_spk14b_state();
 /* $ Abstract */
 
 /*     Begin a type 14 SPK segment in the SPK file associated with */
@@ -814,7 +825,8 @@ static integer c__3 = 3;
 
 /*     Create a descriptor for the segment we are about to write. */
 
-    spkpds_(body, center, frame, &c__14, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__14, first, last, descr, 
+	    frame_len);
     if (failed_()) {
 	chkout_("SPK14B", (ftnlen)6);
 	return 0;
@@ -834,7 +846,8 @@ static integer c__3 = 3;
 /*     epoch. These characteristics are prescribed by the mnemonic EXPLE. */
 /*     See the include file 'sgparam.inc' for more details. */
 
-    sgbwfs_(handle, descr, segid, &c__1, &dcoeff, &pktsiz, &c__3, segid_len);
+    sgbwfs_(handle, descr, segid, &__state->c__1, &dcoeff, &pktsiz, &
+	    __state->c__3, segid_len);
 
 /*     No need to check FAILED() here, since all we do is check out. */
 /*     Leave it up to the caller. */

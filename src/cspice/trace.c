@@ -1,9 +1,17 @@
-/* trace.f -- translated by f2c (version 19980913).
+/* trace.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int trace_state_t;
+static trace_state_t* get_trace_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure                      TRACE ( Trace of a 3x3 matrix ) */
 doublereal trace_(doublereal *matrix)
@@ -11,6 +19,9 @@ doublereal trace_(doublereal *matrix)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    trace_state_t* __state = get_trace_state();
 /* $ Abstract */
 
 /*      Return the trace of a 3x3 matrix. */

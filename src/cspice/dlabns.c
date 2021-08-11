@@ -1,33 +1,49 @@
-/* dlabns.f -- translated by f2c (version 19980913).
+/* dlabns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c_n1 = -1;
-static integer c__8 = 8;
+extern dlabns_init_t __dlabns_init;
+static dlabns_state_t* get_dlabns_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dlabns)
+		state->dlabns = __cspice_allocate_module(sizeof(
+	dlabns_state_t), &__dlabns_init, sizeof(__dlabns_init));
+	return state->dlabns;
+
+}
 
 /* $Procedure DLABNS ( DLA, begin new segment ) */
 /* Subroutine */ int dlabns_(integer *handle)
 {
-    integer addr__, this__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), filli_(integer *, 
-	    integer *, integer *);
-    integer descr[8], lastc, lastd, lasti;
+    integer addr__;
+    integer this__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    integer descr[8];
+    integer lastc;
+    integer lastd;
+    integer lasti;
     extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
-	    daslla_(integer *, integer *, integer *, integer *), dasrdi_(
-	    integer *, integer *, integer *, integer *), dasudi_(integer *, 
-	    integer *, integer *, integer *), dassih_(integer *, char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer sgptrs[2];
 
+
+    /* Module state */
+    dlabns_state_t* __state = get_dlabns_state();
 /* $ Abstract */
 
 /*     Begin a new segment in a DLA file. */
@@ -514,7 +530,7 @@ static integer c__8 = 8;
 /*     descriptors in the file.  If no segments are present, */
 /*     the pointers will contain the value NULPTR. */
 
-    dasrdi_(handle, &c__2, &c__3, sgptrs);
+    dasrdi_(handle, &__state->c__2, &__state->c__3, sgptrs);
 
 /*     Find the last DAS logical addresses in use for each data type. */
 
@@ -527,7 +543,7 @@ static integer c__8 = 8;
 /*     due to the initialization of the file's last segment pointer */
 /*     to NULPTR. */
 
-    filli_(&c_n1, &c__8, descr);
+    filli_(&__state->c_n1, &__state->c__8, descr);
     descr[0] = sgptrs[1];
 
 /*     Set the descriptor's component base addresses now.  The */
@@ -547,7 +563,7 @@ static integer c__8 = 8;
 
 /*     Append the descriptor to the file. */
 
-    dasadi_(handle, &c__8, descr);
+    dasadi_(handle, &__state->c__8, descr);
 
 /*     THIS is the pointer to the current descriptor. */
 
@@ -566,9 +582,9 @@ static integer c__8 = 8;
 /*     this segment. */
 
     if (sgptrs[0] == -1) {
-	dasudi_(handle, &c__2, &c__2, &this__);
+	dasudi_(handle, &__state->c__2, &__state->c__2, &this__);
     }
-    dasudi_(handle, &c__3, &c__3, &this__);
+    dasudi_(handle, &__state->c__3, &__state->c__3, &this__);
 
 /*     Leave the file open.  The segment is now ready to be */
 /*     populated with data.  The routines DASADC, DASADD, and */

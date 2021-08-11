@@ -1,13 +1,21 @@
-/* zzvstrng.f -- translated by f2c (version 19980913).
+/* zzvstrng.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__14 = 14;
+extern zzvstrng_init_t __zzvstrng_init;
+static zzvstrng_state_t* get_zzvstrng_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzvstrng)
+		state->zzvstrng = __cspice_allocate_module(sizeof(
+	zzvstrng_state_t), &__zzvstrng_init, sizeof(__zzvstrng_init));
+	return state->zzvstrng;
+
+}
 
 /* $Procedure       ZZVSTRNG ( Virtual String ) */
 /* Subroutine */ int zzvstrng_0_(int n__, doublereal *x, char *fill, integer *
@@ -16,9 +24,6 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static char string[30] = " 0.0000000000000E+00          ";
-    static integer exp__ = 0;
-    static char myfill[1] = " ";
 
     /* System generated locals */
     integer i__1, i__2;
@@ -29,14 +34,11 @@ static integer c__14 = 14;
     logical l_ge(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer code;
-    static logical incr;
-    static integer lsub, slot, code0, i__, j, blank, value;
-    static logical minus;
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
 	    ftnlen);
-    static char letter[1];
 
+    /* Module state */
+    zzvstrng_state_t* __state = get_zzvstrng_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -354,8 +356,8 @@ L_zzvststr:
 
 
 /* -& */
-    *(unsigned char *)&myfill[0] = *(unsigned char *)fill;
-    dpstr_(x, &c__14, string, (ftnlen)30);
+    *(unsigned char *)&__state->myfill[0] = *(unsigned char *)fill;
+    dpstr_(x, &__state->c__14, __state->string, (ftnlen)30);
 
 /*     Parse the exponent, string looks like the pattern presented */
 /*     below: */
@@ -371,22 +373,23 @@ L_zzvststr:
 /*                      | */
 /*                      ESGN = MAXSIG + 4 */
 
-    code0 = '0';
-    blank = ' ';
-    minus = *(unsigned char *)&string[17] == '-';
-    code = *(unsigned char *)&string[18];
-    exp__ = code - code0;
-    i__ = 20;
-    code = *(unsigned char *)&string[i__ - 1];
-    while(code != blank) {
-	exp__ = exp__ * 10 + (code - code0);
-	++i__;
-	code = *(unsigned char *)&string[i__ - 1];
+    __state->code0 = '0';
+    __state->blank = ' ';
+    __state->minus = *(unsigned char *)&__state->string[17] == '-';
+    __state->code = *(unsigned char *)&__state->string[18];
+    __state->exp__ = __state->code - __state->code0;
+    __state->i__ = 20;
+    __state->code = *(unsigned char *)&__state->string[__state->i__ - 1];
+    while(__state->code != __state->blank) {
+	__state->exp__ = __state->exp__ * 10 + (__state->code - 
+		__state->code0);
+	++__state->i__;
+	__state->code = *(unsigned char *)&__state->string[__state->i__ - 1];
     }
-    if (minus) {
-	exp__ = -exp__;
+    if (__state->minus) {
+	__state->exp__ = -__state->exp__;
     }
-    *expont = exp__;
+    *expont = __state->exp__;
     return 0;
 /* $Procedure      ZZVSBSTR ( Virtual String Character ) */
 
@@ -586,13 +589,13 @@ L_zzvsbstr:
 /*     to left.  First thing we do is get the index of the right most */
 /*     significant portion of SUBSTR that we will manipulate. */
 
-    j = *to - *from + 1;
-    lsub = i_len(substr, substr_len);
+    __state->j = *to - *from + 1;
+    __state->lsub = i_len(substr, substr_len);
 
 /*     Blank pad to the right of J (if there's anything to pad). */
 
-    if (j < lsub) {
-	i__1 = j;
+    if (__state->j < __state->lsub) {
+	i__1 = __state->j;
 	s_copy(substr + i__1, " ", substr_len - i__1, (ftnlen)1);
     }
 
@@ -600,38 +603,40 @@ L_zzvsbstr:
 /*     slot after TO. */
 
     if (*rnd) {
-	slot = *to + 1;
+	__state->slot = *to + 1;
 
 /*        If this points to the decimal point, move one more to the */
 /*        right. */
 
-	if (slot == 0) {
-	    ++slot;
+	if (__state->slot == 0) {
+	    ++__state->slot;
 	}
 
 /*        Determine which digit D_i corresponds to SLOT. */
 
-	if (slot < 0) {
-	    i__ = exp__ + slot + 1;
+	if (__state->slot < 0) {
+	    __state->i__ = __state->exp__ + __state->slot + 1;
 	} else {
-	    i__ = exp__ + slot;
+	    __state->i__ = __state->exp__ + __state->slot;
 	}
 
 /*        We will need to round in D_i is 5 or more. */
 
-	if (i__ < 0) {
-	    *(unsigned char *)letter = '0';
-	} else if (i__ == 0) {
-	    *(unsigned char *)letter = *(unsigned char *)&string[1];
-	} else if (i__ < 14) {
-	    i__1 = i__ + 2;
-	    s_copy(letter, string + i__1, (ftnlen)1, i__ + 3 - i__1);
+	if (__state->i__ < 0) {
+	    *(unsigned char *)__state->letter = '0';
+	} else if (__state->i__ == 0) {
+	    *(unsigned char *)__state->letter = *(unsigned char *)&
+		    __state->string[1];
+	} else if (__state->i__ < 14) {
+	    i__1 = __state->i__ + 2;
+	    s_copy(__state->letter, __state->string + i__1, (ftnlen)1, 
+		    __state->i__ + 3 - i__1);
 	} else {
-	    *(unsigned char *)letter = '0';
+	    *(unsigned char *)__state->letter = '0';
 	}
-	incr = l_ge(letter, "5", (ftnlen)1, (ftnlen)1);
+	__state->incr = l_ge(__state->letter, "5", (ftnlen)1, (ftnlen)1);
     } else {
-	incr = FALSE_;
+	__state->incr = FALSE_;
     }
 
 /*     Starting at the right most slot, we work left incrementing */
@@ -639,88 +644,95 @@ L_zzvsbstr:
 /*     some value, we are done incrementing. */
 
     i__1 = *from;
-    for (slot = *to; slot >= i__1; --slot) {
-	if (slot == 0) {
-	    *(unsigned char *)letter = '.';
+    for (__state->slot = *to; __state->slot >= i__1; --__state->slot) {
+	if (__state->slot == 0) {
+	    *(unsigned char *)__state->letter = '.';
 	} else {
 
 /*           Otherwise we need to first see which digit, d_I, is being */
 /*           requested. */
 
-	    if (slot < 0) {
-		i__ = exp__ + slot + 1;
+	    if (__state->slot < 0) {
+		__state->i__ = __state->exp__ + __state->slot + 1;
 	    } else {
-		i__ = exp__ + slot;
+		__state->i__ = __state->exp__ + __state->slot;
 	    }
 
 /*           Now just look up d_I according to the rule we established */
 /*           earlier. */
 
-	    if (i__ < 0) {
+	    if (__state->i__ < 0) {
 
 /*              If the SLOT is prior to the first significant character */
 /*              or the virtual string, we use the fill character. */
 /*              Otherwise we use a zero. */
 
-		if (incr) {
-		    *(unsigned char *)letter = '1';
-		    incr = FALSE_;
+		if (__state->incr) {
+		    *(unsigned char *)__state->letter = '1';
+		    __state->incr = FALSE_;
 		} else {
-		    if (slot < -1) {
-			*(unsigned char *)letter = *(unsigned char *)&myfill[
-				0];
+		    if (__state->slot < -1) {
+			*(unsigned char *)__state->letter = *(unsigned char *)
+				&__state->myfill[0];
 		    } else {
-			*(unsigned char *)letter = '0';
+			*(unsigned char *)__state->letter = '0';
 		    }
 		}
-	    } else if (i__ == 0) {
-		*(unsigned char *)letter = *(unsigned char *)&string[1];
+	    } else if (__state->i__ == 0) {
+		*(unsigned char *)__state->letter = *(unsigned char *)&
+			__state->string[1];
 
 /*              If necessary, increment LETTER. */
 
-		if (incr) {
-		    value = *(unsigned char *)letter - code0 + 1;
+		if (__state->incr) {
+		    __state->value = *(unsigned char *)__state->letter - 
+			    __state->code0 + 1;
 
 /*                 If value is 10 or more we will need to */
 /*                 increment the next character too.  If VALUE */
 /*                 is less than 10, we are done incrementing set */
 /*                 INCR to NO. */
 
-		    if (value == 10) {
-			*(unsigned char *)letter = '0';
+		    if (__state->value == 10) {
+			*(unsigned char *)__state->letter = '0';
 		    } else {
-			*(unsigned char *)letter = (char) (value + code0);
-			incr = FALSE_;
+			*(unsigned char *)__state->letter = (char) (
+				__state->value + __state->code0);
+			__state->incr = FALSE_;
 		    }
 		}
-	    } else if (i__ < 14) {
+	    } else if (__state->i__ < 14) {
 
 /*              This case is virtually identical to the previous */
 /*              case, except that we need to pick off a different */
 /*              letter from STRING. */
 
-		i__2 = i__ + 2;
-		s_copy(letter, string + i__2, (ftnlen)1, i__ + 3 - i__2);
-		if (incr) {
-		    value = *(unsigned char *)letter - code0 + 1;
-		    if (value == 10) {
-			*(unsigned char *)letter = '0';
+		i__2 = __state->i__ + 2;
+		s_copy(__state->letter, __state->string + i__2, (ftnlen)1, 
+			__state->i__ + 3 - i__2);
+		if (__state->incr) {
+		    __state->value = *(unsigned char *)__state->letter - 
+			    __state->code0 + 1;
+		    if (__state->value == 10) {
+			*(unsigned char *)__state->letter = '0';
 		    } else {
-			*(unsigned char *)letter = (char) (value + code0);
-			incr = FALSE_;
+			*(unsigned char *)__state->letter = (char) (
+				__state->value + __state->code0);
+			__state->incr = FALSE_;
 		    }
 		}
 	    } else {
-		*(unsigned char *)letter = '0';
-		incr = FALSE_;
+		*(unsigned char *)__state->letter = '0';
+		__state->incr = FALSE_;
 	    }
 	}
-	if (j <= lsub) {
-	    *(unsigned char *)&substr[j - 1] = *(unsigned char *)letter;
+	if (__state->j <= __state->lsub) {
+	    *(unsigned char *)&substr[__state->j - 1] = *(unsigned char *)
+		    __state->letter;
 	}
-	--j;
+	--__state->j;
     }
-    *did = incr;
+    *did = __state->incr;
     return 0;
 } /* zzvstrng_ */
 

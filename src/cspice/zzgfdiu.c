@@ -1,13 +1,21 @@
-/* zzgfdiu.f -- translated by f2c (version 19980913).
+/* zzgfdiu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzgfdiu_init_t __zzgfdiu_init;
+static zzgfdiu_state_t* get_zzgfdiu_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfdiu)
+		state->zzgfdiu = __cspice_allocate_module(sizeof(
+	zzgfdiu_state_t), &__zzgfdiu_init, sizeof(__zzgfdiu_init));
+	return state->zzgfdiu;
+
+}
 
 /* $Procedure ZZGFDIU ( Private --- GF, distance utilities ) */
 /* Subroutine */ int zzgfdiu_0_(int n__, char *target, char *abcorr, char *
@@ -15,28 +23,30 @@ static integer c__0 = 0;
 	dist, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen), chkin_(
-	    char *, ftnlen), ucase_(char *, char *, ftnlen, ftnlen), errch_(
-	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     doublereal state[6];
-    static integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen), bods2c_(
-	    char *, integer *, logical *, ftnlen);
+	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     doublereal lt;
     logical attblk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    static integer svtarg;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
-    static char svcorr[5];
     extern /* Subroutine */ int zzgfdiq_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    zzgfdiu_state_t* __state = get_zzgfdiu_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -504,7 +514,7 @@ L_zzgfdiin:
 
 /*     Find NAIF IDs for TARGET and OBSRVR. */
 
-    bods2c_(target, &svtarg, &found, target_len);
+    bods2c_(target, &__state->svtarg, &found, target_len);
     if (! found) {
 	setmsg_("The target object, '#', is not a recognized name for an eph"
 		"emeris object. The cause of this problem may be that you nee"
@@ -514,7 +524,7 @@ L_zzgfdiin:
 	chkout_("ZZGFDIIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &svobs, &found, obsrvr_len);
+    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -527,7 +537,7 @@ L_zzgfdiin:
 
 /*     Make sure the observer and target are distinct. */
 
-    if (svtarg == svobs) {
+    if (__state->svtarg == __state->svobs) {
 	setmsg_("The observer and target must be distinct objects, but are n"
 		"ot: OBSRVR = #; TARGET = #.", (ftnlen)86);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -540,13 +550,14 @@ L_zzgfdiin:
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &c__0, abcorr, svcorr, (ftnlen)1, abcorr_len, (ftnlen)5);
-    ucase_(svcorr, svcorr, (ftnlen)5, (ftnlen)5);
+    cmprss_(" ", &__state->c__0, abcorr, __state->svcorr, (ftnlen)1, 
+	    abcorr_len, (ftnlen)5);
+    ucase_(__state->svcorr, __state->svcorr, (ftnlen)5, (ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(svcorr, attblk, (ftnlen)5);
+    zzvalcor_(__state->svcorr, attblk, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFDIIN", (ftnlen)8);
 	return 0;
@@ -706,8 +717,8 @@ L_zzgfdidc:
 	return 0;
     }
     chkin_("ZZGFDIDC", (ftnlen)8);
-    spkez_(&svtarg, et, "J2000", svcorr, &svobs, state, &lt, (ftnlen)5, (
-	    ftnlen)5);
+    spkez_(&__state->svtarg, et, "J2000", __state->svcorr, &__state->svobs, 
+	    state, &lt, (ftnlen)5, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFDIDC", (ftnlen)8);
 	return 0;
@@ -852,7 +863,8 @@ L_zzgfdigq:
 	return 0;
     }
     chkin_("ZZGFDIGQ", (ftnlen)8);
-    zzgfdiq_(&svtarg, et, svcorr, &svobs, dist, (ftnlen)5);
+    zzgfdiq_(&__state->svtarg, et, __state->svcorr, &__state->svobs, dist, (
+	    ftnlen)5);
     chkout_("ZZGFDIGQ", (ftnlen)8);
     return 0;
 } /* zzgfdiu_ */

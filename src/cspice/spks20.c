@@ -1,13 +1,21 @@
-/* spks20.f -- translated by f2c (version 19980913).
+/* spks20.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__7 = 7;
+extern spks20_init_t __spks20_init;
+static spks20_state_t* get_spks20_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks20)
+		state->spks20 = __cspice_allocate_module(sizeof(
+	spks20_state_t), &__spks20_init, sizeof(__spks20_init));
+	return state->spks20;
+
+}
 
 /* $Procedure      SPKS20 ( S/P Kernel, subset, type 20 ) */
 /* Subroutine */ int spks20_(integer *handle, integer *baddr, integer *eaddr, 
@@ -21,21 +29,35 @@ static integer c__7 = 7;
 
     /* Local variables */
     doublereal data[100];
-    integer addr__, nrec, last, move;
+    integer addr__;
+    integer nrec;
+    integer last;
+    integer move;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal btime;
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
-    doublereal dscale, subbeg, tscale;
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    doublereal dscale;
+    doublereal subbeg;
+    doublereal tscale;
     integer remain;
-    doublereal subijd, initjd, intlen, subifr, initfr;
+    doublereal subijd;
+    doublereal initjd;
+    doublereal intlen;
+    doublereal subifr;
+    doublereal initfr;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     doublereal intrvl;
     extern logical return_(void);
-    extern doublereal j2000_(void), spd_(void);
+    extern doublereal j2000_(void);
+    extern doublereal spd_(void);
 
+
+    /* Module state */
+    spks20_state_t* __state = get_spks20_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 20 */
@@ -255,7 +277,7 @@ static integer c__7 = 7;
     data[4] = intlen;
     data[5] = (doublereal) recsiz;
     data[6] = (doublereal) nrec;
-    dafada_(data, &c__7);
+    dafada_(data, &__state->c__7);
     chkout_("SPKS20", (ftnlen)6);
     return 0;
 } /* spks20_ */

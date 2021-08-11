@@ -1,16 +1,24 @@
-/* zzbodvcd.f -- translated by f2c (version 19980913).
+/* zzbodvcd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzbodvcd_state_t;
+static zzbodvcd_state_t* get_zzbodvcd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZBODVCD ( Get d.p. kernel variable for body, with bypass ) */
 /* Subroutine */ int zzbodvcd_(integer *bodyid, char *item, integer *maxn, 
 	integer *varctr, integer *n, doublereal *values, ftnlen item_len)
 {
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *), chkin_(char *
-	    , ftnlen);
+    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
 	    *, doublereal *, ftnlen);
@@ -18,6 +26,9 @@
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzbodvcd_state_t* __state = get_zzbodvcd_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

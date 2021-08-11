@@ -1,9 +1,17 @@
-/* cylsph.f -- translated by f2c (version 19980913).
+/* cylsph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cylsph_state_t;
+static cylsph_state_t* get_cylsph_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYLSPH ( Cylindrical to spherical ) */
 /* Subroutine */ int cylsph_(doublereal *r__, doublereal *longc, doublereal *
@@ -16,8 +24,15 @@
     double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal x, y, rh, th, big;
+    doublereal x;
+    doublereal y;
+    doublereal rh;
+    doublereal th;
+    doublereal big;
 
+
+    /* Module state */
+    cylsph_state_t* __state = get_cylsph_state();
 /* $ Abstract */
 
 /*     Convert from cylindrical to spherical coordinates. */

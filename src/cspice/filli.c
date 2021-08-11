@@ -1,9 +1,17 @@
-/* filli.f -- translated by f2c (version 19980913).
+/* filli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int filli_state_t;
+static filli_state_t* get_filli_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FILLI ( Fill an integer array ) */
 /* Subroutine */ int filli_(integer *value, integer *ndim, integer *array)
@@ -14,6 +22,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    filli_state_t* __state = get_filli_state();
 /* $ Abstract */
 
 /*      Fill an integer array with a specified value. */

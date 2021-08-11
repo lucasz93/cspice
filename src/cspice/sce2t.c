@@ -1,9 +1,17 @@
-/* sce2t.f -- translated by f2c (version 19980913).
+/* sce2t.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sce2t_state_t;
+static sce2t_state_t* get_sce2t_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCE2T ( ET to discrete SCLK ticks ) */
 /* Subroutine */ int sce2t_(integer *sc, doublereal *et, doublereal *sclkdp)
@@ -12,13 +20,19 @@
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scet01_(integer *, 
-	    doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scet01_(integer *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer sctype_(integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    sce2t_state_t* __state = get_sce2t_state();
 /* $ Abstract */
 
 /*     Convert ephemeris seconds past J2000 (ET) to integral */

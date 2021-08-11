@@ -1,9 +1,17 @@
-/* traceg.f -- translated by f2c (version 19980913).
+/* traceg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int traceg_state_t;
+static traceg_state_t* get_traceg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  TRACEG ( Trace of a matrix, general dimension ) */
 doublereal traceg_(doublereal *matrix, integer *ndim)
@@ -18,6 +26,9 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    traceg_state_t* __state = get_traceg_state();
 /* $ Abstract */
 
 /*      Return the trace of a square matrix of arbitrary dimension. */
@@ -139,15 +150,15 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
     /* Parameter adjustments */
     matrix_dim1 = *ndim;
     matrix_dim2 = *ndim;
-    matrix_offset = matrix_dim1 + 1;
+    matrix_offset = 1 + matrix_dim1 * 1;
 
     /* Function Body */
     ret_val = 0.;
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ret_val += matrix[(i__2 = i__ + i__ * matrix_dim1 - matrix_offset) < 
-		matrix_dim1 * matrix_dim2 && 0 <= i__2 ? i__2 : s_rnge("matr"
-		"ix", i__2, "traceg_", (ftnlen)133)];
+		1 * matrix_dim1 * matrix_dim2 && 0 <= i__2 ? i__2 : s_rnge(
+		"matrix", i__2, "traceg_", (ftnlen)133)];
     }
     return ret_val;
 } /* traceg_ */

@@ -1,15 +1,21 @@
-/* zzgfssob.f -- translated by f2c (version 19980913).
+/* zzgfssob.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__3 = 3;
-static doublereal c_b40 = 1.;
+extern zzgfssob_init_t __zzgfssob_init;
+static zzgfssob_state_t* get_zzgfssob_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfssob)
+		state->zzgfssob = __cspice_allocate_module(sizeof(
+	zzgfssob_state_t), &__zzgfssob_init, sizeof(__zzgfssob_init));
+	return state->zzgfssob;
+
+}
 
 /* $Procedure      ZZGFSSOB ( GF, state of sub-observer point ) */
 /* Subroutine */ int zzgfssob_(char *method, integer *trgid, doublereal *et, 
@@ -19,11 +25,6 @@ static doublereal c_b40 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer prvobs = 0;
-    static integer prvtrg = 0;
-    static char svobs[36] = "                                    ";
-    static char svtarg[36] = "                                    ";
 
     /* System generated locals */
     integer i__1;
@@ -33,29 +34,33 @@ static doublereal c_b40 = 1.;
 
     /* Local variables */
     doublereal dalt[2];
-    logical near__, geom;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vscl_(
-	    doublereal *, doublereal *, doublereal *);
+    logical near__;
+    logical geom;
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
+	    );
     extern doublereal vdot_(doublereal *, doublereal *);
     logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *);
     doublereal upos[3];
     extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *), zzcorsxf_(logical *,
-	     doublereal *, doublereal *, doublereal *);
+	    *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
+	    *, doublereal *);
     integer i__;
     extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
     doublereal t;
     extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal savel[3];
     logical found;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     vsubg_(doublereal *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
     doublereal stemp[6];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal xform[36]	/* was [6][6] */;
@@ -69,33 +74,62 @@ static doublereal c_b40 = 1.;
     integer frcode;
     extern doublereal clight_(void);
     extern logical return_(void);
-    doublereal corxfi[36]	/* was [6][6] */, corxfm[36]	/* was [6][6] 
-	    */, fxosta[6], fxpsta[6], fxpvel[3], fxtsta[6], obspnt[6], obssta[
-	    12]	/* was [6][2] */, obstrg[6], acc[3], pntsta[6], raysta[6], 
-	    sastat[6], spoint[3], srfvec[3], ssbobs[6], ssbtrg[6], trgepc;
-    integer center, clssid, frclss;
-    logical attblk[6], usestl;
+    doublereal corxfi[36]	/* was [6][6] */;
+    doublereal corxfm[36]	/* was [6][6] */;
+    doublereal fxosta[6];
+    doublereal fxpsta[6];
+    doublereal fxpvel[3];
+    doublereal fxtsta[6];
+    doublereal obspnt[6];
+    doublereal obssta[12]	/* was [6][2] */;
+    doublereal obstrg[6];
+    doublereal acc[3];
+    doublereal pntsta[6];
+    doublereal raysta[6];
+    doublereal sastat[6];
+    doublereal spoint[3];
+    doublereal srfvec[3];
+    doublereal ssbobs[6];
+    doublereal ssbtrg[6];
+    doublereal trgepc;
+    integer center;
+    integer clssid;
+    integer frclss;
+    logical attblk[6];
+    logical usestl;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     logical fnd;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(integer *, 
-	    integer *, integer *, integer *, logical *), errint_(char *, 
-	    integer *, ftnlen), spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), vminug_(
-	    doublereal *, integer *, doublereal *), dnearp_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *), surfpv_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
+	    ;
+    extern /* Subroutine */ int dnearp_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    , subpnt_(char *, char *, doublereal *, char *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen), spkssb_(integer *, doublereal *, char *, 
+	    ;
+    extern /* Subroutine */ int surfpv_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    ;
+    extern /* Subroutine */ int subpnt_(char *, char *, doublereal *, char *, 
+	    char *, char *, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
 	    doublereal *, ftnlen);
     doublereal dlt;
     extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), qderiv_(integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), invstm_(doublereal *, 
-	    doublereal *);
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    zzgfssob_state_t* __state = get_zzgfssob_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -794,15 +828,15 @@ static doublereal c_b40 = 1.;
 	return 0;
     }
     chkin_("ZZGFSSOB", (ftnlen)8);
-    if (first || *trgid != prvtrg) {
-	bodc2s_(trgid, svtarg, (ftnlen)36);
-	prvtrg = *trgid;
+    if (__state->first || *trgid != __state->prvtrg) {
+	bodc2s_(trgid, __state->svtarg, (ftnlen)36);
+	__state->prvtrg = *trgid;
     }
-    if (first || *obsid != prvobs) {
-	bodc2s_(obsid, svobs, (ftnlen)36);
-	prvobs = *obsid;
+    if (__state->first || *obsid != __state->prvobs) {
+	bodc2s_(obsid, __state->svobs, (ftnlen)36);
+	__state->prvobs = *obsid;
     }
-    first = FALSE_;
+    __state->first = FALSE_;
 
 /*     Parse the aberration correction specifier. */
 
@@ -874,7 +908,7 @@ static doublereal c_b40 = 1.;
 /*        Compute the state of the observer with respect to the target */
 /*        in the body-fixed frame. */
 
-	vminug_(fxtsta, &c__6, fxosta);
+	vminug_(fxtsta, &__state->c__6, fxosta);
 
 /*        Now we can obtain the surface velocity of the sub-observer */
 /*        point. */
@@ -900,7 +934,7 @@ static doublereal c_b40 = 1.;
 /*           the negative of the observer's position relative */
 /*           to the target center. */
 
-	    vminug_(fxosta, &c__6, raysta);
+	    vminug_(fxosta, &__state->c__6, raysta);
 	    surfpv_(fxosta, raysta, radii, &radii[1], &radii[2], fxpsta, &
 		    found);
 
@@ -975,9 +1009,9 @@ static doublereal c_b40 = 1.;
 /*        Note that SUBPNT will signal an error if FIXREF is not */
 /*        actually centered on the target body. */
 
-	subpnt_(method, svtarg, et, fixref, abcorr, svobs, spoint, &trgepc, 
-		srfvec, method_len, (ftnlen)36, fixref_len, abcorr_len, (
-		ftnlen)36);
+	subpnt_(method, __state->svtarg, et, fixref, abcorr, __state->svobs, 
+		spoint, &trgepc, srfvec, method_len, (ftnlen)36, fixref_len, 
+		abcorr_len, (ftnlen)36);
 
 /*        Get J2000-relative states of observer and target with respect */
 /*        to the solar system barycenter at their respective epochs of */
@@ -999,8 +1033,8 @@ static doublereal c_b40 = 1.;
 /*        body-fixed frame. At this point we don't know the */
 /*        point's velocity; set it to zero. */
 
-	moved_(spoint, &c__3, fxpsta);
-	cleard_(&c__3, &fxpsta[3]);
+	moved_(spoint, &__state->c__3, fxpsta);
+	cleard_(&__state->c__3, &fxpsta[3]);
 	if (usestl) {
 
 /*           We're going to need the acceleration of the observer */
@@ -1023,7 +1057,8 @@ static doublereal c_b40 = 1.;
 /*           Compute the observer's acceleration using a quadratic */
 /*           approximation. */
 
-	    qderiv_(&c__3, &obssta[3], &obssta[9], &c_b40, acc);
+	    qderiv_(&__state->c__3, &obssta[3], &obssta[9], &__state->c_b40, 
+		    acc);
 	}
 
 /*        The rest of the algorithm is iterative. On the first */
@@ -1035,7 +1070,7 @@ static doublereal c_b40 = 1.;
 /*        pass yields a reasonable estimate. On the second pass, */
 /*        we'll use the velocity derived on the first pass. */
 
-	cleard_(&c__3, fxpvel);
+	cleard_(&__state->c__3, fxpvel);
 
 /*        We'll also estimate the rate of change of light time */
 /*        as zero on the first pass. */
@@ -1056,12 +1091,12 @@ static doublereal c_b40 = 1.;
 /*           correct the velocity for the rate of change of light */
 /*           time. */
 
-	    moved_(ssbtg0, &c__3, ssbtrg);
+	    moved_(ssbtg0, &__state->c__3, ssbtrg);
 	    vscl_(&scale, &ssbtg0[3], &ssbtrg[3]);
 
 /*           Get the state of the target with respect to the observer. */
 
-	    vsubg_(ssbtrg, ssbobs, &c__6, obstrg);
+	    vsubg_(ssbtrg, ssbobs, &__state->c__6, obstrg);
 
 /*           Correct the J2000 to body-fixed state transformation matrix */
 /*           for the rate of change of light time. */
@@ -1075,12 +1110,12 @@ static doublereal c_b40 = 1.;
 
 /*           Convert the sub-observer point state to the J2000 frame. */
 
-	    mxvg_(corxfi, fxpsta, &c__6, &c__6, pntsta);
+	    mxvg_(corxfi, fxpsta, &__state->c__6, &__state->c__6, pntsta);
 
 /*           Find the J2000-relative state of the sub-observer */
 /*           point with respect to the target. */
 
-	    vaddg_(obstrg, pntsta, &c__6, obspnt);
+	    vaddg_(obstrg, pntsta, &__state->c__6, obspnt);
 	    if (usestl) {
 
 /*              Now compute the stellar aberration correction */
@@ -1088,26 +1123,26 @@ static doublereal c_b40 = 1.;
 /*              this correction as well. */
 
 		zzstelab_(&xmit, acc, &ssbobs[3], obspnt, sa, savel);
-		moved_(sa, &c__3, sastat);
-		moved_(savel, &c__3, &sastat[3]);
+		moved_(sa, &__state->c__3, sastat);
+		moved_(savel, &__state->c__3, &sastat[3]);
 
 /*              Adding the stellar aberration state to the target center */
 /*              state gives us the state of the target center with */
 /*              respect to the observer, corrected for the aberrations */
 /*              applicable to the sub-observer point. */
-		vaddg_(obstrg, sastat, &c__6, stemp);
+		vaddg_(obstrg, sastat, &__state->c__6, stemp);
 	    } else {
-		moved_(obstrg, &c__6, stemp);
+		moved_(obstrg, &__state->c__6, stemp);
 	    }
 
 /*           Convert STEMP to the body-fixed reference frame. */
 
-	    mxvg_(corxfm, stemp, &c__6, &c__6, fxtsta);
+	    mxvg_(corxfm, stemp, &__state->c__6, &__state->c__6, fxtsta);
 
 /*           At long last, compute the state of the observer */
 /*           with respect to the target in the body-fixed frame. */
 
-	    vminug_(fxtsta, &c__6, fxosta);
+	    vminug_(fxtsta, &__state->c__6, fxosta);
 
 /*           Now we can obtain the surface velocity of the */
 /*           sub-observer point. */
@@ -1132,7 +1167,7 @@ static doublereal c_b40 = 1.;
 /*              point." The ray direction is simply the negative of the */
 /*              observer's position relative to the target center. */
 
-		vminug_(fxosta, &c__6, raysta);
+		vminug_(fxosta, &__state->c__6, raysta);
 		surfpv_(fxosta, raysta, radii, &radii[1], &radii[2], fxpsta, &
 			found);
 
@@ -1161,8 +1196,8 @@ static doublereal c_b40 = 1.;
 /*           add the result to the state of the target center */
 /*           with respect to the observer. */
 
-	    mxvg_(corxfi, fxpsta, &c__6, &c__6, pntsta);
-	    vaddg_(obstrg, pntsta, &c__6, obspnt);
+	    mxvg_(corxfi, fxpsta, &__state->c__6, &__state->c__6, pntsta);
+	    vaddg_(obstrg, pntsta, &__state->c__6, obspnt);
 
 /*           Now that we have an improved estimate of the */
 /*           sub-observer state, we can estimate the rate of */
@@ -1200,7 +1235,7 @@ static doublereal c_b40 = 1.;
 
 /*     Copy the computed state to the output argument STATE. */
 
-    moved_(fxpsta, &c__6, state);
+    moved_(fxpsta, &__state->c__6, state);
     chkout_("ZZGFSSOB", (ftnlen)8);
     return 0;
 } /* zzgfssob_ */

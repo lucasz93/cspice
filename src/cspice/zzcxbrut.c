@@ -1,13 +1,21 @@
-/* zzcxbrut.f -- translated by f2c (version 19980913).
+/* zzcxbrut.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b6 = 1.;
+extern zzcxbrut_init_t __zzcxbrut_init;
+static zzcxbrut_state_t* get_zzcxbrut_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzcxbrut)
+		state->zzcxbrut = __cspice_allocate_module(sizeof(
+	zzcxbrut_state_t), &__zzcxbrut_init, sizeof(__zzcxbrut_init));
+	return state->zzcxbrut;
+
+}
 
 /* $Procedure  ZZCXBRUT ( Cone-segment intersection by brute force ) */
 /* Subroutine */ int zzcxbrut_(doublereal *apex, doublereal *axis, doublereal 
@@ -28,25 +36,44 @@ static doublereal c_b6 = 1.;
     extern doublereal vdot_(doublereal *, doublereal *);
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal uoff1[3], uoff2[3], x[3], delta;
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal uoff1[3];
+    doublereal uoff2[3];
+    doublereal x[3];
+    doublereal delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal midpt;
     logical state;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     extern logical vzero_(doublereal *);
-    logical state1, state2;
+    logical state1;
+    logical state2;
     doublereal dp;
-    extern doublereal pi_(void), halfpi_(void);
-    doublereal locang, cosang, ux[3], locaxi[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
-	    , chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
-    doublereal dp1, dp2, prvdlt;
+    extern doublereal pi_(void);
+    extern doublereal halfpi_(void);
+    doublereal locang;
+    doublereal cosang;
+    doublereal ux[3];
+    doublereal locaxi[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    doublereal dp1;
+    doublereal dp2;
+    doublereal prvdlt;
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    doublereal seg[3], low, off1[3], off2[3];
+    doublereal seg[3];
+    doublereal low;
+    doublereal off1[3];
+    doublereal off2[3];
 
+
+    /* Module state */
+    zzcxbrut_state_t* __state = get_zzcxbrut_state();
 /* $ Abstract */
 
 
@@ -280,7 +307,7 @@ static doublereal c_b6 = 1.;
     nitr = 0;
     while(delta > 1e-15 && delta < prvdlt && nitr < 1000) {
 	midpt = (low + high) / 2;
-	vlcom_(&c_b6, off1, &midpt, seg, x);
+	vlcom_(&__state->c_b6, off1, &midpt, seg, x);
 	vhat_(x, ux);
 	dp = vdot_(ux, locaxi);
 	state = dp >= cosang;

@@ -1,25 +1,27 @@
-/* zzekpdec.f -- translated by f2c (version 19980913).
+/* zzekpdec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__11 = 11;
-static integer c__20 = 20;
-static integer c__0 = 0;
+extern zzekpdec_init_t __zzekpdec_init;
+static zzekpdec_state_t* get_zzekpdec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekpdec)
+		state->zzekpdec = __cspice_allocate_module(sizeof(
+	zzekpdec_state_t), &__zzekpdec_init, sizeof(__zzekpdec_init));
+	return state->zzekpdec;
+
+}
 
 /* $Procedure      ZZEKPDEC ( EK, parse column declaration ) */
 /* Subroutine */ int zzekpdec_(char *decl, integer *pardsc, ftnlen decl_len)
 {
     /* Initialized data */
 
-    static char attkey[32*5] = "DATATYPE                        " "SIZE     "
-	    "                       " "INDEXED                         " "NUL"
-	    "LS_OK                        " "FIXED_COUNT                     ";
-    static integer reqkey[1] = { 1 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -30,25 +32,35 @@ static integer c__0 = 0;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    integer i__;
+    integer j;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int cleari_(integer *, integer *);
     logical attfnd[11];
-    integer attloc[11], tokloc;
+    integer attloc[11];
+    integer tokloc;
     extern /* Subroutine */ int lparsm_(char *, char *, integer *, integer *, 
-	    char *, ftnlen, ftnlen, ftnlen), sigerr_(char *, ftnlen);
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char tokens[32*20];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), cmprss_(char *, integer *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), nparsi_(char *, integer *, char *, integer *, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     extern logical return_(void);
     char msg[320];
     integer ptr;
 
+
+    /* Module state */
+    zzekpdec_state_t* __state = get_zzekpdec_state();
 /* $ Abstract */
 
 /*     Parse a declaration of a new EK column. */
@@ -579,7 +591,7 @@ static integer c__0 = 0;
 
 /*     Start with a clean slate. */
 
-    cleari_(&c__11, pardsc);
+    cleari_(&__state->c__11, pardsc);
 
 /*     Our declaration language has been cleverly designed so that the */
 /*     characters */
@@ -625,7 +637,8 @@ static integer c__0 = 0;
 /*     The order of the token pairs is not necessarily as shown. */
 
 
-    lparsm_(decl, ",=", &c__20, &n, tokens, decl_len, (ftnlen)2, (ftnlen)32);
+    lparsm_(decl, ",=", &__state->c__20, &n, tokens, decl_len, (ftnlen)2, (
+	    ftnlen)32);
 
 /*     Make sure the tokens are in upper case.  They are already */
 /*     left-justified. */
@@ -653,9 +666,9 @@ static integer c__0 = 0;
 	while(j <= 5 && ! found) {
 	    if (s_cmp(tokens + (((i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
 		    s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)471)) << 5), 
-		    attkey + (((i__3 = j - 1) < 5 && 0 <= i__3 ? i__3 : 
-		    s_rnge("attkey", i__3, "zzekpdec_", (ftnlen)471)) << 5), (
-		    ftnlen)32, (ftnlen)32) == 0) {
+		    __state->attkey + (((i__3 = j - 1) < 5 && 0 <= i__3 ? 
+		    i__3 : s_rnge("attkey", i__3, "zzekpdec_", (ftnlen)471)) 
+		    << 5), (ftnlen)32, (ftnlen)32) == 0) {
 		found = TRUE_;
 		attfnd[(i__2 = j - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge("att"
 			"fnd", i__2, "zzekpdec_", (ftnlen)473)] = TRUE_;
@@ -670,17 +683,17 @@ static integer c__0 = 0;
 /*     Make sure we got the required keyword tokens we were expecting. */
 
     for (i__ = 1; i__ <= 1; ++i__) {
-	if (! attfnd[(i__2 = reqkey[(i__1 = i__ - 1) < 1 && 0 <= i__1 ? i__1 :
-		 s_rnge("reqkey", i__1, "zzekpdec_", (ftnlen)488)] - 1) < 11 
-		&& 0 <= i__2 ? i__2 : s_rnge("attfnd", i__2, "zzekpdec_", (
-		ftnlen)488)]) {
+	if (! attfnd[(i__2 = __state->reqkey[(i__1 = i__ - 1) < 1 && 0 <= 
+		i__1 ? i__1 : s_rnge("reqkey", i__1, "zzekpdec_", (ftnlen)488)
+		] - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge("attfnd", i__2, 
+		"zzekpdec_", (ftnlen)488)]) {
 	    setmsg_("Required keyword # was not found in column declaration "
 		    "#.", (ftnlen)57);
-	    errch_("#", attkey + (((i__2 = reqkey[(i__1 = i__ - 1) < 1 && 0 <=
-		     i__1 ? i__1 : s_rnge("reqkey", i__1, "zzekpdec_", (
-		    ftnlen)492)] - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge("attk"
-		    "ey", i__2, "zzekpdec_", (ftnlen)492)) << 5), (ftnlen)1, (
-		    ftnlen)32);
+	    errch_("#", __state->attkey + (((i__2 = __state->reqkey[(i__1 = 
+		    i__ - 1) < 1 && 0 <= i__1 ? i__1 : s_rnge("reqkey", i__1, 
+		    "zzekpdec_", (ftnlen)492)] - 1) < 5 && 0 <= i__2 ? i__2 : 
+		    s_rnge("attkey", i__2, "zzekpdec_", (ftnlen)492)) << 5), (
+		    ftnlen)1, (ftnlen)32);
 	    errch_("#", decl, (ftnlen)1, decl_len);
 	    sigerr_("SPICE(BADCOLUMDECL)", (ftnlen)19);
 	    chkout_("ZZEKPDEC", (ftnlen)8);
@@ -745,21 +758,21 @@ static integer c__0 = 0;
 /*           CHARACTER** */
 
 
-	cmprss_(" ", &c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ?
-		 i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)561)) << 
-		5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? i__2 : 
-		s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)561)) << 5), (
-		ftnlen)1, (ftnlen)32, (ftnlen)32);
-	cmprss_("(", &c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ?
-		 i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)562)) << 
-		5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? i__2 : 
-		s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)562)) << 5), (
-		ftnlen)1, (ftnlen)32, (ftnlen)32);
-	cmprss_(")", &c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ?
-		 i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)563)) << 
-		5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? i__2 : 
-		s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)563)) << 5), (
-		ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_(" ", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
+		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
+		561)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
+		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)561)) << 
+		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_("(", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
+		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
+		562)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
+		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)562)) << 
+		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_(")", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
+		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
+		563)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
+		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)563)) << 
+		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
 	if (*(unsigned char *)&tokens[(((i__1 = tokloc - 1) < 20 && 0 <= i__1 
 		? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)566)) << 
 		5) + 9] != '*') {

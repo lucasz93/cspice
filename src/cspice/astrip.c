@@ -1,9 +1,17 @@
-/* astrip.f -- translated by f2c (version 19980913).
+/* astrip.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int astrip_state_t;
+static astrip_state_t* get_astrip_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     ASTRIP ( STRIP Ascii characters from a string ) */
 /* Subroutine */ int astrip_(char *instr, char *asciib, char *asciie, char *
@@ -18,10 +26,18 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer last, i__, j, k;
+    integer last;
+    integer i__;
+    integer j;
+    integer k;
     extern integer lastnb_(char *, ftnlen);
-    integer lwrbnd, uprbnd, outlen;
+    integer lwrbnd;
+    integer uprbnd;
+    integer outlen;
 
+
+    /* Module state */
+    astrip_state_t* __state = get_astrip_state();
 /* $ Abstract */
 
 /*      Remove from a character string all characters which fall */

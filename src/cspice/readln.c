@@ -1,13 +1,21 @@
-/* readln.f -- translated by f2c (version 19980913).
+/* readln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern readln_init_t __readln_init;
+static readln_state_t* get_readln_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->readln)
+		state->readln = __cspice_allocate_module(sizeof(
+	readln_state_t), &__readln_init, sizeof(__readln_init));
+	return state->readln;
+
+}
 
 /* $Procedure      READLN ( Read a text line from a logical unit ) */
 /* Subroutine */ int readln_(integer *unit, char *line, logical *eof, ftnlen 
@@ -20,12 +28,17 @@ static integer c__1 = 1;
     integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    readln_state_t* __state = get_readln_state();
 /* $ Abstract */
 
 /*     This routine will read a single line of text from the Fortran */
@@ -185,7 +198,7 @@ static integer c__1 = 1;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, line, line_len);
+    iostat = do_fio(&__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }

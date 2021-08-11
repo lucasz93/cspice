@@ -1,14 +1,21 @@
-/* zzhullax.f -- translated by f2c (version 19980913).
+/* zzhullax.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b20 = -1.;
-static doublereal c_b36 = .5;
+extern zzhullax_init_t __zzhullax_init;
+static zzhullax_state_t* get_zzhullax_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzhullax)
+		state->zzhullax = __cspice_allocate_module(sizeof(
+	zzhullax_state_t), &__zzhullax_init, sizeof(__zzhullax_init));
+	return state->zzhullax;
+
+}
 
 /* $Procedure   ZZHULLAX ( Pyramidal FOV convex hull to FOV axis ) */
 /* Subroutine */ int zzhullax_(char *inst, integer *n, doublereal *bounds, 
@@ -23,23 +30,31 @@ static doublereal c_b36 = .5;
 
     /* Local variables */
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    doublereal xvec[3], yvec[3], zvec[3];
+    doublereal xvec[3];
+    doublereal yvec[3];
+    doublereal zvec[3];
     integer xidx;
     extern doublereal vsep_(doublereal *, doublereal *);
     integer next;
     logical pass1;
-    integer i__, m;
-    doublereal r__, v[3], delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer i__;
+    integer m;
+    doublereal r__;
+    doublereal v[3];
+    doublereal delta;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), vlcom_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    integer minix, maxix;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    integer minix;
+    integer maxix;
     doublereal trans[9]	/* was [3][3] */;
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *), vcrss_(doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
@@ -48,19 +63,27 @@ static doublereal c_b36 = .5;
     logical ok;
     extern doublereal halfpi_(void);
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), sigerr_(char *, ftnlen);
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal minlon;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal maxlon;
-    extern /* Subroutine */ int vhatip_(doublereal *), vsclip_(doublereal *, 
-	    doublereal *), setmsg_(char *, ftnlen), errint_(char *, integer *,
-	     ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    doublereal lat, sep, lon;
+    doublereal lat;
+    doublereal sep;
+    doublereal lon;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
-    doublereal ray1[3], ray2[3];
+    doublereal ray1[3];
+    doublereal ray2[3];
 
+
+    /* Module state */
+    zzhullax_state_t* __state = get_zzhullax_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -408,9 +431,9 @@ static doublereal c_b36 = .5;
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is exterior. */
 
-	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? 
+	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
 		i__1 : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)408)], &
-		bounds[(i__2 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+		bounds[(i__2 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)408)], cp);
 
 /*        We insist on consecutive boundary vectors being */
@@ -442,7 +465,7 @@ static doublereal c_b36 = .5;
 /*           latter is not an edge of the current face. */
 
 	    if (m != i__ && m != next) {
-		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < bounds_dim2 * 3 
+		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * bounds_dim2 
 			&& 0 <= i__1 ? i__1 : s_rnge("bounds", i__1, "zzhull"
 			"ax_", (ftnlen)446)]);
 		if (pass1) {
@@ -457,7 +480,7 @@ static doublereal c_b36 = .5;
 /*                    angular separations will be computed using the new */
 /*                    value of CP. */
 
-			vsclip_(&c_b20, cp);
+			vsclip_(&__state->c_b20, cp);
 			sep = pi_() - sep;
 		    }
 		    pass1 = FALSE_;
@@ -510,11 +533,11 @@ static doublereal c_b36 = .5;
 /*              or outward normal, depending on the ordering of the */
 /*              boundary vectors. */
 
-		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 			i__1 ? i__1 : s_rnge("bounds", i__1, "zzhullax_", (
-			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 
-			bounds_dim2 * 3 && 0 <= i__2 ? i__2 : s_rnge("bounds",
-			 i__2, "zzhullax_", (ftnlen)530)], cp);
+			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 3 * 
+			bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge("bounds", 
+			i__2, "zzhullax_", (ftnlen)530)], cp);
 
 /*              It's allowable for non-consecutive boundary vectors to */
 /*              be linearly dependent, but if we have such a pair, */
@@ -541,10 +564,10 @@ static doublereal c_b36 = .5;
 /*                    face. */
 
 			if (m != i__ && m != next) {
-			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 
-				    bounds_dim2 * 3 && 0 <= i__1 ? i__1 : 
-				    s_rnge("bounds", i__1, "zzhullax_", (
-				    ftnlen)560)]);
+			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * 
+				    bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(
+				    "bounds", i__1, "zzhullax_", (ftnlen)560)]
+				    );
 			    if (pass1) {
 
 /*                          Adjust CP if necessary so that it points */
@@ -557,7 +580,7 @@ static doublereal c_b36 = .5;
 /*                             loop, all other angular separations will */
 /*                             be computed using the new value of CP. */
 
-				    vsclip_(&c_b20, cp);
+				    vsclip_(&__state->c_b20, cp);
 				    sep = pi_() - sep;
 				}
 				pass1 = FALSE_;
@@ -645,11 +668,11 @@ static doublereal c_b36 = .5;
 /*     the "face frame." */
 
 
-    vhat_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 :
+    vhat_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 :
 	     s_rnge("bounds", i__1, "zzhullax_", (ftnlen)683)], ray1);
-    vhat_(&bounds[(i__1 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 
+    vhat_(&bounds[(i__1 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 
 	    : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)684)], ray2);
-    vlcom_(&c_b36, ray1, &c_b36, ray2, xvec);
+    vlcom_(&__state->c_b36, ray1, &__state->c_b36, ray2, xvec);
     vhatip_(xvec);
     vhat_(cp, yvec);
     ucrss_(xvec, yvec, zvec);
@@ -687,7 +710,7 @@ static doublereal c_b36 = .5;
 /*           The current vector is not a boundary of our edge, */
 /*           so find its longitude. */
 
-	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <=
+	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <=
 		     i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (
 		    ftnlen)720)], v);
 	    reclat_(v, &r__, &lon, &lat);
@@ -750,7 +773,7 @@ static doublereal c_b36 = .5;
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)794)
 		], axis);
 	if (sep > halfpi_() - 1e-12) {

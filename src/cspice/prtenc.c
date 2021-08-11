@@ -1,9 +1,17 @@
-/* prtenc.f -- translated by f2c (version 19980913).
+/* prtenc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prtenc_state_t;
+static prtenc_state_t* get_prtenc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PRTENC ( Encode a character string, portably ) */
 /* Subroutine */ int prtenc_0_(int n__, integer *number, char *string, ftnlen 
@@ -13,13 +21,17 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer base, i__;
+    integer base;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer num;
 
+
+    /* Module state */
+    prtenc_state_t* __state = get_prtenc_state();
 /* $ Abstract */
 
 /*     Encode a nonnegative integer number into a character string, */

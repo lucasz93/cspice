@@ -1,9 +1,17 @@
-/* zzekillt.f -- translated by f2c (version 19980913).
+/* zzekillt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekillt_state_t;
+static zzekillt_state_t* get_zzekillt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKILLT ( EK, indirect, last element less than ) */
 integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
@@ -20,17 +28,23 @@ integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
     doublereal dnum;
     integer inum;
     extern /* Subroutine */ int zzeklltc_(integer *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen), zzeklltd_(integer *, 
-	    integer *, integer *, doublereal *, integer *, integer *), 
-	    zzekllti_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *), chkin_(char *, ftnlen);
+	    char *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeklltd_(integer *, integer *, integer *, 
+	    doublereal *, integer *, integer *);
+    extern /* Subroutine */ int zzekllti_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical return_(void);
     integer coltyp;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer rec;
 
+
+    /* Module state */
+    zzekillt_state_t* __state = get_zzekillt_state();
 /* $ Abstract */
 
 /*     Find the ordinal position of the row, in an specified EK segment, */

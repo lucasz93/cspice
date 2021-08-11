@@ -1,18 +1,21 @@
-/* zzeklled.f -- translated by f2c (version 19980913).
+/* zzeklled.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__0 = 0;
-static logical c_false = FALSE_;
-static integer c__4 = 4;
+extern zzeklled_init_t __zzeklled_init;
+static zzeklled_state_t* get_zzeklled_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeklled)
+		state->zzeklled = __cspice_allocate_module(sizeof(
+	zzeklled_state_t), &__zzeklled_init, sizeof(__zzeklled_init));
+	return state->zzeklled;
+
+}
 
 /* $Procedure ZZEKLLED ( EK, last less than or equal to, d.p. ) */
 /* Subroutine */ int zzeklled_(integer *handle, integer *segdsc, integer *
@@ -26,17 +29,25 @@ static integer c__4 = 4;
     extern /* Subroutine */ int zzekixlk_(integer *, integer *, integer *, 
 	    integer *);
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer dtype, nrows, middle;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer dtype;
+    integer nrows;
+    integer middle;
     logical indexd;
     char column[32];
-    integer begptr, endptr, midptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer begptr;
+    integer endptr;
+    integer midptr;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer end;
 
+
+    /* Module state */
+    zzeklled_state_t* __state = get_zzeklled_state();
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */
@@ -666,8 +677,9 @@ static integer c__4 = 4;
 
     zzekixlk_(handle, coldsc, &begin, &begptr);
     zzekixlk_(handle, coldsc, &end, &endptr);
-    if (zzekscmp_(&c__3, handle, segdsc, coldsc, &begptr, &c__1, &c__2, " ", 
-	    dkey, &c__0, &c_false, (ftnlen)1)) {
+    if (zzekscmp_(&__state->c__3, handle, segdsc, coldsc, &begptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, &
+	    __state->c_false, (ftnlen)1)) {
 
 /*        The smallest entry of the column is greater than */
 /*        the input value, so none of the entries */
@@ -675,8 +687,9 @@ static integer c__4 = 4;
 
 	*prvloc = 0;
 	*prvptr = 0;
-    } else if (zzekscmp_(&c__4, handle, segdsc, coldsc, &endptr, &c__1, &c__2,
-	     " ", dkey, &c__0, &c_false, (ftnlen)1)) {
+    } else if (zzekscmp_(&__state->c__4, handle, segdsc, coldsc, &endptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, &
+	    __state->c_false, (ftnlen)1)) {
 
 /*        The last element of the array is less than or equal to the */
 /*        input value. */
@@ -696,8 +709,9 @@ static integer c__4 = 4;
 
 	    middle = (begin + end) / 2;
 	    zzekixlk_(handle, coldsc, &middle, &midptr);
-	    if (zzekscmp_(&c__4, handle, segdsc, coldsc, &midptr, &c__1, &
-		    c__2, " ", dkey, &c__0, &c_false, (ftnlen)1)) {
+	    if (zzekscmp_(&__state->c__4, handle, segdsc, coldsc, &midptr, &
+		    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
+		    &__state->c_false, (ftnlen)1)) {
 
 /*              The middle value is less than or equal to the input */
 /*              value. */

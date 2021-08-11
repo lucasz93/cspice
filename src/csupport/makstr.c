@@ -1,9 +1,10 @@
-/* makstr.f -- translated by f2c (version 19980913).
+/* makstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      MAKSTR (Make String ) */
 /* Subroutine */ int makstr_0_(int n__, char *pattrn, char *this__, char *

@@ -1,9 +1,17 @@
-/* lxqstr.f -- translated by f2c (version 19980913).
+/* lxqstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lxqstr_state_t;
+static lxqstr_state_t* get_lxqstr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LXQSTR ( Lex quoted string ) */
 /* Subroutine */ int lxqstr_(char *string, char *qchar, integer *first, 
@@ -17,8 +25,13 @@
 
     /* Local variables */
     logical even;
-    integer l, loc, pos;
+    integer l;
+    integer loc;
+    integer pos;
 
+
+    /* Module state */
+    lxqstr_state_t* __state = get_lxqstr_state();
 /* $ Abstract */
 
 /*     Lex (scan) a quoted string. */

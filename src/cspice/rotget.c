@@ -1,14 +1,21 @@
-/* rotget.f -- translated by f2c (version 19980913).
+/* rotget.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
+extern rotget_init_t __rotget_init;
+static rotget_state_t* get_rotget_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rotget)
+		state->rotget = __cspice_allocate_module(sizeof(
+	rotget_state_t), &__rotget_init, sizeof(__rotget_init));
+	return state->rotget;
+
+}
 
 /* $Procedure      ROTGET ( Frame get rotation ) */
 /* Subroutine */ int rotget_(integer *infrm, doublereal *et, doublereal *
@@ -21,24 +28,33 @@ static integer c__1 = 1;
     doublereal tipm[9]	/* was [3][3] */;
     integer type__;
     extern /* Subroutine */ int zzdynrot_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *), chkin_(char *, ftnlen), errch_(char *, 
-	    char *, ftnlen, ftnlen);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     char versn[6];
     extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer center;
     extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *), tkfram_(integer *, doublereal *, integer *,
-	     logical *), ckfrot_(integer *, doublereal *, doublereal *, 
-	    integer *, logical *), sigerr_(char *, ftnlen);
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int ckfrot_(integer *, doublereal *, doublereal *,
+	     integer *, logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), irfrot_(integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    rotget_state_t* __state = get_rotget_state();
 /* $ Abstract */
 
 /*     Find the rotation from a user specified frame to another frame at */
@@ -302,7 +318,7 @@ static integer c__1 = 1;
 
     frinfo_(infrm, &center, &type__, &typeid, found);
     if (! (*found)) {
-	cleard_(&c__9, rotate);
+	cleard_(&__state->c__9, rotate);
 	*outfrm = 0;
 	chkout_("ROTGET", (ftnlen)6);
 	return 0;
@@ -312,7 +328,7 @@ static integer c__1 = 1;
 /*     on the frame class. */
 
     if (type__ == 1) {
-	irfrot_(infrm, &c__1, rotate);
+	irfrot_(infrm, &__state->c__1, rotate);
 	if (! failed_()) {
 	    *outfrm = 1;
 	}
@@ -339,7 +355,7 @@ static integer c__1 = 1;
 /*        to .FALSE. at end of this routine. */
 
     } else {
-	cleard_(&c__9, rotate);
+	cleard_(&__state->c__9, rotate);
 	*outfrm = 0;
 	*found = FALSE_;
 	setmsg_("The reference frame # has class id-code #. This form of ref"
@@ -358,7 +374,7 @@ static integer c__1 = 1;
 /*     in the header. */
 
     if (failed_() || ! (*found)) {
-	cleard_(&c__9, rotate);
+	cleard_(&__state->c__9, rotate);
 	*outfrm = 0;
 	*found = FALSE_;
     }

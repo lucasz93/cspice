@@ -1,9 +1,17 @@
-/* tkvrsn.f -- translated by f2c (version 19980913).
+/* tkvrsn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int tkvrsn_state_t;
+static tkvrsn_state_t* get_tkvrsn_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TKVRSN ( Toolkit version strings ) */
 /* Subroutine */ int tkvrsn_(char *item, char *verstr, ftnlen item_len, 
@@ -15,6 +23,9 @@
     /* Local variables */
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    tkvrsn_state_t* __state = get_tkvrsn_state();
 /* $ Abstract */
 
 /*     Given an item such as the toolkit or an entry point name, return */

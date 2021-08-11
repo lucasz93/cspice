@@ -1,9 +1,17 @@
-/* ltime.f -- translated by f2c (version 19980913).
+/* ltime.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ltime_state_t;
+static ltime_state_t* get_ltime_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LTIME ( Light Time ) */
 /* Subroutine */ int ltime_(doublereal *etobs, integer *obs, char *dir, 
@@ -13,10 +21,12 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    doublereal sobs[6], myet, c__;
+    doublereal sobs[6];
+    doublereal myet;
+    doublereal c__;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal starg[6];
     extern doublereal vdist_(doublereal *, doublereal *);
     extern integer rtrim_(char *, ftnlen);
@@ -25,10 +35,15 @@
     extern doublereal clight_(void);
     integer bcentr;
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ltime_state_t* __state = get_ltime_state();
 /* $ Abstract */
 
 /*     This routine computes the transmit (or receive) time */

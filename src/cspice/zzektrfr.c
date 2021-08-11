@@ -1,14 +1,21 @@
-/* zzektrfr.f -- translated by f2c (version 19980913).
+/* zzektrfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__3 = 3;
+extern zzektrfr_init_t __zzektrfr_init;
+static zzektrfr_state_t* get_zzektrfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrfr)
+		state->zzektrfr = __cspice_allocate_module(sizeof(
+	zzektrfr_state_t), &__zzektrfr_init, sizeof(__zzektrfr_init));
+	return state->zzektrfr;
+
+}
 
 /* $Procedure      ZZEKTRFR ( EK tree, free ) */
 /* Subroutine */ int zzektrfr_(integer *handle, integer *tree)
@@ -20,18 +27,29 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], node;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *), 
-	    zzekpgri_(integer *, integer *, integer *), chkin_(char *, ftnlen)
-	    ;
-    integer depth, level, nkids, stack[30]	/* was [3][10] */, first, 
-	    nkeys, kidbas, remain;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer page[256];
+    integer node;
+    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer depth;
+    integer level;
+    integer nkids;
+    integer stack[30]	/* was [3][10] */;
+    integer first;
+    integer nkeys;
+    integer kidbas;
+    integer remain;
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzektrfr_state_t* __state = get_zzektrfr_state();
 /* $ Abstract */
 
 /*     Free a tree:  deallocate all pages belonging to the tree. */
@@ -579,7 +597,7 @@ static integer c__3 = 3;
 	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
 		, (ftnlen)60);
 	errint_("#", &depth, (ftnlen)1);
-	errint_("#", &c__10, (ftnlen)1);
+	errint_("#", &__state->c__10, (ftnlen)1);
 	errhan_("#", handle, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
@@ -658,7 +676,7 @@ static integer c__3 = 3;
 
 /*           This node has no children.  We can free this page. */
 
-	    zzekpgfr_(handle, &c__3, &node);
+	    zzekpgfr_(handle, &__state->c__3, &node);
 	    --remain;
 
 /*           Obtain the parent node by popping the stack. */

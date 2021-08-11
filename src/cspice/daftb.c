@@ -1,17 +1,21 @@
-/* daftb.f -- translated by f2c (version 19980913).
+/* daftb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__0 = 0;
-static integer c__3 = 3;
+extern daftb_init_t __daftb_init;
+static daftb_state_t* get_daftb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->daftb)
+		state->daftb = __cspice_allocate_module(sizeof(daftb_state_t),
+	 &__daftb_init, sizeof(__daftb_init));
+	return state->daftb;
+
+}
 
 /* $Procedure DAFTB ( DAF, convert transfer file to binary file ) */
 /* Subroutine */ int daftb_(integer *xfrlun, char *binfil, ftnlen binfil_len)
@@ -30,43 +34,55 @@ static integer c__3 = 3;
     char name__[1000];
     integer barr;
     char line[255];
-    integer bcnt, earr, ecnt;
+    integer bcnt;
+    integer earr;
+    integer ecnt;
     logical more;
-    char word[255], rest[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    char word[255];
+    char rest[255];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     char tarch[8];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical inarr;
     char ttype[8];
     extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), dafada_(doublereal *, integer *), dafbna_(
-	    integer *, doublereal *, char *, ftnlen), dafena_(void);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     integer nd;
     extern logical failed_(void);
     integer ni;
     extern /* Subroutine */ int dafcls_(integer *);
     char ifname[60];
     integer binhdl;
-    extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *), 
-	    rdenci_(integer *, integer *, integer *), dafopn_(char *, integer 
-	    *, integer *, char *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int rdenci_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
+	    integer *, integer *, ftnlen, ftnlen);
     doublereal buffer[1024];
     integer dtacnt;
     extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
 	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
     char idword[8];
-    integer arrcnt, numdta;
+    integer arrcnt;
+    integer numdta;
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     integer snmlen;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[320];
     extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    integer iostat, numarr, numlft;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), nextwd_(char *, char *, char *, ftnlen, 
+    integer iostat;
+    integer numarr;
+    integer numlft;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
     integer lftovr;
     extern logical return_(void);
@@ -76,12 +92,11 @@ static integer c__3 = 3;
     doublereal summry[125];
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 0 };
-    static cilist io___9 = { 1, 0, 1, 0, 0 };
-    static cilist io___27 = { 1, 0, 1, 0, 0 };
-    static cilist io___32 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    daftb_state_t* __state = get_daftb_state();
 /* $ Abstract */
 
 /*     Convert the contents of an DAF transfer file into an equivalent */
@@ -457,12 +472,12 @@ static integer c__3 = 3;
 /*     error occurs, set an appropriate error message and signal the */
 /*     error. */
 
-    io___5.ciunit = *xfrlun;
-    iostat = s_rsle(&io___5);
+    __state->io___5.ciunit = *xfrlun;
+    iostat = s_rsle(&__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&c__9, &c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -497,7 +512,7 @@ L100001:
 
 /*     Read in the ND and NI values for the DAF file. */
 
-    rdenci_(xfrlun, &c__2, isumry);
+    rdenci_(xfrlun, &__state->c__2, isumry);
     if (failed_()) {
 	chkout_("DAFTB", (ftnlen)5);
 	return 0;
@@ -507,12 +522,12 @@ L100001:
 
 /*     Read the internal filename for the DAF file. */
 
-    io___9.ciunit = *xfrlun;
-    iostat = s_rsle(&io___9);
+    __state->io___9.ciunit = *xfrlun;
+    iostat = s_rsle(&__state->io___9);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__9, &c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -532,11 +547,11 @@ L100002:
 /*     depending on whether it's a new file or an old file. */
 
     if (s_cmp(ttype, "?", (ftnlen)8, (ftnlen)1) != 0) {
-	dafonw_(binfil, ttype, &nd, &ni, ifname, &c__0, &binhdl, binfil_len, (
-		ftnlen)8, (ftnlen)60);
+	dafonw_(binfil, ttype, &nd, &ni, ifname, &__state->c__0, &binhdl, 
+		binfil_len, (ftnlen)8, (ftnlen)60);
     } else {
-	dafopn_(binfil, &nd, &ni, ifname, &c__0, &binhdl, binfil_len, (ftnlen)
-		60);
+	dafopn_(binfil, &nd, &ni, ifname, &__state->c__0, &binhdl, binfil_len,
+		 (ftnlen)60);
     }
     if (failed_()) {
 	chkout_("DAFTB", (ftnlen)5);
@@ -572,7 +587,7 @@ L100002:
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&c__1, line, (ftnlen)255);
+	iostat = do_fio(&__state->c__1, line, (ftnlen)255);
 	if (iostat != 0) {
 	    goto L100003;
 	}
@@ -743,12 +758,12 @@ L100003:
 
 	if (inarr) {
 	    dtacnt = 0;
-	    io___27.ciunit = *xfrlun;
-	    iostat = s_rsle(&io___27);
+	    __state->io___27.ciunit = *xfrlun;
+	    iostat = s_rsle(&__state->io___27);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_lio(&c__9, &c__1, name__, snmlen);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, name__, snmlen);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
@@ -807,13 +822,13 @@ L100004:
 /*              First, read in the count of encoded numbers in the */
 /*              current data block. */
 
-		io___32.ciunit = *xfrlun;
-		iostat = s_rsle(&io___32);
+		__state->io___32.ciunit = *xfrlun;
+		iostat = s_rsle(&__state->io___32);
 		if (iostat != 0) {
 		    goto L100005;
 		}
-		iostat = do_lio(&c__3, &c__1, (char *)&numdta, (ftnlen)sizeof(
-			integer));
+		iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&
+			numdta, (ftnlen)sizeof(integer));
 		if (iostat != 0) {
 		    goto L100005;
 		}

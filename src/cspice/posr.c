@@ -1,9 +1,17 @@
-/* posr.f -- translated by f2c (version 19980913).
+/* posr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int posr_state_t;
+static posr_state_t* get_posr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            POSR ( Position of substring, reverse search) */
 integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen 
@@ -18,8 +26,13 @@ integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
     /* Local variables */
     integer b;
     logical found;
-    integer fchnce, offset, lenstr;
+    integer fchnce;
+    integer offset;
+    integer lenstr;
 
+
+    /* Module state */
+    posr_state_t* __state = get_posr_state();
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a substring, starting at */

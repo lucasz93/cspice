@@ -1,9 +1,10 @@
-/* podiec.f -- translated by f2c (version 19980913).
+/* podiec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      PODIEC ( Pod, insert elements, character ) */
 /* Subroutine */ int podiec_(char *elems, integer *n, integer *loc, char *pod,

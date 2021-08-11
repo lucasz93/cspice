@@ -1,9 +1,17 @@
-/* wnsumd.f -- translated by f2c (version 19980913).
+/* wnsumd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnsumd_state_t;
+static wnsumd_state_t* get_wnsumd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure WNSUMD ( Summary of a double precision window ) */
 /* Subroutine */ int wnsumd_(doublereal *window, doublereal *meas, doublereal 
@@ -23,12 +31,17 @@
     doublereal m;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal mlong;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal mshort;
     extern logical return_(void);
-    doublereal sumsqr, sum;
+    doublereal sumsqr;
+    doublereal sum;
 
+
+    /* Module state */
+    wnsumd_state_t* __state = get_wnsumd_state();
 /* $ Abstract */
 
 /*     Summarize the contents of a double precision window. */

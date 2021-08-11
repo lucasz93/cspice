@@ -1,9 +1,17 @@
-/* zzgpnm.f -- translated by f2c (version 19980913).
+/* zzgpnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgpnm_state_t;
+static zzgpnm_state_t* get_zzgpnm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZGPNM ( Get position of a name ) */
 /* Subroutine */ int zzgpnm_(integer *namlst, integer *nmpool, char *names, 
@@ -16,16 +24,23 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer head, node, tail;
+    integer head;
+    integer node;
+    integer tail;
     logical full;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), lnkan_(integer *, 
-	    integer *), lnkila_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int lnkan_(integer *, integer *);
+    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
     extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern integer zzhash_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzgpnm_state_t* __state = get_zzgpnm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

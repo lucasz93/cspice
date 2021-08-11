@@ -1,9 +1,17 @@
-/* zzekcchk.f -- translated by f2c (version 19980913).
+/* zzekcchk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekcchk_state_t;
+static zzekcchk_state_t* get_zzekcchk_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKCCHK ( Private: EK, check names in encoded query ) */
 /* Subroutine */ int zzekcchk_(char *query, integer *eqryi, char *eqryc, 
@@ -21,25 +29,39 @@
     /* Local variables */
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
 	    ftnlen);
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen), repmc_(char *, char *, 
-	    char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    integer cb, cc, ce;
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
+    integer cb;
+    integer cc;
+    integer ce;
     extern logical failed_(void);
-    integer tb, te;
+    integer tb;
+    integer te;
     extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    char column[32], ctouch[1];
-    integer attdsc[6], colidx, iparse, nmatch, tabidx;
+    char column[32];
+    char ctouch[1];
+    integer attdsc[6];
+    integer colidx;
+    integer iparse;
+    integer nmatch;
+    integer tabidx;
     logical noname;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer lxb[2];
 
+
+    /* Module state */
+    zzekcchk_state_t* __state = get_zzekcchk_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

@@ -1,30 +1,27 @@
-/* outmsg.f -- translated by f2c (version 19980913).
+/* outmsg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5 = 5;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern outmsg_init_t __outmsg_init;
+static outmsg_state_t* get_outmsg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->outmsg)
+		state->outmsg = __cspice_allocate_module(sizeof(
+	outmsg_state_t), &__outmsg_init, sizeof(__outmsg_init));
+	return state->outmsg;
+
+}
 
 /* $Procedure      OUTMSG ( Output Error Messages ) */
 /* Subroutine */ int outmsg_(char *list, ftnlen list_len)
 {
     /* Initialized data */
 
-    static char defmsg[80*4] = "Oh, by the way:  The SPICELIB error handling"
-	    " actions are USER-TAILORABLE.  You  " "can choose whether the To"
-	    "olkit aborts or continues when errors occur, which     " "error "
-	    "messages to output, and where to send the output.  Please read t"
-	    "he ERROR  " "\"Required Reading\" file, or see the routines ERRA"
-	    "CT, ERRDEV, and ERRPRT.        ";
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2], a__2[3];
@@ -38,46 +35,55 @@ static integer c__1 = 1;
 	     s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char name__[32], line[80];
+    char name__[32];
+    char line[80];
     logical long__;
     char lmsg[1840];
     logical expl;
-    char smsg[25], xmsg[80];
+    char smsg[25];
+    char xmsg[80];
     integer i__;
     logical trace;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    integer depth, index;
+    integer depth;
+    integer index;
     extern integer wdcnt_(char *, ftnlen);
     extern /* Subroutine */ int expln_(char *, char *, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    char versn[80], words[9*5];
+    char versn[80];
+    char words[9*5];
     integer start;
     logical short__;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char device[255];
     integer remain;
-    static char border[80];
     extern /* Subroutine */ int getdev_(char *, ftnlen);
     logical dfault;
     integer length;
     extern /* Subroutine */ int trcdep_(integer *);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int trcnam_(integer *, char *, ftnlen), lparse_(
-	    char *, char *, integer *, integer *, char *, ftnlen, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int trcnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int lparse_(char *, char *, integer *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     extern logical msgsel_(char *, ftnlen);
     integer wrdlen;
-    extern /* Subroutine */ int getlms_(char *, ftnlen), wrline_(char *, char 
-	    *, ftnlen, ftnlen), getsms_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int getlms_(char *, ftnlen);
+    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int getsms_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     char tmpmsg[105];
     extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
     integer numwrd;
-    char upword[9], outwrd[1840];
+    char upword[9];
+    char outwrd[1840];
     extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen);
     logical output;
 
+
+    /* Module state */
+    outmsg_state_t* __state = get_outmsg_state();
 /* $ Abstract */
 
 /*     Output error messages. */
@@ -607,10 +613,10 @@ static integer c__1 = 1;
 
 /*     The first time through, set up the output borders. */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 	for (i__ = 1; i__ <= 80; ++i__) {
-	    *(unsigned char *)&border[i__ - 1] = '=';
+	    *(unsigned char *)&__state->border[i__ - 1] = '=';
 	}
     }
 
@@ -627,7 +633,8 @@ static integer c__1 = 1;
 /*     a word we don't recognize in the list, we signal an error */
 /*     and continue parsing the list. */
 
-    lparse_(list, ",", &c__5, &numwrd, words, list_len, (ftnlen)1, (ftnlen)9);
+    lparse_(list, ",", &__state->c__5, &numwrd, words, list_len, (ftnlen)1, (
+	    ftnlen)9);
     i__1 = numwrd;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ucase_(words + ((i__2 = i__ - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(
@@ -663,7 +670,7 @@ static integer c__1 = 1;
 	    i__3[1] = 9, a__1[1] = words + ((i__2 = i__ - 1) < 5 && 0 <= i__2 
 		    ? i__2 : s_rnge("words", i__2, "outmsg_", (ftnlen)650)) * 
 		    9;
-	    s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)38);
+	    s_cat(ch__1, a__1, i__3, &__state->c__2, (ftnlen)38);
 	    wrline_(device, ch__1, (ftnlen)255, (ftnlen)38);
 	}
     }
@@ -698,7 +705,7 @@ static integer c__1 = 1;
 /*     skip a line. */
 
     wrline_(device, " ", (ftnlen)255, (ftnlen)1);
-    wrline_(device, border, (ftnlen)255, (ftnlen)80);
+    wrline_(device, __state->border, (ftnlen)255, (ftnlen)80);
     wrline_(device, " ", (ftnlen)255, (ftnlen)1);
 
 /*     Output the toolkit version and skip a line. */
@@ -707,7 +714,7 @@ static integer c__1 = 1;
 /* Writing concatenation */
     i__3[0] = 17, a__1[0] = "Toolkit version: ";
     i__3[1] = 80, a__1[1] = versn;
-    s_cat(line, a__1, i__3, &c__2, (ftnlen)80);
+    s_cat(line, a__1, i__3, &__state->c__2, (ftnlen)80);
     wrline_(device, line, (ftnlen)255, (ftnlen)80);
     wrline_(device, " ", (ftnlen)255, (ftnlen)1);
 
@@ -730,7 +737,7 @@ static integer c__1 = 1;
 	i__4[0] = rtrim_(smsg, (ftnlen)25), a__2[0] = smsg;
 	i__4[1] = 4, a__2[1] = " -- ";
 	i__4[2] = 80, a__2[2] = xmsg;
-	s_cat(tmpmsg, a__2, i__4, &c__3, (ftnlen)105);
+	s_cat(tmpmsg, a__2, i__4, &__state->c__3, (ftnlen)105);
 	wrline_(device, tmpmsg, (ftnlen)255, (ftnlen)105);
 	wrline_(device, " ", (ftnlen)255, (ftnlen)1);
     } else if (short__ && msgsel_("SHORT", (ftnlen)5)) {
@@ -892,7 +899,8 @@ static integer c__1 = 1;
 /*              name into the output line. */
 
 		if (index == 1) {
-		    suffix_(name__, &c__0, line, (ftnlen)32, (ftnlen)80);
+		    suffix_(name__, &__state->c__0, line, (ftnlen)32, (ftnlen)
+			    80);
 		    remain -= length;
 		} else {
 
@@ -901,7 +909,8 @@ static integer c__1 = 1;
 /*                 the first thing on the next line. */
 
 		    if (remain >= 4) {
-			suffix_("-->", &c__1, line, (ftnlen)3, (ftnlen)80);
+			suffix_("-->", &__state->c__1, line, (ftnlen)3, (
+				ftnlen)80);
 			remain += -4;
 		    } else {
 			wrline_(device, line, (ftnlen)255, (ftnlen)80);
@@ -914,7 +923,8 @@ static integer c__1 = 1;
 /*                 the first thing on the next line. */
 
 		    if (remain >= length) {
-			suffix_(name__, &c__1, line, (ftnlen)32, (ftnlen)80);
+			suffix_(name__, &__state->c__1, line, (ftnlen)32, (
+				ftnlen)80);
 			remain = remain - length - 1;
 		    } else {
 			wrline_(device, line, (ftnlen)255, (ftnlen)80);
@@ -945,9 +955,9 @@ static integer c__1 = 1;
 /*        Output the default message: */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    wrline_(device, defmsg + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("defmsg", i__1, "outmsg_", (ftnlen)971)) * 
-		    80, (ftnlen)255, (ftnlen)80);
+	    wrline_(device, __state->defmsg + ((i__1 = i__ - 1) < 4 && 0 <= 
+		    i__1 ? i__1 : s_rnge("defmsg", i__1, "outmsg_", (ftnlen)
+		    971)) * 80, (ftnlen)255, (ftnlen)80);
 	}
 	wrline_(device, " ", (ftnlen)255, (ftnlen)1);
     }
@@ -958,7 +968,7 @@ static integer c__1 = 1;
 
 /*     Write the ending border out: */
 
-    wrline_(device, border, (ftnlen)255, (ftnlen)80);
+    wrline_(device, __state->border, (ftnlen)255, (ftnlen)80);
     return 0;
 } /* outmsg_ */
 

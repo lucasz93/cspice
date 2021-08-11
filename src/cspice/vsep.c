@@ -1,9 +1,17 @@
-/* vsep.f -- translated by f2c (version 19980913).
+/* vsep.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vsep_state_t;
+static vsep_state_t* get_vsep_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VSEP  ( Angular separation of vectors, 3 dimensions ) */
 doublereal vsep_(doublereal *v1, doublereal *v2)
@@ -16,13 +24,19 @@ doublereal vsep_(doublereal *v1, doublereal *v2)
 
     /* Local variables */
     extern doublereal vdot_(doublereal *, doublereal *);
-    doublereal dmag1, dmag2, vtemp[3];
+    doublereal dmag1;
+    doublereal dmag2;
+    doublereal vtemp[3];
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
 	    *);
     extern doublereal vnorm_(doublereal *);
-    doublereal u1[3], u2[3];
+    doublereal u1[3];
+    doublereal u2[3];
     extern doublereal pi_(void);
 
+
+    /* Module state */
+    vsep_state_t* __state = get_vsep_state();
 /* $ Abstract */
 
 /*      Find the separation angle in radians between two double */

@@ -1,15 +1,21 @@
-/* zzspkac0.f -- translated by f2c (version 19980913).
+/* zzspkac0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__3 = 3;
-static doublereal c_b13 = 1.;
+extern zzspkac0_init_t __zzspkac0_init;
+static zzspkac0_state_t* get_zzspkac0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkac0)
+		state->zzspkac0 = __cspice_allocate_module(sizeof(
+	zzspkac0_state_t), &__zzspkac0_init, sizeof(__zzspkac0_init));
+	return state->zzspkac0;
+
+}
 
 /* $Procedure ZZSPKAC0 ( S/P Kernel, aberration corrected state ) */
 /* Subroutine */ int zzspkac0_(integer *targ, doublereal *et, char *ref, char 
@@ -18,8 +24,6 @@ static doublereal c_b13 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;
@@ -32,28 +36,34 @@ static doublereal c_b13 = 1.;
     /* Local variables */
     extern /* Subroutine */ int zzspkas0_(integer *, doublereal *, char *, 
 	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), zzspkgo0_(integer *, doublereal *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen);
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzspkgo0_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
     integer i__;
     extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
     doublereal t;
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    doublereal ltssb, ssblt, stobs[12]	/* was [6][2] */;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    doublereal ltssb;
+    doublereal ssblt;
+    doublereal stobs[12]	/* was [6][2] */;
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     logical attblk[15];
     extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *);
     doublereal ssbobs[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), irfnum_(char *, integer *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
     doublereal acc[3];
 
+
+    /* Module state */
+    zzspkac0_state_t* __state = get_zzspkac0_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -661,7 +671,8 @@ static doublereal c_b13 = 1.;
     } else {
 	chkin_("ZZSPKAC0", (ftnlen)8);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -674,7 +685,7 @@ static doublereal c_b13 = 1.;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -685,8 +696,8 @@ static doublereal c_b13 = 1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZPRSCOR. */
 
-	usestl = attblk[2];
-	first = FALSE_;
+	__state->usestl = attblk[2];
+	__state->first = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -711,8 +722,8 @@ static doublereal c_b13 = 1.;
 /*     Get the geometric state of the observer relative to the SSB, */
 /*     which we'll call SSBOBS. */
 
-    zzspkgo0_(obs, et, ref, &c__0, ssbobs, &ssblt, ref_len);
-    if (usestl) {
+    zzspkgo0_(obs, et, ref, &__state->c__0, ssbobs, &ssblt, ref_len);
+    if (__state->usestl) {
 
 /*        Numerically differentiate the observer velocity relative to */
 /*        the SSB to obtain acceleration. We first evaluate the */
@@ -720,13 +731,13 @@ static doublereal c_b13 = 1.;
 /*        barycenter at ET +/- DELTA. */
 	for (i__ = 1; i__ <= 2; ++i__) {
 	    t = *et + ((i__ << 1) - 3) * 1.;
-	    zzspkgo0_(obs, &t, ref, &c__0, &stobs[(i__1 = i__ * 6 - 6) < 12 &&
-		     0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkac0_", (
-		    ftnlen)632)], &ltssb, ref_len);
+	    zzspkgo0_(obs, &t, ref, &__state->c__0, &stobs[(i__1 = i__ * 6 - 
+		    6) < 12 && 0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzs"
+		    "pkac0_", (ftnlen)632)], &ltssb, ref_len);
 	}
-	qderiv_(&c__3, &stobs[3], &stobs[9], &c_b13, acc);
+	qderiv_(&__state->c__3, &stobs[3], &stobs[9], &__state->c_b13, acc);
     } else {
-	cleard_(&c__3, acc);
+	cleard_(&__state->c__3, acc);
     }
 
 /*     Look up the apparent state. The light time and light */

@@ -1,9 +1,17 @@
-/* removc.f -- translated by f2c (version 19980913).
+/* removc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int removc_state_t;
+static removc_state_t* get_removc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REMOVC ( Remove an item from a character set ) */
 /* Subroutine */ int removc_(char *item, char *a, ftnlen item_len, ftnlen 
@@ -16,7 +24,8 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical in;
@@ -26,6 +35,9 @@
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    removc_state_t* __state = get_removc_state();
 /* $ Abstract */
 
 /*      Remove an item from a character set. */

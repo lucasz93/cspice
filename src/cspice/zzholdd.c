@@ -1,14 +1,21 @@
-/* zzholdd.f -- translated by f2c (version 19980913).
+/* zzholdd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__4 = 4;
+extern zzholdd_init_t __zzholdd_init;
+static zzholdd_state_t* get_zzholdd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzholdd)
+		state->zzholdd = __cspice_allocate_module(sizeof(
+	zzholdd_state_t), &__zzholdd_init, sizeof(__zzholdd_init));
+	return state->zzholdd;
+
+}
 
 /* $Procedure ZZHOLDD ( Private --- hold a scalar DP ) */
 /* Subroutine */ int zzholdd_(integer *op, integer *id, logical *ok, 
@@ -16,7 +23,6 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static logical init = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -27,15 +33,16 @@ static integer c__4 = 4;
     /* Local variables */
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static logical first[4];
     extern integer brckti_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static doublereal svalue[4];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzholdd_state_t* __state = get_zzholdd_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -426,7 +433,7 @@ static integer c__4 = 4;
 
 /*     Confirm a proper ID value. */
 
-    if (brckti_(id, &c__1, &c__4) != *id) {
+    if (brckti_(id, &__state->c__1, &__state->c__4) != *id) {
 	*value = 0.;
 	*ok = FALSE_;
 	chkin_("ZZHOLDD", (ftnlen)7);
@@ -434,7 +441,7 @@ static integer c__4 = 4;
 		"nfirmthe ID value exists in the zzholdd.inc parameter file.", 
 		(ftnlen)118);
 	errint_("#1", id, (ftnlen)2);
-	errint_("#2", &c__4, (ftnlen)2);
+	errint_("#2", &__state->c__4, (ftnlen)2);
 	sigerr_("SPICE(UNKNOWNID)", (ftnlen)16);
 	chkout_("ZZHOLDD", (ftnlen)7);
 	return 0;
@@ -442,12 +449,12 @@ static integer c__4 = 4;
 
 /*     Initialize the FIRST array; perform once per program run. */
 
-    if (init) {
+    if (__state->init) {
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    first[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		    i__1, "zzholdd_", (ftnlen)318)] = TRUE_;
+	    __state->first[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		    "first", i__1, "zzholdd_", (ftnlen)318)] = TRUE_;
 	}
-	init = FALSE_;
+	__state->init = FALSE_;
     }
 
 /*     Perform the operation as described by OP. */
@@ -462,16 +469,16 @@ static integer c__4 = 4;
 /*          - If no previous set to this ID, return value as zero and */
 /*            OK as false. */
 
-	if (first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		i__1, "zzholdd_", (ftnlen)341)]) {
+	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		"first", i__1, "zzholdd_", (ftnlen)341)]) {
 	    *value = 0.;
 	    *ok = FALSE_;
 	} else {
 
 /*           Return the stored value. */
 
-	    *value = svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svalue", i__1, "zzholdd_", (ftnlen)351)];
+	    *value = __state->svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 
+		    : s_rnge("svalue", i__1, "zzholdd_", (ftnlen)351)];
 	    *ok = TRUE_;
 	}
     } else if (*op == -2) {
@@ -479,19 +486,19 @@ static integer c__4 = 4;
 /*        Store a value for later use. Set FIRST to false */
 /*        so subsequent get calls will work. */
 
-	if (first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		i__1, "zzholdd_", (ftnlen)363)]) {
-	    first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", 
-		    i__1, "zzholdd_", (ftnlen)365)] = FALSE_;
+	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		"first", i__1, "zzholdd_", (ftnlen)363)]) {
+	    __state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		    "first", i__1, "zzholdd_", (ftnlen)365)] = FALSE_;
 	}
-	svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("svalue", 
-		i__1, "zzholdd_", (ftnlen)369)] = *value;
+	__state->svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		"svalue", i__1, "zzholdd_", (ftnlen)369)] = *value;
     } else if (*op == -3) {
 
 /*        Reset FIRST( ID ) forcing a put before a get. */
 
-	first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("first", i__1,
-		 "zzholdd_", (ftnlen)376)] = TRUE_;
+	__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+		"first", i__1, "zzholdd_", (ftnlen)376)] = TRUE_;
     } else {
 
 /*        Unknown value for 'OP'. Signal an error. */

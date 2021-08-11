@@ -1,14 +1,21 @@
-/* zzcvstat.f -- translated by f2c (version 19980913).
+/* zzcvstat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b6 = 1.;
-static integer c__6 = 6;
+extern zzcvstat_init_t __zzcvstat_init;
+static zzcvstat_state_t* get_zzcvstat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzcvstat)
+		state->zzcvstat = __cspice_allocate_module(sizeof(
+	zzcvstat_state_t), &__zzcvstat_init, sizeof(__zzcvstat_init));
+	return state->zzcvstat;
+
+}
 
 /* $Procedure ZZCVSTAT ( Constant velocity state ) */
 /* Subroutine */ int zzcvstat_0_(int n__, doublereal *et, char *ref, integer *
@@ -19,25 +26,24 @@ static integer c__6 = 6;
 
     /* Local variables */
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    static doublereal svet;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *);
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), vlcom_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    static char svref[32];
-    static integer svctr;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
     extern logical failed_(void);
     doublereal xf[36]	/* was [6][6] */;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal xstate[6];
     extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
-    static doublereal svstat[6];
 
+    /* Module state */
+    zzcvstat_state_t* __state = get_zzcvstat_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -362,23 +368,24 @@ L_zzcvxsta:
 
 /*     Extrapolate the saved state to the input time. */
 
-    delta = *et - svet;
-    vlcom_(&c_b6, svstat, &delta, &svstat[3], xstate);
-    vequ_(&svstat[3], &xstate[3]);
+    delta = *et - __state->svet;
+    vlcom_(&__state->c_b6, __state->svstat, &delta, &__state->svstat[3], 
+	    xstate);
+    vequ_(&__state->svstat[3], &xstate[3]);
 
 /*     Convert the extrapolated state to the requested frame */
 /*     at ET. */
 
-    sxform_(svref, ref, et, xf, (ftnlen)32, ref_len);
+    sxform_(__state->svref, ref, et, xf, (ftnlen)32, ref_len);
     if (failed_()) {
 	chkout_("ZZCVXSTA", (ftnlen)8);
 	return 0;
     }
-    mxvg_(xf, xstate, &c__6, &c__6, state);
+    mxvg_(xf, xstate, &__state->c__6, &__state->c__6, state);
 
 /*     Set the output center of motion argument as well. */
 
-    *center = svctr;
+    *center = __state->svctr;
     chkout_("ZZCVXSTA", (ftnlen)8);
     return 0;
 /* $Procedure ZZCVSSTA ( Constant velocity state, store parameters ) */
@@ -517,10 +524,10 @@ L_zzcvssta:
 
 /*     Save all inputs. */
 
-    moved_(state, &c__6, svstat);
-    svctr = *center;
-    svet = *et;
-    s_copy(svref, ref, (ftnlen)32, ref_len);
+    moved_(state, &__state->c__6, __state->svstat);
+    __state->svctr = *center;
+    __state->svet = *et;
+    s_copy(__state->svref, ref, (ftnlen)32, ref_len);
     return 0;
 } /* zzcvstat_ */
 

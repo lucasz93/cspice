@@ -1,13 +1,21 @@
-/* zzrytrec.f -- translated by f2c (version 19980913).
+/* zzrytrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzrytrec_init_t __zzrytrec_init;
+static zzrytrec_state_t* get_zzrytrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrytrec)
+		state->zzrytrec = __cspice_allocate_module(sizeof(
+	zzrytrec_state_t), &__zzrytrec_init, sizeof(__zzrytrec_init));
+	return state->zzrytrec;
+
+}
 
 /* $Procedure ZZRYTREC ( DSK, ray touches rectangular element ) */
 /* Subroutine */ int zzrytrec_(doublereal *vertex, doublereal *raydir, 
@@ -22,25 +30,29 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), zzraybox_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzraybox_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, logical *);
     integer i__;
-    doublereal l[3], delta[3];
+    doublereal l[3];
+    doublereal delta[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     logical inside;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal boxori[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal extent[3];
     extern logical return_(void);
     extern /* Subroutine */ int zzinrec_(doublereal *, doublereal *, 
 	    doublereal *, integer *, logical *);
 
+
+    /* Module state */
+    zzrytrec_state_t* __state = get_zzrytrec_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -252,7 +264,7 @@ static integer c__0 = 0;
 
     *nxpts = 0;
     d__1 = *margin * 2;
-    zzinrec_(vertex, bounds, &d__1, &c__0, &inside);
+    zzinrec_(vertex, bounds, &d__1, &__state->c__0, &inside);
     if (inside) {
 
 /*        We know the answer. */
@@ -265,9 +277,9 @@ static integer c__0 = 0;
 /*     Expand the box using the specified margin. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	delta[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("delta", i__1,
-		 "zzrytrec_", (ftnlen)269)] = *margin * (d__1 = l[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("l", i__2, "zzrytrec_", 
+	delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", i__2,
+		 "zzrytrec_", (ftnlen)269)] = *margin * (d__1 = l[(i__1 = i__ 
+		- 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzrytrec_", 
 		(ftnlen)269)], abs(d__1));
 	boxori[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("boxori", 
 		i__1, "zzrytrec_", (ftnlen)271)] = bounds[(i__2 = (i__ << 1) 

@@ -1,13 +1,24 @@
-/* vadd.f -- translated by f2c (version 19980913).
+/* vadd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vadd_state_t;
+static vadd_state_t* get_vadd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VADD ( Vector addition, 3 dimensional ) */
 /* Subroutine */ int vadd_(doublereal *v1, doublereal *v2, doublereal *vout)
 {
+
+    /* Module state */
+    vadd_state_t* __state = get_vadd_state();
 /* $ Abstract */
 
 /*      Add two 3 dimensional vectors. */

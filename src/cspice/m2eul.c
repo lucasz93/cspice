@@ -1,14 +1,21 @@
-/* m2eul.f -- translated by f2c (version 19980913).
+/* m2eul.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b15 = .1;
-static integer c__9 = 9;
+extern m2eul_init_t __m2eul_init;
+static m2eul_state_t* get_m2eul_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->m2eul)
+		state->m2eul = __cspice_allocate_module(sizeof(m2eul_state_t),
+	 &__m2eul_init, sizeof(__m2eul_init));
+	return state->m2eul;
+
+}
 
 /* $Procedure      M2EUL ( Matrix to Euler angles ) */
 /* Subroutine */ int m2eul_(doublereal *r__, integer *axis3, integer *axis2, 
@@ -17,7 +24,6 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,23 +34,29 @@ static integer c__9 = 9;
 
     /* Local variables */
     doublereal sign;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), mtxm_(
-	    doublereal *, doublereal *, doublereal *);
-    integer c__, i__;
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
+	    );
+    integer c__;
+    integer i__;
     logical degen;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical isrot_(doublereal *, doublereal *, doublereal *);
     doublereal change[9]	/* was [3][3] */;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpmat[9]	/* was [3][3] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal tmprot[9]	/* was [3][3] */;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    m2eul_state_t* __state = get_m2eul_state();
 /* $ Abstract */
 
 /*     Factor a rotation matrix as a product of three rotations about */
@@ -639,7 +651,7 @@ static integer c__9 = 9;
 
 /*     R must be a rotation matrix, or we may as well forget it. */
 
-    } else if (! isrot_(r__, &c_b15, &c_b15)) {
+    } else if (! isrot_(r__, &__state->c_b15, &__state->c_b15)) {
 	setmsg_("Input matrix is not a rotation.", (ftnlen)31);
 	sigerr_("SPICE(NOTAROTATION)", (ftnlen)19);
 	chkout_("M2EUL", (ftnlen)5);
@@ -729,8 +741,8 @@ static integer c__9 = 9;
 /*        is just a little mapping that takes 1 to 2, 2 to 3, and 3 to */
 /*        1. */
 
-	if (*axis2 == next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "m2eul_", (ftnlen)746)]) {
+	if (*axis2 == __state->next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge("next", i__1, "m2eul_", (ftnlen)746)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -742,7 +754,7 @@ static integer c__9 = 9;
 
 /*        Set up the entries of CHANGE: */
 
-	cleard_(&c__9, change);
+	cleard_(&__state->c__9, change);
 	change[(i__1 = *axis3 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
 		i__1, "m2eul_", (ftnlen)762)] = 1.;
 	change[(i__1 = *axis2 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
@@ -853,8 +865,8 @@ static integer c__9 = 9;
 /*        straightened out right now.  The variable NEXT is just a */
 /*        little mapping that takes 1 to 2, 2 to 3, and 3 to 1. */
 
-	if (*axis2 == next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "m2eul_", (ftnlen)883)]) {
+	if (*axis2 == __state->next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge("next", i__1, "m2eul_", (ftnlen)883)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -862,7 +874,7 @@ static integer c__9 = 9;
 
 /*        Set up the entries of CHANGE: */
 
-	cleard_(&c__9, change);
+	cleard_(&__state->c__9, change);
 	change[(i__1 = *axis3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
 		i__1, "m2eul_", (ftnlen)894)] = 1.;
 	change[(i__1 = *axis2 + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 

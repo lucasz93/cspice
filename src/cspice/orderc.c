@@ -1,9 +1,17 @@
-/* orderc.f -- translated by f2c (version 19980913).
+/* orderc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int orderc_state_t;
+static orderc_state_t* get_orderc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ORDERC ( Order of a character array ) */
 /* Subroutine */ int orderc_(char *array, integer *ndim, integer *iorder, 
@@ -16,10 +24,15 @@
     logical l_le(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    orderc_state_t* __state = get_orderc_state();
 /* $ Abstract */
 
 /*      Determine the order of elements in an array of character strings. */

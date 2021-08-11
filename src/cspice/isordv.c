@@ -1,9 +1,17 @@
-/* isordv.f -- translated by f2c (version 19980913).
+/* isordv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isordv_state_t;
+static isordv_state_t* get_isordv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ISORDV ( Is it an order vector ) */
 logical isordv_(integer *array, integer *n)
@@ -13,8 +21,12 @@ logical isordv_(integer *array, integer *n)
     logical ret_val;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
 
+
+    /* Module state */
+    isordv_state_t* __state = get_isordv_state();
 /* $ Abstract */
 
 /*     Determine whether an array of N items contains the integers */

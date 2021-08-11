@@ -1,22 +1,27 @@
-/* zzsclk.f -- translated by f2c (version 19980913).
+/* zzsclk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__2 = 2;
-static integer c__7 = 7;
+extern zzsclk_init_t __zzsclk_init;
+static zzsclk_state_t* get_zzsclk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsclk)
+		state->zzsclk = __cspice_allocate_module(sizeof(
+	zzsclk_state_t), &__zzsclk_init, sizeof(__zzsclk_init));
+	return state->zzsclk;
+
+}
 
 /* $Procedure    ZZSCLK ( Is there and SCLK for a CKID ) */
 logical zzsclk_(integer *ckid, integer *sclkid)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2];
@@ -29,29 +34,35 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    char sclk[32], type__[32];
-    integer i__, n;
+    char sclk[32];
+    char type__[32];
+    integer i__;
+    integer n;
     extern integer cardi_(integer *);
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     char agent[32];
-    logical watch, found;
+    logical watch;
+    logical found;
     extern integer sizei_(integer *);
-    static integer known[16];
     logical keepid;
-    static integer passed[16];
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), dtpool_(char *, 
-	    logical *, integer *, char *, ftnlen, ftnlen);
-    static integer dtsize[7];
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
     extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
     char sclkvr[32*7];
-    extern /* Subroutine */ int ssizei_(integer *, integer *), removi_(
-	    integer *, integer *), insrti_(integer *, integer *);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int removi_(integer *, integer *);
+    extern /* Subroutine */ int insrti_(integer *, integer *);
     extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), swpool_(
-	    char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
 
+
+    /* Module state */
+    zzsclk_state_t* __state = get_zzsclk_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -182,17 +193,17 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 	return ret_val;
     }
     chkin_("ZZSCLK", (ftnlen)6);
-    if (first) {
-	first = FALSE_;
-	dtsize[0] = 1;
-	dtsize[1] = 1;
-	dtsize[2] = 1;
-	dtsize[3] = 1;
-	dtsize[4] = 3;
-	dtsize[5] = 1;
-	dtsize[6] = 1;
-	ssizei_(&c__10, known);
-	ssizei_(&c__10, passed);
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->dtsize[0] = 1;
+	__state->dtsize[1] = 1;
+	__state->dtsize[2] = 1;
+	__state->dtsize[3] = 1;
+	__state->dtsize[4] = 3;
+	__state->dtsize[5] = 1;
+	__state->dtsize[6] = 1;
+	ssizei_(&__state->c__10, __state->known);
+	ssizei_(&__state->c__10, __state->passed);
     }
 
 /*     We've got a text kernel (or meta kernel). See if there is an */
@@ -204,23 +215,23 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /* Writing concatenation */
     i__2[0] = 6, a__1[0] = "ZZSCLK";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(agent, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(agent, a__1, i__2, &__state->c__2, (ftnlen)32);
 
 /*     See if this is an ID-code we've encountered before.  If it */
 /*     is we can make use of stored knowledge about this ID-code. */
 
-    if (elemi_(sclkid, known)) {
+    if (elemi_(sclkid, __state->known)) {
 	watch = FALSE_;
 	keepid = TRUE_;
 	cvpool_(agent, &update, (ftnlen)32);
-    } else if (cardi_(known) < sizei_(known)) {
+    } else if (cardi_(__state->known) < sizei_(__state->known)) {
 
 /*        The SCLKID specified is not in the list of SCLKIDs for */
 /*        this routine and there is room left in the pool of */
 /*        SCLKIDs to keep track of one more.  Put this ID into */
 /*        the list of known IDS */
 
-	insrti_(sclkid, known);
+	insrti_(sclkid, __state->known);
 	update = TRUE_;
 	watch = TRUE_;
 	keepid = TRUE_;
@@ -234,7 +245,7 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /*        Nothing has changed in the kernel pool w.r.t this agent. */
 /*        The test for an SCLK will not have changed either. */
 
-	ret_val = elemi_(sclkid, passed);
+	ret_val = elemi_(sclkid, __state->passed);
 	chkout_("ZZSCLK", (ftnlen)6);
 	return ret_val;
     }
@@ -248,37 +259,37 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /* Writing concatenation */
     i__2[0] = 15, a__1[0] = "SCLK_DATA_TYPE_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 16, a__1[0] = "SCLK01_N_FIELDS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 32, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 32, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 14, a__1[0] = "SCLK01_MODULI_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 64, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 15, a__1[0] = "SCLK01_OFFSETS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 96, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 96, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 20, a__1[0] = "SCLK01_COEFFICIENTS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 128, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 128, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 21, a__1[0] = "SCLK_PARTITION_START_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 160, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 160, a__1, i__2, &__state->c__2, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 19, a__1[0] = "SCLK_PARTITION_END_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 192, a__1, i__2, &c__2, (ftnlen)32);
+    s_cat(sclkvr + 192, a__1, i__2, &__state->c__2, (ftnlen)32);
 
 /*     If we are supposed to watch for this agent, we add him to */
 /*     the list of kernel pool agents. */
 
     if (watch) {
-	swpool_(agent, &c__7, sclkvr, (ftnlen)32, (ftnlen)32);
+	swpool_(agent, &__state->c__7, sclkvr, (ftnlen)32, (ftnlen)32);
 	cvpool_(agent, &update, (ftnlen)32);
     }
 
@@ -290,16 +301,16 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 		"sclkvr", i__1, "zzsclk_", (ftnlen)276)) << 5), &found, &n, 
 		type__, (ftnlen)32, (ftnlen)32);
 	if (! found || s_cmp(type__, "N", (ftnlen)32, (ftnlen)1) != 0 || n / 
-		dtsize[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"dtsize", i__1, "zzsclk_", (ftnlen)278)] * dtsize[(i__3 = i__ 
-		- 1) < 7 && 0 <= i__3 ? i__3 : s_rnge("dtsize", i__3, "zzscl"
-		"k_", (ftnlen)278)] != n) {
+		__state->dtsize[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
+		s_rnge("dtsize", i__1, "zzsclk_", (ftnlen)278)] * 
+		__state->dtsize[(i__3 = i__ - 1) < 7 && 0 <= i__3 ? i__3 : 
+		s_rnge("dtsize", i__3, "zzsclk_", (ftnlen)278)] != n) {
 
 /*           We don't have adequate SCLK data for the specified */
 /*           object.  Remove this AGENT from the list of agents */
 /*           that have passed the test. */
 
-	    removi_(sclkid, passed);
+	    removi_(sclkid, __state->passed);
 	    chkout_("ZZSCLK", (ftnlen)6);
 	    return ret_val;
 	}
@@ -309,7 +320,7 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /*     there is room to WATCH for this agent, */
 
     if (keepid) {
-	insrti_(sclkid, passed);
+	insrti_(sclkid, __state->passed);
     }
 
 /*     As far as we can tell, everything looks ok. */

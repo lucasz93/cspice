@@ -1,15 +1,21 @@
-/* dafec.f -- translated by f2c (version 19980913).
+/* dafec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__5000 = 5000;
+extern dafec_init_t __dafec_init;
+static dafec_state_t* get_dafec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafec)
+		state->dafec = __cspice_allocate_module(sizeof(dafec_state_t),
+	 &__dafec_init, sizeof(__dafec_init));
+	return state->dafec;
+
+}
 
 /* $Procedure DAFEC ( DAF extract comments ) */
 /* Subroutine */ int dafec_(integer *handle, integer *bufsiz, integer *n, 
@@ -17,7 +23,6 @@ static integer c__5000 = 5000;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -32,9 +37,15 @@ static integer c__5000 = 5000;
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
-    integer i__, j, k;
+    integer i__;
+    integer j;
+    integer k;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, bward, fward, recno, index;
+    integer ncomc;
+    integer bward;
+    integer fward;
+    integer recno;
+    integer index;
     logical found;
     integer ncomr;
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
@@ -45,39 +56,31 @@ static integer c__5000 = 5000;
     integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char ifname[60];
-    static integer filhan[5000];
-    static char crecrd[1000];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
-    static integer filchr[5000];
-    integer daflun, nchars;
-    static integer filcnt[5000];
-    static char eocmrk[1];
+    integer daflun;
+    integer nchars;
     extern integer isrchi_(integer *, integer *, integer *);
     integer linlen;
-    static integer nfiles;
     integer eocpos;
-    static char eolmrk[1];
-    static integer lsthan, lstrec[5000];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer numcom;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer nelpos;
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer curpos;
     extern logical return_(void);
-    static integer lstpos[5000];
     logical eol;
 
     /* Fortran I/O blocks */
-    static cilist io___29 = { 1, 0, 1, 0, 0 };
-    static cilist io___33 = { 1, 0, 1, 0, 0 };
-    static cilist io___38 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    dafec_state_t* __state = get_dafec_state();
 /* $ Abstract */
 
 /*     Extract comments from the comment area of a binary DAF. */
@@ -424,23 +427,23 @@ static integer c__5000 = 5000;
 /*     we need to initialize the character value of the end-of-line */
 /*     marker, and the file table variables. */
 
-    if (first) {
-	first = FALSE_;
-	nfiles = 0;
-	lsthan = 0;
-	*(unsigned char *)eocmrk = '\4';
-	*(unsigned char *)eolmrk = '\0';
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->nfiles = 0;
+	__state->lsthan = 0;
+	*(unsigned char *)__state->eocmrk = '\4';
+	*(unsigned char *)__state->eolmrk = '\0';
 	for (i__ = 1; i__ <= 5000; ++i__) {
-	    filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "chr", i__1, "dafec_", (ftnlen)446)] = 0;
-	    filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "cnt", i__1, "dafec_", (ftnlen)447)] = 0;
-	    filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "han", i__1, "dafec_", (ftnlen)448)] = 0;
-	    lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "pos", i__1, "dafec_", (ftnlen)449)] = 0;
-	    lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "rec", i__1, "dafec_", (ftnlen)450)] = 0;
+	    __state->filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("filchr", i__1, "dafec_", (ftnlen)446)] = 0;
+	    __state->filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("filcnt", i__1, "dafec_", (ftnlen)447)] = 0;
+	    __state->filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("filhan", i__1, "dafec_", (ftnlen)448)] = 0;
+	    __state->lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("lstpos", i__1, "dafec_", (ftnlen)449)] = 0;
+	    __state->lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("lstrec", i__1, "dafec_", (ftnlen)450)] = 0;
 	}
     }
 
@@ -467,7 +470,7 @@ static integer c__5000 = 5000;
 /*     Convert the DAF handle to its corresponding Fortran logical */
 /*     unit number for reading the comment records. */
 
-    zzddhhlu_(handle, "DAF", &c_false, &daflun, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &daflun, (ftnlen)3);
     if (failed_()) {
 	chkout_("DAFEC", (ftnlen)5);
 	return 0;
@@ -480,8 +483,8 @@ static integer c__5000 = 5000;
 /*     If we have extracted comments from at least one file and we */
 /*     didn't finish, check to see if HANDLE is in the file table. */
 
-    if (nfiles > 0) {
-	index = isrchi_(handle, &nfiles, filhan);
+    if (__state->nfiles > 0) {
+	index = isrchi_(handle, &__state->nfiles, __state->filhan);
     } else {
 	index = 0;
     }
@@ -494,14 +497,14 @@ static integer c__5000 = 5000;
 /*        Set the record number and the starting position accordingly, */
 /*        i.e., where we left off when we last read from that file. */
 
-	recno = lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"lstrec", i__1, "dafec_", (ftnlen)516)];
-	curpos = lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("lstpos", i__1, "dafec_", (ftnlen)517)];
-	nchars = filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("filchr", i__1, "dafec_", (ftnlen)518)];
-	ncomc = filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"filcnt", i__1, "dafec_", (ftnlen)519)];
+	recno = __state->lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 
+		: s_rnge("lstrec", i__1, "dafec_", (ftnlen)516)];
+	curpos = __state->lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? 
+		i__1 : s_rnge("lstpos", i__1, "dafec_", (ftnlen)517)];
+	nchars = __state->filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? 
+		i__1 : s_rnge("filchr", i__1, "dafec_", (ftnlen)518)];
+	ncomc = __state->filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 
+		: s_rnge("filcnt", i__1, "dafec_", (ftnlen)519)];
     } else {
 
 /*        We have not yet read any comments from this file, so start at */
@@ -533,13 +536,14 @@ static integer c__5000 = 5000;
 	    found = FALSE_;
 	    while(ncomr > 0 && ! found && empty) {
 		recno = ncomr + 1;
-		io___29.ciunit = daflun;
-		io___29.cirec = recno;
-		iostat = s_rdue(&io___29);
+		__state->io___29.ciunit = daflun;
+		__state->io___29.cirec = recno;
+		iostat = s_rdue(&__state->io___29);
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+		iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000)
+			;
 		if (iostat != 0) {
 		    goto L100001;
 		}
@@ -558,13 +562,13 @@ L100001:
 /*              Scan the comment record looking for the end of comments */
 /*              marker. */
 
-		eocpos = cpos_(crecrd, eocmrk, &c__1, (ftnlen)1000, (ftnlen)1)
-			;
+		eocpos = cpos_(__state->crecrd, __state->eocmrk, &
+			__state->c__1, (ftnlen)1000, (ftnlen)1);
 		if (eocpos > 0) {
 		    found = TRUE_;
 		} else {
-		    nelpos = ncpos_(crecrd, eolmrk, &c__1, (ftnlen)1000, (
-			    ftnlen)1);
+		    nelpos = ncpos_(__state->crecrd, __state->eolmrk, &
+			    __state->c__1, (ftnlen)1000, (ftnlen)1);
 		    if (nelpos != 0) {
 			empty = FALSE_;
 		    } else {
@@ -613,20 +617,20 @@ L100001:
 
 /*     Begin reading the comment area into the buffer. */
 
-    if (*handle != lsthan) {
+    if (*handle != __state->lsthan) {
 
 /*        If the current DAF handle is not the same as the handle on */
 /*        the last call, then we need to read in the appropriate record */
 /*        from the DAF comment area. Otherwise the record was saved and */
 /*        so we don't need to read it in. */
 
-	io___33.ciunit = daflun;
-	io___33.cirec = recno;
-	iostat = s_rdue(&io___33);
+	__state->io___33.ciunit = daflun;
+	__state->io___33.cirec = recno;
+	iostat = s_rdue(&__state->io___33);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+	iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -657,7 +661,8 @@ L100002:
 	eol = FALSE_;
 	while(! eol) {
 	    ++nchars;
-	    *(unsigned char *)ch = *(unsigned char *)&crecrd[curpos - 1];
+	    *(unsigned char *)ch = *(unsigned char *)&__state->crecrd[curpos 
+		    - 1];
 	    if (*(unsigned char *)ch == 0) {
 		eol = TRUE_;
 		if (j <= linlen) {
@@ -686,13 +691,14 @@ L100002:
 
 	    if (curpos == 1000) {
 		++recno;
-		io___38.ciunit = daflun;
-		io___38.cirec = recno;
-		iostat = s_rdue(&io___38);
+		__state->io___38.ciunit = daflun;
+		__state->io___38.cirec = recno;
+		iostat = s_rdue(&__state->io___38);
 		if (iostat != 0) {
 		    goto L100003;
 		}
-		iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+		iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000)
+			;
 		if (iostat != 0) {
 		    goto L100003;
 		}
@@ -748,7 +754,7 @@ L100003:
 /*           entry for this file from the file table. */
 
 	    *done = TRUE_;
-	    lsthan = 0;
+	    __state->lsthan = 0;
 
 /*           0 <= INDEX <= NFILES, and we only want to remove things */
 /*           from the file table if: */
@@ -760,30 +766,35 @@ L100003:
 /*           table, and that we are currently reading from one of them. */
 
 	    if (index > 0) {
-		i__1 = nfiles - 1;
+		i__1 = __state->nfiles - 1;
 		for (k = index; k <= i__1; ++k) {
-		    filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filchr", i__2, "dafec_", (ftnlen)811)] = filchr[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filchr", i__3, "dafec_", (ftnlen)811)];
-		    filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filcnt", i__2, "dafec_", (ftnlen)812)] = filcnt[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filcnt", i__3, "dafec_", (ftnlen)812)];
-		    filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filhan", i__2, "dafec_", (ftnlen)813)] = filhan[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filhan", i__3, "dafec_", (ftnlen)813)];
-		    lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstrec", i__2, "dafec_", (ftnlen)814)] = lstrec[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstrec", i__3, "dafec_", (ftnlen)814)];
-		    lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstpos", i__2, "dafec_", (ftnlen)815)] = lstpos[(
-			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstpos", i__3, "dafec_", (ftnlen)815)];
+		    __state->filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("filchr", i__2, "dafec_", (ftnlen)811)] =
+			     __state->filchr[(i__3 = k) < 5000 && 0 <= i__3 ? 
+			    i__3 : s_rnge("filchr", i__3, "dafec_", (ftnlen)
+			    811)];
+		    __state->filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("filcnt", i__2, "dafec_", (ftnlen)812)] =
+			     __state->filcnt[(i__3 = k) < 5000 && 0 <= i__3 ? 
+			    i__3 : s_rnge("filcnt", i__3, "dafec_", (ftnlen)
+			    812)];
+		    __state->filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("filhan", i__2, "dafec_", (ftnlen)813)] =
+			     __state->filhan[(i__3 = k) < 5000 && 0 <= i__3 ? 
+			    i__3 : s_rnge("filhan", i__3, "dafec_", (ftnlen)
+			    813)];
+		    __state->lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("lstrec", i__2, "dafec_", (ftnlen)814)] =
+			     __state->lstrec[(i__3 = k) < 5000 && 0 <= i__3 ? 
+			    i__3 : s_rnge("lstrec", i__3, "dafec_", (ftnlen)
+			    814)];
+		    __state->lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
+			    : s_rnge("lstpos", i__2, "dafec_", (ftnlen)815)] =
+			     __state->lstpos[(i__3 = k) < 5000 && 0 <= i__3 ? 
+			    i__3 : s_rnge("lstpos", i__3, "dafec_", (ftnlen)
+			    815)];
 		}
-		--nfiles;
+		--__state->nfiles;
 	    }
 	}
     }
@@ -808,38 +819,43 @@ L100003:
 /*           has been read, so add it to the file table and save all of */
 /*           its information if there is room in the file table. */
 
-	    if (nfiles >= 5000) {
+	    if (__state->nfiles >= 5000) {
 		setmsg_("The file table is full with # files, and another fi"
 			"le could not be added.", (ftnlen)73);
-		errint_("#", &c__5000, (ftnlen)1);
+		errint_("#", &__state->c__5000, (ftnlen)1);
 		sigerr_("SPICE(FILETABLEFULL)", (ftnlen)20);
 		chkout_("DAFEC", (ftnlen)5);
 		return 0;
 	    }
-	    ++nfiles;
-	    filchr[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dafec_", (ftnlen)859)] = nchars;
-	    filcnt[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filcnt", i__1, "dafec_", (ftnlen)860)] = ncomc;
-	    filhan[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filhan", i__1, "dafec_", (ftnlen)861)] = *handle;
-	    lstrec[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dafec_", (ftnlen)862)] = recno;
-	    lstpos[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dafec_", (ftnlen)863)] = curpos;
-	    lsthan = *handle;
+	    ++__state->nfiles;
+	    __state->filchr[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("filchr", i__1, "dafec_", (ftnlen)859)] = 
+		    nchars;
+	    __state->filcnt[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("filcnt", i__1, "dafec_", (ftnlen)860)] = 
+		    ncomc;
+	    __state->filhan[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("filhan", i__1, "dafec_", (ftnlen)861)] = *
+		    handle;
+	    __state->lstrec[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("lstrec", i__1, "dafec_", (ftnlen)862)] = 
+		    recno;
+	    __state->lstpos[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("lstpos", i__1, "dafec_", (ftnlen)863)] = 
+		    curpos;
+	    __state->lsthan = *handle;
 	} else {
 
 /*           The comment area of this file is already in the file table, */
 /*           so just update its information. */
 
-	    filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dafec_", (ftnlen)871)] = nchars;
-	    lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dafec_", (ftnlen)872)] = recno;
-	    lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dafec_", (ftnlen)873)] = curpos;
-	    lsthan = *handle;
+	    __state->filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("filchr", i__1, "dafec_", (ftnlen)871)] = nchars;
+	    __state->lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("lstrec", i__1, "dafec_", (ftnlen)872)] = recno;
+	    __state->lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("lstpos", i__1, "dafec_", (ftnlen)873)] = curpos;
+	    __state->lsthan = *handle;
 	}
     }
     chkout_("DAFEC", (ftnlen)5);

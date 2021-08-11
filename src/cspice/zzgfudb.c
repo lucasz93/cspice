@@ -1,14 +1,21 @@
-/* zzgfudb.f -- translated by f2c (version 19980913).
+/* zzgfudb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static doublereal c_b10 = 1.;
+extern zzgfudb_init_t __zzgfudb_init;
+static zzgfudb_state_t* get_zzgfudb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfudb)
+		state->zzgfudb = __cspice_allocate_module(sizeof(
+	zzgfudb_state_t), &__zzgfudb_init, sizeof(__zzgfudb_init));
+	return state->zzgfudb;
+
+}
 
 /* $Procedure ZZGFUDB ( Private --- GF, general use boolean search ) */
 /* Subroutine */ int zzgfudb_(U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp 
@@ -21,8 +28,8 @@ static doublereal c_b10 = 1.;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer count;
     doublereal start;
     extern logical failed_(void);
@@ -31,11 +38,16 @@ static doublereal c_b10 = 1.;
 	    doublereal *, logical *, U_fp, doublereal *);
     extern integer wncard_(doublereal *);
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), wnfetd_(doublereal *, integer *,
-	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
+	     doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzgfudb_state_t* __state = get_zzgfudb_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -768,8 +780,8 @@ static doublereal c_b10 = 1.;
 /*        function passes as UDFUNB, the scalar as UDFUNS. */
 
 	zzgfsolvx_((U_fp)udfuns, (U_fp)udfunb, (U_fp)udstep, (U_fp)udrefn, 
-		bail, (L_fp)udbail, &c_false, &c_b10, &start, &finish, tol, 
-		rpt, (U_fp)udrepu, result);
+		bail, (L_fp)udbail, &__state->c_false, &__state->c_b10, &
+		start, &finish, tol, rpt, (U_fp)udrepu, result);
 	if (failed_()) {
 	    chkout_("ZZGFUDB", (ftnlen)7);
 	    return 0;

@@ -1,14 +1,21 @@
-/* zzinpdt.f -- translated by f2c (version 19980913).
+/* zzinpdt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b16 = 1e-12;
+extern zzinpdt_init_t __zzinpdt_init;
+static zzinpdt_state_t* get_zzinpdt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzinpdt)
+		state->zzinpdt = __cspice_allocate_module(sizeof(
+	zzinpdt_state_t), &__zzinpdt_init, sizeof(__zzinpdt_init));
+	return state->zzinpdt;
+
+}
 
 /* $Procedure ZZINPDT ( DSK, in planetodetic element? ) */
 /* Subroutine */ int zzinpdt_(doublereal *p, doublereal *bounds, doublereal *
@@ -16,8 +23,6 @@ static doublereal c_b16 = 1e-12;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal hpi = -1.;
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -28,33 +33,49 @@ static doublereal c_b16 = 1e-12;
     /* Local variables */
     doublereal dlon;
     extern /* Subroutine */ int zzinpdt0_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *), zzpdcmpl_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, integer *)
-	    ;
+	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzpdcmpl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *);
     doublereal f;
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal twopi_(void);
     extern logical failed_(void);
     doublereal re;
-    extern doublereal pi_(void), halfpi_(void);
-    static doublereal altbds[6]	/* was [2][3] */;
-    doublereal amnalt, amnlat, amnlon, amxalt, amxlat, amxlon, lonmrg, maxalt,
-	     maxlat, maxlon, minalt, minlat, minlon, pcnlat;
-    static doublereal pi2;
+    extern doublereal pi_(void);
+    extern doublereal halfpi_(void);
+    doublereal amnalt;
+    doublereal amnlat;
+    doublereal amnlon;
+    doublereal amxalt;
+    doublereal amxlat;
+    doublereal amxlon;
+    doublereal lonmrg;
+    doublereal maxalt;
+    doublereal maxlat;
+    doublereal maxlon;
+    doublereal minalt;
+    doublereal minlat;
+    doublereal minlon;
+    doublereal pcnlat;
     integer relmin;
     extern logical return_(void);
     integer relmax;
     logical alpass;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), reclat_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal lon;
 
+
+    /* Module state */
+    zzinpdt_state_t* __state = get_zzinpdt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -511,19 +532,19 @@ static doublereal c_b16 = 1e-12;
 	return 0;
     }
     chkin_("ZZINPDT", (ftnlen)7);
-    if (first) {
-	hpi = halfpi_();
-	pi2 = twopi_();
+    if (__state->first) {
+	__state->hpi = halfpi_();
+	__state->pi2 = twopi_();
 
 /*        Initialize the local array used for altitude checks. */
 
-	altbds[2] = -halfpi_();
-	altbds[3] = halfpi_();
-	altbds[0] = -pi_();
-	altbds[1] = pi_();
-	altbds[4] = 0.;
-	altbds[5] = 0.;
-	first = FALSE_;
+	__state->altbds[2] = -halfpi_();
+	__state->altbds[3] = halfpi_();
+	__state->altbds[0] = -pi_();
+	__state->altbds[1] = pi_();
+	__state->altbds[4] = 0.;
+	__state->altbds[5] = 0.;
+	__state->first = FALSE_;
     }
     if (*exclud < 0 || *exclud > 3) {
 	setmsg_("EXCLUD must be in the range 0:3 but was #.", (ftnlen)42);
@@ -587,10 +608,10 @@ static doublereal c_b16 = 1e-12;
 /*        Create adjusted latitude bounds. */
 
 /* Computing MAX */
-	d__1 = -hpi - 1e-12, d__2 = minlat - *margin;
+	d__1 = -__state->hpi - 1e-12, d__2 = minlat - *margin;
 	amnlat = max(d__1,d__2);
 /* Computing MIN */
-	d__1 = hpi + 1e-12, d__2 = maxlat + *margin;
+	d__1 = __state->hpi + 1e-12, d__2 = maxlat + *margin;
 	amxlat = min(d__1,d__2);
 
 /*        Compare the latitude of the input point to the bounds. */
@@ -631,9 +652,9 @@ static doublereal c_b16 = 1e-12;
 /*        tests; the latitude test is set up for an automatic pass */
 /*        (the latitude range of ALTBDS is [-pi/2, pi/2]). */
 
-	altbds[4] = amnalt;
-	altbds[5] = amxalt;
-	zzinpdt0_(p, &lon, altbds, corpar, &c__1, &alpass);
+	__state->altbds[4] = amnalt;
+	__state->altbds[5] = amxalt;
+	zzinpdt0_(p, &lon, __state->altbds, corpar, &__state->c__1, &alpass);
 	if (! alpass) {
 	    chkout_("ZZINPDT", (ftnlen)7);
 	    return 0;
@@ -651,7 +672,7 @@ static doublereal c_b16 = 1e-12;
 
 /*        Start out by normalizing the element's longitude bounds. */
 
-	zznrmlon_(bounds, &bounds[1], &c_b16, &minlon, &maxlon);
+	zznrmlon_(bounds, &bounds[1], &__state->c_b16, &minlon, &maxlon);
 	if (failed_()) {
 	    chkout_("ZZINPDT", (ftnlen)7);
 	    return 0;
@@ -674,9 +695,9 @@ static doublereal c_b16 = 1e-12;
 /*        We use planetocentric latitude to determine whether the point */
 /*        is "close" to a pole. */
 
-	d__1 = hpi - 1e-8;
+	d__1 = __state->hpi - 1e-8;
 	zzpdcmpl_(&re, &f, p, &d__1, &relmax);
-	d__1 = -hpi + 1e-8;
+	d__1 = -__state->hpi + 1e-8;
 	zzpdcmpl_(&re, &f, p, &d__1, &relmin);
 	if (failed_()) {
 	    chkout_("ZZINPDT", (ftnlen)7);
@@ -716,7 +737,7 @@ static doublereal c_b16 = 1e-12;
 
 /*                 See whether an aliased version of LON is a match. */
 
-		    lon += pi2;
+		    lon += __state->pi2;
 		} else {
 
 /*                 Consider LON to be a match with the lower bound. */
@@ -728,7 +749,7 @@ static doublereal c_b16 = 1e-12;
 
 /*                 See whether an aliased version of LON is a match. */
 
-		    lon -= pi2;
+		    lon -= __state->pi2;
 		} else {
 
 /*                 Consider LON to be a match with the upper bound. */

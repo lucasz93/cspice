@@ -1,9 +1,17 @@
-/* gfrefn.f -- translated by f2c (version 19980913).
+/* gfrefn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int gfrefn_state_t;
+static gfrefn_state_t* get_gfrefn_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure GFREFN ( GF, default refinement estimator) */
 /* Subroutine */ int gfrefn_(doublereal *t1, doublereal *t2, logical *s1, 
@@ -12,6 +20,9 @@
     doublereal x;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
 
+
+    /* Module state */
+    gfrefn_state_t* __state = get_gfrefn_state();
 /* $ Abstract */
 
 /*     For those times when we can't do better, we use a bisection */

@@ -1,9 +1,17 @@
-/* zzektrdp.f -- translated by f2c (version 19980913).
+/* zzektrdp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrdp_state_t;
+static zzektrdp_state_t* get_zzektrdp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRDP ( EK tree, return data pointer ) */
 /* Subroutine */ int zzektrdp_(integer *handle, integer *tree, integer *key, 
@@ -12,8 +20,13 @@
     integer node;
     extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *);
-    integer level, noffst, idx;
+    integer level;
+    integer noffst;
+    integer idx;
 
+
+    /* Module state */
+    zzektrdp_state_t* __state = get_zzektrdp_state();
 /* $ Abstract */
 
 /*     Return the data pointer from a specified location in an EK tree. */

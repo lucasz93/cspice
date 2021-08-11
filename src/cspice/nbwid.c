@@ -1,9 +1,17 @@
-/* nbwid.f -- translated by f2c (version 19980913).
+/* nbwid.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nbwid_state_t;
+static nbwid_state_t* get_nbwid_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            NBWID ( Non-blank width of a character array ) */
 integer nbwid_(char *array, integer *nelt, ftnlen array_len)
@@ -15,8 +23,13 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, j, strlen;
+    integer i__;
+    integer j;
+    integer strlen;
 
+
+    /* Module state */
+    nbwid_state_t* __state = get_nbwid_state();
 /* $ Abstract */
 
 /*     Determine the non-blank width of a character array---that is, */

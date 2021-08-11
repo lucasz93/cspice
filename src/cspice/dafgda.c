@@ -1,9 +1,17 @@
-/* dafgda.f -- translated by f2c (version 19980913).
+/* dafgda.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafgda_state_t;
+static dafgda_state_t* get_dafgda_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DAFGDA ( DAF, read data from address ) */
 /* Subroutine */ int dafgda_(integer *handle, integer *begin, integer *end, 
@@ -13,18 +21,29 @@
     integer i__1, i__2;
 
     /* Local variables */
-    integer begr, begw, endr, endw, last, next;
+    integer begr;
+    integer begw;
+    integer endr;
+    integer endw;
+    integer last;
+    integer next;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno;
     logical found;
     integer first;
     extern /* Subroutine */ int dafgdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *), cleard_(integer *, 
-	    doublereal *), dafarw_(integer *, integer *, integer *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen),
-	     errint_(char *, integer *, ftnlen);
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dafgda_state_t* __state = get_dafgda_state();
 /* $ Abstract */
 
 /*     Read the double precision data bounded by two addresses within */

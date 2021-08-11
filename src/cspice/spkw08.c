@@ -1,16 +1,21 @@
-/* spkw08.f -- translated by f2c (version 19980913).
+/* spkw08.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27 = 27;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spkw08_init_t __spkw08_init;
+static spkw08_state_t* get_spkw08_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw08)
+		state->spkw08 = __cspice_allocate_module(sizeof(
+	spkw08_state_t), &__spkw08_init, sizeof(__spkw08_init));
+	return state->spkw08;
+
+}
 
 /* $Procedure      SPKW08 ( Write SPK segment, type 8 ) */
 /* Subroutine */ int spkw08_(integer *handle, integer *body, integer *center, 
@@ -24,28 +29,36 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen), dafps_(integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
 	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal ltime;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     char etstr[40];
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafbna_(
-	    integer *, doublereal *, char *, ftnlen), dafena_(void);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod;
+    integer chrcod;
+    integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
     doublereal tol;
 
+
+    /* Module state */
+    spkw08_state_t* __state = get_spkw08_state();
 /* $ Abstract */
 
 /*     Write a type 8 segment to an SPK file. */
@@ -500,7 +513,7 @@ static integer c__1 = 1;
 	setmsg_("The interpolating polynomials have degree #; the valid degr"
 		"ee range is [1, #].", (ftnlen)78);
 	errint_("#", degree, (ftnlen)1);
-	errint_("#", &c__27, (ftnlen)1);
+	errint_("#", &__state->c__27, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	chkout_("SPKW08", (ftnlen)6);
 	return 0;
@@ -605,7 +618,7 @@ static integer c__1 = 1;
 
 /*     Pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Begin a new segment. */
 
@@ -641,12 +654,12 @@ static integer c__1 = 1;
 
     i__1 = *n * 6;
     dafada_(states, &i__1);
-    dafada_(epoch1, &c__1);
-    dafada_(step, &c__1);
+    dafada_(epoch1, &__state->c__1);
+    dafada_(step, &__state->c__1);
     d__1 = (doublereal) (*degree);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

@@ -1,9 +1,17 @@
-/* kxtrct.f -- translated by f2c (version 19980913).
+/* kxtrct.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int kxtrct_state_t;
+static kxtrct_state_t* get_kxtrct_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      KXTRCT ( Extract a substring starting with a keyword ) */
 /* Subroutine */ int kxtrct_(char *keywd, char *terms, integer *nterms, char *
@@ -17,9 +25,12 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer b, e;
+    integer b;
+    integer e;
     extern integer nblen_(char *, ftnlen);
-    integer start, berase, eerase;
+    integer start;
+    integer berase;
+    integer eerase;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer delims;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
@@ -28,8 +39,12 @@
     extern /* Subroutine */ int shiftl_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer wdindx_(char *, char *, ftnlen, ftnlen);
-    integer endstr, positn;
+    integer endstr;
+    integer positn;
 
+
+    /* Module state */
+    kxtrct_state_t* __state = get_kxtrct_state();
 /* $ Abstract */
 
 /*     Locate a keyword in a string and extract the substring from */

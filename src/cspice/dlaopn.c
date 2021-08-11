@@ -1,15 +1,21 @@
-/* dlaopn.f -- translated by f2c (version 19980913).
+/* dlaopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_b8 = 1000000;
-static integer c_n1 = -1;
+extern dlaopn_init_t __dlaopn_init;
+static dlaopn_state_t* get_dlaopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dlaopn)
+		state->dlaopn = __cspice_allocate_module(sizeof(
+	dlaopn_state_t), &__dlaopn_init, sizeof(__dlaopn_init));
+	return state->dlaopn;
+
+}
 
 /* $Procedure DLAOPN ( DLA, open new file ) */
 /* Subroutine */ int dlaopn_(char *fname, char *ftype, char *ifname, integer *
@@ -18,12 +24,18 @@ static integer c_n1 = -1;
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomr;
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
-	    sigerr_(char *, ftnlen), dasonw_(char *, char *, char *, integer *
-	    , integer *, ftnlen, ftnlen, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dlaopn_state_t* __state = get_dlaopn_state();
 /* $ Abstract */
 
 /*     Open a new DLA file and set the file type. */
@@ -380,12 +392,12 @@ static integer c_n1 = -1;
 
 /*     Write the format version. */
 
-    dasadi_(handle, &c__1, &c_b8);
+    dasadi_(handle, &__state->c__1, &__state->c_b8);
 
 /*     Initialize the forward and backward segment list pointers. */
 
-    dasadi_(handle, &c__1, &c_n1);
-    dasadi_(handle, &c__1, &c_n1);
+    dasadi_(handle, &__state->c__1, &__state->c_n1);
+    dasadi_(handle, &__state->c__1, &__state->c_n1);
 
 /*     We leave the file open, since further writes to the file */
 /*     should occur next.  The file will eventually be closed */

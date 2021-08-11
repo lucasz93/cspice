@@ -1,9 +1,17 @@
-/* zzvox2id.f -- translated by f2c (version 19980913).
+/* zzvox2id.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzvox2id_state_t;
+static zzvox2id_state_t* get_zzvox2id_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZVOX2ID ( Return voxel index from coords ) */
 integer zzvox2id_(integer *vixyz, integer *nvox)
@@ -11,6 +19,9 @@ integer zzvox2id_(integer *vixyz, integer *nvox)
     /* System generated locals */
     integer ret_val;
 
+
+    /* Module state */
+    zzvox2id_state_t* __state = get_zzvox2id_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

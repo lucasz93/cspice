@@ -1,15 +1,21 @@
-/* zzdasgrd.f -- translated by f2c (version 19980913).
+/* zzdasgrd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__128 = 128;
-static integer c__1 = 1;
+extern zzdasgrd_init_t __zzdasgrd_init;
+static zzdasgrd_state_t* get_zzdasgrd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdasgrd)
+		state->zzdasgrd = __cspice_allocate_module(sizeof(
+	zzdasgrd_state_t), &__zzdasgrd_init, sizeof(__zzdasgrd_init));
+	return state->zzdasgrd;
+
+}
 
 /* $Procedure ZZDASGRD ( DAS, get record, double precision ) */
 /* Subroutine */ int zzdasgrd_(integer *handle, integer *recno, doublereal *
@@ -17,36 +23,40 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* Builtin functions */
     integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int zzddhnfc_(integer *), zzddhnfo_(integer *, 
-	    char *, integer *, integer *, integer *, logical *, ftnlen), 
-	    zzddhhlu_(integer *, char *, logical *, integer *, ftnlen), 
-	    zzxlated_(integer *, char *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzddhnfc_(integer *);
+    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
+	    integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzxlated_(integer *, char *, integer *, 
+	    doublereal *, ftnlen);
     char fname[255];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern logical failed_(void);
-    static integer natbff;
     char chrrec[1024];
-    static integer intbff;
-    integer intamh, intarc;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    integer intamh;
+    integer intarc;
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___10 = { 1, 0, 1, 0, 0 };
-    static cilist io___11 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    zzdasgrd_state_t* __state = get_zzdasgrd_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -223,25 +233,26 @@ static integer c__1 = 1;
 	return 0;
     }
     chkin_("ZZDASGRD", (ftnlen)8);
-    if (first) {
+    if (__state->first) {
 
 /*        Get the integer code for the host binary file format. */
 
-	zzddhnfc_(&natbff);
+	zzddhnfc_(&__state->natbff);
 	if (failed_()) {
 	    chkout_("ZZDASGRD", (ftnlen)8);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Get a logical unit for this file. */
 
-    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 
 /*     Get the binary file format of the file designated by HANDLE. */
 
-    zzddhnfo_(handle, fname, &intarc, &intbff, &intamh, &found, (ftnlen)255);
+    zzddhnfo_(handle, fname, &intarc, &__state->intbff, &intamh, &found, (
+	    ftnlen)255);
     if (failed_()) {
 	chkout_("ZZDASGRD", (ftnlen)8);
 	return 0;
@@ -255,17 +266,17 @@ static integer c__1 = 1;
 	chkout_("ZZDASGRD", (ftnlen)8);
 	return 0;
     }
-    if (intbff == natbff) {
+    if (__state->intbff == __state->natbff) {
 
 /*        The file has native format. */
 
-	io___10.ciunit = unit;
-	io___10.cirec = *recno;
-	iostat = s_rdue(&io___10);
+	__state->io___10.ciunit = unit;
+	__state->io___10.cirec = *recno;
+	iostat = s_rdue(&__state->io___10);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__128, (char *)&record[0], (ftnlen)sizeof(
+	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
 		doublereal));
 	if (iostat != 0) {
 	    goto L100001;
@@ -287,13 +298,13 @@ L100001:
 /*        Read the record as a character string, then translate it */
 /*        to an array of d.p. numbers. */
 
-	io___11.ciunit = unit;
-	io___11.cirec = *recno;
-	iostat = s_rdue(&io___11);
+	__state->io___11.ciunit = unit;
+	__state->io___11.cirec = *recno;
+	iostat = s_rdue(&__state->io___11);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__1, chrrec, (ftnlen)1024);
+	iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -313,7 +324,8 @@ L100002:
 
 /*        Translate the character record to double precision type. */
 
-	zzxlated_(&intbff, chrrec, &c__128, record, (ftnlen)1024);
+	zzxlated_(&__state->intbff, chrrec, &__state->c__128, record, (ftnlen)
+		1024);
 
 /*        We don't test FAILED here because the routine */
 /*        will return from this point. */

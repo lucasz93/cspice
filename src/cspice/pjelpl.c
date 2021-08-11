@@ -1,9 +1,17 @@
-/* pjelpl.f -- translated by f2c (version 19980913).
+/* pjelpl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pjelpl_state_t;
+static pjelpl_state_t* get_pjelpl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PJELPL ( Project ellipse onto plane ) */
 /* Subroutine */ int pjelpl_(doublereal *elin, doublereal *plane, doublereal *
@@ -12,15 +20,28 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal const__;
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *), vprjp_(doublereal *, doublereal *, doublereal *), el2cgv_(
-	    doublereal *, doublereal *, doublereal *, doublereal *), cgv2el_(
-	    doublereal *, doublereal *, doublereal *, doublereal *), pl2nvc_(
-	    doublereal *, doublereal *, doublereal *);
-    doublereal prjvc1[3], prjvc2[3], center[3], normal[3], smajor[3];
+	    *);
+    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
+	    doublereal *);
+    doublereal prjvc1[3];
+    doublereal prjvc2[3];
+    doublereal center[3];
+    doublereal normal[3];
+    doublereal smajor[3];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal prjctr[3], sminor[3];
+    doublereal prjctr[3];
+    doublereal sminor[3];
     extern logical return_(void);
 
+
+    /* Module state */
+    pjelpl_state_t* __state = get_pjelpl_state();
 /* $ Abstract */
 
 /*     Project an ellipse onto a plane, orthogonally. */

@@ -1,19 +1,31 @@
-/* cke06.f -- translated by f2c (version 19980913).
+/* cke06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cke06_state_t;
+static cke06_state_t* get_cke06_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CKE06 ( C-Kernel, evaluate, type 6 ) */
 /* Subroutine */ int cke06_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
     extern /* Subroutine */ int cke05_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), chkin_(char *, ftnlen), chkout_(char 
-	    *, ftnlen);
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    cke06_state_t* __state = get_cke06_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 6 CK segment. */

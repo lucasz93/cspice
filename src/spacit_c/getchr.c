@@ -1,9 +1,10 @@
-/* getchr.f -- translated by f2c (version 19980913).
+/* getchr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      GETCHR ( Prompting for a character string value ) */
 /* Subroutine */ int getchr_(char *prmpt, char *value, logical *gotval, 

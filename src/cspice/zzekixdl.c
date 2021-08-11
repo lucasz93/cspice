@@ -1,9 +1,17 @@
-/* zzekixdl.f -- translated by f2c (version 19980913).
+/* zzekixdl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekixdl_state_t;
+static zzekixdl_state_t* get_zzekixdl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     ZZEKIXDL ( EK, delete record from index ) */
 /* Subroutine */ int zzekixdl_(integer *handle, integer *segdsc, integer *
@@ -11,20 +19,23 @@
 {
     integer tree;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *), 
-	    chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), setmsg_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer idxtyp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer idx;
     extern /* Subroutine */ int zzekfrx_(integer *, integer *, integer *, 
 	    integer *, integer *);
 
+
+    /* Module state */
+    zzekixdl_state_t* __state = get_zzekixdl_state();
 /* $ Abstract */
 
 /*     Update an EK column index to reflect deletion of a record */

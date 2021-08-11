@@ -1,14 +1,21 @@
-/* spkw15.f -- translated by f2c (version 19980913).
+/* spkw15.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__15 = 15;
-static integer c__16 = 16;
+extern spkw15_init_t __spkw15_init;
+static spkw15_state_t* get_spkw15_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw15)
+		state->spkw15 = __cspice_allocate_module(sizeof(
+	spkw15_state_t), &__spkw15_init, sizeof(__spkw15_init));
+	return state->spkw15;
+
+}
 
 /* $Procedure      SPKW15 ( SPK, write a type 15 segment ) */
 /* Subroutine */ int spkw15_(integer *handle, integer *body, integer *center, 
@@ -24,8 +31,8 @@ static integer c__16 = 16;
     /* Local variables */
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal mypa[3];
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal mytp[3];
     integer i__;
@@ -35,19 +42,26 @@ static integer c__16 = 16;
     integer value;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafbna_(
-	    integer *, doublereal *, char *, ftnlen), dafena_(void);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     doublereal record[16];
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), spkpds_(integer *, integer *, char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
     extern doublereal dpr_(void);
     doublereal dot;
 
+
+    /* Module state */
+    spkw15_state_t* __state = get_spkw15_state();
 /* $ Abstract */
 
 /*     Write an SPK segment of type 15 given a type 15 data record. */
@@ -493,7 +507,8 @@ static integer c__16 = 16;
 /*     record.  Create the segment descriptor. (FIRST and LAST are */
 /*     checked by SPKPDS as well as consistency between BODY and CENTER). */
 
-    spkpds_(body, center, frame, &c__15, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__15, first, last, descr, 
+	    frame_len);
     if (failed_()) {
 	chkout_("SPKW15", (ftnlen)6);
 	return 0;
@@ -506,7 +521,7 @@ static integer c__16 = 16;
 	chkout_("SPKW15", (ftnlen)6);
 	return 0;
     }
-    dafada_(record, &c__16);
+    dafada_(record, &__state->c__16);
     if (! failed_()) {
 	dafena_();
     }

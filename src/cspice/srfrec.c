@@ -1,14 +1,21 @@
-/* srfrec.f -- translated by f2c (version 19980913).
+/* srfrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b5 = 1.;
+extern srfrec_init_t __srfrec_init;
+static srfrec_state_t* get_srfrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->srfrec)
+		state->srfrec = __cspice_allocate_module(sizeof(
+	srfrec_state_t), &__srfrec_init, sizeof(__srfrec_init));
+	return state->srfrec;
+
+}
 
 /* $Procedure      SRFREC ( Surface to rectangular coordinates ) */
 /* Subroutine */ int srfrec_(integer *body, doublereal *long__, doublereal *
@@ -17,13 +24,19 @@ static doublereal c_b5 = 1.;
     doublereal uvec[3];
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), edpnt_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), bodvcd_(
-	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
-	    latrec_(doublereal *, doublereal *, doublereal *, doublereal *), 
-	    chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int edpnt_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    srfrec_state_t* __state = get_srfrec_state();
 /* $ Abstract */
 
 /*     Convert planetocentric latitude and longitude of a surface */
@@ -305,12 +318,12 @@ static doublereal c_b5 = 1.;
 
 /*     Look up the body's radii. */
 
-    bodvcd_(body, "RADII", &c__3, &n, radii, (ftnlen)5);
+    bodvcd_(body, "RADII", &__state->c__3, &n, radii, (ftnlen)5);
 
 /*     Find the unit vector pointing from the body center to the */
 /*     input surface point. */
 
-    latrec_(&c_b5, long__, lat, uvec);
+    latrec_(&__state->c_b5, long__, lat, uvec);
 
 /*     Find out where the ray defined by this vector intersects the */
 /*     surface.  This intercept is the point we're looking for. */

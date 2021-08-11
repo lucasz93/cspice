@@ -1,9 +1,17 @@
-/* sizec.f -- translated by f2c (version 19980913).
+/* sizec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sizec_state_t;
+static sizec_state_t* get_sizec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SIZEC ( Size of a character cell ) */
 integer sizec_(char *cell, ftnlen cell_len)
@@ -12,13 +20,19 @@ integer sizec_(char *cell, ftnlen cell_len)
     integer ret_val;
 
     /* Local variables */
-    integer card, size;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dechar_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer card;
+    integer size;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dechar_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sizec_state_t* __state = get_sizec_state();
 /* $ Abstract */
 
 /*     Return the size (maximum cardinality) of a character cell. */

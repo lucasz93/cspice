@@ -1,19 +1,33 @@
-/* wnfild.f -- translated by f2c (version 19980913).
+/* wnfild.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnfild_state_t;
+static wnfild_state_t* get_wnfild_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNFILD ( Fill small gaps in a DP window ) */
 /* Subroutine */ int wnfild_(doublereal *small, doublereal *window)
 {
-    integer card, i__, j;
+    integer card;
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scardd_(integer *, 
-	    doublereal *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wnfild_state_t* __state = get_wnfild_state();
 /* $ Abstract */
 
 /*     Fill small gaps between adjacent intervals of a double precision */

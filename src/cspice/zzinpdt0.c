@@ -1,13 +1,21 @@
-/* zzinpdt0.f -- translated by f2c (version 19980913).
+/* zzinpdt0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b5 = 1e-12;
+extern zzinpdt0_init_t __zzinpdt0_init;
+static zzinpdt0_state_t* get_zzinpdt0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzinpdt0)
+		state->zzinpdt0 = __cspice_allocate_module(sizeof(
+	zzinpdt0_state_t), &__zzinpdt0_init, sizeof(__zzinpdt0_init));
+	return state->zzinpdt0;
+
+}
 
 /* $Procedure ZZINPDT0 ( DSK, in planetodetic element, w/o margin? ) */
 /* Subroutine */ int zzinpdt0_(doublereal *p, doublereal *lon, doublereal *
@@ -15,31 +23,45 @@ static doublereal c_b5 = 1e-12;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal pi2 = -1.;
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;
 
     /* Local variables */
-    doublereal emin, emax, pmin, pmax;
+    doublereal emin;
+    doublereal emax;
+    doublereal pmin;
+    doublereal pmax;
     extern /* Subroutine */ int zzellbds_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), zzpdcmpl_(doublereal *, doublereal *,
-	     doublereal *, doublereal *, integer *);
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzpdcmpl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *);
     doublereal f;
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), chkin_(char *, ftnlen);
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal level;
     extern doublereal twopi_(void);
     extern logical failed_(void);
-    doublereal re, rp;
+    doublereal re;
+    doublereal rp;
     extern doublereal halfpi_(void);
-    doublereal loclon, maxlat, maxalt, maxlon, minlat, minlon, minalt;
-    integer maxrel, minrel;
+    doublereal loclon;
+    doublereal maxlat;
+    doublereal maxalt;
+    doublereal maxlon;
+    doublereal minlat;
+    doublereal minlon;
+    doublereal minalt;
+    integer maxrel;
+    integer minrel;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzinpdt0_state_t* __state = get_zzinpdt0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -470,9 +492,9 @@ static doublereal c_b5 = 1e-12;
 	return 0;
     }
     chkin_("ZZINPDT0", (ftnlen)8);
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 
 /*     Unpack the shape parameters. Set the polar axis length for */
@@ -528,7 +550,7 @@ static doublereal c_b5 = 1e-12;
 
 /*        Put the local longitude bounds in order, if necessary. */
 
-	zznrmlon_(bounds, &bounds[1], &c_b5, &minlon, &maxlon);
+	zznrmlon_(bounds, &bounds[1], &__state->c_b5, &minlon, &maxlon);
 
 /*        Compare the point's longitude to the segment's longitude */
 /*        bounds. */
@@ -539,13 +561,13 @@ static doublereal c_b5 = 1e-12;
 /*           If the point's longitude is less than the segment's */
 /*           longitude by more than a small margin, shift the longitude */
 /*           right by 2*pi. */
-	    loclon = *lon + pi2;
+	    loclon = *lon + __state->pi2;
 	} else if (*lon > maxlon + 1e-12) {
 
 /*           If the point's longitude is greater than the segment's */
 /*           longitude by more than a small margin, shift the longitude */
 /*           left by 2*pi. */
-	    loclon = *lon - pi2;
+	    loclon = *lon - __state->pi2;
 	}
 	if (loclon < minlon - 1e-12 || loclon > maxlon + 1e-12) {
 

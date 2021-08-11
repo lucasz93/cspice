@@ -1,9 +1,17 @@
-/* zzdsin.f -- translated by f2c (version 19980913).
+/* zzdsin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzdsin_state_t;
+static zzdsin_state_t* get_zzdsin_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDSIN ( SGP4 deep space initialization ) */
 /* Subroutine */ int zzdsin_(doublereal *geophs, doublereal *cosim, 
@@ -35,20 +43,71 @@
 	    *);
 
     /* Local variables */
-    doublereal sghl, aonv, sghs, temp, ainv2, sini2, temp1;
+    doublereal sghl;
+    doublereal aonv;
+    doublereal sghs;
+    doublereal temp;
+    doublereal ainv2;
+    doublereal sini2;
+    doublereal temp1;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal theta, emsqo, root22, root32, root52, root44, root54, rptim;
+    doublereal theta;
+    doublereal emsqo;
+    doublereal root22;
+    doublereal root32;
+    doublereal root52;
+    doublereal root44;
+    doublereal root54;
+    doublereal rptim;
     extern doublereal twopi_(void);
-    doublereal q22, q31, q33;
+    doublereal q22;
+    doublereal q31;
+    doublereal q33;
     extern doublereal pi_(void);
-    doublereal g200, f220, f221, f311, f321, f322, f330, cosisq, f441, f442, 
-	    f522, f523, f542, f543, g201, g211, g300, g310, g322, g410, g422, 
-	    g520, g521, g532, g533;
+    doublereal g200;
+    doublereal f220;
+    doublereal f221;
+    doublereal f311;
+    doublereal f321;
+    doublereal f322;
+    doublereal f330;
+    doublereal cosisq;
+    doublereal f441;
+    doublereal f442;
+    doublereal f522;
+    doublereal f523;
+    doublereal f542;
+    doublereal f543;
+    doublereal g201;
+    doublereal g211;
+    doublereal g300;
+    doublereal g310;
+    doublereal g322;
+    doublereal g410;
+    doublereal g422;
+    doublereal g520;
+    doublereal g521;
+    doublereal g532;
+    doublereal g533;
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal eoc, emo, shl, xke, ses, x2o3, sgs, shs, sis, sls, znl, zns, 
-	    xno2;
+    doublereal eoc;
+    doublereal emo;
+    doublereal shl;
+    doublereal xke;
+    doublereal ses;
+    doublereal x2o3;
+    doublereal sgs;
+    doublereal shs;
+    doublereal sis;
+    doublereal sls;
+    doublereal znl;
+    doublereal zns;
+    doublereal xno2;
 
+
+    /* Module state */
+    zzdsin_state_t* __state = get_zzdsin_state();
 /* $ Abstract */
 
 /*     This Subroutine provides Deep Space contributions to Mean */

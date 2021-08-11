@@ -1,9 +1,17 @@
-/* reordl.f -- translated by f2c (version 19980913).
+/* reordl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reordl_state_t;
+static reordl_state_t* get_reordl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REORDL ( Reorder a logical array ) */
 /* Subroutine */ int reordl_(integer *iorder, integer *ndim, logical *array)
@@ -14,8 +22,12 @@
     /* Local variables */
     integer hold;
     logical temp;
-    integer index, start;
+    integer index;
+    integer start;
 
+
+    /* Module state */
+    reordl_state_t* __state = get_reordl_state();
 /* $ Abstract */
 
 /*      Re-order the elements of a logical array according to */

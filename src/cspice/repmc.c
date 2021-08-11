@@ -1,9 +1,17 @@
-/* repmc.f -- translated by f2c (version 19980913).
+/* repmc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int repmc_state_t;
+static repmc_state_t* get_repmc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  REPMC  ( Replace marker with character string ) */
 /* Subroutine */ int repmc_(char *in, char *marker, char *value, char *out, 
@@ -24,8 +32,12 @@
     extern integer lastnb_(char *, ftnlen);
     integer mrknbl;
     extern integer frstnb_(char *, ftnlen);
-    integer mrkpsb, mrkpse;
+    integer mrkpsb;
+    integer mrkpse;
 
+
+    /* Module state */
+    repmc_state_t* __state = get_repmc_state();
 /* $ Abstract */
 
 /*     Replace a marker with a character string. */

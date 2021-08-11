@@ -1,20 +1,27 @@
-/* zzddhnfc.f -- translated by f2c (version 19980913).
+/* zzddhnfc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern zzddhnfc_init_t __zzddhnfc_init;
+static zzddhnfc_state_t* get_zzddhnfc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhnfc)
+		state->zzddhnfc = __cspice_allocate_module(sizeof(
+	zzddhnfc_state_t), &__zzddhnfc_init, sizeof(__zzddhnfc_init));
+	return state->zzddhnfc;
+
+}
 
 /* $Procedure ZZDDHNFC ( DDH, return native BFF format code ) */
 /* Subroutine */ int zzddhnfc_(integer *natbff)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -24,18 +31,22 @@ static integer c__4 = 4;
 
     /* Local variables */
     extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
-	    ftnlen), zzplatfm_(char *, char *, ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static integer savbff;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char strbff[8*4];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     char tmpstr[8];
 
+
+    /* Module state */
+    zzddhnfc_state_t* __state = get_zzddhnfc_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -430,16 +441,16 @@ static integer c__4 = 4;
     if (return_()) {
 	return 0;
     }
-    if (first) {
+    if (__state->first) {
 	chkin_("ZZDDHNFC", (ftnlen)8);
 
 /*        Populate STRBFF, the buffer that contains the labels */
 /*        for each binary file format. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhnfc_", (ftnlen)
-		    171)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 4 &&
+		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhnfc_", (
+		    ftnlen)171)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */
@@ -447,8 +458,9 @@ static integer c__4 = 4;
 
 	zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
 	ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-	savbff = isrchc_(tmpstr, &c__4, strbff, (ftnlen)8, (ftnlen)8);
-	if (savbff == 0) {
+	__state->savbff = isrchc_(tmpstr, &__state->c__4, __state->strbff, (
+		ftnlen)8, (ftnlen)8);
+	if (__state->savbff == 0) {
 	    setmsg_("The binary file format, '#', is not supported by this v"
 		    "ersion of the toolkit. This is a serious problem, contac"
 		    "t NAIF.", (ftnlen)118);
@@ -460,10 +472,10 @@ static integer c__4 = 4;
 
 /*        Do not perform initialization tasks again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
 	chkout_("ZZDDHNFC", (ftnlen)8);
     }
-    *natbff = savbff;
+    *natbff = __state->savbff;
     return 0;
 } /* zzddhnfc_ */
 

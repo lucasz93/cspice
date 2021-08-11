@@ -1,9 +1,21 @@
-/* zznrmlon.f -- translated by f2c (version 19980913).
+/* zznrmlon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zznrmlon_init_t __zznrmlon_init;
+static zznrmlon_state_t* get_zznrmlon_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zznrmlon)
+		state->zznrmlon = __cspice_allocate_module(sizeof(
+	zznrmlon_state_t), &__zznrmlon_init, sizeof(__zznrmlon_init));
+	return state->zznrmlon;
+
+}
 
 /* $Procedure ZZNRMLON ( Normalize longitude bounds ) */
 /* Subroutine */ int zznrmlon_(doublereal *inmin, doublereal *inmax, 
@@ -11,21 +23,24 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;
 
     /* Local variables */
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    extern doublereal twopi_(void), touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    static doublereal pi2;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern doublereal twopi_(void);
+    extern doublereal touchd_(doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern doublereal dpr_(void);
 
+
+    /* Module state */
+    zznrmlon_state_t* __state = get_zznrmlon_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -200,9 +215,9 @@
 
 /*     Use discovery check-in. Don't check RETURN. */
 
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 
 /*     TOL cannot be negative. */
@@ -219,7 +234,7 @@
 /*     Reject inputs that lie outside of [-2*pi, 2*pi], accounting */
 /*     for the tolerance. */
 
-    if (*inmin < -pi2 - *tol || *inmin > pi2 + *tol) {
+    if (*inmin < -__state->pi2 - *tol || *inmin > __state->pi2 + *tol) {
 	chkin_("ZZNRMLON", (ftnlen)8);
 	setmsg_("Longitude lower bound INMIN = # (radians),  = # (deg). The "
 		"minimum allowed value is  -2*pi - TOL = # (radians), = # (de"
@@ -227,9 +242,9 @@
 	errdp_("#", inmin, (ftnlen)1);
 	d__1 = *inmin * dpr_();
 	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = -pi2 - *tol;
+	d__1 = -__state->pi2 - *tol;
 	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = (-pi2 - *tol) * dpr_();
+	d__1 = (-__state->pi2 - *tol) * dpr_();
 	errdp_("#", &d__1, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZNRMLON", (ftnlen)8);
@@ -253,12 +268,12 @@
 /*     The input longitude is within range or is out of range by at most */
 /*     |TOL| radians. Bracket it. */
 /* Computing MAX */
-    d__1 = -pi2, d__2 = min(*inmin,pi2);
+    d__1 = -__state->pi2, d__2 = min(*inmin,__state->pi2);
     *outmin = max(d__1,d__2);
 
 /*     Same deal for the upper bound. */
 
-    if (*inmax < -pi2 - *tol || *inmax > pi2 + *tol) {
+    if (*inmax < -__state->pi2 - *tol || *inmax > __state->pi2 + *tol) {
 	chkin_("ZZNRMLON", (ftnlen)8);
 	setmsg_("Longitude upper bound INMAX = # (radians),  = # (deg). The "
 		"minimum allowed value is  -2*pi - TOL = # (radians), = # (de"
@@ -266,16 +281,16 @@
 	errdp_("#", inmax, (ftnlen)1);
 	d__1 = *inmax * dpr_();
 	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = -pi2 - *tol;
+	d__1 = -__state->pi2 - *tol;
 	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = (-pi2 - *tol) * dpr_();
+	d__1 = (-__state->pi2 - *tol) * dpr_();
 	errdp_("#", &d__1, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZNRMLON", (ftnlen)8);
 	return 0;
     }
 /* Computing MAX */
-    d__1 = -pi2, d__2 = min(*inmax,pi2);
+    d__1 = -__state->pi2, d__2 = min(*inmax,__state->pi2);
     *outmax = max(d__1,d__2);
 
 /*     If the bounds are out of order, put them in order. */
@@ -296,17 +311,17 @@
 /*           OUTMAX is non-positive. Shift it to the right. */
 
 /* Computing MIN */
-	    d__2 = *outmax + pi2;
+	    d__2 = *outmax + __state->pi2;
 	    d__1 = touchd_(&d__2);
-	    *outmax = min(d__1,pi2);
+	    *outmax = min(d__1,__state->pi2);
 	    if (*outmax < *outmin) {
 
 /*              If the bounds are still out of order, shift the lower */
 /*              bound left. */
 
 /* Computing MAX */
-		d__3 = *outmin - pi2;
-		d__1 = touchd_(&d__3), d__2 = -pi2;
+		d__3 = *outmin - __state->pi2;
+		d__1 = touchd_(&d__3), d__2 = -__state->pi2;
 		*outmin = max(d__1,d__2);
 	    }
 	} else {
@@ -314,8 +329,8 @@
 /*           OUTMAX is > 0. Shift the lower bound left. */
 
 /* Computing MAX */
-	    d__3 = *outmin - pi2;
-	    d__1 = touchd_(&d__3), d__2 = -pi2;
+	    d__3 = *outmin - __state->pi2;
+	    d__1 = touchd_(&d__3), d__2 = -__state->pi2;
 	    *outmin = max(d__1,d__2);
 	}
     }
@@ -325,12 +340,12 @@
 
     d__1 = *outmax - *outmin;
     delta = touchd_(&d__1);
-    d__1 = pi2 + *tol;
+    d__1 = __state->pi2 + *tol;
     if (delta > touchd_(&d__1)) {
 
 /*        Shift the upper bound lower by 2*pi. */
 
-	d__1 = *outmax - pi2;
+	d__1 = *outmax - __state->pi2;
 	*outmax = touchd_(&d__1);
     }
 

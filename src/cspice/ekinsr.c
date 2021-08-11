@@ -1,18 +1,21 @@
-/* ekinsr.f -- translated by f2c (version 19980913).
+/* ekinsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__254 = 254;
-static integer c_n1 = -1;
-static integer c__252 = 252;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern ekinsr_init_t __ekinsr_init;
+static ekinsr_state_t* get_ekinsr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekinsr)
+		state->ekinsr = __cspice_allocate_module(sizeof(
+	ekinsr_state_t), &__ekinsr_init, sizeof(__ekinsr_init));
+	return state->ekinsr;
+
+}
 
 /* $Procedure      EKINSR ( EK, insert record into segment ) */
 /* Subroutine */ int ekinsr_(integer *handle, integer *segno, integer *recno)
@@ -21,28 +24,50 @@ static integer c__1 = 1;
     integer i__1, i__2, i__3;
 
     /* Local variables */
-    integer base, nrec, size, room;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekrbck_(char *, integer *, integer *, integer *, integer *, 
-	    ftnlen), zzekmloc_(integer *, integer *, integer *, integer *), 
-	    zzekpgbs_(integer *, integer *, integer *), zzektrin_(integer *, 
-	    integer *, integer *, integer *);
-    integer p, mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), filli_(integer *, 
-	    integer *, integer *);
-    integer ncols, lastp, lastw;
+    integer base;
+    integer nrec;
+    integer size;
+    integer room;
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
+	    integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrin_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer mbase;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    integer ncols;
+    integer lastp;
+    integer lastw;
     extern logical failed_(void);
-    integer coldsc[11], mp;
+    integer coldsc[11];
+    integer mp;
     extern logical return_(void);
-    integer nlinks, recbas, recptr[254], segdsc[24];
+    integer nlinks;
+    integer recbas;
+    integer recptr[254];
+    integer segdsc[24];
     logical isshad;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), dasrdi_(integer *, 
-	    integer *, integer *, integer *), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen), sigerr_(char *, ftnlen), 
-	    cleari_(integer *, integer *), ekshdw_(integer *, logical *), 
-	    dasudi_(integer *, integer *, integer *, integer *), zzekaps_(
-	    integer *, integer *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int ekshdw_(integer *, logical *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    ekinsr_state_t* __state = get_ekinsr_state();
 /* $ Abstract */
 
 /*     Add a new, empty record to a specified E-kernel segment at */
@@ -973,7 +998,7 @@ static integer c__1 = 1;
 		"s size is <= #.  This is an EK software bug.  Contact NAIF.", 
 		(ftnlen)118);
 	errint_("#", &size, (ftnlen)1);
-	errint_("#", &c__254, (ftnlen)1);
+	errint_("#", &__state->c__254, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("EKINSR", (ftnlen)6);
 	return 0;
@@ -1006,8 +1031,8 @@ static integer c__1 = 1;
 /*     determine the status, we must know whether the parent file is */
 /*     shadowed. */
 
-    cleari_(&c__254, recptr);
-    filli_(&c_n1, &c__252, recptr);
+    cleari_(&__state->c__254, recptr);
+    filli_(&__state->c_n1, &__state->c__252, recptr);
     ekshdw_(handle, &isshad);
     if (isshad) {
 	recptr[0] = 3;
@@ -1021,7 +1046,7 @@ static integer c__1 = 1;
 
 /*        Just write the record pointer into the current integer page. */
 
-	zzekpgbs_(&c__3, &lastp, &base);
+	zzekpgbs_(&__state->c__3, &lastp, &base);
 	recbas = base + lastw;
 	i__1 = recbas + 1;
 	i__2 = recbas + size;
@@ -1045,7 +1070,8 @@ static integer c__1 = 1;
 
 /*        Allocate an integer page. */
 
-	zzekaps_(handle, segdsc, &c__3, &c_false, &p, &recbas);
+	zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
+		recbas);
 
 /*        Write out the record pointer. */
 
@@ -1058,7 +1084,7 @@ static integer c__1 = 1;
 
 	i__1 = recbas + 256;
 	i__2 = recbas + 256;
-	dasudi_(handle, &i__1, &i__2, &c__1);
+	dasudi_(handle, &i__1, &i__2, &__state->c__1);
 
 /*        Update the segment's metadata to reflect the addition of a */
 /*        data page.  The last page in use is the one we just wrote to. */

@@ -1,13 +1,21 @@
-/* zzdsksph.f -- translated by f2c (version 19980913).
+/* zzdsksph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzdsksph_init_t __zzdsksph_init;
+static zzdsksph_state_t* get_zzdsksph_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksph)
+		state->zzdsksph = __cspice_allocate_module(sizeof(
+	zzdsksph_state_t), &__zzdsksph_init, sizeof(__zzdsksph_init));
+	return state->zzdsksph;
+
+}
 
 /* $Procedure ZZDSKSPH ( DSK, bounding spheres for target body ) */
 /* Subroutine */ int zzdsksph_(integer *bodyid, integer *nsurf, integer *
@@ -15,17 +23,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer ctr[2] = { -1,-1 };
-    static logical first = TRUE_;
-    static integer prvfid = 0;
-    static integer prvbod = 0;
-    static integer prvlst[100] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0 };
-    static integer prvnls = -1;
-    static doublereal svmaxr = -1.;
-    static doublereal svminr = -1.;
 
     /* System generated locals */
     integer i__1;
@@ -38,28 +35,40 @@ static integer c__3 = 3;
 
     /* Local variables */
     logical same;
-    doublereal minr, maxr;
+    doublereal minr;
+    doublereal maxr;
     extern /* Subroutine */ int zzdskbdc_();
-    extern /* Subroutine */ int zzdskbbl_(integer *), zzdskchk_(integer *, 
-	    logical *), zzdsksbd_(integer *), zzrecbox_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), zzdskbss_(integer *);
+    extern /* Subroutine */ int zzdskbbl_(integer *);
+    extern /* Subroutine */ int zzdskchk_(integer *, logical *);
+    extern /* Subroutine */ int zzdsksbd_(integer *);
+    extern /* Subroutine */ int zzrecbox_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdskbss_(integer *);
     doublereal f;
-    extern /* Subroutine */ int zzctruin_(integer *), zzdsksns_(U_fp, integer 
-	    *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
+	    doublereal *, logical *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     extern doublereal dpmax_(void);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen), movei_(integer *, integer *, integer *);
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern doublereal vnorm_(doublereal *);
     extern logical failed_(void);
     doublereal re;
-    integer dladsc[8], handle;
+    integer dladsc[8];
+    integer handle;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    doublereal offmag, lt, rp, lx, ly, lz;
+    doublereal offmag;
+    doublereal lt;
+    doublereal rp;
+    doublereal lx;
+    doublereal ly;
+    doublereal lz;
     integer framid;
     char frname[32];
     integer frclid;
@@ -67,16 +76,33 @@ static integer c__3 = 3;
     char errmsg[1840];
     doublereal boxctr[3];
     extern logical return_(void);
-    doublereal boxrad, ctrmnr, dskdsc[24], midtim, offset[3], sgmaxr, sgminr;
-    integer corsys, frcent, frclas, surfid;
-    logical newlst, segfnd, update;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), frinfo_(integer *, integer *, integer *, integer *, 
-	    logical *), frmnam_(integer *, char *, ftnlen), spkgps_(integer *,
-	     doublereal *, char *, integer *, doublereal *, doublereal *, 
-	    ftnlen);
+    doublereal boxrad;
+    doublereal ctrmnr;
+    doublereal dskdsc[24];
+    doublereal midtim;
+    doublereal offset[3];
+    doublereal sgmaxr;
+    doublereal sgminr;
+    integer corsys;
+    integer frcent;
+    integer frclas;
+    integer surfid;
+    logical newlst;
+    logical segfnd;
+    logical update;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    zzdsksph_state_t* __state = get_zzdsksph_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -688,8 +714,8 @@ static integer c__3 = 3;
 	return 0;
     }
     chkin_("ZZDSKSPH", (ftnlen)8);
-    if (first) {
-	zzctruin_(ctr);
+    if (__state->first) {
+	zzctruin_(__state->ctr);
     }
 
 /*     Check NSURF. */
@@ -707,15 +733,15 @@ static integer c__3 = 3;
 /*     or not the surface list is non-empty. */
 
     newlst = TRUE_;
-    if (! first) {
-	if (*bodyid == prvbod) {
-	    if (*nsurf == prvnls) {
+    if (! __state->first) {
+	if (*bodyid == __state->prvbod) {
+	    if (*nsurf == __state->prvnls) {
 		same = TRUE_;
 		i__ = 1;
 		while(i__ <= *nsurf && same) {
-		    same = srflst[i__ - 1] == prvlst[(i__1 = i__ - 1) < 100 &&
-			     0 <= i__1 ? i__1 : s_rnge("prvlst", i__1, "zzds"
-			    "ksph_", (ftnlen)353)];
+		    same = srflst[i__ - 1] == __state->prvlst[(i__1 = i__ - 1)
+			     < 100 && 0 <= i__1 ? i__1 : s_rnge("prvlst", 
+			    i__1, "zzdsksph_", (ftnlen)353)];
 		    ++i__;
 		}
 
@@ -731,22 +757,22 @@ static integer c__3 = 3;
 /*     the surface list won't match after an error occurs. We'll */
 /*     reset PRVNLS prior to exit if all goes well. */
 
-    prvnls = -1;
+    __state->prvnls = -1;
 
 /*     Check for DSK update in ZZDSKBSR. */
 
-    zzdskchk_(ctr, &update);
+    zzdskchk_(__state->ctr, &update);
 
 /*     Initialize the temporary variables MINR, MAXR. */
 
-    minr = svminr;
-    maxr = svmaxr;
-    if (first || update || newlst) {
+    minr = __state->svminr;
+    maxr = __state->svmaxr;
+    if (__state->first || update || newlst) {
 
 /*        Initialize the saved radius data. */
 
-	svmaxr = -1.;
-	svminr = dpmax_();
+	__state->svmaxr = -1.;
+	__state->svminr = dpmax_();
 
 /*        Prepare to fetch segment data. Initialize the ZZDSKBSR */
 /*        segment list for the body of interest. */
@@ -760,8 +786,8 @@ static integer c__3 = 3;
 /*        Fetch segment DSK descriptors for the indicated body and */
 /*        surface list. */
 
-	prvfid = 0;
-	cleard_(&c__3, offset);
+	__state->prvfid = 0;
+	cleard_(&__state->c__3, offset);
 
 /*        Re-initialize MINR and MAXR. */
 
@@ -794,7 +820,7 @@ static integer c__3 = 3;
 /*              center. */
 
 		framid = i_dnnt(&dskdsc[4]);
-		if (framid != prvfid) {
+		if (framid != __state->prvfid) {
 
 /*                 Get the frame center for the current segment. */
 
@@ -945,8 +971,8 @@ static integer c__3 = 3;
 
 /*           Update the saved bounds. */
 
-	    svminr = minr;
-	    svmaxr = maxr;
+	    __state->svminr = minr;
+	    __state->svmaxr = maxr;
 	}
     }
     if (maxr < 0.) {
@@ -979,14 +1005,14 @@ static integer c__3 = 3;
 	return 0;
     }
     if (! failed_()) {
-	first = FALSE_;
-	prvbod = *bodyid;
-	prvnls = *nsurf;
+	__state->first = FALSE_;
+	__state->prvbod = *bodyid;
+	__state->prvnls = *nsurf;
 	if (newlst) {
-	    movei_(srflst, nsurf, prvlst);
+	    movei_(srflst, nsurf, __state->prvlst);
 	}
-	*maxrad = svmaxr;
-	*minrad = svminr;
+	*maxrad = __state->svmaxr;
+	*minrad = __state->svminr;
     }
     chkout_("ZZDSKSPH", (ftnlen)8);
     return 0;

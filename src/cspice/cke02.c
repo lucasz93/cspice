@@ -1,24 +1,35 @@
-/* cke02.f -- translated by f2c (version 19980913).
+/* cke02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern cke02_init_t __cke02_init;
+static cke02_state_t* get_cke02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cke02)
+		state->cke02 = __cspice_allocate_module(sizeof(cke02_state_t),
+	 &__cke02_init, sizeof(__cke02_init));
+	return state->cke02;
+
+}
 
 /* $Procedure  CKE02 ( C-kernel, evaluate pointing record, data type 2 ) */
 /* Subroutine */ int cke02_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
-    doublereal time, quat[4];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), mxmt_(
-	    doublereal *, doublereal *, doublereal *);
-    doublereal cbase[9]	/* was [3][3] */, angle;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vequg_(doublereal *, 
-	    integer *, doublereal *);
+    doublereal time;
+    doublereal quat[4];
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
+	    );
+    doublereal cbase[9]	/* was [3][3] */;
+    doublereal angle;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int axisar_(doublereal *, doublereal *, 
 	    doublereal *);
@@ -28,6 +39,9 @@ static integer c__4 = 4;
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    cke02_state_t* __state = get_cke02_state();
 /* $ Abstract */
 
 /*   Evaluate a pointing record returned by CKR02 from a CK data type 2 */
@@ -340,7 +354,7 @@ static integer c__4 = 4;
 /*        RECORD ( 9  ) = av2 */
 /*        RECORD ( 10 ) = av3 */
 
-    vequg_(&record[3], &c__4, quat);
+    vequg_(&record[3], &__state->c__4, quat);
     vequ_(&record[7], avtemp);
 
 /*     Calculate the angle of the rotation. */

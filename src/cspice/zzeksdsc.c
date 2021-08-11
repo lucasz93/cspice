@@ -1,9 +1,17 @@
-/* zzeksdsc.f -- translated by f2c (version 19980913).
+/* zzeksdsc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeksdsc_state_t;
+static zzeksdsc_state_t* get_zzeksdsc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSDSC ( EK, get segment descriptor ) */
 /* Subroutine */ int zzeksdsc_(integer *handle, integer *segno, integer *
@@ -15,10 +23,14 @@
     /* Local variables */
     extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
 	    integer *);
-    integer mbase, mp;
+    integer mbase;
+    integer mp;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
 
+
+    /* Module state */
+    zzeksdsc_state_t* __state = get_zzeksdsc_state();
 /* $ Abstract */
 
 /*     Look up the descriptor of a specified EK segment. */

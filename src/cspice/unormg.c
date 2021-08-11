@@ -1,9 +1,17 @@
-/* unormg.f -- translated by f2c (version 19980913).
+/* unormg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int unormg_state_t;
+static unormg_state_t* get_unormg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      UNORMG ( Unit vector and norm, general dimension ) */
 /* Subroutine */ int unormg_(doublereal *v1, integer *ndim, doublereal *vout, 
@@ -19,6 +27,9 @@
     integer i__;
     extern doublereal vnormg_(doublereal *, integer *);
 
+
+    /* Module state */
+    unormg_state_t* __state = get_unormg_state();
 /* $ Abstract */
 
 /*     Normalize a double precision vector of arbitrary dimension and */
@@ -171,16 +182,16 @@
     if (*vmag > 0.) {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vout", i__2, "unormg_", (ftnlen)161)] = v1[(i__3 = i__ - 
-		    1) < v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, 
-		    "unormg_", (ftnlen)161)] / *vmag;
+	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("vout", i__2, "unormg_", (ftnlen)161)] = v1[(i__3 =
+		     i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge(
+		    "v1", i__3, "unormg_", (ftnlen)161)] / *vmag;
 	}
     } else {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vout", i__2, "unormg_", (ftnlen)165)] = 0.;
+	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
+		    s_rnge("vout", i__2, "unormg_", (ftnlen)165)] = 0.;
 	}
     }
 

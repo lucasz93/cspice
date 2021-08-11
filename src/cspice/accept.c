@@ -1,20 +1,34 @@
-/* accept.f -- translated by f2c (version 19980913).
+/* accept.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern accept_init_t __accept_init;
+static accept_state_t* get_accept_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->accept)
+		state->accept = __cspice_allocate_module(sizeof(
+	accept_state_t), &__accept_init, sizeof(__accept_init));
+	return state->accept;
+
+}
 
 /* $Procedure      ACCEPT ( Accept New Long Error Message ) */
 logical accept_0_(int n__, logical *ok)
 {
     /* Initialized data */
 
-    static logical savok = TRUE_;
 
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    accept_state_t* __state = get_accept_state();
 /* $ Abstract */
 
 /*      Indicate to the SPICELIB error handling mechanism whether or not */
@@ -163,7 +177,7 @@ logical accept_0_(int n__, logical *ok)
 
 /*     Executable Code: */
 
-    savok = *ok;
+    __state->savok = *ok;
     ret_val = FALSE_;
     return ret_val;
 /* $Procedure      ALLOWD    (Are Changes of Long Error Message Allowed?) */
@@ -302,7 +316,7 @@ L_allowd:
 
 /*     Executable Code: */
 
-    ret_val = savok;
+    ret_val = __state->savok;
     return ret_val;
 } /* accept_ */
 

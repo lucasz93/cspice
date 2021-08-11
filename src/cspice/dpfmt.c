@@ -1,14 +1,21 @@
-/* dpfmt.f -- translated by f2c (version 19980913).
+/* dpfmt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static logical c_true = TRUE_;
+extern dpfmt_init_t __dpfmt_init;
+static dpfmt_state_t* get_dpfmt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpfmt)
+		state->dpfmt = __cspice_allocate_module(sizeof(dpfmt_state_t),
+	 &__dpfmt_init, sizeof(__dpfmt_init));
+	return state->dpfmt;
+
+}
 
 /* $Procedure      DPFMT ( Format a double precision number ) */
 /* Subroutine */ int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen 
@@ -29,27 +36,39 @@ static logical c_true = TRUE_;
     extern /* Subroutine */ int zzvsbstr_(integer *, integer *, logical *, 
 	    char *, logical *, ftnlen);
     doublereal y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), zzvststr_(doublereal *, char *, integer *, 
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvststr_(doublereal *, char *, integer *, 
 	    ftnlen);
     logical shift;
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
 	    ftnlen);
     integer start;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    rjust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int rjust_(char *, char *, ftnlen, ftnlen);
     char mystr[32];
-    integer declen, sigdig;
+    integer declen;
+    integer sigdig;
     logical needsn;
-    integer lastch, sgnlen, frstch, intlen, firstb;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer lastch;
+    integer sgnlen;
+    integer frstch;
+    integer intlen;
+    integer firstb;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     logical ovflow;
-    integer expsiz, sprsiz, exp__;
+    integer expsiz;
+    integer sprsiz;
+    integer exp__;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    dpfmt_state_t* __state = get_dpfmt_state();
 /* $ Abstract */
 
 /*     Using a picture, create a formatted string that represents a */
@@ -331,7 +350,7 @@ static logical c_true = TRUE_;
 
 /*     Determine where the picture ends. */
 
-    firstb = pos_(pictur, " ", &c__1, pictur_len, (ftnlen)1);
+    firstb = pos_(pictur, " ", &__state->c__1, pictur_len, (ftnlen)1);
     if (firstb == 0) {
 	lastch = i_len(pictur, pictur_len);
     } else {
@@ -446,7 +465,7 @@ static logical c_true = TRUE_;
 
 /*     See if there is a decimal point. */
 
-    dpat = pos_(pictur, ".", &c__1, pictur_len, (ftnlen)1);
+    dpat = pos_(pictur, ".", &__state->c__1, pictur_len, (ftnlen)1);
 
 /*     The integer part is the stuff to the left of the first */
 /*     decimal point and that follows the sign (if there is one */
@@ -567,8 +586,8 @@ static logical c_true = TRUE_;
 
     start = sgnlen + 1;
     i__1 = -intlen;
-    zzvsbstr_(&i__1, &declen, &c_true, str + (start - 1), &ovflow, str_len - (
-	    start - 1));
+    zzvsbstr_(&i__1, &declen, &__state->c_true, str + (start - 1), &ovflow, 
+	    str_len - (start - 1));
 
 /*     We might be done at this point.  The IF-THEN block below */
 /*     handles the one snag that could arise. */
@@ -611,7 +630,7 @@ static logical c_true = TRUE_;
 /*        We need to move the sign right until, there are no */
 /*        blanks between it and the next character. */
 
-	frstch = ncpos_(str, " -", &c__1, str_len, (ftnlen)2);
+	frstch = ncpos_(str, " -", &__state->c__1, str_len, (ftnlen)2);
 	if (frstch > 2) {
 	    i__1 = frstch - 2;
 	    s_copy(str + i__1, str, frstch - 1 - i__1, (ftnlen)1);

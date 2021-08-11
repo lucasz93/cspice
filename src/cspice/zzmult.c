@@ -1,16 +1,27 @@
-/* zzmult.f -- translated by f2c (version 19980913).
+/* zzmult.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzmult_init_t __zzmult_init;
+static zzmult_state_t* get_zzmult_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzmult)
+		state->zzmult = __cspice_allocate_module(sizeof(
+	zzmult_state_t), &__zzmult_init, sizeof(__zzmult_init));
+	return state->zzmult;
+
+}
 
 /* $Procedure ZZMULT ( Safer multiplication ) */
 doublereal zzmult_(doublereal *a, doublereal *b)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal ret_val, d__1;
@@ -19,15 +30,17 @@ doublereal zzmult_(doublereal *a, doublereal *b)
     double d_lg10(doublereal *);
 
     /* Local variables */
-    static doublereal loga, logb;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal expnt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzmult_state_t* __state = get_zzmult_state();
 /* $ Abstract */
 
 /*     Safely calculate the value A*B, avoiding the possibility */
@@ -329,13 +342,13 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 /*     The double precision maximum value has the form */
 /*     "d*(10**EXPNT)." The value of interest is "EXPNT." */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 
 /*        A "floor" evaluation. */
 
 	d__1 = dpmax_();
-	expnt = (doublereal) ((integer) d_lg10(&d__1));
+	__state->expnt = (doublereal) ((integer) d_lg10(&d__1));
     }
 
 /*     If either A or B equals zero the multiplication is zero. */
@@ -354,13 +367,13 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 /*     An earlier check returned if A or B equal zero. */
 
     d__1 = abs(*a);
-    loga = d_lg10(&d__1);
+    __state->loga = d_lg10(&d__1);
     d__1 = abs(*b);
-    logb = d_lg10(&d__1);
+    __state->logb = d_lg10(&d__1);
 
 /*     Local possible overflow check. */
 
-    if (loga + logb > expnt) {
+    if (__state->loga + __state->logb > __state->expnt) {
 	ret_val = 0.;
 	setmsg_("Numerical overflow event. Multiplier value, #1, multiplican"
 		"d value, #2.", (ftnlen)71);
@@ -374,7 +387,7 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 /*     Local possible underflow check. Accept this may occur, */
 /*     return a zero. */
 
-    if (loga + logb < -(expnt - 1.)) {
+    if (__state->loga + __state->logb < -(__state->expnt - 1.)) {
 	ret_val = 0.;
 	chkout_("ZZMULT", (ftnlen)6);
 	return ret_val;

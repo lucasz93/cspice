@@ -1,27 +1,38 @@
-/* gfstol.f -- translated by f2c (version 19980913).
+/* gfstol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__3 = 3;
+extern gfstol_init_t __gfstol_init;
+static gfstol_state_t* get_gfstol_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfstol)
+		state->gfstol = __cspice_allocate_module(sizeof(
+	gfstol_state_t), &__gfstol_init, sizeof(__gfstol_init));
+	return state->gfstol;
+
+}
 
 /* $Procedure GFSTOL ( GF, set a tolerance value for GF ) */
 /* Subroutine */ int gfstol_(doublereal *value)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfstol_state_t* __state = get_gfstol_state();
 /* $ Abstract */
 
 /*     Override the default GF convergence value used in the high */
@@ -455,7 +466,7 @@ static integer c__3 = 3;
 	chkout_("GFSTOL", (ftnlen)6);
 	return 0;
     } else {
-	zzholdd_(&c_n2, &c__3, &ok, value);
+	zzholdd_(&__state->c_n2, &__state->c__3, &ok, value);
     }
     return 0;
 } /* gfstol_ */

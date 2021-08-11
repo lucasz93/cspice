@@ -1,9 +1,17 @@
-/* nthwd.f -- translated by f2c (version 19980913).
+/* nthwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nthwd_state_t;
+static nthwd_state_t* get_nthwd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NTHWD ( Nth word in a character string ) */
 /* Subroutine */ int nthwd_(char *string, integer *nth, char *word, integer *
@@ -16,8 +24,13 @@
 
     /* Local variables */
     logical loop;
-    integer i__, n, length;
+    integer i__;
+    integer n;
+    integer length;
 
+
+    /* Module state */
+    nthwd_state_t* __state = get_nthwd_state();
 /* $ Abstract */
 
 /*      Return the Nth word in a character string, and its location */

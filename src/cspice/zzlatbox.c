@@ -1,9 +1,17 @@
-/* zzlatbox.f -- translated by f2c (version 19980913).
+/* zzlatbox.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzlatbox_state_t;
+static zzlatbox_state_t* get_zzlatbox_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZLATBOX (Bounding box for latitudinal volume element) */
 /* Subroutine */ int zzlatbox_(doublereal *bounds, doublereal *center, 
@@ -16,22 +24,37 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal diag[3], midr, minr, maxr, minz, maxz;
+    doublereal diag[3];
+    doublereal midr;
+    doublereal minr;
+    doublereal maxr;
+    doublereal minz;
+    doublereal maxz;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal inrad, hdlon;
+    doublereal inrad;
+    doublereal hdlon;
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *), errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *), twopi_(void), halfpi_(void);
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
+    extern doublereal halfpi_(void);
     extern /* Subroutine */ int cylrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal midlon, minlat, maxlat;
+    doublereal midlon;
+    doublereal minlat;
+    doublereal maxlat;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal minlon;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal maxlon, outrad;
+    doublereal maxlon;
+    doublereal outrad;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzlatbox_state_t* __state = get_zzlatbox_state();
 /* $ Abstract */
 
 /*     Create a bounding box for a latitudinal volume element. */

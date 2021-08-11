@@ -1,16 +1,21 @@
-/* zzdskbun.f -- translated by f2c (version 19980913).
+/* zzdskbun.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__0 = 0;
-static integer c__1000 = 1000;
-static integer c__9 = 9;
+extern zzdskbun_init_t __zzdskbun_init;
+static zzdskbun_state_t* get_zzdskbun_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdskbun)
+		state->zzdskbun = __cspice_allocate_module(sizeof(
+	zzdskbun_state_t), &__zzdskbun_init, sizeof(__zzdskbun_init));
+	return state->zzdskbun;
+
+}
 
 /* $Procedure ZZDSKBUN ( DSK, buffered unprioritized normal vector ) */
 /* Subroutine */ int zzdskbun_(integer *bodyid, integer *nsurf, integer *
@@ -32,40 +37,62 @@ static integer c__9 = 9;
     integer nhit;
     doublereal dist;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *), mtxv_(doublereal *, 
-	    doublereal *, doublereal *);
-    integer i__, j;
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
+	    );
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer plate[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer sghit[1000];
     doublereal segpt[3];
     integer dtype;
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal vtemp[3], xform[9]	/* was [3][3] */, verts[9]	/* 
-	    was [3][3] */;
+    doublereal vtemp[3];
+    doublereal xform[9]	/* was [3][3] */;
+    doublereal verts[9]	/* was [3][3] */;
     extern logical failed_(void);
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     integer segfid;
     extern integer isrchi_(integer *, integer *, integer *);
     extern logical return_(void);
-    doublereal sgmarg, sgxbuf[9000]	/* was [3][3][1000] */;
-    integer corsys, prvfrm, surfce, winner;
-    logical bodyok, inside, multfr, surfok, timeok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dskgtl_(integer *, doublereal *), pltnrm_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), vhatip_(doublereal *), 
-	    mxv_(doublereal *, doublereal *, doublereal *), zzinrec_(
-	    doublereal *, doublereal *, doublereal *, integer *, logical *), 
-	    zzinlat_(doublereal *, doublereal *, doublereal *, integer *, 
-	    logical *), zzinpdt_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *), zzptpl02_(integer *, integer 
-	    *, doublereal *, doublereal *, integer *, integer *, doublereal *,
-	     logical *);
+    doublereal sgmarg;
+    doublereal sgxbuf[9000]	/* was [3][3][1000] */;
+    integer corsys;
+    integer prvfrm;
+    integer surfce;
+    integer winner;
+    logical bodyok;
+    logical inside;
+    logical multfr;
+    logical surfok;
+    logical timeok;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
+    extern /* Subroutine */ int pltnrm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int zzinrec_(doublereal *, doublereal *, 
+	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinlat_(doublereal *, doublereal *, 
+	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinpdt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzptpl02_(integer *, integer *, doublereal *, 
+	    doublereal *, integer *, integer *, doublereal *, logical *);
 
+
+    /* Module state */
+    zzdskbun_state_t* __state = get_zzdskbun_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -829,7 +856,7 @@ static integer c__9 = 9;
 
 /*     Get the segment margin from the tolerance database. */
 
-    dskgtl_(&c__2, &sgmarg);
+    dskgtl_(&__state->c__2, &sgmarg);
 
 /*     Indicate we haven't yet seen a segment frame different */
 /*     from the one designated by FIXFID. */
@@ -946,14 +973,14 @@ static integer c__9 = 9;
 
 		corsys = i_dnnt(&dskbuf[i__ * 24 - 19]);
 		if (corsys == 1) {
-		    zzinlat_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &c__0, &
-			    inside);
+		    zzinlat_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &
+			    __state->c__0, &inside);
 		} else if (corsys == 3) {
-		    zzinrec_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &c__0, &
-			    inside);
+		    zzinrec_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &
+			    __state->c__0, &inside);
 		} else if (corsys == 4) {
 		    zzinpdt_(segpt, &dskbuf[i__ * 24 - 8], &dskbuf[i__ * 24 - 
-			    18], &sgmarg, &c__0, &inside);
+			    18], &sgmarg, &__state->c__0, &inside);
 		} else {
 		    setmsg_("Coordinate system # is not supported.", (ftnlen)
 			    37);
@@ -975,7 +1002,7 @@ static integer c__9 = 9;
 		    if (nhit == 1000) {
 			setmsg_("Too many segments contain the input point. "
 				"Buffer size is #.", (ftnlen)60);
-			errint_("#", &c__1000, (ftnlen)1);
+			errint_("#", &__state->c__1000, (ftnlen)1);
 			sigerr_("SPICE(TOOMANYHITS)", (ftnlen)18);
 			chkout_("ZZDSKBUN", (ftnlen)8);
 			return 0;
@@ -987,9 +1014,9 @@ static integer c__9 = 9;
 
 /*                 Save the frame transformation for this segment. */
 
-		    moved_(xform, &c__9, &sgxbuf[(i__2 = (nhit * 3 + 1) * 3 - 
-			    12) < 9000 && 0 <= i__2 ? i__2 : s_rnge("sgxbuf", 
-			    i__2, "zzdskbun_", (ftnlen)542)]);
+		    moved_(xform, &__state->c__9, &sgxbuf[(i__2 = (nhit * 3 + 
+			    1) * 3 - 12) < 9000 && 0 <= i__2 ? i__2 : s_rnge(
+			    "sgxbuf", i__2, "zzdskbun_", (ftnlen)542)]);
 		}
 	    }
 
@@ -1045,7 +1072,7 @@ static integer c__9 = 9;
 
 		moved_(&sgxbuf[(i__1 = (i__ * 3 + 1) * 3 - 12) < 9000 && 0 <= 
 			i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbun_", (
-			ftnlen)611)], &c__9, xform);
+			ftnlen)611)], &__state->c__9, xform);
 		mxv_(xform, point, segpt);
 		vsub_(segpt, &offbuf[j * 3 - 3], vtemp);
 		vequ_(vtemp, segpt);
@@ -1133,7 +1160,7 @@ static integer c__9 = 9;
 
 	    moved_(&sgxbuf[(i__1 = (winner * 3 + 1) * 3 - 12) < 9000 && 0 <= 
 		    i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbun_", (ftnlen)
-		    726)], &c__9, xform);
+		    726)], &__state->c__9, xform);
 	    mtxv_(xform, normal, vtemp);
 	    vequ_(vtemp, normal);
 	}

@@ -1,14 +1,21 @@
-/* ckgr06.f -- translated by f2c (version 19980913).
+/* ckgr06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckgr06_init_t __ckgr06_init;
+static ckgr06_state_t* get_ckgr06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgr06)
+		state->ckgr06 = __cspice_allocate_module(sizeof(
+	ckgr06_state_t), &__ckgr06_init, sizeof(__ckgr06_init));
+	return state->ckgr06;
+
+}
 
 /* $Procedure CKGR06 ( C-kernel, get record, type 06 ) */
 /* Subroutine */ int ckgr06_(integer *handle, doublereal *descr, integer *
@@ -16,7 +23,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer pktszs[4] = { 8,4,14,7 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -27,26 +33,37 @@ static integer c__6 = 6;
     /* Local variables */
     integer nrec;
     doublereal rate;
-    integer baddr, eaddr;
+    integer baddr;
+    integer eaddr;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer minib, minie;
+    integer minib;
+    integer minie;
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), dafgda_(integer *, integer *, integer *,
-	     doublereal *);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     doublereal dc[2];
     integer ic[6];
     extern logical failed_(void);
     doublereal dpdata[1];
-    integer epcbas, epaddr, bufbas;
+    integer epcbas;
+    integer epaddr;
+    integer bufbas;
     doublereal buffer[4];
-    integer nepdir, ptrbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer nepdir;
+    integer ptrbas;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer nintvl;
     extern logical return_(void);
-    integer pktsiz, subtyp;
+    integer pktsiz;
+    integer subtyp;
 
+
+    /* Module state */
+    ckgr06_state_t* __state = get_ckgr06_state();
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 6 segment in a CK file, */
@@ -681,7 +698,7 @@ static integer c__6 = 6;
 /*        IC(6)  Final address of segment data */
 
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     If this segment is not of data type 6, then signal an error. */
 
@@ -765,8 +782,8 @@ static integer c__6 = 6;
 	chkout_("CKGR06", (ftnlen)6);
 	return 0;
     }
-    pktsiz = pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge("pktszs",
-	     i__1, "ckgr06_", (ftnlen)686)];
+    pktsiz = __state->pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+	    "pktszs", i__1, "ckgr06_", (ftnlen)686)];
 
 /*     Check the record index. */
 

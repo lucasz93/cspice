@@ -1,14 +1,21 @@
-/* ckpfs.f -- translated by f2c (version 19980913).
+/* ckpfs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckpfs_init_t __ckpfs_init;
+static ckpfs_state_t* get_ckpfs_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckpfs)
+		state->ckpfs = __cspice_allocate_module(sizeof(ckpfs_state_t),
+	 &__ckpfs_init, sizeof(__ckpfs_init));
+	return state->ckpfs;
+
+}
 
 /* $Procedure      CKPFS ( C-kernel, get pointing from segment ) */
 /* Subroutine */ int ckpfs_(integer *handle, doublereal *descr, doublereal *
@@ -16,34 +23,46 @@ static integer c__6 = 6;
 	doublereal *av, doublereal *clkout, logical *found)
 {
     extern /* Subroutine */ int cke01_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), cke02_(logical *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), cke03_(logical *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), cke04_(
-	    logical *, doublereal *, doublereal *, doublereal *, doublereal *)
-	    , cke05_(logical *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), cke06_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), ckr01_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, logical *), 
-	    ckr02_(integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *), ckr03_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, logical *), 
-	    ckr04_(integer *, doublereal *, doublereal *, doublereal *, 
-	    logical *, doublereal *, logical *), ckr05_(integer *, doublereal 
-	    *, doublereal *, doublereal *, logical *, doublereal *, logical *)
-	    , ckr06_(integer *, doublereal *, doublereal *, doublereal *, 
-	    logical *, doublereal *, logical *);
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cke02_(logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cke03_(logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cke04_(logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cke05_(logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cke06_(logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int ckr01_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr02_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr03_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr04_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr05_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr06_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, logical *);
     integer type__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     extern logical failed_(void);
     doublereal record[340];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    ckpfs_state_t* __state = get_ckpfs_state();
 /* $ Abstract */
 
 /*     Evaluate pointing data from a segment for a given time. */
@@ -639,7 +658,7 @@ static integer c__6 = 6;
 /*     Unpack the descriptor to see what the data type of the segment is, */
 /*     and call the appropriate read-and-evaluate routines. */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     type__ = icd[2];
     if (type__ == 1) {
 	ckr01_(handle, descr, sclkdp, tol, needav, record, found);

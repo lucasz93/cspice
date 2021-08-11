@@ -1,24 +1,38 @@
-/* lnkfsl.f -- translated by f2c (version 19980913).
+/* lnkfsl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lnkfsl_init_t __lnkfsl_init;
+static lnkfsl_state_t* get_lnkfsl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lnkfsl)
+		state->lnkfsl = __cspice_allocate_module(sizeof(
+	lnkfsl_state_t), &__lnkfsl_init, sizeof(__lnkfsl_init));
+	return state->lnkfsl;
+
+}
 
 /* $Procedure      LNKFSL ( LNK, free sublist of a list  ) */
 /* Subroutine */ int lnkfsl_(integer *head, integer *tail, integer *pool)
 {
-    integer node, prev, next;
+    integer node;
+    integer prev;
+    integer next;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer count;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    lnkfsl_state_t* __state = get_lnkfsl_state();
 /* $ Abstract */
 
 /*     Free a specified sublist in a list. */
@@ -245,7 +259,7 @@ static integer c__0 = 0;
 	errint_("#", tail, (ftnlen)1);
 	errint_("#", &pool[(*tail << 1) + 11], (ftnlen)1);
 	errint_("#", &pool[(*tail << 1) + 10], (ftnlen)1);
-	errint_("#", &c__0, (ftnlen)1);
+	errint_("#", &__state->c__0, (ftnlen)1);
 	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
 	chkout_("LNKFSL", (ftnlen)6);
 	return 0;

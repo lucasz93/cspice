@@ -1,9 +1,17 @@
-/* zzgrav.f -- translated by f2c (version 19980913).
+/* zzgrav.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgrav_state_t;
+static zzgrav_state_t* get_zzgrav_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZGRAV ( SGP4 gravitational constants ) */
 /* Subroutine */ int zzgrav_(doublereal *grav)
@@ -14,6 +22,9 @@
     /* Builtin functions */
     double sqrt(doublereal);
 
+
+    /* Module state */
+    zzgrav_state_t* __state = get_zzgrav_state();
 /* $ Abstract */
 
 /*      Constants assignments equivalent to 21 July 2006 "getgravconst" */

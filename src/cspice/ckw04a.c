@@ -1,15 +1,21 @@
-/* ckw04a.f -- translated by f2c (version 19980913).
+/* ckw04a.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__142 = 142;
-static integer c__7 = 7;
-static doublereal c_b20 = 128.;
+extern ckw04a_init_t __ckw04a_init;
+static ckw04a_state_t* get_ckw04a_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw04a)
+		state->ckw04a = __cspice_allocate_module(sizeof(
+	ckw04a_state_t), &__ckw04a_init, sizeof(__ckw04a_init));
+	return state->ckw04a;
+
+}
 
 /* $Procedure      CKW04A ( CK type 04: Add data to a segment ) */
 /* Subroutine */ int ckw04a_(integer *handle, integer *npkts, integer *pktsiz,
@@ -24,18 +30,24 @@ static doublereal c_b20 = 128.;
     /* Local variables */
     integer k;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer dispm, kk;
+    integer dispm;
+    integer kk;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer displm;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int sgwvpk_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *), zzck4i2d_(integer *, 
-	    integer *, doublereal *, doublereal *);
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int zzck4i2d_(integer *, integer *, doublereal *, 
+	    doublereal *);
 
+
+    /* Module state */
+    ckw04a_state_t* __state = get_ckw04a_state();
 /* $ Abstract */
 
 /*     Add data to a type 4 CK segment currently being written to */
@@ -744,7 +756,7 @@ static doublereal c_b20 = 128.;
 		     (ftnlen)167);
 	    errint_("#", &k, (ftnlen)1);
 	    errhan_("#", handle, (ftnlen)1);
-	    errint_("#", &c__142, (ftnlen)1);
+	    errint_("#", &__state->c__142, (ftnlen)1);
 	    errint_("#", &pktsiz[k - 1], (ftnlen)1);
 	    sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
 	    chkout_("CKW04A", (ftnlen)6);
@@ -770,7 +782,8 @@ static doublereal c_b20 = 128.;
 		    i__2, "ckw04a_", (ftnlen)580)] = (integer) pktdat[kk + 2 
 		    + displm - 1];
 	}
-	zzck4i2d_(numcft, &c__7, &c_b20, &pktdat[dispm + 2]);
+	zzck4i2d_(numcft, &__state->c__7, &__state->c_b20, &pktdat[dispm + 2])
+		;
 
 /*        Shift coefficients sets to the left to overwrite numbers of */
 /*        packets */

@@ -1,14 +1,21 @@
-/* spks19.f -- translated by f2c (version 19980913).
+/* spks19.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b118 = 1.;
+extern spks19_init_t __spks19_init;
+static spks19_state_t* get_spks19_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks19)
+		state->spks19 = __cspice_allocate_module(sizeof(
+	spks19_state_t), &__spks19_init, sizeof(__spks19_init));
+	return state->spks19;
+
+}
 
 /* $Procedure SPKS19 ( S/P Kernel, subset, type 19 ) */
 /* Subroutine */ int spks19_(integer *handle, integer *baddr, integer *eaddr, 
@@ -16,7 +23,6 @@ static doublereal c_b118 = 1.;
 {
     /* Initialized data */
 
-    static integer pktszs[3] = { 12,6,6 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -26,43 +32,24 @@ static doublereal c_b118 = 1.;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal data[100];
-    static integer npad, isel, ndir, npkt, i__, l, nread;
-    static logical final;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer minib, minie;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen);
-    static integer shift, nsdir, noivl, start;
-    static doublereal iv1beg, iv1end;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
-    static integer min1sz;
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    static integer ub;
-    static doublereal ivfbeg;
-    static integer begidx, bufbas;
-    static doublereal ivlbeg;
-    static integer minbep;
-    static doublereal ivfend;
-    static integer bepidx, endidx, eepidx, remain, ivlbas;
-    static doublereal ivlend;
     extern integer lstled_(doublereal *, integer *, doublereal *);
-    static integer minndr, ptrbas, minnpk;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen);
-    static doublereal contrl[3];
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer curivl;
     extern integer lstltd_(doublereal *, integer *, doublereal *);
-    static integer minfsz;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    static integer nintvl, wndsiz;
     extern logical return_(void);
-    static integer pktsiz, subtyp;
-    static char spk[255];
 
+    /* Module state */
+    spks19_state_t* __state = get_spks19_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 19 */
@@ -573,7 +560,7 @@ static doublereal c_b118 = 1.;
 /*     Initialize the flag indicating the existence of the "final" */
 /*     output mini-segment. */
 
-    final = FALSE_;
+    __state->final = FALSE_;
 /* *********************************************************************** */
 
 /*     Part 1: Obtain attributes of the input segment */
@@ -583,7 +570,7 @@ static doublereal c_b118 = 1.;
 /*     Read the input segment structure control area. */
 
     i__1 = *eaddr - 1;
-    dafgda_(handle, &i__1, eaddr, data);
+    dafgda_(handle, &i__1, eaddr, __state->data);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -592,8 +579,8 @@ static doublereal c_b118 = 1.;
 /*     Fetch the interval selection order flag and the */
 /*     number of interpolation intervals. */
 
-    isel = i_dnnt(data);
-    nintvl = i_dnnt(&data[1]);
+    __state->isel = i_dnnt(__state->data);
+    __state->nintvl = i_dnnt(&__state->data[1]);
 
 /*     Compute the number of interval boundary directories. Recall that */
 /*     the final interval stop time must be accounted for, so the */
@@ -601,7 +588,7 @@ static doublereal c_b118 = 1.;
 
 /*        ( ( NINTVL + 1) - 1 ) / DIRSIZ */
 
-    ndir = nintvl / 100;
+    __state->ndir = __state->nintvl / 100;
 
 /*     Find the base address IVLBAS of the interval start times. First */
 /*     set PTRBAS, which is the address preceding the interval pointers. */
@@ -609,8 +596,8 @@ static doublereal c_b118 = 1.;
 /*     The interval base precedes the interval bounds, the interval */
 /*     directories, the interval pointers, and the control area. */
 
-    ptrbas = *eaddr - (nintvl + 3);
-    ivlbas = ptrbas - (ndir + nintvl + 1);
+    __state->ptrbas = *eaddr - (__state->nintvl + 3);
+    __state->ivlbas = __state->ptrbas - (__state->ndir + __state->nintvl + 1);
 /* *********************************************************************** */
 
 /*     Part 2: Create the first output mini-segment */
@@ -628,39 +615,40 @@ static doublereal c_b118 = 1.;
 /*     Since we're only examining interval start times, the last one */
 /*     we may need to read is at index NINTVL. */
 
-    nread = min(100,nintvl);
-    bufbas = ivlbas;
+    __state->nread = min(100,__state->nintvl);
+    __state->bufbas = __state->ivlbas;
 
 /*     NREAD is at least 1 here. */
 
-    i__1 = bufbas + 1;
-    i__2 = bufbas + nread;
-    dafgda_(handle, &i__1, &i__2, data);
+    i__1 = __state->bufbas + 1;
+    i__2 = __state->bufbas + __state->nread;
+    dafgda_(handle, &i__1, &i__2, __state->data);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
     }
-    remain = nintvl - nread;
+    __state->remain = __state->nintvl - __state->nread;
 
 /*     The variable NREAD is the array index of the last */
 /*     item read into the buffer on the previous read */
 /*     operation. On the first pass NREAD is at least 1. */
 
-    while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)576)] < *begin) {
-	bufbas += nread;
-	nread = min(100,remain);
+    while(__state->remain > 0 && __state->data[(i__1 = __state->nread - 1) < 
+	    100 && 0 <= i__1 ? i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)
+	    576)] < *begin) {
+	__state->bufbas += __state->nread;
+	__state->nread = min(100,__state->remain);
 
 /*        NREAD is at least 1 here. */
 
-	i__1 = bufbas + 1;
-	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, data);
+	i__1 = __state->bufbas + 1;
+	i__2 = __state->bufbas + __state->nread;
+	dafgda_(handle, &i__1, &i__2, __state->data);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
 	}
-	remain -= nread;
+	__state->remain -= __state->nread;
     }
 
 /*     Let I be the index of the last interval boundary time that */
@@ -672,20 +660,21 @@ static doublereal c_b118 = 1.;
 /*     examined before the final call above to DAFGDA. All of those */
 /*     boundary times were strictly less than BEGIN. */
 
-    i__ = bufbas - ivlbas + lstltd_(begin, &nread, data);
+    __state->i__ = __state->bufbas - __state->ivlbas + lstltd_(begin, &
+	    __state->nread, __state->data);
 
 /*     Let BEGIDX be the index of the last interval start time that */
 /*     precedes BEGIN, unless BEGIN coincides with the first interval */
 /*     start time; in this case, BEGIDX must be 1. */
 
-    begidx = max(1,i__);
+    __state->begidx = max(1,__state->i__);
 
 /*     In order to extract data from the mini-segment, we'll need its */
 /*     address range. */
 
-    i__1 = ptrbas + begidx;
-    i__2 = ptrbas + begidx + 1;
-    dafgda_(handle, &i__1, &i__2, data);
+    i__1 = __state->ptrbas + __state->begidx;
+    i__2 = __state->ptrbas + __state->begidx + 1;
+    dafgda_(handle, &i__1, &i__2, __state->data);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -694,15 +683,15 @@ static doublereal c_b118 = 1.;
 /*     Convert the segment-base-relative mini-segment begin and end */
 /*     pointers to absolute DAF addresses. */
 
-    minib = *baddr - 1 + i_dnnt(data);
-    minie = *baddr - 1 + i_dnnt(&data[1]) - 1;
+    __state->minib = *baddr - 1 + i_dnnt(__state->data);
+    __state->minie = *baddr - 1 + i_dnnt(&__state->data[1]) - 1;
 
 /*     Read the control area of the mini-segment. */
 
-    bufbas = minie - 3;
-    i__1 = bufbas + 1;
-    i__2 = bufbas + 3;
-    dafgda_(handle, &i__1, &i__2, contrl);
+    __state->bufbas = __state->minie - 3;
+    i__1 = __state->bufbas + 1;
+    i__2 = __state->bufbas + 3;
+    dafgda_(handle, &i__1, &i__2, __state->contrl);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -710,71 +699,72 @@ static doublereal c_b118 = 1.;
 
 /*     Fetch the control area parameters for the mini-segment. */
 
-    subtyp = i_dnnt(contrl);
-    wndsiz = i_dnnt(&contrl[1]);
-    npkt = i_dnnt(&contrl[2]);
+    __state->subtyp = i_dnnt(__state->contrl);
+    __state->wndsiz = i_dnnt(&__state->contrl[1]);
+    __state->npkt = i_dnnt(&__state->contrl[2]);
 
 /*     Set the packet size, which is a function of the subtype. */
 
-    if (subtyp < 0 || subtyp >= 3) {
+    if (__state->subtyp < 0 || __state->subtyp >= 3) {
 	setmsg_("Unexpected SPK type 19 subtype # found in type 19 segment w"
 		"ithin mini-segment #.", (ftnlen)80);
-	errint_("#", &subtyp, (ftnlen)1);
-	errint_("#", &begidx, (ftnlen)1);
+	errint_("#", &__state->subtyp, (ftnlen)1);
+	errint_("#", &__state->begidx, (ftnlen)1);
 	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
     }
-    pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge("pktszs",
-	     i__1, "spks19_", (ftnlen)666)];
+    __state->pktsiz = __state->pktszs[(i__1 = __state->subtyp) < 3 && 0 <= 
+	    i__1 ? i__1 : s_rnge("pktszs", i__1, "spks19_", (ftnlen)666)];
 
 /*     Determine how much of the mini-segment we need to transfer. The */
 /*     first step is to find the last epoch less than or equal to BEGIN */
 /*     in the mini-segment's epoch list. Let MINBEP be the base address */
 /*     of the epoch list (that is, the start address minus 1). */
 
-    minbep = minib - 1 + npkt * pktsiz;
+    __state->minbep = __state->minib - 1 + __state->npkt * __state->pktsiz;
 
 /*     Read epochs until we find one greater than or equal to BEGIN. */
 
 /*     It's possible that only the last epoch of the input mini-segment */
 /*     satisfies this criterion, but at least one epoch must satisfy it. */
 
-    nread = min(100,npkt);
-    bufbas = minbep;
-    i__1 = bufbas + 1;
-    i__2 = bufbas + nread;
-    dafgda_(handle, &i__1, &i__2, data);
+    __state->nread = min(100,__state->npkt);
+    __state->bufbas = __state->minbep;
+    i__1 = __state->bufbas + 1;
+    i__2 = __state->bufbas + __state->nread;
+    dafgda_(handle, &i__1, &i__2, __state->data);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
     }
-    remain = npkt - nread;
+    __state->remain = __state->npkt - __state->nread;
 
 /*     The variable NREAD is the array index of the last */
 /*     item read into the buffer on the previous read */
 /*     operation. */
 
-    while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)701)] < *begin) {
+    while(__state->remain > 0 && __state->data[(i__1 = __state->nread - 1) < 
+	    100 && 0 <= i__1 ? i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)
+	    701)] < *begin) {
 
 /*        Advance the buffer base to account for the NREAD */
 /*        epochs fetched on the previous DAFGDA call. */
 
-	bufbas += nread;
-	nread = min(100,remain);
+	__state->bufbas += __state->nread;
+	__state->nread = min(100,__state->remain);
 
 /*        Since REMAIN was positive at the beginning of this */
 /*        loop iteration, NREAD is positive here. */
 
-	i__1 = bufbas + 1;
-	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, data);
+	i__1 = __state->bufbas + 1;
+	i__2 = __state->bufbas + __state->nread;
+	dafgda_(handle, &i__1, &i__2, __state->data);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
 	}
-	remain -= nread;
+	__state->remain -= __state->nread;
     }
 
 /*     At this point BUFBAS - MINBEP is the number of epochs in the */
@@ -785,7 +775,8 @@ static doublereal c_b118 = 1.;
 /*     equal to BEGIN. That epoch is contained in the last buffer we */
 /*     read. */
 
-    bepidx = bufbas - minbep + lstled_(begin, &nread, data);
+    __state->bepidx = __state->bufbas - __state->minbep + lstled_(begin, &
+	    __state->nread, __state->data);
 
 /*     BEPIDX is at least 1 and may be as large as NPKT. */
 
@@ -793,31 +784,31 @@ static doublereal c_b118 = 1.;
 /*     interpolation behavior in the neighborhood of the epoch at */
 /*     index BEPIDX. */
 
-    npad = wndsiz / 2 - 1;
+    __state->npad = __state->wndsiz / 2 - 1;
 
 /*     Shift BEPIDX by the pad amount, if possible. The minimum value */
 /*     of BEPIDX is 1. */
 
 /* Computing MAX */
-    i__1 = 1, i__2 = bepidx - npad;
-    bepidx = max(i__1,i__2);
+    i__1 = 1, i__2 = __state->bepidx - __state->npad;
+    __state->bepidx = max(i__1,i__2);
 
 /*     The output mini-segment can never have fewer than two epochs. */
 /*     When the window size is 2 and BEPIDX is equal to NPKT, we */
 /*     must extend the window on the left. */
 
 /* Computing MIN */
-    i__1 = bepidx, i__2 = npkt - 1;
-    bepidx = min(i__1,i__2);
+    i__1 = __state->bepidx, i__2 = __state->npkt - 1;
+    __state->bepidx = min(i__1,i__2);
 
 /*     If the input interval end time is less than or equal to END, we */
 /*     need to use the rest of the data from this interval. Otherwise */
 /*     find out how much data from this interval we need to transfer. */
 
-    bufbas = ivlbas + begidx;
-    i__1 = bufbas + 1;
-    i__2 = bufbas + 1;
-    dafgda_(handle, &i__1, &i__2, &ivlend);
+    __state->bufbas = __state->ivlbas + __state->begidx;
+    i__1 = __state->bufbas + 1;
+    i__2 = __state->bufbas + 1;
+    dafgda_(handle, &i__1, &i__2, &__state->ivlend);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -826,13 +817,13 @@ static doublereal c_b118 = 1.;
 /*     Let EEPIDX be the index of the last epoch we select from */
 /*     the current input mini-segment. We'll set EEPIDX below. */
 
-    if (ivlend <= *end) {
+    if (__state->ivlend <= *end) {
 
 /*        The requested subset coverage is either equal to or extends */
 /*        beyond the right boundary of this interval. We'll use all data */
 /*        from this interval. */
 
-	eepidx = npkt;
+	__state->eepidx = __state->npkt;
     } else {
 
 /*        IVLEND is strictly greater than END. This interval covers */
@@ -846,30 +837,30 @@ static doublereal c_b118 = 1.;
 /*        The input mini-segment contains ( NPKT - BEPIDX + 1 ) epochs */
 /*        following and including the one at BEPIDX. */
 
-	remain = npkt - bepidx + 1;
+	__state->remain = __state->npkt - __state->bepidx + 1;
 
 /*        REMAIN is at least 2 at this point, since in this case, */
 /*        some epoch exceeds END, and that epoch must have index */
 /*        greater than BEPIDX. */
 
-	nread = min(100,remain);
+	__state->nread = min(100,__state->remain);
 
 /*        NREAD is at least 2. */
 
-	if (nread < 2) {
+	if (__state->nread < 2) {
 
 /*           This code should not be reached. */
 
-	    dafhfn_(handle, spk, (ftnlen)255);
+	    dafhfn_(handle, __state->spk, (ftnlen)255);
 	    setmsg_("Input file: #. Segment address range: #:#. Structural e"
 		    "rror found: NREAD is #; end time of interval # is #.", (
 		    ftnlen)107);
-	    errch_("#", spk, (ftnlen)1, (ftnlen)255);
+	    errch_("#", __state->spk, (ftnlen)1, (ftnlen)255);
 	    errint_("#", baddr, (ftnlen)1);
 	    errint_("#", eaddr, (ftnlen)1);
-	    errint_("#", &nread, (ftnlen)1);
-	    errint_("#", &begidx, (ftnlen)1);
-	    errdp_("#", &ivlend, (ftnlen)1);
+	    errint_("#", &__state->nread, (ftnlen)1);
+	    errint_("#", &__state->begidx, (ftnlen)1);
+	    errdp_("#", &__state->ivlend, (ftnlen)1);
 	    sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -878,34 +869,35 @@ static doublereal c_b118 = 1.;
 /*        Set the buffer base address so that we start reading at */
 /*        address MINBEP + BEPIDX. */
 
-	bufbas = minbep + bepidx - 1;
-	i__1 = bufbas + 1;
-	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, data);
+	__state->bufbas = __state->minbep + __state->bepidx - 1;
+	i__1 = __state->bufbas + 1;
+	i__2 = __state->bufbas + __state->nread;
+	dafgda_(handle, &i__1, &i__2, __state->data);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
 	}
-	remain -= nread;
+	__state->remain -= __state->nread;
 
 /*        NREAD is (still) at least 2. */
 
-	while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 
-		: s_rnge("data", i__1, "spks19_", (ftnlen)844)] <= *end) {
-	    bufbas += nread;
-	    nread = min(remain,100);
+	while(__state->remain > 0 && __state->data[(i__1 = __state->nread - 1)
+		 < 100 && 0 <= i__1 ? i__1 : s_rnge("data", i__1, "spks19_", (
+		ftnlen)844)] <= *end) {
+	    __state->bufbas += __state->nread;
+	    __state->nread = min(__state->remain,100);
 
 /*           NREAD is at least 1 since REMAIN was positive */
 /*           at the top of the loop. */
 
-	    i__1 = bufbas + 1;
-	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, data);
+	    i__1 = __state->bufbas + 1;
+	    i__2 = __state->bufbas + __state->nread;
+	    dafgda_(handle, &i__1, &i__2, __state->data);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
-	    remain -= nread;
+	    __state->remain -= __state->nread;
 	}
 
 /*        At this point BUFBAS - MINBEP is the number of epochs in the */
@@ -922,26 +914,27 @@ static doublereal c_b118 = 1.;
 /*        EEPIDX exceeds by 1 the index of the last epoch less than or */
 /*        equal to END. */
 
-	l = lstled_(end, &nread, data);
-	eepidx = bufbas - minbep + l + 1;
+	__state->l = lstled_(end, &__state->nread, __state->data);
+	__state->eepidx = __state->bufbas - __state->minbep + __state->l + 1;
 
 /*        EEPIDX is at least 2 and is less than or equal to NPKT. */
 
-	if (eepidx < 2 || eepidx > npkt) {
+	if (__state->eepidx < 2 || __state->eepidx > __state->npkt) {
 
 /*           This code should not be reached. */
 
-	    dafhfn_(handle, spk, (ftnlen)255);
+	    dafhfn_(handle, __state->spk, (ftnlen)255);
 	    setmsg_("Input file: #. Segment address range: #:#. Structural e"
 		    "rror found: last epoch is #; end time of interval # is #."
 		    , (ftnlen)112);
-	    errch_("#", spk, (ftnlen)1, (ftnlen)255);
+	    errch_("#", __state->spk, (ftnlen)1, (ftnlen)255);
 	    errint_("#", baddr, (ftnlen)1);
 	    errint_("#", eaddr, (ftnlen)1);
-	    errdp_("#", &data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spks19_", (ftnlen)897)], (ftnlen)1);
-	    errint_("#", &begidx, (ftnlen)1);
-	    errdp_("#", &ivlend, (ftnlen)1);
+	    errdp_("#", &__state->data[(i__1 = __state->nread - 1) < 100 && 0 
+		    <= i__1 ? i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)
+		    897)], (ftnlen)1);
+	    errint_("#", &__state->begidx, (ftnlen)1);
+	    errdp_("#", &__state->ivlend, (ftnlen)1);
 	    sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -951,27 +944,27 @@ static doublereal c_b118 = 1.;
 /*        interpolation behavior in the neighborhood of the epoch at */
 /*        index EEPIDX. */
 
-	if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data", 
-		i__1, "spks19_", (ftnlen)911)] == *end) {
+	if (__state->data[(i__1 = __state->l - 1) < 100 && 0 <= i__1 ? i__1 : 
+		s_rnge("data", i__1, "spks19_", (ftnlen)911)] == *end) {
 
 /*           The epochs at indices EEPIDX-1 and EEPIDX comprise the */
 /*           first two epochs of the right half of an interpolation */
 /*           window of size WNDSIZ. We need two fewer pad epochs to */
 /*           complete the right half of the window. */
 
-	    npad = wndsiz / 2 - 2;
+	    __state->npad = __state->wndsiz / 2 - 2;
 	} else {
 
 /*           The epoch at EEPIDX is the first of the pad. */
 
-	    npad = wndsiz / 2 - 1;
+	    __state->npad = __state->wndsiz / 2 - 1;
 	}
 
 /*        The maximum allowed value of EEPIDX is NPKT. */
 
 /* Computing MIN */
-	i__1 = npkt, i__2 = eepidx + npad;
-	eepidx = min(i__1,i__2);
+	i__1 = __state->npkt, i__2 = __state->eepidx + __state->npad;
+	__state->eepidx = min(i__1,i__2);
     }
 
 /*     At this point BEPIDX and EEPIDX are both set. */
@@ -980,9 +973,9 @@ static doublereal c_b118 = 1.;
 /*     We'll use this below when we compute the interval start */
 /*     time of the first output mini-segment. */
 
-    i__1 = ivlbas + begidx;
-    i__2 = ivlbas + begidx;
-    dafgda_(handle, &i__1, &i__2, &ivlbeg);
+    i__1 = __state->ivlbas + __state->begidx;
+    i__2 = __state->ivlbas + __state->begidx;
+    dafgda_(handle, &i__1, &i__2, &__state->ivlbeg);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -991,13 +984,15 @@ static doublereal c_b118 = 1.;
 /*     first mini-segment of the output segment will contain packets */
 /*     BEPIDX through EEPIDX of the input mini-segment at index BEGIDX. */
 
-    i__1 = eepidx;
-    for (i__ = bepidx; i__ <= i__1; ++i__) {
-	bufbas = minib - 1 + (i__ - 1) * pktsiz;
-	i__2 = bufbas + 1;
-	i__3 = bufbas + pktsiz;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &pktsiz);
+    i__1 = __state->eepidx;
+    for (__state->i__ = __state->bepidx; __state->i__ <= i__1; ++__state->i__)
+	     {
+	__state->bufbas = __state->minib - 1 + (__state->i__ - 1) * 
+		__state->pktsiz;
+	i__2 = __state->bufbas + 1;
+	i__3 = __state->bufbas + __state->pktsiz;
+	dafgda_(handle, &i__2, &i__3, __state->data);
+	dafada_(__state->data, &__state->pktsiz);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1011,13 +1006,15 @@ static doublereal c_b118 = 1.;
 /*     bound of the input interval, or a boundary epoch (first or last) */
 /*     of the output epoch list, whichever is most restrictive. */
 
-    i__1 = eepidx;
-    for (i__ = bepidx; i__ <= i__1; ++i__) {
-	bufbas = minib - 1 + npkt * pktsiz + (i__ - 1);
-	i__2 = bufbas + 1;
-	i__3 = bufbas + 1;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+    i__1 = __state->eepidx;
+    for (__state->i__ = __state->bepidx; __state->i__ <= i__1; ++__state->i__)
+	     {
+	__state->bufbas = __state->minib - 1 + __state->npkt * 
+		__state->pktsiz + (__state->i__ - 1);
+	i__2 = __state->bufbas + 1;
+	i__3 = __state->bufbas + 1;
+	dafgda_(handle, &i__2, &i__3, __state->data);
+	dafada_(__state->data, &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1028,44 +1025,46 @@ static doublereal c_b118 = 1.;
 /*        pass. IVLBEG has already been set to the start time of the */
 /*        input interval at index BEGIDX. */
 
-	if (i__ == bepidx) {
+	if (__state->i__ == __state->bepidx) {
 
 /*           The first output interval cannot start earlier than */
 /*           the interval from which its data are taken. It may */
 /*           start later. */
 
-	    iv1beg = max(ivlbeg,data[0]);
+	    __state->iv1beg = max(__state->ivlbeg,__state->data[0]);
 	}
 
 /*        Determine IV1END on the final loop pass. */
 
-	if (i__ == eepidx) {
+	if (__state->i__ == __state->eepidx) {
 
 /*           The first output interval cannot end later than */
 /*           the interval from which its data are taken. It may */
 /*           end earlier. */
 
-	    iv1end = min(ivlend,data[0]);
+	    __state->iv1end = min(__state->ivlend,__state->data[0]);
 	}
     }
 
 /*     Create the epoch directory for the first output mini-segment. */
 
-    minnpk = eepidx - bepidx + 1;
-    minndr = (minnpk - 1) / 100;
-    i__1 = minndr;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    __state->minnpk = __state->eepidx - __state->bepidx + 1;
+    __state->minndr = (__state->minnpk - 1) / 100;
+    i__1 = __state->minndr;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
 /*        Set BUFBAS to the address that immediately precedes the */
 /*        element we're about to read. We must skip over the data */
 /*        packets and the first (BEPIDX-1) epochs before starting our */
 /*        count. */
 
-	bufbas = minib - 1 + npkt * pktsiz + (bepidx - 1) + i__ * 100 - 1;
-	i__2 = bufbas + 1;
-	i__3 = bufbas + 1;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	__state->bufbas = __state->minib - 1 + __state->npkt * 
+		__state->pktsiz + (__state->bepidx - 1) + __state->i__ * 100 
+		- 1;
+	i__2 = __state->bufbas + 1;
+	i__3 = __state->bufbas + 1;
+	dafgda_(handle, &i__2, &i__3, __state->data);
+	dafada_(__state->data, &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1074,12 +1073,12 @@ static doublereal c_b118 = 1.;
 
 /*     Finally, write out the control area for the first mini-segment. */
 
-    d__1 = (doublereal) subtyp;
-    dafada_(&d__1, &c__1);
-    d__1 = (doublereal) wndsiz;
-    dafada_(&d__1, &c__1);
-    d__1 = (doublereal) minnpk;
-    dafada_(&d__1, &c__1);
+    d__1 = (doublereal) __state->subtyp;
+    dafada_(&d__1, &__state->c__1);
+    d__1 = (doublereal) __state->wndsiz;
+    dafada_(&d__1, &__state->c__1);
+    d__1 = (doublereal) __state->minnpk;
+    dafada_(&d__1, &__state->c__1);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -1090,7 +1089,8 @@ static doublereal c_b118 = 1.;
 /*     The size is the sum of the sizes of the packet set, the */
 /*     epochs, the epoch directories, and the control area. */
 
-    min1sz = minnpk * (pktsiz + 1) + minndr + 3;
+    __state->min1sz = __state->minnpk * (__state->pktsiz + 1) + 
+	    __state->minndr + 3;
 /* *********************************************************************** */
 
 /*     Part 3: Transfer the middle group of mini-segments to the */
@@ -1109,12 +1109,12 @@ static doublereal c_b118 = 1.;
 /*     interval. Note that this time may differ from IV1END, which */
 /*     is the end time of the first output interval. */
 
-    if (ivlend > *end || begidx == nintvl) {
+    if (__state->ivlend > *end || __state->begidx == __state->nintvl) {
 
 /*        We've transferred all the data we need. We don't need */
 /*        to obtain data from other mini-segments. */
 
-	endidx = begidx;
+	__state->endidx = __state->begidx;
 
 /*        FINAL is already set to .FALSE. */
 
@@ -1126,19 +1126,19 @@ static doublereal c_b118 = 1.;
 /*        the one we just wrote, and that have end times less than or */
 /*        equal to END, get copied without modification to the output */
 /*        file. Note that this sequence of mini-segments could be empty. */
-	curivl = begidx + 1;
+	__state->curivl = __state->begidx + 1;
 
 /*        Initialize the start time of the final output mini-segment. */
 /*        We'll update this if we produce more output mini-segments. */
 
-	ivfbeg = ivlend;
+	__state->ivfbeg = __state->ivlend;
 
 /*        Get the end time of the interval at index CURIVL. */
 
-	bufbas = ivlbas + curivl;
-	i__1 = bufbas + 1;
-	i__2 = bufbas + 1;
-	dafgda_(handle, &i__1, &i__2, &ivlend);
+	__state->bufbas = __state->ivlbas + __state->curivl;
+	i__1 = __state->bufbas + 1;
+	i__2 = __state->bufbas + 1;
+	dafgda_(handle, &i__1, &i__2, &__state->ivlend);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1147,42 +1147,42 @@ static doublereal c_b118 = 1.;
 /*        CURIVL is the index of the interval we're about to process, */
 /*        and if CURIVL is in range, IVLEND is its end time. */
 
-	while(ivlend <= *end && curivl <= nintvl) {
+	while(__state->ivlend <= *end && __state->curivl <= __state->nintvl) {
 
 /*           Entering this loop means the "middle" component of the */
 /*           output segment is non-empty. */
 
 /*           Get the begin and end pointers for the current mini-segment. */
 
-	    bufbas = ptrbas + curivl - 1;
-	    i__1 = bufbas + 1;
-	    i__2 = bufbas + 2;
-	    dafgda_(handle, &i__1, &i__2, data);
+	    __state->bufbas = __state->ptrbas + __state->curivl - 1;
+	    i__1 = __state->bufbas + 1;
+	    i__2 = __state->bufbas + 2;
+	    dafgda_(handle, &i__1, &i__2, __state->data);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
-	    minib = *baddr - 1 + i_dnnt(data);
-	    minie = *baddr - 1 + i_dnnt(&data[1]) - 1;
+	    __state->minib = *baddr - 1 + i_dnnt(__state->data);
+	    __state->minie = *baddr - 1 + i_dnnt(&__state->data[1]) - 1;
 
 /*           Transfer all data from DAF address MINIB through DAF */
 /*           address MINIE to the target SPK segment. */
 
-	    remain = minie - minib + 1;
-	    bufbas = minib - 1;
-	    nread = min(100,remain);
-	    while(remain > 0) {
-		i__1 = bufbas + 1;
-		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, data);
-		dafada_(data, &nread);
+	    __state->remain = __state->minie - __state->minib + 1;
+	    __state->bufbas = __state->minib - 1;
+	    __state->nread = min(100,__state->remain);
+	    while(__state->remain > 0) {
+		i__1 = __state->bufbas + 1;
+		i__2 = __state->bufbas + __state->nread;
+		dafgda_(handle, &i__1, &i__2, __state->data);
+		dafada_(__state->data, &__state->nread);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
 		}
-		remain -= nread;
-		bufbas += nread;
-		nread = min(100,remain);
+		__state->remain -= __state->nread;
+		__state->bufbas += __state->nread;
+		__state->nread = min(100,__state->remain);
 	    }
 
 /*           We've copied the mini-segment at index CURIVL. */
@@ -1191,17 +1191,17 @@ static doublereal c_b118 = 1.;
 /*           this one turns out NOT to be the last; in that */
 /*           case this is the final interval's start time. */
 
-	    ivfbeg = ivlend;
+	    __state->ivfbeg = __state->ivlend;
 
 /*           Get the end time of the next interval, if there */
 /*           is one. */
 
-	    ++curivl;
-	    if (curivl <= nintvl) {
-		bufbas = ivlbas + curivl;
-		i__1 = bufbas + 1;
-		i__2 = bufbas + 1;
-		dafgda_(handle, &i__1, &i__2, &ivlend);
+	    ++__state->curivl;
+	    if (__state->curivl <= __state->nintvl) {
+		__state->bufbas = __state->ivlbas + __state->curivl;
+		i__1 = __state->bufbas + 1;
+		i__2 = __state->bufbas + 1;
+		dafgda_(handle, &i__1, &i__2, &__state->ivlend);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
@@ -1225,7 +1225,7 @@ static doublereal c_b118 = 1.;
 /*     Part 4: Create the final output mini-segment, if necessary */
 
 /* *********************************************************************** */
-	if (curivl > nintvl) {
+	if (__state->curivl > __state->nintvl) {
 
 /*           The coverage of the middle group extends to the end of */
 /*           the coverage of the input segment. There's no more data to */
@@ -1233,12 +1233,12 @@ static doublereal c_b118 = 1.;
 
 /*           FINAL is already set to .FALSE. */
 
-	    endidx = nintvl;
+	    __state->endidx = __state->nintvl;
 	} else {
 
 /*           We're going to create one last output mini-segment. */
 
-	    final = TRUE_;
+	    __state->final = TRUE_;
 
 /*           The input segment contains at least one more interpolation */
 /*           interval, and the end time of this interval is greater than */
@@ -1246,27 +1246,27 @@ static doublereal c_b118 = 1.;
 /*           END, the interval would have been processed in the loop */
 /*           above. */
 
-	    endidx = curivl;
+	    __state->endidx = __state->curivl;
 
 /*           In order to extract data from the mini-segment, we'll need */
 /*           its address range. */
 
-	    i__1 = ptrbas + endidx;
-	    i__2 = ptrbas + endidx + 1;
-	    dafgda_(handle, &i__1, &i__2, data);
+	    i__1 = __state->ptrbas + __state->endidx;
+	    i__2 = __state->ptrbas + __state->endidx + 1;
+	    dafgda_(handle, &i__1, &i__2, __state->data);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
-	    minib = *baddr - 1 + i_dnnt(data);
-	    minie = *baddr - 1 + i_dnnt(&data[1]) - 1;
+	    __state->minib = *baddr - 1 + i_dnnt(__state->data);
+	    __state->minie = *baddr - 1 + i_dnnt(&__state->data[1]) - 1;
 
 /*           Read the control area of the mini-segment. */
 
-	    bufbas = minie - 3;
-	    i__1 = bufbas + 1;
-	    i__2 = bufbas + 3;
-	    dafgda_(handle, &i__1, &i__2, contrl);
+	    __state->bufbas = __state->minie - 3;
+	    i__1 = __state->bufbas + 1;
+	    i__2 = __state->bufbas + 3;
+	    dafgda_(handle, &i__1, &i__2, __state->contrl);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
@@ -1274,23 +1274,24 @@ static doublereal c_b118 = 1.;
 
 /*           Fetch the control area parameters for the mini-segment. */
 
-	    subtyp = i_dnnt(contrl);
-	    wndsiz = i_dnnt(&contrl[1]);
-	    npkt = i_dnnt(&contrl[2]);
+	    __state->subtyp = i_dnnt(__state->contrl);
+	    __state->wndsiz = i_dnnt(&__state->contrl[1]);
+	    __state->npkt = i_dnnt(&__state->contrl[2]);
 
 /*           Set the packet size, which is a function of the subtype. */
 
-	    if (subtyp < 0 || subtyp >= 3) {
+	    if (__state->subtyp < 0 || __state->subtyp >= 3) {
 		setmsg_("Unexpected SPK type 19 subtype # found in type 19 s"
 			"egment within mini-segment #.", (ftnlen)80);
-		errint_("#", &subtyp, (ftnlen)1);
-		errint_("#", &curivl, (ftnlen)1);
+		errint_("#", &__state->subtyp, (ftnlen)1);
+		errint_("#", &__state->curivl, (ftnlen)1);
 		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
-	    pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "pktszs", i__1, "spks19_", (ftnlen)1301)];
+	    __state->pktsiz = __state->pktszs[(i__1 = __state->subtyp) < 3 && 
+		    0 <= i__1 ? i__1 : s_rnge("pktszs", i__1, "spks19_", (
+		    ftnlen)1301)];
 
 /*           Determine how much of the mini-segment we need to transfer. */
 /*           The first step is to find the last epoch less than or equal */
@@ -1298,40 +1299,41 @@ static doublereal c_b118 = 1.;
 /*           base address of the epoch list (that is, the start address */
 /*           minus 1). */
 
-	    minbep = minib - 1 + npkt * pktsiz;
+	    __state->minbep = __state->minib - 1 + __state->npkt * 
+		    __state->pktsiz;
 
 /*           Read epochs until we find one strictly greater than END. */
 /*           The previous interval was the last one with an end time */
 /*           less than or equal to END, so the epoch we seek should */
 /*           exist. We have an error condition if it doesn't. */
 
-	    nread = min(100,npkt);
-	    bufbas = minbep;
-	    i__1 = bufbas + 1;
-	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, data);
+	    __state->nread = min(100,__state->npkt);
+	    __state->bufbas = __state->minbep;
+	    i__1 = __state->bufbas + 1;
+	    i__2 = __state->bufbas + __state->nread;
+	    dafgda_(handle, &i__1, &i__2, __state->data);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
 	    }
-	    remain = npkt - nread;
+	    __state->remain = __state->npkt - __state->nread;
 
 /*           The variable NREAD is the array index of the last item read */
 /*           into the buffer on the previous read operation. */
 
-	    while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1335)] <= *
-		    end) {
-		bufbas += nread;
-		nread = min(100,remain);
-		i__1 = bufbas + 1;
-		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, data);
+	    while(__state->remain > 0 && __state->data[(i__1 = __state->nread 
+		    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data", i__1, 
+		    "spks19_", (ftnlen)1335)] <= *end) {
+		__state->bufbas += __state->nread;
+		__state->nread = min(100,__state->remain);
+		i__1 = __state->bufbas + 1;
+		i__2 = __state->bufbas + __state->nread;
+		dafgda_(handle, &i__1, &i__2, __state->data);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
 		}
-		remain -= nread;
+		__state->remain -= __state->nread;
 	    }
 
 /*           At this point BUFBAS - MINBEP is the number of epochs in */
@@ -1348,26 +1350,27 @@ static doublereal c_b118 = 1.;
 /*           EEPIDX exceeds by 1 the index of the last epoch less than */
 /*           or equal to END. */
 
-	    l = lstled_(end, &nread, data);
-	    eepidx = bufbas - minbep + l + 1;
+	    __state->l = lstled_(end, &__state->nread, __state->data);
+	    __state->eepidx = __state->bufbas - __state->minbep + __state->l 
+		    + 1;
 
 /*           EEPIDX is at least 2 and is less than or equal to NPKT. */
 
-	    if (eepidx < 2) {
+	    if (__state->eepidx < 2) {
 
 /*              This code should not be reached, since getting here */
 /*              implies the first epoch of the interval is greater than */
 /*              END. */
 
-		dafhfn_(handle, spk, (ftnlen)255);
+		dafhfn_(handle, __state->spk, (ftnlen)255);
 		setmsg_("Input file: #. Segment address range: #:#. Structur"
 			"al error found: no epochs in final input interval ex"
 			"ceed END. Interval index is #; END is #.", (ftnlen)
 			143);
-		errch_("#", spk, (ftnlen)1, (ftnlen)255);
+		errch_("#", __state->spk, (ftnlen)1, (ftnlen)255);
 		errint_("#", baddr, (ftnlen)1);
 		errint_("#", eaddr, (ftnlen)1);
-		errint_("#", &endidx, (ftnlen)1);
+		errint_("#", &__state->endidx, (ftnlen)1);
 		errdp_("#", end, (ftnlen)1);
 		sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
 		chkout_("SPKS19", (ftnlen)6);
@@ -1378,8 +1381,9 @@ static doublereal c_b118 = 1.;
 /*           interpolation behavior in the neighborhood of the epoch at */
 /*           index EEPIDX. */
 
-	    if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data",
-		     i__1, "spks19_", (ftnlen)1402)] == *end) {
+	    if (__state->data[(i__1 = __state->l - 1) < 100 && 0 <= i__1 ? 
+		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1402)] == *
+		    end) {
 
 /*              The epochs at indices EEPIDX-1 and EEPIDX comprise */
 /*              the first two epochs of the right half of an */
@@ -1387,20 +1391,20 @@ static doublereal c_b118 = 1.;
 /*              fewer pad epochs to complete the right half of the */
 /*              window. */
 
-		npad = wndsiz / 2 - 2;
+		__state->npad = __state->wndsiz / 2 - 2;
 	    } else {
 
 /*              The epoch at EEPIDX is the first of the pad. */
 
-		npad = wndsiz / 2 - 1;
+		__state->npad = __state->wndsiz / 2 - 1;
 	    }
 
 /*           Update the final epoch index to include the pad. The index */
 /*           cannot exceed the mini-segment's packet count. */
 
 /* Computing MIN */
-	    i__1 = npkt, i__2 = eepidx + npad;
-	    eepidx = min(i__1,i__2);
+	    i__1 = __state->npkt, i__2 = __state->eepidx + __state->npad;
+	    __state->eepidx = min(i__1,i__2);
 
 /*           EEPIDX must always exceed BEPIDX; no interpolation */
 /*           interval may have zero length. */
@@ -1410,27 +1414,27 @@ static doublereal c_b118 = 1.;
 /*           -1, and EEPIDX will be 1. We don't want to allow */
 /*           EEPIDX to be less than 2. */
 
-	    eepidx = max(eepidx,2);
+	    __state->eepidx = max(__state->eepidx,2);
 
 /*           EEPIDX should always be in range at this point. */
 
-	    if (eepidx < 2 || eepidx > npkt) {
+	    if (__state->eepidx < 2 || __state->eepidx > __state->npkt) {
 
 /*              This code should not be reached, since getting here */
 /*              implies the first epoch of the interval is greater than */
 /*              END. */
 
-		dafhfn_(handle, spk, (ftnlen)255);
+		dafhfn_(handle, __state->spk, (ftnlen)255);
 		setmsg_("Input file: #. Segment address range: #:#. BEPIDX ="
 			" #; EEPIDX = #; NPKT = #.Interval index is #; END is"
 			" #.", (ftnlen)106);
-		errch_("#", spk, (ftnlen)1, (ftnlen)255);
+		errch_("#", __state->spk, (ftnlen)1, (ftnlen)255);
 		errint_("#", baddr, (ftnlen)1);
 		errint_("#", eaddr, (ftnlen)1);
-		errint_("#", &bepidx, (ftnlen)1);
-		errint_("#", &eepidx, (ftnlen)1);
-		errint_("#", &npkt, (ftnlen)1);
-		errint_("#", &endidx, (ftnlen)1);
+		errint_("#", &__state->bepidx, (ftnlen)1);
+		errint_("#", &__state->eepidx, (ftnlen)1);
+		errint_("#", &__state->npkt, (ftnlen)1);
+		errint_("#", &__state->endidx, (ftnlen)1);
 		errdp_("#", end, (ftnlen)1);
 		sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
 		chkout_("SPKS19", (ftnlen)6);
@@ -1439,13 +1443,14 @@ static doublereal c_b118 = 1.;
 
 /*           Write the packets of the last mini-segment. */
 
-	    i__1 = eepidx;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		bufbas = minib - 1 + (i__ - 1) * pktsiz;
-		i__2 = bufbas + 1;
-		i__3 = bufbas + pktsiz;
-		dafgda_(handle, &i__2, &i__3, data);
-		dafada_(data, &pktsiz);
+	    i__1 = __state->eepidx;
+	    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+		__state->bufbas = __state->minib - 1 + (__state->i__ - 1) * 
+			__state->pktsiz;
+		i__2 = __state->bufbas + 1;
+		i__3 = __state->bufbas + __state->pktsiz;
+		dafgda_(handle, &i__2, &i__3, __state->data);
+		dafada_(__state->data, &__state->pktsiz);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
@@ -1455,39 +1460,41 @@ static doublereal c_b118 = 1.;
 /*           Write the epochs of the last mini-segment. Save the */
 /*           final epoch; we'll need it later. */
 
-	    i__1 = eepidx;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		bufbas = minib - 1 + npkt * pktsiz + (i__ - 1);
-		i__2 = bufbas + 1;
-		i__3 = bufbas + 1;
-		dafgda_(handle, &i__2, &i__3, data);
-		dafada_(data, &c__1);
+	    i__1 = __state->eepidx;
+	    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+		__state->bufbas = __state->minib - 1 + __state->npkt * 
+			__state->pktsiz + (__state->i__ - 1);
+		i__2 = __state->bufbas + 1;
+		i__3 = __state->bufbas + 1;
+		dafgda_(handle, &i__2, &i__3, __state->data);
+		dafada_(__state->data, &__state->c__1);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
 		}
-		if (i__ == eepidx) {
+		if (__state->i__ == __state->eepidx) {
 
 /*                 The current interval is the last of the output */
 /*                 segment. The interval end must be greater than or */
 /*                 equal to END. It's safe to simply choose the final */
 /*                 epoch as the interval end. */
 
-		    ivfend = data[0];
+		    __state->ivfend = __state->data[0];
 		}
 	    }
 
 /*           Create epoch directories for the last mini-segment. */
 
-	    minnpk = eepidx;
-	    minndr = (minnpk - 1) / 100;
-	    i__1 = minndr;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		bufbas = minib - 1 + npkt * pktsiz + i__ * 100 - 1;
-		i__2 = bufbas + 1;
-		i__3 = bufbas + 1;
-		dafgda_(handle, &i__2, &i__3, data);
-		dafada_(data, &c__1);
+	    __state->minnpk = __state->eepidx;
+	    __state->minndr = (__state->minnpk - 1) / 100;
+	    i__1 = __state->minndr;
+	    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+		__state->bufbas = __state->minib - 1 + __state->npkt * 
+			__state->pktsiz + __state->i__ * 100 - 1;
+		i__2 = __state->bufbas + 1;
+		i__3 = __state->bufbas + 1;
+		dafgda_(handle, &i__2, &i__3, __state->data);
+		dafada_(__state->data, &__state->c__1);
 		if (failed_()) {
 		    chkout_("SPKS19", (ftnlen)6);
 		    return 0;
@@ -1497,12 +1504,12 @@ static doublereal c_b118 = 1.;
 /*           Finally, write out the control area for the last */
 /*           mini-segment. */
 
-	    d__1 = (doublereal) subtyp;
-	    dafada_(&d__1, &c__1);
-	    d__1 = (doublereal) wndsiz;
-	    dafada_(&d__1, &c__1);
-	    d__1 = (doublereal) minnpk;
-	    dafada_(&d__1, &c__1);
+	    d__1 = (doublereal) __state->subtyp;
+	    dafada_(&d__1, &__state->c__1);
+	    d__1 = (doublereal) __state->wndsiz;
+	    dafada_(&d__1, &__state->c__1);
+	    d__1 = (doublereal) __state->minnpk;
+	    dafada_(&d__1, &__state->c__1);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
@@ -1512,7 +1519,8 @@ static doublereal c_b118 = 1.;
 /*           This is the sum of the sizes of the packet space, the */
 /*           epochs, the directories, and the control area. */
 
-	    minfsz = minnpk * (pktsiz + 1) + minndr + 3;
+	    __state->minfsz = __state->minnpk * (__state->pktsiz + 1) + 
+		    __state->minndr + 3;
 	}
 
 /*        We're done with the final mini-segment. */
@@ -1532,11 +1540,11 @@ static doublereal c_b118 = 1.;
 /*     Let NOIVL be the number of intervals in the output subset */
 /*     segment. */
 
-    noivl = endidx - begidx + 1;
+    __state->noivl = __state->endidx - __state->begidx + 1;
 
 /*     The first interval start time is IV1BEG. */
 
-    dafada_(&iv1beg, &c__1);
+    dafada_(&__state->iv1beg, &__state->c__1);
     if (failed_()) {
 	chkout_("SPKS19", (ftnlen)6);
 	return 0;
@@ -1544,12 +1552,12 @@ static doublereal c_b118 = 1.;
 
 /*     Write the remaining interval boundaries. */
 
-    if (noivl == 1) {
+    if (__state->noivl == 1) {
 
 /*        The final interval boundary is the stop time of */
 /*        the first interval. */
 
-	dafada_(&iv1end, &c__1);
+	dafada_(&__state->iv1end, &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1561,12 +1569,12 @@ static doublereal c_b118 = 1.;
 
 /*        Set the upper bound of the interval boundary transfer loop. */
 
-	if (final) {
+	if (__state->final) {
 
 /*           We'll transfer all interval start times up to, */
 /*           but not including, the final one. */
 
-	    ub = noivl - 1;
+	    __state->ub = __state->noivl - 1;
 	} else {
 
 /*           There's no mini-segment following the middle group. */
@@ -1575,18 +1583,19 @@ static doublereal c_b118 = 1.;
 /*           the end time of the last interval of the middle */
 /*           group. */
 
-	    ub = noivl + 1;
+	    __state->ub = __state->noivl + 1;
 	}
 
 /*        Transfer interval boundaries from the middle group. */
 
-	i__1 = ub;
-	for (i__ = 2; i__ <= i__1; ++i__) {
-	    bufbas = ivlbas + (begidx - 1) + (i__ - 1);
-	    i__2 = bufbas + 1;
-	    i__3 = bufbas + 1;
-	    dafgda_(handle, &i__2, &i__3, data);
-	    dafada_(data, &c__1);
+	i__1 = __state->ub;
+	for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
+	    __state->bufbas = __state->ivlbas + (__state->begidx - 1) + (
+		    __state->i__ - 1);
+	    i__2 = __state->bufbas + 1;
+	    i__3 = __state->bufbas + 1;
+	    dafgda_(handle, &i__2, &i__3, __state->data);
+	    dafada_(__state->data, &__state->c__1);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
@@ -1596,7 +1605,7 @@ static doublereal c_b118 = 1.;
 /*        If the "final" mini-segment exists, we haven't */
 /*        transferred its interval boundaries. Do it now. */
 
-	if (final) {
+	if (__state->final) {
 
 /*           The start and end times of the last output interpolation */
 /*           interval are stored in IVFBEG and IVFEND. */
@@ -1605,8 +1614,8 @@ static doublereal c_b118 = 1.;
 /*           mini-segment was written, and it was updated if necessary */
 /*           in the block of code that transferred the middle group. */
 
-	    dafada_(&ivfbeg, &c__1);
-	    dafada_(&ivfend, &c__1);
+	    dafada_(&__state->ivfbeg, &__state->c__1);
+	    dafada_(&__state->ivfend, &__state->c__1);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
@@ -1634,21 +1643,22 @@ static doublereal c_b118 = 1.;
 /*        ( ( NOIVL + 1 ) - 1 ) / DIRSIZ */
 
 
-    nsdir = noivl / 100;
-    i__1 = nsdir;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    __state->nsdir = __state->noivl / 100;
+    i__1 = __state->nsdir;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
 /*        Look up the interval boundary at offset I*DIRSIZ from */
 /*        the boundary index BEGIDX-1. */
 
-	bufbas = ivlbas + (begidx - 1) + i__ * 100 - 1;
-	i__2 = bufbas + 1;
-	i__3 = bufbas + 1;
-	dafgda_(handle, &i__2, &i__3, data);
+	__state->bufbas = __state->ivlbas + (__state->begidx - 1) + 
+		__state->i__ * 100 - 1;
+	i__2 = __state->bufbas + 1;
+	i__3 = __state->bufbas + 1;
+	dafgda_(handle, &i__2, &i__3, __state->data);
 
 /*        Write this directory entry to the output segment. */
 
-	dafada_(data, &c__1);
+	dafada_(__state->data, &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKS19", (ftnlen)6);
 	    return 0;
@@ -1660,8 +1670,8 @@ static doublereal c_b118 = 1.;
 /*     The first output mini-segment ranges from relative */
 /*     addresses 1 : MIN1SZ. */
 
-    dafada_(&c_b118, &c__1);
-    if (noivl == 1) {
+    dafada_(&__state->c_b118, &__state->c__1);
+    if (__state->noivl == 1) {
 
 /*        The next pointer indicates the first address after the */
 /*        mini-segment, whether or not there is another mini-segment. */
@@ -1669,8 +1679,8 @@ static doublereal c_b118 = 1.;
 /*        Note that MIN1SZ was initialized after the first output */
 /*        mini-segment was written. */
 
-	d__1 = (doublereal) (min1sz + 1);
-	dafada_(&d__1, &c__1);
+	d__1 = (doublereal) (__state->min1sz + 1);
+	dafada_(&d__1, &__state->c__1);
     } else {
 
 /*        There are multiple output mini-segments. There is either */
@@ -1679,16 +1689,16 @@ static doublereal c_b118 = 1.;
 /*        We can obtain from the input segment the sizes of the */
 /*        mini-segments that were copied whole. */
 
-	start = min1sz + 1;
+	__state->start = __state->min1sz + 1;
 
 /*        Set the upper bound of the mini-segment pointer transfer loop. */
 
-	if (final) {
+	if (__state->final) {
 
 /*           We'll transfer all mini-segment start pointers up to and */
 /*           including the start pointer of the final output */
 
-	    ub = noivl;
+	    __state->ub = __state->noivl;
 	} else {
 
 /*           The middle group is non-empty, and there's no mini-segment */
@@ -1699,7 +1709,7 @@ static doublereal c_b118 = 1.;
 /*           end pointer is the successor of the last DAF address */
 /*           occupied by the mini-segment. */
 
-	    ub = noivl + 1;
+	    __state->ub = __state->noivl + 1;
 	}
 
 /*        Write mini-segment pointers from the middle group. */
@@ -1714,24 +1724,25 @@ static doublereal c_b118 = 1.;
 /*        final address of the first output mini-segment and the final */
 /*        address of the input mini-segment at index BEGIDX. */
 
-	i__1 = ub;
-	for (i__ = 2; i__ <= i__1; ++i__) {
+	i__1 = __state->ub;
+	for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
 
 /*           Look up the Ith start pointer. */
 
-	    bufbas = ptrbas + (begidx - 1) + (i__ - 1);
-	    i__2 = bufbas + 1;
-	    i__3 = bufbas + 1;
-	    dafgda_(handle, &i__2, &i__3, data);
+	    __state->bufbas = __state->ptrbas + (__state->begidx - 1) + (
+		    __state->i__ - 1);
+	    i__2 = __state->bufbas + 1;
+	    i__3 = __state->bufbas + 1;
+	    dafgda_(handle, &i__2, &i__3, __state->data);
 
 /*           On the first pass, compute the pointer shift amount. */
 
-	    if (i__ == 2) {
-		shift = min1sz + 1 - i_dnnt(data);
+	    if (__state->i__ == 2) {
+		__state->shift = __state->min1sz + 1 - i_dnnt(__state->data);
 	    }
-	    start = i_dnnt(data) + shift;
-	    d__1 = (doublereal) start;
-	    dafada_(&d__1, &c__1);
+	    __state->start = i_dnnt(__state->data) + __state->shift;
+	    d__1 = (doublereal) __state->start;
+	    dafada_(&d__1, &__state->c__1);
 	    if (failed_()) {
 		chkout_("SPKS19", (ftnlen)6);
 		return 0;
@@ -1741,7 +1752,7 @@ static doublereal c_b118 = 1.;
 /*        If the "final" mini-segment exists, we haven't */
 /*        transferred its end pointer. Do it now. */
 
-	if (final) {
+	if (__state->final) {
 
 /*           MINFSZ is the size of the final output mini-segment. */
 
@@ -1751,18 +1762,18 @@ static doublereal c_b118 = 1.;
 
 /*           Write the pointer. */
 
-	    d__1 = (doublereal) (start + minfsz);
-	    dafada_(&d__1, &c__1);
+	    d__1 = (doublereal) (__state->start + __state->minfsz);
+	    dafada_(&d__1, &__state->c__1);
 	}
     }
 
 /*     Write the interval count and selection flag to the */
 /*     new segment. */
 
-    d__1 = (doublereal) isel;
-    dafada_(&d__1, &c__1);
-    d__1 = (doublereal) noivl;
-    dafada_(&d__1, &c__1);
+    d__1 = (doublereal) __state->isel;
+    dafada_(&d__1, &__state->c__1);
+    d__1 = (doublereal) __state->noivl;
+    dafada_(&d__1, &__state->c__1);
     chkout_("SPKS19", (ftnlen)6);
     return 0;
 } /* spks19_ */

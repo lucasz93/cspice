@@ -1,9 +1,17 @@
-/* zzekqtab.f -- translated by f2c (version 19980913).
+/* zzekqtab.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekqtab_state_t;
+static zzekqtab_state_t* get_zzekqtab_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKQTAB ( Private: EK, read table names from query ) */
 /* Subroutine */ int zzekqtab_(integer *eqryi, char *eqryc, integer *n, char *
@@ -14,16 +22,26 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, ntab;
+    integer base;
+    integer ntab;
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen), chkin_(char *, ftnlen);
-    integer ab, ae;
-    extern logical failed_(void);
-    integer tb, te, buflen, iparse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
 	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer ab;
+    integer ae;
+    extern logical failed_(void);
+    integer tb;
+    integer te;
+    integer buflen;
+    integer iparse;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekqtab_state_t* __state = get_zzekqtab_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

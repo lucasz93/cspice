@@ -1,16 +1,21 @@
-/* spkr10.f -- translated by f2c (version 19980913).
+/* spkr10.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__8 = 8;
-static integer c__7 = 7;
-static integer c__14 = 14;
+extern spkr10_init_t __spkr10_init;
+static spkr10_state_t* get_spkr10_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr10)
+		state->spkr10 = __cspice_allocate_module(sizeof(
+	spkr10_state_t), &__spkr10_init, sizeof(__spkr10_init));
+	return state->spkr10;
+
+}
 
 /* $Procedure SPKR10 ( SPK, read record from SPK type 10 segment ) */
 /* Subroutine */ int spkr10_(integer *handle, doublereal *descr, doublereal *
@@ -20,22 +25,21 @@ static integer c__14 = 14;
     integer i__1;
 
     /* Local variables */
-    static integer ends[2], indx, from, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
-    static logical found;
-    static doublereal value;
-    static integer to, nepoch, getelm;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *), sgmeta_(integer *, doublereal *, 
-	    integer *, integer *), chkout_(char *, ftnlen), sgfpkt_(integer *,
-	     doublereal *, integer *, integer *, doublereal *, integer *), 
-	    sgfrvi_(integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *, logical *);
-    static integer putelm;
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
+	     doublereal *, integer *, logical *);
     extern logical return_(void);
-    static integer set1, set2;
 
+    /* Module state */
+    spkr10_state_t* __state = get_spkr10_state();
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 10 */
@@ -601,55 +605,57 @@ static integer c__14 = 14;
 /*     Fetch the constants and store them in the first part of */
 /*     the output RECORD. */
 
-    sgfcon_(handle, descr, &c__1, &c__8, record);
+    sgfcon_(handle, descr, &__state->c__1, &__state->c__8, record);
 
 /*     Locate the time in the file closest to the input ET. */
 
-    sgfrvi_(handle, descr, et, &value, &indx, &found);
+    sgfrvi_(handle, descr, et, &__state->value, &__state->indx, &
+	    __state->found);
 
 /*     Determine which pair of element sets to choose so that */
 /*     they will bracket ET. */
 
-    if (*et <= value) {
+    if (*et <= __state->value) {
 /* Computing MAX */
-	i__1 = indx - 1;
-	from = max(i__1,1);
-	to = indx;
+	i__1 = __state->indx - 1;
+	__state->from = max(i__1,1);
+	__state->to = __state->indx;
     } else {
-	sgmeta_(handle, descr, &c__7, &nepoch);
-	from = indx;
+	sgmeta_(handle, descr, &__state->c__7, &__state->nepoch);
+	__state->from = __state->indx;
 /* Computing MIN */
-	i__1 = indx + 1;
-	to = min(i__1,nepoch);
+	i__1 = __state->indx + 1;
+	__state->to = min(i__1,__state->nepoch);
     }
 
 /*     Fetch the element sets */
 
-    sgfpkt_(handle, descr, &from, &to, &record[8], ends);
+    sgfpkt_(handle, descr, &__state->from, &__state->to, &record[8], 
+	    __state->ends);
 
 /*     If the size of the packets is not 14, this is an old style */
 /*     two-line element set without nutation information.  We simply */
 /*     set all of the angles to zero. */
 
-    if (ends[0] == 10) {
+    if (__state->ends[0] == 10) {
 
 /*        First shift the elements to their proper locations in RECORD */
 /*        so there will be room to fill in the zeros. */
 
-	putelm = 32;
-	getelm = 28;
-	while(getelm > 18) {
-	    record[putelm - 1] = record[getelm - 1];
-	    --putelm;
-	    --getelm;
+	__state->putelm = 32;
+	__state->getelm = 28;
+	while(__state->getelm > 18) {
+	    record[__state->putelm - 1] = record[__state->getelm - 1];
+	    --__state->putelm;
+	    --__state->getelm;
 	}
-	set1 = 19;
-	set2 = 33;
-	for (i__ = 1; i__ <= 4; ++i__) {
-	    record[set1 - 1] = 0.;
-	    record[set2 - 1] = 0.;
-	    ++set1;
-	    ++set2;
+	__state->set1 = 19;
+	__state->set2 = 33;
+	for (__state->i__ = 1; __state->i__ <= 4; ++__state->i__) {
+	    record[__state->set1 - 1] = 0.;
+	    record[__state->set2 - 1] = 0.;
+	    ++__state->set1;
+	    ++__state->set2;
 	}
     }
 
@@ -658,8 +664,8 @@ static integer c__14 = 14;
 /*     segment.  We simply copy the one fetched a second time so */
 /*     that the record is properly constructed. */
 
-    if (from == to) {
-	moved_(&record[8], &c__14, &record[22]);
+    if (__state->from == __state->to) {
+	moved_(&record[8], &__state->c__14, &record[22]);
     }
     chkout_("SPKR10", (ftnlen)6);
     return 0;

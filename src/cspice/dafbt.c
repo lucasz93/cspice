@@ -1,16 +1,21 @@
-/* dafbt.f -- translated by f2c (version 19980913).
+/* dafbt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern dafbt_init_t __dafbt_init;
+static dafbt_state_t* get_dafbt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafbt)
+		state->dafbt = __cspice_allocate_module(sizeof(dafbt_state_t),
+	 &__dafbt_init, sizeof(__dafbt_init));
+	return state->dafbt;
+
+}
 
 /* $Procedure DAFBT ( DAF, convert binary file to transfer file ) */
 /* Subroutine */ int dafbt_(char *binfil, integer *xfrlun, ftnlen binfil_len)
@@ -34,8 +39,10 @@ static integer c__2 = 2;
     integer free;
     char line[80];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), dafgn_(char *, ftnlen), dafgs_(doublereal *), 
-	    chkin_(char *, ftnlen);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int dafgn_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer bward;
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
@@ -45,11 +52,13 @@ static integer c__2 = 2;
 	    ftnlen, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *), daffna_(logical *);
+	    doublereal *);
+    extern /* Subroutine */ int daffna_(logical *);
     integer nd;
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *);
-    integer dtabeg, ni;
+    integer dtabeg;
+    integer ni;
     extern /* Subroutine */ int dafcls_(integer *);
     char ifname[60];
     integer binhdl;
@@ -57,28 +66,32 @@ static integer c__2 = 2;
 	    *, integer *, integer *, integer *, ftnlen);
     doublereal buffer[1024];
     integer dtacnt;
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen), wrencd_(
-	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int wrencd_(integer *, integer *, doublereal *);
     integer binlun;
     char idword[8];
     integer numdta;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer snmlen;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), wrenci_(integer *, 
-	    integer *, integer *);
-    integer iostat, numarr, numlft;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int wrenci_(integer *, integer *, integer *);
+    integer iostat;
+    integer numarr;
+    integer numlft;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dsumry[125];
     integer isumry[250];
     doublereal summry[125];
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 1 };
 
 
+
+    /* Module state */
+    dafbt_state_t* __state = get_dafbt_state();
 /* $ Abstract */
 
 /*     Convert the contents of a binary DAF file to an equivalent DAF */
@@ -477,7 +490,7 @@ static integer c__2 = 2;
 /*     unit. We need to do this in order to accurately move the file */
 /*     ID word to the DAF transfer file. */
 
-    zzddhhlu_(&binhdl, "DAF", &c_false, &binlun, (ftnlen)3);
+    zzddhhlu_(&binhdl, "DAF", &__state->c_false, &binlun, (ftnlen)3);
 
 /*     If the translation failed, checkout and return, as an appropriate */
 /*     error message should have already been set. */
@@ -490,12 +503,12 @@ static integer c__2 = 2;
 /*     Read the ID word from the binary file. It should be the first 8 */
 /*     characters on the first record in the file. */
 
-    io___4.ciunit = binlun;
-    iostat = s_rdue(&io___4);
+    __state->io___4.ciunit = binlun;
+    iostat = s_rdue(&__state->io___4);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -536,8 +549,8 @@ L100001:
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&c__1, "DAFETF NAIF DAF ENCODED TRANSFER FILE", (ftnlen)
-	    37);
+    iostat = do_fio(&__state->c__1, "DAFETF NAIF DAF ENCODED TRANSFER FILE", (
+	    ftnlen)37);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -566,8 +579,8 @@ L100002:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 8, a__1[1] = idword;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__1, a__1, i__1, &c__3, (ftnlen)10);
-    iostat = do_fio(&c__1, ch__1, (ftnlen)10);
+    s_cat(ch__1, a__1, i__1, &__state->c__3, (ftnlen)10);
+    iostat = do_fio(&__state->c__1, ch__1, (ftnlen)10);
     if (iostat != 0) {
 	goto L100003;
     }
@@ -587,7 +600,7 @@ L100003:
 
     isumry[0] = nd;
     isumry[1] = ni;
-    wrenci_(xfrlun, &c__2, isumry);
+    wrenci_(xfrlun, &__state->c__2, isumry);
     if (failed_()) {
 	chkout_("DAFBT", (ftnlen)5);
 	return 0;
@@ -606,8 +619,8 @@ L100003:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 60, a__1[1] = ifname;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__2, a__1, i__1, &c__3, (ftnlen)62);
-    iostat = do_fio(&c__1, ch__2, (ftnlen)62);
+    s_cat(ch__2, a__1, i__1, &__state->c__3, (ftnlen)62);
+    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)62);
     if (iostat != 0) {
 	goto L100004;
     }
@@ -708,7 +721,7 @@ L100004:
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
@@ -737,8 +750,8 @@ L100005:
 	    i__1[0] = 1, a__1[0] = "'";
 	    i__1[1] = snmlen, a__1[1] = name__;
 	    i__1[2] = 1, a__1[2] = "'";
-	    s_cat(ch__3, a__1, i__1, &c__3, (ftnlen)1002);
-	    iostat = do_fio(&c__1, ch__3, snmlen + 2);
+	    s_cat(ch__3, a__1, i__1, &__state->c__3, (ftnlen)1002);
+	    iostat = do_fio(&__state->c__1, ch__3, snmlen + 2);
 	    if (iostat != 0) {
 		goto L100006;
 	    }
@@ -814,7 +827,8 @@ L100006:
 		if (iostat != 0) {
 		    goto L100007;
 		}
-		iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+		iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80)
+			);
 		if (iostat != 0) {
 		    goto L100007;
 		}
@@ -859,7 +873,7 @@ L100007:
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100008;
 	    }
@@ -892,7 +906,7 @@ L100008:
     if (iostat != 0) {
 	goto L100009;
     }
-    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
     if (iostat != 0) {
 	goto L100009;
     }

@@ -1,16 +1,21 @@
-/* daft2b.f -- translated by f2c (version 19980913).
+/* daft2b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__5 = 5;
+extern daft2b_init_t __daft2b_init;
+static daft2b_state_t* get_daft2b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->daft2b)
+		state->daft2b = __cspice_allocate_module(sizeof(
+	daft2b_state_t), &__daft2b_init, sizeof(__daft2b_init));
+	return state->daft2b;
+
+}
 
 /* $Procedure DAFT2B ( DAF, text to binary ) */
 /* Subroutine */ int daft2b_(integer *text, char *binary, integer *resv, 
@@ -27,15 +32,20 @@ static integer c__5 = 5;
 
     /* Local variables */
     char name__[1000*2];
-    integer more, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    integer more;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     char tarch[8];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer chunk, isize, lsize;
+    integer chunk;
+    integer isize;
+    integer lsize;
     char ttype[8];
     extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), dafada_(doublereal *, integer *);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
     doublereal dc[125];
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
 	    ftnlen);
@@ -43,35 +53,29 @@ static integer c__5 = 5;
     extern /* Subroutine */ int dafena_(void);
     integer nd;
     extern logical failed_(void);
-    integer ni, handle;
+    integer ni;
+    integer handle;
     extern /* Subroutine */ int dafcls_(integer *);
     char ifname[60*2];
     extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
 	    integer *, integer *, ftnlen, ftnlen);
     doublereal buffer[1024];
     char idword[8];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal sum[125];
 
     /* Fortran I/O blocks */
-    static cilist io___5 = { 1, 0, 1, 0, 0 };
-    static cilist io___6 = { 1, 0, 1, 0, 0 };
-    static cilist io___13 = { 1, 0, 1, 0, 0 };
-    static cilist io___15 = { 1, 0, 1, 0, 0 };
-    static cilist io___17 = { 1, 0, 1, 0, 0 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
-    static cilist io___23 = { 1, 0, 1, 0, 0 };
-    static cilist io___25 = { 1, 0, 1, 0, 0 };
-    static cilist io___27 = { 1, 0, 1, 0, 0 };
-    static cilist io___28 = { 1, 0, 1, 0, 0 };
-    static cilist io___29 = { 1, 0, 1, 0, 0 };
-    static cilist io___30 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    daft2b_state_t* __state = get_daft2b_state();
 /* $ Abstract */
 
 /*     Deprecated. The routine DAFTB supersedes this routine. */
@@ -390,12 +394,12 @@ static integer c__5 = 5;
 /*     We should be positioned and ready to read the file ID word from */
 /*     the text file, so let's try it. */
 
-    io___5.ciunit = *text;
-    iostat = s_rsle(&io___5);
+    __state->io___5.ciunit = *text;
+    iostat = s_rsle(&__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&c__9, &c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -423,20 +427,22 @@ L100001:
 	chkout_("DAFT2B", (ftnlen)6);
 	return 0;
     }
-    io___6.ciunit = *text;
-    iostat = s_rsle(&io___6);
+    __state->io___6.ciunit = *text;
+    iostat = s_rsle(&__state->io___6);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__3, &c__1, (char *)&nd, (ftnlen)sizeof(integer));
+    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&nd, (ftnlen)
+	    sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__3, &c__1, (char *)&ni, (ftnlen)sizeof(integer));
+    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&ni, (ftnlen)
+	    sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__9, &c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -473,12 +479,13 @@ L100002:
 
     lsize = nd + (ni - 1) / 2 + 1;
     isize = lsize << 3;
-    io___13.ciunit = *text;
-    iostat = s_rsle(&io___13);
+    __state->io___13.ciunit = *text;
+    iostat = s_rsle(&__state->io___13);
     if (iostat != 0) {
 	goto L100003;
     }
-    iostat = do_lio(&c__3, &c__1, (char *)&more, (ftnlen)sizeof(integer));
+    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&more, (ftnlen)
+	    sizeof(integer));
     if (iostat != 0) {
 	goto L100003;
     }
@@ -495,12 +502,12 @@ L100003:
 	return 0;
     }
     while(more > 0) {
-	io___15.ciunit = *text;
-	iostat = s_rsle(&io___15);
+	__state->io___15.ciunit = *text;
+	iostat = s_rsle(&__state->io___15);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_lio(&c__9, &c__1, name__, isize);
+	iostat = do_lio(&__state->c__9, &__state->c__1, name__, isize);
 	if (iostat != 0) {
 	    goto L100004;
 	}
@@ -516,16 +523,16 @@ L100004:
 	    chkout_("DAFT2B", (ftnlen)6);
 	    return 0;
 	}
-	io___17.ciunit = *text;
-	iostat = s_rsle(&io___17);
+	__state->io___17.ciunit = *text;
+	iostat = s_rsle(&__state->io___17);
 	if (iostat != 0) {
 	    goto L100005;
 	}
 	i__1 = nd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    iostat = do_lio(&c__5, &c__1, (char *)&dc[(i__2 = i__ - 1) < 125 
-		    && 0 <= i__2 ? i__2 : s_rnge("dc", i__2, "daft2b_", (
-		    ftnlen)465)], (ftnlen)sizeof(doublereal));
+	    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&dc[(i__2 
+		    = i__ - 1) < 125 && 0 <= i__2 ? i__2 : s_rnge("dc", i__2, 
+		    "daft2b_", (ftnlen)465)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
@@ -542,16 +549,16 @@ L100005:
 	    chkout_("DAFT2B", (ftnlen)6);
 	    return 0;
 	}
-	io___20.ciunit = *text;
-	iostat = s_rsle(&io___20);
+	__state->io___20.ciunit = *text;
+	iostat = s_rsle(&__state->io___20);
 	if (iostat != 0) {
 	    goto L100006;
 	}
 	i__2 = ni - 2;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    iostat = do_lio(&c__3, &c__1, (char *)&ic[(i__1 = i__ - 1) < 250 
-		    && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, "daft2b_", (
-		    ftnlen)480)], (ftnlen)sizeof(integer));
+	    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&ic[(i__1 
+		    = i__ - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
+		    "daft2b_", (ftnlen)480)], (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100006;
 	    }
@@ -574,13 +581,13 @@ L100006:
 	    chkout_("DAFT2B", (ftnlen)6);
 	    return 0;
 	}
-	io___23.ciunit = *text;
-	iostat = s_rsle(&io___23);
+	__state->io___23.ciunit = *text;
+	iostat = s_rsle(&__state->io___23);
 	if (iostat != 0) {
 	    goto L100007;
 	}
-	iostat = do_lio(&c__3, &c__1, (char *)&chunk, (ftnlen)sizeof(integer))
-		;
+	iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&chunk, (
+		ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100007;
 	}
@@ -605,17 +612,17 @@ L100007:
 		chkout_("DAFT2B", (ftnlen)6);
 		return 0;
 	    } else {
-		io___25.ciunit = *text;
-		iostat = s_rsle(&io___25);
+		__state->io___25.ciunit = *text;
+		iostat = s_rsle(&__state->io___25);
 		if (iostat != 0) {
 		    goto L100008;
 		}
 		i__1 = chunk;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    iostat = do_lio(&c__5, &c__1, (char *)&buffer[(i__2 = i__ 
-			    - 1) < 1024 && 0 <= i__2 ? i__2 : s_rnge("buffer",
-			     i__2, "daft2b_", (ftnlen)533)], (ftnlen)sizeof(
-			    doublereal));
+		    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&
+			    buffer[(i__2 = i__ - 1) < 1024 && 0 <= i__2 ? 
+			    i__2 : s_rnge("buffer", i__2, "daft2b_", (ftnlen)
+			    533)], (ftnlen)sizeof(doublereal));
 		    if (iostat != 0) {
 			goto L100008;
 		    }
@@ -638,13 +645,13 @@ L100008:
 		    return 0;
 		}
 	    }
-	    io___27.ciunit = *text;
-	    iostat = s_rsle(&io___27);
+	    __state->io___27.ciunit = *text;
+	    iostat = s_rsle(&__state->io___27);
 	    if (iostat != 0) {
 		goto L100009;
 	    }
-	    iostat = do_lio(&c__3, &c__1, (char *)&chunk, (ftnlen)sizeof(
-		    integer));
+	    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&chunk, (
+		    ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100009;
 	    }
@@ -661,12 +668,12 @@ L100009:
 		return 0;
 	    }
 	}
-	io___28.ciunit = *text;
-	iostat = s_rsle(&io___28);
+	__state->io___28.ciunit = *text;
+	iostat = s_rsle(&__state->io___28);
 	if (iostat != 0) {
 	    goto L100010;
 	}
-	iostat = do_lio(&c__9, &c__1, name__ + 1000, isize);
+	iostat = do_lio(&__state->c__9, &__state->c__1, name__ + 1000, isize);
 	if (iostat != 0) {
 	    goto L100010;
 	}
@@ -697,12 +704,13 @@ L100010:
 		return 0;
 	    }
 	}
-	io___29.ciunit = *text;
-	iostat = s_rsle(&io___29);
+	__state->io___29.ciunit = *text;
+	iostat = s_rsle(&__state->io___29);
 	if (iostat != 0) {
 	    goto L100011;
 	}
-	iostat = do_lio(&c__3, &c__1, (char *)&more, (ftnlen)sizeof(integer));
+	iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&more, (
+		ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100011;
 	}
@@ -724,12 +732,12 @@ L100011:
 /*     be last: the internal file name brings up the rear. If it doesn't */
 /*     match the one at the front, complain. */
 
-    io___30.ciunit = *text;
-    iostat = s_rsle(&io___30);
+    __state->io___30.ciunit = *text;
+    iostat = s_rsle(&__state->io___30);
     if (iostat != 0) {
 	goto L100012;
     }
-    iostat = do_lio(&c__9, &c__1, ifname + 60, (ftnlen)60);
+    iostat = do_lio(&__state->c__9, &__state->c__1, ifname + 60, (ftnlen)60);
     if (iostat != 0) {
 	goto L100012;
     }

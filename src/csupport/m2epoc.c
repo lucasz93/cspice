@@ -1,9 +1,10 @@
-/* m2epoc.f -- translated by f2c (version 19980913).
+/* m2epoc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2EPOC ( Determine whether or not a word is an epoch ) */
 logical m2epoc_(char *word, ftnlen word_len)

@@ -1,9 +1,17 @@
-/* recsph.f -- translated by f2c (version 19980913).
+/* recsph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int recsph_state_t;
+static recsph_state_t* get_recsph_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RECSPH ( Rectangular to spherical coordinates ) */
 /* Subroutine */ int recsph_(doublereal *rectan, doublereal *r__, doublereal *
@@ -16,8 +24,14 @@
     double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal x, y, z__, big;
+    doublereal x;
+    doublereal y;
+    doublereal z__;
+    doublereal big;
 
+
+    /* Module state */
+    recsph_state_t* __state = get_recsph_state();
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to spherical coordinates. */

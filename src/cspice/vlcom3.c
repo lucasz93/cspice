@@ -1,14 +1,25 @@
-/* vlcom3.f -- translated by f2c (version 19980913).
+/* vlcom3.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vlcom3_state_t;
+static vlcom3_state_t* get_vlcom3_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VLCOM3 ( Vector linear combination, 3 dimensions ) */
 /* Subroutine */ int vlcom3_(doublereal *a, doublereal *v1, doublereal *b, 
 	doublereal *v2, doublereal *c__, doublereal *v3, doublereal *sum)
 {
+
+    /* Module state */
+    vlcom3_state_t* __state = get_vlcom3_state();
 /* $ Abstract */
 
 /*      This subroutine computes the vector linear combination */

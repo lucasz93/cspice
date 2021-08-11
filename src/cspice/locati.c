@@ -1,9 +1,17 @@
-/* locati.f -- translated by f2c (version 19980913).
+/* locati.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int locati_state_t;
+static locati_state_t* get_locati_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LOCATI ( Locate an identifier in a list ) */
 /* Subroutine */ int locati_(integer *id, integer *idsz, integer *list, 
@@ -14,21 +22,27 @@
 
     /* Local variables */
     integer head;
-    logical same, more;
-    integer last, i__;
+    logical same;
+    logical more;
+    integer last;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nfree;
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     integer psize;
     extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
     extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lnksiz_(integer *);
     extern /* Subroutine */ int lnkxsl_(integer *, integer *, integer *);
     integer new__;
 
+
+    /* Module state */
+    locati_state_t* __state = get_locati_state();
 /* $ Abstract */
 
 /*     This routine locates the current location of an identifier */
@@ -334,7 +348,7 @@
 
     /* Parameter adjustments */
     list_dim1 = *idsz;
-    list_offset = list_dim1 + 1;
+    list_offset = 1 + list_dim1 * 1;
 
     /* Function Body */
     chkin_("LOCATI", (ftnlen)6);

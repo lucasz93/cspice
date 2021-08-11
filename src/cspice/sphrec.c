@@ -1,9 +1,17 @@
-/* sphrec.f -- translated by f2c (version 19980913).
+/* sphrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sphrec_state_t;
+static sphrec_state_t* get_sphrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPHREC ( Spherical to rectangular coordinates ) */
 /* Subroutine */ int sphrec_(doublereal *r__, doublereal *colat, doublereal *
@@ -13,8 +21,13 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal x, y, z__;
+    doublereal x;
+    doublereal y;
+    doublereal z__;
 
+
+    /* Module state */
+    sphrec_state_t* __state = get_sphrec_state();
 /* $ Abstract */
 
 /*     Convert from spherical coordinates to rectangular coordinates. */

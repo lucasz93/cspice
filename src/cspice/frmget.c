@@ -1,14 +1,21 @@
-/* frmget.f -- translated by f2c (version 19980913).
+/* frmget.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__36 = 36;
-static integer c__1 = 1;
+extern frmget_init_t __frmget_init;
+static frmget_state_t* get_frmget_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->frmget)
+		state->frmget = __cspice_allocate_module(sizeof(
+	frmget_state_t), &__frmget_init, sizeof(__frmget_init));
+	return state->frmget;
+
+}
 
 /* $Procedure      FRMGET ( Frame get transformation ) */
 /* Subroutine */ int frmget_(integer *infrm, doublereal *et, doublereal *
@@ -25,27 +32,36 @@ static integer c__1 = 1;
     integer type__;
     extern /* Subroutine */ int zzdynfrm_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *);
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
     char versn[6];
     extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), ckfxfm_(
-	    integer *, doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int ckfxfm_(integer *, doublereal *, doublereal *,
+	     integer *, logical *);
     integer center;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *), tisbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), tkfram_(integer *, doublereal *, integer *,
-	     logical *), sigerr_(char *, ftnlen);
+	    integer *, logical *);
+    extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer typeid;
     doublereal rotate[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), irfrot_(integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    frmget_state_t* __state = get_frmget_state();
 /* $ Abstract */
 
 /*     Find the transformation from a user specified frame to */
@@ -310,7 +326,7 @@ static integer c__1 = 1;
 
     frinfo_(infrm, &center, &type__, &typeid, found);
     if (! (*found)) {
-	cleard_(&c__36, xform);
+	cleard_(&__state->c__36, xform);
 	*outfrm = 0;
 	chkout_("FRMGET", (ftnlen)6);
 	return 0;
@@ -320,7 +336,7 @@ static integer c__1 = 1;
 /*     based on the frame class. */
 
     if (type__ == 1) {
-	irfrot_(infrm, &c__1, rotate);
+	irfrot_(infrm, &__state->c__1, rotate);
 	if (! failed_()) {
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
@@ -389,7 +405,7 @@ static integer c__1 = 1;
 /*        to .FALSE. at end of this routine. */
 
     } else {
-	cleard_(&c__36, xform);
+	cleard_(&__state->c__36, xform);
 	*outfrm = 0;
 	*found = FALSE_;
 	setmsg_("The reference frame # has class id-code #. This form of ref"
@@ -408,7 +424,7 @@ static integer c__1 = 1;
 /*     in the header. */
 
     if (failed_() || ! (*found)) {
-	cleard_(&c__36, xform);
+	cleard_(&__state->c__36, xform);
 	*outfrm = 0;
 	*found = FALSE_;
     }

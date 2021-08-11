@@ -1,9 +1,17 @@
-/* cmprss.f -- translated by f2c (version 19980913).
+/* cmprss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cmprss_state_t;
+static cmprss_state_t* get_cmprss_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CMPRSS ( Compress a character string ) */
 /* Subroutine */ int cmprss_(char *delim, integer *n, char *input, char *
@@ -17,8 +25,15 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, inlen, count, outlen;
+    integer i__;
+    integer j;
+    integer inlen;
+    integer count;
+    integer outlen;
 
+
+    /* Module state */
+    cmprss_state_t* __state = get_cmprss_state();
 /* $ Abstract */
 
 /*      Compress a character string by removing occurrences of */

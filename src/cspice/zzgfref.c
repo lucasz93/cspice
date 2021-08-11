@@ -1,14 +1,21 @@
-/* zzgfref.f -- translated by f2c (version 19980913).
+/* zzgfref.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__2 = 2;
+extern zzgfref_init_t __zzgfref_init;
+static zzgfref_state_t* get_zzgfref_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfref)
+		state->zzgfref = __cspice_allocate_module(sizeof(
+	zzgfref_state_t), &__zzgfref_init, sizeof(__zzgfref_init));
+	return state->zzgfref;
+
+}
 
 /* $Procedure ZZGFREF ( Private --- GF, update REFVAL ) */
 /* Subroutine */ int zzgfref_(doublereal *refval)
@@ -17,6 +24,9 @@ static integer c__2 = 2;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    zzgfref_state_t* __state = get_zzgfref_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -264,7 +274,7 @@ static integer c__2 = 2;
 
 /*     Store the REFVAL value for use in ZZGFUDLT. */
 
-    zzholdd_(&c_n2, &c__2, &ok, refval);
+    zzholdd_(&__state->c_n2, &__state->c__2, &ok, refval);
     return 0;
 } /* zzgfref_ */
 

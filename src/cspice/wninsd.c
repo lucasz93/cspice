@@ -1,13 +1,21 @@
-/* wninsd.f -- translated by f2c (version 19980913).
+/* wninsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern wninsd_init_t __wninsd_init;
+static wninsd_state_t* get_wninsd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wninsd)
+		state->wninsd = __cspice_allocate_module(sizeof(
+	wninsd_state_t), &__wninsd_init, sizeof(__wninsd_init));
+	return state->wninsd;
+
+}
 
 /* $Procedure      WNINSD ( Insert an interval into a DP window ) */
 /* Subroutine */ int wninsd_(doublereal *left, doublereal *right, doublereal *
@@ -18,16 +26,24 @@ static integer c__2 = 2;
     doublereal d__1, d__2;
 
     /* Local variables */
-    integer card, size, i__, j;
+    integer card;
+    integer size;
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), excess_(
-	    integer *, char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char 
-	    *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wninsd_state_t* __state = get_wninsd_state();
 /* $ Abstract */
 
 /*      Insert an interval into a double precision window. */
@@ -272,7 +288,7 @@ static integer c__2 = 2;
 	    window[card + 6] = *left;
 	    window[card + 7] = *right;
 	} else {
-	    excess_(&c__2, "window", (ftnlen)6);
+	    excess_(&__state->c__2, "window", (ftnlen)6);
 	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
 	}
 	chkout_("WNINSD", (ftnlen)6);
@@ -316,7 +332,7 @@ static integer c__2 = 2;
 	    window[i__ + 4] = *left;
 	    window[i__ + 5] = *right;
 	} else {
-	    excess_(&c__2, "window", (ftnlen)6);
+	    excess_(&__state->c__2, "window", (ftnlen)6);
 	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
 	    chkout_("WNINSD", (ftnlen)6);
 	    return 0;

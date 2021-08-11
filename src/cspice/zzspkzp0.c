@@ -1,9 +1,21 @@
-/* zzspkzp0.f -- translated by f2c (version 19980913).
+/* zzspkzp0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzspkzp0_init_t __zzspkzp0_init;
+static zzspkzp0_state_t* get_zzspkzp0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkzp0)
+		state->zzspkzp0 = __cspice_allocate_module(sizeof(
+	zzspkzp0_state_t), &__zzspkzp0_init, sizeof(__zzspkzp0_init));
+	return state->zzspkzp0;
+
+}
 
 /* $Procedure ZZSPKZP0 ( S/P Kernel, easy position ) */
 /* Subroutine */ int zzspkzp0_(integer *targ, doublereal *et, char *ref, char 
@@ -12,49 +24,41 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    static integer fj2000;
     extern /* Subroutine */ int zzrefch0_(integer *, integer *, doublereal *, 
-	    doublereal *), zzspkpa0_(integer *, doublereal *, char *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzspkpa0_(integer *, doublereal *, char *, 
 	    doublereal *, char *, doublereal *, doublereal *, ftnlen, ftnlen);
-    static doublereal temp[3], sobs[6];
     extern /* Subroutine */ int zzspkgp0_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), zzspksb0_(integer 
-	    *, doublereal *, char *, doublereal *, ftnlen);
-    static integer type__;
-    static logical xmit;
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzspksb0_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzctruin_(integer *);
-    static integer i__;
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical eqchr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical found;
-    static char svref[32];
     extern integer ltrim_(char *, ftnlen);
-    static doublereal xform[9]	/* was [3][3] */;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal postn[3];
-    static integer svctr1[2];
     extern logical failed_(void);
-    static integer center;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *);
-    static doublereal ltcent;
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer reqfrm, typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
-    static integer svreqf;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    zzspkzp0_state_t* __state = get_zzspkzp0_state();
 /* $ Abstract */
 
 /*     Return the position of a target body relative to an observing */
@@ -1033,20 +1037,21 @@
 
 /*     Get the frame id for J2000 on the first call to this routine. */
 
-    if (first) {
-	namfrm_("J2000", &fj2000, (ftnlen)5);
+    if (__state->first) {
+	namfrm_("J2000", &__state->fj2000, (ftnlen)5);
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Decide whether the aberration correction is for received or */
 /*     transmitted radiation. */
 
-    i__ = ltrim_(abcorr, abcorr_len);
-    xmit = eqchr_(abcorr + (i__ - 1), "X", (ftnlen)1, (ftnlen)1);
+    __state->i__ = ltrim_(abcorr, abcorr_len);
+    __state->xmit = eqchr_(abcorr + (__state->i__ - 1), "X", (ftnlen)1, (
+	    ftnlen)1);
 
 /*     If we only want geometric positions, then compute just that. */
 
@@ -1062,8 +1067,9 @@
 /*        Get the auxiliary information about the requested output */
 /*        frame. */
 
-	zznamfrm_(svctr1, svref, &svreqf, ref, &reqfrm, (ftnlen)32, ref_len);
-	if (reqfrm == 0) {
+	zznamfrm_(__state->svctr1, __state->svref, &__state->svreqf, ref, &
+		__state->reqfrm, (ftnlen)32, ref_len);
+	if (__state->reqfrm == 0) {
 	    setmsg_("The requested output frame '#' is not recognized by the"
 		    " reference frame subsystem. Please check that the approp"
 		    "riate kernels have been loaded and that you have correct"
@@ -1073,12 +1079,13 @@
 	    chkout_("ZZSPKZP0", (ftnlen)8);
 	    return 0;
 	}
-	frinfo_(&reqfrm, &center, &type__, &typeid, &found);
+	frinfo_(&__state->reqfrm, &__state->center, &__state->type__, &
+		__state->typeid, &__state->found);
 	if (failed_()) {
 	    chkout_("ZZSPKZP0", (ftnlen)8);
 	    return 0;
 	}
-	if (! found) {
+	if (! __state->found) {
 	    setmsg_("The requested output frame '#' is not recognized by the"
 		    " reference frame subsystem. Please check that the approp"
 		    "riate kernels have been loaded and that you have correct"
@@ -1092,10 +1099,10 @@
 /*        If we are dealing with an inertial frame, we can simply */
 /*        call SPKSSB, SPKAPO and return. */
 
-	if (type__ == 1) {
-	    zzspksb0_(obs, et, ref, sobs, ref_len);
-	    zzspkpa0_(targ, et, ref, sobs, abcorr, ptarg, lt, ref_len, 
-		    abcorr_len);
+	if (__state->type__ == 1) {
+	    zzspksb0_(obs, et, ref, __state->sobs, ref_len);
+	    zzspkpa0_(targ, et, ref, __state->sobs, abcorr, ptarg, lt, 
+		    ref_len, abcorr_len);
 	    chkout_("ZZSPKZP0", (ftnlen)8);
 	    return 0;
 	}
@@ -1109,20 +1116,20 @@
 
 /*        We also need the light time to the center of the frame. */
 
-	zzspksb0_(obs, et, "J2000", sobs, (ftnlen)5);
-	zzspkpa0_(targ, et, "J2000", sobs, abcorr, postn, lt, (ftnlen)5, 
-		abcorr_len);
+	zzspksb0_(obs, et, "J2000", __state->sobs, (ftnlen)5);
+	zzspkpa0_(targ, et, "J2000", __state->sobs, abcorr, __state->postn, 
+		lt, (ftnlen)5, abcorr_len);
 	if (failed_()) {
 	    chkout_("ZZSPKZP0", (ftnlen)8);
 	    return 0;
 	}
-	if (center == *obs) {
-	    ltcent = 0.;
-	} else if (center == *targ) {
-	    ltcent = *lt;
+	if (__state->center == *obs) {
+	    __state->ltcent = 0.;
+	} else if (__state->center == *targ) {
+	    __state->ltcent = *lt;
 	} else {
-	    zzspkpa0_(&center, et, "J2000", sobs, abcorr, temp, &ltcent, (
-		    ftnlen)5, abcorr_len);
+	    zzspkpa0_(&__state->center, et, "J2000", __state->sobs, abcorr, 
+		    __state->temp, &__state->ltcent, (ftnlen)5, abcorr_len);
 	}
 
 /*        If something went wrong (like we couldn't get the position of */
@@ -1138,20 +1145,20 @@
 /*        of the non-inertial frame at an epoch later than ET by */
 /*        the one-way light time. */
 
-	if (xmit) {
-	    ltcent = -ltcent;
+	if (__state->xmit) {
+	    __state->ltcent = -__state->ltcent;
 	}
 
 /*        Get the rotation from J2000 to the requested frame */
 /*        and convert the position. */
 
-	d__1 = *et - ltcent;
-	zzrefch0_(&fj2000, &reqfrm, &d__1, xform);
+	d__1 = *et - __state->ltcent;
+	zzrefch0_(&__state->fj2000, &__state->reqfrm, &d__1, __state->xform);
 	if (failed_()) {
 	    chkout_("ZZSPKZP0", (ftnlen)8);
 	    return 0;
 	}
-	mxv_(xform, postn, ptarg);
+	mxv_(__state->xform, __state->postn, ptarg);
     }
     chkout_("ZZSPKZP0", (ftnlen)8);
     return 0;

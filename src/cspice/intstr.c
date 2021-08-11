@@ -1,16 +1,27 @@
-/* intstr.f -- translated by f2c (version 19980913).
+/* intstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern intstr_init_t __intstr_init;
+static intstr_state_t* get_intstr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->intstr)
+		state->intstr = __cspice_allocate_module(sizeof(
+	intstr_state_t), &__intstr_init, sizeof(__intstr_init));
+	return state->intstr;
+
+}
 
 /* $Procedure  INTSTR  ( Integer to character string ) */
 /* Subroutine */ int intstr_(integer *number, char *string, ftnlen string_len)
 {
     /* Initialized data */
 
-    static char digits[1*10] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
 
     /* System generated locals */
     integer i__1;
@@ -20,9 +31,15 @@
     integer i_len(char *, ftnlen), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, remndr, result, tmpnum;
+    integer i__;
+    integer remndr;
+    integer result;
+    integer tmpnum;
     char tmpstr[80];
 
+
+    /* Module state */
+    intstr_state_t* __state = get_intstr_state();
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent character string. */
@@ -220,9 +237,9 @@
 	    result = tmpnum / 10;
 	    remndr = result * 10 - tmpnum;
 	    tmpnum = result;
-	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&digits[(
-		    i__1 = remndr) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "intstr_", (ftnlen)237)];
+	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = remndr) < 10 && 0 <= i__1 ? i__1 :
+		     s_rnge("digits", i__1, "intstr_", (ftnlen)237)];
 	}
 
 /*        Put the minus sign in place. */
@@ -238,16 +255,17 @@
 	    result = tmpnum / 10;
 	    remndr = tmpnum - result * 10;
 	    tmpnum = result;
-	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&digits[(
-		    i__1 = remndr) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "intstr_", (ftnlen)257)];
+	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = remndr) < 10 && 0 <= i__1 ? i__1 :
+		     s_rnge("digits", i__1, "intstr_", (ftnlen)257)];
 	}
     } else {
 
 /*        Treat zero as a special case, because it's easier. */
 
 	--i__;
-	*(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&digits[0];
+	*(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&
+		__state->digits[0];
     }
 
 /*     Set the value of the output string before returning. Let the */

@@ -1,9 +1,21 @@
-/* zzmobliq.f -- translated by f2c (version 19980913).
+/* zzmobliq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzmobliq_init_t __zzmobliq_init;
+static zzmobliq_state_t* get_zzmobliq_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzmobliq)
+		state->zzmobliq = __cspice_allocate_module(sizeof(
+	zzmobliq_state_t), &__zzmobliq_init, sizeof(__zzmobliq_init));
+	return state->zzmobliq;
+
+}
 
 /* $Procedure   ZZMOBLIQ   ( Mean obliquity of date ) */
 /* Subroutine */ int zzmobliq_(doublereal *et, doublereal *mob, doublereal *
@@ -11,13 +23,13 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
-    static doublereal year, t;
     extern doublereal jyear_(void);
-    static doublereal persec, rad;
     extern doublereal rpd_(void);
 
+
+    /* Module state */
+    zzmobliq_state_t* __state = get_zzmobliq_state();
 /* $ Abstract */
 
 /*     Return the mean obliquity of the ecliptic, and its time */
@@ -162,24 +174,24 @@
 
 /*     Local variables */
 
-    if (first) {
-	first = FALSE_;
-	year = jyear_();
-	rad = rpd_();
-	persec = 1. / (year * 100.);
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->year = jyear_();
+	__state->rad = rpd_();
+	__state->persec = 1. / (__state->year * 100.);
     }
 
 /*     Convert the input epoch to Julian centuries past J2000: */
 
-    t = *et / year / 100.;
+    __state->t = *et / __state->year / 100.;
 
 /*     Compute the obliquity at epoch.  The polynomial yields arcseconds; */
 /*     convert the units to radians. */
 
-    *mob = rad / 3600. * (t * (t * (t * .001813 - 5.9e-4) - 46.815) + 
-	    84381.448);
-    *dmob = rad / 3600. * (t * (t * 3 * .001813 - .0011800000000000001) - 
-	    46.815) * persec;
+    *mob = __state->rad / 3600. * (__state->t * (__state->t * (__state->t * 
+	    .001813 - 5.9e-4) - 46.815) + 84381.448);
+    *dmob = __state->rad / 3600. * (__state->t * (__state->t * 3 * .001813 - 
+	    .0011800000000000001) - 46.815) * __state->persec;
     return 0;
 } /* zzmobliq_ */
 

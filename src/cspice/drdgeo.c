@@ -1,9 +1,17 @@
-/* drdgeo.f -- translated by f2c (version 19980913).
+/* drdgeo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int drdgeo_state_t;
+static drdgeo_state_t* get_drdgeo_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DRDGEO ( Derivative of rectangular w.r.t. geodetic ) */
 /* Subroutine */ int drdgeo_(doublereal *long__, doublereal *lat, doublereal *
@@ -13,14 +21,25 @@
     double cos(doublereal), sin(doublereal), sqrt(doublereal);
 
     /* Local variables */
-    doublereal clat, flat, clon, slat, slon, flat2, g;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    doublereal g2, dgdlat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    doublereal clat;
+    doublereal flat;
+    doublereal clon;
+    doublereal slat;
+    doublereal slon;
+    doublereal flat2;
+    doublereal g;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal g2;
+    doublereal dgdlat;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    drdgeo_state_t* __state = get_drdgeo_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

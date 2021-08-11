@@ -1,9 +1,17 @@
-/* nblen.f -- translated by f2c (version 19980913).
+/* nblen.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nblen_state_t;
+static nblen_state_t* get_nblen_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             NBLEN ( Non blank length of a string ) */
 integer nblen_(char *string, ftnlen string_len)
@@ -15,8 +23,12 @@ integer nblen_(char *string, ftnlen string_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
 
+
+    /* Module state */
+    nblen_state_t* __state = get_nblen_state();
 /* $ Abstract */
 
 /*     Return the non-blank length of a character string. (That is, */

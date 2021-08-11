@@ -1,13 +1,21 @@
-/* lnkhl.f -- translated by f2c (version 19980913).
+/* lnkhl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lnkhl_init_t __lnkhl_init;
+static lnkhl_state_t* get_lnkhl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lnkhl)
+		state->lnkhl = __cspice_allocate_module(sizeof(lnkhl_state_t),
+	 &__lnkhl_init, sizeof(__lnkhl_init));
+	return state->lnkhl;
+
+}
 
 /* $Procedure      LNKHL ( LNK, head of list ) */
 integer lnkhl_(integer *node, integer *pool)
@@ -17,10 +25,15 @@ integer lnkhl_(integer *node, integer *pool)
 
     /* Local variables */
     integer prev;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    lnkhl_state_t* __state = get_lnkhl_state();
 /* $ Abstract */
 
 /*     Return the head node of the list containing a specified node. */
@@ -233,7 +246,7 @@ integer lnkhl_(integer *node, integer *pool)
 	errint_("#", node, (ftnlen)1);
 	errint_("#", &pool[(*node << 1) + 11], (ftnlen)1);
 	errint_("#", &pool[(*node << 1) + 10], (ftnlen)1);
-	errint_("#", &c__0, (ftnlen)1);
+	errint_("#", &__state->c__0, (ftnlen)1);
 	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
 	chkout_("LNKHL", (ftnlen)5);
 	return ret_val;

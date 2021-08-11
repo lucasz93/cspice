@@ -1,13 +1,21 @@
-/* zzgfwsts.f -- translated by f2c (version 19980913).
+/* zzgfwsts.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzgfwsts_init_t __zzgfwsts_init;
+static zzgfwsts_state_t* get_zzgfwsts_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfwsts)
+		state->zzgfwsts = __cspice_allocate_module(sizeof(
+	zzgfwsts_state_t), &__zzgfwsts_init, sizeof(__zzgfwsts_init));
+	return state->zzgfwsts;
+
+}
 
 /* $Procedure ZZGFWSTS ( Private --- GF, sift first window thru second ) */
 /* Subroutine */ int zzgfwsts_(doublereal *wndw1, doublereal *wndw2, char *
@@ -17,23 +25,39 @@ static integer c__0 = 0;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    logical keep, left, open;
-    integer begp1, begp2, begp3, endp1, endp2, endp3, size1, size2;
+    logical keep;
+    logical left;
+    logical open;
+    integer begp1;
+    integer begp2;
+    integer begp3;
+    integer endp1;
+    integer endp2;
+    integer endp3;
+    integer size1;
+    integer size2;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical right;
     extern integer sized_(doublereal *);
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     char locinc[2];
     logical closed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ssized_(integer *, doublereal *), setmsg_(char *, ftnlen)
-	    , errint_(char *, integer *, ftnlen), cmprss_(char *, integer *, 
-	    char *, char *, ftnlen, ftnlen, ftnlen);
-    integer maxpts, ovflow;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssized_(integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    integer maxpts;
+    integer ovflow;
     extern logical return_(void);
 
+
+    /* Module state */
+    zzgfwsts_state_t* __state = get_zzgfwsts_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -222,7 +246,8 @@ static integer c__0 = 0;
     endp2 = 2;
     begp3 = -1;
     endp3 = 0;
-    cmprss_(" ", &c__0, inclsn, locinc, (ftnlen)1, inclsn_len, (ftnlen)2);
+    cmprss_(" ", &__state->c__0, inclsn, locinc, (ftnlen)1, inclsn_len, (
+	    ftnlen)2);
     open = s_cmp(locinc, "()", (ftnlen)2, (ftnlen)2) == 0;
     left = s_cmp(locinc, "[)", (ftnlen)2, (ftnlen)2) == 0;
     right = s_cmp(locinc, "(]", (ftnlen)2, (ftnlen)2) == 0;

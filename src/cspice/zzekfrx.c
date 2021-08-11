@@ -1,13 +1,21 @@
-/* zzekfrx.f -- translated by f2c (version 19980913).
+/* zzekfrx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekfrx_init_t __zzekfrx_init;
+static zzekfrx_state_t* get_zzekfrx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekfrx)
+		state->zzekfrx = __cspice_allocate_module(sizeof(
+	zzekfrx_state_t), &__zzekfrx_init, sizeof(__zzekfrx_init));
+	return state->zzekfrx;
+
+}
 
 /* $Procedure     ZZEKFRX ( EK, find record in index ) */
 /* Subroutine */ int zzekfrx_(integer *handle, integer *segdsc, integer *
@@ -18,27 +26,36 @@ static integer c__1 = 1;
     integer ival;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzeklerc_(integer *, integer *, integer *, 
-	    char *, integer *, logical *, integer *, integer *, ftnlen), 
-	    zzeklerd_(integer *, integer *, integer *, doublereal *, integer *
-	    , logical *, integer *, integer *), zzekleri_(integer *, integer *
-	    , integer *, integer *, integer *, logical *, integer *, integer *
-	    ), chkin_(char *, ftnlen);
-    integer recno, cvlen;
+	    char *, integer *, logical *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeklerd_(integer *, integer *, integer *, 
+	    doublereal *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekleri_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer recno;
+    integer cvlen;
     logical found;
-    integer dtype, cmplen;
+    integer dtype;
+    integer cmplen;
     extern logical return_(void);
     logical isnull;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errhan_(char *, 
-	    integer *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer prvptr;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekrsc_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, char *, logical *, logical *, ftnlen), 
-	    zzekrsd_(integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, logical *, logical *), zzekrsi_(integer *, integer *
-	    , integer *, integer *, integer *, integer *, logical *, logical *
-	    );
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *, logical *);
+    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, logical *, logical *);
 
+
+    /* Module state */
+    zzekfrx_state_t* __state = get_zzekfrx_state();
 /* $ Abstract */
 
 /*     Find the ordinal position of a specified record in a specified, */
@@ -578,19 +595,19 @@ static integer c__1 = 1;
 
     dtype = coldsc[1];
     if (dtype == 1) {
-	zzekrsc_(handle, segdsc, coldsc, recptr, &c__1, &cvlen, cval, &isnull,
-		 &found, (ftnlen)1024);
+	zzekrsc_(handle, segdsc, coldsc, recptr, &__state->c__1, &cvlen, cval,
+		 &isnull, &found, (ftnlen)1024);
 	if (found && ! isnull) {
 	    cmplen = min(cvlen,1024);
 	} else {
 	    cmplen = 0;
 	}
     } else if (dtype == 2 || dtype == 4) {
-	zzekrsd_(handle, segdsc, coldsc, recptr, &c__1, &dval, &isnull, &
-		found);
+	zzekrsd_(handle, segdsc, coldsc, recptr, &__state->c__1, &dval, &
+		isnull, &found);
     } else if (dtype == 3) {
-	zzekrsi_(handle, segdsc, coldsc, recptr, &c__1, &ival, &isnull, &
-		found);
+	zzekrsi_(handle, segdsc, coldsc, recptr, &__state->c__1, &ival, &
+		isnull, &found);
     } else {
 	setmsg_("File = #; COLIDX = #. Unrecognized data type code # found i"
 		"n descriptor.", (ftnlen)72);

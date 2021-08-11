@@ -1,13 +1,21 @@
-/* zzhsi.f -- translated by f2c (version 19980913).
+/* zzhsi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzhsi_init_t __zzhsi_init;
+static zzhsi_state_t* get_zzhsi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzhsi)
+		state->zzhsi = __cspice_allocate_module(sizeof(zzhsi_state_t),
+	 &__zzhsi_init, sizeof(__zzhsi_init));
+	return state->zzhsi;
+
+}
 
 /* $Procedure ZZHSI ( Private---Add-only Integer Hash ) */
 /* Subroutine */ int zzhsi_0_(int n__, integer *hashsz, integer *hedlst, 
@@ -24,17 +32,21 @@ static integer c__1 = 1;
     integer node;
     logical full;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
     logical lfound;
     integer lookat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     extern integer zzhashi_(integer *, integer *);
 
+
+    /* Module state */
+    zzhsi_state_t* __state = get_zzhsi_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -586,7 +598,7 @@ L_zzhsiini:
 /*     The requested number of nodes must be valid. ZZHASHI will check */
 /*     that. */
 
-    i__ = zzhashi_(&c__1, hashsz);
+    i__ = zzhashi_(&__state->c__1, hashsz);
     if (failed_()) {
 	chkout_("ZZHSIINI", (ftnlen)8);
 	return 0;

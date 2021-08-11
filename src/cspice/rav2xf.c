@@ -1,9 +1,17 @@
-/* rav2xf.f -- translated by f2c (version 19980913).
+/* rav2xf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rav2xf_state_t;
+static rav2xf_state_t* get_rav2xf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RAV2XF ( Rotation and angular velocity to transform ) */
 /* Subroutine */ int rav2xf_(doublereal *rot, doublereal *av, doublereal *
@@ -16,12 +24,16 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j;
-    doublereal omegat[9]	/* was [3][3] */, drotdt[9]	/* was [3][3] 
-	    */;
+    integer i__;
+    integer j;
+    doublereal omegat[9]	/* was [3][3] */;
+    doublereal drotdt[9]	/* was [3][3] */;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    rav2xf_state_t* __state = get_rav2xf_state();
 /* $ Abstract */
 
 /*     This routine determines from a state transformation matrix */

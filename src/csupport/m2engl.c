@@ -1,9 +1,10 @@
-/* m2engl.f -- translated by f2c (version 19980913).
+/* m2engl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2ENGL ( Determine if a word contains all letters) */
 logical m2engl_(char *word, ftnlen word_len)

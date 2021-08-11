@@ -1,13 +1,21 @@
-/* zzekrd03.f -- translated by f2c (version 19980913).
+/* zzekrd03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekrd03_init_t __zzekrd03_init;
+static zzekrd03_state_t* get_zzekrd03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrd03)
+		state->zzekrd03 = __cspice_allocate_module(sizeof(
+	zzekrd03_state_t), &__zzekrd03_init, sizeof(__zzekrd03_init));
+	return state->zzekrd03;
+
+}
 
 /* $Procedure   ZZEKRD03 ( EK, read class 3 column entry elements ) */
 /* Subroutine */ int zzekrd03_(integer *handle, integer *segdsc, integer *
@@ -26,22 +34,40 @@ static integer c__1 = 1;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     integer epos;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
-	    integer *, integer *, integer *, integer *);
-    integer b, e, l, n, p, pbase, avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer recno, ncols;
+	    ftnlen);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    integer b;
+    integer e;
+    integer l;
+    integer n;
+    integer p;
+    integer pbase;
+    integer avail;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer recno;
+    integer ncols;
     extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen), dasrdi_(integer *, integer 
-	    *, integer *, integer *);
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     char column[32];
-    integer colidx, datptr, relptr, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), zzekgei_(integer *, 
-	    integer *, integer *);
+    integer colidx;
+    integer datptr;
+    integer relptr;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekgei_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekrd03_state_t* __state = get_zzekrd03_state();
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 3 column. */
@@ -876,7 +902,7 @@ static integer c__1 = 1;
 
 /*        Read the available data from the page under consideration. */
 
-	zzekpgpg_(&c__1, &datptr, &p, &pbase);
+	zzekpgpg_(&__state->c__1, &datptr, &p, &pbase);
 	relptr = datptr - pbase;
 /* Computing MIN */
 	i__1 = n, i__2 = 1014 - relptr + 1;
@@ -895,7 +921,7 @@ static integer c__1 = 1;
 
 	    i__1 = pbase + 1015;
 	    zzekgei_(handle, &i__1, &p);
-	    zzekpgbs_(&c__1, &p, &pbase);
+	    zzekpgbs_(&__state->c__1, &p, &pbase);
 	    avail = min(n,1014);
 	    b = pbase + 1;
 	    e = pbase + avail;

@@ -1,13 +1,21 @@
-/* cke04.f -- translated by f2c (version 19980913).
+/* cke04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern cke04_init_t __cke04_init;
+static cke04_state_t* get_cke04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cke04)
+		state->cke04 = __cspice_allocate_module(sizeof(cke04_state_t),
+	 &__cke04_init, sizeof(__cke04_init));
+	return state->cke04;
+
+}
 
 /* $Procedure      CKE04 ( C-kernel, evaluate pointing record, type 4 ) */
 /* Subroutine */ int cke04_(logical *needav, doublereal *record, doublereal *
@@ -27,8 +35,12 @@ static integer c__4 = 4;
     extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
     integer basadd;
     extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *), q2m_(doublereal *, doublereal *);
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    cke04_state_t* __state = get_cke04_state();
 /* $ Abstract */
 
 /*     Evaluate a pointing record returned by CKR04 from a CK type 4 */
@@ -582,7 +594,7 @@ static integer c__4 = 4;
 
 /*     Normalize quaternion. */
 
-    vhatg_(q, &c__4, qout);
+    vhatg_(q, &__state->c__4, qout);
 
 /*     Convert the quaternion to a C-matrix. */
 

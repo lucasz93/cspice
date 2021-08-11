@@ -1,9 +1,21 @@
-/* pxform.f -- translated by f2c (version 19980913).
+/* pxform.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern pxform_init_t __pxform_init;
+static pxform_state_t* get_pxform_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pxform)
+		state->pxform = __cspice_allocate_module(sizeof(
+	pxform_state_t), &__pxform_init, sizeof(__pxform_init));
+	return state->pxform;
+
+}
 
 /* $Procedure      PXFORM ( Position Transformation Matrix ) */
 /* Subroutine */ int pxform_(char *from, char *to, doublereal *et, doublereal 
@@ -11,24 +23,24 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
-    static char svto[32];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzctruin_(integer *);
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer fcode;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer tcode;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static integer svctr1[2], svctr2[2];
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    static integer svfcod, svtcde;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    static char svfrom[32];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pxform_state_t* __state = get_pxform_state();
 /* $ Abstract */
 
 /*     Return the matrix that transforms position vectors from one */
@@ -283,16 +295,18 @@
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	__state->first = FALSE_;
     }
-    zznamfrm_(svctr1, svfrom, &svfcod, from, &fcode, (ftnlen)32, from_len);
-    zznamfrm_(svctr2, svto, &svtcde, to, &tcode, (ftnlen)32, to_len);
+    zznamfrm_(__state->svctr1, __state->svfrom, &__state->svfcod, from, &
+	    fcode, (ftnlen)32, from_len);
+    zznamfrm_(__state->svctr2, __state->svto, &__state->svtcde, to, &tcode, (
+	    ftnlen)32, to_len);
 
 /*     Only non-zero id-codes are legitimate frame id-codes.  Zero */
 /*     indicates that the frame wasn't recognized. */

@@ -1,9 +1,10 @@
-/* fndptk.f -- translated by f2c (version 19980913).
+/* fndptk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      FNDPTK ( Find the previous token in a string ) */
 /* Subroutine */ int fndptk_(char *string, char *delims, integer *start, 

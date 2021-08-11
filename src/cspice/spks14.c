@@ -1,16 +1,21 @@
-/* spks14.f -- translated by f2c (version 19980913).
+/* spks14.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
-static integer c__128 = 128;
+extern spks14_init_t __spks14_init;
+static spks14_state_t* get_spks14_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks14)
+		state->spks14 = __cspice_allocate_module(sizeof(
+	spks14_state_t), &__spks14_init, sizeof(__spks14_init));
+	return state->spks14;
+
+}
 
 /* $Procedure      SPKS14 ( S/P Kernel, subset, type 14 ) */
 /* Subroutine */ int spks14_(integer *srchan, doublereal *srcdsc, integer *
@@ -20,37 +25,50 @@ static integer c__128 = 128;
     integer i__1;
 
     /* Local variables */
-    integer body, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), spk14a_(integer *,
-	     integer *, doublereal *, doublereal *), spk14b_(integer *, char *
-	    , integer *, integer *, char *, doublereal *, doublereal *, 
-	    integer *, ftnlen, ftnlen), spk14e_(integer *);
+    integer body;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int spk14a_(integer *, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spk14b_(integer *, char *, integer *, integer 
+	    *, char *, doublereal *, doublereal *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spk14e_(integer *);
     doublereal dtemp[2];
     logical found;
     integer itemp[6];
     doublereal myref;
-    integer dummy, chbdeg;
+    integer dummy;
+    integer chbdeg;
     extern logical failed_(void);
-    integer begidx, iframe;
+    integer begidx;
+    integer iframe;
     doublereal begtim;
     integer endidx;
-    extern /* Subroutine */ int irfnam_(integer *, char *, ftnlen), sgfref_(
-	    integer *, doublereal *, integer *, integer *, doublereal *);
-    doublereal endtim, record[128];
+    extern /* Subroutine */ int irfnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sgfref_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *);
+    doublereal endtim;
+    doublereal record[128];
     integer center;
     extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *);
     char myfram[16];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *), sgfpkt_(integer *, 
-	    doublereal *, integer *, integer *, doublereal *, integer *), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+	     doublereal *, integer *, logical *);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spks14_state_t* __state = get_spks14_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in a type 14 SPK segment into a new */
@@ -202,7 +220,7 @@ static integer c__128 = 128;
 /*     First, unpack the destination segment descriptor and set some */
 /*     local variables. */
 
-    dafus_(dstdsc, &c__2, &c__6, dtemp, itemp);
+    dafus_(dstdsc, &__state->c__2, &__state->c__6, dtemp, itemp);
     begtim = dtemp[0];
     endtim = dtemp[1];
     body = itemp[0];
@@ -219,7 +237,7 @@ static integer c__128 = 128;
 
 /*     Get the constants for this segment. There is only one. */
 
-    sgfcon_(srchan, srcdsc, &c__1, &c__1, dtemp);
+    sgfcon_(srchan, srcdsc, &__state->c__1, &__state->c__1, dtemp);
     if (failed_()) {
 	chkout_("SPKS14", (ftnlen)6);
 	return 0;
@@ -241,7 +259,7 @@ static integer c__128 = 128;
 		" parameter MAXREC in the subroutine SPKS14 and notify the NA"
 		"IF group of this problem.", (ftnlen)204);
 	errint_("#", &recsiz, (ftnlen)1);
-	errint_("#", &c__128, (ftnlen)1);
+	errint_("#", &__state->c__128, (ftnlen)1);
 	sigerr_("SPICE(SPKRECTOOLARGE)", (ftnlen)21);
 	chkout_("SPKS14", (ftnlen)6);
 	return 0;
@@ -269,7 +287,7 @@ static integer c__128 = 128;
     for (i__ = begidx; i__ <= i__1; ++i__) {
 	sgfpkt_(srchan, srcdsc, &i__, &i__, record, &dummy);
 	sgfref_(srchan, srcdsc, &i__, &i__, &myref);
-	spk14a_(dsthan, &c__1, record, &myref);
+	spk14a_(dsthan, &__state->c__1, record, &myref);
 	if (failed_()) {
 	    chkout_("SPKS14", (ftnlen)6);
 	    return 0;

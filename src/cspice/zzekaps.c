@@ -1,13 +1,21 @@
-/* zzekaps.f -- translated by f2c (version 19980913).
+/* zzekaps.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzekaps_init_t __zzekaps_init;
+static zzekaps_state_t* get_zzekaps_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekaps)
+		state->zzekaps = __cspice_allocate_module(sizeof(
+	zzekaps_state_t), &__zzekaps_init, sizeof(__zzekaps_init));
+	return state->zzekaps;
+
+}
 
 /* $Procedure      ZZEKAPS ( EK, allocate page for segment ) */
 /* Subroutine */ int zzekaps_(integer *handle, integer *segdsc, integer *
@@ -15,13 +23,21 @@ static integer c__0 = 0;
 {
     integer tree;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *), zzekpgan_(integer *, integer *, integer *, integer *),
-	     zzeksfwd_(integer *, integer *, integer *, integer *), zzektrap_(
-	    integer *, integer *, integer *, integer *), zzekslnk_(integer *, 
-	    integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
     extern logical failed_(void);
     integer idx;
 
+
+    /* Module state */
+    zzekaps_state_t* __state = get_zzekaps_state();
 /* $ Abstract */
 
 /*     Allocate a data page for a specified EK segment. */
@@ -350,8 +366,8 @@ static integer c__0 = 0;
 
 /*     Zero out the page's link count and forward pointer. */
 
-    zzekslnk_(handle, type__, p, &c__0);
-    zzeksfwd_(handle, type__, p, &c__0);
+    zzekslnk_(handle, type__, p, &__state->c__0);
+    zzeksfwd_(handle, type__, p, &__state->c__0);
 
 /*     Update the segment's metadata.  For type 1 segments, */
 /*     the new page into the page tree of the appropriate data type. */

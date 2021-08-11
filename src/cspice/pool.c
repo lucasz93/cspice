@@ -1,19 +1,21 @@
-/* pool.f -- translated by f2c (version 19980913).
+/* pool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__26003 = 26003;
-static integer c_b8 = 400000;
-static integer c__15000 = 15000;
-static integer c__1000 = 1000;
-static integer c_b11 = 130015;
-static integer c__1 = 1;
-static integer c__32 = 32;
+extern pool_init_t __pool_init;
+static pool_state_t* get_pool_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pool)
+		state->pool = __cspice_allocate_module(sizeof(pool_state_t), &
+	__pool_init, sizeof(__pool_init));
+	return state->pool;
+
+}
 
 /* $Procedure POOL ( Maintain a pool of kernel variables ) */
 /* Subroutine */ int pool_0_(int n__, char *kernel, integer *unit, char *
@@ -27,7 +29,6 @@ static integer c__32 = 32;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -41,103 +42,79 @@ static integer c__32 = 32;
 	    i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer head, code, need, free, node;
-    static char line[132];
-    static integer tail, hits;
-    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *), 
-	    zzgapool_(char *, char *, integer *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen), zzctrinc_(integer *);
-    static integer i__, j, k;
+    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
+    extern /* Subroutine */ int zzgapool_(char *, char *, integer *, integer *
+	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctrinc_(integer *);
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int zznwpool_(char *, char *, integer *, integer *
 	    , char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer r__, begin;
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
-    static integer dnode, space, avail;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer nnode;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    lnkan_(integer *, integer *);
-    static doublereal small;
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
-	    ftnlen), errdp_(char *, doublereal *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sizec_(char *, ftnlen);
-    extern /* Subroutine */ int copyc_(char *, char *, ftnlen, ftnlen), 
-	    ioerr_(char *, char *, integer *, ftnlen, ftnlen), movei_(integer 
-	    *, integer *, integer *);
+    extern /* Subroutine */ int copyc_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ioerr_(char *, char *, integer *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern integer lnktl_(integer *, integer *);
-    static logical gotit;
-    static integer nvars__;
     extern integer rtrim_(char *, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzcln_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer nptrs;
     extern logical failed_(void);
-    static integer datahd;
-    static char begdat[10];
-    static logical dp;
-    static integer agnode;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    static integer chnode;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    static integer nameat, nfetch, nw, dpnode;
     extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    static char active[32*130021];
     extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
 	    integer *, ftnlen, ftnlen);
-    static integer margin;
     extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
 	    integer *);
-    static char cvalue[132];
-    extern integer lnknfn_(integer *), lastnb_(char *, ftnlen);
-    static char pnames[32*26003], begtxt[10];
-    extern integer intmax_(void), intmin_(void);
-    static integer namlst[26003], datlst[26003];
-    extern integer lstltc_(char *, integer *, char *, ftnlen, ftnlen), 
-	    zzhash_(char *, ftnlen);
-    static integer nmpool[52018]	/* was [2][26009] */, chpool[30012]	
-	    /* was [2][15006] */, dppool[800012]	/* was [2][400006] */;
-    static char chvals[80*15000];
-    static doublereal dpvals[400000];
+    extern integer lnknfn_(integer *);
+    extern integer lastnb_(char *, ftnlen);
+    extern integer intmax_(void);
+    extern integer intmin_(void);
+    extern integer lstltc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer zzhash_(char *, ftnlen);
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static char wtagnt[32*130015], agents[32*130021];
-    static integer wtpool[260042]	/* was [2][130021] */;
-    static char wtvars[32*26009], notify[32*130021];
-    static integer subctr[2];
-    static char finish[2], varnam[32];
-    static doublereal dvalue;
-    static integer iostat, iquote, linnum, lookat, nnodes, tofree, wtptrs[
-	    26003], varlen;
-    static logical noagnt, succes, vector;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), zzpini_(logical *, integer *, 
-	    integer *, integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    integer *, integer *, char *, char *, char *, char *, integer *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), lnkini_(
-	    integer *, integer *), rdknew_(char *, ftnlen);
-    static doublereal big;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzpini_(logical *, integer *, integer *, 
+	    integer *, char *, char *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, integer *, 
+	    integer *, char *, char *, char *, char *, integer *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int lnkini_(integer *, integer *);
+    extern /* Subroutine */ int rdknew_(char *, ftnlen);
     extern /* Subroutine */ int zzrvar_(integer *, integer *, char *, integer 
 	    *, integer *, doublereal *, integer *, char *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen), cltext_(char *, ftnlen);
-    static logical eof;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), inslai_(
-	    integer *, integer *, integer *, integer *, integer *);
-    static logical chr;
-    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen), 
-	    removc_(char *, char *, ftnlen, ftnlen), zzgpnm_(integer *, 
-	    integer *, char *, integer *, integer *, doublereal *, integer *, 
-	    char *, char *, logical *, integer *, integer *, ftnlen, ftnlen, 
-	    ftnlen), lnkfsl_(integer *, integer *, integer *), zzrvbf_(char *,
-	     integer *, integer *, integer *, integer *, char *, integer *, 
-	    integer *, doublereal *, integer *, char *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int cltext_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int removc_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgpnm_(integer *, integer *, char *, integer 
+	    *, integer *, doublereal *, integer *, char *, char *, logical *, 
+	    integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzrvbf_(char *, integer *, integer *, integer 
+	    *, integer *, char *, integer *, integer *, doublereal *, integer 
+	    *, char *, char *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
 
+
+    /* Module state */
+    pool_state_t* __state = get_pool_state();
 /* $ Abstract */
 
 /*     Maintain a pool of variables read from SPICE ASCII kernel files. */
@@ -1367,46 +1344,52 @@ L_clpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Wipe out all of the PNAMES data. */
 
-    for (i__ = 1; i__ <= 26003; ++i__) {
-	namlst[(i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("namlst",
-		 i__1, "pool_", (ftnlen)1368)] = 0;
-	datlst[(i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("datlst",
-		 i__1, "pool_", (ftnlen)1369)] = 0;
-	s_copy(pnames + (((i__1 = i__ - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		s_rnge("pnames", i__1, "pool_", (ftnlen)1370)) << 5), " ", (
-		ftnlen)32, (ftnlen)1);
+    for (__state->i__ = 1; __state->i__ <= 26003; ++__state->i__) {
+	__state->namlst[(i__1 = __state->i__ - 1) < 26003 && 0 <= i__1 ? i__1 
+		: s_rnge("namlst", i__1, "pool_", (ftnlen)1368)] = 0;
+	__state->datlst[(i__1 = __state->i__ - 1) < 26003 && 0 <= i__1 ? i__1 
+		: s_rnge("datlst", i__1, "pool_", (ftnlen)1369)] = 0;
+	s_copy(__state->pnames + (((i__1 = __state->i__ - 1) < 26003 && 0 <= 
+		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)1370)) 
+		<< 5), " ", (ftnlen)32, (ftnlen)1);
     }
 
 /*     Free up all of the space in all of the linked list pools, except */
 /*     for the watcher pool. */
 
-    lnkini_(&c__26003, nmpool);
-    lnkini_(&c_b8, dppool);
-    lnkini_(&c__15000, chpool);
-    i__1 = cardc_(wtvars, (ftnlen)32);
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    lnkini_(&__state->c__26003, __state->nmpool);
+    lnkini_(&__state->c_b8, __state->dppool);
+    lnkini_(&__state->c__15000, __state->chpool);
+    i__1 = cardc_(__state->wtvars, (ftnlen)32);
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
 /*        Union the update set AGENTS with the set of agents */
 /*        associated with the Ith watched variable. */
 
-	zznwpool_(wtvars + (((i__2 = i__ + 5) < 26009 && 0 <= i__2 ? i__2 : 
-		s_rnge("wtvars", i__2, "pool_", (ftnlen)1385)) << 5), wtvars, 
-		wtptrs, wtpool, wtagnt, active, notify, agents, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32);
+	zznwpool_(__state->wtvars + (((i__2 = __state->i__ + 5) < 26009 && 0 
+		<= i__2 ? i__2 : s_rnge("wtvars", i__2, "pool_", (ftnlen)1385)
+		) << 5), __state->wtvars, __state->wtptrs, __state->wtpool, 
+		__state->wtagnt, __state->active, __state->notify, 
+		__state->agents, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)
+		32, (ftnlen)32, (ftnlen)32);
     }
     chkout_("CLPOOL", (ftnlen)6);
     return 0;
@@ -1763,45 +1746,55 @@ L_ldpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Open the kernel file and read the first variable. */
 
     rdknew_(kernel, kernel_len);
-    zzrvar_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, chvals, 
-	    varnam, &eof, (ftnlen)32, (ftnlen)80, (ftnlen)32);
+    zzrvar_(__state->namlst, __state->nmpool, __state->pnames, 
+	    __state->datlst, __state->dppool, __state->dpvals, 
+	    __state->chpool, __state->chvals, __state->varnam, &__state->eof, 
+	    (ftnlen)32, (ftnlen)80, (ftnlen)32);
 
 /*     Read the variables in the file, one at a time. */
 
-    while(! eof && ! failed_()) {
-	if (s_cmp(varnam, " ", (ftnlen)32, (ftnlen)1) != 0) {
+    while(! __state->eof && ! failed_()) {
+	if (s_cmp(__state->varnam, " ", (ftnlen)32, (ftnlen)1) != 0) {
 
 /*           See if this variable is being watched; if it is, add its */
 /*           associated agents to the list of AGENTS to be notified of a */
 /*           watched variable update. */
 
-	    if (elemc_(varnam, wtvars, (ftnlen)32, (ftnlen)32)) {
+	    if (elemc_(__state->varnam, __state->wtvars, (ftnlen)32, (ftnlen)
+		    32)) {
 
 /*              Union the update set AGENTS with the set of agents */
 /*              associated with the variable NAME. */
 
-		zznwpool_(varnam, wtvars, wtptrs, wtpool, wtagnt, active, 
-			notify, agents, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-			ftnlen)32, (ftnlen)32, (ftnlen)32);
+		zznwpool_(__state->varnam, __state->wtvars, __state->wtptrs, 
+			__state->wtpool, __state->wtagnt, __state->active, 
+			__state->notify, __state->agents, (ftnlen)32, (ftnlen)
+			32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32);
 	    }
 	}
-	zzrvar_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, 
-		chvals, varnam, &eof, (ftnlen)32, (ftnlen)80, (ftnlen)32);
+	zzrvar_(__state->namlst, __state->nmpool, __state->pnames, 
+		__state->datlst, __state->dppool, __state->dpvals, 
+		__state->chpool, __state->chvals, __state->varnam, &
+		__state->eof, (ftnlen)32, (ftnlen)80, (ftnlen)32);
     }
 
 /*     We need to make sure that the kernel file gets closed.  Normally */
@@ -2049,24 +2042,28 @@ L_rtpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("nam"
-	    "lst", i__1, "pool_", (ftnlen)2102)] == 0) {
+    if (__state->namlst[(i__1 = __state->lookat - 1) < 26003 && 0 <= i__1 ? 
+	    i__1 : s_rnge("namlst", i__1, "pool_", (ftnlen)2102)] == 0) {
 	*found = FALSE_;
 	chkout_("RTPOOL", (ftnlen)6);
 	return 0;
@@ -2076,22 +2073,24 @@ L_rtpool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namlst", i__1, "pool_", (ftnlen)2114)];
-    succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= i__1 ?
-	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2115)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__1 = (node << 1) + 10) < 52018 && 0 <= i__1 ? i__1 : 
-		s_rnge("nmpool", i__1, "pool_", (ftnlen)2119)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__1 = __state->lookat - 1) < 26003 && 0 
+	    <= i__1 ? i__1 : s_rnge("namlst", i__1, "pool_", (ftnlen)2114)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__1 = __state->node 
+	    - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("pnames", i__1, "pool_",
+	     (ftnlen)2115)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__1 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__1 ? i__1 : s_rnge("nmpool", i__1, "pool_", (
+		ftnlen)2119)];
+	if (__state->node < 0) {
 	    *found = FALSE_;
 	    chkout_("RTPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= 
-		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2129)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__1 = 
+		__state->node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("pna"
+		"mes", i__1, "pool_", (ftnlen)2129)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
@@ -2103,20 +2102,23 @@ L_rtpool:
 /*     is positive.  We use negative values to point to character */
 /*     values. */
 
-    if (datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("datlst"
-	    , i__1, "pool_", (ftnlen)2142)] <= 0) {
+    if (__state->datlst[(i__1 = __state->node - 1) < 26003 && 0 <= i__1 ? 
+	    i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)2142)] <= 0) {
 	*found = FALSE_;
     } else {
 	*found = TRUE_;
 	*n = 0;
-	node = datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)2150)];
-	while(node > 0) {
+	__state->node = __state->datlst[(i__1 = __state->node - 1) < 26003 && 
+		0 <= i__1 ? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)
+		2150)];
+	while(__state->node > 0) {
 	    ++(*n);
-	    values[*n - 1] = dpvals[(i__1 = node - 1) < 400000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)2154)];
-	    node = dppool[(i__1 = (node << 1) + 10) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)2155)];
+	    values[*n - 1] = __state->dpvals[(i__1 = __state->node - 1) < 
+		    400000 && 0 <= i__1 ? i__1 : s_rnge("dpvals", i__1, "poo"
+		    "l_", (ftnlen)2154)];
+	    __state->node = __state->dppool[(i__1 = (__state->node << 1) + 10)
+		     < 800012 && 0 <= i__1 ? i__1 : s_rnge("dppool", i__1, 
+		    "pool_", (ftnlen)2155)];
 	}
     }
     chkout_("RTPOOL", (ftnlen)6);
@@ -2317,24 +2319,28 @@ L_expool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("nam"
-	    "lst", i__1, "pool_", (ftnlen)2392)] == 0) {
+    if (__state->namlst[(i__1 = __state->lookat - 1) < 26003 && 0 <= i__1 ? 
+	    i__1 : s_rnge("namlst", i__1, "pool_", (ftnlen)2392)] == 0) {
 	*found = FALSE_;
 	chkout_("EXPOOL", (ftnlen)6);
 	return 0;
@@ -2344,22 +2350,24 @@ L_expool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__1 = lookat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namlst", i__1, "pool_", (ftnlen)2404)];
-    succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= i__1 ?
-	     i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2405)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__1 = (node << 1) + 10) < 52018 && 0 <= i__1 ? i__1 : 
-		s_rnge("nmpool", i__1, "pool_", (ftnlen)2409)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__1 = __state->lookat - 1) < 26003 && 0 
+	    <= i__1 ? i__1 : s_rnge("namlst", i__1, "pool_", (ftnlen)2404)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__1 = __state->node 
+	    - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("pnames", i__1, "pool_",
+	     (ftnlen)2405)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__1 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__1 ? i__1 : s_rnge("nmpool", i__1, "pool_", (
+		ftnlen)2409)];
+	if (__state->node < 0) {
 	    *found = FALSE_;
 	    chkout_("EXPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__1 = node - 1) < 26003 && 0 <= 
-		i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2419)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__1 = 
+		__state->node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("pna"
+		"mes", i__1, "pool_", (ftnlen)2419)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
@@ -2369,8 +2377,8 @@ L_expool:
 /*     However, recall that EXPOOL indicates the existence only of */
 /*     d.p. values. */
 
-    *found = datlst[(i__1 = node - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "datlst", i__1, "pool_", (ftnlen)2430)] > 0;
+    *found = __state->datlst[(i__1 = __state->node - 1) < 26003 && 0 <= i__1 ?
+	     i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)2430)] > 0;
     chkout_("EXPOOL", (ftnlen)6);
     return 0;
 /* $Procedure WRPOOL ( Write the variables in pool to a specified unit ) */
@@ -2678,28 +2686,28 @@ L_wrpool:
     ci__1.cierr = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(1X,A)";
-    iostat = s_wsfe(&ci__1);
-    if (iostat != 0) {
+    __state->iostat = s_wsfe(&ci__1);
+    if (__state->iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, begdat, (ftnlen)10);
-    if (iostat != 0) {
+    __state->iostat = do_fio(&__state->c__1, __state->begdat, (ftnlen)10);
+    if (__state->iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wsfe();
+    __state->iostat = e_wsfe();
 L100001:
     ci__1.cierr = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(1X,A)";
-    iostat = s_wsfe(&ci__1);
-    if (iostat != 0) {
+    __state->iostat = s_wsfe(&ci__1);
+    if (__state->iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsfe();
+    __state->iostat = e_wsfe();
 L100002:
-    if (iostat != 0) {
-	ioerr_("writing a variable to the output kernel file ", " ", &iostat, 
-		(ftnlen)45, (ftnlen)1);
+    if (__state->iostat != 0) {
+	ioerr_("writing a variable to the output kernel file ", " ", &
+		__state->iostat, (ftnlen)45, (ftnlen)1);
 	sigerr_("SPICE(WRITEERROR)", (ftnlen)17);
 	chkout_("WRPOOL", (ftnlen)6);
 	return 0;
@@ -2707,43 +2715,47 @@ L100002:
 
 /*     Next prepare for writing out the data. */
 
-    iquote = '\'';
-    margin = 38;
-    for (k = 1; k <= 26003; ++k) {
+    __state->iquote = '\'';
+    __state->margin = 38;
+    for (__state->k = 1; __state->k <= 26003; ++__state->k) {
 
 /*        Get the head of this list. */
 
-	nnode = namlst[(i__1 = k - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"namlst", i__1, "pool_", (ftnlen)2772)];
-	while(nnode > 0) {
-	    s_copy(line, pnames + (((i__1 = nnode - 1) < 26003 && 0 <= i__1 ? 
-		    i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)2776)) << 
-		    5), (ftnlen)132, (ftnlen)32);
-	    datahd = datlst[(i__1 = nnode - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)2777)];
-	    dp = datahd > 0;
-	    chr = datahd < 0;
-	    dnode = abs(datahd);
+	__state->nnode = __state->namlst[(i__1 = __state->k - 1) < 26003 && 0 
+		<= i__1 ? i__1 : s_rnge("namlst", i__1, "pool_", (ftnlen)2772)
+		];
+	while(__state->nnode > 0) {
+	    s_copy(__state->line, __state->pnames + (((i__1 = __state->nnode 
+		    - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge("pnames", i__1, 
+		    "pool_", (ftnlen)2776)) << 5), (ftnlen)132, (ftnlen)32);
+	    __state->datahd = __state->datlst[(i__1 = __state->nnode - 1) < 
+		    26003 && 0 <= i__1 ? i__1 : s_rnge("datlst", i__1, "pool_"
+		    , (ftnlen)2777)];
+	    __state->dp = __state->datahd > 0;
+	    __state->chr = __state->datahd < 0;
+	    __state->dnode = abs(__state->datahd);
 
 /*           Determine whether or not this is a vector object. */
 
-	    if (dp) {
-		vector = dppool[(i__1 = (dnode << 1) + 10) < 800012 && 0 <= 
-			i__1 ? i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)
-			2785)] > 0;
-	    } else if (chr) {
-		vector = chpool[(i__1 = (dnode << 1) + 10) < 30012 && 0 <= 
-			i__1 ? i__1 : s_rnge("chpool", i__1, "pool_", (ftnlen)
-			2787)] > 0;
+	    if (__state->dp) {
+		__state->vector = __state->dppool[(i__1 = (__state->dnode << 
+			1) + 10) < 800012 && 0 <= i__1 ? i__1 : s_rnge("dppo"
+			"ol", i__1, "pool_", (ftnlen)2785)] > 0;
+	    } else if (__state->chr) {
+		__state->vector = __state->chpool[(i__1 = (__state->dnode << 
+			1) + 10) < 30012 && 0 <= i__1 ? i__1 : s_rnge("chpool"
+			, i__1, "pool_", (ftnlen)2787)] > 0;
 	    } else {
 		setmsg_("This error is never supposed to occur. No data was "
 			"available for the variable '#'. ", (ftnlen)83);
-		r__ = rtrim_(pnames + (((i__1 = nnode - 1) < 26003 && 0 <= 
-			i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)
-			2793)) << 5), (ftnlen)32);
-		errch_("#", pnames + (((i__1 = nnode - 1) < 26003 && 0 <= 
-			i__1 ? i__1 : s_rnge("pnames", i__1, "pool_", (ftnlen)
-			2794)) << 5), (ftnlen)1, r__);
+		__state->r__ = rtrim_(__state->pnames + (((i__1 = 
+			__state->nnode - 1) < 26003 && 0 <= i__1 ? i__1 : 
+			s_rnge("pnames", i__1, "pool_", (ftnlen)2793)) << 5), 
+			(ftnlen)32);
+		errch_("#", __state->pnames + (((i__1 = __state->nnode - 1) < 
+			26003 && 0 <= i__1 ? i__1 : s_rnge("pnames", i__1, 
+			"pool_", (ftnlen)2794)) << 5), (ftnlen)1, 
+			__state->r__);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("WRPOOL", (ftnlen)6);
 		return 0;
@@ -2752,129 +2764,137 @@ L100002:
 /*           If still here, then we can set up the beginning of this */
 /*           output line. */
 
-	    s_copy(line + 33, "= ", (ftnlen)99, (ftnlen)2);
-	    if (vector) {
-		s_copy(line + 35, "( ", (ftnlen)97, (ftnlen)2);
+	    s_copy(__state->line + 33, "= ", (ftnlen)99, (ftnlen)2);
+	    if (__state->vector) {
+		s_copy(__state->line + 35, "( ", (ftnlen)97, (ftnlen)2);
 	    }
 
 /*           Now fetch all of the data associated with this variable. */
 /*           We'll write them out one per line. */
 
-	    while(dnode > 0) {
+	    while(__state->dnode > 0) {
 
 /*              Get the next data value and the address of the next node. */
 
-		if (dp) {
-		    dvalue = dpvals[(i__1 = dnode - 1) < 400000 && 0 <= i__1 ?
-			     i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)
-			    2817)];
-		    dnode = dppool[(i__1 = (dnode << 1) + 10) < 800012 && 0 <=
-			     i__1 ? i__1 : s_rnge("dppool", i__1, "pool_", (
-			    ftnlen)2818)];
+		if (__state->dp) {
+		    __state->dvalue = __state->dpvals[(i__1 = __state->dnode 
+			    - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge("dpva"
+			    "ls", i__1, "pool_", (ftnlen)2817)];
+		    __state->dnode = __state->dppool[(i__1 = (__state->dnode 
+			    << 1) + 10) < 800012 && 0 <= i__1 ? i__1 : s_rnge(
+			    "dppool", i__1, "pool_", (ftnlen)2818)];
 		} else {
-		    s_copy(cvalue, "'", (ftnlen)132, (ftnlen)1);
-		    j = 1;
+		    s_copy(__state->cvalue, "'", (ftnlen)132, (ftnlen)1);
+		    __state->j = 1;
 
 /*                 We have to double up each of the quotes on output. */
 /*                 For this reason we copy the letters one at a time */
 /*                 into the output holding area CVALUE. */
 
-		    i__2 = rtrim_(chvals + ((i__1 = dnode - 1) < 15000 && 0 <=
-			     i__1 ? i__1 : s_rnge("chvals", i__1, "pool_", (
-			    ftnlen)2827)) * 80, (ftnlen)80);
-		    for (i__ = 1; i__ <= i__2; ++i__) {
-			++j;
-			*(unsigned char *)&cvalue[j - 1] = *(unsigned char *)&
-				chvals[((i__1 = dnode - 1) < 15000 && 0 <= 
+		    i__2 = rtrim_(__state->chvals + ((i__1 = __state->dnode - 
+			    1) < 15000 && 0 <= i__1 ? i__1 : s_rnge("chvals", 
+			    i__1, "pool_", (ftnlen)2827)) * 80, (ftnlen)80);
+		    for (__state->i__ = 1; __state->i__ <= i__2; 
+			    ++__state->i__) {
+			++__state->j;
+			*(unsigned char *)&__state->cvalue[__state->j - 1] = *
+				(unsigned char *)&__state->chvals[((i__1 = 
+				__state->dnode - 1) < 15000 && 0 <= i__1 ? 
+				i__1 : s_rnge("chvals", i__1, "pool_", (
+				ftnlen)2829)) * 80 + (__state->i__ - 1)];
+			__state->code = *(unsigned char *)&__state->chvals[((
+				i__1 = __state->dnode - 1) < 15000 && 0 <= 
 				i__1 ? i__1 : s_rnge("chvals", i__1, "pool_", 
-				(ftnlen)2829)) * 80 + (i__ - 1)];
-			code = *(unsigned char *)&chvals[((i__1 = dnode - 1) <
-				 15000 && 0 <= i__1 ? i__1 : s_rnge("chvals", 
-				i__1, "pool_", (ftnlen)2831)) * 80 + (i__ - 1)
-				];
-			if (code == iquote) {
-			    ++j;
-			    *(unsigned char *)&cvalue[j - 1] = *(unsigned 
-				    char *)&chvals[((i__1 = dnode - 1) < 
-				    15000 && 0 <= i__1 ? i__1 : s_rnge("chva"
-				    "ls", i__1, "pool_", (ftnlen)2835)) * 80 + 
-				    (i__ - 1)];
+				(ftnlen)2831)) * 80 + (__state->i__ - 1)];
+			if (__state->code == __state->iquote) {
+			    ++__state->j;
+			    *(unsigned char *)&__state->cvalue[__state->j - 1]
+				     = *(unsigned char *)&__state->chvals[((
+				    i__1 = __state->dnode - 1) < 15000 && 0 <=
+				     i__1 ? i__1 : s_rnge("chvals", i__1, 
+				    "pool_", (ftnlen)2835)) * 80 + (
+				    __state->i__ - 1)];
 			}
 		    }
-		    ++j;
-		    *(unsigned char *)&cvalue[j - 1] = '\'';
-		    dnode = chpool[(i__2 = (dnode << 1) + 10) < 30012 && 0 <= 
-			    i__2 ? i__2 : s_rnge("chpool", i__2, "pool_", (
-			    ftnlen)2841)];
+		    ++__state->j;
+		    *(unsigned char *)&__state->cvalue[__state->j - 1] = '\'';
+		    __state->dnode = __state->chpool[(i__2 = (__state->dnode 
+			    << 1) + 10) < 30012 && 0 <= i__2 ? i__2 : s_rnge(
+			    "chpool", i__2, "pool_", (ftnlen)2841)];
 		}
 
 /*              We will need to properly finish off this write with */
 /*              either a comma, a blank or a right parenthesis. */
 
-		if (dnode > 0) {
-		    s_copy(finish, ", ", (ftnlen)2, (ftnlen)2);
-		} else if (vector) {
-		    s_copy(finish, " )", (ftnlen)2, (ftnlen)2);
+		if (__state->dnode > 0) {
+		    s_copy(__state->finish, ", ", (ftnlen)2, (ftnlen)2);
+		} else if (__state->vector) {
+		    s_copy(__state->finish, " )", (ftnlen)2, (ftnlen)2);
 		} else {
-		    s_copy(finish, " ", (ftnlen)2, (ftnlen)1);
+		    s_copy(__state->finish, " ", (ftnlen)2, (ftnlen)1);
 		}
 
 /*              Now write out our data. */
 
-		if (dp) {
+		if (__state->dp) {
 		    ci__1.cierr = 1;
 		    ci__1.ciunit = *unit;
 		    ci__1.cifmt = "(1X,A,D25.17,A)";
-		    iostat = s_wsfe(&ci__1);
-		    if (iostat != 0) {
+		    __state->iostat = s_wsfe(&ci__1);
+		    if (__state->iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = do_fio(&c__1, line, margin);
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, __state->line, 
+			    __state->margin);
+		    if (__state->iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = do_fio(&c__1, (char *)&dvalue, (ftnlen)sizeof(
-			    doublereal));
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, (char *)&
+			    __state->dvalue, (ftnlen)sizeof(doublereal));
+		    if (__state->iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = do_fio(&c__1, finish, (ftnlen)2);
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, __state->finish, 
+			    (ftnlen)2);
+		    if (__state->iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = e_wsfe();
+		    __state->iostat = e_wsfe();
 L100003:
 		    ;
 		} else {
 		    ci__1.cierr = 1;
 		    ci__1.ciunit = *unit;
 		    ci__1.cifmt = "(1X,3A)";
-		    iostat = s_wsfe(&ci__1);
-		    if (iostat != 0) {
+		    __state->iostat = s_wsfe(&ci__1);
+		    if (__state->iostat != 0) {
 			goto L100004;
 		    }
-		    iostat = do_fio(&c__1, line, margin);
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, __state->line, 
+			    __state->margin);
+		    if (__state->iostat != 0) {
 			goto L100004;
 		    }
-		    iostat = do_fio(&c__1, cvalue, j);
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, __state->cvalue, 
+			    __state->j);
+		    if (__state->iostat != 0) {
 			goto L100004;
 		    }
-		    iostat = do_fio(&c__1, finish, (ftnlen)2);
-		    if (iostat != 0) {
+		    __state->iostat = do_fio(&__state->c__1, __state->finish, 
+			    (ftnlen)2);
+		    if (__state->iostat != 0) {
 			goto L100004;
 		    }
-		    iostat = e_wsfe();
+		    __state->iostat = e_wsfe();
 L100004:
 		    ;
 		}
 
 /*              Check the IOSTAT code.  After all, that's why it's there. */
 
-		if (iostat != 0) {
+		if (__state->iostat != 0) {
 		    ioerr_("writing a variable to the output kernel file ", 
-			    " ", &iostat, (ftnlen)45, (ftnlen)1);
+			    " ", &__state->iostat, (ftnlen)45, (ftnlen)1);
 		    sigerr_("SPICE(WRITEERROR)", (ftnlen)17);
 		    chkout_("WRPOOL", (ftnlen)6);
 		    return 0;
@@ -2884,13 +2904,14 @@ L100004:
 /*              leading blanks for subsequent components of the */
 /*              vector (if we are in fact writing one). */
 
-		s_copy(line, " ", (ftnlen)132, (ftnlen)1);
+		s_copy(__state->line, " ", (ftnlen)132, (ftnlen)1);
 	    }
 
 /*           Get the next name for this node: */
 
-	    nnode = nmpool[(i__2 = (nnode << 1) + 10) < 52018 && 0 <= i__2 ? 
-		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)2890)];
+	    __state->nnode = __state->nmpool[(i__2 = (__state->nnode << 1) + 
+		    10) < 52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, 
+		    "pool_", (ftnlen)2890)];
 	}
 
 /*        Get the next node (if there is one). */
@@ -2903,28 +2924,28 @@ L100004:
     ci__1.cierr = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(1X,A)";
-    iostat = s_wsfe(&ci__1);
-    if (iostat != 0) {
+    __state->iostat = s_wsfe(&ci__1);
+    if (__state->iostat != 0) {
 	goto L100005;
     }
-    iostat = e_wsfe();
+    __state->iostat = e_wsfe();
 L100005:
     ci__1.cierr = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(1X,A)";
-    iostat = s_wsfe(&ci__1);
-    if (iostat != 0) {
+    __state->iostat = s_wsfe(&ci__1);
+    if (__state->iostat != 0) {
 	goto L100006;
     }
-    iostat = do_fio(&c__1, begtxt, (ftnlen)10);
-    if (iostat != 0) {
+    __state->iostat = do_fio(&__state->c__1, __state->begtxt, (ftnlen)10);
+    if (__state->iostat != 0) {
 	goto L100006;
     }
-    iostat = e_wsfe();
+    __state->iostat = e_wsfe();
 L100006:
-    if (iostat != 0) {
-	ioerr_("writing a variable to the output kernel file ", " ", &iostat, 
-		(ftnlen)45, (ftnlen)1);
+    if (__state->iostat != 0) {
+	ioerr_("writing a variable to the output kernel file ", " ", &
+		__state->iostat, (ftnlen)45, (ftnlen)1);
 	sigerr_("SPICE(WRITEERROR)", (ftnlen)17);
 	chkout_("WRPOOL", (ftnlen)6);
 	return 0;
@@ -3252,12 +3273,16 @@ L_swpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. Although setting a watcher does not */
@@ -3265,7 +3290,7 @@ L_swpool:
 /*     sure that the next call to CVPOOL with this watcher triggers the */
 /*     initial update. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Do all of the error checking we need to do BEFORE touching */
 /*     the watcher data structure. We don't want to end up with */
@@ -3273,21 +3298,22 @@ L_swpool:
 
 /*     First make sure we can handle any new kernel variable names. */
 
-    need = 0;
+    __state->need = 0;
     i__2 = *nnames;
-    for (i__ = 1; i__ <= i__2; ++i__) {
-	if (! elemc_(names + (i__ - 1) * names_len, wtvars, names_len, (
-		ftnlen)32)) {
-	    ++need;
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
+	if (! elemc_(names + (__state->i__ - 1) * names_len, __state->wtvars, 
+		names_len, (ftnlen)32)) {
+	    ++__state->need;
 	}
     }
-    space = sizec_(wtvars, (ftnlen)32) - cardc_(wtvars, (ftnlen)32);
-    if (need > space) {
+    __state->space = sizec_(__state->wtvars, (ftnlen)32) - cardc_(
+	    __state->wtvars, (ftnlen)32);
+    if (__state->need > __state->space) {
 	setmsg_("The watched kernel variable name list WTVARS has room for #"
 		" more elements, so the # new names (in a list of # names) as"
 		"sociated with agent # cannot be inserted.", (ftnlen)160);
-	errint_("#", &space, (ftnlen)1);
-	errint_("#", &need, (ftnlen)1);
+	errint_("#", &__state->space, (ftnlen)1);
+	errint_("#", &__state->need, (ftnlen)1);
 	errint_("#", nnames, (ftnlen)1);
 	errch_("#", agent, (ftnlen)1, agent_len);
 	sigerr_("SPICE(KERVARSETOVERFLOW)", (ftnlen)24);
@@ -3300,32 +3326,33 @@ L_swpool:
 /*     check for kernel variables that would have more than */
 /*     MAXAGT agents watching them if this watch were established. */
 
-    need = 0;
+    __state->need = 0;
     i__2 = *nnames;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 
 /*        Get the agents associated with NAMES(I). The output argument */
 /*        ACTIVE is a SPICE set. */
 
-	zzgapool_(names + (i__ - 1) * names_len, wtvars, wtptrs, wtpool, 
-		wtagnt, active, names_len, (ftnlen)32, (ftnlen)32, (ftnlen)32)
-		;
-	nfetch = cardc_(active, (ftnlen)32);
-	noagnt = nfetch == 0 || ! elemc_(agent, active, agent_len, (ftnlen)32)
-		;
-	if (noagnt) {
-	    ++need;
+	zzgapool_(names + (__state->i__ - 1) * names_len, __state->wtvars, 
+		__state->wtptrs, __state->wtpool, __state->wtagnt, 
+		__state->active, names_len, (ftnlen)32, (ftnlen)32, (ftnlen)
+		32);
+	__state->nfetch = cardc_(__state->active, (ftnlen)32);
+	__state->noagnt = __state->nfetch == 0 || ! elemc_(agent, 
+		__state->active, agent_len, (ftnlen)32);
+	if (__state->noagnt) {
+	    ++__state->need;
 
 /*           Check the number of agents already associated with the */
 /*           current kernel variable. */
 
-	    if (nfetch == 1000) {
+	    if (__state->nfetch == 1000) {
 		setmsg_("The list of agents to notify when # is updated is t"
 			"oo big. The maximum number of agents that any kernel"
 			"pool variable can activate is #.", (ftnlen)135);
-		errch_("#", names + (i__ - 1) * names_len, (ftnlen)1, 
-			names_len);
-		errint_("#", &c__1000, (ftnlen)1);
+		errch_("#", names + (__state->i__ - 1) * names_len, (ftnlen)1,
+			 names_len);
+		errint_("#", &__state->c__1000, (ftnlen)1);
 		sigerr_("SPICE(TOOMANYWATCHES)", (ftnlen)21);
 		chkout_("SWPOOL", (ftnlen)6);
 		return 0;
@@ -3335,13 +3362,13 @@ L_swpool:
 
 /*     See whether WTAGNT has enough room to set this watch. */
 
-    space = lnknfn_(wtpool);
-    if (need > space) {
+    __state->space = lnknfn_(__state->wtpool);
+    if (__state->need > __state->space) {
 	setmsg_("The watched kernel variable agent list WTAGNT has room for "
 		"# more elements, so the # new occurrences of agent # require"
 		"d for the input watch cannot be inserted.", (ftnlen)160);
-	errint_("#", &space, (ftnlen)1);
-	errint_("#", &need, (ftnlen)1);
+	errint_("#", &__state->space, (ftnlen)1);
+	errint_("#", &__state->need, (ftnlen)1);
 	errch_("#", agent, (ftnlen)1, agent_len);
 	sigerr_("SPICE(AGENTLISTOVERFLOW)", (ftnlen)24);
 	chkout_("SWPOOL", (ftnlen)6);
@@ -3356,15 +3383,16 @@ L_swpool:
 /*     occurs. */
 
     i__2 = *nnames;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 
 /*        Get the agents associated with NAMES(I). The output argument */
 /*        ACTIVE is a SPICE set. */
 
-	zzgapool_(names + (i__ - 1) * names_len, wtvars, wtptrs, wtpool, 
-		wtagnt, active, names_len, (ftnlen)32, (ftnlen)32, (ftnlen)32)
-		;
-	nfetch = cardc_(active, (ftnlen)32);
+	zzgapool_(names + (__state->i__ - 1) * names_len, __state->wtvars, 
+		__state->wtptrs, __state->wtpool, __state->wtagnt, 
+		__state->active, names_len, (ftnlen)32, (ftnlen)32, (ftnlen)
+		32);
+	__state->nfetch = cardc_(__state->active, (ftnlen)32);
 
 /*        Three things can happen now: */
 
@@ -3385,32 +3413,34 @@ L_swpool:
 /*        We'll just take them one at a time. */
 
 
-	if (nfetch > 0) {
-	    if (! elemc_(agent, active, agent_len, (ftnlen)32)) {
+	if (__state->nfetch > 0) {
+	    if (! elemc_(agent, __state->active, agent_len, (ftnlen)32)) {
 
 /*              Case 1: at least one agent is already watching NAMES(I), */
 /*              but AGENT is not watching NAMES(I). We need the head of */
 /*              the agent list for this kernel variable. */
 
-		i__1 = cardc_(wtvars, (ftnlen)32);
-		j = bsrchc_(names + (i__ - 1) * names_len, &i__1, wtvars + 
-			192, names_len, (ftnlen)32);
-		head = wtptrs[(i__1 = j - 1) < 26003 && 0 <= i__1 ? i__1 : 
-			s_rnge("wtptrs", i__1, "pool_", (ftnlen)3427)];
+		i__1 = cardc_(__state->wtvars, (ftnlen)32);
+		__state->j = bsrchc_(names + (__state->i__ - 1) * names_len, &
+			i__1, __state->wtvars + 192, names_len, (ftnlen)32);
+		__state->head = __state->wtptrs[(i__1 = __state->j - 1) < 
+			26003 && 0 <= i__1 ? i__1 : s_rnge("wtptrs", i__1, 
+			"pool_", (ftnlen)3427)];
 
 /*              Allocate a free node in the watch pool; append this node */
 /*              to the tail of the agent list for the kernel variable; */
 /*              we know that list is non-empty. */
 
-		lnkan_(wtpool, &node);
-		tail = lnktl_(&head, wtpool);
-		lnkila_(&tail, &node, wtpool);
+		lnkan_(__state->wtpool, &__state->node);
+		__state->tail = lnktl_(&__state->head, __state->wtpool);
+		lnkila_(&__state->tail, &__state->node, __state->wtpool);
 
 /*              Store the agent name at index NODE in the agent list. */
 
-		s_copy(wtagnt + (((i__1 = node - 1) < 130015 && 0 <= i__1 ? 
-			i__1 : s_rnge("wtagnt", i__1, "pool_", (ftnlen)3443)) 
-			<< 5), agent, (ftnlen)32, agent_len);
+		s_copy(__state->wtagnt + (((i__1 = __state->node - 1) < 
+			130015 && 0 <= i__1 ? i__1 : s_rnge("wtagnt", i__1, 
+			"pool_", (ftnlen)3443)) << 5), agent, (ftnlen)32, 
+			agent_len);
 
 /*              The insertion is complete. We update AGENTS, which is */
 /*              the set of agents to notify, at the end of this routine. */
@@ -3428,9 +3458,9 @@ L_swpool:
 /*           always follow that of the last element in WTVARS */
 /*           less than NAMES(I). */
 
-	    i__1 = cardc_(wtvars, (ftnlen)32);
-	    j = lstltc_(names + (i__ - 1) * names_len, &i__1, wtvars + 192, 
-		    names_len, (ftnlen)32) + 1;
+	    i__1 = cardc_(__state->wtvars, (ftnlen)32);
+	    __state->j = lstltc_(names + (__state->i__ - 1) * names_len, &
+		    i__1, __state->wtvars + 192, names_len, (ftnlen)32) + 1;
 
 /*           Note that we don't use INSRTC to add NAMES(I) to WTVARS */
 /*           because we need the insertion index, and we don't want */
@@ -3448,28 +3478,30 @@ L_swpool:
 
 /*           NPTRS is the size of the associated pointer table WTPTRS. */
 
-	    nvars__ = cardc_(wtvars, (ftnlen)32);
-	    nptrs = nvars__;
-	    inslac_(names + (i__ - 1) * names_len, &c__1, &j, wtvars + 192, &
-		    nvars__, names_len, (ftnlen)32);
+	    __state->nvars__ = cardc_(__state->wtvars, (ftnlen)32);
+	    __state->nptrs = __state->nvars__;
+	    inslac_(names + (__state->i__ - 1) * names_len, &__state->c__1, &
+		    __state->j, __state->wtvars + 192, &__state->nvars__, 
+		    names_len, (ftnlen)32);
 
 /*           WTVARS is actually a set, so we must update its cardinality. */
 
-	    scardc_(&nvars__, wtvars, (ftnlen)32);
+	    scardc_(&__state->nvars__, __state->wtvars, (ftnlen)32);
 
 /*           Allocate a free node in the watch pool. */
 
-	    lnkan_(wtpool, &node);
+	    lnkan_(__state->wtpool, &__state->node);
 
 /*           Now insert NODE in the pointer table WTPTRS at index J. */
 
-	    inslai_(&node, &c__1, &j, wtptrs, &nptrs);
+	    inslai_(&__state->node, &__state->c__1, &__state->j, 
+		    __state->wtptrs, &__state->nptrs);
 
 /*           Store the agent name at index NODE in the agent list. */
 
-	    s_copy(wtagnt + (((i__1 = node - 1) < 130015 && 0 <= i__1 ? i__1 :
-		     s_rnge("wtagnt", i__1, "pool_", (ftnlen)3505)) << 5), 
-		    agent, (ftnlen)32, agent_len);
+	    s_copy(__state->wtagnt + (((i__1 = __state->node - 1) < 130015 && 
+		    0 <= i__1 ? i__1 : s_rnge("wtagnt", i__1, "pool_", (
+		    ftnlen)3505)) << 5), agent, (ftnlen)32, agent_len);
 
 /*           The insertion is complete. We update AGENTS, which is the */
 /*           set of agents to notify, at the end of this routine. */
@@ -3478,7 +3510,7 @@ L_swpool:
 
 /*     We ALWAYS put this agent into the list of agents to be notified. */
 
-    insrtc_(agent, agents, agent_len, (ftnlen)32);
+    insrtc_(agent, __state->agents, agent_len, (ftnlen)32);
 
 /*     That is all. */
 
@@ -3788,21 +3820,25 @@ L_cvpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Check to see if our agent is on the list of agents to be */
 /*     notified.  If it is, we take this agent off the list---he's */
 /*     now considered to have been notified. */
 
-    *update = elemc_(agent, agents, agent_len, (ftnlen)32);
+    *update = elemc_(agent, __state->agents, agent_len, (ftnlen)32);
     if (*update) {
-	removc_(agent, agents, agent_len, (ftnlen)32);
+	removc_(agent, __state->agents, agent_len, (ftnlen)32);
     }
     chkout_("CVPOOL", (ftnlen)6);
     return 0;
@@ -4069,12 +4105,16 @@ L_gcpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Perform the one obvious error check first. */
@@ -4091,14 +4131,14 @@ L_gcpool:
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4189)] == 0) {
+    if (__state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 <= i__2 ? 
+	    i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)4189)] == 0) {
 	*found = FALSE_;
 	chkout_("GCPOOL", (ftnlen)6);
 	return 0;
@@ -4108,36 +4148,38 @@ L_gcpool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)4201)];
-    succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4202)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)4206)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)4201)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__2 = __state->node 
+	    - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "pool_",
+	     (ftnlen)4202)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__2 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, "pool_", (
+		ftnlen)4206)];
+	if (__state->node < 0) {
 	    *found = FALSE_;
 	    chkout_("GCPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4216)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+		__state->node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pna"
+		"mes", i__2, "pool_", (ftnlen)4216)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
 /*     list of names at PNAMES(NODE), ABS( DATLST(NODE) ) points to the */
 /*     head of a linked list of values for this NAME. */
 
-    datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)4224)];
-    if (datahd > 0) {
+    __state->datahd = __state->datlst[(i__2 = __state->node - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)4224)];
+    if (__state->datahd > 0) {
 	*n = 0;
 	*found = FALSE_;
 	chkout_("GCPOOL", (ftnlen)6);
 	return 0;
-    } else if (datahd == 0) {
+    } else if (__state->datahd == 0) {
 	setmsg_("This is never supposed to happen.  The requested name, '#',"
 		" was found in the name list, but the pointer to the head of "
 		"the data for this variable is zero. Please note your activit"
@@ -4148,24 +4190,26 @@ L_gcpool:
 	return 0;
     }
     *found = TRUE_;
-    k = 0;
+    __state->k = 0;
     *n = 0;
-    begin = max(*start,1);
-    node = -datahd;
-    while(node > 0) {
-	++k;
-	if (k >= begin) {
+    __state->begin = max(*start,1);
+    __state->node = -__state->datahd;
+    while(__state->node > 0) {
+	++__state->k;
+	if (__state->k >= __state->begin) {
 	    ++(*n);
-	    s_copy(cvals + (*n - 1) * cvals_len, chvals + ((i__2 = node - 1) <
-		     15000 && 0 <= i__2 ? i__2 : s_rnge("chvals", i__2, "poo"
-		    "l_", (ftnlen)4260)) * 80, cvals_len, (ftnlen)80);
+	    s_copy(cvals + (*n - 1) * cvals_len, __state->chvals + ((i__2 = 
+		    __state->node - 1) < 15000 && 0 <= i__2 ? i__2 : s_rnge(
+		    "chvals", i__2, "pool_", (ftnlen)4260)) * 80, cvals_len, (
+		    ftnlen)80);
 	    if (*n == *room) {
 		chkout_("GCPOOL", (ftnlen)6);
 		return 0;
 	    }
 	}
-	node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ? i__2 : 
-		s_rnge("chpool", i__2, "pool_", (ftnlen)4269)];
+	__state->node = __state->chpool[(i__2 = (__state->node << 1) + 10) < 
+		30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", i__2, "pool_", (
+		ftnlen)4269)];
     }
     chkout_("GCPOOL", (ftnlen)6);
     return 0;
@@ -4429,12 +4473,16 @@ L_gdpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Perform the one obvious error check first. */
@@ -4451,14 +4499,14 @@ L_gdpool:
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4591)] == 0) {
+    if (__state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 <= i__2 ? 
+	    i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)4591)] == 0) {
 	*found = FALSE_;
 	chkout_("GDPOOL", (ftnlen)6);
 	return 0;
@@ -4468,36 +4516,38 @@ L_gdpool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)4603)];
-    succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4604)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)4608)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)4603)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__2 = __state->node 
+	    - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "pool_",
+	     (ftnlen)4604)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__2 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, "pool_", (
+		ftnlen)4608)];
+	if (__state->node < 0) {
 	    *found = FALSE_;
 	    chkout_("GDPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)4618)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+		__state->node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pna"
+		"mes", i__2, "pool_", (ftnlen)4618)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
 /*     list of names at PNAMES(NODE), ABS( DATLST(NODE) ) points to the */
 /*     head of a linked list of values for this NAME. */
 
-    datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)4626)];
-    if (datahd < 0) {
+    __state->datahd = __state->datlst[(i__2 = __state->node - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)4626)];
+    if (__state->datahd < 0) {
 	*n = 0;
 	*found = FALSE_;
 	chkout_("GDPOOL", (ftnlen)6);
 	return 0;
-    } else if (datahd == 0) {
+    } else if (__state->datahd == 0) {
 	setmsg_("This is never supposed to happen.  The requested name, '#',"
 		" was found in the name list, but the pointer to the head of "
 		"the data for this variable is zero. Please note your activit"
@@ -4508,23 +4558,25 @@ L_gdpool:
 	return 0;
     }
     *found = TRUE_;
-    k = 0;
+    __state->k = 0;
     *n = 0;
-    begin = max(*start,1);
-    node = datahd;
-    while(node > 0) {
-	++k;
-	if (k >= begin) {
+    __state->begin = max(*start,1);
+    __state->node = __state->datahd;
+    while(__state->node > 0) {
+	++__state->k;
+	if (__state->k >= __state->begin) {
 	    ++(*n);
-	    values[*n - 1] = dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)4662)];
+	    values[*n - 1] = __state->dpvals[(i__2 = __state->node - 1) < 
+		    400000 && 0 <= i__2 ? i__2 : s_rnge("dpvals", i__2, "poo"
+		    "l_", (ftnlen)4662)];
 	    if (*n == *room) {
 		chkout_("GDPOOL", (ftnlen)6);
 		return 0;
 	    }
 	}
-	node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? i__2 :
-		 s_rnge("dppool", i__2, "pool_", (ftnlen)4671)];
+	__state->node = __state->dppool[(i__2 = (__state->node << 1) + 10) < 
+		800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, "pool_", (
+		ftnlen)4671)];
     }
     chkout_("GDPOOL", (ftnlen)6);
     return 0;
@@ -4791,12 +4843,16 @@ L_gipool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Perform the one obvious error check first. */
@@ -4813,14 +4869,14 @@ L_gipool:
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)4994)] == 0) {
+    if (__state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 <= i__2 ? 
+	    i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)4994)] == 0) {
 	*found = FALSE_;
 	chkout_("GIPOOL", (ftnlen)6);
 	return 0;
@@ -4830,36 +4886,38 @@ L_gipool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)5006)];
-    succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5007)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)5011)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)5006)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__2 = __state->node 
+	    - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "pool_",
+	     (ftnlen)5007)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__2 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, "pool_", (
+		ftnlen)5011)];
+	if (__state->node < 0) {
 	    *found = FALSE_;
 	    chkout_("GIPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5021)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+		__state->node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pna"
+		"mes", i__2, "pool_", (ftnlen)5021)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
 /*     list of names at PNAMES(NODE), ABS( DATLST(NODE) ) points to the */
 /*     head of a linked list of values for this NAME. */
 
-    datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)5029)];
-    if (datahd < 0) {
+    __state->datahd = __state->datlst[(i__2 = __state->node - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)5029)];
+    if (__state->datahd < 0) {
 	*n = 0;
 	*found = FALSE_;
 	chkout_("GIPOOL", (ftnlen)6);
 	return 0;
-    } else if (datahd == 0) {
+    } else if (__state->datahd == 0) {
 	setmsg_("This is never supposed to happen.  The requested name, '#',"
 		" was found in the name list, but the pointer to the head of "
 		"the data for this variable is zero. Please note your activit"
@@ -4872,33 +4930,34 @@ L_gipool:
 
 /*     Prepare for fetching values. */
 
-    big = (doublereal) intmax_();
-    small = (doublereal) intmin_();
+    __state->big = (doublereal) intmax_();
+    __state->small = (doublereal) intmin_();
     *found = TRUE_;
-    k = 0;
+    __state->k = 0;
     *n = 0;
-    begin = max(*start,1);
-    node = datahd;
-    while(node > 0) {
-	++k;
-	if (k >= begin) {
+    __state->begin = max(*start,1);
+    __state->node = __state->datahd;
+    while(__state->node > 0) {
+	++__state->k;
+	if (__state->k >= __state->begin) {
 	    ++(*n);
-	    if (dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("dpvals", i__2, "pool_", (ftnlen)5070)] >= small &&
-		     dpvals[(i__1 = node - 1) < 400000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dpvals", i__1, "pool_", (ftnlen)5070)] <= big) {
-		ivals[*n - 1] = i_dnnt(&dpvals[(i__2 = node - 1) < 400000 && 
-			0 <= i__2 ? i__2 : s_rnge("dpvals", i__2, "pool_", (
-			ftnlen)5073)]);
+	    if (__state->dpvals[(i__2 = __state->node - 1) < 400000 && 0 <= 
+		    i__2 ? i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)
+		    5070)] >= __state->small && __state->dpvals[(i__1 = 
+		    __state->node - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge(
+		    "dpvals", i__1, "pool_", (ftnlen)5070)] <= __state->big) {
+		ivals[*n - 1] = i_dnnt(&__state->dpvals[(i__2 = __state->node 
+			- 1) < 400000 && 0 <= i__2 ? i__2 : s_rnge("dpvals", 
+			i__2, "pool_", (ftnlen)5073)]);
 	    } else {
 		setmsg_("The value associated with index # of the kernel var"
 			"iable # is outside the range of integers. The value "
 			"stored was: # .", (ftnlen)118);
-		errint_("#", &k, (ftnlen)1);
+		errint_("#", &__state->k, (ftnlen)1);
 		errch_("#", name__, (ftnlen)1, rtrim_(name__, name_len));
-		errdp_("#", &dpvals[(i__2 = node - 1) < 400000 && 0 <= i__2 ? 
-			i__2 : s_rnge("dpvals", i__2, "pool_", (ftnlen)5085)],
-			 (ftnlen)1);
+		errdp_("#", &__state->dpvals[(i__2 = __state->node - 1) < 
+			400000 && 0 <= i__2 ? i__2 : s_rnge("dpvals", i__2, 
+			"pool_", (ftnlen)5085)], (ftnlen)1);
 		sigerr_("SPICE(INTOUTOFRANGE)", (ftnlen)20);
 		chkout_("GIPOOL", (ftnlen)6);
 		return 0;
@@ -4908,8 +4967,9 @@ L_gipool:
 		return 0;
 	    }
 	}
-	node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? i__2 :
-		 s_rnge("dppool", i__2, "pool_", (ftnlen)5099)];
+	__state->node = __state->dppool[(i__2 = (__state->node << 1) + 10) < 
+		800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, "pool_", (
+		ftnlen)5099)];
     }
     chkout_("GIPOOL", (ftnlen)6);
     return 0;
@@ -5112,12 +5172,16 @@ L_dtpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Until we find otherwise, we shall assume there is no data */
@@ -5129,14 +5193,14 @@ L_dtpool:
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)5345)] == 0) {
+    if (__state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 <= i__2 ? 
+	    i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)5345)] == 0) {
 	chkout_("DTPOOL", (ftnlen)6);
 	return 0;
     }
@@ -5145,48 +5209,52 @@ L_dtpool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    node = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)5356)];
-    succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= i__2 ?
-	     i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5357)) << 5), 
-	    name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	node = nmpool[(i__2 = (node << 1) + 10) < 52018 && 0 <= i__2 ? i__2 : 
-		s_rnge("nmpool", i__2, "pool_", (ftnlen)5361)];
-	if (node < 0) {
+    __state->node = __state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)5356)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__2 = __state->node 
+	    - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "pool_",
+	     (ftnlen)5357)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->node = __state->nmpool[(i__2 = (__state->node << 1) + 10) < 
+		52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, "pool_", (
+		ftnlen)5361)];
+	if (__state->node < 0) {
 	    chkout_("DTPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__2 = node - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)5370)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+		__state->node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pna"
+		"mes", i__2, "pool_", (ftnlen)5370)) << 5), name_len, (ftnlen)
+		32) == 0;
     }
 
 /*     If you get to this point, the variable NAME is present in the */
 /*     list of names at PNAMES(NODE), ABS( DATLST(NODE) ) points to the */
 /*     head of a linked list of values for this NAME. */
 
-    datahd = datlst[(i__2 = node - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "datlst", i__2, "pool_", (ftnlen)5379)];
-    if (datahd < 0) {
+    __state->datahd = __state->datlst[(i__2 = __state->node - 1) < 26003 && 0 
+	    <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)5379)];
+    if (__state->datahd < 0) {
 	s_copy(type__, "C", type_len, (ftnlen)1);
 	*found = TRUE_;
-	node = -datahd;
-	while(node > 0) {
+	__state->node = -__state->datahd;
+	while(__state->node > 0) {
 	    ++(*n);
-	    node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5389)];
+	    __state->node = __state->chpool[(i__2 = (__state->node << 1) + 10)
+		     < 30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", i__2, 
+		    "pool_", (ftnlen)5389)];
 	}
-    } else if (datahd > 0) {
+    } else if (__state->datahd > 0) {
 	s_copy(type__, "N", type_len, (ftnlen)1);
 	*found = TRUE_;
-	node = datahd;
-	while(node > 0) {
+	__state->node = __state->datahd;
+	while(__state->node > 0) {
 	    ++(*n);
-	    node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)5400)];
+	    __state->node = __state->dppool[(i__2 = (__state->node << 1) + 10)
+		     < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, 
+		    "pool_", (ftnlen)5400)];
 	}
-    } else if (datahd == 0) {
+    } else if (__state->datahd == 0) {
 	setmsg_("This is never supposed to happen.  The requested name, '#',"
 		" was found in the name list, but the pointer to the head of "
 		"the data for this variable is zero. Please note your activit"
@@ -5476,13 +5544,13 @@ L_pcpool:
 /*     Check the variable name length; signal an error */
 /*     if longer than MAXLEN. */
 
-    varlen = i_len(name__, lastnb_(name__, name_len));
-    if (varlen > 32) {
+    __state->varlen = i_len(name__, lastnb_(name__, name_len));
+    if (__state->varlen > 32) {
 	setmsg_("The input kernel pool variable name exceeds the maximum all"
 		"owed length of #1. The length of the variable name is #2, th"
 		"e offending variable name: '#3'.", (ftnlen)151);
-	errint_("#1", &c__32, (ftnlen)2);
-	errint_("#2", &varlen, (ftnlen)2);
+	errint_("#1", &__state->c__32, (ftnlen)2);
+	errint_("#2", &__state->varlen, (ftnlen)2);
 	errch_("#3", name__, (ftnlen)2, name_len);
 	sigerr_("SPICE(BADVARNAME)", (ftnlen)17);
 	chkout_("PCPOOL", (ftnlen)6);
@@ -5491,23 +5559,29 @@ L_pcpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Find out where the name for this item is located */
 /*     in the data tables. */
 
-    zzgpnm_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, chvals, 
-	    name__, &gotit, &lookat, &nameat, (ftnlen)32, (ftnlen)80, 
+    zzgpnm_(__state->namlst, __state->nmpool, __state->pnames, 
+	    __state->datlst, __state->dppool, __state->dpvals, 
+	    __state->chpool, __state->chvals, name__, &__state->gotit, &
+	    __state->lookat, &__state->nameat, (ftnlen)32, (ftnlen)80, 
 	    name_len);
     if (failed_()) {
 	chkout_("PCPOOL", (ftnlen)6);
@@ -5517,17 +5591,18 @@ L_pcpool:
 /*     Determine how much room is available for inserting new d.p.s */
 /*     values into the kernel pool. */
 
-    avail = lnknfn_(chpool);
-    if (gotit) {
+    __state->avail = lnknfn_(__state->chpool);
+    if (__state->gotit) {
 
 /*        If we found the specified variable in the kernel pool, we */
 /*        may be able to free up some space before inserting data. */
 /*        We need to take this into account when determining */
 /*        the amount of free room in the pool. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)5777)];
-	if (datahd > 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)5777)];
+	if (__state->datahd > 0) {
 
 /*           No extra strings will be freed.  We have whatever */
 /*           free space is in the CHPOOL right now. */
@@ -5537,27 +5612,27 @@ L_pcpool:
 /*           Find out how many items are in the current */
 /*           list of strings associated with the variable. */
 
-	    tofree = 0;
-	    node = -datahd;
-	    while(node > 0) {
-		++tofree;
-		node = chpool[(i__2 = (node << 1) + 10) < 30012 && 0 <= i__2 ?
-			 i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5794)]
-			;
+	    __state->tofree = 0;
+	    __state->node = -__state->datahd;
+	    while(__state->node > 0) {
+		++__state->tofree;
+		__state->node = __state->chpool[(i__2 = (__state->node << 1) 
+			+ 10) < 30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", 
+			i__2, "pool_", (ftnlen)5794)];
 	    }
 
 /*           Add the number we will free to the amount currently */
 /*           free in the dp pool. */
 
-	    avail += tofree;
+	    __state->avail += __state->tofree;
 	}
     }
 
 /*     If the AVAIL for new data is less than the number of items */
 /*     to be added, we just bail out here. */
 
-    if (avail < *n) {
-	if (! gotit) {
+    if (__state->avail < *n) {
+	if (! __state->gotit) {
 
 /*           We need to perform some clean up.  We've allocated */
 /*           a new name but it has nothing in it. On the other hand */
@@ -5565,14 +5640,16 @@ L_pcpool:
 /*           only read from the pool. We haven't altered anything. */
 /*           But in that case we'll never get into this block of code. */
 
-	    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+	    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+		    __state->datlst, __state->nmpool, __state->chpool, 
+		    __state->dppool);
 	}
 	setmsg_("There is not sufficient space available in the kernel pool "
 		"to store the # items associated with the name #.  There is r"
 		"oom to store only # items. ", (ftnlen)146);
 	errint_("#", n, (ftnlen)1);
 	errch_("#", name__, (ftnlen)1, name_len);
-	errint_("#", &avail, (ftnlen)1);
+	errint_("#", &__state->avail, (ftnlen)1);
 	sigerr_("SPICE(NOMOREROOM)", (ftnlen)17);
 	chkout_("PCPOOL", (ftnlen)6);
 	return 0;
@@ -5581,35 +5658,38 @@ L_pcpool:
 /*     There is room to insert the data.  Free up any required */
 /*     nodes. */
 
-    if (gotit) {
+    if (__state->gotit) {
 
 /*        We need to free the data associated with this */
 /*        variable.  But first make sure there will be room */
 /*        to add data. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)5850)];
-	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)5851)] = 0;
-	if (datahd > 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)5850)];
+	__state->datlst[(i__2 = __state->nameat - 1) < 26003 && 0 <= i__2 ? 
+		i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)5851)] = 0;
+	if (__state->datahd > 0) {
 
 /*           This variable was character type we need to */
 /*           free a linked list from the character data */
 /*           pool. */
 
-	    head = datahd;
-	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)5861)];
-	    lnkfsl_(&head, &tail, dppool);
+	    __state->head = __state->datahd;
+	    __state->tail = -__state->dppool[(i__2 = (__state->head << 1) + 
+		    11) < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, 
+		    "pool_", (ftnlen)5861)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->dppool);
 	} else {
 
 /*           This variable was character type. We need to */
 /*           free a linked list from the numeric pool. */
 
-	    head = -datahd;
-	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)5872)];
-	    lnkfsl_(&head, &tail, chpool);
+	    __state->head = -__state->datahd;
+	    __state->tail = -__state->chpool[(i__2 = (__state->head << 1) + 
+		    11) < 30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", i__2, 
+		    "pool_", (ftnlen)5872)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->chpool);
 	}
     }
 
@@ -5617,13 +5697,13 @@ L_pcpool:
 /*     needs to be done.  Now add the data. */
 
     i__2 = *n;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 
 /*        We are ready to go.  Allocate a node for this data */
 /*        item. First make sure there is room to do so. */
 
-	free = lnknfn_(chpool);
-	if (free <= 0) {
+	__state->free = lnknfn_(__state->chpool);
+	if (__state->free <= 0) {
 	    setmsg_("There is no room available for adding another character"
 		    " value to the kernel pool.", (ftnlen)81);
 	    sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
@@ -5633,33 +5713,38 @@ L_pcpool:
 
 /*        Allocate a node for storing this string value: */
 
-	lnkan_(chpool, &chnode);
-	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)5907)] == 0) {
+	lnkan_(__state->chpool, &__state->chnode);
+	if (__state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)5907)] == 0) 
+		{
 
 /*           There was no data for this name yet.  We make */
 /*           CHNODE be the head of the data list for this name. */
 
-	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)5913)] = -chnode;
+	    __state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		    ? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)5913)] = 
+		    -__state->chnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
-	    head = -datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)5920)];
-	    tail = -chpool[(i__1 = (head << 1) + 11) < 30012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("chpool", i__1, "pool_", (ftnlen)5921)];
-	    lnkila_(&tail, &chnode, chpool);
+	    __state->head = -__state->datlst[(i__1 = __state->nameat - 1) < 
+		    26003 && 0 <= i__1 ? i__1 : s_rnge("datlst", i__1, "pool_"
+		    , (ftnlen)5920)];
+	    __state->tail = -__state->chpool[(i__1 = (__state->head << 1) + 
+		    11) < 30012 && 0 <= i__1 ? i__1 : s_rnge("chpool", i__1, 
+		    "pool_", (ftnlen)5921)];
+	    lnkila_(&__state->tail, &__state->chnode, __state->chpool);
 	}
 
 /*        Finally insert this data item in the data buffer */
 /*        at CHNODE.  Note any quotes will be doubled so we */
 /*        have to undo this affect when we store the data. */
 
-	s_copy(chvals + ((i__1 = chnode - 1) < 15000 && 0 <= i__1 ? i__1 : 
-		s_rnge("chvals", i__1, "pool_", (ftnlen)5932)) * 80, cvals + (
-		i__ - 1) * cvals_len, (ftnlen)80, cvals_len);
+	s_copy(__state->chvals + ((i__1 = __state->chnode - 1) < 15000 && 0 <=
+		 i__1 ? i__1 : s_rnge("chvals", i__1, "pool_", (ftnlen)5932)) 
+		* 80, cvals + (__state->i__ - 1) * cvals_len, (ftnlen)80, 
+		cvals_len);
 
 /*        That's all for this value. It's now time to loop */
 /*        back through and get the next value. */
@@ -5670,14 +5755,15 @@ L_pcpool:
 /*     If it is, add its associated agents to the list of */
 /*     AGENTS to be notified of a watched variable update. */
 
-    if (elemc_(name__, wtvars, name_len, (ftnlen)32)) {
+    if (elemc_(name__, __state->wtvars, name_len, (ftnlen)32)) {
 
 /*        Union the update set AGENTS with the set of agents */
 /*        associated with the variable NAME. */
 
-	zznwpool_(name__, wtvars, wtptrs, wtpool, wtagnt, active, notify, 
-		agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)
-		32, (ftnlen)32);
+	zznwpool_(name__, __state->wtvars, __state->wtptrs, __state->wtpool, 
+		__state->wtagnt, __state->active, __state->notify, 
+		__state->agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32,
+		 (ftnlen)32, (ftnlen)32);
     }
     chkout_("PCPOOL", (ftnlen)6);
     return 0;
@@ -5958,13 +6044,13 @@ L_pdpool:
 /*     Check the variable name length; signal an error */
 /*     if longer than MAXLEN. */
 
-    varlen = i_len(name__, lastnb_(name__, name_len));
-    if (varlen > 32) {
+    __state->varlen = i_len(name__, lastnb_(name__, name_len));
+    if (__state->varlen > 32) {
 	setmsg_("The input kernel pool variable name exceeds the maximum all"
 		"owed length of #1. The length of the variable name is #2, th"
 		"e offending variable name: '#3'.", (ftnlen)151);
-	errint_("#1", &c__32, (ftnlen)2);
-	errint_("#2", &varlen, (ftnlen)2);
+	errint_("#1", &__state->c__32, (ftnlen)2);
+	errint_("#2", &__state->varlen, (ftnlen)2);
 	errch_("#3", name__, (ftnlen)2, name_len);
 	sigerr_("SPICE(BADVARNAME)", (ftnlen)17);
 	chkout_("PDPOOL", (ftnlen)6);
@@ -5973,23 +6059,29 @@ L_pdpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Find out where the name for this item is located */
 /*     in the data tables. */
 
-    zzgpnm_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, chvals, 
-	    name__, &gotit, &lookat, &nameat, (ftnlen)32, (ftnlen)80, 
+    zzgpnm_(__state->namlst, __state->nmpool, __state->pnames, 
+	    __state->datlst, __state->dppool, __state->dpvals, 
+	    __state->chpool, __state->chvals, name__, &__state->gotit, &
+	    __state->lookat, &__state->nameat, (ftnlen)32, (ftnlen)80, 
 	    name_len);
     if (failed_()) {
 	chkout_("PDPOOL", (ftnlen)6);
@@ -5999,17 +6091,18 @@ L_pdpool:
 /*     Determine how much room is available for inserting new d.p.s */
 /*     values into the kernel pool. */
 
-    avail = lnknfn_(dppool);
-    if (gotit) {
+    __state->avail = lnknfn_(__state->dppool);
+    if (__state->gotit) {
 
 /*        If we found the specified variable in the kernel pool, we */
 /*        may be able to free up some space before inserting data. */
 /*        We need to take this into account when determining */
 /*        the amount of free room in the pool. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6314)];
-	if (datahd < 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)6314)];
+	if (__state->datahd < 0) {
 
 /*           No extra d.p.s will be freed.  We have whatever */
 /*           free space is in the DPPOOL right now. */
@@ -6019,27 +6112,27 @@ L_pdpool:
 /*           Find out how many items are in the current */
 /*           list of d.p. associated with the variable. */
 
-	    tofree = 0;
-	    node = datahd;
-	    while(node > 0) {
-		++tofree;
-		node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 
-			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6331)
-			];
+	    __state->tofree = 0;
+	    __state->node = __state->datahd;
+	    while(__state->node > 0) {
+		++__state->tofree;
+		__state->node = __state->dppool[(i__2 = (__state->node << 1) 
+			+ 10) < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", 
+			i__2, "pool_", (ftnlen)6331)];
 	    }
 
 /*           Add the number we will free to the amount currently */
 /*           free in the dp pool. */
 
-	    avail += tofree;
+	    __state->avail += __state->tofree;
 	}
     }
 
 /*     If the AVAIL for new data is less than the number of items */
 /*     to be added, we just bail out here. */
 
-    if (avail < *n) {
-	if (! gotit) {
+    if (__state->avail < *n) {
+	if (! __state->gotit) {
 
 /*           We need to perform some clean up.  We've allocated */
 /*           a new name but it has nothing in it. On the other hand */
@@ -6047,14 +6140,16 @@ L_pdpool:
 /*           only read from the pool. We haven't altered anything. */
 /*           But in that case we'll never get into this block of code. */
 
-	    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+	    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+		    __state->datlst, __state->nmpool, __state->chpool, 
+		    __state->dppool);
 	}
 	setmsg_("There is not sufficient space available in the kernel pool "
 		"to store the # items associated with the name #.  There is r"
 		"oom to store only # items. ", (ftnlen)146);
 	errint_("#", n, (ftnlen)1);
 	errch_("#", name__, (ftnlen)1, name_len);
-	errint_("#", &avail, (ftnlen)1);
+	errint_("#", &__state->avail, (ftnlen)1);
 	sigerr_("SPICE(NOMOREROOM)", (ftnlen)17);
 	chkout_("PDPOOL", (ftnlen)6);
 	return 0;
@@ -6063,35 +6158,38 @@ L_pdpool:
 /*     There is room to insert the data.  Free up any required */
 /*     nodes. */
 
-    if (gotit) {
+    if (__state->gotit) {
 
 /*        We need to free the data associated with this */
 /*        variable.  But first make sure there will be room */
 /*        to add data. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6387)];
-	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)6388)] = 0;
-	if (datahd < 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)6387)];
+	__state->datlst[(i__2 = __state->nameat - 1) < 26003 && 0 <= i__2 ? 
+		i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)6388)] = 0;
+	if (__state->datahd < 0) {
 
 /*           This variable was character type we need to */
 /*           free a linked list from the character data */
 /*           pool. */
 
-	    head = -datahd;
-	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6398)];
-	    lnkfsl_(&head, &tail, chpool);
+	    __state->head = -__state->datahd;
+	    __state->tail = -__state->chpool[(i__2 = (__state->head << 1) + 
+		    11) < 30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", i__2, 
+		    "pool_", (ftnlen)6398)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->chpool);
 	} else {
 
 /*           This variable was numeric type. We need to */
 /*           free a linked list from the numeric pool. */
 
-	    head = datahd;
-	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6409)];
-	    lnkfsl_(&head, &tail, dppool);
+	    __state->head = __state->datahd;
+	    __state->tail = -__state->dppool[(i__2 = (__state->head << 1) + 
+		    11) < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, 
+		    "pool_", (ftnlen)6409)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->dppool);
 	}
     }
 
@@ -6099,18 +6197,20 @@ L_pdpool:
 /*     needs to be done.  Now add the data. */
 
     i__2 = *n;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 
 /*        OK. See if there is room in */
 /*        the numeric portion of the pool to store this value. */
 
-	free = lnknfn_(dppool);
-	if (free <= 0) {
+	__state->free = lnknfn_(__state->dppool);
+	if (__state->free <= 0) {
 
 /*           This branch of the code should never be exercised, */
 /*           but it doesn't hurt to program in a redundant check. */
 
-	    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+	    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+		    __state->datlst, __state->nmpool, __state->chpool, 
+		    __state->dppool);
 	    setmsg_("There is no room available for adding another numeric v"
 		    "alue to the kernel pool.", (ftnlen)79);
 	    sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
@@ -6120,44 +6220,50 @@ L_pdpool:
 
 /*        Allocate a node for storing this numeric value: */
 
-	lnkan_(dppool, &dpnode);
-	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)6450)] == 0) {
+	lnkan_(__state->dppool, &__state->dpnode);
+	if (__state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)6450)] == 0) 
+		{
 
 /*           There was no data for this name yet.  We make */
 /*           DPNODE be the head of the data list for this name. */
 
-	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)6456)] = dpnode;
+	    __state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		    ? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)6456)] = 
+		    __state->dpnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
-	    head = datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)6463)];
-	    tail = -dppool[(i__1 = (head << 1) + 11) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)6464)];
-	    lnkila_(&tail, &dpnode, dppool);
+	    __state->head = __state->datlst[(i__1 = __state->nameat - 1) < 
+		    26003 && 0 <= i__1 ? i__1 : s_rnge("datlst", i__1, "pool_"
+		    , (ftnlen)6463)];
+	    __state->tail = -__state->dppool[(i__1 = (__state->head << 1) + 
+		    11) < 800012 && 0 <= i__1 ? i__1 : s_rnge("dppool", i__1, 
+		    "pool_", (ftnlen)6464)];
+	    lnkila_(&__state->tail, &__state->dpnode, __state->dppool);
 	}
 
 /*        Finally insert this data item into the numeric buffer. */
 
-	dpvals[(i__1 = dpnode - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge(
-		"dpvals", i__1, "pool_", (ftnlen)6473)] = values[i__ - 1];
+	__state->dpvals[(i__1 = __state->dpnode - 1) < 400000 && 0 <= i__1 ? 
+		i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)6473)] = 
+		values[__state->i__ - 1];
     }
 
 /*     One last thing, see if this variable is being watched, */
 /*     If it is, add its associated agents to the list of */
 /*     AGENTS to be notified of a watched variable update. */
 
-    if (elemc_(name__, wtvars, name_len, (ftnlen)32)) {
+    if (elemc_(name__, __state->wtvars, name_len, (ftnlen)32)) {
 
 /*        Union the update set AGENTS with the set of agents */
 /*        associated with the variable NAME. */
 
-	zznwpool_(name__, wtvars, wtptrs, wtpool, wtagnt, active, notify, 
-		agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)
-		32, (ftnlen)32);
+	zznwpool_(name__, __state->wtvars, __state->wtptrs, __state->wtpool, 
+		__state->wtagnt, __state->active, __state->notify, 
+		__state->agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32,
+		 (ftnlen)32, (ftnlen)32);
     }
     chkout_("PDPOOL", (ftnlen)6);
     return 0;
@@ -6437,13 +6543,13 @@ L_pipool:
 /*     Check the variable name length; signal an error */
 /*     if longer than MAXLEN. */
 
-    varlen = i_len(name__, lastnb_(name__, name_len));
-    if (varlen > 32) {
+    __state->varlen = i_len(name__, lastnb_(name__, name_len));
+    if (__state->varlen > 32) {
 	setmsg_("The input kernel pool variable name exceeds the maximum all"
 		"owed length of #1. The length of the variable name is #2, th"
 		"e offending variable name: '#3'.", (ftnlen)151);
-	errint_("#1", &c__32, (ftnlen)2);
-	errint_("#2", &varlen, (ftnlen)2);
+	errint_("#1", &__state->c__32, (ftnlen)2);
+	errint_("#2", &__state->varlen, (ftnlen)2);
 	errch_("#3", name__, (ftnlen)2, name_len);
 	sigerr_("SPICE(BADVARNAME)", (ftnlen)17);
 	chkout_("PIPOOL", (ftnlen)6);
@@ -6452,23 +6558,29 @@ L_pipool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Find out where the name for this item is located */
 /*     in the data tables. */
 
-    zzgpnm_(namlst, nmpool, pnames, datlst, dppool, dpvals, chpool, chvals, 
-	    name__, &gotit, &lookat, &nameat, (ftnlen)32, (ftnlen)80, 
+    zzgpnm_(__state->namlst, __state->nmpool, __state->pnames, 
+	    __state->datlst, __state->dppool, __state->dpvals, 
+	    __state->chpool, __state->chvals, name__, &__state->gotit, &
+	    __state->lookat, &__state->nameat, (ftnlen)32, (ftnlen)80, 
 	    name_len);
     if (failed_()) {
 	chkout_("PIPOOL", (ftnlen)6);
@@ -6478,17 +6590,18 @@ L_pipool:
 /*     Determine how much room is available for inserting new d.p.s */
 /*     values into the kernel pool. */
 
-    avail = lnknfn_(dppool);
-    if (gotit) {
+    __state->avail = lnknfn_(__state->dppool);
+    if (__state->gotit) {
 
 /*        If we found the specified variable in the kernel pool, we */
 /*        may be able to free up some space before inserting data. */
 /*        We need to take this into account when determining */
 /*        the amount of free room in the pool. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6850)];
-	if (datahd < 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)6850)];
+	if (__state->datahd < 0) {
 
 /*           No extra d.p.s will be freed.  We have whatever */
 /*           free space is in the DPPOOL right now. */
@@ -6498,27 +6611,27 @@ L_pipool:
 /*           Find out how many items are in the current */
 /*           list of d.p. associated with the variable. */
 
-	    tofree = 0;
-	    node = datahd;
-	    while(node > 0) {
-		++tofree;
-		node = dppool[(i__2 = (node << 1) + 10) < 800012 && 0 <= i__2 
-			? i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6867)
-			];
+	    __state->tofree = 0;
+	    __state->node = __state->datahd;
+	    while(__state->node > 0) {
+		++__state->tofree;
+		__state->node = __state->dppool[(i__2 = (__state->node << 1) 
+			+ 10) < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", 
+			i__2, "pool_", (ftnlen)6867)];
 	    }
 
 /*           Add the number we will free to the amount currently */
 /*           free in the dp pool. */
 
-	    avail += tofree;
+	    __state->avail += __state->tofree;
 	}
     }
 
 /*     If the AVAIL for new data is less than the number of items */
 /*     to be added, we just bail out here. */
 
-    if (avail < *n) {
-	if (! gotit) {
+    if (__state->avail < *n) {
+	if (! __state->gotit) {
 
 /*           We need to perform some clean up.  We've allocated */
 /*           a new name but it has nothing in it. On the other hand */
@@ -6526,14 +6639,16 @@ L_pipool:
 /*           only read from the pool. We haven't altered anything. */
 /*           But in that case we'll never get into this block of code. */
 
-	    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+	    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+		    __state->datlst, __state->nmpool, __state->chpool, 
+		    __state->dppool);
 	}
 	setmsg_("There is not sufficient space available in the kernel pool "
 		"to store the # items associated with the name #.  There is r"
 		"oom to store only # items. ", (ftnlen)146);
 	errint_("#", n, (ftnlen)1);
 	errch_("#", name__, (ftnlen)1, name_len);
-	errint_("#", &avail, (ftnlen)1);
+	errint_("#", &__state->avail, (ftnlen)1);
 	sigerr_("SPICE(NOMOREROOM)", (ftnlen)17);
 	chkout_("PIPOOL", (ftnlen)6);
 	return 0;
@@ -6542,35 +6657,38 @@ L_pipool:
 /*     There is room to insert the data.  Free up any required */
 /*     nodes. */
 
-    if (gotit) {
+    if (__state->gotit) {
 
 /*        We need to free the data associated with this */
 /*        variable.  But first make sure there will be room */
 /*        to add data. */
 
-	datahd = datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-		s_rnge("datlst", i__2, "pool_", (ftnlen)6922)];
-	datlst[(i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("dat"
-		"lst", i__2, "pool_", (ftnlen)6923)] = 0;
-	if (datahd < 0) {
+	__state->datahd = __state->datlst[(i__2 = __state->nameat - 1) < 
+		26003 && 0 <= i__2 ? i__2 : s_rnge("datlst", i__2, "pool_", (
+		ftnlen)6922)];
+	__state->datlst[(i__2 = __state->nameat - 1) < 26003 && 0 <= i__2 ? 
+		i__2 : s_rnge("datlst", i__2, "pool_", (ftnlen)6923)] = 0;
+	if (__state->datahd < 0) {
 
 /*           This variable was character type we need to */
 /*           free a linked list from the character data */
 /*           pool. */
 
-	    head = -datahd;
-	    tail = -chpool[(i__2 = (head << 1) + 11) < 30012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("chpool", i__2, "pool_", (ftnlen)6933)];
-	    lnkfsl_(&head, &tail, chpool);
+	    __state->head = -__state->datahd;
+	    __state->tail = -__state->chpool[(i__2 = (__state->head << 1) + 
+		    11) < 30012 && 0 <= i__2 ? i__2 : s_rnge("chpool", i__2, 
+		    "pool_", (ftnlen)6933)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->chpool);
 	} else {
 
 /*           This variable was numeric type. We need to */
 /*           free a linked list from the numeric pool. */
 
-	    head = datahd;
-	    tail = -dppool[(i__2 = (head << 1) + 11) < 800012 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dppool", i__2, "pool_", (ftnlen)6944)];
-	    lnkfsl_(&head, &tail, dppool);
+	    __state->head = __state->datahd;
+	    __state->tail = -__state->dppool[(i__2 = (__state->head << 1) + 
+		    11) < 800012 && 0 <= i__2 ? i__2 : s_rnge("dppool", i__2, 
+		    "pool_", (ftnlen)6944)];
+	    lnkfsl_(&__state->head, &__state->tail, __state->dppool);
 	}
     }
 
@@ -6578,18 +6696,20 @@ L_pipool:
 /*     needs to be done.  Now add the data. */
 
     i__2 = *n;
-    for (i__ = 1; i__ <= i__2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 
 /*        OK. See if there is room in */
 /*        the numeric portion of the pool to store this value. */
 
-	free = lnknfn_(dppool);
-	if (free <= 0) {
+	__state->free = lnknfn_(__state->dppool);
+	if (__state->free <= 0) {
 
 /*           This branch of the code should never be exercised, */
 /*           but it doesn't hurt to program in a redundant check. */
 
-	    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+	    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+		    __state->datlst, __state->nmpool, __state->chpool, 
+		    __state->dppool);
 	    setmsg_("There is no room available for adding another numeric v"
 		    "alue to the kernel pool.", (ftnlen)79);
 	    sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
@@ -6599,45 +6719,50 @@ L_pipool:
 
 /*        Allocate a node for storing this numeric value: */
 
-	lnkan_(dppool, &dpnode);
-	if (datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		"datlst", i__1, "pool_", (ftnlen)6985)] == 0) {
+	lnkan_(__state->dppool, &__state->dpnode);
+	if (__state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)6985)] == 0) 
+		{
 
 /*           There was no data for this name yet.  We make */
 /*           DPNODE be the head of the data list for this name. */
 
-	    datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "datlst", i__1, "pool_", (ftnlen)6991)] = dpnode;
+	    __state->datlst[(i__1 = __state->nameat - 1) < 26003 && 0 <= i__1 
+		    ? i__1 : s_rnge("datlst", i__1, "pool_", (ftnlen)6991)] = 
+		    __state->dpnode;
 	} else {
 
 /*           Put this node after the tail of the current list. */
 
-	    head = datlst[(i__1 = nameat - 1) < 26003 && 0 <= i__1 ? i__1 : 
-		    s_rnge("datlst", i__1, "pool_", (ftnlen)6998)];
-	    tail = -dppool[(i__1 = (head << 1) + 11) < 800012 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dppool", i__1, "pool_", (ftnlen)6999)];
-	    lnkila_(&tail, &dpnode, dppool);
+	    __state->head = __state->datlst[(i__1 = __state->nameat - 1) < 
+		    26003 && 0 <= i__1 ? i__1 : s_rnge("datlst", i__1, "pool_"
+		    , (ftnlen)6998)];
+	    __state->tail = -__state->dppool[(i__1 = (__state->head << 1) + 
+		    11) < 800012 && 0 <= i__1 ? i__1 : s_rnge("dppool", i__1, 
+		    "pool_", (ftnlen)6999)];
+	    lnkila_(&__state->tail, &__state->dpnode, __state->dppool);
 	}
 
 /*        Finally insert this data item into the numeric buffer. */
 
-	dpvals[(i__1 = dpnode - 1) < 400000 && 0 <= i__1 ? i__1 : s_rnge(
-		"dpvals", i__1, "pool_", (ftnlen)7008)] = (doublereal) ivals[
-		i__ - 1];
+	__state->dpvals[(i__1 = __state->dpnode - 1) < 400000 && 0 <= i__1 ? 
+		i__1 : s_rnge("dpvals", i__1, "pool_", (ftnlen)7008)] = (
+		doublereal) ivals[__state->i__ - 1];
     }
 
 /*     One last thing, see if this variable is being watched, */
 /*     If it is, add its associated agents to the list of */
 /*     AGENTS to be notified of a watched variable update. */
 
-    if (elemc_(name__, wtvars, name_len, (ftnlen)32)) {
+    if (elemc_(name__, __state->wtvars, name_len, (ftnlen)32)) {
 
 /*        Union the update set AGENTS with the set of agents */
 /*        associated with the variable NAME. */
 
-	zznwpool_(name__, wtvars, wtptrs, wtpool, wtagnt, active, notify, 
-		agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)
-		32, (ftnlen)32);
+	zznwpool_(name__, __state->wtvars, __state->wtptrs, __state->wtpool, 
+		__state->wtagnt, __state->active, __state->notify, 
+		__state->agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32,
+		 (ftnlen)32, (ftnlen)32);
     }
     chkout_("PIPOOL", (ftnlen)6);
     return 0;
@@ -6841,46 +6966,56 @@ L_lmpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Read from the internal SPICE pool buffer */
 
-    linnum = 1;
-    zzrvbf_(cvals, n, &linnum, namlst, nmpool, pnames, datlst, dppool, dpvals,
-	     chpool, chvals, varnam, &eof, cvals_len, (ftnlen)32, (ftnlen)80, 
-	    (ftnlen)32);
+    __state->linnum = 1;
+    zzrvbf_(cvals, n, &__state->linnum, __state->namlst, __state->nmpool, 
+	    __state->pnames, __state->datlst, __state->dppool, 
+	    __state->dpvals, __state->chpool, __state->chvals, 
+	    __state->varnam, &__state->eof, cvals_len, (ftnlen)32, (ftnlen)80,
+	     (ftnlen)32);
 
 /*     Read the variables in the file, one at a time. */
 
-    while(! eof && ! failed_()) {
-	if (s_cmp(varnam, " ", (ftnlen)32, (ftnlen)1) != 0) {
-	    if (elemc_(varnam, wtvars, (ftnlen)32, (ftnlen)32)) {
+    while(! __state->eof && ! failed_()) {
+	if (s_cmp(__state->varnam, " ", (ftnlen)32, (ftnlen)1) != 0) {
+	    if (elemc_(__state->varnam, __state->wtvars, (ftnlen)32, (ftnlen)
+		    32)) {
 
 /*              The variable VARNAM is watched. */
 
 /*              Union the update set AGENTS with the set of agents */
 /*              associated with the variable VARNAM. */
 
-		zznwpool_(varnam, wtvars, wtptrs, wtpool, wtagnt, active, 
-			notify, agents, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-			ftnlen)32, (ftnlen)32, (ftnlen)32);
+		zznwpool_(__state->varnam, __state->wtvars, __state->wtptrs, 
+			__state->wtpool, __state->wtagnt, __state->active, 
+			__state->notify, __state->agents, (ftnlen)32, (ftnlen)
+			32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32);
 	    }
 	}
 
 /*        We've processed VARNAM if it was non-blank. */
 
-	zzrvbf_(cvals, n, &linnum, namlst, nmpool, pnames, datlst, dppool, 
-		dpvals, chpool, chvals, varnam, &eof, cvals_len, (ftnlen)32, (
+	zzrvbf_(cvals, n, &__state->linnum, __state->namlst, __state->nmpool, 
+		__state->pnames, __state->datlst, __state->dppool, 
+		__state->dpvals, __state->chpool, __state->chvals, 
+		__state->varnam, &__state->eof, cvals_len, (ftnlen)32, (
 		ftnlen)80, (ftnlen)32);
     }
 
@@ -7241,17 +7376,21 @@ L_dvpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     Locate the variable name in the hash table.  If the variable */
 /*     is not present, just return. */
@@ -7259,14 +7398,14 @@ L_dvpool:
 
 /*     Compute the hash value of this name. */
 
-    lookat = zzhash_(name__, name_len);
+    __state->lookat = zzhash_(name__, name_len);
 
 /*     Now see if there is a non-empty conflict resolution list for the */
 /*     input string NAME.  If so, NAMLST(LOOKAT) contains the head node */
 /*     of the conflict resolution list; this node is a positive value. */
 
-    if (namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("nam"
-	    "lst", i__2, "pool_", (ftnlen)7711)] == 0) {
+    if (__state->namlst[(i__2 = __state->lookat - 1) < 26003 && 0 <= i__2 ? 
+	    i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)7711)] == 0) {
 	chkout_("DVPOOL", (ftnlen)6);
 	return 0;
     }
@@ -7275,21 +7414,23 @@ L_dvpool:
 /*     a conflict resolution list.  See if the NAME corresponding */
 /*     to this node is the one we are looking for. */
 
-    nameat = namlst[(i__2 = lookat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-	    "namlst", i__2, "pool_", (ftnlen)7722)];
-    succes = s_cmp(name__, pnames + (((i__2 = nameat - 1) < 26003 && 0 <= 
-	    i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)7723)) << 5)
-	    , name_len, (ftnlen)32) == 0;
-    while(! succes) {
-	nameat = nmpool[(i__2 = (nameat << 1) + 10) < 52018 && 0 <= i__2 ? 
-		i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)7727)];
-	if (nameat < 0) {
+    __state->nameat = __state->namlst[(i__2 = __state->lookat - 1) < 26003 && 
+	    0 <= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)7722)];
+    __state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+	    __state->nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge("pnames"
+	    , i__2, "pool_", (ftnlen)7723)) << 5), name_len, (ftnlen)32) == 0;
+    while(! __state->succes) {
+	__state->nameat = __state->nmpool[(i__2 = (__state->nameat << 1) + 10)
+		 < 52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, "pool_",
+		 (ftnlen)7727)];
+	if (__state->nameat < 0) {
 	    chkout_("DVPOOL", (ftnlen)6);
 	    return 0;
 	}
-	succes = s_cmp(name__, pnames + (((i__2 = nameat - 1) < 26003 && 0 <= 
-		i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)7736)) 
-		<< 5), name_len, (ftnlen)32) == 0;
+	__state->succes = s_cmp(name__, __state->pnames + (((i__2 = 
+		__state->nameat - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
+		"pnames", i__2, "pool_", (ftnlen)7736)) << 5), name_len, (
+		ftnlen)32) == 0;
     }
 
 /*     Ok, the variable's here.  The head node of its value list is */
@@ -7299,29 +7440,32 @@ L_dvpool:
 /*     CHPOOL. */
 
 
-    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+    zzcln_(&__state->lookat, &__state->nameat, __state->namlst, 
+	    __state->datlst, __state->nmpool, __state->chpool, 
+	    __state->dppool);
 
 /*     For consistency with CLPOOL, blank out the PNAMES entry containing */
 /*     the name of this variable.  This is a bit of a flourish since */
 /*     when errors occur during the population of the kernel pool, PNAMES */
 /*     is not cleaned out */
 
-    s_copy(pnames + (((i__2 = nameat - 1) < 26003 && 0 <= i__2 ? i__2 : 
-	    s_rnge("pnames", i__2, "pool_", (ftnlen)7757)) << 5), " ", (
-	    ftnlen)32, (ftnlen)1);
+    s_copy(__state->pnames + (((i__2 = __state->nameat - 1) < 26003 && 0 <= 
+	    i__2 ? i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)7757)) << 5)
+	    , " ", (ftnlen)32, (ftnlen)1);
 
 /*     There may be agents watching the variable we just wiped out.  If */
 /*     so, add these agents to the list of agents to be notified of a */
 /*     watched variable update. */
 
-    if (elemc_(name__, wtvars, name_len, (ftnlen)32)) {
+    if (elemc_(name__, __state->wtvars, name_len, (ftnlen)32)) {
 
 /*        Union the update set AGENTS with the set of agents */
 /*        associated with the variable NAME. */
 
-	zznwpool_(name__, wtvars, wtptrs, wtpool, wtagnt, active, notify, 
-		agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)
-		32, (ftnlen)32);
+	zznwpool_(name__, __state->wtvars, __state->wtptrs, __state->wtpool, 
+		__state->wtagnt, __state->active, __state->notify, 
+		__state->agents, name_len, (ftnlen)32, (ftnlen)32, (ftnlen)32,
+		 (ftnlen)32, (ftnlen)32);
     }
     chkout_("DVPOOL", (ftnlen)6);
     return 0;
@@ -7591,12 +7735,16 @@ L_gnpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Perform the one obvious error check first. */
@@ -7613,37 +7761,39 @@ L_gnpool:
 
 /*     So far we've encountered no matching names. */
 
-    hits = 0;
+    __state->hits = 0;
     *n = 0;
-    begin = max(1,*start);
-    for (k = 1; k <= 26003; ++k) {
+    __state->begin = max(1,*start);
+    for (__state->k = 1; __state->k <= 26003; ++__state->k) {
 
 /*        See if there is any variable associated with this hash value. */
 
-	nnode = namlst[(i__2 = k - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		"namlst", i__2, "pool_", (ftnlen)8095)];
-	while(nnode > 0) {
+	__state->nnode = __state->namlst[(i__2 = __state->k - 1) < 26003 && 0 
+		<= i__2 ? i__2 : s_rnge("namlst", i__2, "pool_", (ftnlen)8095)
+		];
+	while(__state->nnode > 0) {
 
 /*           There is some name list associated with this node. See if */
 /*           it the current one matches the supplied template. */
 
-	    if (matchi_(pnames + (((i__2 = nnode - 1) < 26003 && 0 <= i__2 ? 
-		    i__2 : s_rnge("pnames", i__2, "pool_", (ftnlen)8102)) << 
-		    5), name__, "*", "%", (ftnlen)32, name_len, (ftnlen)1, (
-		    ftnlen)1)) {
+	    if (matchi_(__state->pnames + (((i__2 = __state->nnode - 1) < 
+		    26003 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "pool_"
+		    , (ftnlen)8102)) << 5), name__, "*", "%", (ftnlen)32, 
+		    name_len, (ftnlen)1, (ftnlen)1)) {
 
 /*              We've got a match.  Record this fact and if we have */
 /*              reached (or passed) the starting point, put this name */
 /*              on the output list. */
 
-		++hits;
-		if (hits >= *start) {
+		++__state->hits;
+		if (__state->hits >= *start) {
 		    if (*n < *room) {
 			++(*n);
-			s_copy(cvals + (*n - 1) * cvals_len, pnames + (((i__2 
-				= nnode - 1) < 26003 && 0 <= i__2 ? i__2 : 
-				s_rnge("pnames", i__2, "pool_", (ftnlen)8115))
-				 << 5), cvals_len, (ftnlen)32);
+			s_copy(cvals + (*n - 1) * cvals_len, __state->pnames 
+				+ (((i__2 = __state->nnode - 1) < 26003 && 0 
+				<= i__2 ? i__2 : s_rnge("pnames", i__2, "poo"
+				"l_", (ftnlen)8115)) << 5), cvals_len, (ftnlen)
+				32);
 		    }
 
 /*                 If we've filled up the buffer, we may as well */
@@ -7659,14 +7809,15 @@ L_gnpool:
 
 /*           Get the next name for this node. */
 
-	    nnode = nmpool[(i__2 = (nnode << 1) + 10) < 52018 && 0 <= i__2 ? 
-		    i__2 : s_rnge("nmpool", i__2, "pool_", (ftnlen)8134)];
+	    __state->nnode = __state->nmpool[(i__2 = (__state->nnode << 1) + 
+		    10) < 52018 && 0 <= i__2 ? i__2 : s_rnge("nmpool", i__2, 
+		    "pool_", (ftnlen)8134)];
 	}
 
 /*        Advance to the next hash value. */
 
     }
-    *found = hits > 0;
+    *found = __state->hits > 0;
     chkout_("GNPOOL", (ftnlen)6);
     return 0;
 /* $Procedure DWPOOL ( Delete watch from kernel pool ) */
@@ -7821,18 +7972,22 @@ L_dwpool:
 
 /*     Initialize the pool if necessary. */
 
-    if (first) {
-	zzpini_(&first, &c__26003, &c_b8, &c__15000, begdat, begtxt, nmpool, 
-		dppool, chpool, namlst, datlst, &c__1000, &c_b11, wtvars, 
-		wtptrs, wtpool, wtagnt, agents, active, notify, subctr, (
-		ftnlen)10, (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
-		ftnlen)32, (ftnlen)32);
+    if (__state->first) {
+	zzpini_(&__state->first, &__state->c__26003, &__state->c_b8, &
+		__state->c__15000, __state->begdat, __state->begtxt, 
+		__state->nmpool, __state->dppool, __state->chpool, 
+		__state->namlst, __state->datlst, &__state->c__1000, &
+		__state->c_b11, __state->wtvars, __state->wtptrs, 
+		__state->wtpool, __state->wtagnt, __state->agents, 
+		__state->active, __state->notify, __state->subctr, (ftnlen)10,
+		 (ftnlen)10, (ftnlen)32, (ftnlen)32, (ftnlen)32, (ftnlen)32, (
+		ftnlen)32);
     }
 
 /*     Make sure we're not silencing an agent who has something */
 /*     to say. */
 
-    if (elemc_(agent, agents, agent_len, (ftnlen)32)) {
+    if (elemc_(agent, __state->agents, agent_len, (ftnlen)32)) {
 	setmsg_("Could not delete AGENT # from the watch symbol table becaus"
 		"e AGENT is associated with at least one updated kernel varia"
 		"ble. ", (ftnlen)124);
@@ -7844,12 +7999,12 @@ L_dwpool:
 
 /*     Increment POOL state counter. */
 
-    zzctrinc_(subctr);
+    zzctrinc_(__state->subctr);
 
 /*     AGENT is no longer on the list of agents associated with a */
 /*     kernel variable update. */
 
-    removc_(agent, agents, agent_len, (ftnlen)32);
+    removc_(agent, __state->agents, agent_len, (ftnlen)32);
 
 /*     For each kernel variable in the watcher's list, remove */
 /*     AGENT from its list of guys to be notified when a variable change */
@@ -7880,8 +8035,9 @@ L_dwpool:
 /*     Since WTVARS may shrink due to deletion of watches, we */
 /*     fetch the cardinality of WTVARS on each loop iteration. */
 
-    i__ = 1;
-    while(i__ <= cardc_(wtvars, (ftnlen)32) && ! failed_()) {
+    __state->i__ = 1;
+    while(__state->i__ <= cardc_(__state->wtvars, (ftnlen)32) && ! failed_()) 
+	    {
 
 /*        Search the list of agents associated with the Ith watched */
 /*        variable for AGENT. We want the list count as well, so */
@@ -7893,38 +8049,39 @@ L_dwpool:
 /*        If we find AGENT, we'll use AGNODE to designate */
 /*        the node associated with AGENT. */
 
-	node = wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		"wtptrs", i__2, "pool_", (ftnlen)8392)];
-	nnodes = 0;
-	agnode = 0;
-	while(node > 0) {
-	    ++nnodes;
+	__state->node = __state->wtptrs[(i__2 = __state->i__ - 1) < 26003 && 
+		0 <= i__2 ? i__2 : s_rnge("wtptrs", i__2, "pool_", (ftnlen)
+		8392)];
+	__state->nnodes = 0;
+	__state->agnode = 0;
+	while(__state->node > 0) {
+	    ++__state->nnodes;
 
 /*           Fetch the next agent for the Ith kernel variable. */
 
-	    if (s_cmp(wtagnt + (((i__2 = node - 1) < 130015 && 0 <= i__2 ? 
-		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8402)) << 
-		    5), agent, (ftnlen)32, agent_len) == 0) {
+	    if (s_cmp(__state->wtagnt + (((i__2 = __state->node - 1) < 130015 
+		    && 0 <= i__2 ? i__2 : s_rnge("wtagnt", i__2, "pool_", (
+		    ftnlen)8402)) << 5), agent, (ftnlen)32, agent_len) == 0) {
 
 /*               Save the current node. */
 
-		agnode = node;
+		__state->agnode = __state->node;
 	    }
 
 /*           Find the next node in the list. */
 
-	    node = lnknxt_(&node, wtpool);
+	    __state->node = lnknxt_(&__state->node, __state->wtpool);
 	}
-	if (agnode > 0) {
+	if (__state->agnode > 0) {
 
 /*           The input agent is on the agent list for the Ith watched */
 /*           kernel variable. Delete this agent from the list. Delete */
 /*           the node corresponding to AGENT from the watch pool. First */
 /*           set the corresponding agent name to blank. */
 
-	    s_copy(wtagnt + (((i__2 = agnode - 1) < 130015 && 0 <= i__2 ? 
-		    i__2 : s_rnge("wtagnt", i__2, "pool_", (ftnlen)8423)) << 
-		    5), " ", (ftnlen)32, (ftnlen)1);
+	    s_copy(__state->wtagnt + (((i__2 = __state->agnode - 1) < 130015 
+		    && 0 <= i__2 ? i__2 : s_rnge("wtagnt", i__2, "pool_", (
+		    ftnlen)8423)) << 5), " ", (ftnlen)32, (ftnlen)1);
 
 /*           If we're about to delete the head node of the agent list, */
 /*           we'll need to update WTPTRS(I) to point to the new head. */
@@ -7932,31 +8089,35 @@ L_dwpool:
 /*           of AGNODE; we'll handle that case after the LNKFSL call */
 /*           below. */
 
-	    if (wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-		    "wtptrs", i__2, "pool_", (ftnlen)8432)] == agnode) {
-		wtptrs[(i__2 = i__ - 1) < 26003 && 0 <= i__2 ? i__2 : s_rnge(
-			"wtptrs", i__2, "pool_", (ftnlen)8434)] = lnknxt_(&
-			agnode, wtpool);
+	    if (__state->wtptrs[(i__2 = __state->i__ - 1) < 26003 && 0 <= 
+		    i__2 ? i__2 : s_rnge("wtptrs", i__2, "pool_", (ftnlen)
+		    8432)] == __state->agnode) {
+		__state->wtptrs[(i__2 = __state->i__ - 1) < 26003 && 0 <= 
+			i__2 ? i__2 : s_rnge("wtptrs", i__2, "pool_", (ftnlen)
+			8434)] = lnknxt_(&__state->agnode, __state->wtpool);
 	    }
 
 /*           Now free AGNODE. */
 
-	    lnkfsl_(&agnode, &agnode, wtpool);
-	    if (nnodes == 1) {
+	    lnkfsl_(&__state->agnode, &__state->agnode, __state->wtpool);
+	    if (__state->nnodes == 1) {
 
 /*              In fact AGENT is the *only* agent for the Ith variable. */
 /*              Deleting AGENT means that nobody's watching this */
 /*              variable any more, so delete the variable from the */
 /*              watched variable set. */
-		nw = cardc_(wtvars, (ftnlen)32);
-		s_copy(varnam, wtvars + (((i__2 = i__ + 5) < 26009 && 0 <= 
-			i__2 ? i__2 : s_rnge("wtvars", i__2, "pool_", (ftnlen)
-			8453)) << 5), (ftnlen)32, (ftnlen)32);
-		removc_(varnam, wtvars, (ftnlen)32, (ftnlen)32);
+		__state->nw = cardc_(__state->wtvars, (ftnlen)32);
+		s_copy(__state->varnam, __state->wtvars + (((i__2 = 
+			__state->i__ + 5) < 26009 && 0 <= i__2 ? i__2 : 
+			s_rnge("wtvars", i__2, "pool_", (ftnlen)8453)) << 5), 
+			(ftnlen)32, (ftnlen)32);
+		removc_(__state->varnam, __state->wtvars, (ftnlen)32, (ftnlen)
+			32);
 
 /*              Remove the associated pointer from the pointer array. */
 
-		remlai_(&c__1, &i__, wtptrs, &nw);
+		remlai_(&__state->c__1, &__state->i__, __state->wtptrs, &
+			__state->nw);
 
 /*              Since we deleted the current variable table entry and */
 /*              compressed the set WTVARS and the array WTPTRS, I now */
@@ -7964,7 +8125,7 @@ L_dwpool:
 /*              here to compensate for the increment operation at the */
 /*              bottom of the loop. */
 
-		--i__;
+		--__state->i__;
 	    }
 
 /*           We've now deleted AGENT from the AGENT list for WTVARS(I). */
@@ -7979,7 +8140,7 @@ L_dwpool:
 /*        at that time, so the increment operation here always is */
 /*        applicable. */
 
-	++i__;
+	++__state->i__;
 
 /*        At this point in the loop, either I has increased or */
 /*        CARDC(WTVARS) has decreased; hence we've made progress */
@@ -8147,17 +8308,17 @@ L_zzvupool:
 	return 0;
     }
     chkin_("ZZVUPOOL", (ftnlen)8);
-    copyc_(wtvars, uwvars, (ftnlen)32, uwvars_len);
-    i__2 = cardc_(wtvars, (ftnlen)32);
-    movei_(wtptrs, &i__2, uwptrs);
+    copyc_(__state->wtvars, uwvars, (ftnlen)32, uwvars_len);
+    i__2 = cardc_(__state->wtvars, (ftnlen)32);
+    movei_(__state->wtptrs, &i__2, uwptrs);
 
 /*     UWPOOL is expected to have dimensions */
 
 /*        ( 2,  LBPOOL : MXNOTE ) */
 
-    i__ = 260042;
-    movei_(wtpool, &i__, uwpool);
-    movec_(wtagnt, &c_b11, uwagnt, (ftnlen)32, uwagnt_len);
+    __state->i__ = 260042;
+    movei_(__state->wtpool, &__state->i__, uwpool);
+    movec_(__state->wtagnt, &__state->c_b11, uwagnt, (ftnlen)32, uwagnt_len);
     chkout_("ZZVUPOOL", (ftnlen)8);
     return 0;
 /* $Procedure ZZPCTRCK ( Private: check/update user's POOL state counter ) */
@@ -8358,7 +8519,7 @@ L_zzpctrck:
     if (return_()) {
 	return 0;
     }
-    zzctrchk_(subctr, usrctr, update);
+    zzctrchk_(__state->subctr, usrctr, update);
     return 0;
 } /* pool_ */
 

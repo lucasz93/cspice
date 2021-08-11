@@ -1,18 +1,31 @@
-/* texpyr.f -- translated by f2c (version 19980913).
+/* texpyr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern texpyr_init_t __texpyr_init;
+static texpyr_state_t* get_texpyr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->texpyr)
+		state->texpyr = __cspice_allocate_module(sizeof(
+	texpyr_state_t), &__texpyr_init, sizeof(__texpyr_init));
+	return state->texpyr;
+
+}
 
 /* $Procedure      TEXPYR ( Time --- Expand year ) */
 /* Subroutine */ int texpyr_0_(int n__, integer *year)
 {
     /* Initialized data */
 
-    static integer centry = 1900;
-    static integer lbound = 1969;
 
+
+    /* Module state */
+    texpyr_state_t* __state = get_texpyr_state();
 /* $ Abstract */
 
 /*    Expand an abbreviated year to a full year specification. */
@@ -180,8 +193,8 @@
     if (*year >= 100 || *year < 0) {
 	return 0;
     }
-    *year += centry;
-    if (*year < lbound) {
+    *year += __state->centry;
+    if (*year < __state->lbound) {
 	*year += 100;
     }
     return 0;
@@ -301,8 +314,8 @@ L_tsetyr:
 /*     Set the interval of expansion for abbreviated years */
 
 /* -& */
-    centry = *year / 100 * 100;
-    lbound = *year;
+    __state->centry = *year / 100 * 100;
+    __state->lbound = *year;
     return 0;
 } /* texpyr_ */
 

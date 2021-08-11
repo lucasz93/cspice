@@ -1,9 +1,17 @@
-/* nextwd.f -- translated by f2c (version 19980913).
+/* nextwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nextwd_state_t;
+static nextwd_state_t* get_nextwd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NEXTWD ( Next word in a character string ) */
 /* Subroutine */ int nextwd_(char *string, char *next, char *rest, ftnlen 
@@ -18,11 +26,15 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, begin;
+    integer i__;
+    integer begin;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     logical inword;
     integer end;
 
+
+    /* Module state */
+    nextwd_state_t* __state = get_nextwd_state();
 /* $ Abstract */
 
 /*      Return the next word in a given character string, and */

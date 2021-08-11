@@ -1,22 +1,27 @@
-/* zzddhmnm.f -- translated by f2c (version 19980913).
+/* zzddhmnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__20 = 20;
+extern zzddhmnm_init_t __zzddhmnm_init;
+static zzddhmnm_state_t* get_zzddhmnm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhmnm)
+		state->zzddhmnm = __cspice_allocate_module(sizeof(
+	zzddhmnm_state_t), &__zzddhmnm_init, sizeof(__zzddhmnm_init));
+	return state->zzddhmnm;
+
+}
 
 /* $Procedure ZZDDHMNM ( Return unique enough DP number for a file ) */
 doublereal zzddhmnm_(integer *unit)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = 0;
 
     /* System generated locals */
     integer i__1;
@@ -28,34 +33,38 @@ doublereal zzddhmnm_(integer *unit)
 	    char *, integer);
 
     /* Local variables */
-    char arch[8], type__[8];
+    char arch[8];
+    char type__[8];
     extern /* Subroutine */ int zzddhini_(integer *, integer *, integer *, 
-	    char *, char *, char *, ftnlen, ftnlen, ftnlen), zzddhppf_(
-	    integer *, integer *, integer *), zzxlatei_(integer *, char *, 
-	    integer *, integer *, ftnlen);
+	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzxlatei_(integer *, char *, integer *, 
+	    integer *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), idw2at_(char *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     extern logical failed_(void);
     extern integer isrchi_(integer *, integer *, integer *);
-    char idword[8], strbff[8*4];
-    static integer supbff[4];
+    char idword[8];
+    char strbff[8*4];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    char stramh[8*4], strarc[8*2];
-    integer intarr[20], iostat;
+    char stramh[8*4];
+    char strarc[8*2];
+    integer intarr[20];
+    integer iostat;
     char strbuf[80];
     integer supidx;
     extern logical return_(void);
-    static integer numsup;
     integer bff;
     doublereal mnm;
 
     /* Fortran I/O blocks */
-    static cilist io___10 = { 1, 0, 1, 0, 1 };
-    static cilist io___18 = { 1, 0, 1, 0, 1 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    zzddhmnm_state_t* __state = get_zzddhmnm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -509,9 +518,9 @@ doublereal zzddhmnm_(integer *unit)
 
 /*     Perform some initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, stramh,
+		 strarc, strbff, (ftnlen)8, (ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() to handle the unlikely event that */
 /*        ZZDDHINI signaled SPICE(BUG). */
@@ -523,22 +532,23 @@ doublereal zzddhmnm_(integer *unit)
 
 /*        Do not perform initialization tasks again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Read ID word string followed by NINTS integers from the first */
 /*     record of the file. */
 
-    io___10.ciunit = *unit;
-    iostat = s_rdue(&io___10);
+    __state->io___10.ciunit = *unit;
+    iostat = s_rdue(&__state->io___10);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__20, (char *)&intarr[0], (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__20, (char *)&intarr[0], (ftnlen)sizeof(
+	    integer));
     if (iostat != 0) {
 	goto L100001;
     }
@@ -566,7 +576,7 @@ L100001:
 
 /*           For DAF files, try to get the file's binary format. */
 
-	    zzddhppf_(unit, &c__1, &bff);
+	    zzddhppf_(unit, &__state->c__1, &bff);
 	    if (failed_()) {
 		chkout_("ZZDDHMNM", (ftnlen)8);
 		return ret_val;
@@ -576,7 +586,7 @@ L100001:
 /*           the first record again, now directly as characters, and */
 /*           translate these character to native integers. */
 
-	    if (bff != natbff) {
+	    if (bff != __state->natbff) {
 
 /*              First, check if run-time translation is supported for */
 /*              this BFF. This check, stolen from ZZDDHMAN, is needed */
@@ -585,7 +595,7 @@ L100001:
 /*              is not supported, simply get out (note that the default */
 /*              return value was set to zero at the start.) */
 
-		supidx = isrchi_(&bff, &numsup, supbff);
+		supidx = isrchi_(&bff, &__state->numsup, __state->supbff);
 		if (supidx == 0) {
 		    chkout_("ZZDDHMNM", (ftnlen)8);
 		    return ret_val;
@@ -593,22 +603,22 @@ L100001:
 
 /*              Read the first record as characters and do translation. */
 
-		io___18.ciunit = *unit;
-		iostat = s_rdue(&io___18);
+		__state->io___18.ciunit = *unit;
+		iostat = s_rdue(&__state->io___18);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&c__1, idword, (ftnlen)8);
+		iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&c__1, strbuf, (ftnlen)80);
+		iostat = do_uio(&__state->c__1, strbuf, (ftnlen)80);
 		if (iostat != 0) {
 		    goto L100002;
 		}
 		iostat = e_rdue();
 L100002:
-		zzxlatei_(&bff, strbuf, &c__20, intarr, (ftnlen)80);
+		zzxlatei_(&bff, strbuf, &__state->c__20, intarr, (ftnlen)80);
 		if (failed_()) {
 		    chkout_("ZZDDHMNM", (ftnlen)8);
 		    return ret_val;
@@ -626,14 +636,14 @@ L100002:
 /*           record without regard to the file's binary format and, */
 /*           if successful, add them to the total. */
 
-	    io___20.ciunit = *unit;
-	    io___20.cirec = intarr[17];
-	    iostat = s_rdue(&io___20);
+	    __state->io___20.ciunit = *unit;
+	    __state->io___20.cirec = intarr[17];
+	    iostat = s_rdue(&__state->io___20);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_uio(&c__20, (char *)&intarr[0], (ftnlen)sizeof(
-		    integer));
+	    iostat = do_uio(&__state->c__20, (char *)&intarr[0], (ftnlen)
+		    sizeof(integer));
 	    if (iostat != 0) {
 		goto L100003;
 	    }

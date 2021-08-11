@@ -1,13 +1,21 @@
-/* sypopd.f -- translated by f2c (version 19980913).
+/* sypopd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sypopd_init_t __sypopd_init;
+static sypopd_state_t* get_sypopd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sypopd)
+		state->sypopd = __cspice_allocate_module(sizeof(
+	sypopd_state_t), &__sypopd_init, sizeof(__sypopd_init));
+	return state->sypopd;
+
+}
 
 /* $Procedure      SYPOPD ( Pop a value from a particular symbol ) */
 /* Subroutine */ int sypopd_(char *name__, char *tabsym, integer *tabptr, 
@@ -18,23 +26,32 @@ static integer c__1 = 1;
     integer i__1;
 
     /* Local variables */
-    integer nval, nptr, nsym;
-    extern integer cardc_(char *, ftnlen), cardd_(doublereal *), cardi_(
-	    integer *);
+    integer nval;
+    integer nptr;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardd_(doublereal *);
+    extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), scardd_(
-	    integer *, doublereal *), remlac_(integer *, integer *, char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
+	    *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
-	    integer *), scardi_(integer *, integer *), remlai_(integer *, 
-	    integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
+	    integer *);
     integer locval;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sypopd_state_t* __state = get_sypopd_state();
 /* $ Abstract */
 
 /*     Pop a value associated with a particular symbol in a double */
@@ -252,7 +269,7 @@ static integer c__1 = 1;
 	i__1 = locsym - 1;
 	locval = sumai_(&tabptr[6], &i__1) + 1;
 	*value = tabval[locval + 5];
-	remlad_(&c__1, &locval, &tabval[6], &nval);
+	remlad_(&__state->c__1, &locval, &tabval[6], &nval);
 	scardd_(&nval, tabval);
 
 /*        If this was the sole value for the symbol, remove the */
@@ -260,10 +277,10 @@ static integer c__1 = 1;
 /*        decrement the dimension. */
 
 	if (tabptr[locsym + 5] == 1) {
-	    remlac_(&c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
+	    remlac_(&__state->c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
 		    tabsym_len);
 	    scardc_(&nsym, tabsym, tabsym_len);
-	    remlai_(&c__1, &locsym, &tabptr[6], &nptr);
+	    remlai_(&__state->c__1, &locsym, &tabptr[6], &nptr);
 	    scardi_(&nptr, tabptr);
 	} else {
 	    --tabptr[locsym + 5];

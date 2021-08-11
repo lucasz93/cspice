@@ -1,9 +1,17 @@
-/* mxv.f -- translated by f2c (version 19980913).
+/* mxv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int mxv_state_t;
+static mxv_state_t* get_mxv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      MXV ( Matrix times vector, 3x3 ) */
 /* Subroutine */ int mxv_(doublereal *matrix, doublereal *vin, doublereal *
@@ -19,6 +27,9 @@
     integer i__;
     doublereal prodv[3];
 
+
+    /* Module state */
+    mxv_state_t* __state = get_mxv_state();
 /* $ Abstract */
 
 /*     Multiply a 3x3 double precision matrix with a 3-dimensional */

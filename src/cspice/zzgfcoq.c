@@ -1,14 +1,21 @@
-/* zzgfcoq.f -- translated by f2c (version 19980913).
+/* zzgfcoq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__7 = 7;
-static integer c__3 = 3;
+extern zzgfcoq_init_t __zzgfcoq_init;
+static zzgfcoq_state_t* get_zzgfcoq_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfcoq)
+		state->zzgfcoq = __cspice_allocate_module(sizeof(
+	zzgfcoq_state_t), &__zzgfcoq_init, sizeof(__zzgfcoq_init));
+	return state->zzgfcoq;
+
+}
 
 /* $Procedure      ZZGFCOQ ( GF, return coordinate quantity ) */
 /* Subroutine */ int zzgfcoq_(char *vecdef, char *method, integer *trgid, 
@@ -20,29 +27,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char sysnms[32*7] = "RECTANGULAR                     " "LATITUDIN"
-	    "AL                     " "RA/DEC                          " "SPH"
-	    "ERICAL                       " "CYLINDRICAL                     " 
-	    "GEODETIC                        " "PLANETOGRAPHIC              "
-	    "    ";
-    static char crdnms[32*3*7] = "X                               " "Y      "
-	    "                         " "Z                               " 
-	    "RADIUS                          " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "RANGE                 "
-	    "          " "RIGHT ASCENSION                 " "DECLINATION     "
-	    "                " "RADIUS                          " "COLATITUDE"
-	    "                      " "LONGITUDE                       " "RADI"
-	    "US                          " "LONGITUDE                       " 
-	    "Z                               " "LONGITUDE                   "
-	    "    " "LATITUDE                        " "ALTITUDE              "
-	    "          " "LONGITUDE                       " "LATITUDE        "
-	    "                " "ALTITUDE                        ";
-    static integer prvctr = 0;
-    static integer prvobs = 0;
-    static integer prvtrg = 0;
-    static char obsnam[36] = "                                    ";
-    static char trgnam[36] = "                                    ";
 
     /* System generated locals */
     integer i__1;
@@ -53,36 +37,49 @@ static integer c__3 = 3;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *), 
-	    bodc2s_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int bodc2s_(integer *, char *, ftnlen);
     extern logical failed_(void);
     doublereal lt;
     extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char ctrnam[36];
     extern logical return_(void);
     char sysnam[32];
-    doublereal coords[3], trgepc, srfvec[3];
-    integer crdidx, sysidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), spkezp_(integer *, doublereal *,
-	     char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen), subpnt_(char *, char *, doublereal *, char *, char *, 
-	    char *, doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen), sincpt_(char *, char *, doublereal *, 
-	    char *, char *, char *, char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen), reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), recpgr_(
-	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen);
+    doublereal coords[3];
+    doublereal trgepc;
+    doublereal srfvec[3];
+    integer crdidx;
+    integer sysidx;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int subpnt_(char *, char *, doublereal *, char *, 
+	    char *, char *, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sincpt_(char *, char *, doublereal *, char *, 
+	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int recpgr_(char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
     doublereal pos[3];
 
+
+    /* Module state */
+    zzgfcoq_state_t* __state = get_zzgfcoq_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -830,7 +827,8 @@ static integer c__3 = 3;
 /*     Find the index of the coordinate system name in the list of */
 /*     supported names. */
 
-    sysidx = isrchc_(crdsys, &c__7, sysnms, crdsys_len, (ftnlen)32);
+    sysidx = isrchc_(crdsys, &__state->c__7, __state->sysnms, crdsys_len, (
+	    ftnlen)32);
     if (sysidx == 0) {
 
 /*        We don't recognize this system name. */
@@ -841,16 +839,16 @@ static integer c__3 = 3;
 	chkout_("ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
-    s_copy(sysnam, sysnms + (((i__1 = sysidx - 1) < 7 && 0 <= i__1 ? i__1 : 
-	    s_rnge("sysnms", i__1, "zzgfcoq_", (ftnlen)560)) << 5), (ftnlen)
-	    32, (ftnlen)32);
+    s_copy(sysnam, __state->sysnms + (((i__1 = sysidx - 1) < 7 && 0 <= i__1 ? 
+	    i__1 : s_rnge("sysnms", i__1, "zzgfcoq_", (ftnlen)560)) << 5), (
+	    ftnlen)32, (ftnlen)32);
 
 /*     Find the index of the coordinate name in the list of */
 /*     supported names. */
 
-    crdidx = isrchc_(crdnam, &c__3, crdnms + (((i__1 = sysidx * 3 - 3) < 21 &&
-	     0 <= i__1 ? i__1 : s_rnge("crdnms", i__1, "zzgfcoq_", (ftnlen)
-	    566)) << 5), crdnam_len, (ftnlen)32);
+    crdidx = isrchc_(crdnam, &__state->c__3, __state->crdnms + (((i__1 = 
+	    sysidx * 3 - 3) < 21 && 0 <= i__1 ? i__1 : s_rnge("crdnms", i__1, 
+	    "zzgfcoq_", (ftnlen)566)) << 5), crdnam_len, (ftnlen)32);
     if (crdidx == 0) {
 
 /*        We don't recognize this coordinate name. */
@@ -873,19 +871,19 @@ static integer c__3 = 3;
 	    s_cmp(vecdef, "SURFACE INTERCEPT POINT", vecdef_len, (ftnlen)23) 
 	    == 0 || s_cmp(sysnam, "PLANETOGRAPHIC", (ftnlen)32, (ftnlen)14) ==
 	     0) {
-	if (first || *trgid != prvtrg) {
-	    bodc2s_(trgid, trgnam, (ftnlen)36);
-	    prvtrg = *trgid;
+	if (__state->first || *trgid != __state->prvtrg) {
+	    bodc2s_(trgid, __state->trgnam, (ftnlen)36);
+	    __state->prvtrg = *trgid;
 	}
-	if (first || *obsid != prvobs) {
-	    bodc2s_(obsid, obsnam, (ftnlen)36);
-	    prvobs = *obsid;
+	if (__state->first || *obsid != __state->prvobs) {
+	    bodc2s_(obsid, __state->obsnam, (ftnlen)36);
+	    __state->prvobs = *obsid;
 	}
-	if (first || *ctrid != prvctr) {
-	    bodc2s_(ctrid, ctrnam, (ftnlen)36);
-	    prvctr = *ctrid;
+	if (__state->first || *ctrid != __state->prvctr) {
+	    bodc2s_(ctrid, __state->ctrnam, (ftnlen)36);
+	    __state->prvctr = *ctrid;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
     if (s_cmp(vecdef, "POSITION", vecdef_len, (ftnlen)8) == 0) {
 
@@ -898,17 +896,18 @@ static integer c__3 = 3;
 /*        The caller has requested a sub-observer point coordinate */
 /*        computation. */
 
-	subpnt_(method, trgnam, et, ref, abcorr, obsnam, pos, &trgepc, srfvec,
-		 method_len, (ftnlen)36, ref_len, abcorr_len, (ftnlen)36);
+	subpnt_(method, __state->trgnam, et, ref, abcorr, __state->obsnam, 
+		pos, &trgepc, srfvec, method_len, (ftnlen)36, ref_len, 
+		abcorr_len, (ftnlen)36);
     } else if (s_cmp(vecdef, "SURFACE INTERCEPT POINT", vecdef_len, (ftnlen)
 	    23) == 0) {
 
 /*        The caller has requested a surface intercept point coordinate */
 /*        computation. */
 
-	sincpt_(method, trgnam, et, ref, abcorr, obsnam, dref, dvec, pos, &
-		trgepc, srfvec, found, method_len, (ftnlen)36, ref_len, 
-		abcorr_len, (ftnlen)36, dref_len);
+	sincpt_(method, __state->trgnam, et, ref, abcorr, __state->obsnam, 
+		dref, dvec, pos, &trgepc, srfvec, found, method_len, (ftnlen)
+		36, ref_len, abcorr_len, (ftnlen)36, dref_len);
 
 /*        Without an intercept, there's nothing left to do here. */
 
@@ -940,7 +939,7 @@ static integer c__3 = 3;
 
 /*        No conversion needed for rectangular coordinates. */
 
-	moved_(pos, &c__3, coords);
+	moved_(pos, &__state->c__3, coords);
     } else if (s_cmp(sysnam, "LATITUDINAL", (ftnlen)32, (ftnlen)11) == 0) {
 	reclat_(pos, coords, &coords[1], &coords[2]);
     } else if (s_cmp(sysnam, "RA/DEC", (ftnlen)32, (ftnlen)6) == 0) {
@@ -952,8 +951,8 @@ static integer c__3 = 3;
     } else if (s_cmp(sysnam, "GEODETIC", (ftnlen)32, (ftnlen)8) == 0) {
 	recgeo_(pos, re, f, coords, &coords[1], &coords[2]);
     } else if (s_cmp(sysnam, "PLANETOGRAPHIC", (ftnlen)32, (ftnlen)14) == 0) {
-	recpgr_(ctrnam, pos, re, f, coords, &coords[1], &coords[2], (ftnlen)
-		36);
+	recpgr_(__state->ctrnam, pos, re, f, coords, &coords[1], &coords[2], (
+		ftnlen)36);
     } else {
 
 /*        We should never arrive here. */

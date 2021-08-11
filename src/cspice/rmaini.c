@@ -1,17 +1,30 @@
-/* rmaini.f -- translated by f2c (version 19980913).
+/* rmaini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rmaini_state_t;
+static rmaini_state_t* get_rmaini_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RMAINI ( Remainder --- integer ) */
 /* Subroutine */ int rmaini_(integer *num, integer *denom, integer *q, 
 	integer *rem)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    rmaini_state_t* __state = get_rmaini_state();
 /* $ Abstract */
 
 /*     Compute the integer quotient and non-negative remainder */

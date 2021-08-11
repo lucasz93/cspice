@@ -1,16 +1,21 @@
-/* zzekad01.f -- translated by f2c (version 19980913).
+/* zzekad01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern zzekad01_init_t __zzekad01_init;
+static zzekad01_state_t* get_zzekad01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekad01)
+		state->zzekad01 = __cspice_allocate_module(sizeof(
+	zzekad01_state_t), &__zzekad01_init, sizeof(__zzekad01_init));
+	return state->zzekad01;
+
+}
 
 /* $Procedure     ZZEKAD01 ( EK, add data to class 1 column ) */
 /* Subroutine */ int zzekad01_(integer *handle, integer *segdsc, integer *
@@ -23,20 +28,37 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzekiii1_(integer *, integer *, integer *, 
 	    integer *, integer *, logical *);
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *), 
-	    zzekglnk_(integer *, integer *, integer *, integer *), zzekslnk_(
-	    integer *, integer *, integer *, integer *);
-    integer p, mbase, pbase;
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer mbase;
+    integer pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, itype, lastw;
+    integer recno;
+    integer ncols;
+    integer itype;
+    integer lastw;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dasudi_(integer *, integer *, integer *, integer *);
-    integer colidx, datptr, nlinks, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekaps_(integer *, integer *, integer *, logical *, 
-	    integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer colidx;
+    integer datptr;
+    integer nlinks;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekad01_state_t* __state = get_zzekad01_state();
 /* $ Abstract */
 
 /*     Add a column entry to a class 1 column in a specified EK record. */
@@ -798,7 +820,7 @@ static integer c__1 = 1;
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n2);
+	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n2);
     } else {
 
 /*        Decide where to write the data value.  If there's room left */
@@ -812,16 +834,16 @@ static integer c__1 = 1;
 /*           location. */
 
 	    p = segdsc[17];
-	    zzekpgbs_(&c__3, &p, &pbase);
+	    zzekpgbs_(&__state->c__3, &p, &pbase);
 	    datptr = pbase + lastw + 1;
 	    dasudi_(handle, &ptrloc, &ptrloc, &datptr);
 	    dasudi_(handle, &datptr, &datptr, ival);
 
 /*           The page containing the data item gains a link. */
 
-	    zzekglnk_(handle, &c__3, &p, &nlinks);
+	    zzekglnk_(handle, &__state->c__3, &p, &nlinks);
 	    i__1 = nlinks + 1;
-	    zzekslnk_(handle, &c__3, &p, &i__1);
+	    zzekslnk_(handle, &__state->c__3, &p, &i__1);
 
 /*           The last integer word in use must be updated. */
 
@@ -831,14 +853,15 @@ static integer c__1 = 1;
 /*           Allocate a data page.  Write the data value into the */
 /*           first word of the new page. */
 
-	    zzekaps_(handle, segdsc, &c__3, &c_false, &p, &pbase);
+	    zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
+		    pbase);
 	    i__1 = pbase + 1;
 	    i__2 = pbase + 1;
 	    dasudi_(handle, &i__1, &i__2, ival);
 
 /*           The page containing the data item now has one link. */
 
-	    zzekslnk_(handle, &c__3, &p, &c__1);
+	    zzekslnk_(handle, &__state->c__3, &p, &__state->c__1);
 
 /*           The last integer page and word in use must be updated. */
 

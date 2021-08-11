@@ -1,9 +1,17 @@
-/* dhfa.f -- translated by f2c (version 19980913).
+/* dhfa.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dhfa_state_t;
+static dhfa_state_t* get_dhfa_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DHFA ( Time derivative of half angle ) */
 doublereal dhfa_(doublereal *state, doublereal *bodyr)
@@ -17,17 +25,22 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
     /* Local variables */
     doublereal base;
     extern doublereal vdot_(doublereal *, doublereal *);
-    doublereal p[3], r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), unorm_(doublereal *, doublereal *, 
-	    doublereal *);
+    doublereal p[3];
+    doublereal r__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal rngrat;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dhfa_state_t* __state = get_dhfa_state();
 /* $ Abstract */
 
 /*     Calculate the value of the time derivative of the */

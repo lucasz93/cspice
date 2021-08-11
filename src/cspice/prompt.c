@@ -1,13 +1,21 @@
-/* prompt.f -- translated by f2c (version 19980913).
+/* prompt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern prompt_init_t __prompt_init;
+static prompt_state_t* get_prompt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->prompt)
+		state->prompt = __cspice_allocate_module(sizeof(
+	prompt_state_t), &__prompt_init, sizeof(__prompt_init));
+	return state->prompt;
+
+}
 
 /* $Procedure      PROMPT ( Prompt a user for a string ) */
 /* Subroutine */ int prompt_(char *prmpt, char *string, ftnlen prmpt_len, 
@@ -22,12 +30,17 @@ static integer c__1 = 1;
 	     s_rsfe(cilist *), e_rsfe(void), i_len(char *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen)
-	    , setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    prompt_state_t* __state = get_prompt_state();
 /* $ Abstract */
 
 /*     This routine prompts a user for keyboard input. */
@@ -342,7 +355,7 @@ static integer c__1 = 1;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, prmpt, prmpt_len);
+    iostat = do_fio(&__state->c__1, prmpt, prmpt_len);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -390,7 +403,7 @@ L100001:
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&c__1, string, string_len);
+    iostat = do_fio(&__state->c__1, string, string_len);
     if (iostat != 0) {
 	goto L100002;
     }

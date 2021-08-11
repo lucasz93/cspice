@@ -1,14 +1,25 @@
-/* vpack.f -- translated by f2c (version 19980913).
+/* vpack.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vpack_state_t;
+static vpack_state_t* get_vpack_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VPACK ( Pack three scalar components into a vector ) */
 /* Subroutine */ int vpack_(doublereal *x, doublereal *y, doublereal *z__, 
 	doublereal *v)
 {
+
+    /* Module state */
+    vpack_state_t* __state = get_vpack_state();
 /* $ Abstract */
 
 /*      Pack three scalar components into a vector. */

@@ -1,19 +1,33 @@
-/* vprojg.f -- translated by f2c (version 19980913).
+/* vprojg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vprojg_state_t;
+static vprojg_state_t* get_vprojg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VPROJG ( Vector projection, general dimension ) */
 /* Subroutine */ int vprojg_(doublereal *a, doublereal *b, integer *ndim, 
 	doublereal *p)
 {
-    doublereal scale, adotb, bdotb;
+
+    doublereal scale;
+    doublereal adotb;
+    doublereal bdotb;
     extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
 
+
+    /* Module state */
+    vprojg_state_t* __state = get_vprojg_state();
 /* $ Abstract */
 
 /*     VPROJG finds the projection of the one vector onto another */

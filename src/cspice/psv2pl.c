@@ -1,25 +1,38 @@
-/* psv2pl.f -- translated by f2c (version 19980913).
+/* psv2pl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int psv2pl_state_t;
+static psv2pl_state_t* get_psv2pl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PSV2PL ( Point and spanning vectors to plane ) */
 /* Subroutine */ int psv2pl_(doublereal *point, doublereal *span1, doublereal 
 	*span2, doublereal *plane)
 {
     extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), chkin_(
-	    char *, ftnlen), ucrss_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpvec[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    psv2pl_state_t* __state = get_psv2pl_state();
 /* $ Abstract */
 
 /*     Make a SPICELIB plane from a point and two spanning vectors. */

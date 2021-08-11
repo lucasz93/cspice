@@ -1,9 +1,17 @@
-/* opsgnd.f -- translated by f2c (version 19980913).
+/* opsgnd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int opsgnd_state_t;
+static opsgnd_state_t* get_opsgnd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            OPSGND ( Opposite Sign Double Precision Numbers ) */
 logical opsgnd_(doublereal *x, doublereal *y)
@@ -11,6 +19,9 @@ logical opsgnd_(doublereal *x, doublereal *y)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    opsgnd_state_t* __state = get_opsgnd_state();
 /* $ Abstract */
 
 /*      Function: true if the input arguments have opposite signs. */

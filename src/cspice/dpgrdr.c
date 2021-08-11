@@ -1,14 +1,21 @@
-/* dpgrdr.f -- translated by f2c (version 19980913).
+/* dpgrdr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern dpgrdr_init_t __dpgrdr_init;
+static dpgrdr_state_t* get_dpgrdr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpgrdr)
+		state->dpgrdr = __cspice_allocate_module(sizeof(
+	dpgrdr_state_t), &__dpgrdr_init, sizeof(__dpgrdr_init));
+	return state->dpgrdr;
+
+}
 
 /* $Procedure DPGRDR ( Derivative of planetographic w.r.t. rectangular ) */
 /* Subroutine */ int dpgrdr_(char *body, doublereal *x, doublereal *y, 
@@ -17,7 +24,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,35 +34,36 @@ static integer c__0 = 0;
 
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzctruin_(integer *);
-    integer i__, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    integer i__;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer sense;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static logical svfnd1;
-    static integer svctr1[2];
     extern /* Subroutine */ int dgeodr_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     integer bodyid;
-    static integer svbdid;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen);
     char kvalue[80];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    char pmkvar[32], pgrlon[4];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    char pmkvar[32];
+    char pgrlon[4];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char svbody[36];
     extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
 	    ftnlen);
     extern integer plnsns_(integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    dpgrdr_state_t* __state = get_dpgrdr_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian matrix of the transformation */
@@ -620,18 +627,18 @@ static integer c__0 = 0;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Convert the body name to an ID code. */
 
-    zzbods2c_(svctr1, svbody, &svbdid, &svfnd1, body, &bodyid, &found, (
-	    ftnlen)36, body_len);
+    zzbods2c_(__state->svctr1, __state->svbody, &__state->svbdid, &
+	    __state->svfnd1, body, &bodyid, &found, (ftnlen)36, body_len);
     if (! found) {
 	setmsg_("The value of the input argument BODY is #, this is not a re"
 		"cognized name of an ephemeris object. The cause of this prob"
@@ -671,12 +678,13 @@ static integer c__0 = 0;
 
     repmi_("BODY#_PGR_POSITIVE_LON", "#", &bodyid, pmkvar, (ftnlen)22, (
 	    ftnlen)1, (ftnlen)32);
-    gcpool_(pmkvar, &c__1, &c__1, &n, kvalue, &found, (ftnlen)32, (ftnlen)80);
+    gcpool_(pmkvar, &__state->c__1, &__state->c__1, &n, kvalue, &found, (
+	    ftnlen)32, (ftnlen)80);
     if (found) {
 
 /*        Make sure we recognize the value of PGRLON. */
 
-	ljucrs_(&c__0, kvalue, pgrlon, (ftnlen)80, (ftnlen)4);
+	ljucrs_(&__state->c__0, kvalue, pgrlon, (ftnlen)80, (ftnlen)4);
 	if (s_cmp(pgrlon, "EAST", (ftnlen)4, (ftnlen)4) == 0) {
 	    sense = 1;
 	} else if (s_cmp(pgrlon, "WEST", (ftnlen)4, (ftnlen)4) == 0) {

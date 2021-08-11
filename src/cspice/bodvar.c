@@ -1,13 +1,21 @@
-/* bodvar.f -- translated by f2c (version 19980913).
+/* bodvar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern bodvar_init_t __bodvar_init;
+static bodvar_state_t* get_bodvar_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->bodvar)
+		state->bodvar = __cspice_allocate_module(sizeof(
+	bodvar_state_t), &__bodvar_init, sizeof(__bodvar_init));
+	return state->bodvar;
+
+}
 
 /* $Procedure      BODVAR ( Return values from the kernel pool ) */
 /* Subroutine */ int bodvar_(integer *body, char *item, integer *dim, 
@@ -18,17 +26,23 @@ static integer c__0 = 0;
 
     /* Local variables */
     char code[16];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     char varnam[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int rtpool_(char *, integer *, doublereal *, 
-	    logical *, ftnlen), intstr_(integer *, char *, ftnlen);
+	    logical *, ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    bodvar_state_t* __state = get_bodvar_state();
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by BODVCD and */
@@ -197,9 +211,9 @@ static integer c__0 = 0;
 
     s_copy(varnam, "BODY", (ftnlen)32, (ftnlen)4);
     intstr_(body, code, (ftnlen)16);
-    suffix_(code, &c__0, varnam, (ftnlen)16, (ftnlen)32);
-    suffix_("_", &c__0, varnam, (ftnlen)1, (ftnlen)32);
-    suffix_(item, &c__0, varnam, item_len, (ftnlen)32);
+    suffix_(code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)32);
+    suffix_("_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)32);
+    suffix_(item, &__state->c__0, varnam, item_len, (ftnlen)32);
 
 /*     Grab the items. Complain if they aren't there. */
 

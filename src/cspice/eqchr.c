@@ -1,16 +1,27 @@
-/* eqchr.f -- translated by f2c (version 19980913).
+/* eqchr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern eqchr_init_t __eqchr_init;
+static eqchr_state_t* get_eqchr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->eqchr)
+		state->eqchr = __cspice_allocate_module(sizeof(eqchr_state_t),
+	 &__eqchr_init, sizeof(__eqchr_init));
+	return state->eqchr;
+
+}
 
 /* $Procedure      EQCHR (Equivalent characters) */
 logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -20,8 +31,9 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, uvalue[256];
 
+    /* Module state */
+    eqchr_state_t* __state = get_eqchr_state();
 /* $ Abstract */
 
 /*     This function determines whether two characters are */
@@ -202,74 +214,75 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*     The first time through the loop we set the upper case values */
 /*     for each of the lower case letters. */
 
-    if (first) {
-	for (i__ = 0; i__ <= 255; ++i__) {
-	    uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", 
-		    i__1, "eqchr_", (ftnlen)206)] = i__;
+    if (__state->first) {
+	for (__state->i__ = 0; __state->i__ <= 255; ++__state->i__) {
+	    __state->uvalue[(i__1 = __state->i__) < 256 && 0 <= i__1 ? i__1 : 
+		    s_rnge("uvalue", i__1, "eqchr_", (ftnlen)206)] = 
+		    __state->i__;
 	}
-	first = FALSE_;
-	uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)211)] = 'A';
-	uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)212)] = 'B';
-	uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)213)] = 'C';
-	uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)214)] = 'D';
-	uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)215)] = 'E';
-	uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)216)] = 'F';
-	uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)217)] = 'G';
-	uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)218)] = 'H';
-	uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)219)] = 'I';
-	uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)220)] = 'J';
-	uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)221)] = 'K';
-	uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)222)] = 'L';
-	uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)223)] = 'M';
-	uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)224)] = 'N';
-	uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)225)] = 'O';
-	uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)226)] = 'P';
-	uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)227)] = 'Q';
-	uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)228)] = 'R';
-	uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)229)] = 'S';
-	uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)230)] = 'T';
-	uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)231)] = 'U';
-	uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)232)] = 'V';
-	uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)233)] = 'W';
-	uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)234)] = 'X';
-	uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)235)] = 'Y';
-	uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)236)] = 'Z';
+	__state->first = FALSE_;
+	__state->uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)211)] = 'A';
+	__state->uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)212)] = 'B';
+	__state->uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)213)] = 'C';
+	__state->uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)214)] = 'D';
+	__state->uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)215)] = 'E';
+	__state->uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)216)] = 'F';
+	__state->uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)217)] = 'G';
+	__state->uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)218)] = 'H';
+	__state->uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)219)] = 'I';
+	__state->uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)220)] = 'J';
+	__state->uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)221)] = 'K';
+	__state->uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)222)] = 'L';
+	__state->uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)223)] = 'M';
+	__state->uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)224)] = 'N';
+	__state->uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)225)] = 'O';
+	__state->uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)226)] = 'P';
+	__state->uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)227)] = 'Q';
+	__state->uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)228)] = 'R';
+	__state->uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)229)] = 'S';
+	__state->uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)230)] = 'T';
+	__state->uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)231)] = 'U';
+	__state->uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)232)] = 'V';
+	__state->uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)233)] = 'W';
+	__state->uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)234)] = 'X';
+	__state->uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)235)] = 'Y';
+	__state->uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)236)] = 'Z';
     }
-    i__ = *(unsigned char *)a;
-    j = *(unsigned char *)b;
-    if (i__ > 255 || j > 255) {
-	ret_val = i__ == j;
+    __state->i__ = *(unsigned char *)a;
+    __state->j = *(unsigned char *)b;
+    if (__state->i__ > 255 || __state->j > 255) {
+	ret_val = __state->i__ == __state->j;
     } else {
-	ret_val = uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"uvalue", i__1, "eqchr_", (ftnlen)246)] == uvalue[(i__2 = j) <
-		 256 && 0 <= i__2 ? i__2 : s_rnge("uvalue", i__2, "eqchr_", (
-		ftnlen)246)];
+	ret_val = __state->uvalue[(i__1 = __state->i__) < 256 && 0 <= i__1 ? 
+		i__1 : s_rnge("uvalue", i__1, "eqchr_", (ftnlen)246)] == 
+		__state->uvalue[(i__2 = __state->j) < 256 && 0 <= i__2 ? i__2 
+		: s_rnge("uvalue", i__2, "eqchr_", (ftnlen)246)];
     }
     return ret_val;
 /* $Procedure      NECHR (Not Equivalent characters) */
@@ -431,74 +444,75 @@ L_nechr:
 /*     Check two characters for case insensitive not equal */
 
 /* -& */
-    if (first) {
-	first = FALSE_;
-	for (i__ = 0; i__ <= 255; ++i__) {
-	    uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", 
-		    i__1, "eqchr_", (ftnlen)421)] = i__;
+    if (__state->first) {
+	__state->first = FALSE_;
+	for (__state->i__ = 0; __state->i__ <= 255; ++__state->i__) {
+	    __state->uvalue[(i__1 = __state->i__) < 256 && 0 <= i__1 ? i__1 : 
+		    s_rnge("uvalue", i__1, "eqchr_", (ftnlen)421)] = 
+		    __state->i__;
 	}
-	uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)424)] = 'A';
-	uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)425)] = 'B';
-	uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)426)] = 'C';
-	uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)427)] = 'D';
-	uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)428)] = 'E';
-	uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)429)] = 'F';
-	uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)430)] = 'G';
-	uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)431)] = 'H';
-	uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)432)] = 'I';
-	uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)433)] = 'J';
-	uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)434)] = 'K';
-	uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)435)] = 'L';
-	uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)436)] = 'M';
-	uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)437)] = 'N';
-	uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)438)] = 'O';
-	uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)439)] = 'P';
-	uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)440)] = 'Q';
-	uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)441)] = 'R';
-	uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)442)] = 'S';
-	uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)443)] = 'T';
-	uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)444)] = 'U';
-	uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)445)] = 'V';
-	uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)446)] = 'W';
-	uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)447)] = 'X';
-	uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)448)] = 'Y';
-	uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)449)] = 'Z';
+	__state->uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)424)] = 'A';
+	__state->uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)425)] = 'B';
+	__state->uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)426)] = 'C';
+	__state->uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)427)] = 'D';
+	__state->uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)428)] = 'E';
+	__state->uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)429)] = 'F';
+	__state->uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)430)] = 'G';
+	__state->uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)431)] = 'H';
+	__state->uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)432)] = 'I';
+	__state->uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)433)] = 'J';
+	__state->uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)434)] = 'K';
+	__state->uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)435)] = 'L';
+	__state->uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)436)] = 'M';
+	__state->uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)437)] = 'N';
+	__state->uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)438)] = 'O';
+	__state->uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)439)] = 'P';
+	__state->uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)440)] = 'Q';
+	__state->uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)441)] = 'R';
+	__state->uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)442)] = 'S';
+	__state->uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)443)] = 'T';
+	__state->uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)444)] = 'U';
+	__state->uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)445)] = 'V';
+	__state->uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)446)] = 'W';
+	__state->uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)447)] = 'X';
+	__state->uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)448)] = 'Y';
+	__state->uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uva"
+		"lue", i__1, "eqchr_", (ftnlen)449)] = 'Z';
     }
-    i__ = *(unsigned char *)a;
-    j = *(unsigned char *)b;
-    if (i__ > 255 || j > 255) {
-	ret_val = i__ != j;
+    __state->i__ = *(unsigned char *)a;
+    __state->j = *(unsigned char *)b;
+    if (__state->i__ > 255 || __state->j > 255) {
+	ret_val = __state->i__ != __state->j;
     } else {
-	ret_val = uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"uvalue", i__1, "eqchr_", (ftnlen)459)] != uvalue[(i__2 = j) <
-		 256 && 0 <= i__2 ? i__2 : s_rnge("uvalue", i__2, "eqchr_", (
-		ftnlen)459)];
+	ret_val = __state->uvalue[(i__1 = __state->i__) < 256 && 0 <= i__1 ? 
+		i__1 : s_rnge("uvalue", i__1, "eqchr_", (ftnlen)459)] != 
+		__state->uvalue[(i__2 = __state->j) < 256 && 0 <= i__2 ? i__2 
+		: s_rnge("uvalue", i__2, "eqchr_", (ftnlen)459)];
     }
     return ret_val;
 } /* eqchr_ */

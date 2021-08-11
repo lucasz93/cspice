@@ -1,9 +1,17 @@
-/* lgrint.f -- translated by f2c (version 19980913).
+/* lgrint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lgrint_state_t;
+static lgrint_state_t* get_lgrint_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LGRINT ( Lagrange polynomial interpolation ) */
 doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals, 
@@ -14,16 +22,22 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
     doublereal ret_val;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal c1, c2;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal c1;
+    doublereal c2;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    lgrint_state_t* __state = get_lgrint_state();
 /* $ Abstract */
 
 /*     Evaluate a Lagrange interpolating polynomial for a specified */

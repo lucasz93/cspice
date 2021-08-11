@@ -1,13 +1,21 @@
-/* dasadc.f -- translated by f2c (version 19980913).
+/* dasadc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern dasadc_init_t __dasadc_init;
+static dasadc_state_t* get_dasadc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasadc)
+		state->dasadc = __cspice_allocate_module(sizeof(
+	dasadc_state_t), &__dasadc_init, sizeof(__dasadc_init));
+	return state->dasadc;
+
+}
 
 /* $Procedure      DASADC ( DAS, add data, character ) */
 /* Subroutine */ int dasadc_(integer *handle, integer *n, integer *bpos, 
@@ -23,30 +31,44 @@ static integer c__1 = 1;
     /* Local variables */
     integer free;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, lastc, recno, ncomr, nmove, rcpos;
+    integer ncomc;
+    integer lastc;
+    integer recno;
+    integer ncomr;
+    integer nmove;
+    integer rcpos;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *), 
-	    dashfs_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
     char record[1024];
     integer lastla[3];
     extern /* Subroutine */ int dasurc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen), daswrc_(integer *, integer *, char *, 
-	    ftnlen);
-    integer lastrc[3], clsize, nmoved;
+	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int daswrc_(integer *, integer *, char *, ftnlen);
+    integer lastrc[3];
+    integer clsize;
+    integer nmoved;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numchr;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    integer lastwd[3], nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    integer lastwd[3];
+    integer nresvc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer wordno;
     extern logical return_(void);
-    integer nresvr, nwritn, chr, elt;
+    integer nresvr;
+    integer nwritn;
+    integer chr;
+    integer elt;
 
+
+    /* Module state */
+    dasadc_state_t* __state = get_dasadc_state();
 /* $ Abstract */
 
 /*     Add character data to a DAS file. */
@@ -421,7 +443,8 @@ static integer c__1 = 1;
 /*     character data. */
 
     if (lastc >= 1) {
-	dasa2l_(handle, &c__1, &lastc, &clbase, &clsize, &recno, &wordno);
+	dasa2l_(handle, &__state->c__1, &lastc, &clbase, &clsize, &recno, &
+		wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -532,7 +555,7 @@ static integer c__1 = 1;
 /*     character words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &c__1, n);
+    dascud_(handle, &__state->c__1, n);
     chkout_("DASADC", (ftnlen)6);
     return 0;
 } /* dasadc_ */

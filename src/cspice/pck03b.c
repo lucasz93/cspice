@@ -1,14 +1,21 @@
-/* pck03b.f -- translated by f2c (version 19980913).
+/* pck03b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern pck03b_init_t __pck03b_init;
+static pck03b_state_t* get_pck03b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pck03b)
+		state->pck03b = __cspice_allocate_module(sizeof(
+	pck03b_state_t), &__pck03b_init, sizeof(__pck03b_init));
+	return state->pck03b;
+
+}
 
 /* $Procedure PCK03B ( PCK, begin a type 3 segment ) */
 /* Subroutine */ int pck03b_(integer *handle, char *segid, integer *body, 
@@ -21,13 +28,19 @@ static integer c__1 = 1;
     doublereal dcoeff;
     integer ncoeff;
     extern /* Subroutine */ int pckpds_(integer *, char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen), sigerr_(char *,
-	     ftnlen), chkout_(char *, ftnlen), sgbwfs_(integer *, doublereal *
-	    , char *, integer *, doublereal *, integer *, integer *, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+	    doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer pktsiz;
 
+
+    /* Module state */
+    pck03b_state_t* __state = get_pck03b_state();
 /* $ Abstract */
 
 /*     Begin a type 03 PCK segment in the binary PCK file associated with */
@@ -807,7 +820,7 @@ static integer c__1 = 1;
 
 /*     Create a descriptor for the segment we are about to write. */
 
-    pckpds_(body, frame, &c__3, first, last, descr, frame_len);
+    pckpds_(body, frame, &__state->c__3, first, last, descr, frame_len);
     if (failed_()) {
 	chkout_("PCK03B", (ftnlen)6);
 	return 0;
@@ -827,7 +840,8 @@ static integer c__1 = 1;
 /*     epoch. These characteristics are prescribed by the mnemonic EXPLE. */
 /*     See the include file 'sgparam.inc' for more details. */
 
-    sgbwfs_(handle, descr, segid, &c__1, &dcoeff, &pktsiz, &c__3, segid_len);
+    sgbwfs_(handle, descr, segid, &__state->c__1, &dcoeff, &pktsiz, &
+	    __state->c__3, segid_len);
     chkout_("PCK03B", (ftnlen)6);
     return 0;
 } /* pck03b_ */

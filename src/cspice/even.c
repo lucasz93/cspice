@@ -1,9 +1,17 @@
-/* even.f -- translated by f2c (version 19980913).
+/* even.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int even_state_t;
+static even_state_t* get_even_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            EVEN  ( Is an integer even? ) */
 logical even_(integer *i__)
@@ -11,6 +19,9 @@ logical even_(integer *i__)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    even_state_t* __state = get_even_state();
 /* $ Abstract */
 
 /*      Determine whether an integer is even. */

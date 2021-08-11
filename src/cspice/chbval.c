@@ -1,17 +1,30 @@
-/* chbval.f -- translated by f2c (version 19980913).
+/* chbval.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int chbval_state_t;
+static chbval_state_t* get_chbval_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CHBVAL ( Value of a Chebsheff polynomial expansion ) */
 /* Subroutine */ int chbval_(doublereal *cp, integer *degp, doublereal *x2s, 
 	doublereal *x, doublereal *p)
 {
     integer j;
-    doublereal s, w[3], s2;
+    doublereal s;
+    doublereal w[3];
+    doublereal s2;
 
+
+    /* Module state */
+    chbval_state_t* __state = get_chbval_state();
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

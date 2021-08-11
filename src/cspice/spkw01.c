@@ -1,13 +1,21 @@
-/* spkw01.f -- translated by f2c (version 19980913).
+/* spkw01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern spkw01_init_t __spkw01_init;
+static spkw01_state_t* get_spkw01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw01)
+		state->spkw01 = __cspice_allocate_module(sizeof(
+	spkw01_state_t), &__spkw01_init, sizeof(__spkw01_init));
+	return state->spkw01;
+
+}
 
 /* $Procedure      SPKW01 ( Write SPK segment, type 1 ) */
 /* Subroutine */ int spkw01_(integer *handle, integer *body, integer *center, 
@@ -23,22 +31,29 @@ static integer c__1 = 1;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafbna_(integer *, doublereal *, char *, ftnlen), 
-	    dafena_(void);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod;
+    integer chrcod;
+    integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal maxtim;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), spkpds_(integer *, integer *, char *, integer 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
 	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkw01_state_t* __state = get_spkw01_state();
 /* $ Abstract */
 
 /*     Write a type 1 segment to an SPK file. */
@@ -385,7 +400,8 @@ static integer c__1 = 1;
 
 /*     Create the segment descriptor. */
 
-    spkpds_(body, center, frame, &c__1, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__1, first, last, descr, 
+	    frame_len);
 
 /*     Begin a new segment. */
 
@@ -435,10 +451,10 @@ static integer c__1 = 1;
     dafada_(epochs, n);
     i__1 = *n / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &c__1);
+	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

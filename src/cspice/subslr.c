@@ -1,15 +1,21 @@
-/* subslr.f -- translated by f2c (version 19980913).
+/* subslr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__3 = 3;
-static integer c__10 = 10;
+extern subslr_init_t __subslr_init;
+static subslr_state_t* get_subslr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->subslr)
+		state->subslr = __cspice_allocate_module(sizeof(
+	subslr_state_t), &__subslr_init, sizeof(__subslr_init));
+	return state->subslr;
+
+}
 
 /* $Procedure SUBSLR ( Sub-solar point ) */
 /* Subroutine */ int subslr_(char *method, char *target, doublereal *et, char 
@@ -19,19 +25,6 @@ static integer c__10 = 10;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical near__ = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[500] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "       ";
-    static integer shape = 1;
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -42,82 +35,102 @@ static integer c__10 = 10;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), zzbods2c_(integer *, char *, integer *, logical *, char *, 
-	    integer *, logical *, ftnlen, ftnlen);
+	    );
+    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     doublereal dvec[3];
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    static logical xmit;
-    doublereal spos[3], tpos[3];
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal spos[3];
+    doublereal tpos[3];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen)
-	    ;
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     doublereal j2pos[3];
     extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *), zzctruin_(integer *);
+	    integer *);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
     extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
 	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen), zzsrftrk_(integer *, logical *);
-    doublereal s, radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    static logical usecn;
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    doublereal s;
+    doublereal radii[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern doublereal vdist_(doublereal *, doublereal *);
     doublereal xform[9]	/* was [3][3] */;
-    static integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical uselt;
     doublereal sunst[6];
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
-    doublereal lt, etdiff;
-    integer obscde, fixcid;
+    doublereal lt;
+    doublereal etdiff;
+    integer obscde;
+    integer fixcid;
     doublereal ltdiff;
     extern doublereal clight_(void);
-    integer fixfid, nradii, trgcde;
+    integer fixfid;
+    integer nradii;
+    integer trgcde;
     extern doublereal touchd_(doublereal *);
     extern logical return_(void);
-    char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
-    doublereal altsun, obspos[3], obsrng, prevet, prevlt, ssbost[6], ssbtst[6]
-	    , sslrlt, sslrst[6];
-    integer fixcls, fixctr;
-    static integer srflst[100];
-    logical attblk[15], fnd, surfup;
-    static logical usestl;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svrefc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
-	    *, doublereal *, doublereal *, ftnlen, ftnlen);
-    static logical pri;
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *), bodvcd_(
-	    integer *, char *, integer *, integer *, doublereal *, ftnlen), 
-	    nearpt_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), surfpt_(doublereal *, doublereal *, 
+    char pntdef[20];
+    char shpstr[9];
+    char subtyp[20];
+    char trmstr[20];
+    doublereal altsun;
+    doublereal obspos[3];
+    doublereal obsrng;
+    doublereal prevet;
+    doublereal prevlt;
+    doublereal ssbost[6];
+    doublereal ssbtst[6];
+    doublereal sslrlt;
+    doublereal sslrst[6];
+    integer fixcls;
+    integer fixctr;
+    logical attblk[15];
+    logical fnd;
+    logical surfup;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    , spkssb_(integer *, doublereal *, char *, doublereal *, ftnlen);
+	    ;
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
     doublereal slt;
     extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), spkcpo_(char *, doublereal *, char 
-	    *, char *, char *, doublereal *, char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    spkcpt_(doublereal *, char *, char *, doublereal *, char *, char *
-	    , char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen), mxv_(doublereal *, doublereal *, 
-	    doublereal *), zzsbfxr_(integer *, integer *, integer *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkcpo_(char *, doublereal *, char *, char *, 
+	    char *, doublereal *, char *, char *, doublereal *, doublereal *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkcpt_(doublereal *, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
 	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
 	     logical *);
 
+
+    /* Module state */
+    subslr_state_t* __state = get_subslr_state();
 /* $ Abstract */
 
 /*     Compute the rectangular coordinates of the sub-solar point on */
@@ -1808,20 +1821,21 @@ static integer c__10 = 10;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -1858,20 +1872,20 @@ static integer c__10 = 10;
 /*        The above definitions are consistent with those used by */
 /*        ZZPRSCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
-	usecn = attblk[3];
-	usestl = attblk[2];
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
+	__state->usestl = attblk[2];
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -1883,8 +1897,8 @@ static integer c__10 = 10;
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -1909,8 +1923,8 @@ static integer c__10 = 10;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr3, svfref, &svrefc, fixref, &fixfid, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr3, __state->svfref, &__state->svrefc, fixref, &
+	    fixfid, (ftnlen)32, fixref_len);
     frinfo_(&fixfid, &fixctr, &fixcls, &fixcid, &fnd);
     if (failed_()) {
 	chkout_("SUBSLR", (ftnlen)6);
@@ -1941,15 +1955,15 @@ static integer c__10 = 10;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(svctr4, &surfup);
+    zzsrftrk_(__state->svctr4, &surfup);
 
 /*     If necessary, parse the method specification. PRVMTH */
 /*     and the derived variables NEAR and SHAPE start out with */
 /*     valid values. PRVMTH records the last valid value of */
 /*     METHOD; NEAR and SHAPE are the corresponding variables. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
-	    0) {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -1957,7 +1971,7 @@ static integer c__10 = 10;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -1966,9 +1980,10 @@ static integer c__10 = 10;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, subtyp, &
+		__state->pri, &__state->nsurf, __state->srflst, pntdef, 
+		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
+		ftnlen)20);
 	if (failed_()) {
 	    chkout_("SUBSLR", (ftnlen)6);
 	    return 0;
@@ -1982,9 +1997,9 @@ static integer c__10 = 10;
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -1996,20 +2011,21 @@ static integer c__10 = 10;
 	    chkout_("SUBSLR", (ftnlen)6);
 	    return 0;
 	}
-	if (shape == 1) {
+	if (__state->shape == 1) {
 
 /*           Allow both "near point" and "nadir" expressions */
 /*           the ellipsoid case, since these are equivalent. */
 
-	    near__ = eqstr_(subtyp, "NEAR POINT", (ftnlen)20, (ftnlen)10) || 
-		    eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
+	    __state->near__ = eqstr_(subtyp, "NEAR POINT", (ftnlen)20, (
+		    ftnlen)10) || eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)
+		    5);
 	} else {
 
 /*           "near point" is not supported for DSKs. */
 
-	    near__ = eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
+	    __state->near__ = eqstr_(subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
 	}
-	if (! near__) {
+	if (! __state->near__) {
 	    if (! eqstr_(subtyp, "INTERCEPT", (ftnlen)20, (ftnlen)9)) {
 		setmsg_("Invalid sub-solar point type <#> was found in the m"
 			"ethod string #.", (ftnlen)66);
@@ -2023,21 +2039,21 @@ static integer c__10 = 10;
 
 /*        Save the current value of METHOD. */
 
-	s_copy(prvmth, method, (ftnlen)500, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
-    if (shape == 2) {
+    __state->first = FALSE_;
+    if (__state->shape == 2) {
 
 /*        This is the DSK case. */
 
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &nsurf, srflst, &fixfid);
-    } else if (shape != 1) {
+	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fixfid);
+    } else if (__state->shape != 1) {
 	setmsg_("Computation method argument was <#>; this string must speci"
 		"fy a supported shape model and computation type. See the hea"
 		"der of SUBSLR for details.", (ftnlen)145);
@@ -2055,7 +2071,7 @@ static integer c__10 = 10;
 /*     When light time correction is not used, setting S = 0 */
 /*     allows us to seamlessly set TRGEPC equal to ET. */
 
-    if (uselt) {
+    if (__state->uselt) {
 	s = -1.;
     } else {
 	s = 0.;
@@ -2107,13 +2123,13 @@ static integer c__10 = 10;
 
 /*     Get the radii of the target body from the kernel pool. */
 
-    bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
+    bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
 
 /*     Get the position of the Sun SPOS as seen from the target */
 /*     in the target body-fixed frame at TRGEPC. */
 
-    spkezp_(&c__10, trgepc, fixref, abcorr, &trgcde, spos, &slt, fixref_len, 
-	    abcorr_len);
+    spkezp_(&__state->c__10, trgepc, fixref, abcorr, &trgcde, spos, &slt, 
+	    fixref_len, abcorr_len);
     if (failed_()) {
 	chkout_("SUBSLR", (ftnlen)6);
 	return 0;
@@ -2122,7 +2138,7 @@ static integer c__10 = 10;
 /*     Make a first estimate of the sub-solar point. The algorithm */
 /*     we use depends on the sub-solar point definition. */
 
-    if (near__) {
+    if (__state->near__) {
 
 /*        Locate the nearest point to the Sun on the target's */
 /*        reference ellipsoid. */
@@ -2139,13 +2155,13 @@ static integer c__10 = 10;
 /*        closest ray-DSK surface intercept to the sun is the initial */
 /*        estimate of the sub-solar point. */
 
-	if (shape == 2) {
+	if (__state->shape == 2) {
 
 /*           Generate the ray direction; find the DSK intercept. */
 
 	    vsub_(spoint, spos, dvec);
-	    zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec, 
-		    spoint, &fnd);
+	    zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
+		    fixfid, spos, dvec, spoint, &fnd);
 	    if (failed_()) {
 		chkout_("SUBSLR", (ftnlen)6);
 		return 0;
@@ -2171,7 +2187,7 @@ static integer c__10 = 10;
 /*        Generate the ray direction. */
 
 	vminus_(spos, dvec);
-	if (shape == 1) {
+	if (__state->shape == 1) {
 
 /*           Locate the surface intercept of the ray from the */
 /*           sun to the target center. */
@@ -2195,8 +2211,8 @@ static integer c__10 = 10;
 
 /*           Find the DSK intercept. */
 
-	    zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec, 
-		    spoint, &fnd);
+	    zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
+		    fixfid, spos, dvec, spoint, &fnd);
 	    if (failed_()) {
 		chkout_("SUBSLR", (ftnlen)6);
 		return 0;
@@ -2227,7 +2243,7 @@ static integer c__10 = 10;
 /*     stellar aberration corrections alone has been prevented by an */
 /*     earlier check. */
 
-    if (! uselt) {
+    if (! __state->uselt) {
 
 /*        The TRGEPC value we'll return is simply the input time. The */
 /*        previous call to SPKEZP call yielded the vector OBSPOS. SPOINT */
@@ -2257,7 +2273,7 @@ static integer c__10 = 10;
 /*     previous estimate of the sub-solar point. The number of */
 /*     iterations depends on the light time correction type. */
 
-    if (usecn) {
+    if (__state->usecn) {
 	nitr = 10;
     } else {
 	nitr = 1;
@@ -2333,7 +2349,7 @@ static integer c__10 = 10;
 /*        Find the sub-solar point using the current estimated */
 /*        geometry. */
 
-	if (near__) {
+	if (__state->near__) {
 
 /*           Locate the nearest point to the sun on the target's */
 /*           reference ellipsoid. */
@@ -2350,14 +2366,14 @@ static integer c__10 = 10;
 /*           ellipsoid. The closest ray-DSK surface intercept to the sun */
 /*           is the initial estimate of the sub-solar point. */
 
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              Locate the surface intercept of the ray from the */
 /*              Sun to the target center. */
 
 		vsub_(spoint, spos, dvec);
-		zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec,
-			 spoint, &fnd);
+		zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
+			fixfid, spos, dvec, spoint, &fnd);
 		if (failed_()) {
 		    chkout_("SUBSLR", (ftnlen)6);
 		    return 0;
@@ -2382,7 +2398,7 @@ static integer c__10 = 10;
 /*           Generate the ray direction. */
 
 	    vminus_(spos, dvec);
-	    if (shape == 1) {
+	    if (__state->shape == 1) {
 
 /*              Locate the surface intercept of the ray from the */
 /*              sun to the target center. */
@@ -2407,8 +2423,8 @@ static integer c__10 = 10;
 
 /*              Find the DSK intercept. */
 
-		zzsbfxr_(&trgcde, &nsurf, srflst, trgepc, &fixfid, spos, dvec,
-			 spoint, &fnd);
+		zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
+			fixfid, spos, dvec, spoint, &fnd);
 		if (failed_()) {
 		    chkout_("SUBSLR", (ftnlen)6);
 		    return 0;
@@ -2485,7 +2501,7 @@ static integer c__10 = 10;
 /*     stellar aberration corrections, so we may not be able */
 /*     to use it for this computation. */
 
-    if (usestl) {
+    if (__state->usestl) {
 	spkcpt_(spoint, target, fixref, et, fixref, "TARGET", abcorr, obsrvr, 
 		sslrst, &sslrlt, target_len, fixref_len, fixref_len, (ftnlen)
 		6, abcorr_len, obsrvr_len);

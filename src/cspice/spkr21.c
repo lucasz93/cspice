@@ -1,16 +1,21 @@
-/* spkr21.f -- translated by f2c (version 19980913).
+/* spkr21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__25 = 25;
-static integer c__100 = 100;
+extern spkr21_init_t __spkr21_init;
+static spkr21_state_t* get_spkr21_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr21)
+		state->spkr21 = __cspice_allocate_module(sizeof(
+	spkr21_state_t), &__spkr21_init, sizeof(__spkr21_init));
+	return state->spkr21;
+
+}
 
 /* $Procedure      SPKR21 ( Read SPK record from segment, type 21 ) */
 /* Subroutine */ int spkr21_(integer *handle, doublereal *descr, doublereal *
@@ -24,21 +29,35 @@ static integer c__100 = 100;
 
     /* Local variables */
     doublereal data[100];
-    integer offd, offe, nrec, ndir, offr, i__, begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    integer offd;
+    integer offe;
+    integer nrec;
+    integer ndir;
+    integer offr;
+    integer i__;
+    integer begin;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer recno;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
-    integer ic[6], maxdim, dflsiz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer ic[6];
+    integer maxdim;
+    integer dflsiz;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lstltd_(doublereal *, integer *, doublereal *);
     extern logical return_(void);
-    integer end, off;
+    integer end;
+    integer off;
 
+
+    /* Module state */
+    spkr21_state_t* __state = get_spkr21_state();
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 21 */
@@ -303,7 +322,7 @@ static integer c__100 = 100;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 
@@ -334,7 +353,7 @@ static integer c__100 = 100;
 		"hat this problem is due to your SPICE Toolkit being out of d"
 		"ate.", (ftnlen)183);
 	errint_("#", &maxdim, (ftnlen)1);
-	errint_("#", &c__25, (ftnlen)1);
+	errint_("#", &__state->c__25, (ftnlen)1);
 	sigerr_("SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
 	chkout_("SPKR21", (ftnlen)6);
 	return 0;
@@ -387,7 +406,7 @@ static integer c__100 = 100;
 	    i__2 = off + 1;
 	    i__3 = off + 100;
 	    dafgda_(handle, &i__2, &i__3, data);
-	    recno = (i__ - 1) * 100 + lstltd_(et, &c__100, data) + 1;
+	    recno = (i__ - 1) * 100 + lstltd_(et, &__state->c__100, data) + 1;
 	    offr = begin - 1 + (recno - 1) * dflsiz;
 	    i__2 = offr + 1;
 	    i__3 = offr + dflsiz;

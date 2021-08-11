@@ -1,9 +1,17 @@
-/* recrad.f -- translated by f2c (version 19980913).
+/* recrad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int recrad_state_t;
+static recrad_state_t* get_recrad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RECRAD ( Rectangular coordinates to RA and DEC ) */
 /* Subroutine */ int recrad_(doublereal *rectan, doublereal *range, 
@@ -13,6 +21,9 @@
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
 
+
+    /* Module state */
+    recrad_state_t* __state = get_recrad_state();
 /* $ Abstract */
 
 /*     Convert rectangular coordinates to range, right ascension, */

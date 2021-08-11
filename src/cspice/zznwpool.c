@@ -1,9 +1,17 @@
-/* zznwpool.f -- translated by f2c (version 19980913).
+/* zznwpool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zznwpool_state_t;
+static zznwpool_state_t* get_zznwpool_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZNWPOOL ( Private: notify watchers of update ) */
 /* Subroutine */ int zznwpool_(char *varnam, char *wtvars, integer *wtptrs, 
@@ -12,11 +20,17 @@
 	ftnlen agtwrk_len, ftnlen notify_len, ftnlen agents_len)
 {
     extern /* Subroutine */ int zzgapool_(char *, char *, integer *, integer *
-	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), chkin_(char *, 
-	    ftnlen), copyc_(char *, char *, ftnlen, ftnlen), unionc_(char *, 
-	    char *, char *, ftnlen, ftnlen, ftnlen), chkout_(char *, ftnlen);
+	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int copyc_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int unionc_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zznwpool_state_t* __state = get_zznwpool_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

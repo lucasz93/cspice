@@ -1,31 +1,44 @@
-/* ckfrot.f -- translated by f2c (version 19980913).
+/* ckfrot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckfrot_init_t __ckfrot_init;
+static ckfrot_state_t* get_ckfrot_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckfrot)
+		state->ckfrot = __cspice_allocate_module(sizeof(
+	ckfrot_state_t), &__ckfrot_init, sizeof(__ckfrot_init));
+	return state->ckfrot;
+
+}
 
 /* $Procedure      CKFROT ( C-kernel, find rotation ) */
 /* Subroutine */ int ckfrot_(integer *inst, doublereal *et, doublereal *
 	rotate, integer *ref, logical *found)
 {
-    logical have, pfnd, sfnd;
+    logical have;
+    logical pfnd;
+    logical sfnd;
     doublereal time;
     extern /* Subroutine */ int sce2c_(integer *, doublereal *, doublereal *);
     char segid[40];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), ckbss_(integer *, doublereal *, 
-	    doublereal *, logical *), ckpfs_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
-	     doublereal *, logical *), cksns_(integer *, doublereal *, char *,
-	     logical *, ftnlen), xpose_(doublereal *, doublereal *);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
+	    logical *);
+    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
+	     logical *);
+    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
     extern logical failed_(void);
     doublereal av[3];
     integer handle;
@@ -35,11 +48,16 @@ static integer c__6 = 6;
     integer sclkid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal clkout;
-    extern logical return_(void), zzsclk_(integer *, integer *);
+    extern logical return_(void);
+    extern logical zzsclk_(integer *, integer *);
     doublereal dcd[2];
     integer icd[6];
-    doublereal tol, rot[9]	/* was [3][3] */;
+    doublereal tol;
+    doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    ckfrot_state_t* __state = get_ckfrot_state();
 /* $ Abstract */
 
 /*     Find the rotation from a C-kernel Id to the native */
@@ -270,7 +288,7 @@ static integer c__6 = 6;
 /*           Found one. Fetch the ID code of the reference frame */
 /*           from the descriptor. */
 
-	    dafus_(descr, &c__2, &c__6, dcd, icd);
+	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 	    *ref = icd[1];
 	    *found = TRUE_;
 

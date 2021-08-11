@@ -1,15 +1,21 @@
-/* zzdasrfr.f -- translated by f2c (version 19980913).
+/* zzdasrfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__2 = 2;
-static integer c__1 = 1;
+extern zzdasrfr_init_t __zzdasrfr_init;
+static zzdasrfr_state_t* get_zzdasrfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdasrfr)
+		state->zzdasrfr = __cspice_allocate_module(sizeof(
+	zzdasrfr_state_t), &__zzdasrfr_init, sizeof(__zzdasrfr_init));
+	return state->zzdasrfr;
+
+}
 
 /* $Procedure      ZZDASRFR ( DAS, read file record ) */
 /* Subroutine */ int zzdasrfr_(integer *handle, char *idword, char *ifname, 
@@ -18,36 +24,39 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = -1;
 
     /* Builtin functions */
     integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer ibff, unit;
-    extern /* Subroutine */ int zzddhnfc_(integer *), zzddhppf_(integer *, 
-	    integer *, integer *), zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), zzxlatei_(integer *, char *, integer *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen);
+    integer ibff;
+    integer unit;
+    extern /* Subroutine */ int zzddhnfc_(integer *);
+    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzxlatei_(integer *, char *, integer *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     char chrbuf[1024];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char tmpifn[60];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     char tmpidw[8];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___6 = { 1, 0, 1, 0, 1 };
-    static cilist io___9 = { 1, 0, 1, 0, 1 };
 
 
+
+    /* Module state */
+    zzdasrfr_state_t* __state = get_zzdasrfr_state();
 /* $ Abstract */
 
 /*     Return the contents of the file record of a specified DAS file. */
@@ -530,56 +539,60 @@ static integer c__1 = 1;
 /*     On the first pass through this routine, get the integer code of */
 /*     the host system's native binary file format. */
 
-    if (first) {
-	zzddhnfc_(&natbff);
+    if (__state->first) {
+	zzddhnfc_(&__state->natbff);
 	if (failed_()) {
 	    chkout_("ZZDASRFR", (ftnlen)8);
 	    return 0;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Get a logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 
 /*     Get the integer code for the file's binary format. */
 
-    zzddhppf_(&unit, &c__2, &ibff);
+    zzddhppf_(&unit, &__state->c__2, &ibff);
     if (failed_()) {
 	chkout_("ZZDASRFR", (ftnlen)8);
 	return 0;
     }
-    if (ibff == natbff) {
+    if (ibff == __state->natbff) {
 
 /*        We're looking at a native file. Just read the file record. */
 
-	io___6.ciunit = unit;
-	iostat = s_rdue(&io___6);
+	__state->io___6.ciunit = unit;
+	iostat = s_rdue(&__state->io___6);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, tmpidw, (ftnlen)8);
+	iostat = do_uio(&__state->c__1, tmpidw, (ftnlen)8);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, tmpifn, (ftnlen)60);
+	iostat = do_uio(&__state->c__1, tmpifn, (ftnlen)60);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, (char *)&(*nresvr), (ftnlen)sizeof(integer));
+	iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (ftnlen)sizeof(
+		integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, (char *)&(*nresvc), (ftnlen)sizeof(integer));
+	iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (ftnlen)sizeof(
+		integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer));
+	iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (ftnlen)sizeof(
+		integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer));
+	iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (ftnlen)sizeof(
+		integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
@@ -606,12 +619,12 @@ L100001:
 /*        We'll read the file record as a character string and then */
 /*        pick it apart. */
 
-	io___9.ciunit = unit;
-	iostat = s_rdue(&io___9);
+	__state->io___9.ciunit = unit;
+	iostat = s_rdue(&__state->io___9);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__1, chrbuf, (ftnlen)1024);
+	iostat = do_uio(&__state->c__1, chrbuf, (ftnlen)1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -635,10 +648,10 @@ L100002:
 
 /*        The integer output arguments require translation. */
 
-	zzxlatei_(&ibff, chrbuf + 68, &c__1, nresvr, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 72, &c__1, nresvc, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 76, &c__1, ncomr, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 80, &c__1, ncomc, (ftnlen)4);
+	zzxlatei_(&ibff, chrbuf + 68, &__state->c__1, nresvr, (ftnlen)4);
+	zzxlatei_(&ibff, chrbuf + 72, &__state->c__1, nresvc, (ftnlen)4);
+	zzxlatei_(&ibff, chrbuf + 76, &__state->c__1, ncomr, (ftnlen)4);
+	zzxlatei_(&ibff, chrbuf + 80, &__state->c__1, ncomc, (ftnlen)4);
     }
     chkout_("ZZDASRFR", (ftnlen)8);
     return 0;

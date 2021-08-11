@@ -1,9 +1,17 @@
-/* dxtrct.f -- translated by f2c (version 19980913).
+/* dxtrct.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dxtrct_state_t;
+static dxtrct_state_t* get_dxtrct_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DXTRCT (Extract Double Precision Values From A String) */
 /* Subroutine */ int dxtrct_(char *keywd, integer *maxwds, char *string, 
@@ -15,11 +23,16 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer pntr, i__, j;
+    integer pntr;
+    integer i__;
+    integer j;
     doublereal x;
     extern integer nblen_(char *, ftnlen);
     char error[80];
-    integer start, fallbk, berase, eerase;
+    integer start;
+    integer fallbk;
+    integer berase;
+    integer eerase;
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen);
     integer length;
@@ -29,6 +42,9 @@
     extern integer wdindx_(char *, char *, ftnlen, ftnlen);
     integer positn;
 
+
+    /* Module state */
+    dxtrct_state_t* __state = get_dxtrct_state();
 /* $ Abstract */
 
 /*     Locate a keyword and succeeding numeric words within a string. */

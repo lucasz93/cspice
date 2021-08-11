@@ -1,9 +1,17 @@
-/* vrelg.f -- translated by f2c (version 19980913).
+/* vrelg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vrelg_state_t;
+static vrelg_state_t* get_vrelg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  VRELG ( Vector relative difference, general dimension ) */
 doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
@@ -13,10 +21,13 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 
     /* Local variables */
     doublereal denorm;
-    extern doublereal vdistg_(doublereal *, doublereal *, integer *), vnormg_(
-	    doublereal *, integer *);
+    extern doublereal vdistg_(doublereal *, doublereal *, integer *);
+    extern doublereal vnormg_(doublereal *, integer *);
     doublereal nunorm;
 
+
+    /* Module state */
+    vrelg_state_t* __state = get_vrelg_state();
 /* $ Abstract */
 
 /*   Return the relative difference between two vectors of general */

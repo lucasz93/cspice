@@ -1,14 +1,21 @@
-/* lxname.f -- translated by f2c (version 19980913).
+/* lxname.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__255 = 255;
-static integer c__0 = 0;
+extern lxname_init_t __lxname_init;
+static lxname_state_t* get_lxname_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lxname)
+		state->lxname = __cspice_allocate_module(sizeof(
+	lxname_state_t), &__lxname_init, sizeof(__lxname_init));
+	return state->lxname;
+
+}
 
 /* $Procedure      LXNAME ( Lex names ) */
 /* Subroutine */ int lxname_0_(int n__, char *hdchrs, char *tlchrs, char *
@@ -22,22 +29,34 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer c__, headc[261], i__, l, nhead;
+    integer c__;
+    integer headc[261];
+    integer i__;
+    integer l;
+    integer nhead;
     extern integer cardi_(integer *);
     integer tailc[261];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ntail, tcpos;
+    integer ntail;
+    integer tcpos;
     extern integer rtrim_(char *, ftnlen);
-    integer hl, tl;
-    extern /* Subroutine */ int scardi_(integer *, integer *), validi_(
-	    integer *, integer *, integer *);
+    integer hl;
+    integer tl;
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int validi_(integer *, integer *, integer *);
     extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int appndi_(integer *, integer *), sigerr_(char *,
-	     ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen), ssizei_(integer *, integer *),
-	     insrti_(integer *, integer *);
+    extern /* Subroutine */ int appndi_(integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int insrti_(integer *, integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    lxname_state_t* __state = get_lxname_state();
 /* $ Abstract */
 
 /*     Umbrella routine for name scanning entry points. */
@@ -697,8 +716,8 @@ L_lxdfid:
 
 /*     Initialize our head and tail character sets. */
 
-    ssizei_(&c__255, headc);
-    ssizei_(&c__255, tailc);
+    ssizei_(&__state->c__255, headc);
+    ssizei_(&__state->c__255, tailc);
 
 /*     Fill in the head and tail character arrays with their default */
 /*     values.  User integer codes for the characters. */
@@ -728,8 +747,8 @@ L_lxdfid:
 
 /*     Turn the arrays into integer sets. */
 
-    validi_(&c__255, &nhead, headc);
-    validi_(&c__255, &ntail, tailc);
+    validi_(&__state->c__255, &nhead, headc);
+    validi_(&__state->c__255, &ntail, tailc);
 
 /*     Create the output specification IDSPEC.  This is a cell */
 /*     containing, in order, */
@@ -742,7 +761,7 @@ L_lxdfid:
 /*     IDSPEC is assumed to be initialized. */
 
 
-    scardi_(&c__0, idspec);
+    scardi_(&__state->c__0, idspec);
     appndi_(&nhead, idspec);
     appndi_(&ntail, idspec);
     i__1 = nhead;
@@ -926,8 +945,8 @@ L_lxcsid:
 
 /*     Initialize our head and tail character sets, every time. */
 
-    ssizei_(&c__255, headc);
-    ssizei_(&c__255, tailc);
+    ssizei_(&__state->c__255, headc);
+    ssizei_(&__state->c__255, tailc);
 
 /*     Check the inputs before proceeding. */
 
@@ -994,7 +1013,7 @@ L_lxcsid:
 /*     IDSPEC is assumed to be initialized. */
 
 
-    scardi_(&c__0, idspec);
+    scardi_(&__state->c__0, idspec);
     appndi_(&nhead, idspec);
     appndi_(&ntail, idspec);
     i__1 = nhead;

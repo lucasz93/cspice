@@ -1,24 +1,37 @@
-/* spks15.f -- translated by f2c (version 19980913).
+/* spks15.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__16 = 16;
+extern spks15_init_t __spks15_init;
+static spks15_state_t* get_spks15_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks15)
+		state->spks15 = __cspice_allocate_module(sizeof(
+	spks15_state_t), &__spks15_init, sizeof(__spks15_init));
+	return state->spks15;
+
+}
 
 /* $Procedure SPKS15 ( S/P Kernel, subset, type 15 ) */
 /* Subroutine */ int spks15_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
     doublereal data[16];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafgda_(integer *, integer *, integer *, doublereal *)
-	    , chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spks15_state_t* __state = get_spks15_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 15 */
@@ -198,7 +211,7 @@ static integer c__16 = 16;
 
 /*     Now write the data into the output file. */
 
-    dafada_(data, &c__16);
+    dafada_(data, &__state->c__16);
     chkout_("SPKS15", (ftnlen)6);
     return 0;
 } /* spks15_ */

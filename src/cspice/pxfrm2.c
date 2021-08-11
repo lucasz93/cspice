@@ -1,13 +1,21 @@
-/* pxfrm2.f -- translated by f2c (version 19980913).
+/* pxfrm2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern pxfrm2_init_t __pxfrm2_init;
+static pxfrm2_state_t* get_pxfrm2_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pxfrm2)
+		state->pxfrm2 = __cspice_allocate_module(sizeof(
+	pxfrm2_state_t), &__pxfrm2_init, sizeof(__pxfrm2_init));
+	return state->pxfrm2;
+
+}
 
 /* $Procedure      PXFRM2 ( Position Transform Matrix, Different Epochs ) */
 /* Subroutine */ int pxfrm2_(char *from, char *to, doublereal *etfrom, 
@@ -15,28 +23,28 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
-    static char svto[32];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzctruin_(integer *);
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer fcode;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer tcode;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal jf[9]	/* was [3][3] */;
-    static integer svctr1[2], svctr2[2];
     doublereal tj[9]	/* was [3][3] */;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    static integer svfcod, svtcde;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    static char svfrom[32];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    pxfrm2_state_t* __state = get_pxfrm2_state();
 /* $ Abstract */
 
 /*     Return the 3x3 matrix that transforms position vectors from one */
@@ -699,19 +707,21 @@ static integer c__1 = 1;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	__state->first = FALSE_;
     }
 
 /*     The frame names must be converted to their corresponding IDs. */
 
-    zznamfrm_(svctr1, svfrom, &svfcod, from, &fcode, (ftnlen)32, from_len);
-    zznamfrm_(svctr2, svto, &svtcde, to, &tcode, (ftnlen)32, to_len);
+    zznamfrm_(__state->svctr1, __state->svfrom, &__state->svfcod, from, &
+	    fcode, (ftnlen)32, from_len);
+    zznamfrm_(__state->svctr2, __state->svto, &__state->svtcde, to, &tcode, (
+	    ftnlen)32, to_len);
 
 /*     Only non-zero ID codes are legitimate frame ID codes.  Zero */
 /*     indicates that the frame was not recognized. */
@@ -729,8 +739,8 @@ static integer c__1 = 1;
 
 /*                              [ROTATE] = [TF] = [TJ][JF] */
 
-	refchg_(&fcode, &c__1, etfrom, jf);
-	refchg_(&c__1, &tcode, etto, tj);
+	refchg_(&fcode, &__state->c__1, etfrom, jf);
+	refchg_(&__state->c__1, &tcode, etto, tj);
 	mxm_(tj, jf, rotate);
     } else if (fcode == 0 && tcode == 0) {
 	setmsg_("Neither frame # nor # was recognized as a known reference f"

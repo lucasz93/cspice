@@ -1,13 +1,21 @@
-/* georec.f -- translated by f2c (version 19980913).
+/* georec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b11 = 1.;
+extern georec_init_t __georec_init;
+static georec_state_t* get_georec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->georec)
+		state->georec = __cspice_allocate_module(sizeof(
+	georec_state_t), &__georec_init, sizeof(__georec_init));
+	return state->georec;
+
+}
 
 /* $Procedure      GEOREC ( Geodetic to rectangular coordinates ) */
 /* Subroutine */ int georec_(doublereal *long__, doublereal *lat, doublereal *
@@ -20,17 +28,32 @@ static doublereal c_b11 = 1.;
     double cos(doublereal), sin(doublereal), sqrt(doublereal);
 
     /* Local variables */
-    doublereal base[3], cphi, sphi, scale, x, y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), vlcom_(doublereal *, doublereal *, 
+    doublereal base[3];
+    doublereal cphi;
+    doublereal sphi;
+    doublereal scale;
+    doublereal x;
+    doublereal y;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    doublereal clmbda;
+    doublereal rp;
+    doublereal slmbda;
+    doublereal height;
+    doublereal normal[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    doublereal clmbda, rp, slmbda, height, normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), surfnm_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
     doublereal big;
 
+
+    /* Module state */
+    georec_state_t* __state = get_georec_state();
 /* $ Abstract */
 
 /*     Convert geodetic coordinates to rectangular coordinates. */
@@ -339,7 +362,7 @@ static doublereal c_b11 = 1.;
 
 /*     Move along the normal to the input point. */
 
-    vlcom_(&c_b11, base, &height, normal, rectan);
+    vlcom_(&__state->c_b11, base, &height, normal, rectan);
     chkout_("GEOREC", (ftnlen)6);
     return 0;
 } /* georec_ */

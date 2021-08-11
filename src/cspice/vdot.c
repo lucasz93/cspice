@@ -1,9 +1,17 @@
-/* vdot.f -- translated by f2c (version 19980913).
+/* vdot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vdot_state_t;
+static vdot_state_t* get_vdot_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VDOT  ( Vector dot product, 3 dimensions ) */
 doublereal vdot_(doublereal *v1, doublereal *v2)
@@ -11,6 +19,9 @@ doublereal vdot_(doublereal *v1, doublereal *v2)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    vdot_state_t* __state = get_vdot_state();
 /* $ Abstract */
 
 /*      Compute the dot product of two double precision, 3-dimensional */

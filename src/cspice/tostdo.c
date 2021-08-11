@@ -1,21 +1,33 @@
-/* tostdo.f -- translated by f2c (version 19980913).
+/* tostdo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern tostdo_init_t __tostdo_init;
+static tostdo_state_t* get_tostdo_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->tostdo)
+		state->tostdo = __cspice_allocate_module(sizeof(
+	tostdo_state_t), &__tostdo_init, sizeof(__tostdo_init));
+	return state->tostdo;
+
+}
 
 /* $Procedure      TOSTDO ( To Standard Output) */
 /* Subroutine */ int tostdo_(char *line, ftnlen line_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
-    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen), writln_(
-	    char *, integer *, ftnlen);
-    static integer stdout;
+    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
 
+    /* Module state */
+    tostdo_state_t* __state = get_tostdo_state();
 /* $ Abstract */
 
 /*    Write a line of text to standard output. */
@@ -124,11 +136,11 @@
 /*     Write a line of text to standard output. */
 
 /* -& */
-    if (first) {
-	stdio_("STDOUT", &stdout, (ftnlen)6);
-	first = FALSE_;
+    if (__state->first) {
+	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
+	__state->first = FALSE_;
     }
-    writln_(line, &stdout, line_len);
+    writln_(line, &__state->stdout, line_len);
     return 0;
 } /* tostdo_ */
 

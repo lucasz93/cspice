@@ -1,9 +1,17 @@
-/* cyaiip.f -- translated by f2c (version 19980913).
+/* cyaiip.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cyaiip_state_t;
+static cyaiip_state_t* get_cyaiip_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure CYAIIP ( Cycle the elements of an integer array, in place ) */
 /* Subroutine */ int cyaiip_(integer *nelt, char *dir, integer *ncycle, 
@@ -13,13 +21,25 @@
     integer i__1, i__2;
 
     /* Local variables */
-    integer last, temp, g, i__, j, k, l, m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen)
-	    , setmsg_(char *, ftnlen);
+    integer last;
+    integer temp;
+    integer g;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer m;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern integer gcd_(integer *, integer *);
 
+
+    /* Module state */
+    cyaiip_state_t* __state = get_cyaiip_state();
 /* $ Abstract */
 
 /*     Cycle the elements of an integer array forward or backward */

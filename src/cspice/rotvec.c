@@ -1,9 +1,21 @@
-/* rotvec.f -- translated by f2c (version 19980913).
+/* rotvec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern rotvec_init_t __rotvec_init;
+static rotvec_state_t* get_rotvec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rotvec)
+		state->rotvec = __cspice_allocate_module(sizeof(
+	rotvec_state_t), &__rotvec_init, sizeof(__rotvec_init));
+	return state->rotvec;
+
+}
 
 /* $Procedure      ROTVEC ( Transform a vector via a rotation ) */
 /* Subroutine */ int rotvec_(doublereal *v1, doublereal *angle, integer *
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static integer indexs[5] = { 3,1,2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -21,9 +32,17 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal temp[3], c__, s;
-    integer i1, i2, i3, tmp;
+    doublereal temp[3];
+    doublereal c__;
+    doublereal s;
+    integer i1;
+    integer i2;
+    integer i3;
+    integer tmp;
 
+
+    /* Module state */
+    rotvec_state_t* __state = get_rotvec_state();
 /* $ Abstract */
 
 /*     Transform a vector to a new coordinate system rotated by ANGLE */
@@ -210,12 +229,12 @@
 /*  non-negative value of IAXIS mod 3 . */
 
     tmp = (*iaxis % 3 + 3) % 3;
-    i1 = indexs[(i__1 = tmp) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", i__1, 
-	    "rotvec_", (ftnlen)215)];
-    i2 = indexs[(i__1 = tmp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotvec_", (ftnlen)216)];
-    i3 = indexs[(i__1 = tmp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotvec_", (ftnlen)217)];
+    i1 = __state->indexs[(i__1 = tmp) < 5 && 0 <= i__1 ? i__1 : s_rnge("inde"
+	    "xs", i__1, "rotvec_", (ftnlen)215)];
+    i2 = __state->indexs[(i__1 = tmp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "rotvec_", (ftnlen)216)];
+    i3 = __state->indexs[(i__1 = tmp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "rotvec_", (ftnlen)217)];
 
 /*  The coordinate along the axis of rotation does not change. */
 

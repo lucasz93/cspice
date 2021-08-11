@@ -1,9 +1,10 @@
-/* zzhlp014.f -- translated by f2c (version 19980913).
+/* zzhlp014.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      ZZHLP014 ( private help text ) */
 /* Subroutine */ int zzhlp014_(integer *begin, integer *finish, char *text, 

@@ -1,14 +1,21 @@
-/* inelpl.f -- translated by f2c (version 19980913).
+/* inelpl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static doublereal c_b26 = 1.;
+extern inelpl_init_t __inelpl_init;
+static inelpl_state_t* get_inelpl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->inelpl)
+		state->inelpl = __cspice_allocate_module(sizeof(
+	inelpl_state_t), &__inelpl_init, sizeof(__inelpl_init));
+	return state->inelpl;
+
+}
 
 /* $Procedure      INELPL ( Intersection of ellipse and plane ) */
 /* Subroutine */ int inelpl_(doublereal *ellips, doublereal *plane, integer *
@@ -23,33 +30,50 @@ static doublereal c_b26 = 1.;
 
     /* Local variables */
     doublereal beta;
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal alpha, v[2];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    doublereal const__, trans[4], point[3];
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal alpha;
+    doublereal v[2];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal const__;
+    doublereal trans[4];
+    doublereal point[3];
     extern logical vzero_(doublereal *);
-    doublereal angle1, angle2;
+    doublereal angle1;
+    doublereal angle2;
     extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), vlcom3_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), pl2nvc_(doublereal *, doublereal *, doublereal *), 
-	    pl2nvp_(doublereal *, doublereal *, doublereal *), nvp2pl_(
-	    doublereal *, doublereal *, doublereal *);
+	    doublereal *);
+    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int pl2nvp_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
+	    doublereal *);
     extern doublereal halfpi_(void);
-    doublereal center[3], inpcon, normal[3], smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    doublereal center[3];
+    doublereal inpcon;
+    doublereal normal[3];
+    doublereal smajor[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpvec[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal sminor[3];
     extern doublereal vnormg_(doublereal *, integer *);
-    extern logical vzerog_(doublereal *, integer *), return_(void);
+    extern logical vzerog_(doublereal *, integer *);
+    extern logical return_(void);
     doublereal sep;
 
+
+    /* Module state */
+    inelpl_state_t* __state = get_inelpl_state();
 /* $ Abstract */
 
 /*     Find the intersection of an ellipse and a plane. */
@@ -460,7 +484,7 @@ static doublereal c_b26 = 1.;
 
 /*     Test whether the plane and ellipse are parallel: */
 
-    if (vzerog_(v, &c__2)) {
+    if (vzerog_(v, &__state->c__2)) {
 
 /*        The ellipse lies in the plane if and only if CONST is zero. */
 /*        In any case, we don't modify XPT1 or XPT2. */
@@ -506,7 +530,7 @@ static doublereal c_b26 = 1.;
 
 /*     Let's return right now if there are no solutions. */
 
-    if (vnormg_(v, &c__2) < const__) {
+    if (vnormg_(v, &__state->c__2) < const__) {
 	*nxpts = 0;
 	chkout_("INELPL", (ftnlen)6);
 	return 0;
@@ -527,7 +551,7 @@ static doublereal c_b26 = 1.;
 
 /*     The values of theta are the angles we seek. */
 
-    alpha = acos(const__ / vnormg_(v, &c__2));
+    alpha = acos(const__ / vnormg_(v, &__state->c__2));
     beta = atan2(v[1], v[0]);
     angle1 = beta - alpha;
     angle2 = beta + alpha;
@@ -562,10 +586,10 @@ static doublereal c_b26 = 1.;
 
     d__1 = cos(angle1);
     d__2 = sin(angle1);
-    vlcom3_(&c_b26, center, &d__1, smajor, &d__2, sminor, xpt1);
+    vlcom3_(&__state->c_b26, center, &d__1, smajor, &d__2, sminor, xpt1);
     d__1 = cos(angle2);
     d__2 = sin(angle2);
-    vlcom3_(&c_b26, center, &d__1, smajor, &d__2, sminor, xpt2);
+    vlcom3_(&__state->c_b26, center, &d__1, smajor, &d__2, sminor, xpt2);
     chkout_("INELPL", (ftnlen)6);
     return 0;
 } /* inelpl_ */

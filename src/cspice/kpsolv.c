@@ -1,9 +1,17 @@
-/* kpsolv.f -- translated by f2c (version 19980913).
+/* kpsolv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int kpsolv_state_t;
+static kpsolv_state_t* get_kpsolv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      KPSOLV ( Solve Keplers Equation --- Vector Form ) */
 doublereal kpsolv_(doublereal *evec)
@@ -18,17 +26,31 @@ doublereal kpsolv_(doublereal *evec)
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal cosx, sinx, h__;
+    doublereal cosx;
+    doublereal sinx;
+    doublereal h__;
     integer i__;
-    doublereal k, x;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    doublereal k;
+    doublereal x;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer maxit;
-    doublereal y0, xl, xm, xu, yx;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
-    doublereal ecc, ecc2, yxm, ypx;
+    doublereal y0;
+    doublereal xl;
+    doublereal xm;
+    doublereal xu;
+    doublereal yx;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    doublereal ecc;
+    doublereal ecc2;
+    doublereal yxm;
+    doublereal ypx;
 
+
+    /* Module state */
+    kpsolv_state_t* __state = get_kpsolv_state();
 /* $ Abstract */
 
 /*    This routine solves the equation X = < EVEC, U(X) > where */

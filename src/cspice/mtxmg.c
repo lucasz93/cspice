@@ -1,9 +1,17 @@
-/* mtxmg.f -- translated by f2c (version 19980913).
+/* mtxmg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int mtxmg_state_t;
+static mtxmg_state_t* get_mtxmg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   MTXMG ( Matrix transpose times matrix, general dimension ) */
 /* Subroutine */ int mtxmg_(doublereal *m1, doublereal *m2, integer *nc1, 
@@ -18,8 +26,13 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j, k;
+    integer i__;
+    integer j;
+    integer k;
 
+
+    /* Module state */
+    mtxmg_state_t* __state = get_mtxmg_state();
 /* $ Abstract */
 
 /*      Multiply the transpose of a matrix with another matrix, */
@@ -194,35 +207,35 @@
     /* Parameter adjustments */
     m1_dim1 = *nr1r2;
     m1_dim2 = *nc1;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
     mout_dim1 = *nc1;
     mout_dim2 = *nc2;
-    mout_offset = mout_dim1 + 1;
+    mout_offset = 1 + mout_dim1 * 1;
     m2_dim1 = *nr1r2;
     m2_dim2 = *nc2;
-    m2_offset = m2_dim1 + 1;
+    m2_offset = 1 + m2_dim1 * 1;
 
     /* Function Body */
     i__1 = *nc1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = *nc2;
 	for (j = 1; j <= i__2; ++j) {
-	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < mout_dim1 * 
+	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
 		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge("mout", i__3, 
 		    "mtxmg_", (ftnlen)196)] = 0.;
 	    i__3 = *nr1r2;
 	    for (k = 1; k <= i__3; ++k) {
-		mout[(i__4 = i__ + j * mout_dim1 - mout_offset) < mout_dim1 * 
-			mout_dim2 && 0 <= i__4 ? i__4 : s_rnge("mout", i__4, 
-			"mtxmg_", (ftnlen)198)] = mout[(i__5 = i__ + j * 
-			mout_dim1 - mout_offset) < mout_dim1 * mout_dim2 && 0 
-			<= i__5 ? i__5 : s_rnge("mout", i__5, "mtxmg_", (
-			ftnlen)198)] + m1[(i__6 = k + i__ * m1_dim1 - 
-			m1_offset) < m1_dim1 * m1_dim2 && 0 <= i__6 ? i__6 : 
-			s_rnge("m1", i__6, "mtxmg_", (ftnlen)198)] * m2[(i__7 
-			= k + j * m2_dim1 - m2_offset) < m2_dim1 * m2_dim2 && 
-			0 <= i__7 ? i__7 : s_rnge("m2", i__7, "mtxmg_", (
-			ftnlen)198)];
+		mout[(i__4 = i__ + j * mout_dim1 - mout_offset) < 1 * 
+			mout_dim1 * mout_dim2 && 0 <= i__4 ? i__4 : s_rnge(
+			"mout", i__4, "mtxmg_", (ftnlen)198)] = mout[(i__5 = 
+			i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
+			mout_dim2 && 0 <= i__5 ? i__5 : s_rnge("mout", i__5, 
+			"mtxmg_", (ftnlen)198)] + m1[(i__6 = k + i__ * 
+			m1_dim1 - m1_offset) < 1 * m1_dim1 * m1_dim2 && 0 <= 
+			i__6 ? i__6 : s_rnge("m1", i__6, "mtxmg_", (ftnlen)
+			198)] * m2[(i__7 = k + j * m2_dim1 - m2_offset) < 1 * 
+			m2_dim1 * m2_dim2 && 0 <= i__7 ? i__7 : s_rnge("m2", 
+			i__7, "mtxmg_", (ftnlen)198)];
 	    }
 	}
     }

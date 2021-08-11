@@ -1,14 +1,21 @@
-/* zzasryel.f -- translated by f2c (version 19980913).
+/* zzasryel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static doublereal c_b26 = -1.;
+extern zzasryel_init_t __zzasryel_init;
+static zzasryel_state_t* get_zzasryel_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzasryel)
+		state->zzasryel = __cspice_allocate_module(sizeof(
+	zzasryel_state_t), &__zzasryel_init, sizeof(__zzasryel_init));
+	return state->zzasryel;
+
+}
 
 /* $Procedure      ZZASRYEL ( Angular separation of ray and ellipse ) */
 /* Subroutine */ int zzasryel_(char *extrem, doublereal *ellips, doublereal *
@@ -27,47 +34,61 @@ static doublereal c_b26 = -1.;
     doublereal diff[3];
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal udir[3], xoff[3];
+    doublereal udir[3];
+    doublereal xoff[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal vprj[3], a, b;
+    doublereal vprj[3];
+    doublereal a;
+    doublereal b;
     integer i__;
     doublereal delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal udiff[3], acomp, bcomp, asign;
+    doublereal udiff[3];
+    doublereal acomp;
+    doublereal bcomp;
+    doublereal asign;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal theta;
     logical domin;
     doublereal level;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), swapd_(
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int swapd_(doublereal *, doublereal *);
     doublereal lower;
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal upper, newpt;
-    extern doublereal vnorm_(doublereal *), twopi_(void);
+    doublereal upper;
+    doublereal newpt;
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
     doublereal p2;
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    vprjp_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
+	    *);
     doublereal v2[3];
     integer nxpts;
     doublereal proxy;
     extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), vlcom3_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal gr, eplane[4], center[3], btween;
+    doublereal gr;
+    doublereal eplane[4];
+    doublereal center[3];
+    doublereal btween;
     extern doublereal touchd_(doublereal *);
     doublereal smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer extidx;
     doublereal sminor[3];
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
@@ -75,12 +96,16 @@ static doublereal c_b26 = -1.;
     extern logical return_(void);
     extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
 	    doublereal *, integer *, doublereal *);
-    doublereal btwprx, extprx;
+    doublereal btwprx;
+    doublereal extprx;
     char exttyp[3];
     doublereal lpt[3];
     integer npt;
     doublereal xpt[3];
 
+
+    /* Module state */
+    zzasryel_state_t* __state = get_zzasryel_state();
 /* $ Abstract */
 
 /*     Find the minimum or maximum angular separation between a */
@@ -518,7 +543,8 @@ static doublereal c_b26 = -1.;
 
 /*     Decide whether we're looking for a minimum or maximum. */
 
-    cmprss_(" ", &c__0, extrem, exttyp, (ftnlen)1, extrem_len, (ftnlen)3);
+    cmprss_(" ", &__state->c__0, extrem, exttyp, (ftnlen)1, extrem_len, (
+	    ftnlen)3);
     ljust_(exttyp, exttyp, (ftnlen)3, (ftnlen)3);
     if (s_cmp(exttyp, "MIN", (ftnlen)3, (ftnlen)3) == 0) {
 	domin = TRUE_;
@@ -697,7 +723,7 @@ static doublereal c_b26 = -1.;
 	theta = i__ * delta;
 	d__1 = cos(theta);
 	d__2 = sin(theta);
-	vlcom3_(&c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
+	vlcom3_(&__state->c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
 	vhat_(diff, udiff);
 	proxy = vdist_(udiff, udir);
 	if (domin) {
@@ -806,7 +832,7 @@ static doublereal c_b26 = -1.;
 
 	d__1 = cos(newpt);
 	d__2 = sin(newpt);
-	vlcom3_(&c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
+	vlcom3_(&__state->c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
 	vhat_(diff, udiff);
 	proxy = vdist_(udiff, udir);
 

@@ -1,35 +1,48 @@
-/* zzteme.f -- translated by f2c (version 19980913).
+/* zzteme.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern zzteme_init_t __zzteme_init;
+static zzteme_state_t* get_zzteme_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzteme)
+		state->zzteme = __cspice_allocate_module(sizeof(
+	zzteme_state_t), &__zzteme_init, sizeof(__zzteme_init));
+	return state->zzteme;
+
+}
 
 /* $Procedure ZZTEME ( J2000 to TEME at epoch ) */
 /* Subroutine */ int zzteme_(doublereal *et, doublereal *mt)
 {
-    doublereal xj2000[6], zj2000[6];
+    doublereal xj2000[6];
+    doublereal zj2000[6];
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
 	    integer *, doublereal *);
-    doublereal m1inv[36]	/* was [6][6] */, m2inv[36]	/* was [6][6] 
-	    */, z__[6];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), zztwovxf_(doublereal *
-	    , integer *, doublereal *, integer *, doublereal *), moved_(
-	    doublereal *, integer *, doublereal *);
-    doublereal xtemp[36]	/* was [6][6] */, m1[36]	/* was [6][6] 
-	    */, m2[36]	/* was [6][6] */;
+    doublereal m1inv[36]	/* was [6][6] */;
+    doublereal m2inv[36]	/* was [6][6] */;
+    doublereal z__[6];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zztwovxf_(doublereal *, integer *, doublereal 
+	    *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    doublereal xtemp[36]	/* was [6][6] */;
+    doublereal m1[36]	/* was [6][6] */;
+    doublereal m2[36]	/* was [6][6] */;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *), 
-	    zzeprc76_(doublereal *, doublereal *), zzenut80_(doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzeprc76_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzenut80_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    zzteme_state_t* __state = get_zzteme_state();
 /* $ Abstract */
 
 /*     J2000 to TEME, probably. */
@@ -148,23 +161,23 @@ static integer c__1 = 1;
 
     zzeprc76_(et, m1);
     invstm_(m1, m1inv);
-    moved_(m1inv, &c__6, xj2000);
+    moved_(m1inv, &__state->c__6, xj2000);
 
 /*     Extract the TETE +Z vector and its derivative, both */
 /*     expressed relative to the MEME frame, into Z. */
 
     zzenut80_(et, m2);
     invstm_(m2, m2inv);
-    moved_(&m2inv[12], &c__6, z__);
+    moved_(&m2inv[12], &__state->c__6, z__);
 
 /*     Transform Z to the J2000 frame. */
 
-    mxvg_(m1inv, z__, &c__6, &c__6, zj2000);
+    mxvg_(m1inv, z__, &__state->c__6, &__state->c__6, zj2000);
 
 /*     Compute the TEME to J2000 state transformation; */
 /*     invert this to produce the output matrix. */
 
-    zztwovxf_(zj2000, &c__3, xj2000, &c__1, xtemp);
+    zztwovxf_(zj2000, &__state->c__3, xj2000, &__state->c__1, xtemp);
     invstm_(xtemp, mt);
     chkout_("ZZTEME", (ftnlen)6);
     return 0;

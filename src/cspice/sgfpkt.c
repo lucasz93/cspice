@@ -1,19 +1,21 @@
-/* sgfpkt.f -- translated by f2c (version 19980913).
+/* sgfpkt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__12 = 12;
-static integer c__10 = 10;
-static integer c__16 = 16;
-static integer c__15 = 15;
-static integer c__11 = 11;
-static integer c__8 = 8;
-static integer c__9 = 9;
+extern sgfpkt_init_t __sgfpkt_init;
+static sgfpkt_state_t* get_sgfpkt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sgfpkt)
+		state->sgfpkt = __cspice_allocate_module(sizeof(
+	sgfpkt_state_t), &__sgfpkt_init, sizeof(__sgfpkt_init));
+	return state->sgfpkt;
+
+}
 
 /* $Procedure      SGFPKT ( Generic Segment: Fetch data packets ) */
 /* Subroutine */ int sgfpkt_(integer *handle, doublereal *descr, integer *
@@ -23,25 +25,37 @@ static integer c__9 = 9;
     integer i__1;
 
     /* Local variables */
-    integer size, b, e, i__;
+    integer size;
+    integer b;
+    integer e;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal dtemp[2];
-    integer begin1, begin2;
+    integer begin1;
+    integer begin2;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *), sigerr_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer mypdrb;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer soffst;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    integer mypktb, voffst;
+    integer mypktb;
+    integer voffst;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer mynpdr;
     extern logical return_(void);
-    integer mypdrt, mynpkt, mypkto, mypksz;
+    integer mypdrt;
+    integer mynpkt;
+    integer mypkto;
+    integer mypksz;
 
+
+    /* Module state */
+    sgfpkt_state_t* __state = get_sgfpkt_state();
 /* $ Abstract */
 
 /*     Given the descriptor for a generic segment in a DAF file */
@@ -643,11 +657,11 @@ static integer c__9 = 9;
 
 /*     Perform the needed initialization */
 
-    sgmeta_(handle, descr, &c__12, &mynpkt);
-    sgmeta_(handle, descr, &c__10, &mypdrt);
-    sgmeta_(handle, descr, &c__16, &mypkto);
-    sgmeta_(handle, descr, &c__15, &mypksz);
-    sgmeta_(handle, descr, &c__11, &mypktb);
+    sgmeta_(handle, descr, &__state->c__12, &mynpkt);
+    sgmeta_(handle, descr, &__state->c__10, &mypdrt);
+    sgmeta_(handle, descr, &__state->c__16, &mypkto);
+    sgmeta_(handle, descr, &__state->c__15, &mypksz);
+    sgmeta_(handle, descr, &__state->c__11, &mypktb);
     if (failed_()) {
 	chkout_("SGFPKT", (ftnlen)6);
 	return 0;
@@ -743,8 +757,8 @@ static integer c__9 = 9;
 /*        In addition to the other meta data items already retrieved, we */
 /*        will also need a few others. */
 
-	sgmeta_(handle, descr, &c__8, &mypdrb);
-	sgmeta_(handle, descr, &c__9, &mynpdr);
+	sgmeta_(handle, descr, &__state->c__8, &mypdrb);
+	sgmeta_(handle, descr, &__state->c__9, &mynpdr);
 	if (failed_()) {
 	    chkout_("SGFPKT", (ftnlen)6);
 	    return 0;

@@ -1,9 +1,10 @@
-/* zzdbrgap.f -- translated by f2c (version 19980913).
+/* zzdbrgap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* Table of constant values */
 
@@ -444,13 +445,13 @@ static integer c_b18 = 1000000;
 		    s_rnge("outybd", i__2, "zzdbrgap_", (ftnlen)287)] = bds2[(
 		    i__4 = (srcs[(i__3 = i__ - 1) < 200000 && 0 <= i__3 ? 
 		    i__3 : s_rnge("srcs", i__3, "zzdbrgap_", (ftnlen)287)] << 
-		    1) - 2) < bds2_dim2 << 1 && 0 <= i__4 ? i__4 : s_rnge(
+		    1) - 2) < 2 * bds2_dim2 && 0 <= i__4 ? i__4 : s_rnge(
 		    "bds2", i__4, "zzdbrgap_", (ftnlen)287)];
 	    outybd[(i__2 = (i__ << 1) - 1) < 200000 && 0 <= i__2 ? i__2 : 
 		    s_rnge("outybd", i__2, "zzdbrgap_", (ftnlen)288)] = bds2[(
 		    i__4 = (srcs[(i__3 = i__ - 1) < 200000 && 0 <= i__3 ? 
 		    i__3 : s_rnge("srcs", i__3, "zzdbrgap_", (ftnlen)288)] << 
-		    1) - 1) < bds2_dim2 << 1 && 0 <= i__4 ? i__4 : s_rnge(
+		    1) - 1) < 2 * bds2_dim2 && 0 <= i__4 ? i__4 : s_rnge(
 		    "bds2", i__4, "zzdbrgap_", (ftnlen)288)];
 	}
     } else {

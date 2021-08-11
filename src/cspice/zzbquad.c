@@ -1,9 +1,21 @@
-/* zzbquad.f -- translated by f2c (version 19980913).
+/* zzbquad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzbquad_init_t __zzbquad_init;
+static zzbquad_state_t* get_zzbquad_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzbquad)
+		state->zzbquad = __cspice_allocate_module(sizeof(
+	zzbquad_state_t), &__zzbquad_init, sizeof(__zzbquad_init));
+	return state->zzbquad;
+
+}
 
 /* $Procedure  ZZBQUAD ( Solve quadratic equation with bounds ) */
 /* Subroutine */ int zzbquad_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -12,8 +24,6 @@
 {
     /* Initialized data */
 
-    static doublereal big = 0.;
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;
@@ -29,11 +39,16 @@
     doublereal dscrim;
     extern doublereal touchd_(doublereal *);
     doublereal sqdisc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    doublereal num1, num2;
+    doublereal num1;
+    doublereal num2;
 
+
+    /* Module state */
+    zzbquad_state_t* __state = get_zzbquad_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -224,9 +239,9 @@
     if (return_()) {
 	return 0;
     }
-    if (first) {
-	big = sqrt(dpmax_()) / 100;
-	first = FALSE_;
+    if (__state->first) {
+	__state->big = sqrt(dpmax_()) / 100;
+	__state->first = FALSE_;
     }
 
 /*     Set invalid counts to start out. Initialize R1 and R2. */
@@ -238,11 +253,12 @@
 
 /*     Reject all large magnitude coefficients. */
 
-    if (abs(*a) > big || abs(*b) > big || abs(*c__) > big) {
+    if (abs(*a) > __state->big || abs(*b) > __state->big || abs(*c__) > 
+	    __state->big) {
 	chkin_("ZZBQUAD", (ftnlen)7);
 	setmsg_("Coefficients must have magnitude less than or equal to #, b"
 		"ut were A = #; B = #; C = #.", (ftnlen)87);
-	errdp_("#", &big, (ftnlen)1);
+	errdp_("#", &__state->big, (ftnlen)1);
 	errdp_("#", a, (ftnlen)1);
 	errdp_("#", b, (ftnlen)1);
 	errdp_("#", c__, (ftnlen)1);
@@ -253,11 +269,11 @@
 
 /*     Reject large magnitude upper bounds as well. */
 
-    if (abs(*ub) > big) {
+    if (abs(*ub) > __state->big) {
 	chkin_("ZZBQUAD", (ftnlen)7);
 	setmsg_("Upper bounds must have magnitude less than or equal to #, b"
 		"ut was #.", (ftnlen)68);
-	errdp_("#", &big, (ftnlen)1);
+	errdp_("#", &__state->big, (ftnlen)1);
 	errdp_("#", ub, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZBQUAD", (ftnlen)7);

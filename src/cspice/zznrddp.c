@@ -1,9 +1,20 @@
-/* zznrddp.f -- translated by f2c (version 19980913).
+/* zznrddp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+static zznrddp_state_t* get_zznrddp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zznrddp)
+		state->zznrddp = __cspice_allocate_module(sizeof(
+	zznrddp_state_t), 0, 0);
+	return state->zznrddp;
+
+}
 
 /* $Procedure ZZNRDDP ( Shell for deep space entry points ) */
 /* Subroutine */ int zznrddp_0_(int n__, doublereal *ao, doublereal *elems, 
@@ -19,48 +30,23 @@
 	    doublereal *, doublereal *), atan2(doublereal, doublereal);
 
     /* Local variables */
-    static doublereal ctem, delt, pinc, sghl;
-    static logical cont;
-    static doublereal sghs, aqnv, cosq, temp, stem, eqsq, sinq, thgr, xmao, 
-	    xnoi, zmol, zmos, pinc0, ainv2, sini2, temp1, cosq2, c__;
     extern /* Subroutine */ int zzsecprt_(integer *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    static integer i__;
-    static doublereal bfact, alfdp, jdtdb;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal betdp, atime, theta, xfact, preep, jdut50, xincl, cosiq,
-	     cosok, cosis, xlamo, a1, a2, a3, a4, a5, a6, a7, a8, a9, e3, f2, 
-	    f3, siniq, sinis, sinok, sinzf, stepn, s1, s2, s3, s4, s5, s6, s7,
-	     stepp, x1, x2, x3, x4, x5, x6, x7, x8, xldot, xnddt, xndot, 
-	    xqncl, z1, z2, z3, zcosg, zcosh, zcosi, zsing, zsinh, zsini;
     extern doublereal twopi_(void);
-    static doublereal a10, cc, dg[10], eo, pe, eq, ph, et, ft, se, pl, sh, si,
-	     sl, z11, z12, z13, z21, xl, z22, omegao, z23, z31, z32, z33, ze, 
-	    zf, zm, zn, xnodce;
     extern doublereal pi_(void);
-    static doublereal zx, zy;
-    static integer iresfl;
-    static doublereal f220, f221, ee2, f311, f321, cosomo, f322, f330, f441, 
-	    f442, f522, f523, f542, f543, g200, g201, g211, g300, g310, g322, 
-	    g410, g422, g520, g521, g532, g533, oxnode, pe0, ph0, pl0, rteqsq,
-	     se2, se3, sh2, sh3, si2, si3, sinomo, sl2, sl3, sl4, xh2, xh3, 
-	    xi2, xi3, xl2, xl3, xl4, xnodeo, zcosgl, zcoshl, zcosil, zsingl, 
-	    zsinhl, zsinil;
-    static integer isynfl;
-    static doublereal gam, del[3], eoc;
-    extern doublereal j2000_(void), j1950_(void);
+    extern doublereal j2000_(void);
+    extern doublereal j1950_(void);
     extern logical return_(void);
-    static doublereal ds50, day, pgh, sgh, sel, bsq, shl, sil;
     extern doublereal spd_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal ses, sll, xli, shs, sis, xni, sls, xmo, xls, xnq;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static doublereal ssx[5], pgh0, sgh2, sgh3, sgh4, xgh2, xgh3, xgh4, pix1, 
-	    pix2, xno2;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+    /* Module state */
+    zznrddp_state_t* __state = get_zznrddp_state();
 /* $ Abstract */
 
 /*    This subroutine is a shell for the routines needed by DPSPCE */
@@ -544,31 +530,31 @@ L_zzdpinit:
 /*     two line elements, deep space, initialize */
 
 /* -& */
-    pix1 = pi_();
-    pix2 = twopi_();
+    __state->pix1 = pi_();
+    __state->pix2 = twopi_();
 
 /*     Unpack the elements array. */
 
-    xincl = elems[3];
-    xnodeo = elems[4];
-    eo = elems[5];
-    omegao = elems[6];
-    xmo = elems[7];
+    __state->xincl = elems[3];
+    __state->xnodeo = elems[4];
+    __state->eo = elems[5];
+    __state->omegao = elems[6];
+    __state->xmo = elems[7];
 
 /*     Calculate intermediate values */
 
 /* Computing 2nd power */
-    d__1 = eo;
-    eqsq = d__1 * d__1;
-    bsq = 1. - eqsq;
-    rteqsq = sqrt(bsq);
-    siniq = sin(xincl);
-    cosiq = cos(xincl);
+    d__1 = __state->eo;
+    __state->eqsq = d__1 * d__1;
+    __state->bsq = 1. - __state->eqsq;
+    __state->rteqsq = sqrt(__state->bsq);
+    __state->siniq = sin(__state->xincl);
+    __state->cosiq = cos(__state->xincl);
 /* Computing 2nd power */
-    d__1 = cosiq;
-    cosq2 = d__1 * d__1;
-    sinomo = sin(omegao);
-    cosomo = cos(omegao);
+    d__1 = __state->cosiq;
+    __state->cosq2 = d__1 * d__1;
+    __state->sinomo = sin(__state->omegao);
+    __state->cosomo = cos(__state->omegao);
 
 /*     This section of code was previously performed by the THETAG */
 /*     function.  The epoch of the elements is defined in seconds since */
@@ -578,12 +564,12 @@ L_zzdpinit:
 /*     from the ELEMS array and place it in the first entry of a working */
 /*     array. */
 
-    et = elems[9];
+    __state->et = elems[9];
 
 /*     Convert the ET seconds past the J2000 epoch to the Julian */
 /*     date TDB. */
 
-    jdtdb = j2000_() + et / spd_();
+    __state->jdtdb = j2000_() + __state->et / spd_();
 
 /*     How many days since the 1950 reference? Using SPICE standard */
 /*     leapseconds the difference between TDB and UTC in 1950 is 32.184 */
@@ -591,8 +577,8 @@ L_zzdpinit:
 /*     epoch.  We call this JDTDB epoch ---JDUT50. Then we get the days */
 /*     since 1950 by simple arithmetic. */
 
-    jdut50 = j1950_() - 1. + 32.184 / spd_();
-    ds50 = jdtdb - jdut50;
+    __state->jdut50 = j1950_() - 1. + 32.184 / spd_();
+    __state->ds50 = __state->jdtdb - __state->jdut50;
 
 /*     What is the Earth's right ascension of the epoch?  We know the */
 /*     value at the JD1950-1 reference date, so add the number of radians */
@@ -600,363 +586,430 @@ L_zzdpinit:
 /*     2*PI to get the right ascension for the epoch.  This technique may */
 /*     not be the best way to get this value. */
 
-    theta = ds50 * 6.3003880987 + 1.72944494;
-    thgr = d_mod(&theta, &pix2);
+    __state->theta = __state->ds50 * 6.3003880987 + 1.72944494;
+    __state->thgr = d_mod(&__state->theta, &__state->pix2);
 
 /*     THGR should have a domain between 0 and 2 Pi. */
 
-    if (thgr < 0.) {
-	thgr += pix2;
+    if (__state->thgr < 0.) {
+	__state->thgr += __state->pix2;
     }
 
 /*     Set some operation variables. */
 
-    eq = eo;
-    xnq = *xnodp;
-    aqnv = 1. / *ao;
-    xqncl = xincl;
-    xmao = xmo;
-    sinq = sin(xnodeo);
-    cosq = cos(xnodeo);
+    __state->eq = __state->eo;
+    __state->xnq = *xnodp;
+    __state->aqnv = 1. / *ao;
+    __state->xqncl = __state->xincl;
+    __state->xmao = __state->xmo;
+    __state->sinq = sin(__state->xnodeo);
+    __state->cosq = cos(__state->xnodeo);
 
 /*     Initialize lunar solar terms */
 
-    day = ds50 + 18261.5;
-    if (day != preep) {
-	preep = day;
-	xnodce = 4.523602 - day * 9.2422029e-4;
-	stem = sin(xnodce);
-	ctem = cos(xnodce);
-	zcosil = .91375164 - ctem * .03568096;
+    __state->day = __state->ds50 + 18261.5;
+    if (__state->day != __state->preep) {
+	__state->preep = __state->day;
+	__state->xnodce = 4.523602 - __state->day * 9.2422029e-4;
+	__state->stem = sin(__state->xnodce);
+	__state->ctem = cos(__state->xnodce);
+	__state->zcosil = .91375164 - __state->ctem * .03568096;
 /* Computing 2nd power */
-	d__1 = zcosil;
-	zsinil = sqrt(1. - d__1 * d__1);
-	zsinhl = stem * .089683511 / zsinil;
+	d__1 = __state->zcosil;
+	__state->zsinil = sqrt(1. - d__1 * d__1);
+	__state->zsinhl = __state->stem * .089683511 / __state->zsinil;
 /* Computing 2nd power */
-	d__1 = zsinhl;
-	zcoshl = sqrt(1. - d__1 * d__1);
-	c__ = day * .2299715 + 4.7199672;
-	gam = day * .001944368 + 5.8351514;
-	d__1 = c__ - gam;
-	zmol = d_mod(&d__1, &pix2);
-	if (zmol < 0.) {
-	    zmol += pix2;
+	d__1 = __state->zsinhl;
+	__state->zcoshl = sqrt(1. - d__1 * d__1);
+	__state->c__ = __state->day * .2299715 + 4.7199672;
+	__state->gam = __state->day * .001944368 + 5.8351514;
+	d__1 = __state->c__ - __state->gam;
+	__state->zmol = d_mod(&d__1, &__state->pix2);
+	if (__state->zmol < 0.) {
+	    __state->zmol += __state->pix2;
 	}
-	zx = stem * .39785416 / zsinil;
-	zy = zcoshl * ctem + zsinhl * .91744867 * stem;
+	__state->zx = __state->stem * .39785416 / __state->zsinil;
+	__state->zy = __state->zcoshl * __state->ctem + __state->zsinhl * 
+		.91744867 * __state->stem;
 
 /*        Compute the angle from the x-axis of the point */
 
-	if (zx != 0. || zy != 0.) {
-	    zx = atan2(zx, zy);
-	    if (zx < 0.) {
-		zx += pix2;
+	if (__state->zx != 0. || __state->zy != 0.) {
+	    __state->zx = atan2(__state->zx, __state->zy);
+	    if (__state->zx < 0.) {
+		__state->zx += __state->pix2;
 	    }
 	} else {
-	    zx = 0.;
+	    __state->zx = 0.;
 	}
-	zx = gam + zx - xnodce;
-	zcosgl = cos(zx);
-	zsingl = sin(zx);
-	zmos = day * .017201977 + 6.2565837;
-	zmos = d_mod(&zmos, &pix2);
-	if (zmos < 0.) {
-	    zmos += pix2;
+	__state->zx = __state->gam + __state->zx - __state->xnodce;
+	__state->zcosgl = cos(__state->zx);
+	__state->zsingl = sin(__state->zx);
+	__state->zmos = __state->day * .017201977 + 6.2565837;
+	__state->zmos = d_mod(&__state->zmos, &__state->pix2);
+	if (__state->zmos < 0.) {
+	    __state->zmos += __state->pix2;
 	}
     }
 
 /*     Do solar terms.  Start with the constant values. */
 
-    zcosg = .1945905;
-    zsing = -.98088458;
-    zcosi = .91744867;
-    zsini = .39785416;
-    zcosh = cosq;
-    zsinh = sinq;
-    cc = 2.9864797e-6;
-    zn = 1.19459e-5;
-    ze = .01675;
-    xnoi = 1. / xnq;
+    __state->zcosg = .1945905;
+    __state->zsing = -.98088458;
+    __state->zcosi = .91744867;
+    __state->zsini = .39785416;
+    __state->zcosh = __state->cosq;
+    __state->zsinh = __state->sinq;
+    __state->cc = 2.9864797e-6;
+    __state->zn = 1.19459e-5;
+    __state->ze = .01675;
+    __state->xnoi = 1. / __state->xnq;
 
 /*     Initialize solar and lunar terms.  The procedure will */
 /*     first initialize just the solar, then the lunar, then */
 /*     reinitialize the solar with the added lunar effect. */
 
-    for (i__ = 1; i__ <= 2; ++i__) {
+    for (__state->i__ = 1; __state->i__ <= 2; ++__state->i__) {
 
 /*        Solar. */
 
-	a1 = zcosg * zcosh + zsing * zcosi * zsinh;
-	a3 = -zsing * zcosh + zcosg * zcosi * zsinh;
-	a7 = -zcosg * zsinh + zsing * zcosi * zcosh;
-	a8 = zsing * zsini;
-	a9 = zsing * zsinh + zcosg * zcosi * zcosh;
-	a10 = zcosg * zsini;
-	a2 = cosiq * a7 + siniq * a8;
-	a4 = cosiq * a9 + siniq * a10;
-	a5 = -siniq * a7 + cosiq * a8;
-	a6 = -siniq * a9 + cosiq * a10;
-	x1 = a1 * cosomo + a2 * sinomo;
-	x2 = a3 * cosomo + a4 * sinomo;
-	x3 = -a1 * sinomo + a2 * cosomo;
-	x4 = -a3 * sinomo + a4 * cosomo;
-	x5 = a5 * sinomo;
-	x6 = a6 * sinomo;
-	x7 = a5 * cosomo;
-	x8 = a6 * cosomo;
+	__state->a1 = __state->zcosg * __state->zcosh + __state->zsing * 
+		__state->zcosi * __state->zsinh;
+	__state->a3 = -__state->zsing * __state->zcosh + __state->zcosg * 
+		__state->zcosi * __state->zsinh;
+	__state->a7 = -__state->zcosg * __state->zsinh + __state->zsing * 
+		__state->zcosi * __state->zcosh;
+	__state->a8 = __state->zsing * __state->zsini;
+	__state->a9 = __state->zsing * __state->zsinh + __state->zcosg * 
+		__state->zcosi * __state->zcosh;
+	__state->a10 = __state->zcosg * __state->zsini;
+	__state->a2 = __state->cosiq * __state->a7 + __state->siniq * 
+		__state->a8;
+	__state->a4 = __state->cosiq * __state->a9 + __state->siniq * 
+		__state->a10;
+	__state->a5 = -__state->siniq * __state->a7 + __state->cosiq * 
+		__state->a8;
+	__state->a6 = -__state->siniq * __state->a9 + __state->cosiq * 
+		__state->a10;
+	__state->x1 = __state->a1 * __state->cosomo + __state->a2 * 
+		__state->sinomo;
+	__state->x2 = __state->a3 * __state->cosomo + __state->a4 * 
+		__state->sinomo;
+	__state->x3 = -__state->a1 * __state->sinomo + __state->a2 * 
+		__state->cosomo;
+	__state->x4 = -__state->a3 * __state->sinomo + __state->a4 * 
+		__state->cosomo;
+	__state->x5 = __state->a5 * __state->sinomo;
+	__state->x6 = __state->a6 * __state->sinomo;
+	__state->x7 = __state->a5 * __state->cosomo;
+	__state->x8 = __state->a6 * __state->cosomo;
 /* Computing 2nd power */
-	d__1 = x1;
+	d__1 = __state->x1;
 /* Computing 2nd power */
-	d__2 = x3;
-	z31 = d__1 * d__1 * 12. - d__2 * d__2 * 3.;
-	z32 = x1 * 24. * x2 - x3 * 6. * x4;
+	d__2 = __state->x3;
+	__state->z31 = d__1 * d__1 * 12. - d__2 * d__2 * 3.;
+	__state->z32 = __state->x1 * 24. * __state->x2 - __state->x3 * 6. * 
+		__state->x4;
 /* Computing 2nd power */
-	d__1 = x2;
+	d__1 = __state->x2;
 /* Computing 2nd power */
-	d__2 = x4;
-	z33 = d__1 * d__1 * 12. - d__2 * d__2 * 3.;
+	d__2 = __state->x4;
+	__state->z33 = d__1 * d__1 * 12. - d__2 * d__2 * 3.;
 /* Computing 2nd power */
-	d__1 = a1;
+	d__1 = __state->a1;
 /* Computing 2nd power */
-	d__2 = a2;
-	z1 = (d__1 * d__1 + d__2 * d__2) * 3. + z31 * eqsq;
-	z2 = (a1 * a3 + a2 * a4) * 6. + z32 * eqsq;
+	d__2 = __state->a2;
+	__state->z1 = (d__1 * d__1 + d__2 * d__2) * 3. + __state->z31 * 
+		__state->eqsq;
+	__state->z2 = (__state->a1 * __state->a3 + __state->a2 * __state->a4) 
+		* 6. + __state->z32 * __state->eqsq;
 /* Computing 2nd power */
-	d__1 = a3;
+	d__1 = __state->a3;
 /* Computing 2nd power */
-	d__2 = a4;
-	z3 = (d__1 * d__1 + d__2 * d__2) * 3. + z33 * eqsq;
-	z11 = a1 * -6. * a5 + eqsq * (x1 * -24. * x7 - x3 * 6. * x5);
-	z12 = (a1 * a6 + a3 * a5) * -6. + eqsq * ((x2 * x7 + x1 * x8) * -24. 
-		- (x3 * x6 + x4 * x5) * 6.);
-	z13 = a3 * -6. * a6 + eqsq * (x2 * -24. * x8 - x4 * 6. * x6);
-	z21 = a2 * 6. * a5 + eqsq * (x1 * 24. * x5 - x3 * 6. * x7);
-	z22 = (a4 * a5 + a2 * a6) * 6. + eqsq * ((x2 * x5 + x1 * x6) * 24. - (
-		x4 * x7 + x3 * x8) * 6.);
-	z23 = a4 * 6. * a6 + eqsq * (x2 * 24. * x6 - x4 * 6. * x8);
-	z1 = z1 + z1 + bsq * z31;
-	z2 = z2 + z2 + bsq * z32;
-	z3 = z3 + z3 + bsq * z33;
-	s3 = cc * xnoi;
-	s2 = s3 * -.5 / rteqsq;
-	s4 = s3 * rteqsq;
-	s1 = eq * -15. * s4;
-	s5 = x1 * x3 + x2 * x4;
-	s6 = x2 * x3 + x1 * x4;
-	s7 = x2 * x4 - x1 * x3;
-	se = s1 * zn * s5;
-	si = s2 * zn * (z11 + z13);
-	sl = -zn * s3 * (z1 + z3 - 14. - eqsq * 6.);
-	sgh = s4 * zn * (z31 + z33 - 6.);
-	sh = -zn * s2 * (z21 + z23);
+	d__2 = __state->a4;
+	__state->z3 = (d__1 * d__1 + d__2 * d__2) * 3. + __state->z33 * 
+		__state->eqsq;
+	__state->z11 = __state->a1 * -6. * __state->a5 + __state->eqsq * (
+		__state->x1 * -24. * __state->x7 - __state->x3 * 6. * 
+		__state->x5);
+	__state->z12 = (__state->a1 * __state->a6 + __state->a3 * __state->a5)
+		 * -6. + __state->eqsq * ((__state->x2 * __state->x7 + 
+		__state->x1 * __state->x8) * -24. - (__state->x3 * 
+		__state->x6 + __state->x4 * __state->x5) * 6.);
+	__state->z13 = __state->a3 * -6. * __state->a6 + __state->eqsq * (
+		__state->x2 * -24. * __state->x8 - __state->x4 * 6. * 
+		__state->x6);
+	__state->z21 = __state->a2 * 6. * __state->a5 + __state->eqsq * (
+		__state->x1 * 24. * __state->x5 - __state->x3 * 6. * 
+		__state->x7);
+	__state->z22 = (__state->a4 * __state->a5 + __state->a2 * __state->a6)
+		 * 6. + __state->eqsq * ((__state->x2 * __state->x5 + 
+		__state->x1 * __state->x6) * 24. - (__state->x4 * __state->x7 
+		+ __state->x3 * __state->x8) * 6.);
+	__state->z23 = __state->a4 * 6. * __state->a6 + __state->eqsq * (
+		__state->x2 * 24. * __state->x6 - __state->x4 * 6. * 
+		__state->x8);
+	__state->z1 = __state->z1 + __state->z1 + __state->bsq * __state->z31;
+	__state->z2 = __state->z2 + __state->z2 + __state->bsq * __state->z32;
+	__state->z3 = __state->z3 + __state->z3 + __state->bsq * __state->z33;
+	__state->s3 = __state->cc * __state->xnoi;
+	__state->s2 = __state->s3 * -.5 / __state->rteqsq;
+	__state->s4 = __state->s3 * __state->rteqsq;
+	__state->s1 = __state->eq * -15. * __state->s4;
+	__state->s5 = __state->x1 * __state->x3 + __state->x2 * __state->x4;
+	__state->s6 = __state->x2 * __state->x3 + __state->x1 * __state->x4;
+	__state->s7 = __state->x2 * __state->x4 - __state->x1 * __state->x3;
+	__state->se = __state->s1 * __state->zn * __state->s5;
+	__state->si = __state->s2 * __state->zn * (__state->z11 + 
+		__state->z13);
+	__state->sl = -__state->zn * __state->s3 * (__state->z1 + __state->z3 
+		- 14. - __state->eqsq * 6.);
+	__state->sgh = __state->s4 * __state->zn * (__state->z31 + 
+		__state->z33 - 6.);
+	__state->sh = -__state->zn * __state->s2 * (__state->z21 + 
+		__state->z23);
 
 /*        Check for, and adust SH, at inclinations near 0 and 180 degs. */
 
-	if (xqncl < .052359877 || xqncl > pi_() - .052359877) {
-	    sh = 0.;
+	if (__state->xqncl < .052359877 || __state->xqncl > pi_() - 
+		.052359877) {
+	    __state->sh = 0.;
 	}
 
 /*        Secondary check, J.I.C. */
 
-	if (siniq == 0.) {
-	    sh = 0.;
+	if (__state->siniq == 0.) {
+	    __state->sh = 0.;
 	}
-	ee2 = s1 * 2. * s6;
-	e3 = s1 * 2. * s7;
-	xi2 = s2 * 2. * z12;
-	xi3 = s2 * 2. * (z13 - z11);
-	xl2 = s3 * -2. * z2;
-	xl3 = s3 * -2. * (z3 - z1);
-	xl4 = s3 * -2. * (-21. - eqsq * 9.) * ze;
-	xgh2 = s4 * 2. * z32;
-	xgh3 = s4 * 2. * (z33 - z31);
-	xgh4 = s4 * -18. * ze;
-	xh2 = s2 * -2. * z22;
-	xh3 = s2 * -2. * (z23 - z21);
-	if (i__ == 1) {
+	__state->ee2 = __state->s1 * 2. * __state->s6;
+	__state->e3 = __state->s1 * 2. * __state->s7;
+	__state->xi2 = __state->s2 * 2. * __state->z12;
+	__state->xi3 = __state->s2 * 2. * (__state->z13 - __state->z11);
+	__state->xl2 = __state->s3 * -2. * __state->z2;
+	__state->xl3 = __state->s3 * -2. * (__state->z3 - __state->z1);
+	__state->xl4 = __state->s3 * -2. * (-21. - __state->eqsq * 9.) * 
+		__state->ze;
+	__state->xgh2 = __state->s4 * 2. * __state->z32;
+	__state->xgh3 = __state->s4 * 2. * (__state->z33 - __state->z31);
+	__state->xgh4 = __state->s4 * -18. * __state->ze;
+	__state->xh2 = __state->s2 * -2. * __state->z22;
+	__state->xh3 = __state->s2 * -2. * (__state->z23 - __state->z21);
+	if (__state->i__ == 1) {
 
 /*           Do lunar terms after solar terms, but only once. */
 
-	    ssx[0] = sl;
+	    __state->ssx[0] = __state->sl;
 
 /*            Prevent evaluation of 1/SINIQ for SH = 0. */
 
-	    if (sh == 0.) {
-		ssx[2] = 0.;
+	    if (__state->sh == 0.) {
+		__state->ssx[2] = 0.;
 	    }
-	    if (sh != 0.) {
-		ssx[2] = sh / siniq;
+	    if (__state->sh != 0.) {
+		__state->ssx[2] = __state->sh / __state->siniq;
 	    }
-	    ssx[1] = sgh - cosiq * ssx[2];
-	    ssx[3] = se;
-	    ssx[4] = si;
-	    se2 = ee2;
-	    si2 = xi2;
-	    sl2 = xl2;
-	    sgh2 = xgh2;
-	    sh2 = xh2;
-	    se3 = e3;
-	    si3 = xi3;
-	    sl3 = xl3;
-	    sgh3 = xgh3;
-	    sh3 = xh3;
-	    sl4 = xl4;
-	    sgh4 = xgh4;
-	    zcosg = zcosgl;
-	    zsing = zsingl;
-	    zcosi = zcosil;
-	    zsini = zsinil;
-	    zcosh = zcoshl * cosq + zsinhl * sinq;
-	    zsinh = sinq * zcoshl - cosq * zsinhl;
-	    zn = 1.5835218e-4;
-	    cc = 4.7968065e-7;
-	    ze = .0549;
+	    __state->ssx[1] = __state->sgh - __state->cosiq * __state->ssx[2];
+	    __state->ssx[3] = __state->se;
+	    __state->ssx[4] = __state->si;
+	    __state->se2 = __state->ee2;
+	    __state->si2 = __state->xi2;
+	    __state->sl2 = __state->xl2;
+	    __state->sgh2 = __state->xgh2;
+	    __state->sh2 = __state->xh2;
+	    __state->se3 = __state->e3;
+	    __state->si3 = __state->xi3;
+	    __state->sl3 = __state->xl3;
+	    __state->sgh3 = __state->xgh3;
+	    __state->sh3 = __state->xh3;
+	    __state->sl4 = __state->xl4;
+	    __state->sgh4 = __state->xgh4;
+	    __state->zcosg = __state->zcosgl;
+	    __state->zsing = __state->zsingl;
+	    __state->zcosi = __state->zcosil;
+	    __state->zsini = __state->zsinil;
+	    __state->zcosh = __state->zcoshl * __state->cosq + 
+		    __state->zsinhl * __state->sinq;
+	    __state->zsinh = __state->sinq * __state->zcoshl - __state->cosq *
+		     __state->zsinhl;
+	    __state->zn = 1.5835218e-4;
+	    __state->cc = 4.7968065e-7;
+	    __state->ze = .0549;
 	}
     }
-    ssx[0] += sl;
+    __state->ssx[0] += __state->sl;
 
 /*      Prevent evaluation of 1/SINIQ for SH = 0. */
 
-    if (sh == 0.) {
-	ssx[1] += sgh;
+    if (__state->sh == 0.) {
+	__state->ssx[1] += __state->sgh;
     }
-    if (sh != 0.) {
-	ssx[1] = ssx[1] + sgh - cosiq / siniq * sh;
+    if (__state->sh != 0.) {
+	__state->ssx[1] = __state->ssx[1] + __state->sgh - __state->cosiq / 
+		__state->siniq * __state->sh;
     }
-    if (sh == 0.) {
-	ssx[2] = ssx[2];
+    if (__state->sh == 0.) {
+	__state->ssx[2] = __state->ssx[2];
     }
-    if (sh != 0.) {
-	ssx[2] += sh / siniq;
+    if (__state->sh != 0.) {
+	__state->ssx[2] += __state->sh / __state->siniq;
     }
-    ssx[3] += se;
-    ssx[4] += si;
+    __state->ssx[3] += __state->se;
+    __state->ssx[4] += __state->si;
 
 /*     Geopotential resonance initialization for 12 hour orbits */
 
-    iresfl = 0;
-    isynfl = 0;
-    if (xnq < .0052359877 && xnq > .0034906585) {
+    __state->iresfl = 0;
+    __state->isynfl = 0;
+    if (__state->xnq < .0052359877 && __state->xnq > .0034906585) {
 
 /*        Synchronous resonance terms initialization */
 
-	iresfl = 1;
-	isynfl = 1;
-	g200 = eqsq * (eqsq * .8125 - 2.5) + 1.;
-	g310 = eqsq * 2. + 1.;
-	g300 = eqsq * (eqsq * 6.60937 - 6.) + 1.;
+	__state->iresfl = 1;
+	__state->isynfl = 1;
+	__state->g200 = __state->eqsq * (__state->eqsq * .8125 - 2.5) + 1.;
+	__state->g310 = __state->eqsq * 2. + 1.;
+	__state->g300 = __state->eqsq * (__state->eqsq * 6.60937 - 6.) + 1.;
 /* Computing 2nd power */
-	d__1 = cosiq + 1.;
-	f220 = d__1 * d__1 * .75;
-	f311 = siniq * .9375 * siniq * (cosiq * 3. + 1.) - (cosiq + 1.) * .75;
+	d__1 = __state->cosiq + 1.;
+	__state->f220 = d__1 * d__1 * .75;
+	__state->f311 = __state->siniq * .9375 * __state->siniq * (
+		__state->cosiq * 3. + 1.) - (__state->cosiq + 1.) * .75;
 /* Computing 3rd power */
-	d__1 = cosiq + 1.;
-	f330 = d__1 * (d__1 * d__1) * 1.875;
+	d__1 = __state->cosiq + 1.;
+	__state->f330 = d__1 * (d__1 * d__1) * 1.875;
 /* Computing 2nd power */
-	d__1 = xnq;
+	d__1 = __state->xnq;
 /* Computing 2nd power */
-	d__2 = aqnv;
-	del[0] = d__1 * d__1 * 3. * (d__2 * d__2);
-	del[1] = del[0] * 2. * f220 * g200 * 1.7891679e-6;
-	del[2] = del[0] * 3. * f330 * g300 * 2.2123015e-7 * aqnv;
-	del[0] = del[0] * f311 * g310 * 2.1460748e-6 * aqnv;
-	xlamo = xmao + xnodeo + omegao - thgr;
-	bfact = *xlldot + *omgdot + *xnodot - .0043752691;
-	bfact = bfact + ssx[0] + ssx[1] + ssx[2];
+	d__2 = __state->aqnv;
+	__state->del[0] = d__1 * d__1 * 3. * (d__2 * d__2);
+	__state->del[1] = __state->del[0] * 2. * __state->f220 * 
+		__state->g200 * 1.7891679e-6;
+	__state->del[2] = __state->del[0] * 3. * __state->f330 * 
+		__state->g300 * 2.2123015e-7 * __state->aqnv;
+	__state->del[0] = __state->del[0] * __state->f311 * __state->g310 * 
+		2.1460748e-6 * __state->aqnv;
+	__state->xlamo = __state->xmao + __state->xnodeo + __state->omegao - 
+		__state->thgr;
+	__state->bfact = *xlldot + *omgdot + *xnodot - .0043752691;
+	__state->bfact = __state->bfact + __state->ssx[0] + __state->ssx[1] + 
+		__state->ssx[2];
     } else {
-	if (xnq < .00826 || xnq > .00924 || eq < .5) {
+	if (__state->xnq < .00826 || __state->xnq > .00924 || __state->eq < 
+		.5) {
 	    return 0;
 	}
-	iresfl = 1;
-	eoc = eq * eqsq;
-	g201 = -.306 - (eq - .64) * .44;
+	__state->iresfl = 1;
+	__state->eoc = __state->eq * __state->eqsq;
+	__state->g201 = -.306 - (__state->eq - .64) * .44;
 
 /*     Looks icky doesn't it? */
 
-	if (eq > .65) {
-	    g211 = eq * 331.819 - 72.099 - eqsq * 508.738 + eoc * 266.724;
-	    g310 = eq * 1582.851 - 346.844 - eqsq * 2415.925 + eoc * 1246.113;
-	    g322 = eq * 1554.908 - 342.585 - eqsq * 2366.899 + eoc * 1215.972;
-	    g410 = eq * 4758.686 - 1052.797 - eqsq * 7193.992 + eoc * 
-		    3651.957;
-	    g422 = eq * 16178.11 - 3581.69 - eqsq * 24462.77 + eoc * 12422.52;
+	if (__state->eq > .65) {
+	    __state->g211 = __state->eq * 331.819 - 72.099 - __state->eqsq * 
+		    508.738 + __state->eoc * 266.724;
+	    __state->g310 = __state->eq * 1582.851 - 346.844 - __state->eqsq *
+		     2415.925 + __state->eoc * 1246.113;
+	    __state->g322 = __state->eq * 1554.908 - 342.585 - __state->eqsq *
+		     2366.899 + __state->eoc * 1215.972;
+	    __state->g410 = __state->eq * 4758.686 - 1052.797 - __state->eqsq 
+		    * 7193.992 + __state->eoc * 3651.957;
+	    __state->g422 = __state->eq * 16178.11 - 3581.69 - __state->eqsq *
+		     24462.77 + __state->eoc * 12422.52;
 
 /*           Decide on the G520 coefficient. */
 
-	    if (eq > .715) {
-		g520 = eq * 29936.92 - 5149.66 - eqsq * 54087.36 + eoc * 
-			31324.56;
+	    if (__state->eq > .715) {
+		__state->g520 = __state->eq * 29936.92 - 5149.66 - 
+			__state->eqsq * 54087.36 + __state->eoc * 31324.56;
 	    } else {
-		g520 = 1464.74 - eq * 4664.75 + eqsq * 3763.64;
+		__state->g520 = 1464.74 - __state->eq * 4664.75 + 
+			__state->eqsq * 3763.64;
 	    }
 	} else {
-	    g211 = 3.616 - eq * 13.247 + eqsq * 16.29;
-	    g310 = eq * 117.39 - 19.302 - eqsq * 228.419 + eoc * 156.591;
-	    g322 = eq * 109.7927 - 18.9068 - eqsq * 214.6334 + eoc * 146.5816;
-	    g410 = eq * 242.694 - 41.122 - eqsq * 471.094 + eoc * 313.953;
-	    g422 = eq * 841.88 - 146.407 - eqsq * 1629.014 + eoc * 1083.435;
-	    g520 = eq * 3017.977 - 532.114 - eqsq * 5740. + eoc * 3708.276;
+	    __state->g211 = 3.616 - __state->eq * 13.247 + __state->eqsq * 
+		    16.29;
+	    __state->g310 = __state->eq * 117.39 - 19.302 - __state->eqsq * 
+		    228.419 + __state->eoc * 156.591;
+	    __state->g322 = __state->eq * 109.7927 - 18.9068 - __state->eqsq *
+		     214.6334 + __state->eoc * 146.5816;
+	    __state->g410 = __state->eq * 242.694 - 41.122 - __state->eqsq * 
+		    471.094 + __state->eoc * 313.953;
+	    __state->g422 = __state->eq * 841.88 - 146.407 - __state->eqsq * 
+		    1629.014 + __state->eoc * 1083.435;
+	    __state->g520 = __state->eq * 3017.977 - 532.114 - __state->eqsq *
+		     5740. + __state->eoc * 3708.276;
 	}
-	if (eq >= .7) {
-	    g533 = eq * 161616.52 - 37995.78 - eqsq * 229838.2 + eoc * 
-		    109377.94;
-	    g521 = eq * 218913.95 - 51752.104 - eqsq * 309468.16 + eoc * 
-		    146349.42;
-	    g532 = eq * 170470.89 - 40023.88 - eqsq * 242699.48 + eoc * 
-		    115605.82;
+	if (__state->eq >= .7) {
+	    __state->g533 = __state->eq * 161616.52 - 37995.78 - 
+		    __state->eqsq * 229838.2 + __state->eoc * 109377.94;
+	    __state->g521 = __state->eq * 218913.95 - 51752.104 - 
+		    __state->eqsq * 309468.16 + __state->eoc * 146349.42;
+	    __state->g532 = __state->eq * 170470.89 - 40023.88 - 
+		    __state->eqsq * 242699.48 + __state->eoc * 115605.82;
 	} else {
-	    g533 = eq * 4988.61 - 919.2277 - eqsq * 9064.77 + eoc * 5542.21;
-	    g521 = eq * 4568.6173 - 822.71072 - eqsq * 8491.4146 + eoc * 
-		    5337.524;
-	    g532 = eq * 4690.25 - 853.666 - eqsq * 8624.77 + eoc * 5341.4;
+	    __state->g533 = __state->eq * 4988.61 - 919.2277 - __state->eqsq *
+		     9064.77 + __state->eoc * 5542.21;
+	    __state->g521 = __state->eq * 4568.6173 - 822.71072 - 
+		    __state->eqsq * 8491.4146 + __state->eoc * 5337.524;
+	    __state->g532 = __state->eq * 4690.25 - 853.666 - __state->eqsq * 
+		    8624.77 + __state->eoc * 5341.4;
 	}
-	sini2 = siniq * siniq;
-	f220 = (cosiq * 2. + 1. + cosq2) * .75;
-	f221 = sini2 * 1.5;
-	f321 = siniq * 1.875 * (1. - cosiq * 2. - cosq2 * 3.);
-	f322 = siniq * -1.875 * (cosiq * 2. + 1. - cosq2 * 3.);
-	f441 = sini2 * 35. * f220;
-	f442 = sini2 * 39.375 * sini2;
-	f522 = siniq * 9.84375 * (sini2 * (1. - cosiq * 2. - cosq2 * 5.) + (
-		cosiq * 4. - 2. + cosq2 * 6.) * .33333333);
-	f523 = siniq * (sini2 * 4.92187512 * (-2. - cosiq * 4. + cosq2 * 10.) 
-		+ (cosiq * 2. + 1. - cosq2 * 3.) * 6.56250012);
-	f542 = siniq * 29.53125 * (2. - cosiq * 8. + cosq2 * (cosiq * 8. - 
-		12. + cosq2 * 10.));
-	f543 = siniq * 29.53125 * (-2. - cosiq * 8. + cosq2 * (cosiq * 8. + 
-		12. - cosq2 * 10.));
-	xno2 = xnq * xnq;
-	ainv2 = aqnv * aqnv;
-	temp1 = xno2 * 3. * ainv2;
-	temp = temp1 * 1.7891679e-6;
-	dg[0] = temp * f220 * g201;
-	dg[1] = temp * f221 * g211;
-	temp1 *= aqnv;
-	temp = temp1 * 3.7393792e-7;
-	dg[2] = temp * f321 * g310;
-	dg[3] = temp * f322 * g322;
-	temp1 *= aqnv;
-	temp = temp1 * 2. * 7.3636953e-9;
-	dg[4] = temp * f441 * g410;
-	dg[5] = temp * f442 * g422;
-	temp1 *= aqnv;
-	temp = temp1 * 1.1428639e-7;
-	dg[6] = temp * f522 * g520;
-	dg[7] = temp * f523 * g532;
-	temp = temp1 * 2. * 2.1765803e-9;
-	dg[8] = temp * f542 * g521;
-	dg[9] = temp * f543 * g533;
-	xlamo = xmao + xnodeo + xnodeo - thgr - thgr;
-	bfact = *xlldot + *xnodot + *xnodot - .0043752691 - .0043752691;
-	bfact = bfact + ssx[0] + ssx[2] + ssx[2];
+	__state->sini2 = __state->siniq * __state->siniq;
+	__state->f220 = (__state->cosiq * 2. + 1. + __state->cosq2) * .75;
+	__state->f221 = __state->sini2 * 1.5;
+	__state->f321 = __state->siniq * 1.875 * (1. - __state->cosiq * 2. - 
+		__state->cosq2 * 3.);
+	__state->f322 = __state->siniq * -1.875 * (__state->cosiq * 2. + 1. - 
+		__state->cosq2 * 3.);
+	__state->f441 = __state->sini2 * 35. * __state->f220;
+	__state->f442 = __state->sini2 * 39.375 * __state->sini2;
+	__state->f522 = __state->siniq * 9.84375 * (__state->sini2 * (1. - 
+		__state->cosiq * 2. - __state->cosq2 * 5.) + (__state->cosiq *
+		 4. - 2. + __state->cosq2 * 6.) * .33333333);
+	__state->f523 = __state->siniq * (__state->sini2 * 4.92187512 * (-2. 
+		- __state->cosiq * 4. + __state->cosq2 * 10.) + (
+		__state->cosiq * 2. + 1. - __state->cosq2 * 3.) * 6.56250012);
+	__state->f542 = __state->siniq * 29.53125 * (2. - __state->cosiq * 8. 
+		+ __state->cosq2 * (__state->cosiq * 8. - 12. + 
+		__state->cosq2 * 10.));
+	__state->f543 = __state->siniq * 29.53125 * (-2. - __state->cosiq * 
+		8. + __state->cosq2 * (__state->cosiq * 8. + 12. - 
+		__state->cosq2 * 10.));
+	__state->xno2 = __state->xnq * __state->xnq;
+	__state->ainv2 = __state->aqnv * __state->aqnv;
+	__state->temp1 = __state->xno2 * 3. * __state->ainv2;
+	__state->temp = __state->temp1 * 1.7891679e-6;
+	__state->dg[0] = __state->temp * __state->f220 * __state->g201;
+	__state->dg[1] = __state->temp * __state->f221 * __state->g211;
+	__state->temp1 *= __state->aqnv;
+	__state->temp = __state->temp1 * 3.7393792e-7;
+	__state->dg[2] = __state->temp * __state->f321 * __state->g310;
+	__state->dg[3] = __state->temp * __state->f322 * __state->g322;
+	__state->temp1 *= __state->aqnv;
+	__state->temp = __state->temp1 * 2. * 7.3636953e-9;
+	__state->dg[4] = __state->temp * __state->f441 * __state->g410;
+	__state->dg[5] = __state->temp * __state->f442 * __state->g422;
+	__state->temp1 *= __state->aqnv;
+	__state->temp = __state->temp1 * 1.1428639e-7;
+	__state->dg[6] = __state->temp * __state->f522 * __state->g520;
+	__state->dg[7] = __state->temp * __state->f523 * __state->g532;
+	__state->temp = __state->temp1 * 2. * 2.1765803e-9;
+	__state->dg[8] = __state->temp * __state->f542 * __state->g521;
+	__state->dg[9] = __state->temp * __state->f543 * __state->g533;
+	__state->xlamo = __state->xmao + __state->xnodeo + __state->xnodeo - 
+		__state->thgr - __state->thgr;
+	__state->bfact = *xlldot + *xnodot + *xnodot - .0043752691 - 
+		.0043752691;
+	__state->bfact = __state->bfact + __state->ssx[0] + __state->ssx[2] + 
+		__state->ssx[2];
     }
-    xfact = bfact - xnq;
+    __state->xfact = __state->bfact - __state->xnq;
 
 /*     Initialize integrator */
 
-    xli = xlamo;
-    xni = xnq;
-    atime = 0.;
+    __state->xli = __state->xlamo;
+    __state->xni = __state->xnq;
+    __state->atime = 0.;
     return 0;
 /* $Procedure ZZDPSEC (Calculate secular perturbations ) */
 
@@ -1147,82 +1200,95 @@ L_zzdpsec:
 /*     two line elements, secular perturbation */
 
 /* -& */
-    stepp = 720.;
-    stepn = -720.;
-    xincl = elems[3];
-    eo = elems[5];
-    *xll += ssx[0] * *t;
-    *omgasm += ssx[1] * *t;
-    *xnodes += ssx[2] * *t;
-    *em = eo + ssx[3] * *t;
-    *xinc = xincl + ssx[4] * *t;
+    __state->stepp = 720.;
+    __state->stepn = -720.;
+    __state->xincl = elems[3];
+    __state->eo = elems[5];
+    *xll += __state->ssx[0] * *t;
+    *omgasm += __state->ssx[1] * *t;
+    *xnodes += __state->ssx[2] * *t;
+    *em = __state->eo + __state->ssx[3] * *t;
+    *xinc = __state->xincl + __state->ssx[4] * *t;
 
 /*     Check for the state of the resonance flag. */
 
-    if (iresfl == 0) {
+    if (__state->iresfl == 0) {
 	return 0;
     }
 
 /*     If we got down here then the resonance effects need to be */
 /*     calculated.  Continue to loop until the CONT flag is set to false. */
 
-    cont = TRUE_;
-    while(cont) {
-	if (atime == 0. || *t >= 0. && atime < 0. || *t < 0. && atime >= 0.) {
+    __state->cont = TRUE_;
+    while(__state->cont) {
+	if (__state->atime == 0. || *t >= 0. && __state->atime < 0. || *t < 
+		0. && __state->atime >= 0.) {
 
 /*           Epoch restart */
 
 	    if (*t >= 0.) {
-		delt = stepp;
+		__state->delt = __state->stepp;
 	    } else {
-		delt = stepn;
+		__state->delt = __state->stepn;
 	    }
-	    atime = 0.;
-	    xni = xnq;
-	    xli = xlamo;
-	    cont = FALSE_;
-	} else if (abs(*t) >= abs(atime)) {
-	    delt = stepn;
+	    __state->atime = 0.;
+	    __state->xni = __state->xnq;
+	    __state->xli = __state->xlamo;
+	    __state->cont = FALSE_;
+	} else if (abs(*t) >= abs(__state->atime)) {
+	    __state->delt = __state->stepn;
 	    if (*t > 0.) {
-		delt = stepp;
+		__state->delt = __state->stepp;
 	    }
-	    cont = FALSE_;
+	    __state->cont = FALSE_;
 	} else {
-	    delt = stepp;
+	    __state->delt = __state->stepp;
 	    if (*t >= 0.) {
-		delt = stepn;
+		__state->delt = __state->stepn;
 	    }
-	    zzsecprt_(&isynfl, dg, del, &xni, &omegao, &atime, omgdot, &xli, &
-		    xfact, &xldot, &xndot, &xnddt);
-	    xli = xli + xldot * delt + xndot * 259200.;
-	    xni = xni + xndot * delt + xnddt * 259200.;
-	    atime += delt;
-	    cont = TRUE_;
+	    zzsecprt_(&__state->isynfl, __state->dg, __state->del, &
+		    __state->xni, &__state->omegao, &__state->atime, omgdot, &
+		    __state->xli, &__state->xfact, &__state->xldot, &
+		    __state->xndot, &__state->xnddt);
+	    __state->xli = __state->xli + __state->xldot * __state->delt + 
+		    __state->xndot * 259200.;
+	    __state->xni = __state->xni + __state->xndot * __state->delt + 
+		    __state->xnddt * 259200.;
+	    __state->atime += __state->delt;
+	    __state->cont = TRUE_;
 	}
     }
 
 /*     Do this loop while the time interval is greater than STEPP */
 
-    while((d__1 = *t - atime, abs(d__1)) >= stepp) {
-	zzsecprt_(&isynfl, dg, del, &xni, &omegao, &atime, omgdot, &xli, &
-		xfact, &xldot, &xndot, &xnddt);
-	xli = xli + xldot * delt + xndot * 259200.;
-	xni = xni + xndot * delt + xnddt * 259200.;
-	atime += delt;
+    while((d__1 = *t - __state->atime, abs(d__1)) >= __state->stepp) {
+	zzsecprt_(&__state->isynfl, __state->dg, __state->del, &__state->xni, 
+		&__state->omegao, &__state->atime, omgdot, &__state->xli, &
+		__state->xfact, &__state->xldot, &__state->xndot, &
+		__state->xnddt);
+	__state->xli = __state->xli + __state->xldot * __state->delt + 
+		__state->xndot * 259200.;
+	__state->xni = __state->xni + __state->xndot * __state->delt + 
+		__state->xnddt * 259200.;
+	__state->atime += __state->delt;
     }
 
 /*     Calculate the time interval and determine the secular */
 /*     perturbations */
 
-    ft = *t - atime;
-    zzsecprt_(&isynfl, dg, del, &xni, &omegao, &atime, omgdot, &xli, &xfact, &
-	    xldot, &xndot, &xnddt);
-    *xn = xni + xndot * ft + xnddt * ft * ft * .5;
-    xl = xli + xldot * ft + xndot * ft * ft * .5;
-    temp = -(*xnodes) + thgr + *t * .0043752691;
-    *xll = xl - *omgasm + temp;
-    if (isynfl == 0) {
-	*xll = xl + temp + temp;
+    __state->ft = *t - __state->atime;
+    zzsecprt_(&__state->isynfl, __state->dg, __state->del, &__state->xni, &
+	    __state->omegao, &__state->atime, omgdot, &__state->xli, &
+	    __state->xfact, &__state->xldot, &__state->xndot, &__state->xnddt)
+	    ;
+    *xn = __state->xni + __state->xndot * __state->ft + __state->xnddt * 
+	    __state->ft * __state->ft * .5;
+    __state->xl = __state->xli + __state->xldot * __state->ft + 
+	    __state->xndot * __state->ft * __state->ft * .5;
+    __state->temp = -(*xnodes) + __state->thgr + *t * .0043752691;
+    *xll = __state->xl - *omgasm + __state->temp;
+    if (__state->isynfl == 0) {
+	*xll = __state->xl + __state->temp + __state->temp;
     }
     return 0;
 /* $Procedure ZZDPPER ( Calculate periodic perturbations ) */
@@ -1402,93 +1468,100 @@ L_zzdpper:
 
 /*     Update for solar perts at time T. */
 
-    zm = zmos + *t * 1.19459e-5;
-    zf = zm + sin(zm) * .033500000000000002;
-    sinzf = sin(zf);
-    f2 = sinzf * .5 * sinzf - .25;
-    f3 = sinzf * -.5 * cos(zf);
-    ses = se2 * f2 + se3 * f3;
-    sis = si2 * f2 + si3 * f3;
-    sls = sl2 * f2 + sl3 * f3 + sl4 * sinzf;
-    sghs = sgh2 * f2 + sgh3 * f3 + sgh4 * sinzf;
-    shs = sh2 * f2 + sh3 * f3;
+    __state->zm = __state->zmos + *t * 1.19459e-5;
+    __state->zf = __state->zm + sin(__state->zm) * .033500000000000002;
+    __state->sinzf = sin(__state->zf);
+    __state->f2 = __state->sinzf * .5 * __state->sinzf - .25;
+    __state->f3 = __state->sinzf * -.5 * cos(__state->zf);
+    __state->ses = __state->se2 * __state->f2 + __state->se3 * __state->f3;
+    __state->sis = __state->si2 * __state->f2 + __state->si3 * __state->f3;
+    __state->sls = __state->sl2 * __state->f2 + __state->sl3 * __state->f3 + 
+	    __state->sl4 * __state->sinzf;
+    __state->sghs = __state->sgh2 * __state->f2 + __state->sgh3 * __state->f3 
+	    + __state->sgh4 * __state->sinzf;
+    __state->shs = __state->sh2 * __state->f2 + __state->sh3 * __state->f3;
 
 /*     Update for lunar perts at time T. */
 
-    zm = zmol + *t * 1.5835218e-4;
-    zf = zm + sin(zm) * .10979999999999999;
-    sinzf = sin(zf);
-    f2 = sinzf * .5 * sinzf - .25;
-    f3 = sinzf * -.5 * cos(zf);
-    sel = ee2 * f2 + e3 * f3;
-    sil = xi2 * f2 + xi3 * f3;
-    sll = xl2 * f2 + xl3 * f3 + xl4 * sinzf;
-    sghl = xgh2 * f2 + xgh3 * f3 + xgh4 * sinzf;
-    shl = xh2 * f2 + xh3 * f3;
+    __state->zm = __state->zmol + *t * 1.5835218e-4;
+    __state->zf = __state->zm + sin(__state->zm) * .10979999999999999;
+    __state->sinzf = sin(__state->zf);
+    __state->f2 = __state->sinzf * .5 * __state->sinzf - .25;
+    __state->f3 = __state->sinzf * -.5 * cos(__state->zf);
+    __state->sel = __state->ee2 * __state->f2 + __state->e3 * __state->f3;
+    __state->sil = __state->xi2 * __state->f2 + __state->xi3 * __state->f3;
+    __state->sll = __state->xl2 * __state->f2 + __state->xl3 * __state->f3 + 
+	    __state->xl4 * __state->sinzf;
+    __state->sghl = __state->xgh2 * __state->f2 + __state->xgh3 * __state->f3 
+	    + __state->xgh4 * __state->sinzf;
+    __state->shl = __state->xh2 * __state->f2 + __state->xh3 * __state->f3;
 
 /*     Sum of solar and lunar perts */
 
-    pe = ses + sel;
-    pinc = sis + sil;
-    pl = sls + sll;
-    pgh = sghs + sghl;
-    ph = shs + shl;
+    __state->pe = __state->ses + __state->sel;
+    __state->pinc = __state->sis + __state->sil;
+    __state->pl = __state->sls + __state->sll;
+    __state->pgh = __state->sghs + __state->sghl;
+    __state->ph = __state->shs + __state->shl;
 
 /*     Subtract the epoch perturbations off the calculated values. */
 
-    pe -= pe0;
-    pinc -= pinc0;
-    pl -= pl0;
-    pgh -= pgh0;
-    ph -= ph0;
-    *xinc += pinc;
-    *em += pe;
+    __state->pe -= __state->pe0;
+    __state->pinc -= __state->pinc0;
+    __state->pl -= __state->pl0;
+    __state->pgh -= __state->pgh0;
+    __state->ph -= __state->ph0;
+    *xinc += __state->pinc;
+    *em += __state->pe;
 
 /*     Sin and Cos of the perturbed inclination.  The original */
 /*     Spacetrack 3 report calculated the values before the */
 /*     perturbation. */
 
-    sinis = sin(*xinc);
-    cosis = cos(*xinc);
-    if (xqncl > .2) {
-	ph /= siniq;
-	pgh -= cosiq * ph;
-	*omgasm += pgh;
-	*xnodes += ph;
-	*xll += pl;
+    __state->sinis = sin(*xinc);
+    __state->cosis = cos(*xinc);
+    if (__state->xqncl > .2) {
+	__state->ph /= __state->siniq;
+	__state->pgh -= __state->cosiq * __state->ph;
+	*omgasm += __state->pgh;
+	*xnodes += __state->ph;
+	*xll += __state->pl;
     } else {
 
 /*        Apply periodics with Lyddane modification */
 
-	sinok = sin(*xnodes);
-	cosok = cos(*xnodes);
-	alfdp = sinis * sinok;
-	betdp = sinis * cosok;
-	alfdp = alfdp + ph * cosok + pinc * cosis * sinok;
-	betdp = betdp - ph * sinok + pinc * cosis * cosok;
+	__state->sinok = sin(*xnodes);
+	__state->cosok = cos(*xnodes);
+	__state->alfdp = __state->sinis * __state->sinok;
+	__state->betdp = __state->sinis * __state->cosok;
+	__state->alfdp = __state->alfdp + __state->ph * __state->cosok + 
+		__state->pinc * __state->cosis * __state->sinok;
+	__state->betdp = __state->betdp - __state->ph * __state->sinok + 
+		__state->pinc * __state->cosis * __state->cosok;
 
 /*        Force a 0 - 2Pi domain on XNODES. */
 
 	if (*xnodes < 0.) {
-	    *xnodes += pix2;
+	    *xnodes += __state->pix2;
 	}
-	xls = *xll + *omgasm + pl + pgh + cosis * *xnodes - sinis * *xnodes * 
-		pinc;
+	__state->xls = *xll + *omgasm + __state->pl + __state->pgh + 
+		__state->cosis * *xnodes - __state->sinis * *xnodes * 
+		__state->pinc;
 
 /*        Compute the angle from the x-axis of the point */
 
-	if (alfdp != 0. || betdp != 0.) {
+	if (__state->alfdp != 0. || __state->betdp != 0.) {
 
 /*           Save the old value of XNODES, then compute the current value */
 /*           From ALFDP and BETDP */
 
-	    oxnode = *xnodes;
-	    *xnodes = atan2(alfdp, betdp);
+	    __state->oxnode = *xnodes;
+	    *xnodes = atan2(__state->alfdp, __state->betdp);
 
 /*           Force a 0 - 2Pi domain on XNODES */
 
 	    if (*xnodes < 0.) {
-		*xnodes += pix2;
+		*xnodes += __state->pix2;
 	    }
 
 /*           XNODES should be the angular difference between the previous */
@@ -1497,18 +1570,19 @@ L_zzdpper:
 /*           calculate this term correctly if XNODES passes over the */
 /*           branch cut at 2*Pi. */
 
-	    if ((d__1 = *xnodes - oxnode, abs(d__1)) > pix1) {
-		if (*xnodes > oxnode) {
-		    *xnodes -= pix2;
+	    if ((d__1 = *xnodes - __state->oxnode, abs(d__1)) > __state->pix1)
+		     {
+		if (*xnodes > __state->oxnode) {
+		    *xnodes -= __state->pix2;
 		} else {
-		    *xnodes += pix2;
+		    *xnodes += __state->pix2;
 		}
 	    }
 	} else {
 	    *xnodes = 0.;
 	}
-	*xll += pl;
-	*omgasm = xls - *xll - *xnodes * cos(*xinc);
+	*xll += __state->pl;
+	*omgasm = __state->xls - *xll - *xnodes * cos(*xinc);
     }
     return 0;
 } /* zznrddp_ */

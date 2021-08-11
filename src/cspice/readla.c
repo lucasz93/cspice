@@ -1,9 +1,17 @@
-/* readla.f -- translated by f2c (version 19980913).
+/* readla.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int readla_state_t;
+static readla_state_t* get_readla_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   READLA   ( Read array of lines from a logical unit ) */
 /* Subroutine */ int readla_(integer *unit, integer *maxlin, integer *numlin, 
@@ -13,11 +21,16 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical myeof;
     extern logical failed_(void);
-    extern /* Subroutine */ int readln_(integer *, char *, logical *, ftnlen),
-	     sigerr_(char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *,
-	     ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int readln_(integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    readla_state_t* __state = get_readla_state();
 /* $ Abstract */
 
 /*     This routine reads lines from a Fortran logical unit placing */

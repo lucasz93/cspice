@@ -1,15 +1,21 @@
-/* spkapp.f -- translated by f2c (version 19980913).
+/* spkapp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__9 = 9;
-static integer c__6 = 6;
+extern spkapp_init_t __spkapp_init;
+static spkapp_state_t* get_spkapp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkapp)
+		state->spkapp = __cspice_allocate_module(sizeof(
+	spkapp_state_t), &__spkapp_init, sizeof(__spkapp_init));
+	return state->spkapp;
+
+}
 
 /* $Procedure SPKAPP ( S/P Kernel, apparent state ) */
 /* Subroutine */ int spkapp_(integer *targ, doublereal *et, char *ref, 
@@ -18,10 +24,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char flags[5*9] = "NONE " "LT   " "LT+S " "CN   " "CN+S " "XLT  " 
-	    "XLT+S" "XCN  " "XCN+S";
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;
@@ -33,32 +35,39 @@ static integer c__6 = 6;
 
     /* Local variables */
     char corr[5];
-    static logical xmit;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    integer i__, refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *);
-    static logical usecn;
+    integer i__;
+    integer refid;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal sapos[3];
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
-    static logical uselt;
-    extern doublereal vnorm_(doublereal *), clight_(void);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal clight_(void);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    stlabx_(doublereal *, doublereal *, doublereal *);
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
     integer ltsign;
     extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen), setmsg_(char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal tstate[6];
     integer maxitr;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), spkssb_(
-	    integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    spkapp_state_t* __state = get_spkapp_state();
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by SPKAPS. This */
@@ -801,7 +810,8 @@ static integer c__6 = 6;
     } else {
 	chkin_("SPKAPP", (ftnlen)6);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -809,11 +819,12 @@ static integer c__6 = 6;
 /*        Remove leading and embedded white space from the aberration */
 /*        correction flag and convert to upper case. */
 
-	ljucrs_(&c__0, abcorr, corr, abcorr_len, (ftnlen)5);
+	ljucrs_(&__state->c__0, abcorr, corr, abcorr_len, (ftnlen)5);
 
 /*        Locate the flag in our list of flags. */
 
-	i__ = isrchc_(corr, &c__9, flags, (ftnlen)5, (ftnlen)5);
+	i__ = isrchc_(corr, &__state->c__9, __state->flags, (ftnlen)5, (
+		ftnlen)5);
 	if (i__ == 0) {
 	    setmsg_("Requested aberration correction # is not supported.", (
 		    ftnlen)51);
@@ -825,16 +836,16 @@ static integer c__6 = 6;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction. */
 
-	xmit = i__ > 5;
-	uselt = i__ == 2 || i__ == 3 || i__ == 6 || i__ == 7;
-	usestl = i__ > 1 && odd_(&i__);
-	usecn = i__ == 4 || i__ == 5 || i__ == 8 || i__ == 9;
-	first = FALSE_;
+	__state->xmit = i__ > 5;
+	__state->uselt = i__ == 2 || i__ == 3 || i__ == 6 || i__ == 7;
+	__state->usestl = i__ > 1 && odd_(&i__);
+	__state->usecn = i__ == 4 || i__ == 5 || i__ == 8 || i__ == 9;
+	__state->first = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -851,7 +862,7 @@ static integer c__6 = 6;
 
 /*     Determine the sign of the light time offset. */
 
-    if (xmit) {
+    if (__state->xmit) {
 	ltsign = 1;
     } else {
 	ltsign = -1;
@@ -863,17 +874,17 @@ static integer c__6 = 6;
 /*     light time. */
 
     spkssb_(targ, et, ref, starg, ref_len);
-    vsubg_(starg, sobs, &c__6, tstate);
-    moved_(tstate, &c__6, starg);
+    vsubg_(starg, sobs, &__state->c__6, tstate);
+    moved_(tstate, &__state->c__6, starg);
     *lt = vnorm_(starg) / clight_();
 
 /*     To correct for light time, find the state of the target body */
 /*     at the current epoch minus the one-way light time. Note that */
 /*     the observer remains where he is. */
 
-    if (uselt) {
+    if (__state->uselt) {
 	maxitr = 1;
-    } else if (usecn) {
+    } else if (__state->usecn) {
 	maxitr = 3;
     } else {
 	maxitr = 0;
@@ -882,8 +893,8 @@ static integer c__6 = 6;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	d__1 = *et + ltsign * *lt;
 	spkssb_(targ, &d__1, ref, starg, ref_len);
-	vsubg_(starg, sobs, &c__6, tstate);
-	moved_(tstate, &c__6, starg);
+	vsubg_(starg, sobs, &__state->c__6, tstate);
+	moved_(tstate, &__state->c__6, starg);
 	*lt = vnorm_(starg) / clight_();
     }
 
@@ -895,8 +906,8 @@ static integer c__6 = 6;
 /*     Stellar aberration corrections are not applied to the target's */
 /*     velocity. */
 
-    if (usestl) {
-	if (xmit) {
+    if (__state->usestl) {
+	if (__state->xmit) {
 
 /*           This is the transmission case. */
 

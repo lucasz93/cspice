@@ -1,13 +1,21 @@
-/* sysetc.f -- translated by f2c (version 19980913).
+/* sysetc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sysetc_init_t __sysetc_init;
+static sysetc_state_t* get_sysetc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sysetc)
+		state->sysetc = __cspice_allocate_module(sizeof(
+	sysetc_state_t), &__sysetc_init, sizeof(__sysetc_init));
+	return state->sysetc;
+
+}
 
 /* $Procedure      SYSETC ( Set the value associated with a symbol ) */
 /* Subroutine */ int sysetc_(char *name__, char *value, char *tabsym, integer 
@@ -22,27 +30,37 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nptr, nsym;
-    extern integer cardc_(char *, ftnlen), cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen), sumai_(integer *, integer *), 
-	    sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), remlac_(
-	    integer *, integer *, char *, integer *, ftnlen), scardi_(integer 
-	    *, integer *), inslac_(char *, integer *, integer *, char *, 
+    integer nval;
+    integer nptr;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardi_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sizec_(char *, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer sizei_(integer *);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
+	    *, ftnlen);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
 	    integer *, ftnlen, ftnlen);
     integer dimval;
     extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
 	    integer *, integer *);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym;
     logical oldsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sysetc_state_t* __state = get_sysetc_state();
 /* $ Abstract */
 
 /*     Set the value of a particular symbol in a character symbol table. */
@@ -295,15 +313,15 @@ static integer c__1 = 1;
 
     } else {
 	i__1 = locsym + 1;
-	inslac_(name__, &c__1, &i__1, tabsym + tabsym_len * 6, &nsym, 
-		name_len, tabsym_len);
+	inslac_(name__, &__state->c__1, &i__1, tabsym + tabsym_len * 6, &nsym,
+		 name_len, tabsym_len);
 	scardc_(&nsym, tabsym, tabsym_len);
 	i__1 = locsym + 1;
-	inslai_(&c__1, &c__1, &i__1, &tabptr[6], &nptr);
+	inslai_(&__state->c__1, &__state->c__1, &i__1, &tabptr[6], &nptr);
 	scardi_(&nptr, tabptr);
 	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslac_(value, &c__1, &locval, tabval + tabval_len * 6, &nval, 
-		value_len, tabval_len);
+	inslac_(value, &__state->c__1, &locval, tabval + tabval_len * 6, &
+		nval, value_len, tabval_len);
 	scardc_(&nval, tabval, tabval_len);
     }
     chkout_("SYSETC", (ftnlen)6);

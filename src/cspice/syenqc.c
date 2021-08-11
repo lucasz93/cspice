@@ -1,13 +1,21 @@
-/* syenqc.f -- translated by f2c (version 19980913).
+/* syenqc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern syenqc_init_t __syenqc_init;
+static syenqc_state_t* get_syenqc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->syenqc)
+		state->syenqc = __cspice_allocate_module(sizeof(
+	syenqc_state_t), &__syenqc_init, sizeof(__syenqc_init));
+	return state->syenqc;
+
+}
 
 /* $Procedure      SYENQC ( Enqueue a value onto a symbol ) */
 /* Subroutine */ int syenqc_(char *name__, char *value, char *tabsym, integer 
@@ -18,23 +26,30 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nsym;
+    integer nval;
+    integer nsym;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen), sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), inslac_(
-	    char *, integer *, integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sizec_(char *, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym;
     logical oldsym;
     extern /* Subroutine */ int sysetc_(char *, char *, char *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    syenqc_state_t* __state = get_syenqc_state();
 /* $ Abstract */
 
 /*     Enqueue a value onto a particular symbol in a character */
@@ -249,8 +264,8 @@ static integer c__1 = 1;
 
     } else {
 	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslac_(value, &c__1, &locval, tabval + tabval_len * 6, &nval, 
-		value_len, tabval_len);
+	inslac_(value, &__state->c__1, &locval, tabval + tabval_len * 6, &
+		nval, value_len, tabval_len);
 	scardc_(&nval, tabval, tabval_len);
 	++tabptr[locsym + 5];
     }

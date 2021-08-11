@@ -1,9 +1,17 @@
-/* spcb2a.f -- translated by f2c (version 19980913).
+/* spcb2a.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spcb2a_state_t;
+static spcb2a_state_t* get_spcb2a_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SPCB2A ( SPK and CK, binary to ASCII ) */
 /* Subroutine */ int spcb2a_(char *binary, char *text, ftnlen binary_len, 
@@ -17,11 +25,15 @@
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spcb2t_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int spcb2t_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int txtopn_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    spcb2a_state_t* __state = get_spcb2a_state();
 /* $ Abstract */
 
 /*     Convert a binary SPK or CK file to an equivalent text (ASCII) */

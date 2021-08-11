@@ -1,9 +1,17 @@
-/* removd.f -- translated by f2c (version 19980913).
+/* removd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int removd_state_t;
+static removd_state_t* get_removd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REMOVD ( Remove an item from a double precision set ) */
 /* Subroutine */ int removd_(doublereal *item, doublereal *a)
@@ -12,7 +20,8 @@
     integer i__1;
 
     /* Local variables */
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical in;
@@ -22,6 +31,9 @@
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    removd_state_t* __state = get_removd_state();
 /* $ Abstract */
 
 /*      Remove an item from a double precision set. */

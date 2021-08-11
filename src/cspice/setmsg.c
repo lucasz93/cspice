@@ -1,9 +1,17 @@
-/* setmsg.f -- translated by f2c (version 19980913).
+/* setmsg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int setmsg_state_t;
+static setmsg_state_t* get_setmsg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     SETMSG  ( Set Long Error Message ) */
 /* Subroutine */ int setmsg_(char *msg, ftnlen msg_len)
@@ -11,6 +19,9 @@
     extern logical allowd_(void);
     extern /* Subroutine */ int putlms_(char *, ftnlen);
 
+
+    /* Module state */
+    setmsg_state_t* __state = get_setmsg_state();
 /* $ Abstract */
 
 /*     Set the value of the current long error message. */

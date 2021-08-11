@@ -1,9 +1,17 @@
-/* reordd.f -- translated by f2c (version 19980913).
+/* reordd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reordd_state_t;
+static reordd_state_t* get_reordd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REORDD ( Reorder a double precision array ) */
 /* Subroutine */ int reordd_(integer *iorder, integer *ndim, doublereal *
@@ -15,8 +23,12 @@
     /* Local variables */
     integer hold;
     doublereal temp;
-    integer index, start;
+    integer index;
+    integer start;
 
+
+    /* Module state */
+    reordd_state_t* __state = get_reordd_state();
 /* $ Abstract */
 
 /*      Re-order the elements of a double precision array according to */

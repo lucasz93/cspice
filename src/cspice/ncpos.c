@@ -1,9 +1,17 @@
-/* ncpos.f -- translated by f2c (version 19980913).
+/* ncpos.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ncpos_state_t;
+static ncpos_state_t* get_ncpos_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            NCPOS ( NOT character position ) */
 integer ncpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen 
@@ -20,6 +28,9 @@ integer ncpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen
     logical found;
     integer lenstr;
 
+
+    /* Module state */
+    ncpos_state_t* __state = get_ncpos_state();
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a character NOT belonging */

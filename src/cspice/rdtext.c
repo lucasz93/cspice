@@ -1,13 +1,21 @@
-/* rdtext.f -- translated by f2c (version 19980913).
+/* rdtext.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern rdtext_init_t __rdtext_init;
+static rdtext_state_t* get_rdtext_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdtext)
+		state->rdtext = __cspice_allocate_module(sizeof(
+	rdtext_state_t), &__rdtext_init, sizeof(__rdtext_init));
+	return state->rdtext;
+
+}
 
 /* $Procedure      RDTEXT ( Read a line from a text file ) */
 /* Subroutine */ int rdtext_0_(int n__, char *file, char *line, logical *eof, 
@@ -15,12 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer n = 0;
-    static char lstfil[255] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -38,20 +40,22 @@ static integer c__1 = 1;
 
     /* Local variables */
     logical same;
-    integer unit, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    static integer index, units[96];
+    integer unit;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer isrchi_(integer *, integer *, integer *);
     integer number;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), getlun_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static integer lstunt;
 
+    /* Module state */
+    rdtext_state_t* __state = get_rdtext_state();
 /* $ Abstract */
 
 /*     Read the next line of text from a text file. */
@@ -582,8 +586,8 @@ static integer c__1 = 1;
 
 /*     Are we reading the same file? */
 
-    same = s_cmp(lstfil, file, (ftnlen)255, file_len) == 0 && s_cmp(lstfil, 
-	    " ", (ftnlen)255, (ftnlen)1) != 0;
+    same = s_cmp(__state->lstfil, file, (ftnlen)255, file_len) == 0 && s_cmp(
+	    __state->lstfil, " ", (ftnlen)255, (ftnlen)1) != 0;
     if (! same) {
 
 /*        We still might have the same file. For example these three */
@@ -630,14 +634,14 @@ static integer c__1 = 1;
 	    chkout_("RDTEXT", (ftnlen)6);
 	    return 0;
 	}
-	index = isrchi_(&number, &n, units);
-	if (index == 0) {
+	__state->index = isrchi_(&number, &__state->n, __state->units);
+	if (__state->index == 0) {
 
 /*           Well, we will treat it as a new file then.  We will */
 /*           need a free logical unit. But only if we don't */
 /*           have too many files open already. */
 
-	    if (n == 96) {
+	    if (__state->n == 96) {
 		setmsg_("Too many files open already.", (ftnlen)28);
 		sigerr_("SPICE(TOOMANYFILESOPEN)", (ftnlen)23);
 		chkout_("RDTEXT", (ftnlen)6);
@@ -675,27 +679,28 @@ static integer c__1 = 1;
 /*               - The logical unit connected to this file. */
 /*               - The index of the file within the UNITS array. */
 
-	    ++n;
-	    units[(i__1 = n - 1) < 96 && 0 <= i__1 ? i__1 : s_rnge("units", 
-		    i__1, "rdtext_", (ftnlen)659)] = unit;
-	    index = n;
+	    ++__state->n;
+	    __state->units[(i__1 = __state->n - 1) < 96 && 0 <= i__1 ? i__1 : 
+		    s_rnge("units", i__1, "rdtext_", (ftnlen)659)] = unit;
+	    __state->index = __state->n;
 	}
-	s_copy(lstfil, file, (ftnlen)255, file_len);
-	lstunt = units[(i__1 = index - 1) < 96 && 0 <= i__1 ? i__1 : s_rnge(
-		"units", i__1, "rdtext_", (ftnlen)665)];
+	s_copy(__state->lstfil, file, (ftnlen)255, file_len);
+	__state->lstunt = __state->units[(i__1 = __state->index - 1) < 96 && 
+		0 <= i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)
+		665)];
     }
 
 /*     This is the easy part. Read the next line from the file. */
 
     ci__1.cierr = 1;
     ci__1.ciend = 1;
-    ci__1.ciunit = lstunt;
+    ci__1.ciunit = __state->lstunt;
     ci__1.cifmt = "(A)";
     iostat = s_rsfe(&ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, line, line_len);
+    iostat = do_fio(&__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -711,18 +716,18 @@ L100001:
     *eof = iostat < 0;
     if (iostat != 0) {
 	cl__1.cerr = 0;
-	cl__1.cunit = units[(i__1 = index - 1) < 96 && 0 <= i__1 ? i__1 : 
-		s_rnge("units", i__1, "rdtext_", (ftnlen)689)];
+	cl__1.cunit = __state->units[(i__1 = __state->index - 1) < 96 && 0 <= 
+		i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)689)];
 	cl__1.csta = 0;
 	f_clos(&cl__1);
-	i__1 = n;
-	for (i__ = index + 1; i__ <= i__1; ++i__) {
-	    units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge("units", 
-		    i__2, "rdtext_", (ftnlen)692)] = units[(i__3 = i__ - 1) < 
-		    96 && 0 <= i__3 ? i__3 : s_rnge("units", i__3, "rdtext_", 
-		    (ftnlen)692)];
+	i__1 = __state->n;
+	for (i__ = __state->index + 1; i__ <= i__1; ++i__) {
+	    __state->units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge(
+		    "units", i__2, "rdtext_", (ftnlen)692)] = __state->units[(
+		    i__3 = i__ - 1) < 96 && 0 <= i__3 ? i__3 : s_rnge("units",
+		     i__3, "rdtext_", (ftnlen)692)];
 	}
-	--n;
+	--__state->n;
 
 /*        Fill LINE with blanks. */
 
@@ -730,7 +735,7 @@ L100001:
 
 /*        LSTFIL is no longer valid */
 
-	s_copy(lstfil, " ", (ftnlen)255, (ftnlen)1);
+	s_copy(__state->lstfil, " ", (ftnlen)255, (ftnlen)1);
 
 /*        If this is just the end of the file, don't report an error. */
 /*        (All files have to end sometime.) */
@@ -968,29 +973,30 @@ L_cltext:
 	chkout_("CLTEXT", (ftnlen)6);
 	return 0;
     }
-    index = isrchi_(&number, &n, units);
-    if (index > 0) {
+    __state->index = isrchi_(&number, &__state->n, __state->units);
+    if (__state->index > 0) {
 	cl__1.cerr = 0;
-	cl__1.cunit = units[(i__1 = index - 1) < 96 && 0 <= i__1 ? i__1 : 
-		s_rnge("units", i__1, "rdtext_", (ftnlen)952)];
+	cl__1.cunit = __state->units[(i__1 = __state->index - 1) < 96 && 0 <= 
+		i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)952)];
 	cl__1.csta = 0;
 	f_clos(&cl__1);
-	if (units[(i__1 = index - 1) < 96 && 0 <= i__1 ? i__1 : s_rnge("units"
-		, i__1, "rdtext_", (ftnlen)954)] == lstunt) {
-	    s_copy(lstfil, " ", (ftnlen)255, (ftnlen)1);
+	if (__state->units[(i__1 = __state->index - 1) < 96 && 0 <= i__1 ? 
+		i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)954)] == 
+		__state->lstunt) {
+	    s_copy(__state->lstfil, " ", (ftnlen)255, (ftnlen)1);
 	}
 
 /*        Remember all that salient information about the file? */
 /*        Lose it. */
 
-	i__1 = n;
-	for (i__ = index + 1; i__ <= i__1; ++i__) {
-	    units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge("units", 
-		    i__2, "rdtext_", (ftnlen)963)] = units[(i__3 = i__ - 1) < 
-		    96 && 0 <= i__3 ? i__3 : s_rnge("units", i__3, "rdtext_", 
-		    (ftnlen)963)];
+	i__1 = __state->n;
+	for (i__ = __state->index + 1; i__ <= i__1; ++i__) {
+	    __state->units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge(
+		    "units", i__2, "rdtext_", (ftnlen)963)] = __state->units[(
+		    i__3 = i__ - 1) < 96 && 0 <= i__3 ? i__3 : s_rnge("units",
+		     i__3, "rdtext_", (ftnlen)963)];
 	}
-	--n;
+	--__state->n;
     }
     chkout_("CLTEXT", (ftnlen)6);
     return 0;

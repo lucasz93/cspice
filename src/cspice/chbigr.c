@@ -1,9 +1,17 @@
-/* chbigr.f -- translated by f2c (version 19980913).
+/* chbigr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int chbigr_state_t;
+static chbigr_state_t* get_chbigr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  CHBIGR ( Chebyshev expansion integral ) */
 /* Subroutine */ int chbigr_(integer *degp, doublereal *cp, doublereal *x2s, 
@@ -11,16 +19,27 @@
 {
     doublereal f[3];
     integer i__;
-    doublereal s, w[3], z__[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    doublereal a2, c0, adegp1, adegp2, s2, ai;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal s;
+    doublereal w[3];
+    doublereal z__[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal a2;
+    doublereal c0;
+    doublereal adegp1;
+    doublereal adegp2;
+    doublereal s2;
+    doublereal ai;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer nterms;
     extern logical return_(void);
 
+
+    /* Module state */
+    chbigr_state_t* __state = get_chbigr_state();
 /* $ Abstract */
 
 /*     Evaluate an indefinite integral of a Chebyshev expansion at a */

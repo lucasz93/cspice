@@ -1,9 +1,17 @@
-/* spke14.f -- translated by f2c (version 19980913).
+/* spke14.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke14_state_t;
+static spke14_state_t* get_spke14_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE14 ( S/P Kernel, evaluate, type 14 ) */
 /* Subroutine */ int spke14_(doublereal *et, doublereal *record, doublereal *
@@ -21,10 +29,14 @@
     integer degree;
     extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
 	     doublereal *, doublereal *);
-    integer ncoeff, cofloc;
+    integer ncoeff;
+    integer cofloc;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spke14_state_t* __state = get_spke14_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 14 SPK segment. */

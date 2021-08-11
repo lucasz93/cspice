@@ -1,14 +1,21 @@
-/* dafrrr.f -- translated by f2c (version 19980913).
+/* dafrrr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__128 = 128;
+extern dafrrr_init_t __dafrrr_init;
+static dafrrr_state_t* get_dafrrr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafrrr)
+		state->dafrrr = __cspice_allocate_module(sizeof(
+	dafrrr_state_t), &__dafrrr_init, sizeof(__dafrrr_init));
+	return state->dafrrr;
+
+}
 
 /* $Procedure DAFRRR ( DAF, remove reserved records ) */
 /* Subroutine */ int dafrrr_(integer *handle, integer *resv)
@@ -22,10 +29,14 @@ static integer c__128 = 128;
     /* Local variables */
     char crec[1000];
     doublereal drec[128];
-    integer decr, free, word, next;
-    extern /* Subroutine */ int dafgs_(doublereal *), chkin_(char *, ftnlen), 
-	    dafps_(integer *, integer *, doublereal *, integer *, doublereal *
-	    );
+    integer decr;
+    integer free;
+    integer word;
+    integer next;
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     integer bward;
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
@@ -39,23 +50,29 @@ static integer c__128 = 128;
     integer nd;
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *);
-    integer begblk, ni;
+    integer begblk;
+    integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char ifname[60];
     integer endblk;
-    extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen),
-	     dafrdr_(integer *, integer *, integer *, integer *, doublereal *,
-	     logical *), dafrfr_(integer *, integer *, integer *, char *, 
-	    integer *, integer *, integer *, ftnlen), dafarw_(integer *, 
-	    integer *, integer *), dafwcr_(integer *, integer *, char *, 
-	    ftnlen), dafwdr_(integer *, integer *, doublereal *), dafwfr_(
-	    integer *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
+	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafwcr_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dafwfr_(integer *, integer *, integer *, char 
+	    *, integer *, integer *, integer *, ftnlen);
     integer remove;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     doublereal sum[125];
 
+
+    /* Module state */
+    dafrrr_state_t* __state = get_dafrrr_state();
 /* $ Abstract */
 
 /*     Remove a specified number of reserved records from a Double */
@@ -320,7 +337,8 @@ static integer c__128 = 128;
 /*        otherwise, we won't be able to find the summaries again. */
 
 	recno = begblk;
-	dafrdr_(handle, &recno, &c__1, &c__128, drec, &found);
+	dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, drec, &
+		found);
 	if ((integer) drec[0] > 0) {
 	    endblk = (integer) drec[0] - 1;
 	    next = (integer) drec[0];
@@ -348,7 +366,8 @@ static integer c__128 = 128;
 
 	i__1 = endblk;
 	for (recno = begblk + 2; recno <= i__1; ++recno) {
-	    dafrdr_(handle, &recno, &c__1, &c__128, drec, &found);
+	    dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, drec, &
+		    found);
 	    i__2 = recno - remove;
 	    dafwdr_(handle, &i__2, drec);
 	}

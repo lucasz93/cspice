@@ -1,9 +1,17 @@
-/* cyclec.f -- translated by f2c (version 19980913).
+/* cyclec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cyclec_state_t;
+static cyclec_state_t* get_cyclec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYCLEC ( Cycle a character string ) */
 /* Subroutine */ int cyclec_(char *instr, char *dir, integer *ncycle, char *
@@ -16,16 +24,27 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    char last[1], temp[1];
-    integer g, i__, j, k, l, m, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    char last[1];
+    char temp[1];
+    integer g;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer m;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer limit;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern integer gcd_(integer *, integer *);
 
+
+    /* Module state */
+    cyclec_state_t* __state = get_cyclec_state();
 /* $ Abstract */
 
 /*      Cycle the contents of a character string to the left or right. */

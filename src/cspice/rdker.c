@@ -1,14 +1,21 @@
-/* rdker.f -- translated by f2c (version 19980913).
+/* rdker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_true = TRUE_;
-static logical c_false = FALSE_;
+extern rdker_init_t __rdker_init;
+static rdker_state_t* get_rdker_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdker)
+		state->rdker = __cspice_allocate_module(sizeof(rdker_state_t),
+	 &__rdker_init, sizeof(__rdker_init));
+	return state->rdker;
+
+}
 
 /* $Procedure      RDKER ( Read a kernel file ) */
 /* Subroutine */ int rdker_0_(int n__, char *kernel, char *line, integer *
@@ -16,13 +23,6 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static logical frstim = TRUE_;
-    static char file[255] = "                                               "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                ";
-    static integer linnum = 0;
 
     /* System generated locals */
     integer i__1;
@@ -32,23 +32,20 @@ static logical c_false = FALSE_;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzsetnnread_(logical *);
-    static integer i__, r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char first[80];
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static char begdat[10];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static char begtxt[10];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), cltext_(char *, ftnlen), rdtext_(char *, char *, logical 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int cltext_(char *, ftnlen);
+    extern /* Subroutine */ int rdtext_(char *, char *, logical *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
-    static integer status;
-    static logical end;
 
+    /* Module state */
+    rdker_state_t* __state = get_rdker_state();
 /* $ Abstract */
 
 /*     Open and read the contents of a SPICE ASCII kernel file. */
@@ -577,15 +574,15 @@ L_rdknew:
 
 /*     Initialize the data delimiters if it hasn't been done already. */
 
-    if (frstim) {
-	s_copy(begdat, "\\begindata", (ftnlen)10, (ftnlen)10);
-	s_copy(begtxt, "\\begintext", (ftnlen)10, (ftnlen)10);
-	frstim = FALSE_;
+    if (__state->frstim) {
+	s_copy(__state->begdat, "\\begindata", (ftnlen)10, (ftnlen)10);
+	s_copy(__state->begtxt, "\\begintext", (ftnlen)10, (ftnlen)10);
+	__state->frstim = FALSE_;
     } else {
 
 /*        Close the previous file, if it hasn't been closed already. */
 
-	cltext_(file, (ftnlen)255);
+	cltext_(__state->file, (ftnlen)255);
     }
 
 /*     Close the new file, too, in case they are the same. No sense */
@@ -601,42 +598,36 @@ L_rdknew:
 /*     the line number of the last line read and can return this */
 /*     information from RDKLIN. */
 
-
-/*     The ZZSETNNREAD calls will not exist in source files intended */
-/*     for the FORTRAN toolkit files, they exists only to provide f2c */
-/*     a stub for translation to C. */
-
-    zzsetnnread_(&c_true);
-    rdtext_(kernel, first, &end, kernel_len, (ftnlen)80);
-    zzsetnnread_(&c_false);
+    rdtext_(kernel, __state->first, &__state->end, kernel_len, (ftnlen)80);
 
 /*     Replace any tab characters with blanks. */
 
-    r__ = rtrim_(first, (ftnlen)80);
-    i__1 = r__;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if (*(unsigned char *)&first[i__ - 1] == 9) {
-	    *(unsigned char *)&first[i__ - 1] = ' ';
+    __state->r__ = rtrim_(__state->first, (ftnlen)80);
+    i__1 = __state->r__;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	if (*(unsigned char *)&__state->first[__state->i__ - 1] == 9) {
+	    *(unsigned char *)&__state->first[__state->i__ - 1] = ' ';
 	}
     }
-    ljust_(first, first, (ftnlen)80, (ftnlen)80);
-    linnum = 1;
+    ljust_(__state->first, __state->first, (ftnlen)80, (ftnlen)80);
+    __state->linnum = 1;
 
 /*     The first line is enough to set the status for subsequent */
 /*     calls to RDKDAT. */
 
-    if (end) {
-	status = 3;
+    if (__state->end) {
+	__state->status = 3;
 	cltext_(kernel, kernel_len);
-    } else if (s_cmp(first, begdat, (ftnlen)80, (ftnlen)10) == 0) {
-	status = 2;
+    } else if (s_cmp(__state->first, __state->begdat, (ftnlen)80, (ftnlen)10) 
+	    == 0) {
+	__state->status = 2;
     } else {
-	status = 1;
+	__state->status = 1;
     }
 
 /*     Save the name of the file for future reference. */
 
-    s_copy(file, kernel, (ftnlen)255, kernel_len);
+    s_copy(__state->file, kernel, (ftnlen)255, kernel_len);
     chkout_("RDKNEW", (ftnlen)6);
     return 0;
 /* $Procedure RDKDAT ( Read the next data line from a kernel file ) */
@@ -856,7 +847,7 @@ L_rdkdat:
 /*     If the previous call detected the end of the file, */
 /*     this one should do the same. */
 
-    if (status == 3) {
+    if (__state->status == 3) {
 	*eof = TRUE_;
 	chkout_("RDKDAT", (ftnlen)6);
 	return 0;
@@ -871,37 +862,30 @@ L_rdkdat:
 /*     information from RDKLIN. */
 
     s_copy(line, " ", line_len, (ftnlen)1);
-    while(! failed_() && (status == 1 || s_cmp(line, " ", line_len, (ftnlen)1)
-	     == 0)) {
-
-/*        The ZZSETNNREAD calls will not exist in source files intended */
-/*        for the FORTRAN toolkit files, they exists only to provide f2c */
-/*        a stub for translation to C. */
-
-	zzsetnnread_(&c_true);
-	rdtext_(file, line, eof, (ftnlen)255, line_len);
-	zzsetnnread_(&c_false);
+    while(! failed_() && (__state->status == 1 || s_cmp(line, " ", line_len, (
+	    ftnlen)1) == 0)) {
+	rdtext_(__state->file, line, eof, (ftnlen)255, line_len);
 
 /*        Replace any tab characters with blanks. */
 
-	r__ = rtrim_(line, line_len);
-	i__1 = r__;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    if (*(unsigned char *)&line[i__ - 1] == 9) {
-		*(unsigned char *)&line[i__ - 1] = ' ';
+	__state->r__ = rtrim_(line, line_len);
+	i__1 = __state->r__;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    if (*(unsigned char *)&line[__state->i__ - 1] == 9) {
+		*(unsigned char *)&line[__state->i__ - 1] = ' ';
 	    }
 	}
 	ljust_(line, line, line_len, line_len);
-	++linnum;
+	++__state->linnum;
 	if (*eof) {
-	    status = 3;
-	    cltext_(file, (ftnlen)255);
+	    __state->status = 3;
+	    cltext_(__state->file, (ftnlen)255);
 	    chkout_("RDKDAT", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(line, begtxt, line_len, (ftnlen)10) == 0) {
-	    status = 1;
-	} else if (s_cmp(line, begdat, line_len, (ftnlen)10) == 0) {
-	    status = 2;
+	} else if (s_cmp(line, __state->begtxt, line_len, (ftnlen)10) == 0) {
+	    __state->status = 1;
+	} else if (s_cmp(line, __state->begdat, line_len, (ftnlen)10) == 0) {
+	    __state->status = 2;
 	    s_copy(line, " ", line_len, (ftnlen)1);
 	}
     }
@@ -1057,8 +1041,8 @@ L_rdklin:
 
 /*     Not much to do here.  Just copy the information and return. */
 
-    s_copy(kernel, file, kernel_len, (ftnlen)255);
-    *number = linnum;
+    s_copy(kernel, __state->file, kernel_len, (ftnlen)255);
+    *number = __state->linnum;
     return 0;
 } /* rdker_ */
 

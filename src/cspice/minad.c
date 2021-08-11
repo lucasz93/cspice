@@ -1,9 +1,17 @@
-/* minad.f -- translated by f2c (version 19980913).
+/* minad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int minad_state_t;
+static minad_state_t* get_minad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MINAD  ( Minimum element of array, DP ) */
 /* Subroutine */ int minad_(doublereal *array, integer *ndim, doublereal *
@@ -15,6 +23,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    minad_state_t* __state = get_minad_state();
 /* $ Abstract */
 
 /*     Locate the minimum element of a DP array. */

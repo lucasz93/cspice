@@ -1,13 +1,21 @@
-/* lnknxt.f -- translated by f2c (version 19980913).
+/* lnknxt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lnknxt_init_t __lnknxt_init;
+static lnknxt_state_t* get_lnknxt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lnknxt)
+		state->lnknxt = __cspice_allocate_module(sizeof(
+	lnknxt_state_t), &__lnknxt_init, sizeof(__lnknxt_init));
+	return state->lnknxt;
+
+}
 
 /* $Procedure      LNKNXT ( LNK, next node ) */
 integer lnknxt_(integer *node, integer *pool)
@@ -16,10 +24,15 @@ integer lnknxt_(integer *node, integer *pool)
     integer ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    lnknxt_state_t* __state = get_lnknxt_state();
 /* $ Abstract */
 
 /*     Find the node following a specified node in a doubly linked list */
@@ -241,7 +254,7 @@ integer lnknxt_(integer *node, integer *pool)
 	errint_("#", node, (ftnlen)1);
 	errint_("#", &pool[(*node << 1) + 11], (ftnlen)1);
 	errint_("#", &pool[(*node << 1) + 10], (ftnlen)1);
-	errint_("#", &c__0, (ftnlen)1);
+	errint_("#", &__state->c__0, (ftnlen)1);
 	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
 	chkout_("LNKNXT", (ftnlen)6);
 	return ret_val;

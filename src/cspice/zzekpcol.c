@@ -1,14 +1,21 @@
-/* zzekpcol.f -- translated by f2c (version 19980913).
+/* zzekpcol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__0 = 0;
+extern zzekpcol_init_t __zzekpcol_init;
+static zzekpcol_state_t* get_zzekpcol_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekpcol)
+		state->zzekpcol = __cspice_allocate_module(sizeof(
+	zzekpcol_state_t), &__zzekpcol_init, sizeof(__zzekpcol_init));
+	return state->zzekpcol;
+
+}
 
 /* $Procedure  ZZEKPCOL ( Private: EK, parse column name ) */
 /* Subroutine */ int zzekpcol_(char *qcol, integer *eqryi, char *eqryc, char *
@@ -31,28 +38,47 @@ static integer c__0 = 0;
     extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, doublereal 
 	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen), zzekqtab_(integer *, char *, integer *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen), zzekreqi_(integer *, char *, 
-	    integer *, ftnlen);
-    integer i__, j;
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+	    ftnlen);
+    integer i__;
+    integer j;
     extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen), ucase_(char *, char *, 
-	    ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     integer cc;
     extern logical failed_(void);
-    integer icheck, chbegs[3], chends[3];
+    integer icheck;
+    integer chbegs[3];
+    integer chends[3];
     char chrbuf[160];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    char alslst[64*10], tablst[64*10], tmpcol[32], tmptab[64];
+    char alslst[64*10];
+    char tablst[64*10];
+    char tmpcol[32];
+    char tmptab[64];
     doublereal numvls[3];
-    integer attdsc[6], lxbegs[3], lxends[3], nmatch, ntoken, tokens[3], 
-	    values[3];
+    integer attdsc[6];
+    integer lxbegs[3];
+    integer lxends[3];
+    integer nmatch;
+    integer ntoken;
+    integer tokens[3];
+    integer values[3];
     logical fnd;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), ekccnt_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekpcol_state_t* __state = get_zzekpcol_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -978,9 +1004,9 @@ static integer c__0 = 0;
 
 /*     ZZEKSCAN should therefore return 1 or 3 tokens. */
 
-    zzekscan_(qcol, &c__3, &c__0, &ntoken, tokens, lxbegs, lxends, values, 
-	    numvls, chrbuf, chbegs, chends, error, errmsg, qcol_len, (ftnlen)
-	    160, errmsg_len);
+    zzekscan_(qcol, &__state->c__3, &__state->c__0, &ntoken, tokens, lxbegs, 
+	    lxends, values, numvls, chrbuf, chbegs, chends, error, errmsg, 
+	    qcol_len, (ftnlen)160, errmsg_len);
     if (*error) {
 	return 0;
     }

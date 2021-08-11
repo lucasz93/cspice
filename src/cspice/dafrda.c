@@ -1,9 +1,17 @@
-/* dafrda.f -- translated by f2c (version 19980913).
+/* dafrda.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafrda_state_t;
+static dafrda_state_t* get_dafrda_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DAFRDA ( DAF, read data from address ) */
 /* Subroutine */ int dafrda_(integer *handle, integer *begin, integer *end, 
@@ -13,22 +21,32 @@
     integer i__1, i__2;
 
     /* Local variables */
-    integer begr, begw, endr, endw, last, next;
-    extern /* Subroutine */ int zzddhisn_(integer *, logical *, logical *), 
-	    chkin_(char *, ftnlen);
+    integer begr;
+    integer begw;
+    integer endr;
+    integer endw;
+    integer last;
+    integer next;
+    extern /* Subroutine */ int zzddhisn_(integer *, logical *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno;
     logical found;
     integer first;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), dafrdr_(
-	    integer *, integer *, integer *, integer *, doublereal *, logical 
-	    *), dafarw_(integer *, integer *, integer *), errhan_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     logical native;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dafrda_state_t* __state = get_dafrda_state();
 /* $ Abstract */
 
 /*     Read the double precision data bounded by two addresses within */

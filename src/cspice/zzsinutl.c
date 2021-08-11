@@ -1,14 +1,21 @@
-/* zzsinutl.f -- translated by f2c (version 19980913).
+/* zzsinutl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__100 = 100;
+extern zzsinutl_init_t __zzsinutl_init;
+static zzsinutl_state_t* get_zzsinutl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsinutl)
+		state->zzsinutl = __cspice_allocate_module(sizeof(
+	zzsinutl_state_t), &__zzsinutl_init, sizeof(__zzsinutl_init));
+	return state->zzsinutl;
+
+}
 
 /* $Procedure ZZSINUTL ( DSK, utilities for generalized ray intercept ) */
 /* Subroutine */ int zzsinutl_0_(int n__, integer *trgcde, integer *nsurf, 
@@ -23,32 +30,30 @@ static integer c__100 = 100;
     extern /* Subroutine */ int zzdsksph_(integer *, integer *, integer *, 
 	    doublereal *, doublereal *);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
-	    integer *, char *, integer *, integer *, doublereal *, ftnlen);
-    static integer savfid;
-    static doublereal savrad[3];
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
     extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static integer savnsf;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    static integer savsrf[100];
-    static doublereal savmnr;
-    static integer savtrg;
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static doublereal savmxr;
     extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
 	    ;
-    static integer savtyp;
     extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
 	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
 	     logical *);
 
+
+    /* Module state */
+    zzsinutl_state_t* __state = get_zzsinutl_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -436,18 +441,18 @@ L_zzsuelin:
 	return 0;
     }
     chkin_("ZZSUELIN", (ftnlen)8);
-    savtyp = 1;
-    bodvcd_(trgcde, "RADII", &c__3, &n, savrad, (ftnlen)5);
+    __state->savtyp = 1;
+    bodvcd_(trgcde, "RADII", &__state->c__3, &n, __state->savrad, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZSUELIN", (ftnlen)8);
 	return 0;
     }
 /* Computing MIN */
-    d__1 = min(savrad[0],savrad[1]);
-    savmnr = min(d__1,savrad[2]);
+    d__1 = min(__state->savrad[0],__state->savrad[1]);
+    __state->savmnr = min(d__1,__state->savrad[2]);
 /* Computing MAX */
-    d__1 = max(savrad[0],savrad[1]);
-    savmxr = max(d__1,savrad[2]);
+    d__1 = max(__state->savrad[0],__state->savrad[1]);
+    __state->savmxr = max(d__1,__state->savrad[2]);
     chkout_("ZZSUELIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZSUDSKI ( DSK, initialize SINCPT utilities for dsk target ) */
@@ -617,21 +622,21 @@ L_zzsudski:
 	return 0;
     }
     chkin_("ZZSUDSKI", (ftnlen)8);
-    savtyp = 2;
+    __state->savtyp = 2;
     if (*nsurf < 0 || *nsurf > 100) {
 	setmsg_("Surface count must be in the range 0:# but was #.", (ftnlen)
 		49);
-	errint_("#", &c__100, (ftnlen)1);
+	errint_("#", &__state->c__100, (ftnlen)1);
 	errint_("#", nsurf, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZSUDSKI", (ftnlen)8);
 	return 0;
     }
-    savnsf = *nsurf;
-    movei_(srflst, &savnsf, savsrf);
-    savfid = *fixfid;
-    savtrg = *trgcde;
-    cleard_(&c__3, savrad);
+    __state->savnsf = *nsurf;
+    movei_(srflst, &__state->savnsf, __state->savsrf);
+    __state->savfid = *fixfid;
+    __state->savtrg = *trgcde;
+    cleard_(&__state->c__3, __state->savrad);
     if (failed_()) {
 	chkout_("ZZSUDSKI", (ftnlen)8);
 	return 0;
@@ -639,7 +644,8 @@ L_zzsudski:
 
 /*     Fetch minimum and maximum radius of target body surface. */
 
-    zzdsksph_(trgcde, &savnsf, savsrf, &savmnr, &savmxr);
+    zzdsksph_(trgcde, &__state->savnsf, __state->savsrf, &__state->savmnr, &
+	    __state->savmxr);
     chkout_("ZZSUDSKI", (ftnlen)8);
     return 0;
 /* $Procedure ZZRAYSFX ( DSK, callback for ray-surface intercept ) */
@@ -813,16 +819,16 @@ L_zzraysfx:
 	return 0;
     }
     chkin_("ZZRAYSFX", (ftnlen)8);
-    if (savtyp == 1) {
-	surfpt_(vertex, raydir, savrad, &savrad[1], &savrad[2], spoint, found)
-		;
-    } else if (savtyp == 2) {
-	zzsbfxr_(&savtrg, &savnsf, savsrf, et, &savfid, vertex, raydir, 
-		spoint, found);
+    if (__state->savtyp == 1) {
+	surfpt_(vertex, raydir, __state->savrad, &__state->savrad[1], &
+		__state->savrad[2], spoint, found);
+    } else if (__state->savtyp == 2) {
+	zzsbfxr_(&__state->savtrg, &__state->savnsf, __state->savsrf, et, &
+		__state->savfid, vertex, raydir, spoint, found);
     } else {
 	setmsg_("Surface type code # is not supported. This code branch is n"
 		"ot supposed to be reached.", (ftnlen)85);
-	errint_("#", &savtyp, (ftnlen)1);
+	errint_("#", &__state->savtyp, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZRAYSFX", (ftnlen)8);
 	return 0;
@@ -979,7 +985,7 @@ L_zzmaxrad:
 /*     return radius of maximum bounding sphere for target */
 
 /* -& */
-    *maxrad = savmxr;
+    *maxrad = __state->savmxr;
     return 0;
 /* $Procedure ZZMINRAD ( DSK, minimum radius ) */
 
@@ -1131,7 +1137,7 @@ L_zzminrad:
 /*     return radius of minimum bounding sphere for target */
 
 /* -& */
-    *minrad = savmnr;
+    *minrad = __state->savmnr;
     return 0;
 /* $Procedure ZZRAYNP ( DSK, callback for ray-surface near point ) */
 
@@ -1311,22 +1317,24 @@ L_zzraynp:
 	return 0;
     }
     chkin_("ZZRAYNP", (ftnlen)7);
-    if (savtyp == 1) {
+    if (__state->savtyp == 1) {
 
 /*        Find the nearest point on the ellipsoid's surface to */
 /*        to the ray. */
 
-	npedln_(savrad, &savrad[1], &savrad[2], vertex, raydir, pnear, dist);
-    } else if (savtyp == 2) {
+	npedln_(__state->savrad, &__state->savrad[1], &__state->savrad[2], 
+		vertex, raydir, pnear, dist);
+    } else if (__state->savtyp == 2) {
 
 /*        Find the nearest point on the outer bounding sphere to */
 /*        to the ray. */
 
-	npedln_(&savmxr, &savmxr, &savmxr, vertex, raydir, pnear, dist);
+	npedln_(&__state->savmxr, &__state->savmxr, &__state->savmxr, vertex, 
+		raydir, pnear, dist);
     } else {
 	setmsg_("Surface type code # is not supported. This code branch is n"
 		"ot supposed to be reached.", (ftnlen)85);
-	errint_("#", &savtyp, (ftnlen)1);
+	errint_("#", &__state->savtyp, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZRAYNP", (ftnlen)7);
 	return 0;

@@ -1,30 +1,27 @@
-/* etcal.f -- translated by f2c (version 19980913).
+/* etcal.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2000 = 2000;
-static integer c__1 = 1;
-static integer c__12 = 12;
-static integer c__6 = 6;
+extern etcal_init_t __etcal_init;
+static etcal_state_t* get_etcal_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->etcal)
+		state->etcal = __cspice_allocate_module(sizeof(etcal_state_t),
+	 &__etcal_init, sizeof(__etcal_init));
+	return state->etcal;
+
+}
 
 /* $Procedure            ETCAL ( Convert ET to Calendar format ) */
 /* Subroutine */ int etcal_(doublereal *et, char *string, ftnlen string_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
-    static integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,273,304,334 }
-	    ;
-    static integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,274,305,335 }
-	    ;
-    static char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     address a__1[12];
@@ -38,37 +35,19 @@ static integer c__6 = 6;
 	     char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer dn2000;
-    static doublereal dp2000, frac;
-    static char date[180];
-    static doublereal remd, secs;
-    static integer year, mins;
-    static char dstr[16], hstr[16], mstr[16], sstr[16], ystr[16];
-    static doublereal halfd, q;
-    static integer tsecs, dofyr, month, hours;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static doublereal mynum;
-    static integer bh, bm, iq;
-    static doublereal secspd;
-    static char messge[16];
-    static integer offset;
-    static doublereal dmnint;
-    static logical adjust;
-    static integer daynum;
-    extern integer intmin_(void), intmax_(void);
+    extern integer intmin_(void);
+    extern integer intmax_(void);
     extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
 	    *, ftnlen, ftnlen);
-    static doublereal dmxint, mydnom;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer lstlti_(integer *, integer *, integer *);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    static integer yr1, yr4;
-    static char era[16];
-    static integer day, rem;
     extern doublereal spd_(void);
-    static integer yr100, yr400;
 
+    /* Module state */
+    etcal_state_t* __state = get_etcal_state();
 /* $ Abstract */
 
 
@@ -387,19 +366,22 @@ static integer c__6 = 6;
 
 /*     The number of days since 1 Jan 1 A.D. is given by: */
 
-    if (first) {
-	first = FALSE_;
-	halfd = spd_() / 2.;
-	secspd = spd_();
-	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
-		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->halfd = spd_() / 2.;
+	__state->secspd = spd_();
+	__state->dn2000 = 365 * (__state->c__2000 - 1) + (__state->c__2000 - 
+		1) / 4 - (__state->c__2000 - 1) / 100 + (__state->c__2000 - 1)
+		 / 400 + (__state->dpjan0[(i__1 = __state->c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "etcal_", (ftnlen)
-		571)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "etcal_", (ftnlen)571)] * ((c__2000 / 4 
-		<< 2) / c__2000 - c__2000 / 100 * 100 / c__2000 + c__2000 / 
-		400 * 400 / c__2000) + c__1) - 1;
-	dmxint = (doublereal) intmax_();
-	dmnint = (doublereal) intmin_();
+		571)] + __state->extra[(i__2 = __state->c__1 - 1) < 12 && 0 <=
+		 i__2 ? i__2 : s_rnge("extra", i__2, "etcal_", (ftnlen)571)] *
+		 ((__state->c__2000 / 4 << 2) / __state->c__2000 - 
+		__state->c__2000 / 100 * 100 / __state->c__2000 + 
+		__state->c__2000 / 400 * 400 / __state->c__2000) + 
+		__state->c__1) - 1;
+	__state->dmxint = (doublereal) intmax_();
+	__state->dmnint = (doublereal) intmin_();
     }
 
 /*     Now we "in-line" compute the following call. */
@@ -415,38 +397,39 @@ static integer c__6 = 6;
 /*     We add on 0.0005 seconds so that the string produced will be */
 /*     rounded to the nearest millisecond. */
 
-    mydnom = secspd;
-    mynum = *et + halfd;
-    d__1 = mynum / mydnom;
-    q = d_int(&d__1);
-    remd = mynum - q * mydnom;
-    if (remd < 0.) {
-	q += -1.;
-	remd += mydnom;
+    __state->mydnom = __state->secspd;
+    __state->mynum = *et + __state->halfd;
+    d__1 = __state->mynum / __state->mydnom;
+    __state->q = d_int(&d__1);
+    __state->remd = __state->mynum - __state->q * __state->mydnom;
+    if (__state->remd < 0.) {
+	__state->q += -1.;
+	__state->remd += __state->mydnom;
     }
-    secs = remd;
-    dp2000 = q;
+    __state->secs = __state->remd;
+    __state->dp2000 = __state->q;
 
 /*     Do something about the problem when ET is vastly */
 /*     out of range.  (Day number outside MAX and MIN integer). */
 
-    if (dp2000 + dn2000 < dmnint + 1) {
-	dp2000 = dmnint - dn2000 + 1;
-	s_copy(messge, "Epoch before ", (ftnlen)16, (ftnlen)13);
-	secs = 0.;
-    } else if (dp2000 + dn2000 > dmxint - 1) {
-	dp2000 = dmxint - dn2000 - 1;
-	s_copy(messge, "Epoch after ", (ftnlen)16, (ftnlen)12);
-	secs = 0.;
+    if (__state->dp2000 + __state->dn2000 < __state->dmnint + 1) {
+	__state->dp2000 = __state->dmnint - __state->dn2000 + 1;
+	s_copy(__state->messge, "Epoch before ", (ftnlen)16, (ftnlen)13);
+	__state->secs = 0.;
+    } else if (__state->dp2000 + __state->dn2000 > __state->dmxint - 1) {
+	__state->dp2000 = __state->dmxint - __state->dn2000 - 1;
+	s_copy(__state->messge, "Epoch after ", (ftnlen)16, (ftnlen)12);
+	__state->secs = 0.;
     } else {
-	s_copy(messge, " ", (ftnlen)16, (ftnlen)1);
+	s_copy(__state->messge, " ", (ftnlen)16, (ftnlen)1);
     }
 
 /*     Compute the number of days since 1 .A.D. Jan 1, 00:00:00. */
 /*     From the tests in the previous IF-ELSE IF-ELSE block this */
 /*     addition is guaranteed not to overflow. */
 
-    daynum = (integer) (dp2000 + (doublereal) dn2000);
+    __state->daynum = (integer) (__state->dp2000 + (doublereal) 
+	    __state->dn2000);
 
 /*     If the number of days is negative, we need to do a little */
 /*     work so that we can represent the date in the B.C. era. */
@@ -454,24 +437,24 @@ static integer c__6 = 6;
 /*     be positive and then we subtract off the appropriate multiple */
 /*     of 400 years later. */
 
-    if (daynum < 0) {
+    if (__state->daynum < 0) {
 
 /*        Since we can't make the call below and remain */
 /*        error free, we compute it ourselves. */
 
 /*        call rmaini ( daynum, dp400y, offset, daynum ) */
 
-	iq = daynum / 146097;
-	rem = daynum - iq * 146097;
-	if (rem < 0) {
-	    --iq;
-	    rem += 146097;
+	__state->iq = __state->daynum / 146097;
+	__state->rem = __state->daynum - __state->iq * 146097;
+	if (__state->rem < 0) {
+	    --__state->iq;
+	    __state->rem += 146097;
 	}
-	offset = iq;
-	daynum = rem;
-	adjust = TRUE_;
+	__state->offset = __state->iq;
+	__state->daynum = __state->rem;
+	__state->adjust = TRUE_;
     } else {
-	adjust = FALSE_;
+	__state->adjust = FALSE_;
     }
 
 /*     Next we compute the year.  Divide out multiples of 400, 100 */
@@ -483,54 +466,59 @@ static integer c__6 = 6;
 /*                 DP100Y = 25*DP4Y   - 1 */
 /*                 DP400Y =  4*DP100Y + 1 */
 
-    yr400 = daynum / 146097;
-    rem = daynum - yr400 * 146097;
+    __state->yr400 = __state->daynum / 146097;
+    __state->rem = __state->daynum - __state->yr400 * 146097;
 /* Computing MIN */
-    i__1 = 3, i__2 = rem / 36524;
-    yr100 = min(i__1,i__2);
-    rem -= yr100 * 36524;
+    i__1 = 3, i__2 = __state->rem / 36524;
+    __state->yr100 = min(i__1,i__2);
+    __state->rem -= __state->yr100 * 36524;
 /* Computing MIN */
-    i__1 = 24, i__2 = rem / 1461;
-    yr4 = min(i__1,i__2);
-    rem -= yr4 * 1461;
+    i__1 = 24, i__2 = __state->rem / 1461;
+    __state->yr4 = min(i__1,i__2);
+    __state->rem -= __state->yr4 * 1461;
 /* Computing MIN */
-    i__1 = 3, i__2 = rem / 365;
-    yr1 = min(i__1,i__2);
-    rem -= yr1 * 365;
-    dofyr = rem + 1;
-    year = yr400 * 400 + yr100 * 100 + (yr4 << 2) + yr1 + 1;
+    i__1 = 3, i__2 = __state->rem / 365;
+    __state->yr1 = min(i__1,i__2);
+    __state->rem -= __state->yr1 * 365;
+    __state->dofyr = __state->rem + 1;
+    __state->year = __state->yr400 * 400 + __state->yr100 * 100 + (
+	    __state->yr4 << 2) + __state->yr1 + 1;
 
 /*     Get the month, and day of month (depending upon whether */
 /*     we have a leap year or not). */
 
-    if ((year / 4 << 2) / year - year / 100 * 100 / year + year / 400 * 400 / 
-	    year == 0) {
-	month = lstlti_(&dofyr, &c__12, dpjan0);
-	day = dofyr - dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpjan0", i__1, "etcal_", (ftnlen)698)];
+    if ((__state->year / 4 << 2) / __state->year - __state->year / 100 * 100 /
+	     __state->year + __state->year / 400 * 400 / __state->year == 0) {
+	__state->month = lstlti_(&__state->dofyr, &__state->c__12, 
+		__state->dpjan0);
+	__state->day = __state->dofyr - __state->dpjan0[(i__1 = 
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0"
+		, i__1, "etcal_", (ftnlen)698)];
     } else {
-	month = lstlti_(&dofyr, &c__12, dpbegl);
-	day = dofyr - dpbegl[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpbegl", i__1, "etcal_", (ftnlen)701)];
+	__state->month = lstlti_(&__state->dofyr, &__state->c__12, 
+		__state->dpbegl);
+	__state->day = __state->dofyr - __state->dpbegl[(i__1 = 
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpbegl"
+		, i__1, "etcal_", (ftnlen)701)];
     }
 
 /*     If we had to adjust the year to make it positive, we now */
 /*     need to correct it and then convert it to a B.C. year. */
 
-    if (adjust) {
-	year += offset * 400;
-	year = -year + 1;
-	s_copy(era, " B.C. ", (ftnlen)16, (ftnlen)6);
+    if (__state->adjust) {
+	__state->year += __state->offset * 400;
+	__state->year = -__state->year + 1;
+	s_copy(__state->era, " B.C. ", (ftnlen)16, (ftnlen)6);
     } else {
 
 /*        If the year is less than 1000, we can't just write it */
 /*        out.  We need to add the era.  If we don't do this */
 /*        the dates look very confusing. */
 
-	if (year < 1000) {
-	    s_copy(era, " A.D. ", (ftnlen)16, (ftnlen)6);
+	if (__state->year < 1000) {
+	    s_copy(__state->era, " A.D. ", (ftnlen)16, (ftnlen)6);
 	} else {
-	    s_copy(era, " ", (ftnlen)16, (ftnlen)1);
+	    s_copy(__state->era, " ", (ftnlen)16, (ftnlen)1);
 	}
     }
 
@@ -541,90 +529,95 @@ static integer c__6 = 6;
 /*     or equal to zero so we'll have no problems with HOURS, MINS */
 /*     or SECS becoming negative.) */
 
-    tsecs = (integer) (secs * 1e3);
-    frac = secs - (doublereal) tsecs;
-    hours = tsecs / 3600000;
-    tsecs -= hours * 3600000;
-    mins = tsecs / 60000;
-    tsecs -= mins * 60000;
-    secs = (doublereal) tsecs / 1e3;
+    __state->tsecs = (integer) (__state->secs * 1e3);
+    __state->frac = __state->secs - (doublereal) __state->tsecs;
+    __state->hours = __state->tsecs / 3600000;
+    __state->tsecs -= __state->hours * 3600000;
+    __state->mins = __state->tsecs / 60000;
+    __state->tsecs -= __state->mins * 60000;
+    __state->secs = (doublereal) __state->tsecs / 1e3;
 
 /*     We round seconds if we can do so without getting seconds to be */
 /*     bigger than 60. */
 
-    if (secs + 5e-4 < 60.) {
-	secs += 5e-4;
+    if (__state->secs + 5e-4 < 60.) {
+	__state->secs += 5e-4;
     }
 
 /*     Finally, get the components of our date string. */
 
-    intstr_(&year, ystr, (ftnlen)16);
-    if (day >= 10) {
-	intstr_(&day, dstr, (ftnlen)16);
+    intstr_(&__state->year, __state->ystr, (ftnlen)16);
+    if (__state->day >= 10) {
+	intstr_(&__state->day, __state->dstr, (ftnlen)16);
     } else {
-	s_copy(dstr, "0", (ftnlen)16, (ftnlen)1);
-	intstr_(&day, dstr + 1, (ftnlen)15);
+	s_copy(__state->dstr, "0", (ftnlen)16, (ftnlen)1);
+	intstr_(&__state->day, __state->dstr + 1, (ftnlen)15);
     }
 
 /*     We want to zero pad the hours minutes and seconds. */
 
-    if (hours < 10) {
-	bh = 2;
+    if (__state->hours < 10) {
+	__state->bh = 2;
     } else {
-	bh = 1;
+	__state->bh = 1;
     }
-    if (mins < 10) {
-	bm = 2;
+    if (__state->mins < 10) {
+	__state->bm = 2;
     } else {
-	bm = 1;
+	__state->bm = 1;
     }
-    s_copy(mstr, "00", (ftnlen)16, (ftnlen)2);
-    s_copy(hstr, "00", (ftnlen)16, (ftnlen)2);
-    s_copy(sstr, " ", (ftnlen)16, (ftnlen)1);
+    s_copy(__state->mstr, "00", (ftnlen)16, (ftnlen)2);
+    s_copy(__state->hstr, "00", (ftnlen)16, (ftnlen)2);
+    s_copy(__state->sstr, " ", (ftnlen)16, (ftnlen)1);
 
 /*     Now construct the string components for hours, minutes and */
 /*     seconds. */
 
-    secs = (integer) (secs * 1e3) / 1e3;
-    intstr_(&hours, hstr + (bh - 1), 16 - (bh - 1));
-    intstr_(&mins, mstr + (bm - 1), 16 - (bm - 1));
-    dpstrf_(&secs, &c__6, "F", sstr, (ftnlen)1, (ftnlen)16);
+    __state->secs = (integer) (__state->secs * 1e3) / 1e3;
+    intstr_(&__state->hours, __state->hstr + (__state->bh - 1), 16 - (
+	    __state->bh - 1));
+    intstr_(&__state->mins, __state->mstr + (__state->bm - 1), 16 - (
+	    __state->bm - 1));
+    dpstrf_(&__state->secs, &__state->c__6, "F", __state->sstr, (ftnlen)1, (
+	    ftnlen)16);
 
 /*     The form of the output for SSTR has a leading blank followed by */
 /*     the first significant digit.  If a decimal point is in the */
 /*     third slot, then SSTR is of the form ' x.xxxxx'  and we need */
 /*     to insert a leading zero. */
 
-    if (*(unsigned char *)&sstr[2] == '.') {
-	*(unsigned char *)sstr = '0';
+    if (*(unsigned char *)&__state->sstr[2] == '.') {
+	*(unsigned char *)__state->sstr = '0';
     }
 
 /*     We don't want any leading spaces in SSTR, (HSTR and MSTR don't */
 /*     have leading spaces by construction. */
 
-    ljust_(sstr, sstr, (ftnlen)16, (ftnlen)16);
+    ljust_(__state->sstr, __state->sstr, (ftnlen)16, (ftnlen)16);
 
 /*     Now form the date string, squeeze out extra spaces and */
 /*     left justify the whole thing. */
 
 /* Writing concatenation */
-    i__3[0] = 16, a__1[0] = messge;
-    i__3[1] = 16, a__1[1] = ystr;
-    i__3[2] = 16, a__1[2] = era;
-    i__3[3] = 3, a__1[3] = months + ((i__1 = month - 1) < 12 && 0 <= i__1 ? 
-	    i__1 : s_rnge("months", i__1, "etcal_", (ftnlen)810)) * 3;
+    i__3[0] = 16, a__1[0] = __state->messge;
+    i__3[1] = 16, a__1[1] = __state->ystr;
+    i__3[2] = 16, a__1[2] = __state->era;
+    i__3[3] = 3, a__1[3] = __state->months + ((i__1 = __state->month - 1) < 
+	    12 && 0 <= i__1 ? i__1 : s_rnge("months", i__1, "etcal_", (ftnlen)
+	    810)) * 3;
     i__3[4] = 1, a__1[4] = " ";
-    i__3[5] = 3, a__1[5] = dstr;
+    i__3[5] = 3, a__1[5] = __state->dstr;
     i__3[6] = 1, a__1[6] = " ";
-    i__3[7] = 2, a__1[7] = hstr;
+    i__3[7] = 2, a__1[7] = __state->hstr;
     i__3[8] = 1, a__1[8] = ":";
-    i__3[9] = 2, a__1[9] = mstr;
+    i__3[9] = 2, a__1[9] = __state->mstr;
     i__3[10] = 1, a__1[10] = ":";
-    i__3[11] = 6, a__1[11] = sstr;
-    s_cat(date, a__1, i__3, &c__12, (ftnlen)180);
-    cmprss_(" ", &c__1, date, date, (ftnlen)1, (ftnlen)180, (ftnlen)180);
-    ljust_(date, date, (ftnlen)180, (ftnlen)180);
-    s_copy(string, date, string_len, (ftnlen)180);
+    i__3[11] = 6, a__1[11] = __state->sstr;
+    s_cat(__state->date, a__1, i__3, &__state->c__12, (ftnlen)180);
+    cmprss_(" ", &__state->c__1, __state->date, __state->date, (ftnlen)1, (
+	    ftnlen)180, (ftnlen)180);
+    ljust_(__state->date, __state->date, (ftnlen)180, (ftnlen)180);
+    s_copy(string, __state->date, string_len, (ftnlen)180);
     return 0;
 } /* etcal_ */
 

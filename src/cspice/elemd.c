@@ -1,9 +1,17 @@
-/* elemd.f -- translated by f2c (version 19980913).
+/* elemd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int elemd_state_t;
+static elemd_state_t* get_elemd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            ELEMD ( Element of a double precision set ) */
 logical elemd_(doublereal *item, doublereal *a)
@@ -19,6 +27,9 @@ logical elemd_(doublereal *item, doublereal *a)
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    elemd_state_t* __state = get_elemd_state();
 /* $ Abstract */
 
 /*      Determine whether an item is an element of a double */

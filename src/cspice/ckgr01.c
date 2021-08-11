@@ -1,14 +1,21 @@
-/* ckgr01.f -- translated by f2c (version 19980913).
+/* ckgr01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckgr01_init_t __ckgr01_init;
+static ckgr01_state_t* get_ckgr01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgr01)
+		state->ckgr01 = __cspice_allocate_module(sizeof(
+	ckgr01_state_t), &__ckgr01_init, sizeof(__ckgr01_init));
+	return state->ckgr01;
+
+}
 
 /* $Procedure      CKGR01 ( C-kernel, get record, type 01 ) */
 /* Subroutine */ int ckgr01_(integer *handle, doublereal *descr, integer *
@@ -18,17 +25,27 @@ static integer c__6 = 6;
     integer i__1;
 
     /* Local variables */
-    integer addr__, nrec, psiz;
+    integer addr__;
+    integer nrec;
+    integer psiz;
     doublereal n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
-	     integer *, integer *, doublereal *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
-    integer beg, icd[6];
+    integer beg;
+    integer icd[6];
 
+
+    /* Module state */
+    ckgr01_state_t* __state = get_ckgr01_state();
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a data type 1 segment in a */
@@ -354,7 +371,7 @@ static integer c__6 = 6;
 /*       4 - The existence of angular velocity data, which determines how */
 /*           big the pointing portion of the returned record will be. */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 1) {
 	setmsg_("Data type of the segment should be 1: Passed descriptor sho"
 		"ws type = #.", (ftnlen)71);

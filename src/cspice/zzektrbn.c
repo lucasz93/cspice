@@ -1,14 +1,21 @@
-/* zzektrbn.f -- translated by f2c (version 19980913).
+/* zzektrbn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__82 = 82;
-static integer c__124 = 124;
+extern zzektrbn_init_t __zzektrbn_init;
+static zzektrbn_state_t* get_zzektrbn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrbn)
+		state->zzektrbn = __cspice_allocate_module(sizeof(
+	zzektrbn_state_t), &__zzektrbn_init, sizeof(__zzektrbn_init));
+	return state->zzektrbn;
+
+}
 
 /* $Procedure      ZZEKTRBN ( EK tree, balance nodes ) */
 /* Subroutine */ int zzektrbn_(integer *handle, integer *tree, integer *left, 
@@ -17,15 +24,20 @@ static integer c__124 = 124;
     integer root;
     extern integer zzektrnk_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzektrrk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *), chkin_(char *, 
-	    ftnlen);
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer schlep;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer lnkeys;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    integer rnkeys, sum;
+    integer rnkeys;
+    integer sum;
 
+
+    /* Module state */
+    zzektrbn_state_t* __state = get_zzektrbn_state();
 /* $ Abstract */
 
 /*     Solve overflow in a node by balancing the node */
@@ -441,8 +453,8 @@ static integer c__124 = 124;
 	errint_("#", right, (ftnlen)1);
 	errint_("#", &lnkeys, (ftnlen)1);
 	errint_("#", &rnkeys, (ftnlen)1);
-	errint_("#", &c__82, (ftnlen)1);
-	errint_("#", &c__124, (ftnlen)1);
+	errint_("#", &__state->c__82, (ftnlen)1);
+	errint_("#", &__state->c__124, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTRBN", (ftnlen)8);
 	return 0;

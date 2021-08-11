@@ -1,14 +1,21 @@
-/* zzdsksel.f -- translated by f2c (version 19980913).
+/* zzdsksel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__10 = 10;
+extern zzdsksel_init_t __zzdsksel_init;
+static zzdsksel_state_t* get_zzdsksel_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksel)
+		state->zzdsksel = __cspice_allocate_module(sizeof(
+	zzdsksel_state_t), &__zzdsksel_init, sizeof(__zzdsksel_init));
+	return state->zzdsksel;
+
+}
 
 /* $Procedure ZZDSKSEL ( DSK, segment selection callback umbrella ) */
 logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
@@ -19,7 +26,6 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -35,41 +41,42 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal f;
     integer i__;
-    doublereal r__, scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
-    static doublereal savet;
+    doublereal r__;
+    doublereal scale;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     extern doublereal twopi_(void);
-    doublereal co1min, co2min, co1max, co2max;
-    static doublereal savco1, savco2;
+    doublereal co1min;
+    doublereal co2min;
+    doublereal co1max;
+    doublereal co2max;
     doublereal re;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     integer segfid;
     extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static integer savbid;
     extern integer bsrchi_(integer *, integer *, integer *);
-    static integer savfid;
     extern /* Subroutine */ int shelli_(integer *, integer *);
     doublereal loccor[1];
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern integer touchi_(integer *);
     doublereal locpos[3];
-    static doublereal savpar[10];
-    static integer savcls, savnsf, savsrf[100], savtrg;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static doublereal pi2, savpos[3];
     integer segsys;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
-    static integer savsys;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    doublereal alt, lat, lon;
+    doublereal alt;
+    doublereal lat;
+    doublereal lon;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    zzdsksel_state_t* __state = get_zzdsksel_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -668,7 +675,7 @@ L_zzdsksbd:
 
 /*     Save input value. */
 
-    savbid = *bodyid;
+    __state->savbid = *bodyid;
     return ret_val;
 /* $Procedure ZZDSKBDC ( DSK, check segment's body ID ) */
 
@@ -802,7 +809,7 @@ L_zzdskbdc:
 
 /*     The body ID is the only DSK segment attribute that must match. */
 
-    ret_val = i_dnnt(&dskdsc[1]) == savbid;
+    ret_val = i_dnnt(&dskdsc[1]) == __state->savbid;
     return ret_val;
 /* $Procedure ZZDSKNOT ( DSK, match nothing ) */
 
@@ -1080,25 +1087,25 @@ L_zzdsksit:
 
 /*     Save input values. */
 
-    savbid = *bodyid;
-    savet = *et;
+    __state->savbid = *bodyid;
+    __state->savet = *et;
     if (*nsurf > 100) {
 	chkin_("ZZDSKSIT", (ftnlen)8);
 	setmsg_("Maximum allowed surface ID count is #; input count was #.", (
 		ftnlen)57);
-	errint_("#", &c__100, (ftnlen)1);
+	errint_("#", &__state->c__100, (ftnlen)1);
 	errint_("#", nsurf, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("ZZDSKSIT", (ftnlen)8);
 	return ret_val;
     }
-    savnsf = *nsurf;
+    __state->savnsf = *nsurf;
     i__1 = *nsurf;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	savsrf[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("savsrf", 
-		i__2, "zzdsksel_", (ftnlen)958)] = srflst[i__ - 1];
+	__state->savsrf[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
+		"savsrf", i__2, "zzdsksel_", (ftnlen)958)] = srflst[i__ - 1];
     }
-    shelli_(nsurf, savsrf);
+    shelli_(nsurf, __state->savsrf);
     return ret_val;
 /* $Procedure ZZDSKCIT ( DSK, check body ID, surface, and time ) */
 
@@ -1234,9 +1241,9 @@ L_zzdskcit:
 /*     to make this test, but the required inputs are available. */
 
     ret_val = FALSE_;
-    if (savbid == i_dnnt(&dskdsc[1])) {
-	if (savet >= dskdsc[22] && savet <= dskdsc[23]) {
-	    if (savnsf < 1) {
+    if (__state->savbid == i_dnnt(&dskdsc[1])) {
+	if (__state->savet >= dskdsc[22] && __state->savet <= dskdsc[23]) {
+	    if (__state->savnsf < 1) {
 
 /*              There are no surface ID constraints; we have */
 /*              a match. */
@@ -1248,7 +1255,8 @@ L_zzdskcit:
 /*              segment is on the list of allowed surface IDs. */
 
 		surf = i_dnnt(dskdsc);
-		ret_val = bsrchi_(&surf, &savnsf, savsrf) > 0;
+		ret_val = bsrchi_(&surf, &__state->savnsf, __state->savsrf) > 
+			0;
 	    }
 	}
     }
@@ -1394,10 +1402,10 @@ L_zzdskusc:
 
 /* -& */
     ret_val = FALSE_;
-    savbid = *bodyid;
-    savet = *et;
-    savco1 = *cor1;
-    savco2 = *cor2;
+    __state->savbid = *bodyid;
+    __state->savet = *et;
+    __state->savco1 = *cor1;
+    __state->savco2 = *cor2;
     return ret_val;
 /* $Procedure ZZDSKUMC ( DSK, check body ID, coordinates, and time ) */
 
@@ -1537,18 +1545,18 @@ L_zzdskumc:
 /*     We don't have a match to begin with. */
 
     ret_val = FALSE_;
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 
 /*     Check the body ID first. */
 
-    if (savbid == i_dnnt(&dskdsc[1])) {
+    if (__state->savbid == i_dnnt(&dskdsc[1])) {
 
 /*        The body ID matches; check the time coverage. */
 
-	if (savet >= dskdsc[22] && savet <= dskdsc[23]) {
+	if (__state->savet >= dskdsc[22] && __state->savet <= dskdsc[23]) {
 
 /*           Check the coordinates. Note that we don't */
 /*           know whether the frame and coordinates are */
@@ -1562,7 +1570,7 @@ L_zzdskumc:
 
 /*           Make a local copy of the first coordinate. */
 
-	    loccor[0] = savco1;
+	    loccor[0] = __state->savco1;
 	    if (segsys == 1 || segsys == 4) {
 
 /*              Adjust segment bounds using a small margin. */
@@ -1575,9 +1583,9 @@ L_zzdskumc:
 /*              Move longitude into range. */
 
 		if (loccor[0] < co1min) {
-		    loccor[0] += pi2;
+		    loccor[0] += __state->pi2;
 		} else if (loccor[0] > co1max) {
-		    loccor[0] -= pi2;
+		    loccor[0] -= __state->pi2;
 		}
 	    } else {
 		scale = 1.0000000000010001;
@@ -1601,7 +1609,7 @@ L_zzdskumc:
 /*           Compare the second coordinate against the segment's */
 /*           corresponding coverage range. */
 
-	    if (savco2 < co2min || savco2 > co2max) {
+	    if (__state->savco2 < co2min || __state->savco2 > co2max) {
 
 /*              The second input coordinate is not covered by this */
 /*              segment. */
@@ -1786,14 +1794,14 @@ L_zzdskmsc:
 
 /* -& */
     ret_val = FALSE_;
-    savtrg = *bodyid;
-    savbid = *surfid;
-    savfid = *framid;
-    savsys = *corsys;
-    moved_(corpar, &c__10, savpar);
-    savet = *et;
-    savco1 = *cor1;
-    savco2 = *cor2;
+    __state->savtrg = *bodyid;
+    __state->savbid = *surfid;
+    __state->savfid = *framid;
+    __state->savsys = *corsys;
+    moved_(corpar, &__state->c__10, __state->savpar);
+    __state->savet = *et;
+    __state->savco1 = *cor1;
+    __state->savco2 = *cor2;
     return ret_val;
 /* $Procedure ZZDSKMMC ( DSK, matched segment attribute comparison ) */
 
@@ -1948,50 +1956,50 @@ L_zzdskmmc:
 /*     We don't have a match to begin with. */
 
     ret_val = FALSE_;
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 
 /*     Check the target ID. */
 
-    if (savtrg != i_dnnt(&dskdsc[1])) {
+    if (__state->savtrg != i_dnnt(&dskdsc[1])) {
 	return ret_val;
     }
 
 /*     Check the surface ID. */
 
-    if (savbid != i_dnnt(dskdsc)) {
+    if (__state->savbid != i_dnnt(dskdsc)) {
 	return ret_val;
     }
 
 /*     Check the frame ID. */
 
-    if (savfid != i_dnnt(&dskdsc[4])) {
+    if (__state->savfid != i_dnnt(&dskdsc[4])) {
 	return ret_val;
     }
 
 /*     Check the coordinate system. */
 
-    if (savsys != i_dnnt(&dskdsc[5])) {
+    if (__state->savsys != i_dnnt(&dskdsc[5])) {
 	return ret_val;
     }
 
 /*     If the system is planetodetic, check the reference */
 /*     ellipsoid parameters. */
 
-    if (savsys == 4) {
-	if ((d__1 = savpar[0] - dskdsc[6], abs(d__1)) > 1e-12) {
+    if (__state->savsys == 4) {
+	if ((d__1 = __state->savpar[0] - dskdsc[6], abs(d__1)) > 1e-12) {
 	    return ret_val;
 	}
-	if ((d__1 = savpar[1] - dskdsc[7], abs(d__1)) > 1e-12) {
+	if ((d__1 = __state->savpar[1] - dskdsc[7], abs(d__1)) > 1e-12) {
 	    return ret_val;
 	}
     }
 
 /*     The segment attributes match; check the time coverage. */
 
-    if (savet >= dskdsc[22] && savet <= dskdsc[23]) {
+    if (__state->savet >= dskdsc[22] && __state->savet <= dskdsc[23]) {
 
 /*        Check the coordinates. */
 
@@ -1999,7 +2007,7 @@ L_zzdskmmc:
 
 /*        Make a local copy of the first coordinate. */
 
-	loccor[0] = savco1;
+	loccor[0] = __state->savco1;
 	if (segsys == 1 || segsys == 4) {
 
 /*           Adjust segment bounds using a small margin. */
@@ -2012,9 +2020,9 @@ L_zzdskmmc:
 /*           Move longitude into range. */
 
 	    if (loccor[0] < co1min) {
-		loccor[0] += pi2;
+		loccor[0] += __state->pi2;
 	    } else if (loccor[0] > co1max) {
-		loccor[0] -= pi2;
+		loccor[0] -= __state->pi2;
 	    }
 	} else {
 	    scale = 1.0000000000010001;
@@ -2038,7 +2046,7 @@ L_zzdskmmc:
 /*        Compare the second coordinate against the segment's */
 /*        corresponding coverage range. */
 
-	if (savco2 < co2min || savco2 > co2max) {
+	if (__state->savco2 < co2min || __state->savco2 > co2max) {
 
 /*           The second input coordinate is not covered by this */
 /*           segment. */
@@ -2210,12 +2218,12 @@ L_zzdsksrc:
 
 /* -& */
     ret_val = FALSE_;
-    savbid = *surfid;
-    savtrg = *bodyid;
-    savcls = *dclass;
-    savet = *et;
-    savfid = *framid;
-    vequ_(pos, savpos);
+    __state->savbid = *surfid;
+    __state->savtrg = *bodyid;
+    __state->savcls = *dclass;
+    __state->savet = *et;
+    __state->savfid = *framid;
+    vequ_(pos, __state->savpos);
     return ret_val;
 /* $Procedure ZZDSKMRC ( DSK, rectangular coordinate comparison ) */
 
@@ -2367,32 +2375,32 @@ L_zzdskmrc:
 /*     We don't have a match to begin with. */
 
     ret_val = FALSE_;
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 /*     Check the surface ID. */
 
-    if (savbid != i_dnnt(dskdsc)) {
+    if (__state->savbid != i_dnnt(dskdsc)) {
 	return ret_val;
     }
 
 /*     Reject any segment whose target (center) ID doesn't match */
 /*     the request ID. */
 
-    if (savtrg != i_dnnt(&dskdsc[1])) {
+    if (__state->savtrg != i_dnnt(&dskdsc[1])) {
 	return ret_val;
     }
 
 /*     Check the time coverage. */
 
-    if (savet < dskdsc[22] || savet > dskdsc[23]) {
+    if (__state->savet < dskdsc[22] || __state->savet > dskdsc[23]) {
 	return ret_val;
     }
 
 /*     Check the data class. */
 
-    if (savcls != i_dnnt(&dskdsc[2])) {
+    if (__state->savcls != i_dnnt(&dskdsc[2])) {
 	return ret_val;
     }
 
@@ -2401,20 +2409,20 @@ L_zzdskmrc:
 /*     into the frame of the segment, if the frames differ. */
 
     segfid = i_dnnt(&dskdsc[4]);
-    if (savfid == segfid) {
+    if (__state->savfid == segfid) {
 
 /*        The request frame and segment frame match. Just copy */
 /*        the saved vector. */
 
-	vequ_(savpos, locpos);
+	vequ_(__state->savpos, locpos);
     } else {
 
 /*        Transform the saved vector to the frame of the */
 /*        segment. The transformation epoch is the saved */
 /*        value of ET. */
 
-	refchg_(&savfid, &segfid, &savet, rmat);
-	mxv_(rmat, savpos, locpos);
+	refchg_(&__state->savfid, &segfid, &__state->savet, rmat);
+	mxv_(rmat, __state->savpos, locpos);
     }
 /*     We do need to know whether the first coordinate is a longitude, */
 /*     since we may need to adjust it to get it into the range of the */
@@ -2450,9 +2458,9 @@ L_zzdskmrc:
 /*        Move longitude into range. */
 
 	if (lon < co1min) {
-	    lon += pi2;
+	    lon += __state->pi2;
 	} else if (lon > co1max) {
-	    lon -= pi2;
+	    lon -= __state->pi2;
 	}
     } else {
 	chkin_("ZZDSKMRC", (ftnlen)8);

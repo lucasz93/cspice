@@ -1,14 +1,21 @@
-/* plnsns.f -- translated by f2c (version 19980913).
+/* plnsns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__1 = 1;
+extern plnsns_init_t __plnsns_init;
+static plnsns_state_t* get_plnsns_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->plnsns)
+		state->plnsns = __cspice_allocate_module(sizeof(
+	plnsns_state_t), &__plnsns_init, sizeof(__plnsns_init));
+	return state->plnsns;
+
+}
 
 /* $Procedure      PLNSNS ( Planetographic Longitude Sense ) */
 integer plnsns_(integer *bodid)
@@ -21,15 +28,21 @@ integer plnsns_(integer *bodid)
 
     /* Local variables */
     doublereal rate;
-    char item[32], type__[1];
+    char item[32];
+    char type__[1];
     integer n;
     logical found;
     integer value;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen), gdpool_(char *, integer *, integer *, 
-	    integer *, doublereal *, logical *, ftnlen), dtpool_(char *, 
-	    logical *, integer *, char *, ftnlen, ftnlen);
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
+	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
 
+
+    /* Module state */
+    plnsns_state_t* __state = get_plnsns_state();
 /* $ Abstract */
 
 /*    This function returns the quotient of the planetographic */
@@ -220,7 +233,8 @@ integer plnsns_(integer *bodid)
     if (! found || *(unsigned char *)type__ != 'N' || n < 2) {
 	value = 0;
     } else {
-	gdpool_(item, &c__2, &c__1, &n, &rate, &found, (ftnlen)32);
+	gdpool_(item, &__state->c__2, &__state->c__1, &n, &rate, &found, (
+		ftnlen)32);
 
 /*        If the rate of change of the prime meridian is negative */
 /*        the planetocentric and planetographic longitude are the */

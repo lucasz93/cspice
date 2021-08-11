@@ -1,9 +1,17 @@
-/* repmi.f -- translated by f2c (version 19980913).
+/* repmi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int repmi_state_t;
+static repmi_state_t* get_repmi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure REPMI  ( Replace marker with integer ) */
 /* Subroutine */ int repmi_(char *in, char *marker, integer *value, char *out,
@@ -21,10 +29,14 @@
     extern integer lastnb_(char *, ftnlen);
     integer mrknbl;
     extern integer frstnb_(char *, ftnlen);
-    integer mrkpsb, mrkpse;
+    integer mrkpsb;
+    integer mrkpse;
     char substr[11];
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    repmi_state_t* __state = get_repmi_state();
 /* $ Abstract */
 
 /*     Replace a marker with an integer. */

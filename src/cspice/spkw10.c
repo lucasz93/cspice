@@ -1,17 +1,21 @@
-/* spkw10.f -- translated by f2c (version 19980913).
+/* spkw10.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__8 = 8;
-static integer c__14 = 14;
-static integer c__4 = 4;
-static integer c__1 = 1;
+extern spkw10_init_t __spkw10_init;
+static spkw10_state_t* get_spkw10_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw10)
+		state->spkw10 = __cspice_allocate_module(sizeof(
+	spkw10_state_t), &__spkw10_init, sizeof(__spkw10_init));
+	return state->spkw10;
+
+}
 
 /* $Procedure      SPKW10 (SPK - write a type 10 segment ) */
 /* Subroutine */ int spkw10_(integer *handle, integer *body, integer *center, 
@@ -28,20 +32,25 @@ static integer c__1 = 1;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[6];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     sgwes_(integer *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sgwes_(integer *);
     integer npkts;
     extern logical failed_(void);
     doublereal packet[14];
     integer nepoch;
     extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, integer *, integer *, ftnlen), chkout_(
-	    char *, ftnlen), sgwfpk_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *), spkpds_(integer *, integer *, char *, 
-	    integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+	    integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgwfpk_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzwahr_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    spkw10_state_t* __state = get_spkw10_state();
 /* $ Abstract */
 
 /*     Write an SPK type 10 segment to the DAF open and attached to */
@@ -670,7 +679,8 @@ static integer c__1 = 1;
 /*     First we need to create a descriptor for the segment */
 /*     we are about to write. */
 
-    spkpds_(body, center, frame, &c__10, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__10, first, last, descr, 
+	    frame_len);
     if (failed_()) {
 	chkout_("SPKW10", (ftnlen)6);
 	return 0;
@@ -681,14 +691,15 @@ static integer c__1 = 1;
 
     npkts = *n;
     nepoch = *n;
-    sgbwfs_(handle, descr, segid, &c__8, consts, &c__14, &c__4, segid_len);
+    sgbwfs_(handle, descr, segid, &__state->c__8, consts, &__state->c__14, &
+	    __state->c__4, segid_len);
     i__1 = nepoch;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
 /*        Move the elements into the next packet. */
 
 	base = (i__ - 1) * 10;
-	moved_(&elems[base], &c__10, packet);
+	moved_(&elems[base], &__state->c__10, packet);
 
 /*        For each epoch, we need to get the nutation in obliquity, */
 /*        nutation in longitude and mean obliquity. */
@@ -701,7 +712,8 @@ static integer c__1 = 1;
 
 /*        Now write the packet into the generic segment. */
 
-	sgwfpk_(handle, &c__1, packet, &c__1, &epochs[i__ - 1]);
+	sgwfpk_(handle, &__state->c__1, packet, &__state->c__1, &epochs[i__ - 
+		1]);
     }
     sgwes_(handle);
     chkout_("SPKW10", (ftnlen)6);

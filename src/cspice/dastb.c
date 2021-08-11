@@ -1,17 +1,21 @@
-/* dastb.f -- translated by f2c (version 19980913).
+/* dastb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static logical c_false = FALSE_;
-static integer c__4 = 4;
+extern dastb_init_t __dastb_init;
+static dastb_state_t* get_dastb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dastb)
+		state->dastb = __cspice_allocate_module(sizeof(dastb_state_t),
+	 &__dastb_init, sizeof(__dastb_init));
+	return state->dastb;
+
+}
 
 /* $Procedure DASTB ( DAS, convert transfer file to binary file ) */
 /* Subroutine */ int dastb_(integer *xfrlun, char *binfil, ftnlen binfil_len)
@@ -28,33 +32,49 @@ static integer c__4 = 4;
     /* Local variables */
     char line[255];
     logical more;
-    char word[255], rest[255];
+    char word[255];
+    char rest[255];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc;
     logical inblk;
     char tarch[8];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer recno, ncomr;
+    integer recno;
+    integer ncomr;
     char ttype[8];
     extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), dasadc_(integer *, integer *, integer *, integer 
-	    *, char *, ftnlen), dasadd_(integer *, integer *, doublereal *);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dasadc_(integer *, integer *, integer *, 
+	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    integer ncdata, handle, nddata;
+    integer ncdata;
+    integer handle;
+    integer nddata;
     extern /* Subroutine */ int dasacr_(integer *, integer *);
     char ifname[60];
     integer nidata;
     extern /* Subroutine */ int rdencc_(integer *, integer *, char *, ftnlen);
     char crecrd[1024];
-    extern /* Subroutine */ int rdenci_(integer *, integer *, integer *), 
-	    dasioc_(char *, integer *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int rdenci_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
+	    ftnlen, ftnlen);
     char cbuffr[4*1024];
     doublereal dbuffr[1024];
-    integer bindex, blkcnt, dtacnt, eindex, ibuffr[1024], daslun;
+    integer bindex;
+    integer blkcnt;
+    integer dtacnt;
+    integer eindex;
+    integer ibuffr[1024];
+    integer daslun;
     char idword[8];
-    integer bcount, numblk, numdta, ecount;
+    integer bcount;
+    integer numblk;
+    integer numdta;
+    integer ecount;
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     char errmsg[320];
     integer nresvc;
@@ -62,24 +82,29 @@ static integer c__4 = 4;
     integer iostat;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer numlft;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), chkout_(
-	    char *, ftnlen), dasonw_(char *, char *, char *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen), daswfr_(integer *, char *, 
-	    char *, integer *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen), dascls_(integer *), nextwd_(char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dascls_(integer *);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     integer tcount;
     extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     extern logical return_(void);
-    integer errptr, nresvr;
+    integer errptr;
+    integer nresvr;
     extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 1, 0, 0 };
-    static cilist io___7 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    dastb_state_t* __state = get_dastb_state();
 /* $ Abstract */
 
 /*     Convert the contents of a DAS transfer file into an equivalent */
@@ -487,12 +512,12 @@ static integer c__4 = 4;
 /*     error. */
 
     s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
-    io___3.ciunit = *xfrlun;
-    iostat = s_rsle(&io___3);
+    __state->io___3.ciunit = *xfrlun;
+    iostat = s_rsle(&__state->io___3);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&c__9, &c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -524,12 +549,12 @@ L100001:
 /*     Read the internal filename for the DAS file. */
 
     s_copy(ifname, " ", (ftnlen)60, (ftnlen)1);
-    io___7.ciunit = *xfrlun;
-    iostat = s_rsle(&io___7);
+    __state->io___7.ciunit = *xfrlun;
+    iostat = s_rsle(&__state->io___7);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__9, &c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -547,8 +572,8 @@ L100002:
 
 /*     Open a new binary DAS file and write its file record. */
 
-    dasonw_(binfil, ttype, ifname, &c__0, &handle, binfil_len, (ftnlen)8, (
-	    ftnlen)60);
+    dasonw_(binfil, ttype, ifname, &__state->c__0, &handle, binfil_len, (
+	    ftnlen)8, (ftnlen)60);
     if (failed_()) {
 
 /*        If an error occurred while opening the new DAS file, */
@@ -582,8 +607,8 @@ L100002:
 /*     Read and decode the number of reserved records and reserved */
 /*     characters. */
 
-    rdenci_(xfrlun, &c__1, &nresvr);
-    rdenci_(xfrlun, &c__1, &nresvc);
+    rdenci_(xfrlun, &__state->c__1, &nresvr);
+    rdenci_(xfrlun, &__state->c__1, &nresvc);
     if (failed_()) {
 	chkout_("DASTB", (ftnlen)5);
 	return 0;
@@ -626,8 +651,8 @@ L100002:
 /*     Read and decode the number of comment records and comment */
 /*     characters. */
 
-    rdenci_(xfrlun, &c__1, &ncomr);
-    rdenci_(xfrlun, &c__1, &ncomc);
+    rdenci_(xfrlun, &__state->c__1, &ncomr);
+    rdenci_(xfrlun, &__state->c__1, &ncomc);
     if (failed_()) {
 	chkout_("DASTB", (ftnlen)5);
 	return 0;
@@ -659,7 +684,7 @@ L100002:
 /*        so just add the comments. But first, convert the DAS file */
 /*        handle into its equivalent logical unit. */
 
-	zzddhhlu_(&handle, "DAS", &c_false, &daslun, (ftnlen)3);
+	zzddhhlu_(&handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
 	if (failed_()) {
 
 /*           If an error occurred, attempt to close the binary file, */
@@ -710,7 +735,7 @@ L100002:
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_fio(&c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
@@ -1084,9 +1109,9 @@ L100003:
 /*     useful in determining which data types to expect in the text file */
 /*     when converting back to binary. */
 
-    rdenci_(xfrlun, &c__1, &ncdata);
-    rdenci_(xfrlun, &c__1, &nddata);
-    rdenci_(xfrlun, &c__1, &nidata);
+    rdenci_(xfrlun, &__state->c__1, &ncdata);
+    rdenci_(xfrlun, &__state->c__1, &nddata);
+    rdenci_(xfrlun, &__state->c__1, &nidata);
 
 /*     Process the character data array, if there is some character data. */
 
@@ -1114,7 +1139,7 @@ L100003:
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_fio(&c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
@@ -1435,8 +1460,8 @@ L100004:
 /*                 Write the character data to the DAS character */
 /*                 array in the binary DAS file. */
 
-		    dasadc_(&handle, &numdta, &c__1, &c__4, cbuffr, (ftnlen)4)
-			    ;
+		    dasadc_(&handle, &numdta, &__state->c__1, &__state->c__4, 
+			    cbuffr, (ftnlen)4);
 		    if (failed_()) {
 
 /*                    If an error occurred, attempt to close the */
@@ -1503,7 +1528,7 @@ L100004:
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
 	    if (iostat != 0) {
 		goto L100005;
 	    }
@@ -1890,7 +1915,7 @@ L100005:
 	    if (iostat != 0) {
 		goto L100006;
 	    }
-	    iostat = do_fio(&c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
 	    if (iostat != 0) {
 		goto L100006;
 	    }

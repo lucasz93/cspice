@@ -1,14 +1,21 @@
-/* zzekac09.f -- translated by f2c (version 19980913).
+/* zzekac09.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
+extern zzekac09_init_t __zzekac09_init;
+static zzekac09_state_t* get_zzekac09_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekac09)
+		state->zzekac09 = __cspice_allocate_module(sizeof(
+	zzekac09_state_t), &__zzekac09_init, sizeof(__zzekac09_init));
+	return state->zzekac09;
+
+}
 
 /* $Procedure     ZZEKAC09 ( EK, add class 9 column to segment ) */
 /* Subroutine */ int zzekac09_(integer *handle, integer *segdsc, integer *
@@ -26,27 +33,54 @@ static integer c__2 = 2;
     char page[1024];
     integer from;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekacps_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *), zzekordc_(char *, logical *, logical *, 
-	    integer *, integer *, ftnlen), zzekpgwc_(integer *, integer *, 
-	    char *, ftnlen), zzekwpai_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekwpal_(integer *, integer *, 
-	    integer *, logical *, integer *, integer *), zzekslnk_(integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *);
-    integer l, p, mbase, npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, nrows, cmbase;
+    extern /* Subroutine */ int zzekordc_(char *, logical *, logical *, 
+	    integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekwpai_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekwpal_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer l;
+    integer p;
+    integer mbase;
+    integer npage;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer nrows;
+    integer cmbase;
     extern logical return_(void);
     char column[32];
-    integer colidx, datbas, dscbas, idxbas, idxpag, idxtyp, nflbas, nflpag, 
-	    nulptr, to;
-    logical fixlen, indexd, nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasudi_(integer *, integer *, integer *, integer *);
+    integer colidx;
+    integer datbas;
+    integer dscbas;
+    integer idxbas;
+    integer idxpag;
+    integer idxtyp;
+    integer nflbas;
+    integer nflpag;
+    integer nulptr;
+    integer to;
+    logical fixlen;
+    logical indexd;
+    logical nullok;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
     integer spp;
 
+
+    /* Module state */
+    zzekac09_state_t* __state = get_zzekac09_state();
 /* $ Abstract */
 
 /*     Add an entire class 9 column to an EK segment. */
@@ -899,7 +933,7 @@ static integer c__2 = 2;
 /*     allocate that many new, contiguous pages. */
 
     npage = (nrows + spp - 1) / spp;
-    zzekacps_(handle, segdsc, &c__1, &npage, &p, &datbas);
+    zzekacps_(handle, segdsc, &__state->c__1, &npage, &p, &datbas);
 
 /*     We'll use FROM to indicate the element of CVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
@@ -928,7 +962,7 @@ static integer c__2 = 2;
 /*           Set the link count. */
 
 	    i__2 = (to - l) / l;
-	    zzekslnk_(handle, &c__1, &p, &i__2);
+	    zzekslnk_(handle, &__state->c__1, &p, &i__2);
 
 /*           Next page. */
 
@@ -968,7 +1002,7 @@ static integer c__2 = 2;
 	dasudi_(handle, &i__1, &i__2, &idxbas);
 	i__1 = dscbas + 6;
 	i__2 = dscbas + 6;
-	dasudi_(handle, &i__1, &i__2, &c__2);
+	dasudi_(handle, &i__1, &i__2, &__state->c__2);
     }
     if (nullok) {
 

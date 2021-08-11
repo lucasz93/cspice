@@ -1,9 +1,17 @@
-/* swapai.f -- translated by f2c (version 19980913).
+/* swapai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int swapai_state_t;
+static swapai_state_t* get_swapai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SWAPAI ( Swap elements within an integer array ) */
 /* Subroutine */ int swapai_(integer *n, integer *locn, integer *m, integer *
@@ -13,17 +21,29 @@
     integer i__1;
 
     /* Local variables */
-    integer nsub, i__;
+    integer nsub;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer extra;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer lm, ln, nm, nn, begsub, direct;
+    integer lm;
+    integer ln;
+    integer nm;
+    integer nn;
+    integer begsub;
+    integer direct;
     extern /* Subroutine */ int cyaiip_(integer *, char *, integer *, integer 
-	    *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+	    *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char dir[1];
 
+
+    /* Module state */
+    swapai_state_t* __state = get_swapai_state();
 /* $ Abstract */
 
 /*     Swap (exchange) two non-intersecting groups of contiguous */

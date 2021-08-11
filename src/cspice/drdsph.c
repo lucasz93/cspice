@@ -1,9 +1,17 @@
-/* drdsph.f -- translated by f2c (version 19980913).
+/* drdsph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int drdsph_state_t;
+static drdsph_state_t* get_drdsph_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DRDSPH ( Derivative of rectangular w.r.t. spherical ) */
 /* Subroutine */ int drdsph_(doublereal *r__, doublereal *colat, doublereal *
@@ -13,8 +21,14 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal clong, slong, ccolat, scolat;
+    doublereal clong;
+    doublereal slong;
+    doublereal ccolat;
+    doublereal scolat;
 
+
+    /* Module state */
+    drdsph_state_t* __state = get_drdsph_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

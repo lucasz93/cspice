@@ -1,16 +1,21 @@
-/* zzekscan.f -- translated by f2c (version 19980913).
+/* zzekscan.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__512 = 512;
-static integer c__2 = 2;
-static integer c__29 = 29;
-static integer c__13 = 13;
+extern zzekscan_init_t __zzekscan_init;
+static zzekscan_state_t* get_zzekscan_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekscan)
+		state->zzekscan = __cspice_allocate_module(sizeof(
+	zzekscan_state_t), &__zzekscan_init, sizeof(__zzekscan_init));
+	return state->zzekscan;
+
+}
 
 /* $Procedure      ZZEKSCAN ( EK, scan query ) */
 /* Subroutine */ int zzekscan_(char *query, integer *maxntk, integer *maxnum, 
@@ -21,30 +26,6 @@ static integer c__13 = 13;
 {
     /* Initialized data */
 
-    static char keywds[32*29] = "ALL                             " "AND     "
-	    "                        " "ASC                             " 
-	    "AVG                             " "BETWEEN                     "
-	    "    " "BY                              " "COUNT                 "
-	    "          " "DESC                            " "DISTINCT        "
-	    "                " "EQ                              " "FROM      "
-	    "                      " "GE                              " "GROU"
-	    "P                           " "GT                              " 
-	    "HAVING                          " "IS                          "
-	    "    " "LE                              " "LIKE                  "
-	    "          " "LT                              " "MAX             "
-	    "                " "MIN                             " "NE        "
-	    "                      " "NOT                             " "NULL"
-	    "                            " "OR                              " 
-	    "ORDER                           " "SELECT                      "
-	    "    " "SUM                             " "WHERE                 "
-	    "          ";
-    static integer kwvals[29] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,
-	    18,19,20,21,22,23,24,25,26,27,28,29 };
-    static char spcstr[2*13] = "!=" "^=" "<>" "<=" ">=" "< " "> " "= " "( " 
-	    ") " ", " ". " "* ";
-    static integer spctok[13] = { 1,1,1,1,1,1,1,1,6,7,8,9,10 };
-    static integer spcval[13] = { 22,22,22,17,12,19,14,10,0,0,0,0,0 };
-    static logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -56,38 +37,39 @@ static integer c__13 = 13;
 	    s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer last, cptr, room, i__, j, l;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     extern logical beint_(char *, ftnlen);
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen), repmi_(char *, char *, integer *, char *
-	    , ftnlen, ftnlen, ftnlen);
-    static integer state;
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    static integer nnums, nstrs, chcard;
     extern /* Subroutine */ int lx4num_(char *, integer *, integer *, integer 
 	    *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer idspec[518];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char hdchrs[80];
-    static integer nchars, length;
     extern integer frstpc_(char *, ftnlen);
     extern logical return_(void);
-    static char tlchrs[80], tquery[2000];
-    extern /* Subroutine */ int ssizei_(integer *, integer *), lxcsid_(char *,
-	     char *, integer *, ftnlen, ftnlen), chkout_(char *, ftnlen), 
-	    lxqstr_(char *, char *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen), parsqs_(char *, char *, char *, integer *, logical *, 
-	    char *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), prefix_(char *
-	    , integer *, char *, ftnlen, ftnlen), nparsd_(char *, doublereal *
-	    , char *, integer *, ftnlen, ftnlen), lxidnt_(integer *, char *, 
-	    integer *, integer *, integer *, ftnlen), suffix_(char *, integer 
-	    *, char *, ftnlen, ftnlen);
-    static char chr[1];
-    static integer ptr;
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int lxcsid_(char *, char *, integer *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int lxqstr_(char *, char *, integer *, integer *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int parsqs_(char *, char *, char *, integer *, 
+	    logical *, char *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int lxidnt_(integer *, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
 
+    /* Module state */
+    zzekscan_state_t* __state = get_zzekscan_state();
 /* $ Abstract */
 
 /*     Scan tokens in an EK query. */
@@ -646,39 +628,40 @@ static integer c__13 = 13;
 
 /*     The first time through, set up our identifier character set. */
 
-    if (pass1) {
+    if (__state->pass1) {
 
 /*        Each identifier must start with a letter (of either case). */
 /*        The subsequent characters must be letters, numbers, dollar */
 /*        signs or underscores. */
 
-	s_copy(hdchrs, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-		 (ftnlen)80, (ftnlen)52);
-	s_copy(tlchrs, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-		"0123456789$_", (ftnlen)80, (ftnlen)64);
-	ssizei_(&c__512, idspec);
-	lxcsid_(hdchrs, tlchrs, idspec, (ftnlen)80, (ftnlen)80);
-	pass1 = FALSE_;
+	s_copy(__state->hdchrs, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq"
+		"rstuvwxyz", (ftnlen)80, (ftnlen)52);
+	s_copy(__state->tlchrs, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq"
+		"rstuvwxyz0123456789$_", (ftnlen)80, (ftnlen)64);
+	ssizei_(&__state->c__512, __state->idspec);
+	lxcsid_(__state->hdchrs, __state->tlchrs, __state->idspec, (ftnlen)80,
+		 (ftnlen)80);
+	__state->pass1 = FALSE_;
     }
 
 /*     We'll work with a local copy of the query. */
 
-    l = rtrim_(query, query_len);
-    s_copy(tquery, query, (ftnlen)2000, l);
+    __state->l = rtrim_(query, query_len);
+    s_copy(__state->tquery, query, (ftnlen)2000, __state->l);
 
 /*     Initialize pointers and counts. */
 
-    cptr = 1;
-    nnums = 0;
-    nstrs = 0;
-    chcard = 0;
+    __state->cptr = 1;
+    __state->nnums = 0;
+    __state->nstrs = 0;
+    __state->chcard = 0;
     *ntoken = 0;
 
 /*     Start out in the token search state. */
 
-    state = 1;
-    while(state != 3) {
-	if (state == 1) {
+    __state->state = 1;
+    while(__state->state != 3) {
+	if (__state->state == 1) {
 
 /*           In our initial state, we're looking for a new token. */
 /*           We stop when we have enough characters to determine */
@@ -689,30 +672,31 @@ static integer c__13 = 13;
 /*           token. */
 
 	    if (*ntoken > 0) {
-		cptr = lxends[*ntoken - 1] + 1;
+		__state->cptr = lxends[*ntoken - 1] + 1;
 	    }
-	    if (cptr > l) {
-		state = 3;
+	    if (__state->cptr > __state->l) {
+		__state->state = 3;
 	    } else {
-		while(*(unsigned char *)&tquery[cptr - 1] == ' ' && cptr < l) 
-			{
-		    ++cptr;
+		while(*(unsigned char *)&__state->tquery[__state->cptr - 1] ==
+			 ' ' && __state->cptr < __state->l) {
+		    ++__state->cptr;
 		}
-		if (*(unsigned char *)&tquery[cptr - 1] == ' ') {
+		if (*(unsigned char *)&__state->tquery[__state->cptr - 1] == 
+			' ') {
 
 /*                 We're out of non-blank characters to look at. */
 
-		    state = 3;
+		    __state->state = 3;
 		} else {
-		    *(unsigned char *)chr = *(unsigned char *)&tquery[cptr - 
-			    1];
-		    state = 2;
+		    *(unsigned char *)__state->chr = *(unsigned char *)&
+			    __state->tquery[__state->cptr - 1];
+		    __state->state = 2;
 		}
 	    }
 
 /*           STATE is in the set {NEWTOK, TERM}. */
 
-	} else if (state == 2) {
+	} else if (__state->state == 2) {
 
 /*           If we got this far, we have the initial character of */
 /*           something that could be a valid token.  We test for */
@@ -738,32 +722,34 @@ static integer c__13 = 13;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
 	    }
-	    *(unsigned char *)&ch__1[0] = *(unsigned char *)chr;
+	    *(unsigned char *)&ch__1[0] = *(unsigned char *)__state->chr;
 	    if (*(unsigned char *)&ch__1[0] == '\'' || *(unsigned char *)&
 		    ch__1[0] == '"') {
-		state = 4;
+		__state->state = 4;
 	    } else /* if(complicated condition) */ {
-		*(unsigned char *)&ch__1[0] = *(unsigned char *)chr;
+		*(unsigned char *)&ch__1[0] = *(unsigned char *)__state->chr;
 		if (*(unsigned char *)&ch__1[0] == '.') {
-		    state = 5;
+		    __state->state = 5;
 		} else /* if(complicated condition) */ {
-		    *(unsigned char *)&ch__1[0] = *(unsigned char *)chr;
+		    *(unsigned char *)&ch__1[0] = *(unsigned char *)
+			    __state->chr;
 		    *(unsigned char *)&ch__2[0] = *(unsigned char *)&ch__1[0];
 		    *(unsigned char *)&ch__3[0] = *(unsigned char *)&ch__1[0];
 		    if (*(unsigned char *)&ch__2[0] >= '0' && *(unsigned char 
 			    *)&ch__2[0] <= '9' || (*(unsigned char *)&ch__3[0]
 			     == '+' || *(unsigned char *)&ch__3[0] == '-') || 
 			    *(unsigned char *)&ch__1[0] == '.') {
-			state = 6;
+			__state->state = 6;
 		    } else /* if(complicated condition) */ {
-			*(unsigned char *)&ch__1[0] = *(unsigned char *)chr;
+			*(unsigned char *)&ch__1[0] = *(unsigned char *)
+				__state->chr;
 			if (*(unsigned char *)&ch__1[0] >= 'A' && *(unsigned 
 				char *)&ch__1[0] <= 'Z' || *(unsigned char *)&
 				ch__1[0] >= 'a' && *(unsigned char *)&ch__1[0]
 				 <= 'z') {
-			    state = 7;
+			    __state->state = 7;
 			} else {
-			    state = 8;
+			    __state->state = 8;
 			}
 		    }
 		}
@@ -774,18 +760,18 @@ static integer c__13 = 13;
 
 /*              {QSTR, NUMBER, IDENT, SPCIAL} */
 
-	} else if (state == 4) {
+	} else if (__state->state == 4) {
 
 /*           Look for a quoted string starting at location CPTR. */
 /*           Use the current character as the quote character. */
 
-	    lxqstr_(tquery, chr, &cptr, &last, &nchars, (ftnlen)2000, (ftnlen)
-		    1);
-	    if (nchars == 0) {
+	    lxqstr_(__state->tquery, __state->chr, &__state->cptr, &
+		    __state->last, &__state->nchars, (ftnlen)2000, (ftnlen)1);
+	    if (__state->nchars == 0) {
 		s_copy(errmsg, "Invalid quoted string at location #.", 
 			errmsg_len, (ftnlen)36);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
@@ -795,32 +781,34 @@ static integer c__13 = 13;
 /*           and obtain the corresponding string value.  First make */
 /*           sure we have enough room for the parsed string. */
 
-	    room = i_len(chrbuf, chrbuf_len) - chcard;
-	    if (nchars > room) {
+	    __state->room = i_len(chrbuf, chrbuf_len) - __state->chcard;
+	    if (__state->nchars > __state->room) {
 		s_copy(errmsg, "Insufficient space to store quoted string at"
 			" location #; # chars needed; only # are available.", 
 			errmsg_len, (ftnlen)94);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
-		repmi_(errmsg, "#", &nchars, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
-		repmi_(errmsg, "#", &room, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
+		repmi_(errmsg, "#", &__state->nchars, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
+		repmi_(errmsg, "#", &__state->room, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
 	    }
-	    i__1 = chcard;
-	    parsqs_(tquery + (cptr - 1), chr, chrbuf + i__1, &length, scnerr, 
-		    errmsg, &ptr, cptr + nchars - 1 - (cptr - 1), (ftnlen)1, 
-		    chrbuf_len - i__1, errmsg_len);
+	    i__1 = __state->chcard;
+	    parsqs_(__state->tquery + (__state->cptr - 1), __state->chr, 
+		    chrbuf + i__1, &__state->length, scnerr, errmsg, &
+		    __state->ptr, __state->cptr + __state->nchars - 1 - (
+		    __state->cptr - 1), (ftnlen)1, chrbuf_len - i__1, 
+		    errmsg_len);
 	    if (*scnerr) {
-		prefix_("#", &c__2, errmsg, (ftnlen)1, errmsg_len);
+		prefix_("#", &__state->c__2, errmsg, (ftnlen)1, errmsg_len);
 		repmc_(errmsg, "#", "Error occurred while parsing quoted str"
 			"ing token at location #:", errmsg, errmsg_len, (
 			ftnlen)1, (ftnlen)63, errmsg_len);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
@@ -830,18 +818,18 @@ static integer c__13 = 13;
 
 	    ++(*ntoken);
 	    tokens[*ntoken - 1] = 5;
-	    ++nstrs;
-	    values[*ntoken - 1] = nstrs;
-	    chbegs[nstrs - 1] = chcard + 1;
-	    chends[nstrs - 1] = chcard + length;
-	    chcard = chends[nstrs - 1];
-	    lxbegs[*ntoken - 1] = cptr;
-	    lxends[*ntoken - 1] = last;
-	    state = 1;
+	    ++__state->nstrs;
+	    values[*ntoken - 1] = __state->nstrs;
+	    chbegs[__state->nstrs - 1] = __state->chcard + 1;
+	    chends[__state->nstrs - 1] = __state->chcard + __state->length;
+	    __state->chcard = chends[__state->nstrs - 1];
+	    lxbegs[*ntoken - 1] = __state->cptr;
+	    lxends[*ntoken - 1] = __state->last;
+	    __state->state = 1;
 
 /*           STATE is now NXTTOK. */
 
-	} else if (state == 5) {
+	} else if (__state->state == 5) {
 
 /*           The token begins with a period.  We could be looking at */
 /*           a floating point number, or we could be looking at a */
@@ -849,26 +837,28 @@ static integer c__13 = 13;
 
 /*           Look for a number starting at location CPTR. */
 
-	    lx4num_(tquery, &cptr, &last, &nchars, (ftnlen)2000);
-	    if (nchars > 0) {
-		state = 6;
+	    lx4num_(__state->tquery, &__state->cptr, &__state->last, &
+		    __state->nchars, (ftnlen)2000);
+	    if (__state->nchars > 0) {
+		__state->state = 6;
 	    } else {
-		state = 8;
+		__state->state = 8;
 	    }
 
 /*           STATE has been set to NUMBER or SPCIAL.  CPTR and NTOKEN */
 /*           remain unchanged. */
 
-	} else if (state == 6) {
+	} else if (__state->state == 6) {
 
 /*           Look for a number starting at location CPTR. */
 
-	    lx4num_(tquery, &cptr, &last, &nchars, (ftnlen)2000);
-	    if (nchars == 0) {
+	    lx4num_(__state->tquery, &__state->cptr, &__state->last, &
+		    __state->nchars, (ftnlen)2000);
+	    if (__state->nchars == 0) {
 		s_copy(errmsg, "Invalid numeric token at location #.", 
 			errmsg_len, (ftnlen)36);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
@@ -877,13 +867,13 @@ static integer c__13 = 13;
 /*           Parse the token, but only do so if there's enough */
 /*           room to store the result. */
 
-	    room = *maxnum - nnums;
-	    if (room < 1) {
+	    __state->room = *maxnum - __state->nnums;
+	    if (__state->room < 1) {
 		s_copy(errmsg, "Insufficient space to store value of number "
 			"at location #; # elements are available in the NUMVL"
 			"S array; # are required.", errmsg_len, (ftnlen)120);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		repmi_(errmsg, "#", maxnum, errmsg, errmsg_len, (ftnlen)1, 
 			errmsg_len);
 		i__1 = *maxnum + 1;
@@ -893,8 +883,9 @@ static integer c__13 = 13;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
 	    }
-	    nparsd_(tquery + (cptr - 1), &numvls[nnums], errmsg, &ptr, last - 
-		    (cptr - 1), errmsg_len);
+	    nparsd_(__state->tquery + (__state->cptr - 1), &numvls[
+		    __state->nnums], errmsg, &__state->ptr, __state->last - (
+		    __state->cptr - 1), errmsg_len);
 	    if (s_cmp(errmsg, " ", errmsg_len, (ftnlen)1) != 0) {
 
 /*              This check is done for safety; by construction, we */
@@ -902,11 +893,11 @@ static integer c__13 = 13;
 /*              thinks we have a valid number, so in fact ERRMSG */
 /*              should always be blank. */
 
-		prefix_("#", &c__2, errmsg, (ftnlen)1, errmsg_len);
+		prefix_("#", &__state->c__2, errmsg, (ftnlen)1, errmsg_len);
 		repmc_(errmsg, "#", "Error found in numeric token at locatio"
 			"n #:", errmsg, errmsg_len, (ftnlen)1, (ftnlen)43, 
 			errmsg_len);
-		i__1 = cptr + ptr - 1;
+		i__1 = __state->cptr + __state->ptr - 1;
 		repmi_(errmsg, "#", &i__1, errmsg, errmsg_len, (ftnlen)1, 
 			errmsg_len);
 		*scnerr = TRUE_;
@@ -919,7 +910,8 @@ static integer c__13 = 13;
 /*           to the most restrictive category possible. */
 
 	    ++(*ntoken);
-	    if (beint_(tquery + (cptr - 1), last - (cptr - 1))) {
+	    if (beint_(__state->tquery + (__state->cptr - 1), __state->last - 
+		    (__state->cptr - 1))) {
 		tokens[*ntoken - 1] = 3;
 	    } else {
 		tokens[*ntoken - 1] = 4;
@@ -927,20 +919,21 @@ static integer c__13 = 13;
 
 /*           Set the rest of our outputs. */
 
-	    ++nnums;
-	    values[*ntoken - 1] = nnums;
-	    lxbegs[*ntoken - 1] = cptr;
-	    lxends[*ntoken - 1] = last;
-	    state = 1;
+	    ++__state->nnums;
+	    values[*ntoken - 1] = __state->nnums;
+	    lxbegs[*ntoken - 1] = __state->cptr;
+	    lxends[*ntoken - 1] = __state->last;
+	    __state->state = 1;
 
 /*           STATE is now NXTTOK. */
 
-	} else if (state == 7) {
+	} else if (__state->state == 7) {
 
 /*           Look for an identifier starting at location CPTR. */
 
-	    lxidnt_(idspec, tquery, &cptr, &last, &nchars, (ftnlen)2000);
-	    if (nchars == 0) {
+	    lxidnt_(__state->idspec, __state->tquery, &__state->cptr, &
+		    __state->last, &__state->nchars, (ftnlen)2000);
+	    if (__state->nchars == 0) {
 
 /*              This check is done for safety; by construction, we */
 /*              should always have a valid identifier of at least one */
@@ -949,8 +942,8 @@ static integer c__13 = 13;
 
 		s_copy(errmsg, "Invalid identifier at location #.", 
 			errmsg_len, (ftnlen)33);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
@@ -959,17 +952,17 @@ static integer c__13 = 13;
 /*           We've located an identifier lexeme.  Make sure we have */
 /*           enough room for the string. */
 
-	    room = i_len(chrbuf, chrbuf_len) - chcard;
-	    if (nchars > room) {
+	    __state->room = i_len(chrbuf, chrbuf_len) - __state->chcard;
+	    if (__state->nchars > __state->room) {
 		s_copy(errmsg, "Insufficient space to store identifier strin"
 			"g at location #; # chars needed; only # are availabl"
 			"e.", errmsg_len, (ftnlen)98);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
-		repmi_(errmsg, "#", &nchars, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
-		repmi_(errmsg, "#", &room, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
+		repmi_(errmsg, "#", &__state->nchars, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
+		repmi_(errmsg, "#", &__state->room, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 		*scnerr = TRUE_;
 		chkout_("ZZEKSCAN", (ftnlen)8);
 		return 0;
@@ -979,36 +972,39 @@ static integer c__13 = 13;
 /*           outputs.  Convert the string to upper case. */
 
 	    ++(*ntoken);
-	    i__1 = chcard;
-	    ucase_(tquery + (cptr - 1), chrbuf + i__1, last - (cptr - 1), 
-		    chcard + nchars - i__1);
-	    i__1 = chcard;
-	    i__ = bsrchc_(chrbuf + i__1, &c__29, keywds, chcard + nchars - 
-		    i__1, (ftnlen)32);
-	    if (i__ > 0) {
+	    i__1 = __state->chcard;
+	    ucase_(__state->tquery + (__state->cptr - 1), chrbuf + i__1, 
+		    __state->last - (__state->cptr - 1), __state->chcard + 
+		    __state->nchars - i__1);
+	    i__1 = __state->chcard;
+	    __state->i__ = bsrchc_(chrbuf + i__1, &__state->c__29, 
+		    __state->keywds, __state->chcard + __state->nchars - i__1,
+		     (ftnlen)32);
+	    if (__state->i__ > 0) {
 
 /*              It's a keyword. */
 
 		tokens[*ntoken - 1] = 1;
-		values[*ntoken - 1] = kwvals[(i__1 = i__ - 1) < 29 && 0 <= 
-			i__1 ? i__1 : s_rnge("kwvals", i__1, "zzekscan_", (
-			ftnlen)952)];
-		lxbegs[*ntoken - 1] = cptr;
-		lxends[*ntoken - 1] = last;
-		state = 1;
+		values[*ntoken - 1] = __state->kwvals[(i__1 = __state->i__ - 
+			1) < 29 && 0 <= i__1 ? i__1 : s_rnge("kwvals", i__1, 
+			"zzekscan_", (ftnlen)952)];
+		lxbegs[*ntoken - 1] = __state->cptr;
+		lxends[*ntoken - 1] = __state->last;
+		__state->state = 1;
 	    } else {
 
 /*              It's an identifier. */
 
-		++nstrs;
-		chbegs[nstrs - 1] = chcard + 1;
-		chends[nstrs - 1] = chcard + nchars;
-		chcard = chends[nstrs - 1];
+		++__state->nstrs;
+		chbegs[__state->nstrs - 1] = __state->chcard + 1;
+		chends[__state->nstrs - 1] = __state->chcard + 
+			__state->nchars;
+		__state->chcard = chends[__state->nstrs - 1];
 		tokens[*ntoken - 1] = 2;
-		values[*ntoken - 1] = nstrs;
-		lxbegs[*ntoken - 1] = cptr;
-		lxends[*ntoken - 1] = last;
-		state = 1;
+		values[*ntoken - 1] = __state->nstrs;
+		lxbegs[*ntoken - 1] = __state->cptr;
+		lxends[*ntoken - 1] = __state->last;
+		__state->state = 1;
 
 /*              We finished scanning an identifier. */
 
@@ -1020,59 +1016,61 @@ static integer c__13 = 13;
 
 /*           STATE is set to NXTTOK. */
 
-	} else if (state == 8) {
+	} else if (__state->state == 8) {
 
 /*           Look for a valid token starting with a special character at */
 /*           location CPTR. We attempt to match the longest possible */
 /*           special token. */
 
 /* Computing MIN */
-	    i__1 = 2, i__2 = l - cptr + 1;
-	    i__ = min(i__1,i__2);
-	    j = 0;
-	    while(i__ >= 1 && j == 0) {
-		last = cptr + i__ - 1;
-		j = isrchc_(tquery + (cptr - 1), &c__13, spcstr, last - (cptr 
-			- 1), (ftnlen)2);
-		if (j == 0) {
-		    --i__;
+	    i__1 = 2, i__2 = __state->l - __state->cptr + 1;
+	    __state->i__ = min(i__1,i__2);
+	    __state->j = 0;
+	    while(__state->i__ >= 1 && __state->j == 0) {
+		__state->last = __state->cptr + __state->i__ - 1;
+		__state->j = isrchc_(__state->tquery + (__state->cptr - 1), &
+			__state->c__13, __state->spcstr, __state->last - (
+			__state->cptr - 1), (ftnlen)2);
+		if (__state->j == 0) {
+		    --__state->i__;
 		}
 	    }
-	    if (j > 0) {
+	    if (__state->j > 0) {
 
 /*              We've identified a valid token. */
 
 		++(*ntoken);
-		tokens[*ntoken - 1] = spctok[(i__1 = j - 1) < 13 && 0 <= i__1 
-			? i__1 : s_rnge("spctok", i__1, "zzekscan_", (ftnlen)
-			1013)];
-		values[*ntoken - 1] = spcval[(i__1 = j - 1) < 13 && 0 <= i__1 
-			? i__1 : s_rnge("spcval", i__1, "zzekscan_", (ftnlen)
-			1014)];
-		lxbegs[*ntoken - 1] = cptr;
-		lxends[*ntoken - 1] = cptr - 1 + rtrim_(spcstr + (((i__1 = j 
-			- 1) < 13 && 0 <= i__1 ? i__1 : s_rnge("spcstr", i__1,
-			 "zzekscan_", (ftnlen)1016)) << 1), (ftnlen)2);
-		state = 1;
+		tokens[*ntoken - 1] = __state->spctok[(i__1 = __state->j - 1) 
+			< 13 && 0 <= i__1 ? i__1 : s_rnge("spctok", i__1, 
+			"zzekscan_", (ftnlen)1013)];
+		values[*ntoken - 1] = __state->spcval[(i__1 = __state->j - 1) 
+			< 13 && 0 <= i__1 ? i__1 : s_rnge("spcval", i__1, 
+			"zzekscan_", (ftnlen)1014)];
+		lxbegs[*ntoken - 1] = __state->cptr;
+		lxends[*ntoken - 1] = __state->cptr - 1 + rtrim_(
+			__state->spcstr + (((i__1 = __state->j - 1) < 13 && 0 
+			<= i__1 ? i__1 : s_rnge("spcstr", i__1, "zzekscan_", (
+			ftnlen)1016)) << 1), (ftnlen)2);
+		__state->state = 1;
 	    } else {
 		s_copy(errmsg, "Invalid character found at location #. ", 
 			errmsg_len, (ftnlen)39);
-		repmi_(errmsg, "#", &cptr, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmi_(errmsg, "#", &__state->cptr, errmsg, errmsg_len, (
+			ftnlen)1, errmsg_len);
 
 /*              If the offending character is printable, include it */
 /*              in the error message.  Otherwise, include the integer */
 /*              code for the character. */
 
-		if (frstpc_(chr, (ftnlen)1) > 0) {
-		    suffix_("<character> = '#'", &c__2, errmsg, (ftnlen)17, 
-			    errmsg_len);
-		    repmc_(errmsg, "#", chr, errmsg, errmsg_len, (ftnlen)1, (
-			    ftnlen)1, errmsg_len);
+		if (frstpc_(__state->chr, (ftnlen)1) > 0) {
+		    suffix_("<character> = '#'", &__state->c__2, errmsg, (
+			    ftnlen)17, errmsg_len);
+		    repmc_(errmsg, "#", __state->chr, errmsg, errmsg_len, (
+			    ftnlen)1, (ftnlen)1, errmsg_len);
 		} else {
-		    suffix_("ICHAR(<character>) = #", &c__2, errmsg, (ftnlen)
-			    22, errmsg_len);
-		    i__1 = *(unsigned char *)chr;
+		    suffix_("ICHAR(<character>) = #", &__state->c__2, errmsg, 
+			    (ftnlen)22, errmsg_len);
+		    i__1 = *(unsigned char *)__state->chr;
 		    repmi_(errmsg, "#", &i__1, errmsg, errmsg_len, (ftnlen)1, 
 			    errmsg_len);
 		}

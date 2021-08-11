@@ -1,33 +1,52 @@
-/* zzekpgch.f -- translated by f2c (version 19980913).
+/* zzekpgch.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__8 = 8;
-static integer c__4 = 4;
-static integer c__9 = 9;
-static integer c__14 = 14;
+extern zzekpgch_init_t __zzekpgch_init;
+static zzekpgch_state_t* get_zzekpgch_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekpgch)
+		state->zzekpgch = __cspice_allocate_module(sizeof(
+	zzekpgch_state_t), &__zzekpgch_init, sizeof(__zzekpgch_init));
+	return state->zzekpgch;
+
+}
 
 /* $Procedure   ZZEKPGCH ( EK, paging system access check ) */
 /* Subroutine */ int zzekpgch_(integer *handle, char *access, ftnlen 
 	access_len)
 {
-    integer topc, topd, topi;
+    integer topc;
+    integer topd;
+    integer topi;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer lastc, lastd, lasti, id;
+    integer lastc;
+    integer lastd;
+    integer lasti;
+    integer id;
     extern logical failed_(void);
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
-	    dassih_(integer *, char *, ftnlen), errhan_(char *, integer *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
-    integer npc, npd, npi;
+	    integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer npc;
+    integer npd;
+    integer npi;
 
+
+    /* Module state */
+    zzekpgch_state_t* __state = get_zzekpgch_state();
 /* $ Abstract */
 
 /*     Check that an EK is valid for a specified type of access by the */
@@ -390,13 +409,13 @@ static integer c__14 = 14;
 
 /*     Make sure the DAS file is of the right type. */
 
-    dasrdi_(handle, &c__1, &c__1, &id);
+    dasrdi_(handle, &__state->c__1, &__state->c__1, &id);
     if (id != 8) {
 	setmsg_("File # has architecture #, which is invalid for paged acces"
 		"s.  You are using EK software version #.", (ftnlen)99);
 	errhan_("#", handle, (ftnlen)1);
 	errint_("#", &id, (ftnlen)1);
-	errint_("#", &c__8, (ftnlen)1);
+	errint_("#", &__state->c__8, (ftnlen)1);
 	sigerr_("SPICE(WRONGARCHITECTURE)", (ftnlen)24);
 	chkout_("ZZEKPGCH", (ftnlen)8);
 	return 0;
@@ -404,9 +423,9 @@ static integer c__14 = 14;
 
 /*     Obtain the page counts.  Set the `top' addresses. */
 
-    dasrdi_(handle, &c__4, &c__4, &npc);
-    dasrdi_(handle, &c__9, &c__9, &npd);
-    dasrdi_(handle, &c__14, &c__14, &npi);
+    dasrdi_(handle, &__state->c__4, &__state->c__4, &npc);
+    dasrdi_(handle, &__state->c__9, &__state->c__9, &npd);
+    dasrdi_(handle, &__state->c__14, &__state->c__14, &npi);
     topc = npc << 10;
     topd = npd << 7;
     topi = (npi << 8) + 256;

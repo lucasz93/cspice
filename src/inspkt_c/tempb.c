@@ -1,9 +1,10 @@
-/* tempb.f -- translated by f2c (version 19980913).
+/* tempb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      TEMPB ( Manage SUBTeX temporary buffer ) */
 /* Subroutine */ int tempb_(char *action, char *line, ftnlen action_len, 

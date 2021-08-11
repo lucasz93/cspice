@@ -1,15 +1,21 @@
-/* zzektr1s.f -- translated by f2c (version 19980913).
+/* zzektr1s.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__3 = 3;
-static integer c__256 = 256;
+extern zzektr1s_init_t __zzektr1s_init;
+static zzektr1s_state_t* get_zzektr1s_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektr1s)
+		state->zzektr1s = __cspice_allocate_module(sizeof(
+	zzektr1s_state_t), &__zzektr1s_init, sizeof(__zzektr1s_init));
+	return state->zzektr1s;
+
+}
 
 /* $Procedure      ZZEKTR1S ( EK tree, one-shot load ) */
 /* Subroutine */ int zzektr1s_(integer *handle, integer *tree, integer *size, 
@@ -22,28 +28,60 @@ static integer c__256 = 256;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, page[256], nbig, node, subd, next;
+    integer base;
+    integer page[256];
+    integer nbig;
+    integer node;
+    integer subd;
+    integer next;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *), zzekpgri_(integer *, integer *, integer *), zzekpgwi_(
-	    integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     extern integer zzektrbs_(integer *);
-    integer d__, i__, n, q, child, s;
+    integer d__;
+    integer i__;
+    integer n;
+    integer q;
+    integer child;
+    integer s;
     extern integer zzektrsz_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer level, nkids, npred, nkeys, tsize, kidbas;
-    extern /* Subroutine */ int cleari_(integer *, integer *), dasudi_(
-	    integer *, integer *, integer *, integer *);
+    integer level;
+    integer nkids;
+    integer npred;
+    integer nkeys;
+    integer tsize;
+    integer kidbas;
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
     integer basidx;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    integer bigsiz, nnodes, nsmall, stnbig[10], stnbas[10], stnode[10];
+    integer bigsiz;
+    integer nnodes;
+    integer nsmall;
+    integer stnbig[10];
+    integer stnbas[10];
+    integer stnode[10];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern logical return_(void);
-    integer maxsiz, reqsiz, stlsiz[10], stnext[10], stnkey[10], subsiz, 
-	    totnod;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
-    integer div, key;
+    integer maxsiz;
+    integer reqsiz;
+    integer stlsiz[10];
+    integer stnext[10];
+    integer stnkey[10];
+    integer subsiz;
+    integer totnod;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer div;
+    integer key;
 
+
+    /* Module state */
+    zzektr1s_state_t* __state = get_zzektr1s_state();
 /* $ Abstract */
 
 /*     One-shot tree load:  insert an entire array into an empty */
@@ -661,7 +699,7 @@ static integer c__256 = 256;
 	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
 		, (ftnlen)60);
 	errint_("#", &d__, (ftnlen)1);
-	errint_("#", &c__10, (ftnlen)1);
+	errint_("#", &__state->c__10, (ftnlen)1);
 	errhan_("#", handle, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	sigerr_("SPICE(COUNTTOOLARGE)", (ftnlen)20);
@@ -840,7 +878,7 @@ static integer c__256 = 256;
 /*                 Allocate a node for the Ith child.  Store pointers */
 /*                 to these nodes. */
 
-		    zzekpgal_(handle, &c__3, &child, &base);
+		    zzekpgal_(handle, &__state->c__3, &child, &base);
 		    page[(i__2 = i__ + 87) < 256 && 0 <= i__2 ? i__2 : s_rnge(
 			    "page", i__2, "zzektr1s_", (ftnlen)513)] = child;
 		    ++totnod;
@@ -863,7 +901,7 @@ static integer c__256 = 256;
 
 /*              The current node is a non-leaf child node. */
 
-		cleari_(&c__256, page);
+		cleari_(&__state->c__256, page);
 
 /*              The tree headed by this node has depth D-LEVEL+1 and */
 /*              must hold SUBSIZ keys.  We must figure out the size */
@@ -989,7 +1027,7 @@ static integer c__256 = 256;
 /*                 Allocate a node for the Ith child.  Store pointers */
 /*                 to these nodes. */
 
-		    zzekpgal_(handle, &c__3, &child, &base);
+		    zzekpgal_(handle, &__state->c__3, &child, &base);
 		    page[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(
 			    "page", i__2, "zzektr1s_", (ftnlen)674)] = child;
 		    ++totnod;

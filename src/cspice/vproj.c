@@ -1,9 +1,17 @@
-/* vproj.f -- translated by f2c (version 19980913).
+/* vproj.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vproj_state_t;
+static vproj_state_t* get_vproj_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VPROJ ( Vector projection, 3 dimensions ) */
 /* Subroutine */ int vproj_(doublereal *a, doublereal *b, doublereal *p)
@@ -12,12 +20,18 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    doublereal biga, bigb;
+    doublereal biga;
+    doublereal bigb;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
     extern doublereal vdot_(doublereal *, doublereal *);
-    doublereal r__[3], t[3], scale;
+    doublereal r__[3];
+    doublereal t[3];
+    doublereal scale;
 
+
+    /* Module state */
+    vproj_state_t* __state = get_vproj_state();
 /* $ Abstract */
 
 /*     VPROJ finds the projection of one vector onto another vector. */

@@ -1,13 +1,21 @@
-/* subsol.f -- translated by f2c (version 19980913).
+/* subsol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern subsol_init_t __subsol_init;
+static subsol_state_t* get_subsol_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->subsol)
+		state->subsol = __cspice_allocate_module(sizeof(
+	subsol_state_t), &__subsol_init, sizeof(__subsol_init));
+	return state->subsol;
+
+}
 
 /* $Procedure SUBSOL ( Sub-solar point ) */
 /* Subroutine */ int subsol_(char *method, char *target, doublereal *et, char 
@@ -16,21 +24,18 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzctruin_(integer *);
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), ltime_(doublereal *, integer *, char *, integer 
-	    *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ltime_(doublereal *, integer *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
     logical found;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal sunlt;
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
     integer obscde;
     doublereal lt;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
@@ -42,21 +47,24 @@ static integer c__3 = 3;
     char frname[80];
     integer trgcde;
     doublereal ettarg;
-    static integer svtcde;
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
-    static integer svobsc;
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char svtarg[36];
     extern logical return_(void);
-    static char svobsr[36];
     extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
 	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen), surfpt_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
-    doublereal alt, pos[3];
+	    ftnlen);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    ;
+    doublereal alt;
+    doublereal pos[3];
 
+
+    /* Module state */
+    subsol_state_t* __state = get_subsol_state();
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -596,19 +604,19 @@ static integer c__3 = 3;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &found, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &found, (ftnlen)36, target_len);
     if (! found) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -618,8 +626,8 @@ static integer c__3 = 3;
 	chkout_("SUBSOL", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &found, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &found, (ftnlen)36, obsrvr_len);
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -644,7 +652,7 @@ static integer c__3 = 3;
 
 /*     Get the radii of the target body from the kernel pool. */
 
-    bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
+    bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
 
 /*     Find the name of the body-fixed frame associated with the */
 /*     target body.  We'll want the state of the target relative to */
@@ -694,7 +702,8 @@ static integer c__3 = 3;
 
 	nearpt_(pos, radii, &radii[1], &radii[2], spoint, &alt);
     } else if (eqstr_(method, "Intercept", method_len, (ftnlen)9)) {
-	surfpt_(origin, pos, radii, &radii[1], &radii[2], spoint, &found);
+	surfpt_(__state->origin, pos, radii, &radii[1], &radii[2], spoint, &
+		found);
 
 /*        Since the line in question passes through the center of the */
 /*        target, there will always be a surface intercept.  So we should */

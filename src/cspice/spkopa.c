@@ -1,9 +1,17 @@
-/* spkopa.f -- translated by f2c (version 19980913).
+/* spkopa.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spkopa_state_t;
+static spkopa_state_t* get_spkopa_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKOPA ( SPK open for addition ) */
 /* Subroutine */ int spkopa_(char *file, integer *handle, ftnlen file_len)
@@ -12,15 +20,23 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char arch[8], type__[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    char arch[8];
+    char type__[8];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), dafopw_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
-    extern logical exists_(char *, ftnlen), return_(void);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopw_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern logical exists_(char *, ftnlen);
+    extern logical return_(void);
 
+
+    /* Module state */
+    spkopa_state_t* __state = get_spkopa_state();
 /* $ Abstract */
 
 /*    Open an existing SPK file for subsequent write. */

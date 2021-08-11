@@ -1,19 +1,21 @@
-/* ckw06.f -- translated by f2c (version 19980913).
+/* ckw06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__196 = 196;
-static integer c__340 = 340;
-static integer c__23 = 23;
-static integer c__4 = 4;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern ckw06_init_t __ckw06_init;
+static ckw06_state_t* get_ckw06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw06)
+		state->ckw06 = __cspice_allocate_module(sizeof(ckw06_state_t),
+	 &__ckw06_init, sizeof(__ckw06_init));
+	return state->ckw06;
+
+}
 
 /* $Procedure      CKW06 ( CK, Write segment, type 6 ) */
 /* Subroutine */ int ckw06_(integer *handle, integer *inst, char *ref, 
@@ -24,7 +26,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer pktszs[4] = { 8,4,14,7 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -38,15 +39,20 @@ static integer c__1 = 1;
     doublereal qneg[4];
     integer isel;
     extern logical even_(integer *);
-    integer ndir, i__, j, k;
+    integer ndir;
+    integer i__;
+    integer j;
+    integer k;
     doublereal q[4];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer bepix, eepix;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
-	    doublereal *, integer *, doublereal *);
+    integer bepix;
+    integer eepix;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal prevq[4];
     extern /* Subroutine */ int dafada_(doublereal *, integer *);
     doublereal dc[2];
@@ -55,21 +61,33 @@ static integer c__1 = 1;
     integer ic[6];
     extern logical failed_(void);
     extern /* Subroutine */ int dafena_(void);
-    integer segbeg, chrcod, refcod, segend, pktbeg;
+    integer segbeg;
+    integer chrcod;
+    integer refcod;
+    integer segend;
+    integer pktbeg;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     integer pktend;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern doublereal vdistg_(doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), vminug_(doublereal *, integer *, doublereal *)
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
 	    ;
     integer minisz;
-    extern logical vzerog_(doublereal *, integer *), return_(void);
-    integer pktdsz, winsiz, pktsiz, subtyp;
+    extern logical vzerog_(doublereal *, integer *);
+    extern logical return_(void);
+    integer pktdsz;
+    integer winsiz;
+    integer pktsiz;
+    integer subtyp;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    ckw06_state_t* __state = get_ckw06_state();
 /* $ Abstract */
 
 /*     Write a type 6 segment to a CK file. */
@@ -1100,8 +1118,8 @@ static integer c__1 = 1;
     if (FALSE_) {
 	setmsg_("CK type 6 record size is #, but CKPFS record size is #.is #."
 		, (ftnlen)60);
-	errint_("#", &c__196, (ftnlen)1);
-	errint_("#", &c__340, (ftnlen)1);
+	errint_("#", &__state->c__196, (ftnlen)1);
+	errint_("#", &__state->c__340, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("CKW06", (ftnlen)5);
 	return 0;
@@ -1256,8 +1274,8 @@ static integer c__1 = 1;
 	    chkout_("CKW06", (ftnlen)5);
 	    return 0;
 	}
-	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1024)];
+	pktsiz = __state->pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : 
+		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1024)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
@@ -1289,7 +1307,7 @@ static integer c__1 = 1;
 		    "gree #; the valid degree range is [1, #]", (ftnlen)95);
 	    errint_("#", &i__, (ftnlen)1);
 	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &c__23, (ftnlen)1);
+	    errint_("#", &__state->c__23, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	    chkout_("CKW06", (ftnlen)5);
 	    return 0;
@@ -1377,7 +1395,7 @@ static integer c__1 = 1;
 /*           shape of the packet array is not known at compile time. */
 
 	    addr__ = pktbeg + pktsiz * (j - 1);
-	    if (vzerog_(&packts[addr__ - 1], &c__4)) {
+	    if (vzerog_(&packts[addr__ - 1], &__state->c__4)) {
 		setmsg_("The quaternion in packet # within mini-segment # ha"
 			"s magnitude zero.", (ftnlen)68);
 		errint_("#", &j, (ftnlen)1);
@@ -1397,10 +1415,11 @@ static integer c__1 = 1;
 /*              and its predecessor vs the distance between the */
 /*              negative of the current quaternion and its predecessor. */
 
-		moved_(&packts[addr__ - 1], &c__4, q);
-		moved_(&packts[addr__ - pktsiz - 1], &c__4, prevq);
-		vminug_(q, &c__4, qneg);
-		if (vdistg_(prevq, qneg, &c__4) < vdistg_(prevq, q, &c__4)) {
+		moved_(&packts[addr__ - 1], &__state->c__4, q);
+		moved_(&packts[addr__ - pktsiz - 1], &__state->c__4, prevq);
+		vminug_(q, &__state->c__4, qneg);
+		if (vdistg_(prevq, qneg, &__state->c__4) < vdistg_(prevq, q, &
+			__state->c__4)) {
 		    setmsg_("The quaternion in packet # within mini-segment "
 			    "# is farther than its negative from its predeces"
 			    "sor at index #. This makes the quaternion sequen"
@@ -1522,7 +1541,7 @@ static integer c__1 = 1;
     }
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&c__2, &c__6, dc, ic, descr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
@@ -1548,8 +1567,8 @@ static integer c__1 = 1;
 /*        Set the packet size, which is a function of the subtype. */
 
 	subtyp = subtps[i__ - 1];
-	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1367)];
+	pktsiz = __state->pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : 
+		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1367)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
@@ -1587,19 +1606,19 @@ static integer c__1 = 1;
 	i__2 = ndir;
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix - 1 + j * 100;
-	    dafada_(&sclkdp[k - 1], &c__1);
+	    dafada_(&sclkdp[k - 1], &__state->c__1);
 	}
 
 /*        Write the mini-segment's SCLK rate, subtype, window size, and */
 /*        packet count to the segment. */
 
-	dafada_(&rates[i__ - 1], &c__1);
+	dafada_(&rates[i__ - 1], &__state->c__1);
 	d__1 = (doublereal) subtps[i__ - 1];
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	d__1 = (doublereal) winsiz;
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	d__1 = (doublereal) npkts[i__ - 1];
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	if (failed_()) {
 	    chkout_("CKW06", (ftnlen)5);
 	    return 0;
@@ -1622,7 +1641,7 @@ static integer c__1 = 1;
     ndir = *nmini / 100;
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&ivlbds[i__ * 100 - 1], &c__1);
+	dafada_(&ivlbds[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now we compute and write the start/stop pointers */
@@ -1641,8 +1660,8 @@ static integer c__1 = 1;
 /*        set the window size. First check the subtype, which will be */
 /*        used as an array index. */
 
-	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 4 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1472)];
+	pktsiz = __state->pktszs[(i__2 = subtps[i__ - 1]) < 4 && 0 <= i__2 ? 
+		i__2 : s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1472)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */
@@ -1669,14 +1688,14 @@ static integer c__1 = 1;
 /*        by 1, will be written. */
 
 	d__1 = (doublereal) segbeg;
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
     }
 
 /*     Write the last mini-segment end pointer, incremented by one. */
 /*     SEGEND was computed on the last iteration of the above loop. */
 
     d__1 = (doublereal) (segend + 1);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     Write out the interval selection flag. The input */
 /*     boolean value is represented by a numeric constant. */
@@ -1687,12 +1706,12 @@ static integer c__1 = 1;
 	isel = -1;
     }
     d__1 = (doublereal) isel;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     Write the mini-segment/mini-segment interval count. */
 
     d__1 = (doublereal) (*nmini);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     End the segment. */
 

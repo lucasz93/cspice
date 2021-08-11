@@ -1,13 +1,21 @@
-/* zzftpchk.f -- translated by f2c (version 19980913).
+/* zzftpchk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzftpchk_init_t __zzftpchk_init;
+static zzftpchk_state_t* get_zzftpchk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzftpchk)
+		state->zzftpchk = __cspice_allocate_module(sizeof(
+	zzftpchk_state_t), &__zzftpchk_init, sizeof(__zzftpchk_init));
+	return state->zzftpchk;
+
+}
 
 /* $Procedure ZZFTPCHK ( Private --- Check for FTP Errors ) */
 /* Subroutine */ int zzftpchk_(char *string, logical *ftperr, ftnlen 
@@ -15,22 +23,23 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int zzrbrkst_(char *, char *, char *, char *, 
-	    integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen), zzftpstr_(
-	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+	    integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
     char delim[1];
     extern integer rtrim_(char *, ftnlen);
     integer length;
-    static char lftbkt[6];
-    integer fsmidx, msfidx;
-    static char rgtbkt[6];
+    integer fsmidx;
+    integer msfidx;
     logical isther;
     char filstr[48];
-    static char memstr[16];
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzftpchk_state_t* __state = get_zzftpchk_state();
 /* $ Abstract */
 
 /*    Check a character string that may contain the FTP validation */
@@ -329,13 +338,13 @@ static integer c__1 = 1;
 /*     On the first pass through, fetch a copy of the current FTP */
 /*     validation string. */
 
-    if (first) {
-	zzftpstr_(memstr, lftbkt, rgtbkt, delim, (ftnlen)16, (ftnlen)6, (
-		ftnlen)6, (ftnlen)1);
+    if (__state->first) {
+	zzftpstr_(__state->memstr, __state->lftbkt, __state->rgtbkt, delim, (
+		ftnlen)16, (ftnlen)6, (ftnlen)6, (ftnlen)1);
 
 /*        Don't fetch the string on subsequent calls to this routine. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Extract the FTP validation string from the block of text that */
@@ -346,8 +355,9 @@ static integer c__1 = 1;
 /*     this case we may only validate the part of the substring near */
 /*     the head, for which we have enough room in FILSTR. */
 
-    zzrbrkst_(string, lftbkt, rgtbkt, filstr, &length, &isther, string_len, 
-	    rtrim_(lftbkt, (ftnlen)6), rtrim_(rgtbkt, (ftnlen)6), (ftnlen)48);
+    zzrbrkst_(string, __state->lftbkt, __state->rgtbkt, filstr, &length, &
+	    isther, string_len, rtrim_(__state->lftbkt, (ftnlen)6), rtrim_(
+	    __state->rgtbkt, (ftnlen)6), (ftnlen)48);
 
 /*     Now check ISTHER to see if either LFTBKT or RGTBKT was present */
 /*     in the block of text from the file. If both are absent, then */
@@ -375,8 +385,8 @@ static integer c__1 = 1;
 /*        First determine if the data from the file is a subset of */
 /*        what is stored in memory. */
 
-	fsmidx = pos_(memstr, filstr, &c__1, (ftnlen)16, rtrim_(filstr, (
-		ftnlen)48));
+	fsmidx = pos_(__state->memstr, filstr, &__state->c__1, (ftnlen)16, 
+		rtrim_(filstr, (ftnlen)48));
 
 /*        In the event that FSMIDX is non-zero, we know that FILSTR */
 /*        is a substring of MEMSTR, and thus we have validated all the */
@@ -392,8 +402,8 @@ static integer c__1 = 1;
 /*        is a substring of what's in FILSTR. */
 
 	} else {
-	    msfidx = pos_(filstr, memstr, &c__1, (ftnlen)48, rtrim_(memstr, (
-		    ftnlen)16));
+	    msfidx = pos_(filstr, __state->memstr, &__state->c__1, (ftnlen)48,
+		     rtrim_(__state->memstr, (ftnlen)16));
 
 /*           If this comes back as zero, then we definitely have */
 /*           an FTP error. Set FTPERR appropriately. */

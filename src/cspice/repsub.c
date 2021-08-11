@@ -1,13 +1,21 @@
-/* repsub.f -- translated by f2c (version 19980913).
+/* repsub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern repsub_init_t __repsub_init;
+static repsub_state_t* get_repsub_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->repsub)
+		state->repsub = __cspice_allocate_module(sizeof(
+	repsub_state_t), &__repsub_init, sizeof(__repsub_init));
+	return state->repsub;
+
+}
 
 /* $Procedure      REPSUB ( Replace one substring with another ) */
 /* Subroutine */ int repsub_(char *in, integer *left, integer *right, char *
@@ -21,18 +29,25 @@ static integer c__3 = 3;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer next, i__;
+    integer next;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer inlen;
     extern integer sumai_(integer *, integer *);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
-    integer strlen, outlen;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer strlen;
+    integer outlen;
     extern logical return_(void);
-    integer end, use[3];
+    integer end;
+    integer use[3];
 
+
+    /* Module state */
+    repsub_state_t* __state = get_repsub_state();
 /* $ Abstract */
 
 /*     Replace the substring (LEFT:RIGHT) with a string of any length. */
@@ -286,7 +301,7 @@ static integer c__3 = 3;
 /*     is longer than the original substring. The main thing is to */
 /*     avoid overwriting characters that have yet to be moved. */
 
-    end = sumai_(use, &c__3);
+    end = sumai_(use, &__state->c__3);
     if (*left + strlen > *right) {
 	next = end;
 	for (i__ = use[2]; i__ >= 1; --i__) {

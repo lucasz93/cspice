@@ -1,9 +1,17 @@
-/* zzgfpaq.f -- translated by f2c (version 19980913).
+/* zzgfpaq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgfpaq_state_t;
+static zzgfpaq_state_t* get_zzgfpaq_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZGFPAQ ( Private --- GF, phase angle between bodies ) */
 /* Subroutine */ int zzgfpaq_(doublereal *et, integer *targ, integer *illmn, 
@@ -18,17 +26,22 @@
     /* Local variables */
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), failed_(void);
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical failed_(void);
     extern doublereal pi_(void);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), spkezp_(integer *, 
-	    doublereal *, char *, char *, integer *, doublereal *, doublereal 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
-    doublereal pv1[3], pv2[3];
+    doublereal pv1[3];
+    doublereal pv2[3];
     char ref[5];
     doublereal sep;
 
+
+    /* Module state */
+    zzgfpaq_state_t* __state = get_zzgfpaq_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

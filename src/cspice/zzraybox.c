@@ -1,13 +1,21 @@
-/* zzraybox.f -- translated by f2c (version 19980913).
+/* zzraybox.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b73 = 1.;
+extern zzraybox_init_t __zzraybox_init;
+static zzraybox_state_t* get_zzraybox_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzraybox)
+		state->zzraybox = __cspice_allocate_module(sizeof(
+	zzraybox_state_t), &__zzraybox_init, sizeof(__zzraybox_init));
+	return state->zzraybox;
+
+}
 
 /* $Procedure ZZRAYBOX ( Ray-box intercept ) */
 /* Subroutine */ int zzraybox_(doublereal *vertex, doublereal *raydir, 
@@ -26,13 +34,16 @@ static doublereal c_b73 = 1.;
 	    );
     doublereal near__[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    doublereal udir[3], maxt;
+    doublereal udir[3];
+    doublereal maxt;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer i__;
-    doublereal r__, t[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    doublereal r__;
+    doublereal t[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal limit;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
@@ -43,8 +54,8 @@ static doublereal c_b73 = 1.;
     logical sphfnd;
     doublereal offset[3];
     integer maxidx;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer sector[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal plndst[3];
@@ -52,8 +63,12 @@ static doublereal c_b73 = 1.;
     extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
 	    ;
-    doublereal sphxpt[3], sphvtx[3];
+    doublereal sphxpt[3];
+    doublereal sphvtx[3];
 
+
+    /* Module state */
+    zzraybox_state_t* __state = get_zzraybox_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -404,7 +419,7 @@ static doublereal c_b73 = 1.;
 /*     Compute the candidate intercept. Note that we're now working */
 /*     in a frame centered at the box origin. */
 
-    vlcom_(&c_b73, sphvtx, &maxt, udir, xpt);
+    vlcom_(&__state->c_b73, sphvtx, &maxt, udir, xpt);
 
 /*     Decide whether XPT is actually on the surface of the box. */
 /*     Sharpen XPT as part of the process. */

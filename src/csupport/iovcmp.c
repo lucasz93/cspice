@@ -1,9 +1,10 @@
-/* iovcmp.f -- translated by f2c (version 19980913).
+/* iovcmp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure IOVCMP ( Inverse order vector with compressed range ) */
 /* Subroutine */ int iovcmp_(doublereal *darray, integer *ndim, integer *

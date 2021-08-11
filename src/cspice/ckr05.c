@@ -1,14 +1,21 @@
-/* ckr05.f -- translated by f2c (version 19980913).
+/* ckr05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckr05_init_t __ckr05_init;
+static ckr05_state_t* get_ckr05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckr05)
+		state->ckr05 = __cspice_allocate_module(sizeof(ckr05_state_t),
+	 &__ckr05_init, sizeof(__ckr05_init));
+	return state->ckr05;
+
+}
 
 /* $Procedure      CKR05 ( Read CK record from segment, type 05 ) */
 /* Subroutine */ int ckr05_(integer *handle, doublereal *descr, doublereal *
@@ -17,12 +24,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer lbeg = -1;
-    static integer lend = -1;
-    static integer lhand = 0;
-    static doublereal prevn = -1.;
-    static doublereal prevnn = -1.;
-    static doublereal prevs = -1.;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -34,46 +35,71 @@ static integer c__6 = 6;
     /* Local variables */
     integer high;
     doublereal rate;
-    integer last, type__, i__, j, n;
+    integer last;
+    integer type__;
+    integer i__;
+    integer j;
+    integer n;
     doublereal t;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer nidir;
     extern doublereal dpmax_(void);
-    integer npdir, nsrch;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
-	    doublereal *, integer *, doublereal *);
-    integer lsize, first, nints, rsize;
+    integer npdir;
+    integer nsrch;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    integer lsize;
+    integer first;
+    integer nints;
+    integer rsize;
     doublereal start;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
     integer ic[6];
     extern logical failed_(void);
-    integer bufbas, dirbas;
+    integer bufbas;
+    integer dirbas;
     doublereal hepoch;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     doublereal lepoch;
-    integer npread, nsread, remain, pbegix, sbegix, timbas;
+    integer npread;
+    integer nsread;
+    integer remain;
+    integer pbegix;
+    integer sbegix;
+    integer timbas;
     doublereal pbuffr[101];
     extern integer lstled_(doublereal *, integer *, doublereal *);
     doublereal sbuffr[103];
-    integer pendix, sendix, packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer pendix;
+    integer sendix;
+    integer packsz;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer maxwnd;
     doublereal contrl[5];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lstltd_(doublereal *, integer *, doublereal *);
     doublereal nstart;
     extern logical return_(void);
-    integer pgroup, sgroup, wndsiz, wstart, subtyp;
+    integer pgroup;
+    integer sgroup;
+    integer wndsiz;
+    integer wstart;
+    integer subtyp;
     doublereal nnstrt;
     extern logical odd_(integer *);
-    integer end, low;
+    integer end;
+    integer low;
 
+
+    /* Module state */
+    ckr05_state_t* __state = get_ckr05_state();
 /* $ Abstract */
 
 /*     Read a single CK data record from a segment of type 05 */
@@ -611,7 +637,7 @@ static integer c__6 = 6;
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[2];
     begin = ic[4];
     end = ic[5];
@@ -1004,11 +1030,11 @@ static integer c__6 = 6;
 /*        LEND       segment in the file LHAND that PREVS and PREVN */
 /*                   were found in. */
 
-    if (*handle == lhand && begin == lbeg && end == lend && t >= prevs && t < 
-	    prevn) {
-	start = prevs;
-	nstart = prevn;
-	nnstrt = prevnn;
+    if (*handle == __state->lhand && begin == __state->lbeg && end == 
+	    __state->lend && t >= __state->prevs && t < __state->prevn) {
+	start = __state->prevs;
+	nstart = __state->prevn;
+	nnstrt = __state->prevnn;
     } else {
 
 /*        Search for the interpolation interval. */
@@ -1282,12 +1308,12 @@ static integer c__6 = 6;
 
 /*     Save the information about the interval and segment. */
 
-    lhand = *handle;
-    lbeg = begin;
-    lend = end;
-    prevs = start;
-    prevn = nstart;
-    prevnn = nnstrt;
+    __state->lhand = *handle;
+    __state->lbeg = begin;
+    __state->lend = end;
+    __state->prevs = start;
+    __state->prevn = nstart;
+    __state->prevnn = nnstrt;
 
 /*     Indicate pointing was found. */
 

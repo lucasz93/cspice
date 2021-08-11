@@ -1,14 +1,21 @@
-/* syrend.f -- translated by f2c (version 19980913).
+/* syrend.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern syrend_init_t __syrend_init;
+static syrend_state_t* get_syrend_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->syrend)
+		state->syrend = __cspice_allocate_module(sizeof(
+	syrend_state_t), &__syrend_init, sizeof(__syrend_init));
+	return state->syrend;
+
+}
 
 /* $Procedure      SYREND ( Rename an existing symbol ) */
 /* Subroutine */ int syrend_(char *old, char *new__, char *tabsym, integer *
@@ -25,26 +32,32 @@ static integer c__1 = 1;
     /* Local variables */
     integer nsym;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), bsrchc_(char *, integer *, 
-	    char *, ftnlen, ftnlen);
-    integer olddim, oldloc;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    integer olddim;
+    integer oldloc;
     extern /* Subroutine */ int swapac_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen), swapad_(integer *, integer *, integer 
-	    *, integer *, doublereal *);
+	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int swapad_(integer *, integer *, integer *, 
+	    integer *, doublereal *);
     integer oldval;
     extern /* Subroutine */ int sydeld_(char *, char *, integer *, doublereal 
-	    *, ftnlen, ftnlen), swapai_(integer *, integer *, integer *, 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int swapai_(integer *, integer *, integer *, 
 	    integer *, integer *);
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
     integer newloc;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    syrend_state_t* __state = get_syrend_state();
 /* $ Abstract */
 
 /*     Rename an existing symbol in a double precision symbol table. */
@@ -281,13 +294,13 @@ static integer c__1 = 1;
 	i__1 = newloc - 1;
 	newval = sumai_(&tabptr[6], &i__1) + 1;
 	olddim = tabptr[oldloc + 5];
-	swapad_(&olddim, &oldval, &c__0, &newval, &tabval[6]);
+	swapad_(&olddim, &oldval, &__state->c__0, &newval, &tabval[6]);
 
 /*        Move the name and dimension the same way. */
 
-	swapac_(&c__1, &oldloc, &c__0, &newloc, tabsym + tabsym_len * 6, 
-		tabsym_len);
-	swapai_(&c__1, &oldloc, &c__0, &newloc, &tabptr[6]);
+	swapac_(&__state->c__1, &oldloc, &__state->c__0, &newloc, tabsym + 
+		tabsym_len * 6, tabsym_len);
+	swapai_(&__state->c__1, &oldloc, &__state->c__0, &newloc, &tabptr[6]);
 	if (oldloc < newloc) {
 	    --newloc;
 	}

@@ -1,23 +1,21 @@
-/* zzekpars.f -- translated by f2c (version 19980913).
+/* zzekpars.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27869 = 27869;
-static integer c__100 = 100;
-static integer c__1 = 1;
-static integer c__11 = 11;
-static integer c__6 = 6;
-static integer c__27 = 27;
-static integer c__29 = 29;
-static integer c__26 = 26;
-static integer c__0 = 0;
-static integer c__10 = 10;
-static integer c__50 = 50;
+extern zzekpars_init_t __zzekpars_init;
+static zzekpars_state_t* get_zzekpars_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekpars)
+		state->zzekpars = __cspice_allocate_module(sizeof(
+	zzekpars_state_t), &__zzekpars_init, sizeof(__zzekpars_init));
+	return state->zzekpars;
+
+}
 
 /* $Procedure      ZZEKPARS ( EK, parse tokenized EK query ) */
 /* Subroutine */ int zzekpars_(char *query, integer *ntoken, integer *lxbegs, 
@@ -37,33 +35,54 @@ static integer c__50 = 50;
     /* Local variables */
     integer nsel;
     extern /* Subroutine */ int zzekinqc_(char *, integer *, integer *, 
-	    integer *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzekqini_(integer *, integer *, integer *, char *, doublereal *, 
-	    ftnlen), zzektloc_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, logical *), zzekweqi_(char *, integer *, 
-	    integer *, ftnlen), zzeknrml_(char *, integer *, integer *, 
+	    integer *, integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzektloc_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzeknrml_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, doublereal *, char *, integer *, 
 	    integer *, integer *, char *, doublereal *, logical *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    integer b, e, i__, j, l;
+    integer b;
+    integer e;
+    integer i__;
+    integer j;
+    integer l;
     extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     integer ntabs;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    integer state, token;
+    integer state;
+    integer token;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical failed_(void);
     integer tabdsc[6];
     extern logical return_(void);
-    char errtyp[32], expkey[32];
-    integer alsdsc[6], coldsc[6], lxb, lxe, namdsc[6], ncnstr, norder, toknum,
-	     valdsc[6];
+    char errtyp[32];
+    char expkey[32];
+    integer alsdsc[6];
+    integer coldsc[6];
+    integer lxb;
+    integer lxe;
+    integer namdsc[6];
+    integer ncnstr;
+    integer norder;
+    integer toknum;
+    integer valdsc[6];
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), appndi_(integer *, 
-	    integer *), cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int appndi_(integer *, integer *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
 
+
+    /* Module state */
+    zzekpars_state_t* __state = get_zzekpars_state();
 /* $ Abstract */
 
 /*     Parse an EK query that has been scanned and tokenized. */
@@ -1086,7 +1105,8 @@ static integer c__50 = 50;
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&c__27869, &c__100, eqryi, eqryc, eqryd, eqryc_len);
+    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, 
+	    eqryc_len);
     if (failed_()) {
 	*error = TRUE_;
 	s_copy(prserr, "SPICE(BUG):  encoded query init failed.", prserr_len, 
@@ -1142,7 +1162,8 @@ static integer c__50 = 50;
 /*        SELECT */
 
 
-    zzektloc_(&c__1, &c__11, ntoken, tokens, values, &toknum, &fnd);
+    zzektloc_(&__state->c__1, &__state->c__11, ntoken, tokens, values, &
+	    toknum, &fnd);
     if (! fnd) {
 	*error = TRUE_;
 	s_copy(errtyp, "FROM_NOT_FOUND", (ftnlen)32, (ftnlen)14);
@@ -1215,7 +1236,7 @@ static integer c__50 = 50;
 /*                 actual alias is supplied, we'll update this */
 /*                 descriptor. */
 
-		    cleari_(&c__6, alsdsc);
+		    cleari_(&__state->c__6, alsdsc);
 		    alsdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&alsdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
@@ -1276,7 +1297,7 @@ static integer c__50 = 50;
 /*              Update the place-holder alias descriptor in the integer */
 /*              part of the query. */
 
-		movei_(alsdsc, &c__6, &eqryi[cardi_(eqryi)]);
+		movei_(alsdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
 		state = 3;
 	    } else if (token == 1) {
 
@@ -1361,7 +1382,8 @@ static integer c__50 = 50;
 /*           It's time to parse the SELECT clause.  We'll need to */
 /*           locate the SELECT keyword. */
 
-	    zzektloc_(&c__1, &c__27, ntoken, tokens, values, &toknum, &fnd);
+	    zzektloc_(&__state->c__1, &__state->c__27, ntoken, tokens, values,
+		     &toknum, &fnd);
 	    if (! fnd) {
 		*error = TRUE_;
 		s_copy(errtyp, "SELECT_NOT_FOUND", (ftnlen)32, (ftnlen)16);
@@ -1408,7 +1430,7 @@ static integer c__50 = 50;
 /*                 turns out that the current name is a table name, we'll */
 /*                 update this descriptor. */
 
-		    cleari_(&c__6, valdsc);
+		    cleari_(&__state->c__6, valdsc);
 		    valdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
@@ -1523,7 +1545,7 @@ static integer c__50 = 50;
 /*              Update the place-holder table name descriptor in the */
 /*              encoded query. */
 
-		movei_(namdsc, &c__6, &eqryi[cardi_(eqryi)]);
+		movei_(namdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
 
 /*              Add the column name to the character part of the */
 /*              encoded query. */
@@ -1607,7 +1629,8 @@ static integer c__50 = 50;
 /*           The WHERE clause is optional.  See whether we have one.  The */
 /*           clause is started by a WHERE keyword. */
 
-	    zzektloc_(&c__1, &c__29, ntoken, tokens, values, &toknum, &fnd);
+	    zzektloc_(&__state->c__1, &__state->c__29, ntoken, tokens, values,
+		     &toknum, &fnd);
 	    if (fnd) {
 
 /*              We're going to hand off the list of tokens that comprise */
@@ -1644,7 +1667,8 @@ static integer c__50 = 50;
 /*           The ORDER BY clause is optional.  See whether we have one. */
 /*           The clause is started by an ORDER keyword. */
 
-	    zzektloc_(&c__1, &c__26, ntoken, tokens, values, &toknum, &fnd);
+	    zzektloc_(&__state->c__1, &__state->c__26, ntoken, tokens, values,
+		     &toknum, &fnd);
 	    if (fnd) {
 
 /*              The BY keyword should follow the ORDER keyword. */
@@ -1717,7 +1741,7 @@ static integer c__50 = 50;
 /*                 turns out that the current name is a table name, we'll */
 /*                 update this descriptor. */
 
-		    cleari_(&c__6, valdsc);
+		    cleari_(&__state->c__6, valdsc);
 		    valdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
 			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
@@ -1766,7 +1790,7 @@ static integer c__50 = 50;
 /*              supplied, append the default value ASCENDING to the */
 /*              order-by column descriptor in the encoded query. */
 
-		appndi_(&c__0, eqryi);
+		appndi_(&__state->c__0, eqryi);
 
 /*              We're done with the ORDER BY clause; go on to parse the */
 /*              SELECT clause. */
@@ -1788,7 +1812,7 @@ static integer c__50 = 50;
 /*              supplied, append the default value ASCENDING to the */
 /*              order-by column descriptor in the encoded query. */
 
-		appndi_(&c__0, eqryi);
+		appndi_(&__state->c__0, eqryi);
 		state = 6;
 	    } else if (token == 9) {
 
@@ -1816,10 +1840,10 @@ static integer c__50 = 50;
 /*              order-by column. */
 
 		if (values[toknum - 1] == 3) {
-		    appndi_(&c__0, eqryi);
+		    appndi_(&__state->c__0, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 8) {
-		    appndi_(&c__1, eqryi);
+		    appndi_(&__state->c__1, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 29 || values[toknum - 1] == 
 			11 || values[toknum - 1] == 27) {
@@ -1828,7 +1852,7 @@ static integer c__50 = 50;
 /*                 supplied, append the default value ASCENDING to the */
 /*                 order-by column descriptor in the encoded query. */
 
-		    appndi_(&c__0, eqryi);
+		    appndi_(&__state->c__0, eqryi);
 
 /*                 We're done with the ORDER BY clause.  Go on to */
 /*                 parse the SELECT clause. */
@@ -1863,7 +1887,7 @@ static integer c__50 = 50;
 /*              Update the place-holder table name descriptor in the */
 /*              encoded query. */
 
-		movei_(namdsc, &c__6, &eqryi[cardi_(eqryi)]);
+		movei_(namdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
 
 /*              Add the column name to the character part of the */
 /*              encoded query. */
@@ -1910,14 +1934,14 @@ static integer c__50 = 50;
 /*                 The ASCENDING keyword has been supplied.  After this, */
 /*                 look for another column. */
 
-		    appndi_(&c__0, eqryi);
+		    appndi_(&__state->c__0, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 8) {
 
 /*                 The DESCENDING keyword has been supplied.  After this, */
 /*                 look for another column. */
 
-		    appndi_(&c__1, eqryi);
+		    appndi_(&__state->c__1, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 29 || values[toknum - 1] == 
 			11 || values[toknum - 1] == 27) {
@@ -1935,13 +1959,13 @@ static integer c__50 = 50;
 
 /*              The ASCENDING keyword is implied. */
 
-		appndi_(&c__0, eqryi);
+		appndi_(&__state->c__0, eqryi);
 		state = 6;
 	    } else if (token == 11) {
 
 /*              The ASCENDING keyword is implied. */
 
-		appndi_(&c__0, eqryi);
+		appndi_(&__state->c__0, eqryi);
 
 /*              We're done with the ORDER BY clause.  Parse the SELECT */
 /*              clause. */
@@ -2120,20 +2144,20 @@ static integer c__50 = 50;
 		 0) {
 	    s_copy(prserr, "Number of tables in \"FROM\" clause exceeds allo"
 		    "wed maximum of #.", prserr_len, (ftnlen)63);
-	    repmi_(prserr, "#", &c__10, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
+	    repmi_(prserr, "#", &__state->c__10, prserr, prserr_len, (ftnlen)
+		    1, prserr_len);
 	} else if (s_cmp(errtyp, "TOO_MANY_ORD_COLS", (ftnlen)32, (ftnlen)17) 
 		== 0) {
 	    s_copy(prserr, "Number of order-by columns exceeds allowed maxim"
 		    "um of #.", prserr_len, (ftnlen)56);
-	    repmi_(prserr, "#", &c__10, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
+	    repmi_(prserr, "#", &__state->c__10, prserr, prserr_len, (ftnlen)
+		    1, prserr_len);
 	} else if (s_cmp(errtyp, "TOO_MANY_SEL_COLS", (ftnlen)32, (ftnlen)17) 
 		== 0) {
 	    s_copy(prserr, "Number of SELECT columns exceeds allowed maximum"
 		    " of #.", prserr_len, (ftnlen)54);
-	    repmi_(prserr, "#", &c__50, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
+	    repmi_(prserr, "#", &__state->c__50, prserr, prserr_len, (ftnlen)
+		    1, prserr_len);
 	} else if (s_cmp(errtyp, "WHERE_ERROR", (ftnlen)32, (ftnlen)11) != 0) 
 		{
 	    s_copy(prserr, "SPICE(BUG)--Unrecognized error type.  Type was #."
@@ -2145,7 +2169,7 @@ static integer c__50 = 50;
 
 /*        Indicate that parsing is complete. */
 
-	zzekweqi_("PARSED", &c__1, eqryi, (ftnlen)6);
+	zzekweqi_("PARSED", &__state->c__1, eqryi, (ftnlen)6);
     }
     chkout_("ZZEKPARS", (ftnlen)8);
     return 0;

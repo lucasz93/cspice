@@ -1,9 +1,17 @@
-/* vnorm.f -- translated by f2c (version 19980913).
+/* vnorm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vnorm_state_t;
+static vnorm_state_t* get_vnorm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VNORM ( Vector norm, 3 dimensions ) */
 doublereal vnorm_(doublereal *v1)
@@ -17,6 +25,9 @@ doublereal vnorm_(doublereal *v1)
     /* Local variables */
     doublereal v1max;
 
+
+    /* Module state */
+    vnorm_state_t* __state = get_vnorm_state();
 /* $ Abstract */
 
 /*      Compute the magnitude of a double precision, 3-dimensional */

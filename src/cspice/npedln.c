@@ -1,14 +1,21 @@
-/* npedln.f -- translated by f2c (version 19980913).
+/* npedln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b12 = 2.;
-static doublereal c_b26 = 0.;
+extern npedln_init_t __npedln_init;
+static npedln_state_t* get_npedln_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->npedln)
+		state->npedln = __cspice_allocate_module(sizeof(
+	npedln_state_t), &__npedln_init, sizeof(__npedln_init));
+	return state->npedln;
+
+}
 
 /* $Procedure    NPEDLN ( Nearest point on ellipsoid to line ) */
 /* Subroutine */ int npedln_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -24,7 +31,11 @@ static doublereal c_b26 = 0.;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal cand[9], scla, sclb, sclc, udir[3];
+    doublereal cand[9];
+    doublereal scla;
+    doublereal sclb;
+    doublereal sclc;
+    doublereal udir[3];
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
     integer i__;
@@ -33,12 +44,18 @@ static doublereal c_b26 = 0.;
     logical found[2];
     doublereal prjel[9];
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal sclpt[3], prjpl[4], prjpt[3];
+    doublereal sclpt[3];
+    doublereal prjpl[4];
+    doublereal prjpt[3];
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *), vprjp_(doublereal *, doublereal *, doublereal *), nvc2pl_(
-	    doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
+	    doublereal *);
     extern logical failed_(void);
-    doublereal candpl[4], pt[6]	/* was [3][2] */;
+    doublereal candpl[4];
+    doublereal pt[6]	/* was [3][2] */;
     extern /* Subroutine */ int inedpl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *);
     logical ifound;
@@ -47,19 +64,25 @@ static doublereal c_b26 = 0.;
     doublereal normal[3];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal oppdir[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), vsclip_(doublereal *,
-	     doublereal *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     logical xfound;
     extern /* Subroutine */ int npelpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), vprjpi_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vprjpi_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, logical *);
     doublereal prjnpt[3];
     extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *), surfpt_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    ;
     doublereal mag;
 
+
+    /* Module state */
+    npedln_state_t* __state = get_npedln_state();
 /* $ Abstract */
 
 /*     Find nearest point on a triaxial ellipsoid to a specified line, */
@@ -488,8 +511,8 @@ static doublereal c_b26 = 0.;
     scla = *a / scale;
     sclb = *b / scale;
     sclc = *c__ / scale;
-    if (pow_dd(&scla, &c_b12) == 0. || pow_dd(&sclb, &c_b12) == 0. || pow_dd(&
-	    sclc, &c_b12) == 0.) {
+    if (pow_dd(&scla, &__state->c_b12) == 0. || pow_dd(&sclb, &__state->c_b12)
+	     == 0. || pow_dd(&sclc, &__state->c_b12) == 0.) {
 	setmsg_("Semi-axis too small:  A = #, B = #, C = #. ", (ftnlen)43);
 	errdp_("#", a, (ftnlen)1);
 	errdp_("#", b, (ftnlen)1);
@@ -542,7 +565,7 @@ static doublereal c_b26 = 0.;
 /* Computing 2nd power */
     d__1 = sclc;
     normal[2] = udir[2] / (d__1 * d__1);
-    nvc2pl_(normal, &c_b26, candpl);
+    nvc2pl_(normal, &__state->c_b26, candpl);
     inedpl_(&scla, &sclb, &sclc, candpl, cand, &xfound);
     if (! xfound) {
 	setmsg_("Candidate ellipse could not be found.", (ftnlen)37);
@@ -554,7 +577,7 @@ static doublereal c_b26 = 0.;
 /*     Project the candidate ellipse onto a plane orthogonal to the */
 /*     line.  We'll call the plane PRJPL and the projected ellipse PRJEL. */
 
-    nvc2pl_(udir, &c_b26, prjpl);
+    nvc2pl_(udir, &__state->c_b26, prjpl);
     pjelpl_(cand, prjpl, prjel);
 
 /*     Find the point on the line lying in the projection plane, and */

@@ -1,9 +1,21 @@
-/* fovtrg.f -- translated by f2c (version 19980913).
+/* fovtrg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern fovtrg_init_t __fovtrg_init;
+static fovtrg_state_t* get_fovtrg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->fovtrg)
+		state->fovtrg = __cspice_allocate_module(sizeof(
+	fovtrg_state_t), &__fovtrg_init, sizeof(__fovtrg_init));
+	return state->fovtrg;
+
+}
 
 /* $Procedure      FOVTRG ( Is target in FOV at time? ) */
 /* Subroutine */ int fovtrg_(char *inst, char *target, char *tshape, char *
@@ -13,17 +25,22 @@
 {
     /* Initialized data */
 
-    static doublereal raydir[3] = { 0.,0.,0. };
 
     extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
 	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen), zzgffvst_(doublereal *, logical *), chkin_(char *, 
 	    ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzgffvst_(doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical failed_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    fovtrg_state_t* __state = get_fovtrg_state();
 /* $ Abstract */
 
 /*     Determine if a specified ephemeris object is within the */
@@ -806,8 +823,9 @@
 
 /*     Initialize the visibility calculation. */
 
-    zzgffvin_(inst, tshape, raydir, target, tframe, abcorr, obsrvr, inst_len, 
-	    tshape_len, target_len, tframe_len, abcorr_len, obsrvr_len);
+    zzgffvin_(inst, tshape, __state->raydir, target, tframe, abcorr, obsrvr, 
+	    inst_len, tshape_len, target_len, tframe_len, abcorr_len, 
+	    obsrvr_len);
     if (failed_()) {
 	chkout_("FOVTRG", (ftnlen)6);
 	return 0;

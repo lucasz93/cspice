@@ -1,9 +1,17 @@
-/* zzinrypl.f -- translated by f2c (version 19980913).
+/* zzinrypl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzinrypl_state_t;
+static zzinrypl_state_t* get_zzinrypl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZINRYPL ( Simplified intersection of ray and plane ) */
 /* Subroutine */ int zzinrypl_(doublereal *vertex, doublereal *udir, 
@@ -17,8 +25,14 @@
     doublereal lpar;
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal h__, s, dircon, vtxcon;
+    doublereal h__;
+    doublereal s;
+    doublereal dircon;
+    doublereal vtxcon;
 
+
+    /* Module state */
+    zzinrypl_state_t* __state = get_zzinrypl_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

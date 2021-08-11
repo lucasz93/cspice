@@ -1,25 +1,40 @@
-/* dafdc.f -- translated by f2c (version 19980913).
+/* dafdc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafdc_state_t;
+static dafdc_state_t* get_dafdc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DAFDC ( DAF delete comments ) */
 /* Subroutine */ int dafdc_(integer *handle)
 {
     integer free;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer bward, fward, ncomr, nd;
+    integer bward;
+    integer fward;
+    integer ncomr;
+    integer nd;
     extern logical failed_(void);
     integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char ifname[60];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen), dafrrr_(integer *, 
-	    integer *), chkout_(char *, ftnlen);
+	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrrr_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dafdc_state_t* __state = get_dafdc_state();
 /* $ Abstract */
 
 /*     Delete the entire comment area of a previously opened binary */

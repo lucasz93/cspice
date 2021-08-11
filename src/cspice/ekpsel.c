@@ -1,14 +1,21 @@
-/* ekpsel.f -- translated by f2c (version 19980913).
+/* ekpsel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27869 = 27869;
-static integer c__100 = 100;
+extern ekpsel_init_t __ekpsel_init;
+static ekpsel_state_t* get_ekpsel_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekpsel)
+		state->ekpsel = __cspice_allocate_module(sizeof(
+	ekpsel_state_t), &__ekpsel_init, sizeof(__ekpsel_init));
+	return state->ekpsel;
+
+}
 
 /* $Procedure  EKPSEL ( EK, parse SELECT clause ) */
 /* Subroutine */ int ekpsel_(char *query, integer *n, integer *xbegs, integer 
@@ -18,7 +25,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static char chrtyp[4*4] = "CHR " "DP  " "INT " "TIME";
 
     /* System generated locals */
     integer i__1, i__2;
@@ -31,23 +37,35 @@ static integer c__100 = 100;
     char qtab[64];
     extern /* Subroutine */ int zzekencd_(char *, integer *, char *, 
 	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
-	    ftnlen), zzekqtab_(integer *, char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen), zzekqini_(integer *, integer *, integer *
-	    , char *, doublereal *, ftnlen), zzekreqi_(integer *, char *, 
-	    integer *, ftnlen), zzekqsel_(integer *, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekqsel_(integer *, char *, integer *, 
 	    integer *, integer *, char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen, ftnlen);
     integer i__;
     extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     char eqryc[2000];
     doublereal eqryd[100];
     integer eqryi[27875];
     extern logical return_(void);
-    char aka[64], column[32];
-    integer attdsc[6], colidx, errptr, tabidx;
+    char aka[64];
+    char column[32];
+    integer attdsc[6];
+    integer colidx;
+    integer errptr;
+    integer tabidx;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    ekpsel_state_t* __state = get_ekpsel_state();
 /* $ Abstract */
 
 /*     Parse the SELECT clause of an EK query, returning full particulars */
@@ -1106,7 +1124,8 @@ static integer c__100 = 100;
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&c__27869, &c__100, eqryi, eqryc, eqryd, (ftnlen)2000);
+    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, (
+	    ftnlen)2000);
 
 /*     Encode the input query. */
 
@@ -1140,9 +1159,9 @@ static integer c__100 = 100;
 
 	ekcii_(tabs + (i__ - 1) * tabs_len, &colidx, column, attdsc, tabs_len,
 		 (ftnlen)32);
-	s_copy(xtypes + (i__ - 1) * xtypes_len, chrtyp + (((i__2 = attdsc[1] 
-		- 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chrtyp", i__2, "ekpse"
-		"l_", (ftnlen)498)) << 2), xtypes_len, (ftnlen)4);
+	s_copy(xtypes + (i__ - 1) * xtypes_len, __state->chrtyp + (((i__2 = 
+		attdsc[1] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chrtyp", 
+		i__2, "ekpsel_", (ftnlen)498)) << 2), xtypes_len, (ftnlen)4);
     }
     chkout_("EKPSEL", (ftnlen)6);
     return 0;

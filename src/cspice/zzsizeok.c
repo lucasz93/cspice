@@ -1,19 +1,32 @@
-/* zzsizeok.f -- translated by f2c (version 19980913).
+/* zzsizeok.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzsizeok_state_t;
+static zzsizeok_state_t* get_zzsizeok_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZSIZEOK ( Determine if the size of a segment is ok ) */
 /* Subroutine */ int zzsizeok_(integer *size, integer *psize, integer *dsize, 
 	integer *offset, logical *ok, integer *n)
 {
-    integer a, q, r__;
+    integer a;
+    integer q;
+    integer r__;
     extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
 	    integer *);
     integer pd1;
 
+
+    /* Module state */
+    zzsizeok_state_t* __state = get_zzsizeok_state();
 /* $ Abstract */
 
 

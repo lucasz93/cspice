@@ -1,13 +1,21 @@
-/* dlaens.f -- translated by f2c (version 19980913).
+/* dlaens.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern dlaens_init_t __dlaens_init;
+static dlaens_state_t* get_dlaens_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dlaens)
+		state->dlaens = __cspice_allocate_module(sizeof(
+	dlaens_state_t), &__dlaens_init, sizeof(__dlaens_init));
+	return state->dlaens;
+
+}
 
 /* $Procedure DLAENS ( DLA, end new segment ) */
 /* Subroutine */ int dlaens_(integer *handle)
@@ -18,13 +26,22 @@ static integer c__3 = 3;
     /* Local variables */
     integer this__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer descr[8], lastc, lastd, lasti;
+    integer descr[8];
+    integer lastc;
+    integer lastd;
+    integer lasti;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
-	    dasudi_(integer *, integer *, integer *, integer *), chkout_(char 
-	    *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dlaens_state_t* __state = get_dlaens_state();
 /* $ Abstract */
 
 /*     End a new segment in a DLA file. */
@@ -500,7 +517,7 @@ static integer c__3 = 3;
 /*     Look up the pointer to the last DLA segment descriptor in the */
 /*     file.  Then look up the segment descriptor itself. */
 
-    dasrdi_(handle, &c__3, &c__3, &this__);
+    dasrdi_(handle, &__state->c__3, &__state->c__3, &this__);
     i__1 = this__ + 7;
     dasrdi_(handle, &this__, &i__1, descr);
 

@@ -1,9 +1,17 @@
-/* copyd.f -- translated by f2c (version 19980913).
+/* copyd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int copyd_state_t;
+static copyd_state_t* get_copyd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      COPYD ( Copy a double precision cell ) */
 /* Subroutine */ int copyd_(doublereal *cell, doublereal *copy)
@@ -12,16 +20,22 @@
     integer i__1;
 
     /* Local variables */
-    integer card, size, i__;
+    integer card;
+    integer size;
+    integer i__;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer moved;
     extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), excess_(
-	    integer *, char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char 
-	    *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    copyd_state_t* __state = get_copyd_state();
 /* $ Abstract */
 
 /*      Copy the contents of a double precision cell to another cell. */

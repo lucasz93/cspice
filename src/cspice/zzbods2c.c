@@ -1,9 +1,17 @@
-/* zzbods2c.f -- translated by f2c (version 19980913).
+/* zzbods2c.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzbods2c_state_t;
+static zzbods2c_state_t* get_zzbods2c_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZBODS2C ( Body name to ID translation, with bypass ) */
 /* Subroutine */ int zzbods2c_(integer *usrctr, char *savnam, integer *savcde,
@@ -15,12 +23,16 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbctrck_(integer *, logical *), chkin_(char *
-	    , ftnlen), bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzbctrck_(integer *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     logical update;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzbods2c_state_t* __state = get_zzbods2c_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

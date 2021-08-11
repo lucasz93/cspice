@@ -1,14 +1,21 @@
-/* rdencd.f -- translated by f2c (version 19980913).
+/* rdencd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
+extern rdencd_init_t __rdencd_init;
+static rdencd_state_t* get_rdencd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdencd)
+		state->rdencd = __cspice_allocate_module(sizeof(
+	rdencd_state_t), &__rdencd_init, sizeof(__rdencd_init));
+	return state->rdencd;
+
+}
 
 /* $Procedure  RDENCD  ( Read encoded d.p. numbers from file ) */
 /* Subroutine */ int rdencd_(integer *unit, integer *n, doublereal *data)
@@ -25,12 +32,13 @@ static integer c__1 = 1;
     extern /* Subroutine */ int hx2dp_(char *, doublereal *, logical *, char *
 	    , ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical error;
-    integer nitms, itmbeg;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer nitms;
+    integer itmbeg;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[80];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
@@ -38,9 +46,11 @@ static integer c__1 = 1;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    rdencd_state_t* __state = get_rdencd_state();
 /* $ Abstract */
 
 /*     Read N encoded d.p. numbers from a text file, decoding them */
@@ -271,16 +281,16 @@ static integer c__1 = 1;
 
 /*        Read in a block of data items to be decoded. */
 
-	io___4.ciunit = *unit;
-	iostat = s_rsle(&io___4);
+	__state->io___4.ciunit = *unit;
+	iostat = s_rsle(&__state->io___4);
 	if (iostat != 0) {
 	    goto L100001;
 	}
 	i__1 = nitms;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    iostat = do_lio(&c__9, &c__1, work + (((i__2 = i__ - 1) < 64 && 0 
-		    <= i__2 ? i__2 : s_rnge("work", i__2, "rdencd_", (ftnlen)
-		    265)) << 6), (ftnlen)64);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, work + (((i__2 = 
+		    i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, 
+		    "rdencd_", (ftnlen)265)) << 6), (ftnlen)64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }

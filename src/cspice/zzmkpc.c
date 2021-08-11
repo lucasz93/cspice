@@ -1,9 +1,17 @@
-/* zzmkpc.f -- translated by f2c (version 19980913).
+/* zzmkpc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzmkpc_state_t;
+static zzmkpc_state_t* get_zzmkpc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZMKPC ( Make a time format picture mark ) */
 /* Subroutine */ int zzmkpc_(char *pictur, integer *b, integer *e, char *mark,
@@ -17,7 +25,9 @@
     integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer lpat, last, lmrk;
+    integer lpat;
+    integer last;
+    integer lmrk;
     extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
 	    , char *, ftnlen, ftnlen, ftnlen);
     integer point;
@@ -26,6 +36,9 @@
     char mymark[26];
     integer use;
 
+
+    /* Module state */
+    zzmkpc_state_t* __state = get_zzmkpc_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

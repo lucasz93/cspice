@@ -1,9 +1,17 @@
-/* orderd.f -- translated by f2c (version 19980913).
+/* orderd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int orderd_state_t;
+static orderd_state_t* get_orderd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ORDERD ( Order of a double precision array ) */
 /* Subroutine */ int orderd_(doublereal *array, integer *ndim, integer *
@@ -13,10 +21,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    orderd_state_t* __state = get_orderd_state();
 /* $ Abstract */
 
 /*     Determine the order of elements in a double precision array. */

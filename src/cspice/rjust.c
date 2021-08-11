@@ -1,9 +1,17 @@
-/* rjust.f -- translated by f2c (version 19980913).
+/* rjust.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rjust_state_t;
+static rjust_state_t* get_rjust_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RJUST ( Right justify a character string ) */
 /* Subroutine */ int rjust_(char *input, char *output, ftnlen input_len, 
@@ -18,10 +26,17 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer last, i__, first, start;
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    integer last;
+    integer i__;
+    integer first;
+    integer start;
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
     integer loc;
 
+
+    /* Module state */
+    rjust_state_t* __state = get_rjust_state();
 /* $ Abstract */
 
 /*      Right justify a character string. */

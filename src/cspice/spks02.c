@@ -1,13 +1,21 @@
-/* spks02.f -- translated by f2c (version 19980913).
+/* spks02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern spks02_init_t __spks02_init;
+static spks02_state_t* get_spks02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks02)
+		state->spks02 = __cspice_allocate_module(sizeof(
+	spks02_state_t), &__spks02_init, sizeof(__spks02_init));
+	return state->spks02;
+
+}
 
 /* $Procedure      SPKS02 ( S/P Kernel, subset, type 2 ) */
 /* Subroutine */ int spks02_(integer *handle, integer *baddr, integer *eaddr, 
@@ -18,19 +26,25 @@ static integer c__4 = 4;
 
     /* Local variables */
     doublereal data[50];
-    integer addr__, nrec;
+    integer addr__;
+    integer nrec;
     doublereal init;
-    integer last, move;
+    integer last;
+    integer move;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     integer remain;
     doublereal intlen;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern logical return_(void);
 
+
+    /* Module state */
+    spks02_state_t* __state = get_spks02_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 2 */
@@ -244,7 +258,7 @@ static integer c__4 = 4;
     data[1] = intlen;
     data[2] = (doublereal) recsiz;
     data[3] = (doublereal) nrec;
-    dafada_(data, &c__4);
+    dafada_(data, &__state->c__4);
     chkout_("SPKS02", (ftnlen)6);
     return 0;
 } /* spks02_ */

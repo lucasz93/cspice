@@ -1,13 +1,21 @@
-/* stcf01.f -- translated by f2c (version 19980913).
+/* stcf01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__15 = 15;
+extern stcf01_init_t __stcf01_init;
+static stcf01_state_t* get_stcf01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stcf01)
+		state->stcf01 = __cspice_allocate_module(sizeof(
+	stcf01_state_t), &__stcf01_init, sizeof(__stcf01_init));
+	return state->stcf01;
+
+}
 
 /* $Procedure   STCF01 (STAR catalog type 1, find stars in RA-DEC box) */
 /* Subroutine */ int stcf01_(char *catnam, doublereal *westra, doublereal *
@@ -18,8 +26,8 @@ static integer c__15 = 15;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal ramin;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
@@ -27,18 +35,23 @@ static integer c__15 = 15;
     extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
 	    , char *, ftnlen, ftnlen, ftnlen);
     logical error;
-    char query[512], qrytm1[512], qrytm2[512];
+    char query[512];
+    char qrytm1[512];
+    char qrytm2[512];
     doublereal decmin;
     extern /* Subroutine */ int ekfind_(char *, integer *, logical *, char *, 
 	    ftnlen, ftnlen);
     doublereal decmax;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[512];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern doublereal dpr_(void);
 
+
+    /* Module state */
+    stcf01_state_t* __state = get_stcf01_state();
 /* $ Abstract */
 
 /*     Search through a type 1 star catalog and return the number of */
@@ -311,14 +324,14 @@ static integer c__15 = 15;
 
     repmc_(query, "#", catnam, query, (ftnlen)512, (ftnlen)1, catnam_len, (
 	    ftnlen)512);
-    repmd_(query, "#", &ramin, &c__15, query, (ftnlen)512, (ftnlen)1, (ftnlen)
-	    512);
-    repmd_(query, "#", &ramax, &c__15, query, (ftnlen)512, (ftnlen)1, (ftnlen)
-	    512);
-    repmd_(query, "#", &decmin, &c__15, query, (ftnlen)512, (ftnlen)1, (
-	    ftnlen)512);
-    repmd_(query, "#", &decmax, &c__15, query, (ftnlen)512, (ftnlen)1, (
-	    ftnlen)512);
+    repmd_(query, "#", &ramin, &__state->c__15, query, (ftnlen)512, (ftnlen)1,
+	     (ftnlen)512);
+    repmd_(query, "#", &ramax, &__state->c__15, query, (ftnlen)512, (ftnlen)1,
+	     (ftnlen)512);
+    repmd_(query, "#", &decmin, &__state->c__15, query, (ftnlen)512, (ftnlen)
+	    1, (ftnlen)512);
+    repmd_(query, "#", &decmax, &__state->c__15, query, (ftnlen)512, (ftnlen)
+	    1, (ftnlen)512);
 
 /*     Submit query and get number of stars. Check for */
 /*     errors in QUERY. */

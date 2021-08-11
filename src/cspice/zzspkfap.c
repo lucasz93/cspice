@@ -1,9 +1,21 @@
-/* zzspkfap.f -- translated by f2c (version 19980913).
+/* zzspkfap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzspkfap_init_t __zzspkfap_init;
+static zzspkfap_state_t* get_zzspkfap_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkfap)
+		state->zzspkfap = __cspice_allocate_module(sizeof(
+	zzspkfap_state_t), &__zzspkfap_init, sizeof(__zzspkfap_init));
+	return state->zzspkfap;
+
+}
 
 /* $Procedure ZZSPKFAP ( SPK function, apparent inertial state ) */
 /* Subroutine */ int zzspkfap_(U_fp trgsub, doublereal *et, char *ref, char *
@@ -12,8 +24,6 @@
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -21,28 +31,31 @@
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    static logical xmit;
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *), zzvalcor_(char *, 
-	    logical *, ftnlen), zzspkflt_(U_fp, doublereal *, char *, char *, 
+	    *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzspkflt_(U_fp, doublereal *, char *, char *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
 	    ftnlen);
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal pcorr[3];
-    static logical uselt;
     extern logical failed_(void);
     logical attblk[15];
-    doublereal dpcorr[3], corvel[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), irfnum_(char *, integer *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    doublereal dpcorr[3];
+    doublereal corvel[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal corpos[3];
     extern logical return_(void);
-    static logical usestl;
 
+    /* Module state */
+    zzspkfap_state_t* __state = get_zzspkfap_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -551,7 +564,8 @@
 	return 0;
     }
     chkin_("ZZSPKFAP", (ftnlen)8);
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -564,7 +578,7 @@
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -580,10 +594,10 @@
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
-	usestl = attblk[2];
-	pass1 = FALSE_;
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
+	__state->usestl = attblk[2];
+	__state->pass1 = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -611,14 +625,14 @@
 /*     If stellar aberration corrections are not needed, we're */
 /*     already done. */
 
-    if (! usestl) {
+    if (! __state->usestl) {
 	chkout_("ZZSPKFAP", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the stellar aberration correction and its time derivative. */
 
-    zzstelab_(&xmit, accobs, &stobs[3], starg, pcorr, dpcorr);
+    zzstelab_(&__state->xmit, accobs, &stobs[3], starg, pcorr, dpcorr);
 
 /*     Adding the stellar aberration correction to the light */
 /*     time-corrected target position yields the position corrected for */

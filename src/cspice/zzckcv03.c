@@ -1,9 +1,17 @@
-/* zzckcv03.f -- translated by f2c (version 19980913).
+/* zzckcv03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzckcv03_state_t;
+static zzckcv03_state_t* get_zzckcv03_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCKCV03 ( Private --- C-kernel segment coverage, type 03 ) */
 /* Subroutine */ int zzckcv03_(integer *handle, integer *arrbeg, integer *
@@ -24,11 +32,14 @@
     integer ndir;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     doublereal begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical istdb;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    integer intat, avsln, invls, rsize;
+    integer intat;
+    integer avsln;
+    integer invls;
+    integer rsize;
     doublereal start;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
@@ -36,17 +47,24 @@
     doublereal et;
     integer intbeg;
     doublereal buffer[2];
-    integer seglen, tickat;
+    integer seglen;
+    integer tickat;
     doublereal finish;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer navsln;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), wninsd_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
 	    doublereal *);
-    integer lsttik, lstint;
+    integer lsttik;
+    integer lstint;
     extern logical return_(void);
 
+
+    /* Module state */
+    zzckcv03_state_t* __state = get_zzckcv03_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

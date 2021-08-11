@@ -1,13 +1,21 @@
-/* sctran.f -- translated by f2c (version 19980913).
+/* sctran.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sctran_init_t __sctran_init;
+static sctran_state_t* get_sctran_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sctran)
+		state->sctran = __cspice_allocate_module(sizeof(
+	sctran_state_t), &__sctran_init, sizeof(__sctran_init));
+	return state->sctran;
+
+}
 
 /* $Procedure  SCTRAN  ( SCLK name/ID code translation ) */
 /* Subroutine */ int sctran_0_(int n__, char *clknam, integer *clkid, logical 
@@ -21,18 +29,22 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen),
-	     bodc2n_(integer *, char *, logical *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char tmpnam[32];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    sctran_state_t* __state = get_sctran_state();
 /* $ Abstract */
 
 /*     Convert between SCLK name strings and ID codes. */
@@ -515,7 +527,7 @@ L_scid2n:
     if (! (*found)) {
 	return 0;
     }
-    suffix_("SCLK", &c__1, clknam, (ftnlen)4, clknam_len);
+    suffix_("SCLK", &__state->c__1, clknam, (ftnlen)4, clknam_len);
     return 0;
 } /* sctran_ */
 

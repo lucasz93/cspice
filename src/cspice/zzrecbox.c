@@ -1,9 +1,17 @@
-/* zzrecbox.f -- translated by f2c (version 19980913).
+/* zzrecbox.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzrecbox_state_t;
+static zzrecbox_state_t* get_zzrecbox_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZRECBOX (Bounding box for rectangular volume element) */
 /* Subroutine */ int zzrecbox_(doublereal *bounds, doublereal *center, 
@@ -20,16 +28,22 @@
     doublereal diag[3];
     integer i__;
     doublereal l[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vpack_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal vnorm_(doublereal *);
-    doublereal mincor[3], maxcor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal mincor[3];
+    doublereal maxcor[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzrecbox_state_t* __state = get_zzrecbox_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

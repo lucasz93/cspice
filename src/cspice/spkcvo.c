@@ -1,14 +1,21 @@
-/* spkcvo.f -- translated by f2c (version 19980913).
+/* spkcvo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__6 = 6;
+extern spkcvo_init_t __spkcvo_init;
+static spkcvo_state_t* get_spkcvo_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkcvo)
+		state->spkcvo = __cspice_allocate_module(sizeof(
+	spkcvo_state_t), &__spkcvo_init, sizeof(__spkcvo_init));
+	return state->spkcvo;
+
+}
 
 /* $Procedure SPKCVO ( SPK, constant velocity observer state ) */
 /* Subroutine */ int spkcvo_(char *target, doublereal *et, char *outref, char 
@@ -19,10 +26,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static char evlflg[25*3] = "OBSERVER                 " "TARGET          "
-	    "         " "CENTER                   ";
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1;
@@ -34,50 +37,49 @@ static integer c__6 = 6;
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    static logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 
-	    char *, integer *, ftnlen, ftnlen), zzspkfao_(integer *, 
-	    doublereal *, char *, char *, U_fp, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), zzvalcor_(char *, logical *, 
-	    ftnlen), zzcvssta_(doublereal *, integer *, doublereal *, char *, 
-	    ftnlen), zzctruin_(integer *), zzcorsxf_(logical *, doublereal *, 
-	    doublereal *, doublereal *);
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzspkfao_(integer *, doublereal *, char *, 
+	    char *, U_fp, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzcvssta_(doublereal *, integer *, doublereal 
+	    *, char *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
+	    *, doublereal *);
     extern /* Subroutine */ int zzcvxsta_();
     extern /* Subroutine */ int zzspkfzo_(integer *, doublereal *, char *, 
 	    char *, U_fp, doublereal *, doublereal *, ftnlen, ftnlen);
     doublereal s;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
-    static logical uselt;
-    static integer j2code;
-    static logical svfnd1, svfnd2;
     doublereal j2stat[6];
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2];
-    integer orfcde, ctrcde;
+    integer orfcde;
+    integer ctrcde;
     extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer trgcde;
-    static integer svccde;
     logical attblk[6];
-    static integer svtcde;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), chkout_(
-	    char *, ftnlen);
-    static integer svorfc;
-    static char svtarg[36], svoref[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal tmpxfm[36]	/* was [6][6] */;
     extern logical return_(void);
     doublereal xtrans[36]	/* was [6][6] */;
-    static char svoctr[36];
     integer evltyp;
     doublereal dlt;
 
+
+    /* Module state */
+    spkcvo_state_t* __state = get_spkcvo_state();
 /* $ Abstract */
 
 /*     Return the state of a specified target relative to an "observer," */
@@ -1678,20 +1680,21 @@ static integer c__6 = 6;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
     }
 
 /*     On the first pass, save the ID code of the J2000 frame. */
 
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
-	if (first) {
-	    irfnum_("J2000", &j2code, (ftnlen)5);
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
+	if (__state->first) {
+	    irfnum_("J2000", &__state->j2code, (ftnlen)5);
 	}
 
 /*        Analyze the aberration correction string; produce an attribute */
@@ -1702,17 +1705,17 @@ static integer c__6 = 6;
 	    chkout_("SPKCVO", (ftnlen)6);
 	    return 0;
 	}
-	uselt = attblk[1];
-	xmit = attblk[4];
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
-	first = FALSE_;
+	__state->uselt = attblk[1];
+	__state->xmit = attblk[4];
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	__state->first = FALSE_;
     }
 
 /*     Convert the input name of the center of motion to */
 /*     an ID code. */
 
-    zzbods2c_(svctr1, svoctr, &svccde, &svfnd1, obsctr, &ctrcde, &found, (
-	    ftnlen)36, obsctr_len);
+    zzbods2c_(__state->svctr1, __state->svoctr, &__state->svccde, &
+	    __state->svfnd1, obsctr, &ctrcde, &found, (ftnlen)36, obsctr_len);
     if (! found) {
 	setmsg_("Could not map body name # to an ID code.", (ftnlen)40);
 	errch_("#", obsctr, (ftnlen)1, obsctr_len);
@@ -1723,8 +1726,8 @@ static integer c__6 = 6;
 
 /*     Convert the input name of the target to an ID code. */
 
-    zzbods2c_(svctr2, svtarg, &svtcde, &svfnd2, target, &trgcde, &found, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr2, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd2, target, &trgcde, &found, (ftnlen)36, target_len);
     if (! found) {
 	setmsg_("Could not map body name # to an ID code.", (ftnlen)40);
 	errch_("#", target, (ftnlen)1, target_len);
@@ -1735,8 +1738,8 @@ static integer c__6 = 6;
 
 /*     Look up the output frame's ID code. */
 
-    zznamfrm_(svctr3, svoref, &svorfc, outref, &orfcde, (ftnlen)32, 
-	    outref_len);
+    zznamfrm_(__state->svctr3, __state->svoref, &__state->svorfc, outref, &
+	    orfcde, (ftnlen)32, outref_len);
     if (orfcde == 0) {
 
 /*        Only non-zero ID codes are legitimate.  Zero */
@@ -1753,7 +1756,8 @@ static integer c__6 = 6;
 
 /*     Identify the frame evaluation locus. */
 
-    evltyp = esrchc_(refloc, &c__3, evlflg, refloc_len, (ftnlen)25);
+    evltyp = esrchc_(refloc, &__state->c__3, __state->evlflg, refloc_len, (
+	    ftnlen)25);
     if (evltyp == 0) {
 
 /*        REFLOC is not a valid evaluation choice. */
@@ -1780,7 +1784,7 @@ static integer c__6 = 6;
 /*     expressed in the frame OUTREF, using the specified aberration */
 /*     corrections. */
 
-    if (! uselt) {
+    if (! __state->uselt) {
 
 /*        We evaluate the observer frame at ET, regardless of */
 /*        the setting of EVLTYP. */
@@ -1813,15 +1817,15 @@ static integer c__6 = 6;
 
 	zzspkfzo_(&trgcde, et, "J2000", abcorr, (U_fp)zzcvxsta_, j2stat, lt, (
 		ftnlen)5, abcorr_len);
-	if (orfcde == j2code) {
-	    moved_(j2stat, &c__6, state);
+	if (orfcde == __state->j2code) {
+	    moved_(j2stat, &__state->c__6, state);
 	} else {
-	    frmchg_(&j2code, &orfcde, et, xtrans);
+	    frmchg_(&__state->j2code, &orfcde, et, xtrans);
 	    if (failed_()) {
 		chkout_("SPKCVO", (ftnlen)6);
 		return 0;
 	    }
-	    mxvg_(xtrans, j2stat, &c__6, &c__6, state);
+	    mxvg_(xtrans, j2stat, &__state->c__6, &__state->c__6, state);
 	}
     } else if (evltyp == 2) {
 
@@ -1836,7 +1840,7 @@ static integer c__6 = 6;
 /*        of light time between target and observer. Start out by */
 /*        determining the sign of the light time correction. */
 
-	if (xmit) {
+	if (__state->xmit) {
 
 /*           We're doing transmission corrections. */
 
@@ -1857,19 +1861,19 @@ static integer c__6 = 6;
 	    chkout_("SPKCVO", (ftnlen)6);
 	    return 0;
 	}
-	if (orfcde == j2code) {
+	if (orfcde == __state->j2code) {
 
 /*           The output frame is J2000. No frame transformation is */
 /*           required. */
 
-	    moved_(j2stat, &c__6, state);
+	    moved_(j2stat, &__state->c__6, state);
 	} else {
 
 /*           Look up the state transformation from the J2000 frame to */
 /*           OUTREF at the light time corrected epoch. */
 
 	    d__1 = *et + s * *lt;
-	    frmchg_(&j2code, &orfcde, &d__1, xtrans);
+	    frmchg_(&__state->j2code, &orfcde, &d__1, xtrans);
 	    if (failed_()) {
 		chkout_("SPKCVO", (ftnlen)6);
 		return 0;
@@ -1880,11 +1884,11 @@ static integer c__6 = 6;
 /*           Adjust the transformation to account for the rate of */
 /*           change of observer-target light time. */
 
-	    zzcorsxf_(&xmit, &dlt, xtrans, tmpxfm);
+	    zzcorsxf_(&__state->xmit, &dlt, xtrans, tmpxfm);
 
 /*           Map the output state to the frame OUTREF. */
 
-	    mxvg_(tmpxfm, j2stat, &c__6, &c__6, state);
+	    mxvg_(tmpxfm, j2stat, &__state->c__6, &__state->c__6, state);
 	}
     } else {
 

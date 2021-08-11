@@ -1,17 +1,21 @@
-/* zzgfocu.f -- translated by f2c (version 19980913).
+/* zzgfocu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__4 = 4;
-static integer c__0 = 0;
-static integer c__3 = 3;
-static doublereal c_b199 = 1e-12;
+extern zzgfocu_init_t __zzgfocu_init;
+static zzgfocu_state_t* get_zzgfocu_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfocu)
+		state->zzgfocu = __cspice_allocate_module(sizeof(
+	zzgfocu_state_t), &__zzgfocu_init, sizeof(__zzgfocu_init));
+	return state->zzgfocu;
+
+}
 
 /* $Procedure ZZGFOCU ( GF, occultation utilities ) */
 /* Subroutine */ int zzgfocu_0_(int n__, char *occtyp, char *front, char *
@@ -23,9 +27,6 @@ static doublereal c_b199 = 1e-12;
 {
     /* Initialized data */
 
-    static integer ncalls = 0;
-    static doublereal svorig[3] = { 0.,0.,0. };
-    static char svtyps[7*4] = "ANNULAR" "ANY    " "PARTIAL" "FULL   ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -42,9 +43,12 @@ static doublereal c_b199 = 1e-12;
 	    );
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), zzminrad_(doublereal *), zzcorepc_(char *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen), zzmaxrad_(doublereal *), 
-	    zzvalcor_(char *, logical *, ftnlen);
+	    );
+    extern /* Subroutine */ int zzminrad_(doublereal *);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(doublereal *);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     doublereal t2sep;
     extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
 	    integer *);
@@ -55,60 +59,96 @@ static doublereal c_b199 = 1e-12;
     integer n;
     doublereal radii[3];
     extern /* Subroutine */ int minad_(doublereal *, integer *, doublereal *, 
-	    integer *), maxad_(doublereal *, integer *, doublereal *, integer 
-	    *), chkin_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int maxad_(doublereal *, integer *, doublereal *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     char shape[9];
     integer idobs;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    ucase_(char *, char *, ftnlen, ftnlen);
-    doublereal bdist, fdist;
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    doublereal bdist;
+    doublereal fdist;
     integer trgid;
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), moved_(
-	    doublereal *, integer *, doublereal *);
-    doublereal mtemp[9]	/* was [3][3] */, tdist;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    doublereal mtemp[9]	/* was [3][3] */;
+    doublereal tdist;
     integer nsurf;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer svobs;
     extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     integer idback;
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer occode;
-    extern doublereal dasine_(doublereal *, doublereal *), halfpi_(void);
+    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal halfpi_(void);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    doublereal bckfrt[3], bckobs[3];
+    doublereal bckfrt[3];
+    doublereal bckobs[3];
     extern logical return_(void);
-    char fixfrm[32], pntdef[20], posnam[10], shpstr[9], subtyp[20];
-    static char svbfrm[32], svbmth[500], svbnam[36], svbshp[9], svcorr[5], 
-	    svffrm[32], svfmth[500], svfnam[36], svfshp[9], svonam[36], 
-	    svtype[7];
+    char fixfrm[32];
+    char pntdef[20];
+    char posnam[10];
+    char shpstr[9];
+    char subtyp[20];
     char trmtyp[20];
-    doublereal bckpos[3], bsmaxs[9]	/* was [3][3] */, etbcor, etfcor, 
-	    frtbck[3], frtobs[3], frtpos[3], fsmaxs[9]	/* was [3][3] */, 
-	    ltback, ltfrnt, maxang, minang, spoint[3], srfvec[3];
-    static doublereal svbrad[3], svfrad[3], svmnbr, svmnfr, svmxbr, svmxfr;
-    doublereal trgepc, trgsep;
-    integer center, clssid, ffrmid, frclss, idfrnt, loc, occnum, srflst[100];
-    static integer svback, svfrnt;
-    logical attblk[15], pntocc, pri;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 
-	    *, ftnlen, ftnlen), bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen), errint_(char *, integer *, ftnlen), 
-	    namfrm_(char *, integer *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), spkezp_(integer *, doublereal *,
-	     char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen), pxform_(char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen), vminus_(doublereal *, doublereal *), sincpt_(
-	    char *, char *, doublereal *, char *, char *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
-	     ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    doublereal bckpos[3];
+    doublereal bsmaxs[9]	/* was [3][3] */;
+    doublereal etbcor;
+    doublereal etfcor;
+    doublereal frtbck[3];
+    doublereal frtobs[3];
+    doublereal frtpos[3];
+    doublereal fsmaxs[9]	/* was [3][3] */;
+    doublereal ltback;
+    doublereal ltfrnt;
+    doublereal maxang;
+    doublereal minang;
+    doublereal spoint[3];
+    doublereal srfvec[3];
+    doublereal trgepc;
+    doublereal trgsep;
+    integer center;
+    integer clssid;
+    integer ffrmid;
+    integer frclss;
+    integer idfrnt;
+    integer loc;
+    integer occnum;
+    integer srflst[100];
+    logical attblk[15];
+    logical pntocc;
+    logical pri;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int sincpt_(char *, char *, doublereal *, char *, 
+	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
     extern integer zzocced_(doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
 
+
+    /* Module state */
+    zzgfocu_state_t* __state = get_zzgfocu_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1284,20 +1324,20 @@ L_zzgfocin:
 /*     Save the objects' names. We'll need these if */
 /*     we need to call SINCPT. */
 
-    s_copy(svfnam, front, (ftnlen)36, front_len);
-    s_copy(svbnam, back, (ftnlen)36, back_len);
-    s_copy(svonam, obsrvr, (ftnlen)36, obsrvr_len);
+    s_copy(__state->svfnam, front, (ftnlen)36, front_len);
+    s_copy(__state->svbnam, back, (ftnlen)36, back_len);
+    s_copy(__state->svonam, obsrvr, (ftnlen)36, obsrvr_len);
 
 /*     Store the ID codes, shape specifications, and body-fixed, */
 /*     body-centered frame names of the objects involved in this event. */
 /*     The shape arguments must be parsed in case they contain */
 /*     DSK specifications. */
 
-    svfrnt = idfrnt;
-    s_copy(svffrm, fframe, (ftnlen)32, fframe_len);
-    svback = idback;
-    s_copy(svbfrm, bframe, (ftnlen)32, bframe_len);
-    svobs = idobs;
+    __state->svfrnt = idfrnt;
+    s_copy(__state->svffrm, fframe, (ftnlen)32, fframe_len);
+    __state->svback = idback;
+    s_copy(__state->svbfrm, bframe, (ftnlen)32, bframe_len);
+    __state->svobs = idobs;
 
 /*     Save the input shape strings. These will be examined later, */
 /*     but we need them in their original form for computations */
@@ -1305,25 +1345,25 @@ L_zzgfocin:
 /*     stands for "method"---the name used in SPICE geometry */
 /*     APIs for this type of input string. */
 
-    s_copy(svfmth, fshape, (ftnlen)500, fshape_len);
-    s_copy(svbmth, bshape, (ftnlen)500, bshape_len);
+    s_copy(__state->svfmth, fshape, (ftnlen)500, fshape_len);
+    s_copy(__state->svbmth, bshape, (ftnlen)500, bshape_len);
 
 /*     Parse the front body shape string. */
 
     if (eqstr_(fshape, "POINT", fshape_len, (ftnlen)5)) {
-	s_copy(svfshp, "POINT", (ftnlen)9, (ftnlen)5);
+	s_copy(__state->svfshp, "POINT", (ftnlen)9, (ftnlen)5);
     } else if (eqstr_(fshape, "ELLIPSOID", fshape_len, (ftnlen)9)) {
-	s_copy(svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
+	s_copy(__state->svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
     } else {
-	zzprsmet_(&idfrnt, svfmth, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&idfrnt, __state->svfmth, &__state->c__100, shpstr, subtyp, 
+		&pri, &nsurf, srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, 
+		(ftnlen)20, (ftnlen)20, (ftnlen)20);
 	if (failed_()) {
 	    chkout_("ZZGFOCIN", (ftnlen)8);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    s_copy(svfshp, "DSK", (ftnlen)9, (ftnlen)3);
+	    s_copy(__state->svfshp, "DSK", (ftnlen)9, (ftnlen)3);
 	} else {
 	    setmsg_("Front target shape from FSHAPE string was <#>. Valid sh"
 		    "apes are ELLIPSOID, POINT, and DSK.", (ftnlen)90);
@@ -1337,19 +1377,19 @@ L_zzgfocin:
 /*     Parse the back body shape string. */
 
     if (eqstr_(bshape, "POINT", bshape_len, (ftnlen)5)) {
-	s_copy(svbshp, "POINT", (ftnlen)9, (ftnlen)5);
+	s_copy(__state->svbshp, "POINT", (ftnlen)9, (ftnlen)5);
     } else if (eqstr_(bshape, "ELLIPSOID", bshape_len, (ftnlen)9)) {
-	s_copy(svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
+	s_copy(__state->svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9);
     } else {
-	zzprsmet_(&idfrnt, svbmth, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&idfrnt, __state->svbmth, &__state->c__100, shpstr, subtyp, 
+		&pri, &nsurf, srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, 
+		(ftnlen)20, (ftnlen)20, (ftnlen)20);
 	if (failed_()) {
 	    chkout_("ZZGFOCIN", (ftnlen)8);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    s_copy(svbshp, "DSK", (ftnlen)9, (ftnlen)3);
+	    s_copy(__state->svbshp, "DSK", (ftnlen)9, (ftnlen)3);
 	} else {
 	    setmsg_("Back target shape from BSHAPE string was <#>. Valid sha"
 		    "pes are ELLIPSOID, POINT, and DSK.", (ftnlen)89);
@@ -1362,23 +1402,23 @@ L_zzgfocin:
 
 /*     Check for invalid shape combinations. */
 
-    if (s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(svbshp, 
-	    "POINT", (ftnlen)9, (ftnlen)5) == 0) {
+    if (s_cmp(__state->svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(
+	    __state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0) {
 	setmsg_("Both front and back objects have POINT shape specifications"
 		"; only one point shape is allowed. The other shape must be E"
 		"LLIPSOID or DSK.", (ftnlen)135);
 	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
 	chkout_("ZZGFOCIN", (ftnlen)8);
 	return 0;
-    } else if (s_cmp(svfshp, "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(
-	    svbshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 || s_cmp(svbshp, 
-	    "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(svfshp, "POINT", (
-	    ftnlen)9, (ftnlen)5) != 0) {
+    } else if (s_cmp(__state->svfshp, "DSK", (ftnlen)9, (ftnlen)3) == 0 && 
+	    s_cmp(__state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 || 
+	    s_cmp(__state->svbshp, "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(
+	    __state->svfshp, "POINT", (ftnlen)9, (ftnlen)5) != 0) {
 	setmsg_("Front target shape from FSHAPE string was <#>; back target "
 		"shape from BSHAPE was <#>. When one shape is DSK, the other "
 		"must be POINT.", (ftnlen)133);
-	errch_("#", svfshp, (ftnlen)1, (ftnlen)9);
-	errch_("#", svbshp, (ftnlen)1, (ftnlen)9);
+	errch_("#", __state->svfshp, (ftnlen)1, (ftnlen)9);
+	errch_("#", __state->svbshp, (ftnlen)1, (ftnlen)9);
 	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
 	chkout_("ZZGFOCIN", (ftnlen)8);
 	return 0;
@@ -1387,20 +1427,21 @@ L_zzgfocin:
 /*     Save a single upper-case character representing the occultation */
 /*     type string. */
 
-    ljust_(occtyp, svtype, occtyp_len, (ftnlen)7);
-    ucase_(svtype, svtype, (ftnlen)7, (ftnlen)7);
+    ljust_(occtyp, __state->svtype, occtyp_len, (ftnlen)7);
+    ucase_(__state->svtype, __state->svtype, (ftnlen)7, (ftnlen)7);
 
 /*     Check the occultation type. */
 
-    occnum = isrchc_(svtype, &c__4, svtyps, (ftnlen)7, (ftnlen)7);
+    occnum = isrchc_(__state->svtype, &__state->c__4, __state->svtyps, (
+	    ftnlen)7, (ftnlen)7);
     if (occnum == 0) {
 	setmsg_("The occultation type # is not recognized.  Supported types "
 		"are: #, #, #,  #.", (ftnlen)76);
 	errch_("#", occtyp, (ftnlen)1, occtyp_len);
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    errch_("#", svtyps + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)1095)) * 7, (
-		    ftnlen)1, (ftnlen)7);
+	    errch_("#", __state->svtyps + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ?
+		     i__1 : s_rnge("svtyps", i__1, "zzgfocu_", (ftnlen)1095)) 
+		    * 7, (ftnlen)1, (ftnlen)7);
 	}
 	sigerr_("SPICE(INVALIDOCCTYPE)", (ftnlen)21);
 	chkout_("ZZGFOCIN", (ftnlen)8);
@@ -1410,9 +1451,9 @@ L_zzgfocin:
 /*     If we have a point target, the occultation type must */
 /*     be 'ANY'. */
 
-    if (s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || s_cmp(svbshp, 
-	    "POINT", (ftnlen)9, (ftnlen)5) == 0) {
-	if (s_cmp(svtype, "ANY", (ftnlen)7, (ftnlen)3) != 0) {
+    if (s_cmp(__state->svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || s_cmp(
+	    __state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0) {
+	if (s_cmp(__state->svtype, "ANY", (ftnlen)7, (ftnlen)3) != 0) {
 	    setmsg_("Occultation type # is not allowed when either target bo"
 		    "dy is modeled as a point. Set OCCTYP to ANY for use with"
 		    " point targets.", (ftnlen)126);
@@ -1436,21 +1477,23 @@ L_zzgfocin:
 /*     a stellar aberration correction specifier. */
 
     if (attblk[0]) {
-	s_copy(svcorr, "NONE", (ftnlen)5, (ftnlen)4);
+	s_copy(__state->svcorr, "NONE", (ftnlen)5, (ftnlen)4);
     } else {
 
 /*        The correction string specified either Newtonian or converged */
 /*        light time correction. */
 
 	if (attblk[4]) {
-	    s_copy(svcorr, "X", (ftnlen)5, (ftnlen)1);
+	    s_copy(__state->svcorr, "X", (ftnlen)5, (ftnlen)1);
 	} else {
-	    s_copy(svcorr, " ", (ftnlen)5, (ftnlen)1);
+	    s_copy(__state->svcorr, " ", (ftnlen)5, (ftnlen)1);
 	}
 	if (attblk[3]) {
-	    suffix_("CN", &c__0, svcorr, (ftnlen)2, (ftnlen)5);
+	    suffix_("CN", &__state->c__0, __state->svcorr, (ftnlen)2, (ftnlen)
+		    5);
 	} else {
-	    suffix_("LT", &c__0, svcorr, (ftnlen)2, (ftnlen)5);
+	    suffix_("LT", &__state->c__0, __state->svcorr, (ftnlen)2, (ftnlen)
+		    5);
 	}
     }
 
@@ -1462,18 +1505,18 @@ L_zzgfocin:
 	    s_copy(posnam, "front", (ftnlen)10, (ftnlen)5);
 	    s_copy(fixfrm, fframe, (ftnlen)32, fframe_len);
 	    trgid = idfrnt;
-	    s_copy(shape, svfshp, (ftnlen)9, (ftnlen)9);
+	    s_copy(shape, __state->svfshp, (ftnlen)9, (ftnlen)9);
 	} else {
 	    s_copy(posnam, "back", (ftnlen)10, (ftnlen)4);
 	    s_copy(fixfrm, bframe, (ftnlen)32, bframe_len);
 	    trgid = idback;
-	    s_copy(shape, svbshp, (ftnlen)9, (ftnlen)9);
+	    s_copy(shape, __state->svbshp, (ftnlen)9, (ftnlen)9);
 	}
 	if (s_cmp(shape, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0) {
 
 /*           Fetch and check the radii. */
 
-	    bodvcd_(&trgid, "RADII", &c__3, &n, radii, (ftnlen)5);
+	    bodvcd_(&trgid, "RADII", &__state->c__3, &n, radii, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("ZZGFOCIN", (ftnlen)8);
 		return 0;
@@ -1510,17 +1553,21 @@ L_zzgfocin:
 /*           Checks of radii have been completed. */
 
 	    if (i__ == 1) {
-		moved_(radii, &c__3, svfrad);
+		moved_(radii, &__state->c__3, __state->svfrad);
 
 /*              Select smallest and largest semi-axis lengths of body */
 /*              for later tests. */
 
-		minad_(svfrad, &c__3, &svmnfr, &loc);
-		maxad_(svfrad, &c__3, &svmxfr, &loc);
+		minad_(__state->svfrad, &__state->c__3, &__state->svmnfr, &
+			loc);
+		maxad_(__state->svfrad, &__state->c__3, &__state->svmxfr, &
+			loc);
 	    } else {
-		moved_(radii, &c__3, svbrad);
-		minad_(svbrad, &c__3, &svmnbr, &loc);
-		maxad_(svbrad, &c__3, &svmxbr, &loc);
+		moved_(radii, &__state->c__3, __state->svbrad);
+		minad_(__state->svbrad, &__state->c__3, &__state->svmnbr, &
+			loc);
+		maxad_(__state->svbrad, &__state->c__3, &__state->svmxbr, &
+			loc);
 	    }
 	    if (failed_()) {
 		chkout_("ZZGFOCIN", (ftnlen)8);
@@ -1626,11 +1673,11 @@ L_zzgfocin:
 		return 0;
 	    }
 	    if (i__ == 1) {
-		zzminrad_(&svmnfr);
-		zzmaxrad_(&svmxfr);
+		zzminrad_(&__state->svmnfr);
+		zzmaxrad_(&__state->svmxfr);
 	    } else {
-		zzminrad_(&svmnbr);
-		zzmaxrad_(&svmxbr);
+		zzminrad_(&__state->svmnbr);
+		zzmaxrad_(&__state->svmxbr);
 	    }
 	}
 
@@ -1643,15 +1690,15 @@ L_zzgfocin:
 /*           frame to blank. */
 
 	    if (i__ == 1) {
-		cleard_(&c__3, svfrad);
-		svmnfr = 0.;
-		svmxfr = 0.;
-		s_copy(svffrm, " ", (ftnlen)32, (ftnlen)1);
+		cleard_(&__state->c__3, __state->svfrad);
+		__state->svmnfr = 0.;
+		__state->svmxfr = 0.;
+		s_copy(__state->svffrm, " ", (ftnlen)32, (ftnlen)1);
 	    } else {
-		cleard_(&c__3, svbrad);
-		svmnbr = 0.;
-		svmxbr = 0.;
-		s_copy(svbfrm, " ", (ftnlen)32, (ftnlen)1);
+		cleard_(&__state->c__3, __state->svbrad);
+		__state->svmnbr = 0.;
+		__state->svmxbr = 0.;
+		s_copy(__state->svbfrm, " ", (ftnlen)32, (ftnlen)1);
 	    }
 	}
 
@@ -1824,10 +1871,10 @@ L_zzgfocst:
 /*     Get the apparent positions of FRONT and BACK as seen from the */
 /*     observer. */
 
-    spkezp_(&svfrnt, time, "J2000", svcorr, &svobs, frtpos, &ltfrnt, (ftnlen)
-	    5, (ftnlen)5);
-    spkezp_(&svback, time, "J2000", svcorr, &svobs, bckpos, &ltback, (ftnlen)
-	    5, (ftnlen)5);
+    spkezp_(&__state->svfrnt, time, "J2000", __state->svcorr, &__state->svobs,
+	     frtpos, &ltfrnt, (ftnlen)5, (ftnlen)5);
+    spkezp_(&__state->svback, time, "J2000", __state->svcorr, &__state->svobs,
+	     bckpos, &ltback, (ftnlen)5, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFOCST", (ftnlen)8);
 	return 0;
@@ -1836,8 +1883,8 @@ L_zzgfocst:
 /*     Handle the cases of one and two extended targets */
 /*     separately. */
 
-    if (s_cmp(svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 && s_cmp(svfshp,
-	     "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0) {
+    if (s_cmp(__state->svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 && 
+	    s_cmp(__state->svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0) {
 
 /*        The caller has selected a test for a partial, annular or full */
 /*        occultation using ellipsoidal shape models. */
@@ -1845,8 +1892,9 @@ L_zzgfocst:
 /*        Look up the axes of each target body in the J2000 frame at the */
 /*        light time corrected epoch for that body. */
 
-	zzcorepc_(svcorr, time, &ltback, &etbcor, (ftnlen)5);
-	pxform_(svbfrm, "J2000", &etbcor, mtemp, (ftnlen)32, (ftnlen)5);
+	zzcorepc_(__state->svcorr, time, &ltback, &etbcor, (ftnlen)5);
+	pxform_(__state->svbfrm, "J2000", &etbcor, mtemp, (ftnlen)32, (ftnlen)
+		5);
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);
 	    return 0;
@@ -1856,15 +1904,16 @@ L_zzgfocst:
 /*        target. */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    vscl_(&svbrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svbrad", i__1, "zzgfocu_", (ftnlen)1633)], &mtemp[(i__2 =
-		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1633)], &bsmaxs[(i__3 = i__ * 3 
-		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("bsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1633)]);
+	    vscl_(&__state->svbrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+		    s_rnge("svbrad", i__1, "zzgfocu_", (ftnlen)1633)], &mtemp[
+		    (i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
+		    "mtemp", i__2, "zzgfocu_", (ftnlen)1633)], &bsmaxs[(i__3 =
+		     i__ * 3 - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("bsmaxs", 
+		    i__3, "zzgfocu_", (ftnlen)1633)]);
 	}
-	zzcorepc_(svcorr, time, &ltfrnt, &etfcor, (ftnlen)5);
-	pxform_(svffrm, "J2000", &etfcor, mtemp, (ftnlen)32, (ftnlen)5);
+	zzcorepc_(__state->svcorr, time, &ltfrnt, &etfcor, (ftnlen)5);
+	pxform_(__state->svffrm, "J2000", &etfcor, mtemp, (ftnlen)32, (ftnlen)
+		5);
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);
 	    return 0;
@@ -1874,18 +1923,18 @@ L_zzgfocst:
 /*        target. */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    vscl_(&svfrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svfrad", i__1, "zzgfocu_", (ftnlen)1649)], &mtemp[(i__2 =
-		     i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mtemp", 
-		    i__2, "zzgfocu_", (ftnlen)1649)], &fsmaxs[(i__3 = i__ * 3 
-		    - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("fsmaxs", i__3, 
-		    "zzgfocu_", (ftnlen)1649)]);
+	    vscl_(&__state->svfrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+		    s_rnge("svfrad", i__1, "zzgfocu_", (ftnlen)1649)], &mtemp[
+		    (i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
+		    "mtemp", i__2, "zzgfocu_", (ftnlen)1649)], &fsmaxs[(i__3 =
+		     i__ * 3 - 3) < 9 && 0 <= i__3 ? i__3 : s_rnge("fsmaxs", 
+		    i__3, "zzgfocu_", (ftnlen)1649)]);
 	}
 
 /*        Classify the occultation state of BACK by FRONT as seen from */
 /*        the observer. */
 
-	occode = zzocced_(svorig, bckpos, bsmaxs, frtpos, fsmaxs);
+	occode = zzocced_(__state->svorig, bckpos, bsmaxs, frtpos, fsmaxs);
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);
 	    return 0;
@@ -1895,27 +1944,27 @@ L_zzgfocst:
 /*           Neither body occults the other. */
 
 	    *ocstat = FALSE_;
-	} else if (s_cmp(svtype, "ANY", (ftnlen)7, (ftnlen)3) == 0 && occode <
-		 0) {
+	} else if (s_cmp(__state->svtype, "ANY", (ftnlen)7, (ftnlen)3) == 0 &&
+		 occode < 0) {
 
 /*           The "of" body (target 1) is at least partially occulted by */
 /*           the BY object. */
 
 	    *ocstat = TRUE_;
-	} else if (s_cmp(svtype, "FULL", (ftnlen)7, (ftnlen)4) == 0 && occode 
-		== -3) {
+	} else if (s_cmp(__state->svtype, "FULL", (ftnlen)7, (ftnlen)4) == 0 
+		&& occode == -3) {
 
 /*           The BACK body is in total occultation. */
 
 	    *ocstat = TRUE_;
-	} else if (s_cmp(svtype, "ANNULAR", (ftnlen)7, (ftnlen)7) == 0 && 
-		occode == -2) {
+	} else if (s_cmp(__state->svtype, "ANNULAR", (ftnlen)7, (ftnlen)7) == 
+		0 && occode == -2) {
 
 /*           The  BACK body is in annular occultation. */
 
 	    *ocstat = TRUE_;
-	} else if (s_cmp(svtype, "PARTIAL", (ftnlen)7, (ftnlen)7) == 0 && 
-		occode == -1) {
+	} else if (s_cmp(__state->svtype, "PARTIAL", (ftnlen)7, (ftnlen)7) == 
+		0 && occode == -1) {
 
 /*           The BACK body is partially occulted. */
 
@@ -1928,13 +1977,14 @@ L_zzgfocst:
 	}
 	chkout_("ZZGFOCST", (ftnlen)8);
 	return 0;
-    } else if (s_cmp(svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 && s_cmp(
-	    svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || s_cmp(svfshp, 
-	    "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(svbshp, "POINT", (
-	    ftnlen)9, (ftnlen)5) == 0 || s_cmp(svfshp, "POINT", (ftnlen)9, (
-	    ftnlen)5) == 0 && s_cmp(svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9)
-	     == 0 || s_cmp(svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && 
-	    s_cmp(svbshp, "DSK", (ftnlen)9, (ftnlen)3) == 0) {
+    } else if (s_cmp(__state->svfshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 
+	    && s_cmp(__state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || 
+	    s_cmp(__state->svfshp, "DSK", (ftnlen)9, (ftnlen)3) == 0 && s_cmp(
+	    __state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 || s_cmp(
+	    __state->svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(
+	    __state->svbshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) == 0 || s_cmp(
+	    __state->svfshp, "POINT", (ftnlen)9, (ftnlen)5) == 0 && s_cmp(
+	    __state->svbshp, "DSK", (ftnlen)9, (ftnlen)3) == 0) {
 
 /*        One of the targets is modeled as a point; the other is */
 /*        modeled as an ellipsoid or a DSK shape. */
@@ -1945,7 +1995,7 @@ L_zzgfocst:
 /*        We'll set the logical flag PNTOCC to .TRUE. to indicate a */
 /*        point occultation. */
 
-	pntocc = s_cmp(svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0;
+	pntocc = s_cmp(__state->svbshp, "POINT", (ftnlen)9, (ftnlen)5) == 0;
 
 /*        We're going to start out by doing some error checking. */
 /*        We're looking for intersections of the participating */
@@ -1966,7 +2016,7 @@ L_zzgfocst:
 
 /*           The front target is an extended shape. */
 
-	    if (fdist <= svmnfr) {
+	    if (fdist <= __state->svmnfr) {
 
 /*              The observer is INSIDE the front target. We */
 /*              treat this as an error. */
@@ -1980,7 +2030,7 @@ L_zzgfocst:
 		sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
-	    } else if (vnorm_(bckfrt) <= svmnfr) {
+	    } else if (vnorm_(bckfrt) <= __state->svmnfr) {
 		setmsg_("BACK target is inside FRONT target.", (ftnlen)35);
 		sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
 		chkout_("ZZGFOCST", (ftnlen)8);
@@ -1990,7 +2040,7 @@ L_zzgfocst:
 
 /*           The back target is an extended shape. */
 
-	    if (bdist <= svmnbr) {
+	    if (bdist <= __state->svmnbr) {
 
 /*              The observer is INSIDE the back target. We */
 /*              treat this as an error. */
@@ -2004,7 +2054,7 @@ L_zzgfocst:
 		sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
-	    } else if (vnorm_(bckfrt) <= svmnbr) {
+	    } else if (vnorm_(bckfrt) <= __state->svmnbr) {
 		setmsg_("FRONT target is inside BACK target.", (ftnlen)35);
 		sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
 		chkout_("ZZGFOCST", (ftnlen)8);
@@ -2041,15 +2091,15 @@ L_zzgfocst:
 /*        outer bounding sphere of the extended target. */
 
 	if (pntocc) {
-	    srad = svmxfr * 1.01;
+	    srad = __state->svmxfr * 1.01;
 	    tdist = fdist;
 	} else {
-	    srad = svmxbr * 1.01;
+	    srad = __state->svmxbr * 1.01;
 	    tdist = bdist;
 	}
 	if (srad < tdist) {
 	    d__1 = srad / tdist;
-	    maxang = dasine_(&d__1, &c_b199);
+	    maxang = dasine_(&d__1, &__state->c_b199);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
@@ -2075,11 +2125,11 @@ L_zzgfocst:
 /*        adjust the sphere for our light time error. */
 
 	if (pntocc) {
-	    d__1 = svmnfr * .98999999999999999 / fdist;
-	    minang = dasine_(&d__1, &c_b199);
+	    d__1 = __state->svmnfr * .98999999999999999 / fdist;
+	    minang = dasine_(&d__1, &__state->c_b199);
 	} else {
-	    d__1 = svmnbr * .98999999999999999 / bdist;
-	    minang = dasine_(&d__1, &c_b199);
+	    d__1 = __state->svmnbr * .98999999999999999 / bdist;
+	    minang = dasine_(&d__1, &__state->c_b199);
 	}
 	if (failed_()) {
 	    chkout_("ZZGFOCST", (ftnlen)8);
@@ -2146,10 +2196,11 @@ L_zzgfocst:
 
 /*           The front body is the extended one. */
 
-	    ++ncalls;
-	    sincpt_(svfmth, svfnam, time, svffrm, svcorr, svonam, "J2000", 
-		    bckpos, spoint, &trgepc, srfvec, &found, (ftnlen)500, (
-		    ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
+	    ++__state->ncalls;
+	    sincpt_(__state->svfmth, __state->svfnam, time, __state->svffrm, 
+		    __state->svcorr, __state->svonam, "J2000", bckpos, spoint,
+		     &trgepc, srfvec, &found, (ftnlen)500, (ftnlen)36, (
+		    ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
@@ -2173,9 +2224,10 @@ L_zzgfocst:
 
 /*           The back body is the extended one. */
 
-	    sincpt_(svbmth, svbnam, time, svbfrm, svcorr, svonam, "J2000", 
-		    frtpos, spoint, &trgepc, srfvec, &found, (ftnlen)500, (
-		    ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
+	    sincpt_(__state->svbmth, __state->svbnam, time, __state->svbfrm, 
+		    __state->svcorr, __state->svonam, "J2000", frtpos, spoint,
+		     &trgepc, srfvec, &found, (ftnlen)500, (ftnlen)36, (
+		    ftnlen)32, (ftnlen)5, (ftnlen)36, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("ZZGFOCST", (ftnlen)8);
 		return 0;
@@ -2205,8 +2257,8 @@ L_zzgfocst:
 
 	setmsg_("The combination of shapes of front and back targets is not "
 		"supported: front shape = #; back shape = #.", (ftnlen)102);
-	errch_("#", svfshp, (ftnlen)1, (ftnlen)9);
-	errch_("#", svbshp, (ftnlen)1, (ftnlen)9);
+	errch_("#", __state->svfshp, (ftnlen)1, (ftnlen)9);
+	errch_("#", __state->svbshp, (ftnlen)1, (ftnlen)9);
 	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
 	chkout_("ZZGFOCST", (ftnlen)8);
 	return 0;

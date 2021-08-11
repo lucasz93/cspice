@@ -1,15 +1,21 @@
-/* zzdsksbi.f -- translated by f2c (version 19980913).
+/* zzdsksbi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__24 = 24;
-static integer c__8 = 8;
-static integer c__3 = 3;
+extern zzdsksbi_init_t __zzdsksbi_init;
+static zzdsksbi_state_t* get_zzdsksbi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksbi)
+		state->zzdsksbi = __cspice_allocate_module(sizeof(
+	zzdsksbi_state_t), &__zzdsksbi_init, sizeof(__zzdsksbi_init));
+	return state->zzdsksbi;
+
+}
 
 /* $Procedure ZZDSKSBI ( DSK, initialize API segment buffer ) */
 /* Subroutine */ int zzdsksbi_(integer *maxbod, integer *stsize, integer *
@@ -22,11 +28,15 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cleard_(integer *, 
-	    doublereal *), cleari_(integer *, integer *), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzdsksbi_state_t* __state = get_zzdsksbi_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -551,10 +561,10 @@ static integer c__3 = 3;
     i__1 = *stsize;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	sthan[i__ - 1] = 0;
-	cleard_(&c__24, &stdscr[i__ * 24 - 24]);
-	cleari_(&c__8, &stdlad[(i__ << 3) - 8]);
-	cleard_(&c__3, &stoff[i__ * 3 - 3]);
-	cleard_(&c__3, &stctr[i__ * 3 - 3]);
+	cleard_(&__state->c__24, &stdscr[i__ * 24 - 24]);
+	cleari_(&__state->c__8, &stdlad[(i__ << 3) - 8]);
+	cleard_(&__state->c__3, &stoff[i__ * 3 - 3]);
+	cleard_(&__state->c__3, &stctr[i__ * 3 - 3]);
 	strad[i__ - 1] = 0.;
     }
     *stfree = 1;

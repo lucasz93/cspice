@@ -1,9 +1,17 @@
-/* zzrxr.f -- translated by f2c (version 19980913).
+/* zzrxr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzrxr_state_t;
+static zzrxr_state_t* get_zzrxr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZRXR ( Multiply sequence of 3x3 matrices ) */
 /* Subroutine */ int zzrxr_(doublereal *matrix, integer *n, doublereal *
@@ -18,10 +26,16 @@
     /* Local variables */
     integer incr;
     doublereal temp[18]	/* was [3][3][2] */;
-    integer i__, j, k;
+    integer i__;
+    integer j;
+    integer k;
     extern /* Subroutine */ int ident_(doublereal *);
-    integer get, put;
+    integer get;
+    integer put;
 
+
+    /* Module state */
+    zzrxr_state_t* __state = get_zzrxr_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

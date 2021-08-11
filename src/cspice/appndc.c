@@ -1,9 +1,17 @@
-/* appndc.f -- translated by f2c (version 19980913).
+/* appndc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int appndc_state_t;
+static appndc_state_t* get_appndc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      APPNDC ( Append an item to a character cell ) */
 /* Subroutine */ int appndc_(char *item, char *cell, ftnlen item_len, ftnlen 
@@ -14,15 +22,19 @@
 
     /* Local variables */
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer sizec_(char *, ftnlen);
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
     integer nwcard;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    appndc_state_t* __state = get_appndc_state();
 /* $ Abstract */
 
 /*      Append an item to a character cell. */

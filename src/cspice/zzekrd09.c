@@ -1,13 +1,21 @@
-/* zzekrd09.f -- translated by f2c (version 19980913).
+/* zzekrd09.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekrd09_init_t __zzekrd09_init;
+static zzekrd09_state_t* get_zzekrd09_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrd09)
+		state->zzekrd09 = __cspice_allocate_module(sizeof(
+	zzekrd09_state_t), &__zzekrd09_init, sizeof(__zzekrd09_init));
+	return state->zzekrd09;
+
+}
 
 /* $Procedure   ZZEKRD09 ( EK, read class 9 column entry elements ) */
 /* Subroutine */ int zzekrd09_(integer *handle, integer *segdsc, integer *
@@ -26,20 +34,34 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
 	    ftnlen);
     char cflag[1];
-    integer l, q, r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer l;
+    integer q;
+    integer r__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer ncols;
     char column[32];
-    integer addrss, colidx, datbas, metloc, nflbas, offset;
+    integer addrss;
+    integer colidx;
+    integer datbas;
+    integer metloc;
+    integer nflbas;
+    integer offset;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), dasrdi_(integer *, 
-	    integer *, integer *, integer *), dasrdc_(integer *, integer *, 
-	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
     integer spp;
 
+
+    /* Module state */
+    zzekrd09_state_t* __state = get_zzekrd09_state();
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 9 column. */
@@ -910,7 +932,8 @@ static integer c__1 = 1;
 	r__ = *recno - q * 1014;
 	offset = r__ + (q << 10);
 	addrss = nflbas + offset;
-	dasrdc_(handle, &addrss, &addrss, &c__1, &c__1, cflag, (ftnlen)1);
+	dasrdc_(handle, &addrss, &addrss, &__state->c__1, &__state->c__1, 
+		cflag, (ftnlen)1);
 	*isnull = *(unsigned char *)cflag == 'T';
 	if (*isnull) {
 	    return 0;
@@ -930,7 +953,7 @@ static integer c__1 = 1;
     r__ = *recno - q * spp;
     addrss = datbas + (q << 10) + (r__ - 1) * l + 1;
     i__1 = addrss + l - 1;
-    dasrdc_(handle, &addrss, &i__1, &c__1, &l, cval, cval_len);
+    dasrdc_(handle, &addrss, &i__1, &__state->c__1, &l, cval, cval_len);
 
 /*     Blank-pad CVAL if required. */
 

@@ -1,9 +1,17 @@
-/* cardc.f -- translated by f2c (version 19980913).
+/* cardc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cardc_state_t;
+static cardc_state_t* get_cardc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            CARDC ( Cardinality of a character cell ) */
 integer cardc_(char *cell, ftnlen cell_len)
@@ -12,13 +20,19 @@ integer cardc_(char *cell, ftnlen cell_len)
     integer ret_val;
 
     /* Local variables */
-    integer card, size;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dechar_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer card;
+    integer size;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dechar_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    cardc_state_t* __state = get_cardc_state();
 /* $ Abstract */
 
 /*     Return the cardinality (number of elements) of a character cell. */

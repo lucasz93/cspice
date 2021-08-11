@@ -1,17 +1,21 @@
-/* zzekqini.f -- translated by f2c (version 19980913).
+/* zzekqini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27869 = 27869;
-static integer c__100 = 100;
-static integer c__2000 = 2000;
-static integer c__0 = 0;
-static integer c__19 = 19;
+extern zzekqini_init_t __zzekqini_init;
+static zzekqini_state_t* get_zzekqini_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekqini)
+		state->zzekqini = __cspice_allocate_module(sizeof(
+	zzekqini_state_t), &__zzekqini_init, sizeof(__zzekqini_init));
+	return state->zzekqini;
+
+}
 
 /* $Procedure   ZZEKQINI ( Private: EK, intialize encoded query ) */
 /* Subroutine */ int zzekqini_(integer *isize, integer *dsize, integer *eqryi,
@@ -26,14 +30,20 @@ static integer c__19 = 19;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cleard_(integer *, 
-	    doublereal *), cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ssizei_(integer *, integer *), appndi_(integer *, 
-	    integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int appndi_(integer *, integer *);
 
+
+    /* Module state */
+    zzekqini_state_t* __state = get_zzekqini_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -696,7 +706,7 @@ static integer c__19 = 19;
 	setmsg_("Size of integer component of encoded query is #; at least #"
 		" elements are required.", (ftnlen)82);
 	errint_("#", isize, (ftnlen)1);
-	errint_("#", &c__27869, (ftnlen)1);
+	errint_("#", &__state->c__27869, (ftnlen)1);
 	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
 	chkout_("ZZEKQINI", (ftnlen)8);
 	return 0;
@@ -705,7 +715,7 @@ static integer c__19 = 19;
 	setmsg_("Size of d.p. component of encoded query is #; at least # el"
 		"ements are required.", (ftnlen)79);
 	errint_("#", dsize, (ftnlen)1);
-	errint_("#", &c__100, (ftnlen)1);
+	errint_("#", &__state->c__100, (ftnlen)1);
 	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
 	chkout_("ZZEKQINI", (ftnlen)8);
 	return 0;
@@ -715,7 +725,7 @@ static integer c__19 = 19;
 		" of at least # characters is required.", (ftnlen)97);
 	i__1 = i_len(eqryc, eqryc_len);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__2000, (ftnlen)1);
+	errint_("#", &__state->c__2000, (ftnlen)1);
 	sigerr_("SPICE(STRINGTOOSHORT)", (ftnlen)21);
 	chkout_("ZZEKQINI", (ftnlen)8);
 	return 0;
@@ -731,12 +741,12 @@ static integer c__19 = 19;
 /*     fixed-size portion of the encoded query: */
 
     for (i__ = 1; i__ <= 19; ++i__) {
-	appndi_(&c__0, eqryi);
+	appndi_(&__state->c__0, eqryi);
     }
 
 /*     Clear out the fixed-size portion of the integer cell. */
 
-    cleari_(&c__19, &eqryi[6]);
+    cleari_(&__state->c__19, &eqryi[6]);
 
 /*     Fill in the architecture version. */
 

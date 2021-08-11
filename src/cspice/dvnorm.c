@@ -1,9 +1,17 @@
-/* dvnorm.f -- translated by f2c (version 19980913).
+/* dvnorm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dvnorm_state_t;
+static dvnorm_state_t* get_dvnorm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DVNORM ( Derivative of vector norm ) */
 doublereal dvnorm_(doublereal *state)
@@ -14,8 +22,12 @@ doublereal dvnorm_(doublereal *state)
     /* Local variables */
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal xhat[3];
-    extern doublereal vdot_(doublereal *, doublereal *), vnorm_(doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vnorm_(doublereal *);
 
+
+    /* Module state */
+    dvnorm_state_t* __state = get_dvnorm_state();
 /* $ Abstract */
 
 /*     Function to calculate the derivative of the norm of a 3-vector. */

@@ -1,14 +1,21 @@
-/* spks05.f -- translated by f2c (version 19980913).
+/* spks05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spks05_init_t __spks05_init;
+static spks05_state_t* get_spks05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks05)
+		state->spks05 = __cspice_allocate_module(sizeof(
+	spks05_state_t), &__spks05_init, sizeof(__spks05_init));
+	return state->spks05;
+
+}
 
 /* $Procedure SPKS05 ( S/P Kernel, subset, type 5 ) */
 /* Subroutine */ int spks05_(integer *handle, integer *baddr, integer *eaddr, 
@@ -20,16 +27,23 @@ static integer c__1 = 1;
 
     /* Local variables */
     doublereal data[6];
-    integer offe, nrec, ndir, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafgda_(integer *, integer *, integer *, doublereal *)
-	    ;
+    integer offe;
+    integer nrec;
+    integer ndir;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     doublereal gm;
     integer offset;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer rec[2];
 
+
+    /* Module state */
+    spks05_state_t* __state = get_spks05_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 5 */
@@ -259,7 +273,7 @@ static integer c__1 = 1;
 	i__2 = offset + 1;
 	i__3 = offset + 6;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__6);
+	dafada_(data, &__state->c__6);
     }
 
 /*     Copy epochs REC(1) through REC(2) to the output file. */
@@ -269,7 +283,7 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Put every 100'th epoch into the directory. */
@@ -279,15 +293,15 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Store the GM of the central body and the number of records */
 /*     to end the segment. */
 
-    dafada_(&gm, &c__1);
+    dafada_(&gm, &__state->c__1);
     d__1 = (doublereal) (rec[1] - rec[0] + 1);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     chkout_("SPKS05", (ftnlen)6);
     return 0;
 } /* spks05_ */

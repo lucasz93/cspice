@@ -1,9 +1,17 @@
-/* lnknfn.f -- translated by f2c (version 19980913).
+/* lnknfn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lnknfn_state_t;
+static lnknfn_state_t* get_lnknfn_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LNKNFN ( LNK, number of free nodes ) */
 integer lnknfn_(integer *pool)
@@ -11,6 +19,9 @@ integer lnknfn_(integer *pool)
     /* System generated locals */
     integer ret_val;
 
+
+    /* Module state */
+    lnknfn_state_t* __state = get_lnknfn_state();
 /* $ Abstract */
 
 /*     Return the number of free nodes in a doubly linked list pool. */

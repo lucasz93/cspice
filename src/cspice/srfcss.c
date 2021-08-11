@@ -1,23 +1,35 @@
-/* srfcss.f -- translated by f2c (version 19980913).
+/* srfcss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int srfcss_state_t;
+static srfcss_state_t* get_srfcss_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SRFCSS ( Surface ID and body string to surface string ) */
 /* Subroutine */ int srfcss_(integer *code, char *bodstr, char *srfstr, 
 	logical *isname, ftnlen bodstr_len, ftnlen srfstr_len)
 {
     extern /* Subroutine */ int zzsrfc2n_(integer *, integer *, char *, 
-	    logical *, ftnlen), chkin_(char *, ftnlen), bods2c_(char *, 
-	    integer *, logical *, ftnlen);
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     integer bodyid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    srfcss_state_t* __state = get_srfcss_state();
 /* $ Abstract */
 
 /*     Translate a surface ID code, together with a body string, to the */

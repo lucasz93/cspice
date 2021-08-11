@@ -1,9 +1,17 @@
-/* pckcls.f -- translated by f2c (version 19980913).
+/* pckcls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pckcls_state_t;
+static pckcls_state_t* get_pckcls_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure PCKCLS ( PCK, close file ) */
 /* Subroutine */ int pckcls_(integer *handle)
@@ -17,12 +25,18 @@
     logical found;
     extern /* Subroutine */ int daffna_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *), dafcls_(integer *);
+    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int dafcls_(integer *);
     char access[5];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pckcls_state_t* __state = get_pckcls_state();
 /* $ Abstract */
 
 /*     Close an open PCK file. */

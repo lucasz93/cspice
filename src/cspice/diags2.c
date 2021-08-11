@@ -1,15 +1,21 @@
-/* diags2.f -- translated by f2c (version 19980913).
+/* diags2.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static doublereal c_b6 = 1.;
-static integer c__2 = 2;
+extern diags2_init_t __diags2_init;
+static diags2_state_t* get_diags2_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->diags2)
+		state->diags2 = __cspice_allocate_module(sizeof(
+	diags2_state_t), &__diags2_init, sizeof(__diags2_init));
+	return state->diags2;
+
+}
 
 /* $Procedure  DIAGS2   ( Diagonalize symmetric 2x2 matrix ) */
 /* Subroutine */ int diags2_(doublereal *symmat, doublereal *diag, doublereal 
@@ -17,21 +23,31 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static doublereal ident[4]	/* was [2][2] */ = { 1.,0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;
 
     /* Local variables */
-    doublereal tmpd, tmpv[2], a, b, c__, root1[2], root2[2], scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vhatg_(doublereal *, 
-	    integer *, doublereal *), moved_(doublereal *, integer *, 
-	    doublereal *), rquad_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal tmpd;
+    doublereal tmpv[2];
+    doublereal a;
+    doublereal b;
+    doublereal c__;
+    doublereal root1[2];
+    doublereal root2[2];
+    doublereal scale;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int rquad_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
     doublereal eigvec[2];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    diags2_state_t* __state = get_diags2_state();
 /* $ Abstract */
 
 /*     Diagonalize a symmetric 2x2 matrix. */
@@ -376,8 +392,8 @@ static integer c__2 = 2;
 /*     eigenvector determination is simplified by ruling out this */
 /*     case. */
     if (symmat[2] == 0.) {
-	moved_(ident, &c__4, rotate);
-	moved_(symmat, &c__4, diag);
+	moved_(__state->ident, &__state->c__4, rotate);
+	moved_(symmat, &__state->c__4, diag);
 
 /*        Explicity zero out the (2,1) entry of DIAG, since DIAG is */
 /*        guaranteed to be diagonal. */
@@ -416,7 +432,7 @@ static integer c__2 = 2;
 /* Computing 2nd power */
     d__3 = b;
     d__2 = a * c__ - d__3 * d__3;
-    rquad_(&c_b6, &d__1, &d__2, root1, root2);
+    rquad_(&__state->c_b6, &d__1, &d__2, root1, root2);
 
 /*     ROOT1 is the root corresponding to the positive discriminant term; */
 /*     this is guaranteed by RQUAD. */
@@ -530,8 +546,8 @@ static integer c__2 = 2;
 
 /*        Unitize the eigenvector. */
 
-	vhatg_(eigvec, &c__2, tmpv);
-	moved_(tmpv, &c__2, eigvec);
+	vhatg_(eigvec, &__state->c__2, tmpv);
+	moved_(tmpv, &__state->c__2, eigvec);
 	rotate[0] = eigvec[1];
 	rotate[1] = -eigvec[0];
 	rotate[2] = eigvec[0];
@@ -556,8 +572,8 @@ static integer c__2 = 2;
 
 /*        Unitize the eigenvector. */
 
-	vhatg_(eigvec, &c__2, tmpv);
-	moved_(tmpv, &c__2, eigvec);
+	vhatg_(eigvec, &__state->c__2, tmpv);
+	moved_(tmpv, &__state->c__2, eigvec);
 	rotate[0] = eigvec[0];
 	rotate[1] = eigvec[1];
 	rotate[2] = -eigvec[1];

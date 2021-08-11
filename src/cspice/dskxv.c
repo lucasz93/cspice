@@ -1,9 +1,21 @@
-/* dskxv.f -- translated by f2c (version 19980913).
+/* dskxv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern dskxv_init_t __dskxv_init;
+static dskxv_state_t* get_dskxv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskxv)
+		state->dskxv = __cspice_allocate_module(sizeof(dskxv_state_t),
+	 &__dskxv_init, sizeof(__dskxv_init));
+	return state->dskxv;
+
+}
 
 /* $Procedure DSKXV ( DSK, ray-surface intercept, vectorized ) */
 /* Subroutine */ int dskxv_(logical *pri, char *target, integer *nsurf, 
@@ -13,9 +25,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvfrm[32] = "                                ";
-    static integer prvtcd = 0;
 
     /* System generated locals */
     integer i__1;
@@ -26,34 +35,36 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzpctrck_(integer *, logical *), zzctruin_(integer *);
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static integer trgcde, fixfid;
-    logical frmfnd, trgfnd;
+    logical frmfnd;
+    logical trgfnd;
     integer fxcent;
-    static integer svtcde;
     logical update;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer frmctr[2];
     integer fxtpid;
     logical newfrm;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer fxclss;
-    static integer trgctr[2];
     logical newtrg;
-    static logical svtfnd;
-    static char svtnam[36];
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *), zzsbfxr_(
-	    integer *, integer *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
+	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	     logical *);
 
+
+    /* Module state */
+    dskxv_state_t* __state = get_dskxv_state();
 /* $ Abstract */
 
 /*     Compute ray-surface intercepts for a set of rays, using data */
@@ -1073,12 +1084,12 @@
 	return 0;
     }
     chkin_("DSKXV", (ftnlen)5);
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(trgctr);
-	zzctruin_(frmctr);
+	zzctruin_(__state->trgctr);
+	zzctruin_(__state->frmctr);
 	if (failed_()) {
 	    chkout_("DSKXV", (ftnlen)5);
 	    return 0;
@@ -1120,8 +1131,9 @@
 
 /*     Obtain integer codes for the target and reference frame. */
 
-    zzbods2c_(trgctr, svtnam, &svtcde, &svtfnd, target, &trgcde, &trgfnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->trgctr, __state->svtnam, &__state->svtcde, &
+	    __state->svtfnd, target, &__state->trgcde, &trgfnd, (ftnlen)36, 
+	    target_len);
     if (failed_()) {
 	chkout_("DSKXV", (ftnlen)5);
 	return 0;
@@ -1137,20 +1149,21 @@
 	chkout_("DSKXV", (ftnlen)5);
 	return 0;
     }
-    newfrm = s_cmp(fixref, prvfrm, fixref_len, (ftnlen)32) != 0 || first;
-    newtrg = trgcde != prvtcd || first;
+    newfrm = s_cmp(fixref, __state->prvfrm, fixref_len, (ftnlen)32) != 0 || 
+	    __state->first;
+    newtrg = __state->trgcde != __state->prvtcd || __state->first;
 
 /*     Get the frame ID if the pool state has changed. The */
 /*     first call to ZZPCKTRCK will indicate an update. */
 
-    zzpctrck_(frmctr, &update);
+    zzpctrck_(__state->frmctr, &update);
     if (update || newfrm || newtrg) {
-	namfrm_(fixref, &fixfid, fixref_len);
+	namfrm_(fixref, &__state->fixfid, fixref_len);
 	if (failed_()) {
 	    chkout_("DSKXV", (ftnlen)5);
 	    return 0;
 	}
-	if (fixfid == 0) {
+	if (__state->fixfid == 0) {
 	    setmsg_("Reference frame # is not recognized by the SPICE frame "
 		    "subsystem. Possibly a required frame definition kernel h"
 		    "as not been loaded.", (ftnlen)130);
@@ -1162,7 +1175,7 @@
 
 /*        Determine the attributes of the frame designated by FIXREF. */
 
-	frinfo_(&fixfid, &fxcent, &fxclss, &fxtpid, &frmfnd);
+	frinfo_(&__state->fixfid, &fxcent, &fxclss, &fxtpid, &frmfnd);
 	if (failed_()) {
 	    chkout_("DSKXV", (ftnlen)5);
 	    return 0;
@@ -1179,7 +1192,7 @@
 
 /*        Make sure that FIXREF is centered at the target body's center. */
 
-	if (fxcent != trgcde) {
+	if (fxcent != __state->trgcde) {
 	    setmsg_("Reference frame # is not centered at the target body #."
 		    " The ID code of the frame center is #.", (ftnlen)93);
 	    errch_("#", fixref, (ftnlen)1, fixref_len);
@@ -1192,12 +1205,12 @@
 
 /*        We have a valid frame at this point. Save the name. */
 
-	first = FALSE_;
-	s_copy(prvfrm, fixref, (ftnlen)32, fixref_len);
+	__state->first = FALSE_;
+	s_copy(__state->prvfrm, fixref, (ftnlen)32, fixref_len);
 
 /*        Update the previous target ID code as well. */
 
-	prvtcd = trgcde;
+	__state->prvtcd = __state->trgcde;
     }
 
 /*     TRGCDE and FIXFID are set. */
@@ -1207,8 +1220,9 @@
 
     i__1 = *nrays;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzsbfxr_(&trgcde, nsurf, srflst, et, &fixfid, &vtxarr[i__ * 3 - 3], &
-		dirarr[i__ * 3 - 3], &xptarr[i__ * 3 - 3], &fndarr[i__ - 1]);
+	zzsbfxr_(&__state->trgcde, nsurf, srflst, et, &__state->fixfid, &
+		vtxarr[i__ * 3 - 3], &dirarr[i__ * 3 - 3], &xptarr[i__ * 3 - 
+		3], &fndarr[i__ - 1]);
 	if (failed_()) {
 	    chkout_("DSKXV", (ftnlen)5);
 	    return 0;

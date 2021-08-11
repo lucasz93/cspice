@@ -1,13 +1,21 @@
-/* bedec.f -- translated by f2c (version 19980913).
+/* bedec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern bedec_init_t __bedec_init;
+static bedec_state_t* get_bedec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->bedec)
+		state->bedec = __cspice_allocate_module(sizeof(bedec_state_t),
+	 &__bedec_init, sizeof(__bedec_init));
+	return state->bedec;
+
+}
 
 /* $Procedure            BEDEC  ( Be a decimal number? ) */
 logical bedec_(char *string, ftnlen string_len)
@@ -19,10 +27,17 @@ logical bedec_(char *string, ftnlen string_len)
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer c__, d__, e, l;
-    extern logical beint_(char *, ftnlen), beuns_(char *, ftnlen);
+    integer c__;
+    integer d__;
+    integer e;
+    integer l;
+    extern logical beint_(char *, ftnlen);
+    extern logical beuns_(char *, ftnlen);
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    bedec_state_t* __state = get_bedec_state();
 /* $ Abstract */
 
 /*     Determine whether a string represents a decimal number. */
@@ -192,7 +207,7 @@ logical bedec_(char *string, ftnlen string_len)
 
 /*     First determine whether or not a decimal point is present. */
 
-    d__ = pos_(string, ".", &c__1, string_len, (ftnlen)1);
+    d__ = pos_(string, ".", &__state->c__1, string_len, (ftnlen)1);
     c__ = d__ - 1;
     e = d__ + 1;
     if (d__ == 0) {

@@ -1,13 +1,21 @@
-/* zzrepsub.f -- translated by f2c (version 19980913).
+/* zzrepsub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzrepsub_init_t __zzrepsub_init;
+static zzrepsub_state_t* get_zzrepsub_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrepsub)
+		state->zzrepsub = __cspice_allocate_module(sizeof(
+	zzrepsub_state_t), &__zzrepsub_init, sizeof(__zzrepsub_init));
+	return state->zzrepsub;
+
+}
 
 /* $Procedure      ZZREPSUB ( Replace one substring with another ) */
 /* Subroutine */ int zzrepsub_(char *in, integer *left, integer *right, char *
@@ -21,10 +29,21 @@ static integer c__3 = 3;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer next, i__, inlen;
+    integer next;
+    integer i__;
+    integer inlen;
     extern integer sumai_(integer *, integer *);
-    integer remain, myleft, strlen, outlen, myrght, end, use[3];
+    integer remain;
+    integer myleft;
+    integer strlen;
+    integer outlen;
+    integer myrght;
+    integer end;
+    integer use[3];
 
+
+    /* Module state */
+    zzrepsub_state_t* __state = get_zzrepsub_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -252,7 +271,7 @@ static integer c__3 = 3;
 /*     is longer than the original substring. The main thing is to */
 /*     avoid overwriting characters that have yet to be moved. */
 
-    end = sumai_(use, &c__3);
+    end = sumai_(use, &__state->c__3);
     if (myleft + strlen > *right) {
 	next = end;
 	for (i__ = use[2]; i__ >= 1; --i__) {

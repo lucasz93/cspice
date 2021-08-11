@@ -1,14 +1,21 @@
-/* pckopn.f -- translated by f2c (version 19980913).
+/* pckopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__5 = 5;
+extern pckopn_init_t __pckopn_init;
+static pckopn_state_t* get_pckopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckopn)
+		state->pckopn = __cspice_allocate_module(sizeof(
+	pckopn_state_t), &__pckopn_init, sizeof(__pckopn_init));
+	return state->pckopn;
+
+}
 
 /* $Procedure PCKOPN ( PCK, open new file ) */
 /* Subroutine */ int pckopn_(char *name__, char *ifname, integer *ncomch, 
@@ -18,10 +25,13 @@ static integer c__5 = 5;
     integer ncomr;
     extern logical failed_(void);
     extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen), chkout_(
-	    char *, ftnlen);
+	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pckopn_state_t* __state = get_pckopn_state();
 /* $ Abstract */
 
 /*     Create a new PCK file, returning the handle of the opened file. */
@@ -204,8 +214,8 @@ static integer c__5 = 5;
 
 /*     Just do it. All of the error handling is taken care of for us. */
 
-    dafonw_(name__, "PCK", &c__2, &c__5, ifname, &ncomr, handle, name_len, (
-	    ftnlen)3, ifname_len);
+    dafonw_(name__, "PCK", &__state->c__2, &__state->c__5, ifname, &ncomr, 
+	    handle, name_len, (ftnlen)3, ifname_len);
     if (failed_()) {
 
 /*        If we failed, make sure that HANDLE does not contain a value */

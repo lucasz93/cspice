@@ -1,16 +1,21 @@
-/* zzilusta.f -- translated by f2c (version 19980913).
+/* zzilusta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__36 = 36;
-static integer c__3 = 3;
-static integer c__6 = 6;
+extern zzilusta_init_t __zzilusta_init;
+static zzilusta_state_t* get_zzilusta_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzilusta)
+		state->zzilusta = __cspice_allocate_module(sizeof(
+	zzilusta_state_t), &__zzilusta_init, sizeof(__zzilusta_init));
+	return state->zzilusta;
+
+}
 
 /* $Procedure ZZILUSTA ( Illumination angle states ) */
 /* Subroutine */ int zzilusta_(char *method, char *target, char *illum, 
@@ -25,38 +30,45 @@ static integer c__6 = 6;
     /* Local variables */
     doublereal uvec[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *), zzcorepc_(char *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen), zzvalcor_(char *, logical *, 
-	    ftnlen), zzcorsxf_(logical *, doublereal *, doublereal *, 
-	    doublereal *), chkin_(char *, ftnlen), errch_(char *, char *, 
-	    ftnlen, ftnlen), moved_(doublereal *, integer *, doublereal *);
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal starg[6];
     extern doublereal dvsep_(doublereal *, doublereal *);
-    doublereal ltsrc, xform[36]	/* was [6][6] */;
+    doublereal ltsrc;
+    doublereal xform[36]	/* was [6][6] */;
     logical uselt;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), vzero_(doublereal *
-	    ), failed_(void);
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical vzero_(doublereal *);
+    extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     doublereal lt;
     extern doublereal clight_(void);
     logical attblk[6];
     doublereal obssta[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal srcsta[6];
     extern /* Subroutine */ int spkcpo_(char *, doublereal *, char *, char *, 
 	    char *, doublereal *, char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), vsclip_(
-	    doublereal *, doublereal *);
-    doublereal fxnsta[6], nrmsta[6];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), spkcpt_(doublereal *,
-	     char *, char *, doublereal *, char *, char *, char *, char *, 
-	    doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    doublereal fxnsta[6];
+    doublereal nrmsta[6];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int spkcpt_(doublereal *, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal etsurf;
     extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
 	    ;
@@ -66,6 +78,9 @@ static integer c__6 = 6;
 	    doublereal *, ftnlen, ftnlen);
     doublereal dlt;
 
+
+    /* Module state */
+    zzilusta_state_t* __state = get_zzilusta_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -459,20 +474,20 @@ static integer c__6 = 6;
 
 /*        Correct the state transformation. */
 
-	zzcorsxf_(&c_false, &dlt, xform, tmpxfm);
-	moved_(tmpxfm, &c__36, xform);
+	zzcorsxf_(&__state->c_false, &dlt, xform, tmpxfm);
+	moved_(tmpxfm, &__state->c__36, xform);
     }
 
 /*     Create a body-fixed state vector for the normal vector. */
 /*     Convert the normal vector to unit length for safety. */
 
     vhat_(normal, fxnsta);
-    cleard_(&c__3, &fxnsta[3]);
+    cleard_(&__state->c__3, &fxnsta[3]);
 
 /*     Transform the state of the normal vector to the inertial */
 /*     frame. */
 
-    mxvg_(xform, fxnsta, &c__6, &c__6, nrmsta);
+    mxvg_(xform, fxnsta, &__state->c__6, &__state->c__6, nrmsta);
 
 /*     We also must adjust the state of the illumination source for the */
 /*     rate of change with respect to ET of the observer-surface point */
@@ -496,7 +511,7 @@ static integer c__6 = 6;
 /*     The surface-point observer state we wish to use is the negative */
 /*     of the observer-surface point state. */
 
-    vminug_(starg, &c__6, obssta);
+    vminug_(starg, &__state->c__6, obssta);
 
 /*     Compute the state (value and rate of change ) */
 /*     of the phase angle. */

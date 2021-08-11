@@ -1,16 +1,29 @@
-/* pltexp.f -- translated by f2c (version 19980913).
+/* pltexp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pltexp_state_t;
+static pltexp_state_t* get_pltexp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure PLTEXP ( Plate expander ) */
 /* Subroutine */ int pltexp_(doublereal *iverts, doublereal *delta, 
 	doublereal *overts)
 {
-    doublereal d__, s, sclctr[3];
+    doublereal d__;
+    doublereal s;
+    doublereal sclctr[3];
 
+
+    /* Module state */
+    pltexp_state_t* __state = get_pltexp_state();
 /* $ Abstract */
 
 /*     Expand a triangular plate by a specified amount. The expanded */

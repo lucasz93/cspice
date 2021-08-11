@@ -1,22 +1,35 @@
-/* ekffld.f -- translated by f2c (version 19980913).
+/* ekffld.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekffld_state_t;
+static ekffld_state_t* get_ekffld_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      EKFFLD ( EK, finish fast write ) */
 /* Subroutine */ int ekffld_(integer *handle, integer *segno, integer *rcptrs)
 {
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *), 
-	    chkin_(char *, ftnlen);
-    integer stype, segdsc[24];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer stype;
+    integer segdsc[24];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzekff01_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    ekffld_state_t* __state = get_ekffld_state();
 /* $ Abstract */
 
 /*     Complete a fast write operation on a new E-kernel segment. */

@@ -1,16 +1,21 @@
-/* spkr20.f -- translated by f2c (version 19980913).
+/* spkr20.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
-static integer c__3 = 3;
+extern spkr20_init_t __spkr20_init;
+static spkr20_state_t* get_spkr20_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr20)
+		state->spkr20 = __cspice_allocate_module(sizeof(
+	spkr20_state_t), &__spkr20_init, sizeof(__spkr20_init));
+	return state->spkr20;
+
+}
 
 /* $Procedure      SPKR20 ( SPK, read record from segment, type 20 ) */
 /* Subroutine */ int spkr20_(integer *handle, doublereal *descr, doublereal *
@@ -25,19 +30,28 @@ static integer c__3 = 3;
     /* Local variables */
     integer nrec;
     doublereal init;
-    integer size, i__, begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    integer size;
+    integer i__;
+    integer begin;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer recno;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     dafgda_(integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     doublereal dc[2];
     integer ic[6];
-    doublereal recbeg, dscale;
+    doublereal recbeg;
+    doublereal dscale;
     integer recadr;
     extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
 	    integer *);
-    doublereal tscale, initjd, radius, intlen, initfr;
+    doublereal tscale;
+    doublereal initjd;
+    doublereal radius;
+    doublereal intlen;
+    doublereal initfr;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
@@ -51,6 +65,9 @@ static integer c__3 = 3;
     extern doublereal spd_(void);
     doublereal pos[3];
 
+
+    /* Module state */
+    spkr20_state_t* __state = get_spkr20_state();
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 20 */
@@ -240,7 +257,7 @@ static integer c__3 = 3;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 
@@ -331,7 +348,7 @@ static integer c__3 = 3;
 /*        calculating the indices of subsequent elements to be removed. */
 
 	loc = i__ * nterms + 3 - (i__ - 1);
-	remlad_(&c__1, &loc, record, &size);
+	remlad_(&__state->c__1, &loc, record, &size);
 
 /*        Note that SIZE is an in-out argument; on output it indicates */
 /*        the size of the array after removal of the indicated */
@@ -348,7 +365,7 @@ static integer c__3 = 3;
 /*     elements, the target index is the same as if we had copied the */
 /*     record directly to the output array. */
 
-    moved_(pos, &c__3, &record[recsiz]);
+    moved_(pos, &__state->c__3, &record[recsiz]);
 
 /*     Convert the velocity Chebyshev coefficients to units of km/s. */
 

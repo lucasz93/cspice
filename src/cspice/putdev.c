@@ -1,24 +1,34 @@
-/* putdev.f -- translated by f2c (version 19980913).
+/* putdev.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern putdev_init_t __putdev_init;
+static putdev_state_t* get_putdev_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->putdev)
+		state->putdev = __cspice_allocate_module(sizeof(
+	putdev_state_t), &__putdev_init, sizeof(__putdev_init));
+	return state->putdev;
+
+}
 
 /* $Procedure      PUTDEV ( Store Error Output Device Specification ) */
 /* Subroutine */ int putdev_0_(int n__, char *device, ftnlen device_len)
 {
     /* Initialized data */
 
-    static char savdev[255] = "SCREEN                                       "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                  ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    putdev_state_t* __state = get_putdev_state();
 /* $ Abstract */
 
 /*     PUTDEV is a low-level data structure access routine which stores */
@@ -329,7 +339,7 @@
 
 /*     Executable Code: */
 
-    s_copy(savdev, device, (ftnlen)255, device_len);
+    s_copy(__state->savdev, device, (ftnlen)255, device_len);
     return 0;
 /* $Procedure      GETDEV ( Get Error Output Device Specification ) */
 
@@ -476,7 +486,7 @@ L_getdev:
 
 /*     Grab saved error output device specification: */
 
-    s_copy(device, savdev, device_len, (ftnlen)255);
+    s_copy(device, __state->savdev, device_len, (ftnlen)255);
     return 0;
 } /* putdev_ */
 

@@ -1,14 +1,21 @@
-/* srfxpt.f -- translated by f2c (version 19980913).
+/* srfxpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b45 = 1e-14;
+extern srfxpt_init_t __srfxpt_init;
+static srfxpt_state_t* get_srfxpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->srfxpt)
+		state->srfxpt = __cspice_allocate_module(sizeof(
+	srfxpt_state_t), &__srfxpt_init, sizeof(__srfxpt_init));
+	return state->srfxpt;
+
+}
 
 /* $Procedure      SRFXPT ( Surface intercept point ) */
 /* Subroutine */ int srfxpt_(char *method, char *target, doublereal *et, char 
@@ -19,7 +26,6 @@ static doublereal c_b45 = 1e-14;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -30,23 +36,30 @@ static doublereal c_b45 = 1e-14;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), zzbods2c_(integer *, char *, integer *, logical *, char *, 
-	    integer *, logical *, ftnlen, ftnlen);
+	    );
+    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     integer nitr;
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer type__;
     logical xmit;
-    doublereal rpos[3], tpos[3], j2dir[3];
+    doublereal rpos[3];
+    doublereal tpos[3];
+    doublereal j2dir[3];
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
 	    , integer *, ftnlen, ftnlen);
-    doublereal j2est[3], j2pos[3];
+    doublereal j2est[3];
+    doublereal j2pos[3];
     extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
-    doublereal s, radii[3], range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+    doublereal s;
+    doublereal radii[3];
+    doublereal range;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     extern logical eqchr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal pnear[3];
@@ -59,60 +72,73 @@ static doublereal c_b45 = 1e-14;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    doublereal r2jmat[9]	/* was [3][3] */, j2tmat[9]	/* was [3][3] 
-	    */;
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
+    doublereal r2jmat[9]	/* was [3][3] */;
+    doublereal j2tmat[9]	/* was [3][3] */;
     extern logical failed_(void);
-    static integer svctr3[2];
     integer refcde;
-    doublereal lt, etdiff;
+    doublereal lt;
+    doublereal etdiff;
     integer frcode;
     extern doublereal dasine_(doublereal *, doublereal *);
     doublereal refepc;
-    integer obscde, nradii;
+    integer obscde;
+    integer nradii;
     extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
 	    *, ftnlen);
     char frname[32];
     extern doublereal clight_(void);
-    doublereal ltdiff, maxrad, reject;
+    doublereal ltdiff;
+    doublereal maxrad;
+    doublereal reject;
     integer trgcde;
     char loccor[15];
     integer center;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *), stelab_(doublereal *, doublereal *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
 	    doublereal *);
     extern doublereal touchd_(doublereal *);
     doublereal ltcent;
-    static integer svtcde;
-    doublereal negpos[3], rayalt, trgdir[3];
+    doublereal negpos[3];
+    doublereal rayalt;
+    doublereal trgdir[3];
     integer typeid;
     doublereal stldir[3];
-    static integer svobsc;
     doublereal prevet;
-    static char svtarg[36], svdref[32];
-    static integer svrefc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal stlerr[3];
     extern logical return_(void);
-    doublereal prevlt, ssbost[6], ssbtst[6], stltmp[3];
+    doublereal prevlt;
+    doublereal ssbost[6];
+    doublereal ssbtst[6];
+    doublereal stltmp[3];
     logical usestl;
-    static char svobsr[36];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
-	    *, doublereal *, doublereal *, ftnlen, ftnlen), vminus_(
-	    doublereal *, doublereal *), pxform_(char *, char *, doublereal *,
-	     doublereal *, ftnlen, ftnlen), spkssb_(integer *, doublereal *, 
-	    char *, doublereal *, ftnlen), stlabx_(doublereal *, doublereal *,
-	     doublereal *), bodvcd_(integer *, char *, integer *, integer *, 
-	    doublereal *, ftnlen), surfpt_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    , npedln_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+	    ;
+    extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
     logical fnd;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    srfxpt_state_t* __state = get_srfxpt_state();
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -1285,20 +1311,20 @@ static doublereal c_b45 = 1e-14;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -1308,8 +1334,8 @@ static doublereal c_b45 = 1e-14;
 	chkout_("SRFXPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -1430,7 +1456,8 @@ static doublereal c_b45 = 1e-14;
 
 /*     Determine the attributes of the frame designated by DREF. */
 
-    zznamfrm_(svctr3, svdref, &svrefc, dref, &refcde, (ftnlen)32, dref_len);
+    zznamfrm_(__state->svctr3, __state->svdref, &__state->svrefc, dref, &
+	    refcde, (ftnlen)32, dref_len);
     if (failed_()) {
 	chkout_("SRFXPT", (ftnlen)6);
 	return 0;
@@ -1627,7 +1654,7 @@ static doublereal c_b45 = 1e-14;
 
 /*        Get the radii of the target body from the kernel pool. */
 
-	bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
+	bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
 
 /*        Make an easy test to see whether we can quit now because */
 /*        an intercept cannot exist.  If the ray is separated from */
@@ -1654,7 +1681,7 @@ static doublereal c_b45 = 1e-14;
 /*           Compute the arc sine with SPICE error checking. */
 
 	    d__1 = maxrad * 1.001 / range;
-	    reject = dasine_(&d__1, &c_b45);
+	    reject = dasine_(&d__1, &__state->c_b45);
 	    vminus_(obspos, negpos);
 	    if (vsep_(negpos, trgdir) > reject) {
 

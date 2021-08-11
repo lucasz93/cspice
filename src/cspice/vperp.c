@@ -1,9 +1,17 @@
-/* vperp.f -- translated by f2c (version 19980913).
+/* vperp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vperp_state_t;
+static vperp_state_t* get_vperp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure VPERP ( Perpendicular component of a 3-vector ) */
 /* Subroutine */ int vperp_(doublereal *a, doublereal *b, doublereal *p)
@@ -12,13 +20,20 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    doublereal biga, bigb;
+    doublereal biga;
+    doublereal bigb;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal r__[3], t[3], v[3];
+    doublereal r__[3];
+    doublereal t[3];
+    doublereal v[3];
     extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
-	    *), vsclip_(doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    vperp_state_t* __state = get_vperp_state();
 /* $ Abstract */
 
 /*     Find the component of a vector that is perpendicular to a second */

@@ -1,13 +1,21 @@
-/* zzfrmch0.f -- translated by f2c (version 19980913).
+/* zzfrmch0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern zzfrmch0_init_t __zzfrmch0_init;
+static zzfrmch0_state_t* get_zzfrmch0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzfrmch0)
+		state->zzfrmch0 = __cspice_allocate_module(sizeof(
+	zzfrmch0_state_t), &__zzfrmch0_init, sizeof(__zzfrmch0_init));
+	return state->zzfrmch0;
+
+}
 
 /* $Procedure      ZZFRMCH0 (Frame Change) */
 /* Subroutine */ int zzfrmch0_(integer *frame1, integer *frame2, doublereal *
@@ -29,13 +37,17 @@ static integer c__2 = 2;
     integer this__;
     extern /* Subroutine */ int zznofcon_(doublereal *, integer *, integer *, 
 	    integer *, integer *, char *, ftnlen);
-    integer i__, j, k, l, frame[10];
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer frame[10];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer class__;
     logical found;
     integer relto;
-    doublereal trans[504]	/* was [6][6][14] */, trans2[72]	/* 
-	    was [6][6][2] */;
+    doublereal trans[504]	/* was [6][6][14] */;
+    doublereal trans2[72]	/* was [6][6][2] */;
     extern logical failed_(void);
     integer cmnode;
     extern integer isrchi_(integer *, integer *, integer *);
@@ -45,15 +57,21 @@ static integer c__2 = 2;
     logical gotone;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[1840];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal tempxf[36]	/* was [6][6] */;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *), zzmsxf_(
-	    doublereal *, integer *, doublereal *);
-    integer inc, get, put;
+    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzmsxf_(doublereal *, integer *, doublereal *)
+	    ;
+    integer inc;
+    integer get;
+    integer put;
 
+
+    /* Module state */
+    zzfrmch0_state_t* __state = get_zzfrmch0_state();
 /* $ Abstract */
 
 /*     Return the state transformation matrix from one */
@@ -593,7 +611,7 @@ static integer c__2 = 2;
 		     i__1, "zzfrmch0_", (ftnlen)473)] = relto;
 	    zzmsxf_(&trans[(i__1 = ((node - 1) * 6 + 1) * 6 - 42) < 504 && 0 
 		    <= i__1 ? i__1 : s_rnge("trans", i__1, "zzfrmch0_", (
-		    ftnlen)474)], &c__2, tempxf);
+		    ftnlen)474)], &__state->c__2, tempxf);
 	    for (i__ = 1; i__ <= 6; ++i__) {
 		for (j = 1; j <= 6; ++j) {
 		    trans[(i__1 = i__ + (j + (node - 1) * 6) * 6 - 43) < 504 

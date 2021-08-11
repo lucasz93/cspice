@@ -1,9 +1,17 @@
-/* uddf.f -- translated by f2c (version 19980913).
+/* uddf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int uddf_state_t;
+static uddf_state_t* get_uddf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure UDDF ( First derivative of a function, df(x)/dx ) */
 /* Subroutine */ int uddf_(S_fp udfunc, doublereal *x, doublereal *dx, 
@@ -19,9 +27,13 @@
     doublereal udval[2];
     extern logical failed_(void);
     extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *), chkout_(char *, ftnlen);
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    uddf_state_t* __state = get_uddf_state();
 /* $ Abstract */
 
 /*     Routine to calculate the first derivative of a caller-specified */

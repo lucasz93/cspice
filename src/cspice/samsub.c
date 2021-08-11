@@ -1,9 +1,17 @@
-/* samsub.f -- translated by f2c (version 19980913).
+/* samsub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int samsub_state_t;
+static samsub_state_t* get_samsub_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SAMSUB (Same substrings) */
 logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
@@ -15,6 +23,9 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
     /* Builtin functions */
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    samsub_state_t* __state = get_samsub_state();
 /* $ Abstract */
 
 /*     Determine whether or not two substrings are the same */

@@ -1,9 +1,17 @@
-/* repmd.f -- translated by f2c (version 19980913).
+/* repmd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int repmd_state_t;
+static repmd_state_t* get_repmd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  REPMD  ( Replace marker with double precision number ) */
 /* Subroutine */ int repmd_(char *in, char *marker, doublereal *value, 
@@ -17,15 +25,22 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen), dpstr_(doublereal *, integer *,
-	     char *, ftnlen);
-    integer mrknbf, subnbf;
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
+	    ftnlen);
+    integer mrknbf;
+    integer subnbf;
     extern integer lastnb_(char *, ftnlen);
-    integer mrknbl, subnbl;
+    integer mrknbl;
+    integer subnbl;
     extern integer frstnb_(char *, ftnlen);
-    integer mrkpsb, mrkpse;
+    integer mrkpsb;
+    integer mrkpse;
     char substr[23];
 
+
+    /* Module state */
+    repmd_state_t* __state = get_repmd_state();
 /* $ Abstract */
 
 /*     Replace a marker with a double precision number. */

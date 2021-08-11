@@ -1,14 +1,21 @@
-/* zzstelab.f -- translated by f2c (version 19980913).
+/* zzstelab.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b7 = 1.;
+extern zzstelab_init_t __zzstelab_init;
+static zzstelab_state_t* get_zzstelab_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzstelab)
+		state->zzstelab = __cspice_allocate_module(sizeof(
+	zzstelab_state_t), &__zzstelab_init, sizeof(__zzstelab_init));
+	return state->zzstelab;
+
+}
 
 /* $Procedure ZZSTELAB ( Private --- stellar aberration correction ) */
 /* Subroutine */ int zzstelab_(logical *xmit, doublereal *accobs, doublereal *
@@ -25,36 +32,59 @@ static doublereal c_b7 = 1.;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal dphi, rhat[3];
+    doublereal dphi;
+    doublereal rhat[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal term1[3], term2[3], term3[3], c__, lcacc[3];
+    doublereal term1[3];
+    doublereal term2[3];
+    doublereal term3[3];
+    doublereal c__;
+    doublereal lcacc[3];
     integer i__;
     doublereal s;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal saoff[6]	/* was [3][2] */, drhat[3];
+    doublereal saoff[6]	/* was [3][2] */;
+    doublereal drhat[3];
     extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
-    doublereal ptarg[3], evobs[3], srhat[6], vphat[3], vtarg[3];
+    doublereal ptarg[3];
+    doublereal evobs[3];
+    doublereal srhat[6];
+    doublereal vphat[3];
+    doublereal vtarg[3];
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *), vperp_(doublereal *, doublereal *,
-	     doublereal *);
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), cleard_(integer *, doublereal *);
+	    doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
     doublereal vp[3];
     extern doublereal clight_(void);
-    doublereal dptmag, ptgmag, eptarg[3], dvphat[3], lcvobs[3];
+    doublereal dptmag;
+    doublereal ptgmag;
+    doublereal eptarg[3];
+    doublereal dvphat[3];
+    doublereal lcvobs[3];
     extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen);
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal svphat[6];
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    doublereal sgn, dvp[3], svp[6];
+    doublereal sgn;
+    doublereal dvp[3];
+    doublereal svp[6];
 
+
+    /* Module state */
+    zzstelab_state_t* __state = get_zzstelab_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -429,7 +459,7 @@ static doublereal c_b7 = 1.;
 /*     VHAT's exception handling for the zero vector. */
 
     if (vzero_(vp)) {
-	cleard_(&c__3, vphat);
+	cleard_(&__state->c__3, vphat);
     } else {
 	vhat_(vp, vphat);
     }
@@ -468,7 +498,7 @@ static doublereal c_b7 = 1.;
 
 	d__1 = -vdot_(lcvobs, drhat) - vdot_(lcacc, rhat);
 	d__2 = -vdot_(lcvobs, rhat);
-	vlcom3_(&c_b7, lcacc, &d__1, rhat, &d__2, drhat, dvp);
+	vlcom3_(&__state->c_b7, lcacc, &d__1, rhat, &d__2, drhat, dvp);
 	vhat_(vp, vphat);
 
 /*        Now we can compute DVPHAT, the derivative of VPHAT: */
@@ -532,13 +562,13 @@ static doublereal c_b7 = 1.;
 /*           to make a linear estimate. */
 
 	    d__1 = sgn * 1.;
-	    vlcom_(&c_b7, lcvobs, &d__1, lcacc, evobs);
+	    vlcom_(&__state->c_b7, lcvobs, &d__1, lcacc, evobs);
 
 /*           Estimate the observer-target vector. We use the */
 /*           observer-target state velocity to make a linear estimate. */
 
 	    d__1 = sgn * 1.;
-	    vlcom_(&c_b7, starg, &d__1, &starg[3], eptarg);
+	    vlcom_(&__state->c_b7, starg, &d__1, &starg[3], eptarg);
 
 /*           Let RHAT be the unit observer-target position. */
 /*           Compute the component of the observer's velocity */
@@ -549,7 +579,7 @@ static doublereal c_b7 = 1.;
 	    vhat_(eptarg, rhat);
 	    vperp_(evobs, rhat, vp);
 	    if (vzero_(vp)) {
-		cleard_(&c__3, vphat);
+		cleard_(&__state->c__3, vphat);
 	    } else {
 		vhat_(vp, vphat);
 	    }
@@ -574,7 +604,7 @@ static doublereal c_b7 = 1.;
 
 /*        Now compute the derivative. */
 
-	qderiv_(&c__3, saoff, &saoff[3], &c_b7, dscorr);
+	qderiv_(&__state->c__3, saoff, &saoff[3], &__state->c_b7, dscorr);
     }
 
 /*     At this point the correction offset SCORR and its derivative */

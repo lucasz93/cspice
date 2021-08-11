@@ -1,14 +1,21 @@
-/* zzprsmet.f -- translated by f2c (version 19980913).
+/* zzprsmet.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__100 = 100;
+extern zzprsmet_init_t __zzprsmet_init;
+static zzprsmet_state_t* get_zzprsmet_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzprsmet)
+		state->zzprsmet = __cspice_allocate_module(sizeof(
+	zzprsmet_state_t), &__zzprsmet_init, sizeof(__zzprsmet_init));
+	return state->zzprsmet;
+
+}
 
 /* $Procedure ZZPRSMET ( Private: parse method string ) */
 /* Subroutine */ int zzprsmet_(integer *bodyid, char *method, integer *mxnsrf,
@@ -25,30 +32,40 @@ static integer c__100 = 100;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    integer code, begs[102];
+    integer code;
+    integer begs[102];
     logical done;
-    integer ends[102], npri;
+    integer ends[102];
+    integer npri;
     extern /* Subroutine */ int zzlexmet_(char *, integer *, integer *, 
 	    integer *, integer *, ftnlen);
-    integer i__, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), failed_(void);
+    integer i__;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical failed_(void);
     integer nshape;
     extern /* Subroutine */ int srfscc_(char *, integer *, integer *, logical 
 	    *, ftnlen);
     char locmth[1000];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer nlmbtp;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), ljucrs_(integer *, 
-	    char *, char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(
-	    char *, integer *, ftnlen);
-    integer nsrfls, nsubtp;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer nsrfls;
+    integer nsubtp;
     extern logical return_(void);
     integer ntrmtp;
     logical fnd;
     char chr[1];
 
+
+    /* Module state */
+    zzprsmet_state_t* __state = get_zzprsmet_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -401,11 +418,12 @@ static integer c__100 = 100;
     *(unsigned char *)locmth = '/';
     begs[0] = 1;
     ends[0] = 1;
-    ljucrs_(&c__1, method, locmth + 1, method_len, (ftnlen)999);
+    ljucrs_(&__state->c__1, method, locmth + 1, method_len, (ftnlen)999);
 
 /*     Tokenize the input method string. */
 
-    zzlexmet_(locmth + 1, &c__100, &n, &begs[1], &ends[1], (ftnlen)999);
+    zzlexmet_(locmth + 1, &__state->c__100, &n, &begs[1], &ends[1], (ftnlen)
+	    999);
     if (failed_()) {
 	chkout_("ZZPRSMET", (ftnlen)8);
 	return 0;

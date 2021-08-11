@@ -1,9 +1,17 @@
-/* zzektrls.f -- translated by f2c (version 19980913).
+/* zzektrls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrls_state_t;
+static zzektrls_state_t* get_zzektrls_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRLS ( EK tree, linear search ) */
 integer zzektrls_(integer *handle, integer *tree, integer *ival)
@@ -14,10 +22,14 @@ integer zzektrls_(integer *handle, integer *tree, integer *ival)
     /* Local variables */
     extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
 	    integer *);
-    integer i__, n;
+    integer i__;
+    integer n;
     extern integer zzektrsz_(integer *, integer *);
     integer value;
 
+
+    /* Module state */
+    zzektrls_state_t* __state = get_zzektrls_state();
 /* $ Abstract */
 
 /*     Search an EK tree linearly to find a specified data value.  The */

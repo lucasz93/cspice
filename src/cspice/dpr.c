@@ -1,16 +1,27 @@
-/* dpr.f -- translated by f2c (version 19980913).
+/* dpr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern dpr_init_t __dpr_init;
+static dpr_state_t* get_dpr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpr)
+		state->dpr = __cspice_allocate_module(sizeof(dpr_state_t), &
+	__dpr_init, sizeof(__dpr_init));
+	return state->dpr;
+
+}
 
 /* $Procedure                     DPR ( Degrees per radian ) */
 doublereal dpr_(void)
 {
     /* Initialized data */
 
-    static doublereal value = 0.;
 
     /* System generated locals */
     doublereal ret_val;
@@ -18,6 +29,9 @@ doublereal dpr_(void)
     /* Builtin functions */
     double acos(doublereal);
 
+
+    /* Module state */
+    dpr_state_t* __state = get_dpr_state();
 /* $ Abstract */
 
 /*     Return the number of degrees per radian. */
@@ -149,10 +163,10 @@ doublereal dpr_(void)
 
 /*     What is there to say? */
 
-    if (value == 0.) {
-	value = 180. / acos(-1.);
+    if (__state->value == 0.) {
+	__state->value = 180. / acos(-1.);
     }
-    ret_val = value;
+    ret_val = __state->value;
     return ret_val;
 } /* dpr_ */
 

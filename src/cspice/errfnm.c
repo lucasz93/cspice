@@ -1,9 +1,17 @@
-/* errfnm.f -- translated by f2c (version 19980913).
+/* errfnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int errfnm_state_t;
+static errfnm_state_t* get_errfnm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ERRFNM ( Insert filename into long error message text ) */
 /* Subroutine */ int errfnm_(char *marker, integer *unit, ftnlen marker_len)
@@ -20,6 +28,9 @@
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer iostat;
 
+
+    /* Module state */
+    errfnm_state_t* __state = get_errfnm_state();
 /* $ Abstract */
 
 /*     Substitute the first occurrence of a marker in the current long */

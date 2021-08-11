@@ -1,9 +1,17 @@
-/* wdcnt.f -- translated by f2c (version 19980913).
+/* wdcnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wdcnt_state_t;
+static wdcnt_state_t* get_wdcnt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure WDCNT ( Word Count ) */
 integer wdcnt_(char *string, ftnlen string_len)
@@ -16,8 +24,13 @@ integer wdcnt_(char *string, ftnlen string_len)
 
     /* Local variables */
     logical cont;
-    integer n, length, loc;
+    integer n;
+    integer length;
+    integer loc;
 
+
+    /* Module state */
+    wdcnt_state_t* __state = get_wdcnt_state();
 /* $ Abstract */
 
 /*      Return the number of words in a string. */

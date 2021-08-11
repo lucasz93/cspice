@@ -1,13 +1,21 @@
-/* zzsglatx.f -- translated by f2c (version 19980913).
+/* zzsglatx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b5 = 0.;
+extern zzsglatx_init_t __zzsglatx_init;
+static zzsglatx_state_t* get_zzsglatx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsglatx)
+		state->zzsglatx = __cspice_allocate_module(sizeof(
+	zzsglatx_state_t), &__zzsglatx_init, sizeof(__zzsglatx_init));
+	return state->zzsglatx;
+
+}
 
 /* $Procedure ZZSGLATX ( Line segment latitude extent ) */
 /* Subroutine */ int zzsglatx_(doublereal *p1, doublereal *p2, doublereal *
@@ -15,14 +23,16 @@ static doublereal c_b5 = 0.;
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
 
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal r__, t[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vcrss_(doublereal *, 
-	    doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal r__;
+    doublereal t[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
     integer nxpts;
     doublereal plane2[4];
@@ -34,14 +44,22 @@ static doublereal c_b5 = 0.;
 	    doublereal *, doublereal *);
     doublereal normal[3];
     extern logical opsgnd_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *), chkout_(char *, ftnlen)
-	    ;
-    doublereal dp1, dp2;
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    doublereal dp1;
+    doublereal dp2;
     extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
 	    doublereal *, integer *, doublereal *);
     extern logical return_(void);
-    doublereal dir[3], lat, lon, lat1, lat2;
+    doublereal dir[3];
+    doublereal lat;
+    doublereal lon;
+    doublereal lat1;
+    doublereal lat2;
 
+
+    /* Module state */
+    zzsglatx_state_t* __state = get_zzsglatx_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -340,7 +358,7 @@ static doublereal c_b5 = 0.;
 /*     does exist, the X-Y plane and PLANE1 intersect in a "crease" */
 /*     that is normal to PLANE2. */
 
-    vcrss_(z__, normal, crease);
+    vcrss_(__state->z__, normal, crease);
     if (vzero_(crease)) {
 
 /*        Z and NORMAL are linearly dependent; PLANE1 coincides (up to */
@@ -382,7 +400,7 @@ static doublereal c_b5 = 0.;
 /*        an error. Therefore we don't check FAILED after the */
 /*        following call. */
 
-	nvc2pl_(crease, &c_b5, plane2);
+	nvc2pl_(crease, &__state->c_b5, plane2);
 	vsub_(p2, p1, dir);
 	inrypl_(p1, dir, plane2, &nxpts, t);
 	if (failed_()) {

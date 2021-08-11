@@ -1,16 +1,28 @@
-/* sharpr.f -- translated by f2c (version 19980913).
+/* sharpr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sharpr_state_t;
+static sharpr_state_t* get_sharpr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SHARPR ( Sharpen a rotation ) */
 /* Subroutine */ int sharpr_(doublereal *rot)
 {
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *), vhatip_(doublereal *);
+	    *);
+    extern /* Subroutine */ int vhatip_(doublereal *);
 
+
+    /* Module state */
+    sharpr_state_t* __state = get_sharpr_state();
 /* $ Abstract */
 
 /*     Given a matrix that is "nearly" a rotation, adjust the columns */

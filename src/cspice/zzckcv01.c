@@ -1,9 +1,17 @@
-/* zzckcv01.f -- translated by f2c (version 19980913).
+/* zzckcv01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzckcv01_state_t;
+static zzckcv01_state_t* get_zzckcv01_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCKCV01 ( Private --- C-kernel segment coverage, type 01 ) */
 /* Subroutine */ int zzckcv01_(integer *handle, integer *arrbeg, integer *
@@ -18,9 +26,11 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer nrec, psiz;
+    integer nrec;
+    integer psiz;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
-    integer i__, n;
+    integer i__;
+    integer n;
     doublereal begin;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer tbase;
@@ -31,19 +41,25 @@
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
-    doublereal et, buffer[100];
-    integer remain, seglen;
+    doublereal et;
+    doublereal buffer[100];
+    integer remain;
+    integer seglen;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     doublereal finish;
     integer offset;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer navsln;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), wninsd_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
 	    doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzckcv01_state_t* __state = get_zzckcv01_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

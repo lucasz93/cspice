@@ -1,9 +1,17 @@
-/* pltnp.f -- translated by f2c (version 19980913).
+/* pltnp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pltnp_state_t;
+static pltnp_state_t* get_pltnp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PLTNP ( Nearest point on triangular plate ) */
 /* Subroutine */ int pltnp_(doublereal *point, doublereal *v1, doublereal *v2,
@@ -14,22 +22,42 @@
     doublereal perp[3];
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     logical degen;
-    doublereal pdiff[3], d1, d2, d3, e1[3];
+    doublereal pdiff[3];
+    doublereal d1;
+    doublereal d2;
+    doublereal d3;
+    doublereal e1[3];
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal e2[3], e3[3], l1, l2, l3;
+    doublereal e2[3];
+    doublereal e3[3];
+    doublereal l1;
+    doublereal l2;
+    doublereal l3;
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *), vperp_(doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
-    doublereal enorm1[3], enorm2[3], enorm3[3], normal[3];
-    logical in1, in2, in3;
+    doublereal enorm1[3];
+    doublereal enorm2[3];
+    doublereal enorm3[3];
+    doublereal normal[3];
+    logical in1;
+    logical in2;
+    logical in3;
     extern /* Subroutine */ int npsgpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
-    doublereal np1[3], np2[3];
+    doublereal np1[3];
+    doublereal np2[3];
 
+
+    /* Module state */
+    pltnp_state_t* __state = get_pltnp_state();
 /* $ Abstract */
 
 /*     Find the nearest point on a triangular plate to a given point. */

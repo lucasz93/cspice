@@ -1,9 +1,17 @@
-/* zzddhrcm.f -- translated by f2c (version 19980913).
+/* zzddhrcm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzddhrcm_state_t;
+static zzddhrcm_state_t* get_zzddhrcm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDDHRCM ( Private --- DDH Request Count ) */
 /* Subroutine */ int zzddhrcm_(integer *nut, integer *utcst, integer *reqcnt)
@@ -15,6 +23,9 @@
     integer i__;
     extern integer intmax_(void);
 
+
+    /* Module state */
+    zzddhrcm_state_t* __state = get_zzddhrcm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

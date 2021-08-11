@@ -1,15 +1,21 @@
-/* zzektr23.f -- translated by f2c (version 19980913).
+/* zzektr23.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__125 = 125;
-static integer c__3 = 3;
-static integer c__256 = 256;
+extern zzektr23_init_t __zzektr23_init;
+static zzektr23_state_t* get_zzektr23_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektr23)
+		state->zzektr23 = __cspice_allocate_module(sizeof(
+	zzektr23_state_t), &__zzektr23_init, sizeof(__zzektr23_init));
+	return state->zzektr23;
+
+}
 
 /* $Procedure      ZZEKTR23 ( EK tree, 2-3 split ) */
 /* Subroutine */ int zzektr23_(integer *handle, integer *tree, integer *left, 
@@ -22,27 +28,55 @@ static integer c__256 = 256;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, lsib, rsib, root;
+    integer base;
+    integer lsib;
+    integer rsib;
+    integer root;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *), zzekpgri_(integer *, integer *, integer *), zzekpgwi_(
-	    integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     extern integer zzektrbs_(integer *);
-    integer i__, ppage[256], rbase;
+    integer i__;
+    integer ppage[256];
+    integer rbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nnode;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    integer lsize, msize, rsize, c1page[256], c2page[256], c3page[256], 
-	    datbas, kidbas, ldelta;
-    extern /* Subroutine */ int cleari_(integer *, integer *), dasrdi_(
-	    integer *, integer *, integer *, integer *), dasudi_(integer *, 
-	    integer *, integer *, integer *);
-    integer rdelta, keybas, lshift;
+    integer lsize;
+    integer msize;
+    integer rsize;
+    integer c1page[256];
+    integer c2page[256];
+    integer c3page[256];
+    integer datbas;
+    integer kidbas;
+    integer ldelta;
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer rdelta;
+    integer keybas;
+    integer lshift;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer lnmove, nlkeys, npkeys, nrkeys, ltrsiz, rnmove, rshift;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
-    integer new__, sum;
+    integer lnmove;
+    integer nlkeys;
+    integer npkeys;
+    integer nrkeys;
+    integer ltrsiz;
+    integer rnmove;
+    integer rshift;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer new__;
+    integer sum;
 
+
+    /* Module state */
+    zzektr23_state_t* __state = get_zzektr23_state();
 /* $ Abstract */
 
 /*     Execute a 2-3 split:  split two sibling nodes into three nodes, */
@@ -740,7 +774,7 @@ static integer c__256 = 256;
 		"t sum should be #.", (ftnlen)77);
 	errint_("#", left, (ftnlen)1);
 	errint_("#", right, (ftnlen)1);
-	errint_("#", &c__125, (ftnlen)1);
+	errint_("#", &__state->c__125, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTR23", (ftnlen)8);
 	return 0;
@@ -749,8 +783,8 @@ static integer c__256 = 256;
 /*     Allocate a new page.  This page will become the right sibling */
 /*     of LEFT and the left sibling of RIGHT. */
 
-    zzekpgal_(handle, &c__3, &new__, &base);
-    cleari_(&c__256, c3page);
+    zzekpgal_(handle, &__state->c__3, &new__, &base);
+    cleari_(&__state->c__256, c3page);
 
 /*     It's time to set up the keys in the middle child.  First, we'll */
 /*     take the last LSHIFT keys from the left node, where */

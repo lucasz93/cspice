@@ -1,9 +1,17 @@
-/* zzidmap.f -- translated by f2c (version 19980913).
+/* zzidmap.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzidmap_state_t;
+static zzidmap_state_t* get_zzidmap_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZIDMAP ( Private --- SPICE body ID/name assignments ) */
 /* Subroutine */ int zzidmap_(integer *bltcod, char *bltnam, ftnlen 
@@ -12,6 +20,9 @@
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzidmap_state_t* __state = get_zzidmap_state();
 /* $ Abstract */
 
 /*     The default SPICE body/ID mapping assignments available */

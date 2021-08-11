@@ -1,14 +1,21 @@
-/* zzckcv04.f -- translated by f2c (version 19980913).
+/* zzckcv04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern zzckcv04_init_t __zzckcv04_init;
+static zzckcv04_state_t* get_zzckcv04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzckcv04)
+		state->zzckcv04 = __cspice_allocate_module(sizeof(
+	zzckcv04_state_t), &__zzckcv04_init, sizeof(__zzckcv04_init));
+	return state->zzckcv04;
+
+}
 
 /* $Procedure ZZCKCV04 ( Private --- C-kernel segment coverage, type 04 ) */
 /* Subroutine */ int zzckcv04_(integer *handle, integer *arrbeg, integer *
@@ -20,15 +27,17 @@ static integer c__6 = 6;
     doublereal d__1;
 
     /* Local variables */
-    integer nrec, ends[2];
+    integer nrec;
+    integer ends[2];
     doublereal left;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *), 
-	    errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical istdb;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal right;
@@ -36,15 +45,20 @@ static integer c__6 = 6;
     doublereal dc[2];
     integer ic[6];
     doublereal et;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), sgfpkt_(integer *, doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     doublereal values[143];
     extern integer intmax_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), wninsd_(doublereal *,
-	     doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzckcv04_state_t* __state = get_zzckcv04_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -457,7 +471,7 @@ static integer c__6 = 6;
     ic[5] = *arrend;
     dc[0] = 0.;
     dc[1] = 0.;
-    dafps_(&c__2, &c__6, dc, ic, descr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Determine the number of records in the array. */
 

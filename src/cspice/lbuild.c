@@ -1,13 +1,21 @@
-/* lbuild.f -- translated by f2c (version 19980913).
+/* lbuild.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lbuild_init_t __lbuild_init;
+static lbuild_state_t* get_lbuild_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lbuild)
+		state->lbuild = __cspice_allocate_module(sizeof(
+	lbuild_state_t), &__lbuild_init, sizeof(__lbuild_init));
+	return state->lbuild;
+
+}
 
 /* $Procedure      LBUILD ( Build a list in a character string ) */
 /* Subroutine */ int lbuild_(char *items, integer *n, char *delim, char *list,
@@ -21,11 +29,21 @@ static integer c__0 = 0;
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer dlen, ilen, llen, last, lpos, i__, first;
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    integer dlen;
+    integer ilen;
+    integer llen;
+    integer last;
+    integer lpos;
+    integer i__;
+    integer first;
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
 
+
+    /* Module state */
+    lbuild_state_t* __state = get_lbuild_state();
 /* $ Abstract */
 
 /*      Build a list of items delimited by a character. */
@@ -216,7 +234,7 @@ static integer c__0 = 0;
 		    s_copy(list + (lpos - 1), items + ((i__ - 1) * items_len 
 			    + (first - 1)), list_len - (lpos - 1), last - (
 			    first - 1));
-		    suffix_(delim, &c__0, list, delim_len, list_len);
+		    suffix_(delim, &__state->c__0, list, delim_len, list_len);
 		    lpos = lpos + ilen + dlen;
 		}
 	    }

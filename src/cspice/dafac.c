@@ -1,14 +1,21 @@
-/* dafac.f -- translated by f2c (version 19980913).
+/* dafac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern dafac_init_t __dafac_init;
+static dafac_state_t* get_dafac_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafac)
+		state->dafac = __cspice_allocate_module(sizeof(dafac_state_t),
+	 &__dafac_init, sizeof(__dafac_init));
+	return state->dafac;
+
+}
 
 /* $Procedure DAFAC ( DAF add comments ) */
 /* Subroutine */ int dafac_(integer *handle, integer *n, char *buffer, ftnlen 
@@ -16,7 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -31,9 +37,14 @@ static integer c__1 = 1;
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
-    integer i__, j, space;
+    integer i__;
+    integer j;
+    integer space;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, bward, fward, recno;
+    integer ncomc;
+    integer bward;
+    integer fward;
+    integer recno;
     logical found;
     integer ncomr;
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
@@ -47,28 +58,30 @@ static integer c__1 = 1;
     char crecrd[1000];
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
-    integer daflun, nchars;
+    integer daflun;
+    integer nchars;
     extern integer lastnb_(char *, ftnlen);
-    static char eocmrk[1];
-    integer length, newrec, eocpos;
-    static char eolmrk[1];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer length;
+    integer newrec;
+    integer eocpos;
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nelpos;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    integer rinuse, curpos, notusd;
+    integer rinuse;
+    integer curpos;
+    integer notusd;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___21 = { 1, 0, 1, 0, 0 };
-    static cilist io___30 = { 1, 0, 0, 0, 0 };
-    static cilist io___31 = { 1, 0, 0, 0, 0 };
-    static cilist io___32 = { 1, 0, 0, 0, 0 };
-    static cilist io___33 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    dafac_state_t* __state = get_dafac_state();
 /* $ Abstract */
 
 /*     Add comments from a buffer of character strings to the comment */
@@ -302,10 +315,10 @@ static integer c__1 = 1;
 /*     we need to initialize the character value for the end-of-line */
 /*     marker and the character value for the end of comments marker. */
 
-    if (first) {
-	first = FALSE_;
-	*(unsigned char *)eocmrk = '\4';
-	*(unsigned char *)eolmrk = '\0';
+    if (__state->first) {
+	__state->first = FALSE_;
+	*(unsigned char *)__state->eocmrk = '\4';
+	*(unsigned char *)__state->eolmrk = '\0';
     }
 
 /*     Verify that the DAF file attached to HANDLE is opened with write */
@@ -320,7 +333,7 @@ static integer c__1 = 1;
 /*     Convert the DAF file handle to its corresponding Fortran logical */
 /*     unit number for reading and writing comment records. */
 
-    zzddhhlu_(handle, "DAF", &c_false, &daflun, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &daflun, (ftnlen)3);
     if (failed_()) {
 	chkout_("DAFAC", (ftnlen)5);
 	return 0;
@@ -416,13 +429,13 @@ static integer c__1 = 1;
 	notusd = 0;
 	while(ncomr > 0 && ! found && empty) {
 	    recno = ncomr + 1;
-	    io___21.ciunit = daflun;
-	    io___21.cirec = recno;
-	    iostat = s_rdue(&io___21);
+	    __state->io___21.ciunit = daflun;
+	    __state->io___21.cirec = recno;
+	    iostat = s_rdue(&__state->io___21);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+	    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -441,12 +454,13 @@ L100001:
 /*           Scan the comment record looking for the end of comments */
 /*           marker. */
 
-	    eocpos = cpos_(crecrd, eocmrk, &c__1, (ftnlen)1000, (ftnlen)1);
+	    eocpos = cpos_(crecrd, __state->eocmrk, &__state->c__1, (ftnlen)
+		    1000, (ftnlen)1);
 	    if (eocpos > 0) {
 		found = TRUE_;
 	    } else {
-		nelpos = ncpos_(crecrd, eolmrk, &c__1, (ftnlen)1000, (ftnlen)
-			1);
+		nelpos = ncpos_(crecrd, __state->eolmrk, &__state->c__1, (
+			ftnlen)1000, (ftnlen)1);
 		if (nelpos != 0) {
 		    empty = FALSE_;
 		} else {
@@ -572,13 +586,13 @@ L100001:
 /*           of the current position and the comment record. */
 
 	    if (curpos > 1000) {
-		io___30.ciunit = daflun;
-		io___30.cirec = recno;
-		iostat = s_wdue(&io___30);
+		__state->io___30.ciunit = daflun;
+		__state->io___30.cirec = recno;
+		iostat = s_wdue(&__state->io___30);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+		iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100002;
 		}
@@ -611,13 +625,13 @@ L100002:
 /*        and the comment record. */
 
 	if (curpos > 1000) {
-	    io___31.ciunit = daflun;
-	    io___31.cirec = recno;
-	    iostat = s_wdue(&io___31);
+	    __state->io___31.ciunit = daflun;
+	    __state->io___31.cirec = recno;
+	    iostat = s_wdue(&__state->io___31);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+	    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
@@ -641,7 +655,8 @@ L100003:
 /*        Append the end-of-line marker to the comment line that we just */
 /*        placed into the comment record. */
 
-	*(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)eolmrk;
+	*(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)
+		__state->eolmrk;
 	++curpos;
     }
 
@@ -658,13 +673,13 @@ L100003:
 /*        the record and get set up to add the end of comments mark on */
 /*        the next record. */
 
-	io___32.ciunit = daflun;
-	io___32.cirec = recno;
-	iostat = s_wdue(&io___32);
+	__state->io___32.ciunit = daflun;
+	__state->io___32.cirec = recno;
+	iostat = s_wdue(&__state->io___32);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+	iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100004;
 	}
@@ -688,14 +703,14 @@ L100004:
 /*     Add the end of comments mark to the final comment record and */
 /*     write it to the file. */
 
-    *(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)eocmrk;
-    io___33.ciunit = daflun;
-    io___33.cirec = recno;
-    iostat = s_wdue(&io___33);
+    *(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)__state->eocmrk;
+    __state->io___33.ciunit = daflun;
+    __state->io___33.cirec = recno;
+    iostat = s_wdue(&__state->io___33);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = do_uio(&c__1, crecrd, (ftnlen)1000);
+    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
     if (iostat != 0) {
 	goto L100005;
     }

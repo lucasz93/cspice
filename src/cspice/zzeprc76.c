@@ -1,25 +1,44 @@
-/* zzeprc76.f -- translated by f2c (version 19980913).
+/* zzeprc76.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern zzeprc76_init_t __zzeprc76_init;
+static zzeprc76_state_t* get_zzeprc76_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeprc76)
+		state->zzeprc76 = __cspice_allocate_module(sizeof(
+	zzeprc76_state_t), &__zzeprc76_init, sizeof(__zzeprc76_init));
+	return state->zzeprc76;
+
+}
 
 /* $Procedure   ZZEPRC76   ( Earth precession, 1976 IAU model ) */
 /* Subroutine */ int zzeprc76_(doublereal *et, doublereal *precxf)
 {
-    doublereal cent, zeta, t, scale, z__, theta, dzeta;
+    doublereal cent;
+    doublereal zeta;
+    doublereal t;
+    doublereal scale;
+    doublereal z__;
+    doublereal theta;
+    doublereal dzeta;
     extern doublereal jyear_(void);
     extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
 	    integer *, doublereal *);
-    doublereal dz, ts, dtheta, eulang[6];
+    doublereal dz;
+    doublereal ts;
+    doublereal dtheta;
+    doublereal eulang[6];
     extern doublereal rpd_(void);
 
+
+    /* Module state */
+    zzeprc76_state_t* __state = get_zzeprc76_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -224,7 +243,7 @@ static integer c__2 = 2;
     eulang[3] = -dz;
     eulang[4] = dtheta;
     eulang[5] = -dzeta;
-    eul2xf_(eulang, &c__3, &c__2, &c__3, precxf);
+    eul2xf_(eulang, &__state->c__3, &__state->c__2, &__state->c__3, precxf);
     return 0;
 } /* zzeprc76_ */
 

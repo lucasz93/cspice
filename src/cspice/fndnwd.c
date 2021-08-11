@@ -1,9 +1,17 @@
-/* fndnwd.f -- translated by f2c (version 19980913).
+/* fndnwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int fndnwd_state_t;
+static fndnwd_state_t* get_fndnwd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FNDNWD ( Find the next word after an index ) */
 /* Subroutine */ int fndnwd_(char *string, integer *start, integer *b, 
@@ -16,9 +24,17 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer size, i__, l, n, blank;
-    logical thisb, lastn;
+    integer size;
+    integer i__;
+    integer l;
+    integer n;
+    integer blank;
+    logical thisb;
+    logical lastn;
 
+
+    /* Module state */
+    fndnwd_state_t* __state = get_fndnwd_state();
 /* $ Abstract */
 
 /*     Find the beginning and end of the first word starting at */

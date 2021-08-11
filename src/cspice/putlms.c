@@ -1,49 +1,34 @@
-/* putlms.f -- translated by f2c (version 19980913).
+/* putlms.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern putlms_init_t __putlms_init;
+static putlms_state_t* get_putlms_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->putlms)
+		state->putlms = __cspice_allocate_module(sizeof(
+	putlms_state_t), &__putlms_init, sizeof(__putlms_init));
+	return state->putlms;
+
+}
 
 /* $Procedure      PUTLMS ( Store Long Error Message ) */
 /* Subroutine */ int putlms_0_(int n__, char *msg, ftnlen msg_len)
 {
     /* Initialized data */
 
-    static char savmsg[1840] = "                                            "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "    ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    putlms_state_t* __state = get_putlms_state();
 /* $ Abstract */
 
 /*     PUTLMS is a low-level data structure access routine which stores */
@@ -239,7 +224,7 @@
 
 /*     Executable Code: */
 
-    s_copy(savmsg, msg, (ftnlen)1840, msg_len);
+    s_copy(__state->savmsg, msg, (ftnlen)1840, msg_len);
     return 0;
 /* $Procedure      GETLMS ( Get Long Error Message ) */
 
@@ -375,7 +360,7 @@ L_getlms:
 
 /*     Grab the saved long message: */
 
-    s_copy(msg, savmsg, msg_len, (ftnlen)1840);
+    s_copy(msg, __state->savmsg, msg_len, (ftnlen)1840);
     return 0;
 } /* putlms_ */
 

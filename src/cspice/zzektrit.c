@@ -1,27 +1,39 @@
-/* zzektrit.f -- translated by f2c (version 19980913).
+/* zzektrit.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__82 = 82;
-static integer c__83 = 83;
+extern zzektrit_init_t __zzektrit_init;
+static zzektrit_state_t* get_zzektrit_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrit)
+		state->zzektrit = __cspice_allocate_module(sizeof(
+	zzektrit_state_t), &__zzektrit_init, sizeof(__zzektrit_init));
+	return state->zzektrit;
+
+}
 
 /* $Procedure      ZZEKTRIT ( EK tree, initialize ) */
 /* Subroutine */ int zzektrit_(integer *handle, integer *tree)
 {
-    integer base, page[256];
+    integer base;
+    integer page[256];
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *), zzekpgwi_(integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     integer p;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cleari_(integer *, 
-	    integer *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzektrit_state_t* __state = get_zzektrit_state();
 /* $ Abstract */
 
 /*     Initialize an EK tree, returning the root of the tree. */
@@ -523,7 +535,7 @@ static integer c__83 = 83;
 /*     Start out by allocating a DAS integer page.  We'll write the root */
 /*     node out to this page. */
 
-    zzekpgal_(handle, &c__3, &p, &base);
+    zzekpgal_(handle, &__state->c__3, &p, &base);
     page[0] = 1;
     page[1] = 1;
     page[2] = 0;
@@ -532,9 +544,9 @@ static integer c__83 = 83;
 
 /*     Set all keys to zero; set all child and data pointers to null. */
 
-    cleari_(&c__82, &page[5]);
-    cleari_(&c__82, &page[172]);
-    cleari_(&c__83, &page[88]);
+    cleari_(&__state->c__82, &page[5]);
+    cleari_(&__state->c__82, &page[172]);
+    cleari_(&__state->c__83, &page[88]);
 
 /*     Write out the page. */
 

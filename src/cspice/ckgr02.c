@@ -1,15 +1,21 @@
-/* ckgr02.f -- translated by f2c (version 19980913).
+/* ckgr02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__7 = 7;
+extern ckgr02_init_t __ckgr02_init;
+static ckgr02_state_t* get_ckgr02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgr02)
+		state->ckgr02 = __cspice_allocate_module(sizeof(
+	ckgr02_state_t), &__ckgr02_init, sizeof(__ckgr02_init));
+	return state->ckgr02;
+
+}
 
 /* $Procedure      CKGR02 ( C-kernel, get record, type 02 ) */
 /* Subroutine */ int ckgr02_(integer *handle, doublereal *descr, integer *
@@ -19,18 +25,28 @@ static integer c__7 = 7;
     integer i__1;
 
     /* Local variables */
-    integer addr__, nrec;
+    integer addr__;
+    integer nrec;
     doublereal prec[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cknr02_(integer *, 
-	    doublereal *, integer *), dafus_(doublereal *, integer *, integer 
-	    *, doublereal *, integer *), moved_(doublereal *, integer *, 
-	    doublereal *), dafgda_(integer *, integer *, integer *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cknr02_(integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
-    integer beg, icd[6];
+    integer beg;
+    integer icd[6];
 
+
+    /* Module state */
+    ckgr02_state_t* __state = get_ckgr02_state();
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 2 segment in a CK file, */
@@ -300,7 +316,7 @@ static integer c__7 = 7;
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 2) {
 	setmsg_("Data type of the segment should be 2: Passed descriptor sho"
 		"ws type = #.", (ftnlen)71);
@@ -338,7 +354,7 @@ static integer c__7 = 7;
     i__1 = addr__ + 7;
     dafgda_(handle, &addr__, &i__1, prec);
     record[2] = prec[7];
-    moved_(prec, &c__7, &record[3]);
+    moved_(prec, &__state->c__7, &record[3]);
 
 /*     Next get the interval start time.  Need to go past all of the */
 /*     NREC pointing records (PSIZ * NREC numbers), and then to the */

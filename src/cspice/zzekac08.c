@@ -1,14 +1,21 @@
-/* zzekac08.f -- translated by f2c (version 19980913).
+/* zzekac08.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__128 = 128;
+extern zzekac08_init_t __zzekac08_init;
+static zzekac08_state_t* get_zzekac08_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekac08)
+		state->zzekac08 = __cspice_allocate_module(sizeof(
+	zzekac08_state_t), &__zzekac08_init, sizeof(__zzekac08_init));
+	return state->zzekac08;
+
+}
 
 /* $Procedure     ZZEKAC08 ( EK, add class 8 column to segment ) */
 /* Subroutine */ int zzekac08_(integer *handle, integer *segdsc, integer *
@@ -24,26 +31,49 @@ static integer c__128 = 128;
     doublereal page[128];
     integer from;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekacps_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *), zzekordd_(doublereal *, logical *, logical 
-	    *, integer *, integer *), zzekwpai_(integer *, integer *, integer 
-	    *, integer *, integer *, integer *), zzekpgwd_(integer *, integer 
-	    *, doublereal *), zzekwpal_(integer *, integer *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekordd_(doublereal *, logical *, logical *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekwpai_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zzekwpal_(integer *, integer *, integer *, 
 	    logical *, integer *, integer *);
-    integer p, mbase, npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, nrows, cmbase;
+    integer p;
+    integer mbase;
+    integer npage;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer nrows;
+    integer cmbase;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     extern logical return_(void);
     char column[32];
-    integer colidx, datbas, dscbas, idxbas, idxpag, idxtyp, nflbas, nflpag, 
-	    nulptr, to;
-    logical indexd, nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasudi_(integer *, integer *, integer *, integer *);
+    integer colidx;
+    integer datbas;
+    integer dscbas;
+    integer idxbas;
+    integer idxpag;
+    integer idxtyp;
+    integer nflbas;
+    integer nflpag;
+    integer nulptr;
+    integer to;
+    logical indexd;
+    logical nullok;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    zzekac08_state_t* __state = get_zzekac08_state();
 /* $ Abstract */
 
 /*     Add an entire class 8 column to an EK segment. */
@@ -867,14 +897,14 @@ static integer c__128 = 128;
 /*     allocate that many new, contiguous pages. */
 
     npage = (nrows + 125) / 126;
-    zzekacps_(handle, segdsc, &c__2, &npage, &p, &datbas);
+    zzekacps_(handle, segdsc, &__state->c__2, &npage, &p, &datbas);
 
 /*     We'll use FROM to indicate the element of DVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    cleard_(&c__128, page);
+    cleard_(&__state->c__128, page);
     i__1 = nrows;
     for (from = 1; from <= i__1; ++from) {
 
@@ -938,7 +968,7 @@ static integer c__128 = 128;
 	dasudi_(handle, &i__1, &i__2, &idxbas);
 	i__1 = dscbas + 6;
 	i__2 = dscbas + 6;
-	dasudi_(handle, &i__1, &i__2, &c__2);
+	dasudi_(handle, &i__1, &i__2, &__state->c__2);
     }
     if (nullok) {
 

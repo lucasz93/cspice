@@ -1,22 +1,27 @@
-/* bltfrm.f -- translated by f2c (version 19980913).
+/* bltfrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__127 = 127;
-static integer c__128 = 128;
+extern bltfrm_init_t __bltfrm_init;
+static bltfrm_state_t* get_bltfrm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->bltfrm)
+		state->bltfrm = __cspice_allocate_module(sizeof(
+	bltfrm_state_t), &__bltfrm_init, sizeof(__bltfrm_init));
+	return state->bltfrm;
+
+}
 
 /* $Procedure BLTFRM ( Built-in frame IDs ) */
 /* Subroutine */ int bltfrm_(integer *frmcls, integer *idset)
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -25,27 +30,24 @@ static integer c__128 = 128;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__, j, fcode[127];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizei_(integer *);
     extern logical failed_(void);
-    static integer bidids[128], to, fclsid[127], bididx[128];
     extern /* Subroutine */ int scardi_(integer *, integer *);
-    static char frname[32*127];
-    static integer bidpol[134], fclass[127], corder[127], center[127], bnmidx[
-	    128], bidlst[128];
     extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    static integer bnmpol[134];
-    static char bnmnms[32*128];
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    static integer ctrord[127], bnmlst[128];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), zzfdat_(integer *, 
-	    integer *, char *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzfdat_(integer *, integer *, char *, integer 
+	    *, integer *, integer *, integer *, integer *, integer *, integer 
+	    *, char *, integer *, integer *, integer *, integer *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    bltfrm_state_t* __state = get_bltfrm_state();
 /* $ Abstract */
 
 /*     Return a set containing the frame IDs of all built-in frames of a */
@@ -646,20 +648,23 @@ static integer c__128 = 128;
 
 /*     The output set starts out empty. */
 
-    scardi_(&c__0, idset);
+    scardi_(&__state->c__0, idset);
 
 /*     On the first pass, fetch all data for the */
 /*     built-in frames. */
 
-    if (pass1) {
-	zzfdat_(&c__127, &c__128, frname, fcode, center, fclass, fclsid, 
-		ctrord, bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, 
-		bidids, bididx, (ftnlen)32, (ftnlen)32);
+    if (__state->pass1) {
+	zzfdat_(&__state->c__127, &__state->c__128, __state->frname, 
+		__state->fcode, __state->center, __state->fclass, 
+		__state->fclsid, __state->ctrord, __state->bnmlst, 
+		__state->bnmpol, __state->bnmnms, __state->bnmidx, 
+		__state->bidlst, __state->bidpol, __state->bidids, 
+		__state->bididx, (ftnlen)32, (ftnlen)32);
 	if (failed_()) {
 	    chkout_("BLTFRM", (ftnlen)6);
 	    return 0;
 	}
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     Check the input frame class. */
@@ -683,7 +688,7 @@ static integer c__128 = 128;
 		" least #.", (ftnlen)68);
 	i__1 = sizei_(idset);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__127, (ftnlen)1);
+	errint_("#", &__state->c__127, (ftnlen)1);
 	sigerr_("SPICE(SETTOOSMALL)", (ftnlen)18);
 	chkout_("BLTFRM", (ftnlen)6);
 	return 0;
@@ -693,25 +698,27 @@ static integer c__128 = 128;
 /*     to the output set. First, generate an order vector for */
 /*     the ID codes. */
 
-    orderi_(fcode, &c__127, corder);
-    to = 0;
-    for (i__ = 1; i__ <= 127; ++i__) {
+    orderi_(__state->fcode, &__state->c__127, __state->corder);
+    __state->to = 0;
+    for (__state->i__ = 1; __state->i__ <= 127; ++__state->i__) {
 
 /*        Get the index J in the parallel data arrays of */
 /*        the Ith frame, ordered by ID code. */
 
-	j = corder[(i__1 = i__ - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("cord"
-		"er", i__1, "bltfrm_", (ftnlen)451)];
-	if (fclass[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : s_rnge("fclass",
-		 i__1, "bltfrm_", (ftnlen)453)] == *frmcls || *frmcls == -1) {
+	__state->j = __state->corder[(i__1 = __state->i__ - 1) < 127 && 0 <= 
+		i__1 ? i__1 : s_rnge("corder", i__1, "bltfrm_", (ftnlen)451)];
+	if (__state->fclass[(i__1 = __state->j - 1) < 127 && 0 <= i__1 ? i__1 
+		: s_rnge("fclass", i__1, "bltfrm_", (ftnlen)453)] == *frmcls 
+		|| *frmcls == -1) {
 
 /*           The frame at index J belongs to the */
 /*           requested class. Append the frame's ID */
 /*           code to the set. */
 
-	    ++to;
-	    idset[to + 5] = fcode[(i__1 = j - 1) < 127 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fcode", i__1, "bltfrm_", (ftnlen)461)];
+	    ++__state->to;
+	    idset[__state->to + 5] = __state->fcode[(i__1 = __state->j - 1) < 
+		    127 && 0 <= i__1 ? i__1 : s_rnge("fcode", i__1, "bltfrm_",
+		     (ftnlen)461)];
 	}
     }
 
@@ -721,7 +728,7 @@ static integer c__128 = 128;
 /*     the elements is not necessary. We rely on ZZFDAT to not give us */
 /*     duplicate frame specifications. */
 
-    scardi_(&to, idset);
+    scardi_(&__state->to, idset);
     chkout_("BLTFRM", (ftnlen)6);
     return 0;
 } /* bltfrm_ */

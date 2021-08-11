@@ -1,13 +1,21 @@
-/* countc.f -- translated by f2c (version 19980913).
+/* countc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern countc_init_t __countc_init;
+static countc_state_t* get_countc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->countc)
+		state->countc = __cspice_allocate_module(sizeof(
+	countc_state_t), &__countc_init, sizeof(__countc_init));
+	return state->countc;
+
+}
 
 /* $Procedure COUNTC ( Count characters in a text file ) */
 integer countc_(integer *unit, integer *bline, integer *eline, char *line, 
@@ -25,15 +33,22 @@ integer countc_(integer *unit, integer *bline, integer *eline, char *line,
     /* Local variables */
     logical done;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer chars, linect;
+    integer chars;
+    integer linect;
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), astrip_(
-	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int astrip_(char *, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    countc_state_t* __state = get_countc_state();
 /* $ Abstract */
 
 /*     Count the characters in a group of lines in a text file. */
@@ -243,7 +258,7 @@ integer countc_(integer *unit, integer *bline, integer *eline, char *line,
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_fio(&c__1, line, line_len);
+	iostat = do_fio(&__state->c__1, line, line_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}

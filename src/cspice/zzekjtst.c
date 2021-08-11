@@ -1,19 +1,21 @@
-/* zzekjtst.f -- translated by f2c (version 19980913).
+/* zzekjtst.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__24 = 24;
-static integer c__11 = 11;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__7 = 7;
-static integer c__2 = 2;
-static integer c__5 = 5;
+extern zzekjtst_init_t __zzekjtst_init;
+static zzekjtst_state_t* get_zzekjtst_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekjtst)
+		state->zzekjtst = __cspice_allocate_module(sizeof(
+	zzekjtst_state_t), &__zzekjtst_init, sizeof(__zzekjtst_init));
+	return state->zzekjtst;
+
+}
 
 /* $Procedure  ZZEKJTST  ( Test join candidates ) */
 /* Subroutine */ int zzekjtst_0_(int n__, integer *segvec, integer *jbase1, 
@@ -31,38 +33,29 @@ static integer c__5 = 5;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer base, case__, ltab;
-    static logical done;
-    static integer rtab, lcol, lseg, rcol, lelt, rseg, lcur, relt, lptr, lrow,
-	     rptr, rrow;
     extern logical zzekvmch_(integer *, logical *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekrcmp_(integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern logical zzekrcmp_(integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
+    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekjsrt_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer svcp1[100], svcp2[100], svrb1, svrb2;
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *), zzeksupd_(
-	    integer *, integer *, integer *), zzekjsrt_(integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *), zzekstop_(
-	    integer *);
-    static integer i__, j, k, svnr1, svnr2, svnt1, svnt2, jbase, lbase, rbase;
+    extern /* Subroutine */ int zzekstop_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer lhans[100], lsdsc[2400]	/* was [24][100] */, rhans[
-	    100], rsdsc[2400]	/* was [24][100] */;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    static integer lelts[100], cnstr, relts[100], dtptr, lrows[100], svops[
-	    100], rrows[100], svbas1, svbas2, rb, nr, nt;
-    static logical locact[100];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer addrss, ldscrs[1100]	/* was [11][100] */, lovbas, lrvidx, 
-	    minirv[2], offset, nt3, rdscrs[1100]	/* was [11][100] */, 
-	    rovbas, rrvidx, svncon, tab, top;
-    static logical fnd, lsmall;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekjtst_state_t* __state = get_zzekjtst_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1404,7 +1397,7 @@ L_zzekjprp:
 /*     zero, since the cartesian product will be zero. */
 
     if (*nr1 == 0 || *nr2 == 0) {
-	case__ = 4;
+	__state->case__ = 4;
 	chkout_("ZZEKJPRP", (ftnlen)8);
 	return 0;
     }
@@ -1412,44 +1405,50 @@ L_zzekjprp:
 /*     Set the table count and segment vector count for the output join */
 /*     row set. */
 
-    nt3 = *nt1 + *nt2;
+    __state->nt3 = *nt1 + *nt2;
 
 /*     Create handle, segment base, and column descriptor */
 /*     arrays for both sides of each active relational constraint. */
 
     i__1 = *njcnst;
-    for (j = 1; j <= i__1; ++j) {
-	if (active[j - 1]) {
-	    ltab = cpidx1[j - 1];
-	    rtab = cpidx2[j - 1];
-	    lseg = segvec[ltab - 1];
-	    rseg = segvec[rtab - 1];
-	    lhans[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("lhans", 
-		    i__2, "zzekjtst_", (ftnlen)650)] = sthan[lseg - 1];
-	    rhans[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("rhans", 
-		    i__2, "zzekjtst_", (ftnlen)651)] = sthan[rseg - 1];
-	    movei_(&stsdsc[lseg * 24 - 24], &c__24, &lsdsc[(i__2 = j * 24 - 
-		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, 
-		    "zzekjtst_", (ftnlen)653)]);
-	    movei_(&stsdsc[rseg * 24 - 24], &c__24, &rsdsc[(i__2 = j * 24 - 
-		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge("rsdsc", i__2, 
-		    "zzekjtst_", (ftnlen)654)]);
-	    dtptr = stdtpt[lseg - 1];
-	    i__2 = clidx1[j - 1];
-	    for (k = 2; k <= i__2; ++k) {
-		dtptr = lnknxt_(&dtptr, dtpool);
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	if (active[__state->j - 1]) {
+	    __state->ltab = cpidx1[__state->j - 1];
+	    __state->rtab = cpidx2[__state->j - 1];
+	    __state->lseg = segvec[__state->ltab - 1];
+	    __state->rseg = segvec[__state->rtab - 1];
+	    __state->lhans[(i__2 = __state->j - 1) < 100 && 0 <= i__2 ? i__2 :
+		     s_rnge("lhans", i__2, "zzekjtst_", (ftnlen)650)] = sthan[
+		    __state->lseg - 1];
+	    __state->rhans[(i__2 = __state->j - 1) < 100 && 0 <= i__2 ? i__2 :
+		     s_rnge("rhans", i__2, "zzekjtst_", (ftnlen)651)] = sthan[
+		    __state->rseg - 1];
+	    movei_(&stsdsc[__state->lseg * 24 - 24], &__state->c__24, &
+		    __state->lsdsc[(i__2 = __state->j * 24 - 24) < 2400 && 0 
+		    <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
+		    ftnlen)653)]);
+	    movei_(&stsdsc[__state->rseg * 24 - 24], &__state->c__24, &
+		    __state->rsdsc[(i__2 = __state->j * 24 - 24) < 2400 && 0 
+		    <= i__2 ? i__2 : s_rnge("rsdsc", i__2, "zzekjtst_", (
+		    ftnlen)654)]);
+	    __state->dtptr = stdtpt[__state->lseg - 1];
+	    i__2 = clidx1[__state->j - 1];
+	    for (__state->k = 2; __state->k <= i__2; ++__state->k) {
+		__state->dtptr = lnknxt_(&__state->dtptr, dtpool);
 	    }
-	    movei_(&dtdscs[dtptr * 11 - 11], &c__11, &ldscrs[(i__2 = j * 11 - 
-		    11) < 1100 && 0 <= i__2 ? i__2 : s_rnge("ldscrs", i__2, 
-		    "zzekjtst_", (ftnlen)662)]);
-	    dtptr = stdtpt[rseg - 1];
-	    i__2 = clidx2[j - 1];
-	    for (k = 2; k <= i__2; ++k) {
-		dtptr = lnknxt_(&dtptr, dtpool);
+	    movei_(&dtdscs[__state->dtptr * 11 - 11], &__state->c__11, &
+		    __state->ldscrs[(i__2 = __state->j * 11 - 11) < 1100 && 0 
+		    <= i__2 ? i__2 : s_rnge("ldscrs", i__2, "zzekjtst_", (
+		    ftnlen)662)]);
+	    __state->dtptr = stdtpt[__state->rseg - 1];
+	    i__2 = clidx2[__state->j - 1];
+	    for (__state->k = 2; __state->k <= i__2; ++__state->k) {
+		__state->dtptr = lnknxt_(&__state->dtptr, dtpool);
 	    }
-	    movei_(&dtdscs[dtptr * 11 - 11], &c__11, &rdscrs[(i__2 = j * 11 - 
-		    11) < 1100 && 0 <= i__2 ? i__2 : s_rnge("rdscrs", i__2, 
-		    "zzekjtst_", (ftnlen)672)]);
+	    movei_(&dtdscs[__state->dtptr * 11 - 11], &__state->c__11, &
+		    __state->rdscrs[(i__2 = __state->j * 11 - 11) < 1100 && 0 
+		    <= i__2 ? i__2 : s_rnge("rdscrs", i__2, "zzekjtst_", (
+		    ftnlen)672)]);
 	}
     }
 
@@ -1478,40 +1477,41 @@ L_zzekjprp:
 /*     First step:  We try to find a pair of columns related by an */
 /*     equi-join constraint. */
 
-    case__ = 3;
-    j = 1;
-    fnd = FALSE_;
-    while(j <= *njcnst && ! fnd) {
-	if (active[j - 1] && ops[j - 1] == 1) {
+    __state->case__ = 3;
+    __state->j = 1;
+    __state->fnd = FALSE_;
+    while(__state->j <= *njcnst && ! __state->fnd) {
+	if (active[__state->j - 1] && ops[__state->j - 1] == 1) {
 
 /*           Good deal, we've got an equi-join constraint.  Save the */
 /*           index of this constraint. */
 
-	    case__ = 1;
-	    cnstr = j;
-	    fnd = TRUE_;
+	    __state->case__ = 1;
+	    __state->cnstr = __state->j;
+	    __state->fnd = TRUE_;
 	} else {
-	    ++j;
+	    ++__state->j;
 	}
     }
-    if (case__ == 3) {
-	j = 1;
-	fnd = FALSE_;
-	while(j <= *njcnst && ! fnd) {
-	    if (active[j - 1]) {
-		if (ops[j - 1] == 5 || ops[j - 1] == 4 || ops[j - 1] == 2 || 
-			ops[j - 1] == 3) {
+    if (__state->case__ == 3) {
+	__state->j = 1;
+	__state->fnd = FALSE_;
+	while(__state->j <= *njcnst && ! __state->fnd) {
+	    if (active[__state->j - 1]) {
+		if (ops[__state->j - 1] == 5 || ops[__state->j - 1] == 4 || 
+			ops[__state->j - 1] == 2 || ops[__state->j - 1] == 3) 
+			{
 
 /*                 We've got a non-equi-join constraint.  Save the */
 /*                 index of this constraint. */
 
-		    case__ = 2;
-		    cnstr = j;
-		    fnd = TRUE_;
+		    __state->case__ = 2;
+		    __state->cnstr = __state->j;
+		    __state->fnd = TRUE_;
 		}
 	    }
-	    if (! fnd) {
-		++j;
+	    if (! __state->fnd) {
+		++__state->j;
 	    }
 	}
     }
@@ -1521,7 +1521,7 @@ L_zzekjprp:
 /*     set of input rows vectors, using the keys defined by the */
 /*     join constraint. */
 
-    if (case__ != 3) {
+    if (__state->case__ != 3) {
 
 /*        Produce an order vector for the column on the left side of */
 /*        the CNSTR constraint.  We'll do this by turning the set of */
@@ -1531,10 +1531,10 @@ L_zzekjprp:
 /*        join row set include file for a picture of the data structure */
 /*        we're creating. */
 
-	zzekstop_(&lbase);
-	ltab = cpidx1[cnstr - 1];
-	lcol = clidx1[cnstr - 1];
-	lelt = elts1[cnstr - 1];
+	zzekstop_(&__state->lbase);
+	__state->ltab = cpidx1[__state->cnstr - 1];
+	__state->lcol = clidx1[__state->cnstr - 1];
+	__state->lelt = elts1[__state->cnstr - 1];
 
 /*        Set JBASE to the base address of the join row set containing */
 /*        the table indicated by LTAB.  Set NT, NR and RB to indicate, */
@@ -1544,69 +1544,71 @@ L_zzekjprp:
 /*        set, we'll adjust TAB to indicate position relative to the set */
 /*        of tables defining the second join row set. */
 
-	if (ltab <= *nt1) {
-	    jbase = *jbase1;
-	    nt = *nt1;
-	    nr = *nr1;
-	    rb = *rb1;
-	    tab = ltab;
+	if (__state->ltab <= *nt1) {
+	    __state->jbase = *jbase1;
+	    __state->nt = *nt1;
+	    __state->nr = *nr1;
+	    __state->rb = *rb1;
+	    __state->tab = __state->ltab;
 	} else {
-	    jbase = *jbase2;
-	    nt = *nt2;
-	    nr = *nr2;
-	    rb = *rb2;
-	    tab = ltab - *nt1;
+	    __state->jbase = *jbase2;
+	    __state->nt = *nt2;
+	    __state->nr = *nr2;
+	    __state->rb = *rb2;
+	    __state->tab = __state->ltab - *nt1;
 	}
 
 /*        Save the dimensions and base addresses we'll need later. */
 
-	svbas1 = jbase;
-	svnt1 = nt;
-	svrb1 = rb;
-	svnr1 = nr;
-	zzekspsh_(&c__1, &c__0);
-	zzekspsh_(&c__1, &nr);
-	zzekspsh_(&c__1, &c__1);
-	zzekspsh_(&c__1, &c__1);
-	zzekspsh_(&c__1, &segvec[ltab - 1]);
-	zzekspsh_(&c__1, &c__7);
-	zzekspsh_(&c__1, &nr);
-	i__1 = nr;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+	__state->svbas1 = __state->jbase;
+	__state->svnt1 = __state->nt;
+	__state->svrb1 = __state->rb;
+	__state->svnr1 = __state->nr;
+	zzekspsh_(&__state->c__1, &__state->c__0);
+	zzekspsh_(&__state->c__1, &__state->nr);
+	zzekspsh_(&__state->c__1, &__state->c__1);
+	zzekspsh_(&__state->c__1, &__state->c__1);
+	zzekspsh_(&__state->c__1, &segvec[__state->ltab - 1]);
+	zzekspsh_(&__state->c__1, &__state->c__7);
+	zzekspsh_(&__state->c__1, &__state->nr);
+	i__1 = __state->nr;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
 /*           Grab the row pointer in position TAB from the Ith row */
 /*           vector from the join row set containing the parent table */
 /*           of the LHS constraint column. */
 
-	    base = jbase + rb + (i__ - 1) * (nt + 1);
-	    i__2 = base + tab;
-	    i__3 = base + tab;
-	    zzeksrd_(&i__2, &i__3, minirv);
+	    __state->base = __state->jbase + __state->rb + (__state->i__ - 1) 
+		    * (__state->nt + 1);
+	    i__2 = __state->base + __state->tab;
+	    i__3 = __state->base + __state->tab;
+	    zzeksrd_(&i__2, &i__3, __state->minirv);
 
 /*           Fill in the segment vector pointer for the new very */
 /*           narrow row vector. */
 
-	    minirv[1] = 4;
+	    __state->minirv[1] = 4;
 
 /*           Append to the join row set under construction. */
 
-	    zzekspsh_(&c__2, minirv);
+	    zzekspsh_(&__state->c__2, __state->minirv);
 	}
-	zzekstop_(&top);
-	i__1 = lbase + 1;
-	i__2 = lbase + 1;
-	i__3 = top - lbase;
+	zzekstop_(&__state->top);
+	i__1 = __state->lbase + 1;
+	i__2 = __state->lbase + 1;
+	i__3 = __state->top - __state->lbase;
 	zzeksupd_(&i__1, &i__2, &i__3);
-	zzekjsrt_(&c__1, &lbase, &c__1, &c__1, &lcol, &lelt, &c__0, sthan, 
-		stsdsc, stdtpt, dtpool, dtdscs, &lovbas);
+	zzekjsrt_(&__state->c__1, &__state->lbase, &__state->c__1, &
+		__state->c__1, &__state->lcol, &__state->lelt, &__state->c__0,
+		 sthan, stsdsc, stdtpt, dtpool, dtdscs, &__state->lovbas);
 
 /*        Produce an order vector for the column on the right side of */
 /*        the CNSTR constraint. */
 
-	zzekstop_(&rbase);
-	rtab = cpidx2[cnstr - 1];
-	rcol = clidx2[cnstr - 1];
-	relt = elts2[cnstr - 1];
+	zzekstop_(&__state->rbase);
+	__state->rtab = cpidx2[__state->cnstr - 1];
+	__state->rcol = clidx2[__state->cnstr - 1];
+	__state->relt = elts2[__state->cnstr - 1];
 
 /*        Set JBASE to the base address of the join row set containing */
 /*        the table indicated by RTAB.  Set NT, NR and RB to indicate, */
@@ -1616,124 +1618,132 @@ L_zzekjprp:
 /*        set, we'll adjust TAB to indicate position relative to the set */
 /*        of tables defining the second join row set. */
 
-	if (rtab <= *nt1) {
-	    jbase = *jbase1;
-	    nt = *nt1;
-	    nr = *nr1;
-	    rb = *rb1;
-	    tab = rtab;
+	if (__state->rtab <= *nt1) {
+	    __state->jbase = *jbase1;
+	    __state->nt = *nt1;
+	    __state->nr = *nr1;
+	    __state->rb = *rb1;
+	    __state->tab = __state->rtab;
 	} else {
-	    jbase = *jbase2;
-	    nt = *nt2;
-	    nr = *nr2;
-	    rb = *rb2;
-	    tab = rtab - *nt1;
+	    __state->jbase = *jbase2;
+	    __state->nt = *nt2;
+	    __state->nr = *nr2;
+	    __state->rb = *rb2;
+	    __state->tab = __state->rtab - *nt1;
 	}
 
 /*        Save the dimensions and base addresses we'll need later. */
 
-	svbas2 = jbase;
-	svnt2 = nt;
-	svrb2 = rb;
-	svnr2 = nr;
-	zzekspsh_(&c__1, &c__0);
-	zzekspsh_(&c__1, &nr);
-	zzekspsh_(&c__1, &c__1);
-	zzekspsh_(&c__1, &c__1);
-	zzekspsh_(&c__1, &segvec[rtab - 1]);
-	zzekspsh_(&c__1, &c__7);
-	zzekspsh_(&c__1, &nr);
-	i__1 = nr;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+	__state->svbas2 = __state->jbase;
+	__state->svnt2 = __state->nt;
+	__state->svrb2 = __state->rb;
+	__state->svnr2 = __state->nr;
+	zzekspsh_(&__state->c__1, &__state->c__0);
+	zzekspsh_(&__state->c__1, &__state->nr);
+	zzekspsh_(&__state->c__1, &__state->c__1);
+	zzekspsh_(&__state->c__1, &__state->c__1);
+	zzekspsh_(&__state->c__1, &segvec[__state->rtab - 1]);
+	zzekspsh_(&__state->c__1, &__state->c__7);
+	zzekspsh_(&__state->c__1, &__state->nr);
+	i__1 = __state->nr;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
 /*           Grab the row pointer in position TAB from the Ith row */
 /*           vector from the join row set containing the parent table */
 /*           of the RHS constraint column. */
 
-	    base = jbase + rb + (i__ - 1) * (nt + 1);
-	    i__2 = base + tab;
-	    i__3 = base + tab;
-	    zzeksrd_(&i__2, &i__3, minirv);
+	    __state->base = __state->jbase + __state->rb + (__state->i__ - 1) 
+		    * (__state->nt + 1);
+	    i__2 = __state->base + __state->tab;
+	    i__3 = __state->base + __state->tab;
+	    zzeksrd_(&i__2, &i__3, __state->minirv);
 
 /*           Fill in the segment vector pointer for the new very */
 /*           narrow row vector. */
 
-	    minirv[1] = 4;
+	    __state->minirv[1] = 4;
 
 /*           Append to the join row set under construction. */
 
-	    zzekspsh_(&c__2, minirv);
+	    zzekspsh_(&__state->c__2, __state->minirv);
 	}
-	zzekstop_(&top);
-	i__1 = rbase + 1;
-	i__2 = rbase + 1;
-	i__3 = top - rbase;
+	zzekstop_(&__state->top);
+	i__1 = __state->rbase + 1;
+	i__2 = __state->rbase + 1;
+	i__3 = __state->top - __state->rbase;
 	zzeksupd_(&i__1, &i__2, &i__3);
-	zzekjsrt_(&c__1, &rbase, &c__1, &c__1, &rcol, &relt, &c__0, sthan, 
-		stsdsc, stdtpt, dtpool, dtdscs, &rovbas);
+	zzekjsrt_(&__state->c__1, &__state->rbase, &__state->c__1, &
+		__state->c__1, &__state->rcol, &__state->relt, &__state->c__0,
+		 sthan, stsdsc, stdtpt, dtpool, dtdscs, &__state->rovbas);
 
 /*        Keep a local copy of the active constraint flags, deactivating */
 /*        the distinguished one. */
 
 	i__1 = *njcnst;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    locact[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("loca"
-		    "ct", i__2, "zzekjtst_", (ftnlen)935)] = active[i__ - 1];
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    __state->locact[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? 
+		    i__2 : s_rnge("locact", i__2, "zzekjtst_", (ftnlen)935)] =
+		     active[__state->i__ - 1];
 	}
-	locact[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("locact",
-		 i__1, "zzekjtst_", (ftnlen)938)] = FALSE_;
+	__state->locact[(i__1 = __state->cnstr - 1) < 100 && 0 <= i__1 ? i__1 
+		: s_rnge("locact", i__1, "zzekjtst_", (ftnlen)938)] = FALSE_;
     } else {
 
 /*        This is the `no luck' case.  Save all of the constraints. */
 
 	i__1 = *njcnst;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    locact[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("loca"
-		    "ct", i__2, "zzekjtst_", (ftnlen)946)] = active[i__ - 1];
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    __state->locact[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? 
+		    i__2 : s_rnge("locact", i__2, "zzekjtst_", (ftnlen)946)] =
+		     active[__state->i__ - 1];
 	}
 
 /*        Save the counts pertaining to the input join row sets. */
 
-	svnt1 = *nt1;
-	svnt2 = *nt2;
-	svnr1 = *nr1;
-	svnr2 = *nr2;
-	svrb1 = *rb1;
-	svrb2 = *rb2;
-	svbas1 = *jbase1;
-	svbas2 = *jbase2;
+	__state->svnt1 = *nt1;
+	__state->svnt2 = *nt2;
+	__state->svnr1 = *nr1;
+	__state->svnr2 = *nr2;
+	__state->svrb1 = *rb1;
+	__state->svrb2 = *rb2;
+	__state->svbas1 = *jbase1;
+	__state->svbas2 = *jbase2;
     }
 
 /*     In the non-equi-join case, record whether the join constraint */
 /*     requires the left side to be less than, or less than or equal to, */
 /*     the right side. */
 
-    if (case__ == 2) {
-	lsmall = ops[cnstr - 1] == 5 || ops[cnstr - 1] == 4;
+    if (__state->case__ == 2) {
+	__state->lsmall = ops[__state->cnstr - 1] == 5 || ops[__state->cnstr 
+		- 1] == 4;
     }
 
 /*     Keep our own copy of the relational constraints, except for the */
 /*     column indices, which are used only in this routine. */
 
-    svncon = *njcnst;
-    i__1 = svncon;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	svcp1[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
-		i__2, "zzekjtst_", (ftnlen)980)] = cpidx1[i__ - 1];
-	svops[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svops", 
-		i__2, "zzekjtst_", (ftnlen)981)] = ops[i__ - 1];
-	svcp2[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
-		i__2, "zzekjtst_", (ftnlen)982)] = cpidx2[i__ - 1];
+    __state->svncon = *njcnst;
+    i__1 = __state->svncon;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	__state->svcp1[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)980)] = cpidx1[
+		__state->i__ - 1];
+	__state->svops[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		s_rnge("svops", i__2, "zzekjtst_", (ftnlen)981)] = ops[
+		__state->i__ - 1];
+	__state->svcp2[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)982)] = cpidx2[
+		__state->i__ - 1];
     }
 
 /*     Initialize the pointers we'll use to keep track of the */
 /*     row vectors we'll be comparing.  Initialize the DONE flag */
 /*     as well. */
 
-    lptr = 1;
-    lcur = 1;
-    rptr = 1;
-    done = FALSE_;
+    __state->lptr = 1;
+    __state->lcur = 1;
+    __state->rptr = 1;
+    __state->done = FALSE_;
     chkout_("ZZEKJPRP", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKJNXT  ( Return next join row vector ) */
@@ -1883,10 +1893,10 @@ L_zzekjnxt:
 /*     The action we take depends on the join constraint situation. */
 /*     Handle the "empty" case first. */
 
-    if (case__ == 4) {
+    if (__state->case__ == 4) {
 	return 0;
-    } else if (case__ == 1) {
-	while(! done && ! (*found)) {
+    } else if (__state->case__ == 1) {
+	while(! __state->done && ! (*found)) {
 
 /*           At this point, LCUR and RPTR should point to the current */
 /*           pair of order vector entries to use.  We should always have */
@@ -1906,130 +1916,146 @@ L_zzekjnxt:
 /*           numbers in the join columns for each order vector in our */
 /*           mini-join row sets that we created for sorting. */
 
-	    i__1 = lovbas + lcur;
-	    i__2 = lovbas + lcur;
-	    zzeksrd_(&i__1, &i__2, &lrvidx);
-	    i__1 = rovbas + rptr;
-	    i__2 = rovbas + rptr;
-	    zzeksrd_(&i__1, &i__2, &rrvidx);
-	    addrss = lbase + 7 + (lrvidx - 1 << 1) + 1;
-	    zzeksrd_(&addrss, &addrss, &lrow);
-	    addrss = rbase + 7 + (rrvidx - 1 << 1) + 1;
-	    zzeksrd_(&addrss, &addrss, &rrow);
+	    i__1 = __state->lovbas + __state->lcur;
+	    i__2 = __state->lovbas + __state->lcur;
+	    zzeksrd_(&i__1, &i__2, &__state->lrvidx);
+	    i__1 = __state->rovbas + __state->rptr;
+	    i__2 = __state->rovbas + __state->rptr;
+	    zzeksrd_(&i__1, &i__2, &__state->rrvidx);
+	    __state->addrss = __state->lbase + 7 + (__state->lrvidx - 1 << 1) 
+		    + 1;
+	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->lrow);
+	    __state->addrss = __state->rbase + 7 + (__state->rrvidx - 1 << 1) 
+		    + 1;
+	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->rrow);
 
 /*           Compare column entries, and advance the pointers as */
 /*           required. */
 
-	    if (zzekrcmp_(&c__5, &c__1, &lhans[(i__1 = cnstr - 1) < 100 && 0 
-		    <= i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjtst_", (
-		    ftnlen)1197)], &lsdsc[(i__2 = cnstr * 24 - 24) < 2400 && 
-		    0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
-		    ftnlen)1197)], &ldscrs[(i__3 = cnstr * 11 - 11) < 1100 && 
-		    0 <= i__3 ? i__3 : s_rnge("ldscrs", i__3, "zzekjtst_", (
-		    ftnlen)1197)], &lrow, &lelt, &rhans[(i__4 = cnstr - 1) < 
-		    100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, "zzekjts"
-		    "t_", (ftnlen)1197)], &rsdsc[(i__5 = cnstr * 24 - 24) < 
-		    2400 && 0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, "zzekjt"
-		    "st_", (ftnlen)1197)], &rdscrs[(i__6 = cnstr * 11 - 11) < 
-		    1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, "zzekj"
-		    "tst_", (ftnlen)1197)], &rrow, &relt)) {
+	    if (zzekrcmp_(&__state->c__5, &__state->c__1, &__state->lhans[(
+		    i__1 = __state->cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("lhans", i__1, "zzekjtst_", (ftnlen)1197)], &
+		    __state->lsdsc[(i__2 = __state->cnstr * 24 - 24) < 2400 &&
+		     0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
+		    ftnlen)1197)], &__state->ldscrs[(i__3 = __state->cnstr * 
+		    11 - 11) < 1100 && 0 <= i__3 ? i__3 : s_rnge("ldscrs", 
+		    i__3, "zzekjtst_", (ftnlen)1197)], &__state->lrow, &
+		    __state->lelt, &__state->rhans[(i__4 = __state->cnstr - 1)
+		     < 100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, "zzek"
+		    "jtst_", (ftnlen)1197)], &__state->rsdsc[(i__5 = 
+		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__5 ? i__5 : 
+		    s_rnge("rsdsc", i__5, "zzekjtst_", (ftnlen)1197)], &
+		    __state->rdscrs[(i__6 = __state->cnstr * 11 - 11) < 1100 
+		    && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, "zzekjtst_", 
+		    (ftnlen)1197)], &__state->rrow, &__state->relt)) {
 
 
 /*              The `left' key entry is smaller.  Advance the bottom */
 /*              pointer on the left side. */
 
-		if (lptr < svnr1) {
-		    ++lptr;
-		    lcur = lptr;
+		if (__state->lptr < __state->svnr1) {
+		    ++__state->lptr;
+		    __state->lcur = __state->lptr;
 		} else {
-		    done = TRUE_;
+		    __state->done = TRUE_;
 		}
-	    } else if (zzekrcmp_(&c__1, &c__1, &lhans[(i__1 = cnstr - 1) < 
-		    100 && 0 <= i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjts"
-		    "t_", (ftnlen)1223)], &lsdsc[(i__2 = cnstr * 24 - 24) < 
-		    2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjt"
-		    "st_", (ftnlen)1223)], &ldscrs[(i__3 = cnstr * 11 - 11) < 
-		    1100 && 0 <= i__3 ? i__3 : s_rnge("ldscrs", i__3, "zzekj"
-		    "tst_", (ftnlen)1223)], &lrow, &lelt, &rhans[(i__4 = cnstr 
-		    - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, 
-		    "zzekjtst_", (ftnlen)1223)], &rsdsc[(i__5 = cnstr * 24 - 
-		    24) < 2400 && 0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, 
-		    "zzekjtst_", (ftnlen)1223)], &rdscrs[(i__6 = cnstr * 11 - 
-		    11) < 1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, 
-		    "zzekjtst_", (ftnlen)1223)], &rrow, &relt)) {
+	    } else if (zzekrcmp_(&__state->c__1, &__state->c__1, &
+		    __state->lhans[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjtst_", (ftnlen)
+		    1223)], &__state->lsdsc[(i__2 = __state->cnstr * 24 - 24) 
+		    < 2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzek"
+		    "jtst_", (ftnlen)1223)], &__state->ldscrs[(i__3 = 
+		    __state->cnstr * 11 - 11) < 1100 && 0 <= i__3 ? i__3 : 
+		    s_rnge("ldscrs", i__3, "zzekjtst_", (ftnlen)1223)], &
+		    __state->lrow, &__state->lelt, &__state->rhans[(i__4 = 
+		    __state->cnstr - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
+		    "rhans", i__4, "zzekjtst_", (ftnlen)1223)], &
+		    __state->rsdsc[(i__5 = __state->cnstr * 24 - 24) < 2400 &&
+		     0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, "zzekjtst_", (
+		    ftnlen)1223)], &__state->rdscrs[(i__6 = __state->cnstr * 
+		    11 - 11) < 1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", 
+		    i__6, "zzekjtst_", (ftnlen)1223)], &__state->rrow, &
+		    __state->relt)) {
 
 
 /*              The `left' key entry is equal.  Form a composite */
 /*              row vector and test it against the full set of active */
 /*              constraints. */
 
-		if (svcp1[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1241)] <= 
-			svnt1) {
+		if (__state->svcp1[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("svcp1", i__1, "zzekjtst_", (
+			ftnlen)1241)] <= __state->svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
 /*                 equi-join constraint belongs to the first join */
 /*                 row set. */
 
-		    j = 1;
-		    k = svnt1 + 1;
+		    __state->j = 1;
+		    __state->k = __state->svnt1 + 1;
 		} else {
-		    j = svnt2 + 1;
-		    k = 1;
+		    __state->j = __state->svnt2 + 1;
+		    __state->k = 1;
 		}
-		offset = svrb1 + (lrvidx - 1) * (svnt1 + 1);
-		i__1 = svbas1 + offset + 1;
-		i__2 = svbas1 + offset + svnt1;
-		zzeksrd_(&i__1, &i__2, &rowvec[j - 1]);
-		offset = svrb2 + (rrvidx - 1) * (svnt2 + 1);
-		i__1 = svbas2 + offset + 1;
-		i__2 = svbas2 + offset + svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[k - 1]);
+		__state->offset = __state->svrb1 + (__state->lrvidx - 1) * (
+			__state->svnt1 + 1);
+		i__1 = __state->svbas1 + __state->offset + 1;
+		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
+		zzeksrd_(&i__1, &i__2, &rowvec[__state->j - 1]);
+		__state->offset = __state->svrb2 + (__state->rrvidx - 1) * (
+			__state->svnt2 + 1);
+		i__1 = __state->svbas2 + __state->offset + 1;
+		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
+		zzeksrd_(&i__1, &i__2, &rowvec[__state->k - 1]);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
 
-		i__1 = svncon;
-		for (j = 1; j <= i__1; ++j) {
-		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1274)]
-			    ) {
-			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1275)];
-			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1276)];
-			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1277)] = rowvec[ltab - 1];
-			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1278)] = rowvec[rtab - 1];
+		i__1 = __state->svncon;
+		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
+			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
+			    (ftnlen)1274)]) {
+			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
+				i__2, "zzekjtst_", (ftnlen)1275)];
+			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
+				i__2, "zzekjtst_", (ftnlen)1276)];
+			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
+				"t_", (ftnlen)1277)] = rowvec[__state->ltab - 
+				1];
+			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
+				"t_", (ftnlen)1278)] = rowvec[__state->rtab - 
+				1];
 		    }
 		}
-		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 
-			lrows, lelts, svops, rhans, rsdsc, rdscrs, rrows, 
-			relts);
+		*found = zzekvmch_(&__state->svncon, __state->locact, 
+			__state->lhans, __state->lsdsc, __state->ldscrs, 
+			__state->lrows, __state->lelts, __state->svops, 
+			__state->rhans, __state->rsdsc, __state->rdscrs, 
+			__state->rrows, __state->relts);
 
 /*              Update the pointers. */
 
-		if (lcur < svnr1) {
-		    ++lcur;
-		} else if (lcur == svnr1 && rptr < svnr2) {
+		if (__state->lcur < __state->svnr1) {
+		    ++__state->lcur;
+		} else if (__state->lcur == __state->svnr1 && __state->rptr < 
+			__state->svnr2) {
 
 /*                 We've compared every left hand entry from RPTR */
 /*                 upwards to the right hand entry.  Time to work on */
 /*                 the next right hand entry. */
 
-		    ++rptr;
-		    lcur = lptr;
+		    ++__state->rptr;
+		    __state->lcur = __state->lptr;
 		} else {
 
 /*                 LCUR and RPTR point to the last entries in their */
 /*                 respective row sets. */
 
-		    done = TRUE_;
+		    __state->done = TRUE_;
 		}
 	    } else {
 
@@ -2037,11 +2063,11 @@ L_zzekjnxt:
 /*              on the right.  It's time to look at the next entry */
 /*              on the right, if possible. */
 
-		if (rptr < svnr2) {
-		    ++rptr;
-		    lcur = lptr;
+		if (__state->rptr < __state->svnr2) {
+		    ++__state->rptr;
+		    __state->lcur = __state->lptr;
 		} else {
-		    done = TRUE_;
+		    __state->done = TRUE_;
 		}
 	    }
 
@@ -2049,11 +2075,11 @@ L_zzekjnxt:
 /*           or LCUR, or else we've set DONE to .TRUE. */
 
 	}
-    } else if (case__ == 2) {
+    } else if (__state->case__ == 2) {
 
 /*        This is the non-equi-join case. */
 
-	while(! done && ! (*found)) {
+	while(! __state->done && ! (*found)) {
 
 /*           At this point, LPTR and RPTR should point to the current */
 /*           pair of order vector entries to use.  We should always have */
@@ -2070,102 +2096,113 @@ L_zzekjnxt:
 /*           numbers in the join columns for each order vector in our */
 /*           mini-join row sets that we created for sorting. */
 
-	    i__1 = lovbas + lptr;
-	    i__2 = lovbas + lptr;
-	    zzeksrd_(&i__1, &i__2, &lrvidx);
-	    i__1 = rovbas + rptr;
-	    i__2 = rovbas + rptr;
-	    zzeksrd_(&i__1, &i__2, &rrvidx);
-	    addrss = lbase + 7 + (lrvidx - 1 << 1) + 1;
-	    zzeksrd_(&addrss, &addrss, &lrow);
-	    addrss = rbase + 7 + (rrvidx - 1 << 1) + 1;
-	    zzeksrd_(&addrss, &addrss, &rrow);
+	    i__1 = __state->lovbas + __state->lptr;
+	    i__2 = __state->lovbas + __state->lptr;
+	    zzeksrd_(&i__1, &i__2, &__state->lrvidx);
+	    i__1 = __state->rovbas + __state->rptr;
+	    i__2 = __state->rovbas + __state->rptr;
+	    zzeksrd_(&i__1, &i__2, &__state->rrvidx);
+	    __state->addrss = __state->lbase + 7 + (__state->lrvidx - 1 << 1) 
+		    + 1;
+	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->lrow);
+	    __state->addrss = __state->rbase + 7 + (__state->rrvidx - 1 << 1) 
+		    + 1;
+	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->rrow);
 
 /*           Compare column entries, and advance the pointers as */
 /*           required. */
 
-	    if (zzekrcmp_(&svops[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 
-		    : s_rnge("svops", i__1, "zzekjtst_", (ftnlen)1374)], &
-		    c__1, &lhans[(i__2 = cnstr - 1) < 100 && 0 <= i__2 ? i__2 
-		    : s_rnge("lhans", i__2, "zzekjtst_", (ftnlen)1374)], &
-		    lsdsc[(i__3 = cnstr * 24 - 24) < 2400 && 0 <= i__3 ? i__3 
-		    : s_rnge("lsdsc", i__3, "zzekjtst_", (ftnlen)1374)], &
-		    ldscrs[(i__4 = cnstr * 11 - 11) < 1100 && 0 <= i__4 ? 
-		    i__4 : s_rnge("ldscrs", i__4, "zzekjtst_", (ftnlen)1374)],
-		     &lrow, &lelt, &rhans[(i__5 = cnstr - 1) < 100 && 0 <= 
-		    i__5 ? i__5 : s_rnge("rhans", i__5, "zzekjtst_", (ftnlen)
-		    1374)], &rsdsc[(i__6 = cnstr * 24 - 24) < 2400 && 0 <= 
-		    i__6 ? i__6 : s_rnge("rsdsc", i__6, "zzekjtst_", (ftnlen)
-		    1374)], &rdscrs[(i__7 = cnstr * 11 - 11) < 1100 && 0 <= 
-		    i__7 ? i__7 : s_rnge("rdscrs", i__7, "zzekjtst_", (ftnlen)
-		    1374)], &rrow, &relt)) {
+	    if (zzekrcmp_(&__state->svops[(i__1 = __state->cnstr - 1) < 100 &&
+		     0 <= i__1 ? i__1 : s_rnge("svops", i__1, "zzekjtst_", (
+		    ftnlen)1374)], &__state->c__1, &__state->lhans[(i__2 = 
+		    __state->cnstr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
+		    "lhans", i__2, "zzekjtst_", (ftnlen)1374)], &
+		    __state->lsdsc[(i__3 = __state->cnstr * 24 - 24) < 2400 &&
+		     0 <= i__3 ? i__3 : s_rnge("lsdsc", i__3, "zzekjtst_", (
+		    ftnlen)1374)], &__state->ldscrs[(i__4 = __state->cnstr * 
+		    11 - 11) < 1100 && 0 <= i__4 ? i__4 : s_rnge("ldscrs", 
+		    i__4, "zzekjtst_", (ftnlen)1374)], &__state->lrow, &
+		    __state->lelt, &__state->rhans[(i__5 = __state->cnstr - 1)
+		     < 100 && 0 <= i__5 ? i__5 : s_rnge("rhans", i__5, "zzek"
+		    "jtst_", (ftnlen)1374)], &__state->rsdsc[(i__6 = 
+		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__6 ? i__6 : 
+		    s_rnge("rsdsc", i__6, "zzekjtst_", (ftnlen)1374)], &
+		    __state->rdscrs[(i__7 = __state->cnstr * 11 - 11) < 1100 
+		    && 0 <= i__7 ? i__7 : s_rnge("rdscrs", i__7, "zzekjtst_", 
+		    (ftnlen)1374)], &__state->rrow, &__state->relt)) {
 
 
 /*              This pair of row vectors satisfies the join constraint. */
 /*              Form a composite row vector and test it against the full */
 /*              set of active constraints. */
 
-		if (svcp1[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1392)] <= 
-			svnt1) {
+		if (__state->svcp1[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("svcp1", i__1, "zzekjtst_", (
+			ftnlen)1392)] <= __state->svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
 /*                 equi-join constraint belongs to the first join */
 /*                 row set. */
 
-		    j = 1;
-		    k = svnt1 + 1;
+		    __state->j = 1;
+		    __state->k = __state->svnt1 + 1;
 		} else {
-		    j = svnt2 + 1;
-		    k = 1;
+		    __state->j = __state->svnt2 + 1;
+		    __state->k = 1;
 		}
-		offset = svrb1 + (lrvidx - 1) * (svnt1 + 1);
-		i__1 = svbas1 + offset + 1;
-		i__2 = svbas1 + offset + svnt1;
-		zzeksrd_(&i__1, &i__2, &rowvec[j - 1]);
-		offset = svrb2 + (rrvidx - 1) * (svnt2 + 1);
-		i__1 = svbas2 + offset + 1;
-		i__2 = svbas2 + offset + svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[k - 1]);
+		__state->offset = __state->svrb1 + (__state->lrvidx - 1) * (
+			__state->svnt1 + 1);
+		i__1 = __state->svbas1 + __state->offset + 1;
+		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
+		zzeksrd_(&i__1, &i__2, &rowvec[__state->j - 1]);
+		__state->offset = __state->svrb2 + (__state->rrvidx - 1) * (
+			__state->svnt2 + 1);
+		i__1 = __state->svbas2 + __state->offset + 1;
+		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
+		zzeksrd_(&i__1, &i__2, &rowvec[__state->k - 1]);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
 
-		i__1 = svncon;
-		for (j = 1; j <= i__1; ++j) {
-		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1426)]
-			    ) {
-			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1427)];
-			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1428)];
-			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1429)] = rowvec[ltab - 1];
-			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1430)] = rowvec[rtab - 1];
+		i__1 = __state->svncon;
+		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
+			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
+			    (ftnlen)1426)]) {
+			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
+				i__2, "zzekjtst_", (ftnlen)1427)];
+			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
+				i__2, "zzekjtst_", (ftnlen)1428)];
+			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
+				"t_", (ftnlen)1429)] = rowvec[__state->ltab - 
+				1];
+			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
+				"t_", (ftnlen)1430)] = rowvec[__state->rtab - 
+				1];
 		    }
 		}
-		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 
-			lrows, lelts, svops, rhans, rsdsc, rdscrs, rrows, 
-			relts);
-		if (lsmall) {
+		*found = zzekvmch_(&__state->svncon, __state->locact, 
+			__state->lhans, __state->lsdsc, __state->ldscrs, 
+			__state->lrows, __state->lelts, __state->svops, 
+			__state->rhans, __state->rsdsc, __state->rdscrs, 
+			__state->rrows, __state->relts);
+		if (__state->lsmall) {
 
 /*                 The `left' key entry is smaller.  All higher-indexed */
 /*                 rows on the right side also satisfy the join */
 /*                 constraint, combined with the current left hand side. */
 
-		    if (rptr < svnr2) {
-			++rptr;
-		    } else if (lptr < svnr1) {
-			++lptr;
-			rptr = 1;
+		    if (__state->rptr < __state->svnr2) {
+			++__state->rptr;
+		    } else if (__state->lptr < __state->svnr1) {
+			++__state->lptr;
+			__state->rptr = 1;
 		    } else {
-			done = TRUE_;
+			__state->done = TRUE_;
 		    }
 		} else {
 
@@ -2173,13 +2210,13 @@ L_zzekjnxt:
 /*                 rows on the left side also satisfy the join */
 /*                 constraint, combined with the current right hand side. */
 
-		    if (lptr < svnr1) {
-			++lptr;
-		    } else if (rptr < svnr2) {
-			++rptr;
-			lptr = 1;
+		    if (__state->lptr < __state->svnr1) {
+			++__state->lptr;
+		    } else if (__state->rptr < __state->svnr2) {
+			++__state->rptr;
+			__state->lptr = 1;
 		    } else {
-			done = TRUE_;
+			__state->done = TRUE_;
 		    }
 		}
 
@@ -2191,25 +2228,25 @@ L_zzekjnxt:
 /*              The constraint was not met by the rows under */
 /*              consideration. */
 
-		if (lsmall) {
+		if (__state->lsmall) {
 
 /*                 If the right side can be incremented, there's a */
 /*                 chance of a match. */
 
-		    if (rptr < svnr2) {
-			++rptr;
+		    if (__state->rptr < __state->svnr2) {
+			++__state->rptr;
 		    } else {
-			done = TRUE_;
+			__state->done = TRUE_;
 		    }
 		} else {
 
 /*                 If the left side can be incremented, there's a */
 /*                 chance of a match. */
 
-		    if (lptr < svnr1) {
-			++lptr;
+		    if (__state->lptr < __state->svnr1) {
+			++__state->lptr;
 		    } else {
-			done = TRUE_;
+			__state->done = TRUE_;
 		    }
 		}
 
@@ -2226,53 +2263,59 @@ L_zzekjnxt:
 /*        continuation of our search when we drop back into the loop */
 /*        on a subsequent call. */
 
-	while(lptr <= svnr1) {
-	    while(rptr <= svnr2) {
+	while(__state->lptr <= __state->svnr1) {
+	    while(__state->rptr <= __state->svnr2) {
 
 /*              Form a composite row vector and test it against the full */
 /*              set of active constraints. */
 
-		offset = svrb1 + (lptr - 1) * (svnt1 + 1);
-		i__1 = svbas1 + offset + 1;
-		i__2 = svbas1 + offset + svnt1;
+		__state->offset = __state->svrb1 + (__state->lptr - 1) * (
+			__state->svnt1 + 1);
+		i__1 = __state->svbas1 + __state->offset + 1;
+		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
 		zzeksrd_(&i__1, &i__2, rowvec);
-		offset = svrb2 + (rptr - 1) * (svnt2 + 1);
-		i__1 = svbas2 + offset + 1;
-		i__2 = svbas2 + offset + svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[svnt1]);
+		__state->offset = __state->svrb2 + (__state->rptr - 1) * (
+			__state->svnt2 + 1);
+		i__1 = __state->svbas2 + __state->offset + 1;
+		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
+		zzeksrd_(&i__1, &i__2, &rowvec[__state->svnt1]);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
 
-		i__1 = svncon;
-		for (j = 1; j <= i__1; ++j) {
-		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1567)]
-			    ) {
-			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1568)];
-			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
-				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1569)];
-			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1570)] = rowvec[ltab - 1];
-			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1571)] = rowvec[rtab - 1];
+		i__1 = __state->svncon;
+		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
+			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
+			    (ftnlen)1567)]) {
+			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
+				i__2, "zzekjtst_", (ftnlen)1568)];
+			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
+				i__2, "zzekjtst_", (ftnlen)1569)];
+			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
+				"t_", (ftnlen)1570)] = rowvec[__state->ltab - 
+				1];
+			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
+				"t_", (ftnlen)1571)] = rowvec[__state->rtab - 
+				1];
 		    }
 		}
-		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 
-			lrows, lelts, svops, rhans, rsdsc, rdscrs, rrows, 
-			relts);
-		++rptr;
+		*found = zzekvmch_(&__state->svncon, __state->locact, 
+			__state->lhans, __state->lsdsc, __state->ldscrs, 
+			__state->lrows, __state->lelts, __state->svops, 
+			__state->rhans, __state->rsdsc, __state->rdscrs, 
+			__state->rrows, __state->relts);
+		++__state->rptr;
 		if (*found) {
 		    return 0;
 		}
 	    }
-	    ++lptr;
-	    rptr = 1;
+	    ++__state->lptr;
+	    __state->rptr = 1;
 	}
     }
     return 0;

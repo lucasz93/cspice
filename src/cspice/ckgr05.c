@@ -1,14 +1,21 @@
-/* ckgr05.f -- translated by f2c (version 19980913).
+/* ckgr05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckgr05_init_t __ckgr05_init;
+static ckgr05_state_t* get_ckgr05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgr05)
+		state->ckgr05 = __cspice_allocate_module(sizeof(
+	ckgr05_state_t), &__ckgr05_init, sizeof(__ckgr05_init));
+	return state->ckgr05;
+
+}
 
 /* $Procedure      CKGR05 ( C-kernel, get record, type 05 ) */
 /* Subroutine */ int ckgr05_(integer *handle, doublereal *descr, integer *
@@ -21,20 +28,29 @@ static integer c__6 = 6;
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    integer addr__, nrec;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
-	     integer *, integer *, doublereal *);
+    integer addr__;
+    integer nrec;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal npoint;
     extern logical return_(void);
     integer subtyp;
     doublereal dcd[2];
-    integer beg, icd[6], end;
+    integer beg;
+    integer icd[6];
+    integer end;
 
+
+    /* Module state */
+    ckgr05_state_t* __state = get_ckgr05_state();
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 5 segment in a CK file, */
@@ -450,7 +466,7 @@ static integer c__6 = 6;
 /*       4 - The existence of angular velocity data, which determines how */
 /*           big the pointing portion of the returned record will be. */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 5) {
 	setmsg_("Data type of the segment should be 5: Passed descriptor sho"
 		"ws type = #.", (ftnlen)71);

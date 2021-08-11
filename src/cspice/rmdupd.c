@@ -1,9 +1,17 @@
-/* rmdupd.f -- translated by f2c (version 19980913).
+/* rmdupd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rmdupd_state_t;
+static rmdupd_state_t* get_rmdupd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure RMDUPD ( Remove duplicates from a double precision array ) */
 /* Subroutine */ int rmdupd_(integer *nelt, doublereal *array)
@@ -12,9 +20,13 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int shelld_(integer *, doublereal *);
 
+
+    /* Module state */
+    rmdupd_state_t* __state = get_rmdupd_state();
 /* $ Abstract */
 
 /*      Remove duplicate elements from a double precision array. */

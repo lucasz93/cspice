@@ -1,16 +1,21 @@
-/* zzsrfker.f -- translated by f2c (version 19980913).
+/* zzsrfker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2000 = 2000;
-static integer c__1 = 1;
-static integer c__2003 = 2003;
+extern zzsrfker_init_t __zzsrfker_init;
+static zzsrfker_state_t* get_zzsrfker_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsrfker)
+		state->zzsrfker = __cspice_allocate_module(sizeof(
+	zzsrfker_state_t), &__zzsrfker_init, sizeof(__zzsrfker_init));
+	return state->zzsrfker;
+
+}
 
 /* $Procedure ZZSRFKER ( Surface translation, process kernel update ) */
 /* Subroutine */ int zzsrfker_(char *kernam, char *nornam, integer *kersid, 
@@ -20,9 +25,6 @@ static integer c__2003 = 2003;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char names[32*3] = "NAIF_SURFACE_BODY               " "NAIF_SURFA"
-	    "CE_CODE               " "NAIF_SURFACE_NAME               ";
 
     /* System generated locals */
     integer i__1;
@@ -34,29 +36,38 @@ static integer c__2003 = 2003;
     extern /* Subroutine */ int zzsrfini_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, ftnlen);
-    integer i__, ncode;
+    integer i__;
+    integer ncode;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nname;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer nbody;
     logical fndcde;
     extern logical failed_(void);
-    logical fndbod, fndnam;
+    logical fndbod;
+    logical fndnam;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen);
-    char bdtype[1], cdtype[1];
+    char bdtype[1];
+    char cdtype[1];
     extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), dtpool_(char *, logical *, integer *, 
-	    char *, ftnlen, ftnlen);
+	    *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
     char ndtype[1];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), ljucrs_(integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
 	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
 
+
+    /* Module state */
+    zzsrfker_state_t* __state = get_zzsrfker_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -438,16 +449,17 @@ static integer c__2003 = 2003;
 /*          structures is delegated to ZZSRFINI. */
 
 
-    if (pass1) {
+    if (__state->pass1) {
 
 /*        Set watch on kernel variables used for the surface mapping. */
 
-	swpool_("ZZSRFTRN", &c__3, names, (ftnlen)8, (ftnlen)32);
+	swpool_("ZZSRFTRN", &__state->c__3, __state->names, (ftnlen)8, (
+		ftnlen)32);
 	if (failed_()) {
 	    chkout_("ZZSRFKER", (ftnlen)8);
 	    return 0;
 	}
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     Indicate that no data are available until we find out */
@@ -537,7 +549,7 @@ static integer c__2003 = 2003;
 	errint_("#", &ncode, (ftnlen)1);
 	errch_("#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)17);
 	errint_("#", &nbody, (ftnlen)1);
-	errint_("#", &c__2000, (ftnlen)1);
+	errint_("#", &__state->c__2000, (ftnlen)1);
 	sigerr_("SPICE(TOOMANYSURFACES)", (ftnlen)22);
 	chkout_("ZZSRFKER", (ftnlen)8);
 	return 0;
@@ -560,12 +572,12 @@ static integer c__2003 = 2003;
 
 /*     Note that we'll check the variable sizes below. */
 
-    gcpool_("NAIF_SURFACE_NAME", &c__1, &c__2000, &nname, kernam, &fndnam, (
-	    ftnlen)17, (ftnlen)36);
-    gipool_("NAIF_SURFACE_CODE", &c__1, &c__2000, &ncode, kersid, &fndcde, (
-	    ftnlen)17);
-    gipool_("NAIF_SURFACE_BODY", &c__1, &c__2000, &nbody, kerbid, &fndbod, (
-	    ftnlen)17);
+    gcpool_("NAIF_SURFACE_NAME", &__state->c__1, &__state->c__2000, &nname, 
+	    kernam, &fndnam, (ftnlen)17, (ftnlen)36);
+    gipool_("NAIF_SURFACE_CODE", &__state->c__1, &__state->c__2000, &ncode, 
+	    kersid, &fndcde, (ftnlen)17);
+    gipool_("NAIF_SURFACE_BODY", &__state->c__1, &__state->c__2000, &nbody, 
+	    kerbid, &fndbod, (ftnlen)17);
     if (failed_()) {
 	chkout_("ZZSRFKER", (ftnlen)8);
 	return 0;
@@ -586,14 +598,14 @@ static integer c__2003 = 2003;
 	    chkout_("ZZSRFKER", (ftnlen)8);
 	    return 0;
 	}
-	ljucrs_(&c__1, kernam + (i__ - 1) * 36, nornam + (i__ - 1) * 36, (
-		ftnlen)36, (ftnlen)36);
+	ljucrs_(&__state->c__1, kernam + (i__ - 1) * 36, nornam + (i__ - 1) * 
+		36, (ftnlen)36, (ftnlen)36);
     }
 
 /*     Initialize hash data structures. */
 
-    zzsrfini_(nornam, kersid, kerbid, nkvar, &c__2003, snmhls, snmpol, snmidx,
-	     sidhls, sidpol, sididx, (ftnlen)36);
+    zzsrfini_(nornam, kersid, kerbid, nkvar, &__state->c__2003, snmhls, 
+	    snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36);
     chkout_("ZZSRFKER", (ftnlen)8);
     return 0;
 } /* zzsrfker_ */

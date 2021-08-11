@@ -1,14 +1,21 @@
-/* cke03.f -- translated by f2c (version 19980913).
+/* cke03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__3 = 3;
+extern cke03_init_t __cke03_init;
+static cke03_state_t* get_cke03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cke03)
+		state->cke03 = __cspice_allocate_module(sizeof(cke03_state_t),
+	 &__cke03_init, sizeof(__cke03_init));
+	return state->cke03;
+
+}
 
 /* $Procedure CKE03  ( C-kernel, evaluate pointing record, data type 3 ) */
 /* Subroutine */ int cke03_(logical *needav, doublereal *record, doublereal *
@@ -18,25 +25,41 @@ static integer c__3 = 3;
     doublereal d__1;
 
     /* Local variables */
-    doublereal frac, axis[3];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), mtxm_(
-	    doublereal *, doublereal *, doublereal *), mxmt_(doublereal *, 
-	    doublereal *, doublereal *);
-    doublereal cmat1[9]	/* was [3][3] */, cmat2[9]	/* was [3][3] */, t, 
-	    angle, delta[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), vlcom_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    doublereal q1[4], q2[4], t1, t2;
+    doublereal frac;
+    doublereal axis[3];
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
+	    );
+    doublereal cmat1[9]	/* was [3][3] */;
+    doublereal cmat2[9]	/* was [3][3] */;
+    doublereal t;
+    doublereal angle;
+    doublereal delta[9]	/* was [3][3] */;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    doublereal q1[4];
+    doublereal q2[4];
+    doublereal t1;
+    doublereal t2;
     extern logical failed_(void);
     extern /* Subroutine */ int raxisa_(doublereal *, doublereal *, 
-	    doublereal *), axisar_(doublereal *, doublereal *, doublereal *), 
-	    chkout_(char *, ftnlen);
-    doublereal av1[3], av2[3];
+	    doublereal *);
+    extern /* Subroutine */ int axisar_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    doublereal av1[3];
+    doublereal av2[3];
     extern logical return_(void);
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    cke03_state_t* __state = get_cke03_state();
 /* $ Abstract */
 
 /*   Evaluate a pointing record returned by CKR03 from a CK type 3 */
@@ -460,10 +483,10 @@ static integer c__3 = 3;
     t = record[16];
     t1 = record[0];
     t2 = record[8];
-    moved_(&record[1], &c__4, q1);
-    moved_(&record[5], &c__3, av1);
-    moved_(&record[9], &c__4, q2);
-    moved_(&record[13], &c__3, av2);
+    moved_(&record[1], &__state->c__4, q1);
+    moved_(&record[5], &__state->c__3, av1);
+    moved_(&record[9], &__state->c__4, q2);
+    moved_(&record[13], &__state->c__3, av2);
 
 /*     If T1 and T2 are the same then no interpolation or extrapolation */
 /*     is performed.  Simply convert the quaternion to a C-matrix and */

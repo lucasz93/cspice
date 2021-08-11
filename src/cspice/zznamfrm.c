@@ -1,9 +1,17 @@
-/* zznamfrm.f -- translated by f2c (version 19980913).
+/* zznamfrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zznamfrm_state_t;
+static zznamfrm_state_t* get_zznamfrm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZNAMFRM ( Frame name to ID translation, with bypass ) */
 /* Subroutine */ int zznamfrm_(integer *usrctr, char *savnam, integer *savcde,
@@ -14,12 +22,16 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *), chkin_(char *
-	    , ftnlen), namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     logical update;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zznamfrm_state_t* __state = get_zznamfrm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

@@ -1,13 +1,21 @@
-/* zzddhini.f -- translated by f2c (version 19980913).
+/* zzddhini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern zzddhini_init_t __zzddhini_init;
+static zzddhini_state_t* get_zzddhini_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhini)
+		state->zzddhini = __cspice_allocate_module(sizeof(
+	zzddhini_state_t), &__zzddhini_init, sizeof(__zzddhini_init));
+	return state->zzddhini;
+
+}
 
 /* $Procedure ZZDDHINI ( Private --- DDH Initialize Structures ) */
 /* Subroutine */ int zzddhini_(integer *natbff, integer *supbff, integer *
@@ -20,18 +28,25 @@ static integer c__4 = 4;
     /* Local variables */
     logical done;
     extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
-	    ftnlen), zzplatfm_(char *, char *, ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), nextwd_(char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     char linstr[36];
     extern logical return_(void);
     char tmpstr[8];
 
+
+    /* Module state */
+    zzddhini_state_t* __state = get_zzddhini_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -459,7 +474,7 @@ static integer c__4 = 4;
 
     zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    *natbff = isrchc_(tmpstr, &c__4, strbff, (ftnlen)8, strbff_len);
+    *natbff = isrchc_(tmpstr, &__state->c__4, strbff, (ftnlen)8, strbff_len);
     if (*natbff == 0) {
 	chkin_("ZZDDHINI", (ftnlen)8);
 	setmsg_("The binary file format, '#', is not supported by this veris"
@@ -495,8 +510,8 @@ static integer c__4 = 4;
 /*        appropriate integer code. */
 
 	if (! done) {
-	    supbff[i__ - 1] = isrchc_(tmpstr, &c__4, strbff, (ftnlen)8, 
-		    strbff_len);
+	    supbff[i__ - 1] = isrchc_(tmpstr, &__state->c__4, strbff, (ftnlen)
+		    8, strbff_len);
 
 /*           Check to see if the binary file format listed */
 /*           is properly supported. */

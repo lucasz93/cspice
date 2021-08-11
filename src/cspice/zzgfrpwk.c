@@ -1,17 +1,21 @@
-/* zzgfrpwk.f -- translated by f2c (version 19980913).
+/* zzgfrpwk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5 = 5;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static doublereal c_b19 = 0.;
-static doublereal c_b20 = 100.;
+extern zzgfrpwk_init_t __zzgfrpwk_init;
+static zzgfrpwk_state_t* get_zzgfrpwk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfrpwk)
+		state->zzgfrpwk = __cspice_allocate_module(sizeof(
+	zzgfrpwk_state_t), &__zzgfrpwk_init, sizeof(__zzgfrpwk_init));
+	return state->zzgfrpwk;
+
+}
 
 /* $Procedure    ZZGFRPWK ( Geometry finder report work done on a task ) */
 /* Subroutine */ int zzgfrpwk_0_(int n__, integer *unit, doublereal *total, 
@@ -20,20 +24,6 @@ static doublereal c_b20 = 100.;
 {
     /* Initialized data */
 
-    static integer calls = 0;
-    static integer stdout = 6;
-    static doublereal step = 0.;
-    static doublereal svincr = 0.;
-    static integer svunit = 6;
-    static integer check = 1;
-    static doublereal done = 0.;
-    static doublereal entire = 0.;
-    static char finish[13] = "             ";
-    static logical first = TRUE_;
-    static integer ls = 1;
-    static doublereal lstsec = 0.;
-    static char start[55] = "                                               "
-	    "        ";
 
     /* System generated locals */
     address a__1[5];
@@ -47,20 +37,26 @@ static doublereal c_b20 = 100.;
     /* Local variables */
     doublereal tvec[6];
     extern /* Subroutine */ int zzgfdsps_(integer *, char *, char *, integer *
-	    , ftnlen, ftnlen), zzcputim_(doublereal *), chkin_(char *, ftnlen)
-	    , dpfmt_(doublereal *, char *, char *, ftnlen, ftnlen), stdio_(
-	    char *, integer *, ftnlen);
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzcputim_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     doublereal fractn;
     char messge[78];
     doublereal cursec;
     char prcent[10];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzgfrpwk_state_t* __state = get_zzgfrpwk_state();
 /* $ Abstract */
 
 /*     The entry points under this routine allows one to easily monitor */
@@ -589,59 +585,60 @@ L_zzgftswk:
 /*     On the first pass, obtain the logical unit for */
 /*     standard output. */
 
-    if (first) {
-	stdio_("STDOUT", &stdout, (ftnlen)6);
+    if (__state->first) {
+	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
 
 /*        The output unit is STDOUT unless the caller */
 /*        sets it to something else. */
 
-	svunit = stdout;
-	first = FALSE_;
+	__state->svunit = __state->stdout;
+	__state->first = FALSE_;
     }
 
 /*     Save the inputs and set the amount of work done to 0 */
 
-    entire = *total;
+    __state->entire = *total;
 /* Computing MIN */
     d__1 = 3600., d__2 = max(0.,*freq);
-    step = min(d__1,d__2);
-    check = max(1,*tcheck);
-    s_copy(start, begin, (ftnlen)55, begin_len);
-    s_copy(finish, end, (ftnlen)13, end_len);
-    done = 0.;
+    __state->step = min(d__1,d__2);
+    __state->check = max(1,*tcheck);
+    s_copy(__state->start, begin, (ftnlen)55, begin_len);
+    s_copy(__state->finish, end, (ftnlen)13, end_len);
+    __state->done = 0.;
 
 /*     Set the timer. */
 
     zzcputim_(tvec);
-    lstsec = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
+    __state->lstsec = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
 
 /*     Set the increment counter */
 
-    calls = 0;
+    __state->calls = 0;
 
 /*     Compose the output message. */
 
-    ls = rtrim_(start, (ftnlen)55);
+    __state->ls = rtrim_(__state->start, (ftnlen)55);
 /* Writing concatenation */
-    i__1[0] = ls, a__1[0] = start;
+    i__1[0] = __state->ls, a__1[0] = __state->start;
     i__1[1] = 1, a__1[1] = " ";
     i__1[2] = 7, a__1[2] = "  0.00%";
     i__1[3] = 1, a__1[3] = " ";
-    i__1[4] = 13, a__1[4] = finish;
-    s_cat(messge, a__1, i__1, &c__5, (ftnlen)78);
+    i__1[4] = 13, a__1[4] = __state->finish;
+    s_cat(messge, a__1, i__1, &__state->c__5, (ftnlen)78);
 
 /*     Display a blank line, make sure we don't overwrite anything */
 /*     at the bottom of the screen. The display the message. */
 
-    if (svunit == stdout) {
-	zzgfdsps_(&c__1, messge, "A", &c__0, (ftnlen)78, (ftnlen)1);
+    if (__state->svunit == __state->stdout) {
+	zzgfdsps_(&__state->c__1, messge, "A", &__state->c__0, (ftnlen)78, (
+		ftnlen)1);
     } else {
 
 /*        Write the message without special carriage control. */
 
-	writln_(" ", &svunit, (ftnlen)1);
-	writln_(" ", &svunit, (ftnlen)1);
-	writln_(messge, &svunit, (ftnlen)78);
+	writln_(" ", &__state->svunit, (ftnlen)1);
+	writln_(" ", &__state->svunit, (ftnlen)1);
+	writln_(messge, &__state->svunit, (ftnlen)78);
     }
     chkout_("ZZGFTSWK", (ftnlen)8);
     return 0;
@@ -760,40 +757,42 @@ L_zzgfwkin:
 	return 0;
     }
     chkin_("ZZGFWKIN", (ftnlen)8);
-    svincr = *incr;
-    done += *incr;
-    ++calls;
-    if (entire == 0.) {
+    __state->svincr = *incr;
+    __state->done += *incr;
+    ++__state->calls;
+    if (__state->entire == 0.) {
 	chkout_("ZZGFWKIN", (ftnlen)8);
 	return 0;
     }
-    if (calls >= check) {
-	calls = 0;
+    if (__state->calls >= __state->check) {
+	__state->calls = 0;
 	zzcputim_(tvec);
 	cursec = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
-	if ((d__1 = cursec - lstsec, abs(d__1)) >= step) {
-	    lstsec = cursec;
+	if ((d__1 = cursec - __state->lstsec, abs(d__1)) >= __state->step) {
+	    __state->lstsec = cursec;
 
 /*           Report how much work has been done. */
 
-	    d__1 = done / entire * 100.;
-	    fractn = brcktd_(&d__1, &c_b19, &c_b20);
+	    d__1 = __state->done / __state->entire * 100.;
+	    fractn = brcktd_(&d__1, &__state->c_b19, &__state->c_b20);
 	    dpfmt_(&fractn, "xxx.xx", prcent, (ftnlen)6, (ftnlen)10);
 	    *(unsigned char *)&prcent[6] = '%';
 /* Writing concatenation */
-	    i__1[0] = ls, a__1[0] = start;
+	    i__1[0] = __state->ls, a__1[0] = __state->start;
 	    i__1[1] = 1, a__1[1] = " ";
 	    i__1[2] = 7, a__1[2] = prcent;
 	    i__1[3] = 1, a__1[3] = " ";
-	    i__1[4] = rtrim_(finish, (ftnlen)13), a__1[4] = finish;
-	    s_cat(messge, a__1, i__1, &c__5, (ftnlen)78);
-	    if (svunit == stdout) {
-		zzgfdsps_(&c__0, messge, "A", &c__0, (ftnlen)78, (ftnlen)1);
+	    i__1[4] = rtrim_(__state->finish, (ftnlen)13), a__1[4] = 
+		    __state->finish;
+	    s_cat(messge, a__1, i__1, &__state->c__5, (ftnlen)78);
+	    if (__state->svunit == __state->stdout) {
+		zzgfdsps_(&__state->c__0, messge, "A", &__state->c__0, (
+			ftnlen)78, (ftnlen)1);
 	    } else {
 
 /*              Write the message without special carriage control. */
 
-		writln_(messge, &svunit, (ftnlen)78);
+		writln_(messge, &__state->svunit, (ftnlen)78);
 	    }
 	}
     }
@@ -967,10 +966,10 @@ L_zzgfwkad:
 /* -& */
 /* Computing MIN */
     d__1 = 3600., d__2 = max(0.,*freq);
-    step = min(d__1,d__2);
-    check = max(1,*tcheck);
-    s_copy(start, begin, (ftnlen)55, begin_len);
-    s_copy(finish, end, (ftnlen)13, end_len);
+    __state->step = min(d__1,d__2);
+    __state->check = max(1,*tcheck);
+    s_copy(__state->start, begin, (ftnlen)55, begin_len);
+    s_copy(__state->finish, end, (ftnlen)13, end_len);
     return 0;
 /* $Procedure ZZGFWUN ( Geometry finder set work report output unit ) */
 
@@ -1090,11 +1089,11 @@ L_zzgfwkun:
 /*     On the first pass, obtain the logical unit for */
 /*     standard output. */
 
-    if (first) {
-	stdio_("STDOUT", &stdout, (ftnlen)6);
-	first = FALSE_;
+    if (__state->first) {
+	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
+	__state->first = FALSE_;
     }
-    svunit = *unit;
+    __state->svunit = *unit;
     return 0;
 /* $Procedure ZZGFWKMO ( Geometry finder work reporting monitor ) */
 
@@ -1226,13 +1225,13 @@ L_zzgfwkmo:
 /*     GF low-level progress report monitor */
 
 /* -& */
-    *unit = svunit;
-    *total = entire;
-    *freq = step;
-    *tcheck = check;
-    s_copy(begin, start, begin_len, (ftnlen)55);
-    s_copy(end, finish, end_len, (ftnlen)13);
-    *incr = svincr;
+    *unit = __state->svunit;
+    *total = __state->entire;
+    *freq = __state->step;
+    *tcheck = __state->check;
+    s_copy(begin, __state->start, begin_len, (ftnlen)55);
+    s_copy(end, __state->finish, end_len, (ftnlen)13);
+    *incr = __state->svincr;
     return 0;
 } /* zzgfrpwk_ */
 

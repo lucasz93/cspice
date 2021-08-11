@@ -1,13 +1,21 @@
-/* zzwninsd.f -- translated by f2c (version 19980913).
+/* zzwninsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzwninsd_init_t __zzwninsd_init;
+static zzwninsd_state_t* get_zzwninsd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzwninsd)
+		state->zzwninsd = __cspice_allocate_module(sizeof(
+	zzwninsd_state_t), &__zzwninsd_init, sizeof(__zzwninsd_init));
+	return state->zzwninsd;
+
+}
 
 /* $Procedure ZZWNINSD ( Insert an interval into a DP window ) */
 /* Subroutine */ int zzwninsd_(doublereal *left, doublereal *right, char *
@@ -23,19 +31,26 @@ static integer c__3 = 3;
 	     char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    integer card, size, i__, j;
+    integer card;
+    integer size;
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sized_(doublereal *);
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char msg[1840];
 
+
+    /* Module state */
+    zzwninsd_state_t* __state = get_zzwninsd_state();
 /* $ Abstract */
 
 /*      Insert an interval into a double precision window. */
@@ -264,7 +279,7 @@ static integer c__3 = 3;
 	i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
 	i__1[1] = 1, a__1[1] = " ";
 	i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	s_cat(msg, a__1, i__1, &c__3, (ftnlen)1840);
+	s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
 	setmsg_(msg, (ftnlen)1840);
 	errdp_("#1", left, (ftnlen)2);
 	errdp_("#2", right, (ftnlen)2);
@@ -289,7 +304,7 @@ static integer c__3 = 3;
 	    i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
 	    i__1[1] = 1, a__1[1] = " ";
 	    i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	    s_cat(msg, a__1, i__1, &c__3, (ftnlen)1840);
+	    s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
 	    setmsg_(msg, (ftnlen)1840);
 	    errint_("#1", &size, (ftnlen)2);
 	    errint_("#2", &card, (ftnlen)2);
@@ -344,7 +359,7 @@ static integer c__3 = 3;
 	    i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
 	    i__1[1] = 1, a__1[1] = " ";
 	    i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	    s_cat(msg, a__1, i__1, &c__3, (ftnlen)1840);
+	    s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
 	    setmsg_(msg, (ftnlen)1840);
 	    errint_("#1", &size, (ftnlen)2);
 	    errint_("#2", &card, (ftnlen)2);

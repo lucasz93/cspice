@@ -1,9 +1,17 @@
-/* notru.f -- translated by f2c (version 19980913).
+/* notru.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int notru_state_t;
+static notru_state_t* get_notru_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NOTRU ( No true entries? ) */
 logical notru_(logical *logcls, integer *n)
@@ -15,6 +23,9 @@ logical notru_(logical *logcls, integer *n)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    notru_state_t* __state = get_notru_state();
 /* $ Abstract */
 
 /*     Determine if none the entries in an array of logicals are .TRUE. */

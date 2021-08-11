@@ -1,19 +1,21 @@
-/* zzckspk.f -- translated by f2c (version 19980913).
+/* zzckspk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__72 = 72;
-static integer c__100 = 100;
-static integer c__0 = 0;
-static integer c__10 = 10;
-static integer c__1 = 1;
+extern zzckspk_init_t __zzckspk_init;
+static zzckspk_state_t* get_zzckspk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzckspk)
+		state->zzckspk = __cspice_allocate_module(sizeof(
+	zzckspk_state_t), &__zzckspk_init, sizeof(__zzckspk_init));
+	return state->zzckspk;
+
+}
 
 /* $Procedure      ZZCKSPK ( SPK or CK ) */
 /* Subroutine */ int zzckspk_(integer *handle, char *ckspk, ftnlen ckspk_len)
@@ -25,11 +27,17 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer from, last, size, nspk, type__;
+    integer from;
+    integer last;
+    integer size;
+    integer nspk;
+    integer type__;
     logical ck2ok;
     extern /* Subroutine */ int zzsizeok_(integer *, integer *, integer *, 
-	    integer *, logical *, integer *), dafgs_(doublereal *), chkin_(
-	    char *, ftnlen), dafus_(doublereal *, integer *, integer *, 
+	    integer *, logical *, integer *);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     logical found;
     doublereal times[2];
@@ -41,8 +49,8 @@ static integer c__1 = 1;
     integer ic[6];
     extern /* Subroutine */ int daffna_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *), dafhsf_(integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
     integer to;
     doublereal chcktm;
     integer angvel;
@@ -51,9 +59,13 @@ static integer c__1 = 1;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer thisni;
     extern logical return_(void);
-    doublereal frsttm, sum[5];
+    doublereal frsttm;
+    doublereal sum[5];
     integer nck2;
 
+
+    /* Module state */
+    zzckspk_state_t* __state = get_zzckspk_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -213,7 +225,7 @@ static integer c__1 = 1;
 /*     Unpack the summary record. */
 
     dafgs_(sum);
-    dafus_(sum, &c__2, &c__6, dc, ic);
+    dafus_(sum, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     Look at the slot where the angular velocity flag would */
 /*     be located if this is a CK file. */
@@ -256,7 +268,8 @@ static integer c__1 = 1;
 /*     of being an SPK and if it does get the number of MDA records. */
 
     i__1 = size - 1;
-    zzsizeok_(&i__1, &c__72, &c__100, &c__0, &spkok, &nspk);
+    zzsizeok_(&i__1, &__state->c__72, &__state->c__100, &__state->c__0, &
+	    spkok, &nspk);
     if (! spkok) {
 	s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
 	chkout_("ZZCKSPK", (ftnlen)7);
@@ -286,7 +299,8 @@ static integer c__1 = 1;
 /*     We are getting down to the nitty gritty here. See if the */
 /*     size is compatible with a type 02 C-kernel. */
 
-    zzsizeok_(&size, &c__10, &c__100, &c__1, &ck2ok, &nck2);
+    zzsizeok_(&size, &__state->c__10, &__state->c__100, &__state->c__1, &
+	    ck2ok, &nck2);
     if (! ck2ok) {
 	s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
 	chkout_("ZZCKSPK", (ftnlen)7);

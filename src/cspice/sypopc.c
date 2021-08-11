@@ -1,13 +1,21 @@
-/* sypopc.f -- translated by f2c (version 19980913).
+/* sypopc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sypopc_init_t __sypopc_init;
+static sypopc_state_t* get_sypopc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sypopc)
+		state->sypopc = __cspice_allocate_module(sizeof(
+	sypopc_state_t), &__sypopc_init, sizeof(__sypopc_init));
+	return state->sypopc;
+
+}
 
 /* $Procedure      SYPOPC ( Pop a value from a particular symbol ) */
 /* Subroutine */ int sypopc_(char *name__, char *tabsym, integer *tabptr, 
@@ -21,20 +29,28 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nptr, nsym;
-    extern integer cardc_(char *, ftnlen), cardi_(integer *);
+    integer nval;
+    integer nptr;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), remlac_(
-	    integer *, integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
+	    *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int scardi_(integer *, integer *), remlai_(
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
+	    integer *);
     integer locval;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sypopc_state_t* __state = get_sypopc_state();
 /* $ Abstract */
 
 /*     Pop a value associated with a particular symbol in a character */
@@ -245,7 +261,8 @@ static integer c__1 = 1;
 	locval = sumai_(&tabptr[6], &i__1) + 1;
 	s_copy(value, tabval + (locval + 5) * tabval_len, value_len, 
 		tabval_len);
-	remlac_(&c__1, &locval, tabval + tabval_len * 6, &nval, tabval_len);
+	remlac_(&__state->c__1, &locval, tabval + tabval_len * 6, &nval, 
+		tabval_len);
 	scardc_(&nval, tabval, tabval_len);
 
 /*        If this was the sole value for the symbol, remove the */
@@ -253,10 +270,10 @@ static integer c__1 = 1;
 /*        decrement the dimension. */
 
 	if (tabptr[locsym + 5] == 1) {
-	    remlac_(&c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
+	    remlac_(&__state->c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
 		    tabsym_len);
 	    scardc_(&nsym, tabsym, tabsym_len);
-	    remlai_(&c__1, &locsym, &tabptr[6], &nptr);
+	    remlai_(&__state->c__1, &locsym, &tabptr[6], &nptr);
 	    scardi_(&nptr, tabptr);
 	} else {
 	    --tabptr[locsym + 5];

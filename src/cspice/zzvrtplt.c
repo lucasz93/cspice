@@ -1,9 +1,20 @@
-/* zzvrtplt.f -- translated by f2c (version 19980913).
+/* zzvrtplt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+static zzvrtplt_state_t* get_zzvrtplt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzvrtplt)
+		state->zzvrtplt = __cspice_allocate_module(sizeof(
+	zzvrtplt_state_t), 0, 0);
+	return state->zzvrtplt;
+
+}
 
 /* $Procedure  ZZVRTPLT  ( create vertex-plate mapping ) */
 /* Subroutine */ int zzvrtplt_(integer *nv, integer *np, integer *plates, 
@@ -15,19 +26,22 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzaddlnk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *), zzinilnk_(integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer i__, j;
+    extern /* Subroutine */ int zzinilnk_(integer *, integer *, integer *, 
+	    integer *, integer *);
     extern /* Subroutine */ int zzuntngl_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *), chkin_(char *, 
-	    ftnlen);
-    static integer ncell;
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzvrtplt_state_t* __state = get_zzvrtplt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -550,7 +564,7 @@
 
 /*     Initialize pointer and cell structure. */
 
-    zzinilnk_(nv, cellsz, &ncell, vrtptr, cells);
+    zzinilnk_(nv, cellsz, &__state->ncell, vrtptr, cells);
     if (failed_()) {
 	chkout_("ZZVRTPLT", (ftnlen)8);
 	return 0;
@@ -560,14 +574,14 @@
 /*     combination to the linked list. */
 
     i__1 = *np;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	for (j = 1; j <= 3; ++j) {
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	for (__state->j = 1; __state->j <= 3; ++__state->j) {
 
 /*           AVAL = PLATES(J,I), vertex J of plate ID I. */
 /*           BVAL = I, plate ID value I. */
 
-	    zzaddlnk_(&plates[j + i__ * 3 - 4], &i__, np, cellsz, vrtptr, &
-		    ncell, cells);
+	    zzaddlnk_(&plates[__state->j + __state->i__ * 3 - 4], &
+		    __state->i__, np, cellsz, vrtptr, &__state->ncell, cells);
 	    if (failed_()) {
 		chkout_("ZZVRTPLT", (ftnlen)8);
 		return 0;

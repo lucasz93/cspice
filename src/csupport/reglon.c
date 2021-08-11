@@ -1,9 +1,10 @@
-/* reglon.f -- translated by f2c (version 19980913).
+/* reglon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* Table of constant values */
 
@@ -419,9 +420,9 @@ static doublereal c_b17 = 1e-12;
     *maxlon = dpmin_();
     i__1 = *nivals;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	lb = bounds[(i__2 = (i__ << 1) - 2) < bounds_dim2 << 1 && 0 <= i__2 ? 
+	lb = bounds[(i__2 = (i__ << 1) - 2) < 2 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "reglon_", (ftnlen)256)];
-	ub = bounds[(i__2 = (i__ << 1) - 1) < bounds_dim2 << 1 && 0 <= i__2 ? 
+	ub = bounds[(i__2 = (i__ << 1) - 1) < 2 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "reglon_", (ftnlen)257)];
 
 /*        Rectangles of zero longitude extent not allowed. */
@@ -495,9 +496,9 @@ static doublereal c_b17 = 1e-12;
 
     i__1 = *nivals;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	lb = bounds[(i__2 = (i__ << 1) - 2) < bounds_dim2 << 1 && 0 <= i__2 ? 
+	lb = bounds[(i__2 = (i__ << 1) - 2) < 2 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "reglon_", (ftnlen)337)];
-	ub = bounds[(i__2 = (i__ << 1) - 1) < bounds_dim2 << 1 && 0 <= i__2 ? 
+	ub = bounds[(i__2 = (i__ << 1) - 1) < 2 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "reglon_", (ftnlen)338)];
 
 /*        We'll adjust the inputs to ensure they're in range. */

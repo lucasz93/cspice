@@ -1,9 +1,17 @@
-/* syselc.f -- translated by f2c (version 19980913).
+/* syselc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int syselc_state_t;
+static syselc_state_t* get_syselc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYSELC ( Select a subset of the values of a symbol ) */
 /* Subroutine */ int syselc_(char *name__, integer *begin, integer *end, char 
@@ -18,15 +26,19 @@
     integer nsym;
     extern integer cardc_(char *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movec_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), bsrchc_(char *, integer *, 
-	    char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer locval;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    syselc_state_t* __state = get_syselc_state();
 /* $ Abstract */
 
 /*     Select a subset of the values associated with a particular */

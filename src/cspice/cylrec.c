@@ -1,9 +1,17 @@
-/* cylrec.f -- translated by f2c (version 19980913).
+/* cylrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cylrec_state_t;
+static cylrec_state_t* get_cylrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYLREC ( Cylindrical to rectangular ) */
 /* Subroutine */ int cylrec_(doublereal *r__, doublereal *long__, doublereal *
@@ -13,8 +21,12 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal x, y;
+    doublereal x;
+    doublereal y;
 
+
+    /* Module state */
+    cylrec_state_t* __state = get_cylrec_state();
 /* $ Abstract */
 
 /*      Convert from cylindrical to rectangular coordinates. */

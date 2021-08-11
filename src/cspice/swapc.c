@@ -1,9 +1,17 @@
-/* swapc.f -- translated by f2c (version 19980913).
+/* swapc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int swapc_state_t;
+static swapc_state_t* get_swapc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SWAPC ( Swap character values ) */
 /* Subroutine */ int swapc_(char *a, char *b, ftnlen a_len, ftnlen b_len)
@@ -16,10 +24,15 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer alen, blen;
+    integer alen;
+    integer blen;
     char temp[1];
-    integer i__, short__;
+    integer i__;
+    integer short__;
 
+
+    /* Module state */
+    swapc_state_t* __state = get_swapc_state();
 /* $ Abstract */
 
 /*      Swap the contents of two character strings. */

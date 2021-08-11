@@ -1,14 +1,21 @@
-/* zzgfilu.f -- translated by f2c (version 19980913).
+/* zzgfilu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__3 = 3;
+extern zzgfilu_init_t __zzgfilu_init;
+static zzgfilu_state_t* get_zzgfilu_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfilu)
+		state->zzgfilu = __cspice_allocate_module(sizeof(
+	zzgfilu_state_t), &__zzgfilu_init, sizeof(__zzgfilu_init));
+	return state->zzgfilu;
+
+}
 
 /* $Procedure      ZZGFILU ( GF, illumination angle utilities ) */
 /* Subroutine */ int zzgfilu_0_(int n__, char *method, char *angtyp, char *
@@ -20,9 +27,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static char angnms[50*3] = "PHASE                                       "
-	    "      " "INCIDENCE                                         " 
-	    "EMISSION                                          ";
 
     /* System generated locals */
     integer i__1;
@@ -34,48 +38,54 @@ static integer c__3 = 3;
 
     /* Local variables */
     doublereal rate;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), zzvalcor_(
-	    char *, logical *, ftnlen), zzilusta_(char *, char *, char *, 
-	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzilusta_(char *, char *, char *, doublereal *
+	    , char *, char *, char *, doublereal *, doublereal *, doublereal *
+	    , doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    static char svref[32];
-    static integer svobs;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     integer fxfcde;
     extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    doublereal angles[3], incsta[2];
-    static char svinam[36];
-    doublereal emista[2], ettarg, normal[3];
-    static char svonam[36];
-    doublereal phssta[2], srfvec[3];
-    static char svmeth[200], svtnam[36];
-    integer fxclss, fxtyid, fxcent;
+    doublereal angles[3];
+    doublereal incsta[2];
+    doublereal emista[2];
+    doublereal ettarg;
+    doublereal normal[3];
+    doublereal phssta[2];
+    doublereal srfvec[3];
+    integer fxclss;
+    integer fxtyid;
+    integer fxcent;
     extern logical return_(void);
-    static char svcorr[5];
-    static doublereal svnrml[3];
-    static integer svaidx, svilum, svtarg;
-    static logical svablk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), cmprss_(char *, integer *, char 
-	    *, char *, ftnlen, ftnlen, ftnlen), bodvrd_(char *, char *, 
-	    integer *, integer *, doublereal *, ftnlen, ftnlen), surfnm_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), namfrm_(char *, integer *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *), errint_(
-	    char *, integer *, ftnlen), illumg_(char *, char *, char *, 
-	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    static doublereal svsspt[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int bodvrd_(char *, char *, integer *, integer *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int illumg_(char *, char *, char *, doublereal *, 
+	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
 
+    /* Module state */
+    zzgfilu_state_t* __state = get_zzgfilu_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -580,7 +590,7 @@ L_zzgfilin:
 
 /*     Find NAIF IDs for TARGET, OBSRVR, and ILLUM. */
 
-    bods2c_(target, &svtarg, &found, target_len);
+    bods2c_(target, &__state->svtarg, &found, target_len);
     if (failed_()) {
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
@@ -594,7 +604,7 @@ L_zzgfilin:
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &svobs, &found, obsrvr_len);
+    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
     if (failed_()) {
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
@@ -608,7 +618,7 @@ L_zzgfilin:
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(illum, &svilum, &found, illum_len);
+    bods2c_(illum, &__state->svilum, &found, illum_len);
     if (failed_()) {
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
@@ -626,7 +636,7 @@ L_zzgfilin:
 
 /*     Make sure the observer and target are distinct. */
 
-    if (svtarg == svobs) {
+    if (__state->svtarg == __state->svobs) {
 	setmsg_("The observer and target must be distinct objects, but are n"
 		"ot: OBSRVR = #; TARGET = #.", (ftnlen)86);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -638,7 +648,7 @@ L_zzgfilin:
 
 /*     Make sure the target and illumination source are distinct. */
 
-    if (svtarg == svilum) {
+    if (__state->svtarg == __state->svilum) {
 	setmsg_("The target and illumination source must be distinct objects"
 		", but are not: TARGET = #; ILLUM = #.", (ftnlen)96);
 	errch_("#", target, (ftnlen)1, target_len);
@@ -650,20 +660,21 @@ L_zzgfilin:
 
 /*     Save the observer, target, and illumination source names. */
 
-    s_copy(svonam, obsrvr, (ftnlen)36, obsrvr_len);
-    s_copy(svtnam, target, (ftnlen)36, target_len);
-    s_copy(svinam, illum, (ftnlen)36, illum_len);
+    s_copy(__state->svonam, obsrvr, (ftnlen)36, obsrvr_len);
+    s_copy(__state->svtnam, target, (ftnlen)36, target_len);
+    s_copy(__state->svinam, illum, (ftnlen)36, illum_len);
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &c__0, abcorr, svcorr, (ftnlen)1, abcorr_len, (ftnlen)5);
-    ucase_(svcorr, svcorr, (ftnlen)5, (ftnlen)5);
+    cmprss_(" ", &__state->c__0, abcorr, __state->svcorr, (ftnlen)1, 
+	    abcorr_len, (ftnlen)5);
+    ucase_(__state->svcorr, __state->svcorr, (ftnlen)5, (ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(svcorr, svablk, (ftnlen)5);
+    zzvalcor_(__state->svcorr, __state->svablk, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
@@ -671,7 +682,7 @@ L_zzgfilin:
 
 /*     Reject transmission corrections. */
 
-    if (svablk[4]) {
+    if (__state->svablk[4]) {
 	setmsg_("Aberration correction was #; transmission corrections are n"
 		"ot allowed by this routine.", (ftnlen)86);
 	errch_("#", abcorr, (ftnlen)1, abcorr_len);
@@ -682,7 +693,8 @@ L_zzgfilin:
 
 /*     Look up the radii for the target body. */
 
-    bodvrd_(target, "RADII", &c__3, &n, radii, target_len, (ftnlen)5);
+    bodvrd_(target, "RADII", &__state->c__3, &n, radii, target_len, (ftnlen)5)
+	    ;
     if (failed_()) {
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
@@ -696,18 +708,18 @@ L_zzgfilin:
 	chkout_("ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    vequ_(normal, svnrml);
+    vequ_(normal, __state->svnrml);
 
 /*     Save the surface point in the body-fixed reference frame. */
 
-    vequ_(spoint, svsspt);
+    vequ_(spoint, __state->svsspt);
 
 /*     Save a left-justified, upper case copy of the computation method */
 /*     for the illumination angles. */
 
-    ljust_(method, svmeth, method_len, (ftnlen)200);
-    ucase_(svmeth, svmeth, (ftnlen)200, (ftnlen)200);
-    if (s_cmp(svmeth, "ELLIPSOID", (ftnlen)200, (ftnlen)9) != 0) {
+    ljust_(method, __state->svmeth, method_len, (ftnlen)200);
+    ucase_(__state->svmeth, __state->svmeth, (ftnlen)200, (ftnlen)200);
+    if (s_cmp(__state->svmeth, "ELLIPSOID", (ftnlen)200, (ftnlen)9) != 0) {
 	setmsg_("The only supported computation method is ELLIPSOID; the inp"
 		"ut method was #.", (ftnlen)75);
 	errch_("#", method, (ftnlen)1, method_len);
@@ -719,8 +731,8 @@ L_zzgfilin:
 /*     Save a left-justified, upper case copy of the reference frame */
 /*     name. */
 
-    ljust_(fixref, svref, fixref_len, (ftnlen)32);
-    ucase_(svref, svref, (ftnlen)32, (ftnlen)32);
+    ljust_(fixref, __state->svref, fixref_len, (ftnlen)32);
+    ucase_(__state->svref, __state->svref, (ftnlen)32, (ftnlen)32);
 
 /*     Look up the frame attributes; make sure the frame is centered */
 /*     on the target body. */
@@ -746,7 +758,7 @@ L_zzgfilin:
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
-    if (fxcent != svtarg) {
+    if (fxcent != __state->svtarg) {
 	setmsg_("Reference frame # is not centered at the target body #. The"
 		" ID code of the frame center is #.", (ftnlen)93);
 	errch_("#", fixref, (ftnlen)1, fixref_len);
@@ -759,8 +771,9 @@ L_zzgfilin:
 
 /*     Save the index of the angle type. */
 
-    svaidx = esrchc_(angtyp, &c__3, angnms, angtyp_len, (ftnlen)50);
-    if (svaidx == 0) {
+    __state->svaidx = esrchc_(angtyp, &__state->c__3, __state->angnms, 
+	    angtyp_len, (ftnlen)50);
+    if (__state->svaidx == 0) {
 	setmsg_("Illumination angle type # is not recognized.", (ftnlen)44);
 	errch_("#", angtyp, (ftnlen)1, angtyp_len);
 	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
@@ -918,25 +931,26 @@ L_zzgfildc:
 
 /*     Compute the rates of change of all of the illumination angles. */
 
-    zzilusta_(svmeth, svtnam, svinam, et, svref, svcorr, svonam, svsspt, 
-	    svnrml, phssta, incsta, emista, (ftnlen)200, (ftnlen)36, (ftnlen)
-	    36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
+    zzilusta_(__state->svmeth, __state->svtnam, __state->svinam, et, 
+	    __state->svref, __state->svcorr, __state->svonam, __state->svsspt,
+	     __state->svnrml, phssta, incsta, emista, (ftnlen)200, (ftnlen)36,
+	     (ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
     if (failed_()) {
 	chkout_("ZZGFILDC", (ftnlen)8);
 	return 0;
     }
-    if (svaidx == 1) {
+    if (__state->svaidx == 1) {
 	rate = phssta[1];
-    } else if (svaidx == 2) {
+    } else if (__state->svaidx == 2) {
 	rate = incsta[1];
-    } else if (svaidx == 3) {
+    } else if (__state->svaidx == 3) {
 	rate = emista[1];
     } else {
 
 /*        We should never get here. */
 
 	setmsg_("Unexpected value of SVAIDX: #.", (ftnlen)30);
-	errint_("#", &svaidx, (ftnlen)1);
+	errint_("#", &__state->svaidx, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
     }
 
@@ -1077,15 +1091,16 @@ L_zzgfilgq:
 	return 0;
     }
     chkin_("ZZGFILGQ", (ftnlen)8);
-    illumg_(svmeth, svtnam, svinam, et, svref, svcorr, svonam, svsspt, &
-	    ettarg, srfvec, angles, &angles[1], &angles[2], (ftnlen)200, (
+    illumg_(__state->svmeth, __state->svtnam, __state->svinam, et, 
+	    __state->svref, __state->svcorr, __state->svonam, __state->svsspt,
+	     &ettarg, srfvec, angles, &angles[1], &angles[2], (ftnlen)200, (
 	    ftnlen)36, (ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
     if (failed_()) {
 	chkout_("ZZGFILGQ", (ftnlen)8);
 	return 0;
     }
-    *angle = angles[(i__1 = svaidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "angles", i__1, "zzgfilu_", (ftnlen)1098)];
+    *angle = angles[(i__1 = __state->svaidx - 1) < 3 && 0 <= i__1 ? i__1 : 
+	    s_rnge("angles", i__1, "zzgfilu_", (ftnlen)1098)];
     chkout_("ZZGFILGQ", (ftnlen)8);
     return 0;
 } /* zzgfilu_ */

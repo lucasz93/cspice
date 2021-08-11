@@ -1,9 +1,17 @@
-/* movei.f -- translated by f2c (version 19980913).
+/* movei.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int movei_state_t;
+static movei_state_t* get_movei_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MOVEI  ( Move a integer array to another ) */
 /* Subroutine */ int movei_(integer *arrfrm, integer *ndim, integer *arrto)
@@ -14,6 +22,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    movei_state_t* __state = get_movei_state();
 /* $ Abstract */
 
 /*      Copy the elements of one integer array into another */

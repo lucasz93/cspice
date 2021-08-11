@@ -1,14 +1,21 @@
-/* scencd.f -- translated by f2c (version 19980913).
+/* scencd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__9999 = 9999;
+extern scencd_init_t __scencd_init;
+static scencd_state_t* get_scencd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->scencd)
+		state->scencd = __cspice_allocate_module(sizeof(
+	scencd_state_t), &__scencd_init, sizeof(__scencd_init));
+	return state->scencd;
+
+}
 
 /* $Procedure      SCENCD ( Encode spacecraft clock ) */
 /* Subroutine */ int scencd_(integer *sc, char *sclkch, doublereal *sclkdp, 
@@ -25,25 +32,34 @@ static integer c__9999 = 9999;
 
     /* Local variables */
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    integer part, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer part;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal ticks;
     integer pnter;
     char error[25];
     doublereal pstop[9999];
     extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), scpart_(integer *, 
-	    integer *, doublereal *, doublereal *), chkout_(char *, ftnlen), 
-	    nparsi_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    sctiks_(integer *, char *, doublereal *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int sctiks_(integer *, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer nparts;
     doublereal pstart[9999];
     extern logical return_(void);
     doublereal ptotls[9999];
     integer pos;
 
+
+    /* Module state */
+    scencd_state_t* __state = get_scencd_state();
 /* $ Abstract */
 
 /*     Encode character representation of spacecraft clock time into a */
@@ -555,7 +571,7 @@ static integer c__9999 = 9999;
 
 /*     Convert the non-partition portion of the clock string to ticks. */
 
-    pos = cpos_(sclkch, "/", &c__1, sclkch_len, (ftnlen)1);
+    pos = cpos_(sclkch, "/", &__state->c__1, sclkch_len, (ftnlen)1);
     i__1 = pos;
     sctiks_(sc, sclkch + i__1, &ticks, sclkch_len - i__1);
     if (failed_()) {
@@ -577,7 +593,7 @@ static integer c__9999 = 9999;
 		"alue for parameter MXPART, #.", (ftnlen)88);
 	errint_("#", &nparts, (ftnlen)1);
 	errint_("#", sc, (ftnlen)1);
-	errint_("#", &c__9999, (ftnlen)1);
+	errint_("#", &__state->c__9999, (ftnlen)1);
 	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
 	chkout_("SCENCD", (ftnlen)6);
 	return 0;

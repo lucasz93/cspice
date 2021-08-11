@@ -1,13 +1,21 @@
-/* tparse.f -- translated by f2c (version 19980913).
+/* tparse.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__400 = 400;
+extern tparse_init_t __tparse_init;
+static tparse_state_t* get_tparse_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->tparse)
+		state->tparse = __cspice_allocate_module(sizeof(
+	tparse_state_t), &__tparse_init, sizeof(__tparse_init));
+	return state->tparse;
+
+}
 
 /* $Procedure       TPARSE ( Parse a UTC time string ) */
 /* Subroutine */ int tparse_(char *string, doublereal *sp2000, char *error, 
@@ -26,22 +34,29 @@ static integer c__400 = 400;
     integer q;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    integer ntvec, month;
+    integer ntvec;
+    integer month;
     logical ok;
     extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
-	    *, logical *, char *, ftnlen, ftnlen, ftnlen), rmaini_(integer *, 
-	    integer *, integer *, integer *);
-    logical succes, yabbrv;
+	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
+	    integer *);
+    logical succes;
+    logical yabbrv;
     char modify[8*5];
     logical adjust;
     char pictur[80];
     extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
 	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), texpyr_(integer *);
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int texpyr_(integer *);
     extern doublereal j2000_(void);
     integer day;
     extern doublereal spd_(void);
 
+
+    /* Module state */
+    tparse_state_t* __state = get_tparse_state();
 /* $ Abstract */
 
 /*      Parse a time string and return seconds past the J2000 epoch */
@@ -565,7 +580,7 @@ static integer c__400 = 400;
 
 	    adjust = TRUE_;
 	    temp = year;
-	    rmaini_(&temp, &c__400, &q, &year);
+	    rmaini_(&temp, &__state->c__400, &q, &year);
 	    year += 400;
 	    --q;
 	} else {

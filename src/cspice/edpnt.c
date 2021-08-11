@@ -1,9 +1,17 @@
-/* edpnt.f -- translated by f2c (version 19980913).
+/* edpnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int edpnt_state_t;
+static edpnt_state_t* get_edpnt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure EDPNT ( Ellipsoid point  ) */
 /* Subroutine */ int edpnt_(doublereal *p, doublereal *a, doublereal *b, 
@@ -19,12 +27,17 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal level;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical vzero_(doublereal *), failed_(void);
+    extern logical vzero_(doublereal *);
+    extern logical failed_(void);
     doublereal sq;
     extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    edpnt_state_t* __state = get_edpnt_state();
 /* $ Abstract */
 
 /*     Scale a point so that it lies on the surface of a specified */

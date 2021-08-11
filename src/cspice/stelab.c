@@ -1,13 +1,21 @@
-/* stelab.f -- translated by f2c (version 19980913).
+/* stelab.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern stelab_init_t __stelab_init;
+static stelab_state_t* get_stelab_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stelab)
+		state->stelab = __cspice_allocate_module(sizeof(
+	stelab_state_t), &__stelab_init, sizeof(__stelab_init));
+	return state->stelab;
+
+}
 
 /* $Procedure      STELAB     ( Stellar Aberration ) */
 /* Subroutine */ int stelab_(doublereal *pobj, doublereal *vobs, doublereal *
@@ -22,21 +30,29 @@ static integer c__3 = 3;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
     extern doublereal vdot_(doublereal *, doublereal *);
-    doublereal h__[3], u[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), errdp_(char *, doublereal *, ftnlen), 
-	    vcrss_(doublereal *, doublereal *, doublereal *);
+    doublereal h__[3];
+    doublereal u[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
     extern doublereal clight_(void);
-    doublereal onebyc, sinphi;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    doublereal onebyc;
+    doublereal sinphi;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal lensqr;
     extern logical return_(void);
     doublereal phi;
 
+
+    /* Module state */
+    stelab_state_t* __state = get_stelab_state();
 /* $ Abstract */
 
 /*      Correct the apparent position of an object for stellar */
@@ -308,7 +324,7 @@ static integer c__3 = 3;
 	phi = asin(sinphi);
 	vrotv_(pobj, h__, &phi, appobj);
     } else {
-	moved_(pobj, &c__3, appobj);
+	moved_(pobj, &__state->c__3, appobj);
     }
     chkout_("STELAB", (ftnlen)6);
     return 0;

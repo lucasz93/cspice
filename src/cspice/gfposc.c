@@ -1,17 +1,21 @@
-/* gfposc.f -- translated by f2c (version 19980913).
+/* gfposc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static integer c__10 = 10;
-static logical c_false = FALSE_;
+extern gfposc_init_t __gfposc_init;
+static gfposc_state_t* get_gfposc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfposc)
+		state->gfposc = __cspice_allocate_module(sizeof(
+	gfposc_state_t), &__gfposc_init, sizeof(__gfposc_init));
+	return state->gfposc;
+
+}
 
 /* $Procedure GFPOSC (GF, observer-target vector coordinate search ) */
 /* Subroutine */ int gfposc_(char *target, char *frame, char *abcorr, char *
@@ -23,9 +27,6 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static doublereal dvec[3] = { 0.,0.,0. };
-    static char dref[80] = "                                                "
-	    "                                ";
 
     /* System generated locals */
     integer work_dim1, work_offset, i__1;
@@ -41,23 +42,33 @@ static logical c_false = FALSE_;
     logical ok;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern logical return_(void);
-    extern /* Subroutine */ int gfrefn_(), gfrepi_(), gfrepu_(), gfrepf_(), 
-	    gfstep_();
-    char qcpars[80*10], qpnams[80*10];
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepi_();
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfstep_();
+    char qcpars[80*10];
+    char qpnams[80*10];
     doublereal qdpars[10];
     integer qipars[10];
     logical qlpars[10];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), gfsstp_(doublereal *), gfevnt_(U_fp, U_fp, char *, 
-	    integer *, char *, char *, doublereal *, integer *, logical *, 
-	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    logical *, U_fp, U_fp, U_fp, integer *, integer *, doublereal *, 
-	    logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
+    extern /* Subroutine */ int gfevnt_(U_fp, U_fp, char *, integer *, char *,
+	     char *, doublereal *, integer *, logical *, char *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, logical *, U_fp, U_fp, 
+	    U_fp, integer *, integer *, doublereal *, logical *, L_fp, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfposc_state_t* __state = get_gfposc_state();
 /* $ Abstract */
 
 /*     Determine time intervals for which a coordinate of an */
@@ -1664,8 +1675,8 @@ static logical c_false = FALSE_;
 /*     Define no-use values for DVEC and DREF */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
 
@@ -1719,11 +1730,11 @@ static logical c_false = FALSE_;
     s_copy(qpnams + 560, "METHOD", (ftnlen)80, (ftnlen)6);
     s_copy(qcpars + 560, " ", (ftnlen)80, (ftnlen)1);
     s_copy(qpnams + 640, "DREF", (ftnlen)80, (ftnlen)4);
-    s_copy(qcpars + 640, dref, (ftnlen)80, (ftnlen)80);
+    s_copy(qcpars + 640, __state->dref, (ftnlen)80, (ftnlen)80);
     s_copy(qpnams + 720, "DVEC", (ftnlen)80, (ftnlen)4);
-    qdpars[0] = dvec[0];
-    qdpars[1] = dvec[1];
-    qdpars[2] = dvec[2];
+    qdpars[0] = __state->dvec[0];
+    qdpars[1] = __state->dvec[1];
+    qdpars[2] = __state->dvec[2];
 
 /*     Set the step size. */
 
@@ -1731,7 +1742,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1741,17 +1752,17 @@ static logical c_false = FALSE_;
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Look for solutions. */
 
 /*     Progress report and interrupt options are set to .FALSE. */
 
-    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "COORDINATE", &c__10, qpnams, 
-	    qcpars, qdpars, qipars, qlpars, relate, refval, &tol, adjust, 
-	    cnfine, &c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, mw,
-	     nw, work, &c_false, (L_fp)gfbail_, result, (ftnlen)10, (ftnlen)
-	    80, (ftnlen)80, relate_len);
+    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "COORDINATE", &__state->c__10, 
+	    qpnams, qcpars, qdpars, qipars, qlpars, relate, refval, &tol, 
+	    adjust, cnfine, &__state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
+	    U_fp)gfrepf_, mw, nw, work, &__state->c_false, (L_fp)gfbail_, 
+	    result, (ftnlen)10, (ftnlen)80, (ftnlen)80, relate_len);
     chkout_("GFPOSC", (ftnlen)6);
     return 0;
 } /* gfposc_ */

@@ -1,16 +1,21 @@
-/* convrt.f -- translated by f2c (version 19980913).
+/* convrt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__31 = 31;
-static integer c__5 = 5;
-static integer c__3 = 3;
-static integer c__9 = 9;
+extern convrt_init_t __convrt_init;
+static convrt_state_t* get_convrt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->convrt)
+		state->convrt = __cspice_allocate_module(sizeof(
+	convrt_state_t), &__convrt_init, sizeof(__convrt_init));
+	return state->convrt;
+
+}
 
 /* $Procedure      CONVRT ( Convert Units ) */
 /* Subroutine */ int convrt_(doublereal *x, char *in, char *out, doublereal *
@@ -18,28 +23,6 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char units[16*31] = "RADIANS         " "DEGREES         " "ARCMIN"
-	    "UTES      " "ARCSECONDS      " "HOURANGLE       " "MINUTEANGLE  "
-	    "   " "SECONDANGLE     " "METERS          " "KM              " 
-	    "CM              " "MM              " "LIGHTSECS       " "AU    "
-	    "          " "M               " "KILOMETERS      " "CENTIMETERS  "
-	    "   " "MILLIMETERS     " "FEET            " "INCHES          " 
-	    "STATUTE_MILES   " "NAUTICAL_MILES  " "YARDS           " "LIGHTY"
-	    "EARS      " "PARSECS         " "SECONDS         " "MINUTES      "
-	    "   " "HOURS           " "DAYS            " "JULIAN_YEARS    " 
-	    "TROPICAL_YEARS  " "YEARS           ";
-    static doublereal cnvrtn[31] = { 0.0,1.,.016666666666666666,
-	    2.7777777777777778e-4,15.,.25,.0041666666666666666,1.,1e3,.01,
-	    .001,299792458.,149597870613.68887,1.,1e3,.01,.001,.3048,.0254,
-	    1609.344,1852.,.9144,9460730472580800.,30856775797231604.,1.,60.,
-	    3600.,86400.,31557600.,31556925.976319999,31557600. };
-    static char type__[8*31] = "ANGLE   " "ANGLE   " "ANGLE   " "ANGLE   " 
-	    "ANGLE   " "ANGLE   " "ANGLE   " "DISTANCE" "DISTANCE" "DISTANCE" 
-	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
-	    "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" "DISTANCE" 
-	    "DISTANCE" "DISTANCE" "TIME    " "TIME    " "TIME    " "TIME    " 
-	    "TIME    " "TIME    " "TIME    ";
 
     /* System generated locals */
     address a__1[5], a__2[3], a__3[9];
@@ -54,16 +37,21 @@ static integer c__9 = 9;
     /* Local variables */
     doublereal temp;
     char outu[16];
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern doublereal dpr_(void);
     char inu[16];
 
+
+    /* Module state */
+    convrt_state_t* __state = get_convrt_state();
 /* $ Abstract */
 
 /*      Take a measurement X, the units associated with */
@@ -362,14 +350,16 @@ static integer c__9 = 9;
 	return 0;
     }
     chkin_("CONVRT", (ftnlen)6);
-    if (first) {
-	cnvrtn[0] = dpr_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->cnvrtn[0] = dpr_();
+	__state->first = FALSE_;
     }
     ucase_(in, inu, in_len, (ftnlen)16);
     ucase_(out, outu, out_len, (ftnlen)16);
-    i__ = isrchc_(inu, &c__31, units, (ftnlen)16, (ftnlen)16);
-    j = isrchc_(outu, &c__31, units, (ftnlen)16, (ftnlen)16);
+    i__ = isrchc_(inu, &__state->c__31, __state->units, (ftnlen)16, (ftnlen)
+	    16);
+    j = isrchc_(outu, &__state->c__31, __state->units, (ftnlen)16, (ftnlen)16)
+	    ;
     if (i__ == 0 || j == 0) {
 	if (i__ == 0 && j == 0) {
 /* Writing concatenation */
@@ -378,7 +368,7 @@ static integer c__9 = 9;
 	    i__1[2] = 21, a__1[2] = "nor the output units ";
 	    i__1[3] = 16, a__1[3] = outu;
 	    i__1[4] = 16, a__1[4] = "were recognized.";
-	    s_cat(ch__1, a__1, i__1, &c__5, (ftnlen)101);
+	    s_cat(ch__1, a__1, i__1, &__state->c__5, (ftnlen)101);
 	    setmsg_(ch__1, (ftnlen)101);
 	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
 	    chkout_("CONVRT", (ftnlen)6);
@@ -388,7 +378,7 @@ static integer c__9 = 9;
 	    i__2[0] = 20, a__2[0] = "CONVRT: Input units ";
 	    i__2[1] = 16, a__2[1] = inu;
 	    i__2[2] = 20, a__2[2] = " were not recognized";
-	    s_cat(ch__2, a__2, i__2, &c__3, (ftnlen)56);
+	    s_cat(ch__2, a__2, i__2, &__state->c__3, (ftnlen)56);
 	    setmsg_(ch__2, (ftnlen)56);
 	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
 	    chkout_("CONVRT", (ftnlen)6);
@@ -398,40 +388,43 @@ static integer c__9 = 9;
 	    i__2[0] = 21, a__2[0] = "CONVRT: Output units ";
 	    i__2[1] = 16, a__2[1] = outu;
 	    i__2[2] = 20, a__2[2] = " were not recognized";
-	    s_cat(ch__3, a__2, i__2, &c__3, (ftnlen)57);
+	    s_cat(ch__3, a__2, i__2, &__state->c__3, (ftnlen)57);
 	    setmsg_(ch__3, (ftnlen)57);
 	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
 	    chkout_("CONVRT", (ftnlen)6);
 	    return 0;
 	}
     }
-    if (s_cmp(type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
-	    "type", i__3, "convrt_", (ftnlen)547)) << 3), type__ + (((i__4 = 
-	    j - 1) < 31 && 0 <= i__4 ? i__4 : s_rnge("type", i__4, "convrt_", 
-	    (ftnlen)547)) << 3), (ftnlen)8, (ftnlen)8) != 0) {
+    if (s_cmp(__state->type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : 
+	    s_rnge("type", i__3, "convrt_", (ftnlen)547)) << 3), 
+	    __state->type__ + (((i__4 = j - 1) < 31 && 0 <= i__4 ? i__4 : 
+	    s_rnge("type", i__4, "convrt_", (ftnlen)547)) << 3), (ftnlen)8, (
+	    ftnlen)8) != 0) {
 /* Writing concatenation */
 	i__5[0] = 58, a__3[0] = "CONVRT: Incompatible units. You are attempt"
 		"ing to convert ";
 	i__5[1] = 16, a__3[1] = inu;
 	i__5[2] = 6, a__3[2] = "type: ";
-	i__5[3] = 8, a__3[3] = type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ?
-		 i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)549)) << 3);
+	i__5[3] = 8, a__3[3] = __state->type__ + (((i__3 = i__ - 1) < 31 && 0 
+		<= i__3 ? i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)549))
+		 << 3);
 	i__5[4] = 4, a__3[4] = " to ";
 	i__5[5] = 16, a__3[5] = outu;
 	i__5[6] = 6, a__3[6] = "type: ";
-	i__5[7] = 8, a__3[7] = type__ + (((i__4 = j - 1) < 31 && 0 <= i__4 ? 
-		i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)549)) << 3);
+	i__5[7] = 8, a__3[7] = __state->type__ + (((i__4 = j - 1) < 31 && 0 <=
+		 i__4 ? i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)549)) 
+		<< 3);
 	i__5[8] = 1, a__3[8] = ".";
-	s_cat(ch__4, a__3, i__5, &c__9, (ftnlen)123);
+	s_cat(ch__4, a__3, i__5, &__state->c__9, (ftnlen)123);
 	setmsg_(ch__4, (ftnlen)123);
 	sigerr_("SPICE(INCOMPATIBLEUNITS)", (ftnlen)24);
 	chkout_("CONVRT", (ftnlen)6);
 	return 0;
     }
-    temp = *x * cnvrtn[(i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
-	    "cnvrtn", i__3, "convrt_", (ftnlen)565)];
-    *y = temp / cnvrtn[(i__3 = j - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("cnv"
-	    "rtn", i__3, "convrt_", (ftnlen)566)];
+    temp = *x * __state->cnvrtn[(i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : 
+	    s_rnge("cnvrtn", i__3, "convrt_", (ftnlen)565)];
+    *y = temp / __state->cnvrtn[(i__3 = j - 1) < 31 && 0 <= i__3 ? i__3 : 
+	    s_rnge("cnvrtn", i__3, "convrt_", (ftnlen)566)];
     chkout_("CONVRT", (ftnlen)6);
     return 0;
 } /* convrt_ */

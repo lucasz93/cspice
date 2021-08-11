@@ -1,9 +1,10 @@
-/* sizecb_1.f -- translated by f2c (version 19980913).
+/* sizecb_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure SIZECB ( Size of character buffer ) */
 integer sizecb_1__(char *buffer, ftnlen buffer_len)

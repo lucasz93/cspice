@@ -1,9 +1,17 @@
-/* isrchd.f -- translated by f2c (version 19980913).
+/* isrchd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isrchd_state_t;
+static isrchd_state_t* get_isrchd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             ISRCHD  ( Search in a double precision array ) */
 integer isrchd_(doublereal *value, integer *ndim, doublereal *array)
@@ -14,6 +22,9 @@ integer isrchd_(doublereal *value, integer *ndim, doublereal *array)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    isrchd_state_t* __state = get_isrchd_state();
 /* $ Abstract */
 
 /*      Search for a given value within a double precision array. Return */

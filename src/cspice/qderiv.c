@@ -1,9 +1,17 @@
-/* qderiv.f -- translated by f2c (version 19980913).
+/* qderiv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int qderiv_state_t;
+static qderiv_state_t* get_qderiv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure QDERIV ( Quadratic derivative ) */
 /* Subroutine */ int qderiv_(integer *n, doublereal *f0, doublereal *f2, 
@@ -13,11 +21,16 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vlcomg_(integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    qderiv_state_t* __state = get_qderiv_state();
 /* $ Abstract */
 
 /*     Estimate the derivative of a function by finding the derivative */

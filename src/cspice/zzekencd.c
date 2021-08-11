@@ -1,15 +1,21 @@
-/* zzekencd.f -- translated by f2c (version 19980913).
+/* zzekencd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27869 = 27869;
-static integer c__100 = 100;
-static integer c__500 = 500;
+extern zzekencd_init_t __zzekencd_init;
+static zzekencd_state_t* get_zzekencd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekencd)
+		state->zzekencd = __cspice_allocate_module(sizeof(
+	zzekencd_state_t), &__zzekencd_init, sizeof(__zzekencd_init));
+	return state->zzekencd;
+
+}
 
 /* $Procedure      ZZEKENCD ( EK, encode query ) */
 /* Subroutine */ int zzekencd_(char *query, integer *eqryi, char *eqryc, 
@@ -19,23 +25,36 @@ static integer c__500 = 500;
     extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, doublereal 
 	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen), zzeksemc_(char *, integer *, char *, logical *, 
-	    char *, integer *, ftnlen, ftnlen, ftnlen), zzekqini_(integer *, 
-	    integer *, integer *, char *, doublereal *, ftnlen), zzekpars_(
-	    char *, integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, char *, integer *, integer *, integer *, char *, 
-	    doublereal *, logical *, char *, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    zzeknres_(char *, integer *, char *, logical *, char *, integer *,
-	     ftnlen, ftnlen, ftnlen), zzektres_(char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeksemc_(char *, integer *, char *, logical *
+	    , char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekpars_(char *, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, char *, integer *, 
+	    integer *, integer *, char *, doublereal *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeknres_(char *, integer *, char *, logical *
+	    , char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektres_(char *, integer *, char *, 
 	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
-	    ftnlen), chkin_(char *, ftnlen);
-    integer chbegs[500], chends[500];
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer chbegs[500];
+    integer chends[500];
     char chrbuf[2000];
     extern logical return_(void);
     doublereal numvls[100];
-    integer lxbegs[500], lxends[500], ntoken, tokens[500], values[500];
+    integer lxbegs[500];
+    integer lxends[500];
+    integer ntoken;
+    integer tokens[500];
+    integer values[500];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekencd_state_t* __state = get_zzekencd_state();
 /* $ Abstract */
 
 /*     Convert an EK query to encoded form. */
@@ -764,13 +783,14 @@ static integer c__500 = 500;
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&c__27869, &c__100, eqryi, eqryc, eqryd, eqryc_len);
+    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, 
+	    eqryc_len);
 
 /*     Find the tokens in the input query. */
 
-    zzekscan_(query, &c__500, &c__100, &ntoken, tokens, lxbegs, lxends, 
-	    values, numvls, chrbuf, chbegs, chends, error, errmsg, query_len, 
-	    (ftnlen)2000, errmsg_len);
+    zzekscan_(query, &__state->c__500, &__state->c__100, &ntoken, tokens, 
+	    lxbegs, lxends, values, numvls, chrbuf, chbegs, chends, error, 
+	    errmsg, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
 	*errptr = 1;
 	chkout_("ZZEKENCD", (ftnlen)8);

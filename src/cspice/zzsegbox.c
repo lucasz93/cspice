@@ -1,9 +1,17 @@
-/* zzsegbox.f -- translated by f2c (version 19980913).
+/* zzsegbox.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzsegbox_state_t;
+static zzsegbox_state_t* get_zzsegbox_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZSEGBOX (Bounding box for DSK segment volume element) */
 /* Subroutine */ int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, 
@@ -14,18 +22,26 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzrecbox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), 
-	    zzlatbox_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), zzpdtbox_(doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), chkin_(char *, ftnlen);
-    doublereal l1, l2, l3;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzlatbox_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzpdtbox_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    doublereal l1;
+    doublereal l2;
+    doublereal l3;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer corsys;
 
+
+    /* Module state */
+    zzsegbox_state_t* __state = get_zzsegbox_state();
 /* $ Abstract */
 
 /*     Create a bounding box for a DSK segment volume element. */

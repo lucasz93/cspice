@@ -1,18 +1,21 @@
-/* gfpa.f -- translated by f2c (version 19980913).
+/* gfpa.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5 = 5;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static integer c__4 = 4;
-static logical c_false = FALSE_;
+extern gfpa_init_t __gfpa_init;
+static gfpa_state_t* get_gfpa_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfpa)
+		state->gfpa = __cspice_allocate_module(sizeof(gfpa_state_t), &
+	__gfpa_init, sizeof(__gfpa_init));
+	return state->gfpa;
+
+}
 
 /* $Procedure GFPA ( GF, phase angle search ) */
 /* Subroutine */ int gfpa_(char *target, char *illmn, char *abcorr, char *
@@ -33,25 +36,35 @@ static logical c_false = FALSE_;
     extern logical gfbail_();
     logical ok;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int gfrefn_(), gfrepi_(), gfrepf_(), gfrepu_(), 
-	    gfstep_();
-    char qcpars[80*4], qpnams[80*4];
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepi_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
+    char qcpars[80*4];
+    char qpnams[80*4];
     extern logical return_(void);
     doublereal qdpars[4];
     integer qipars[4];
     logical qlpars[4];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), gfsstp_(doublereal *), gfevnt_(U_fp, U_fp, char *, 
-	    integer *, char *, char *, doublereal *, integer *, logical *, 
-	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    logical *, U_fp, U_fp, U_fp, integer *, integer *, doublereal *, 
-	    logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
+    extern /* Subroutine */ int gfevnt_(U_fp, U_fp, char *, integer *, char *,
+	     char *, doublereal *, integer *, logical *, char *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, logical *, U_fp, U_fp, 
+	    U_fp, integer *, integer *, doublereal *, logical *, L_fp, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
     extern logical odd_(integer *);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfpa_state_t* __state = get_gfpa_state();
 /* $ Abstract */
 
 /*     Determine time intervals for which a specified constraint */
@@ -1243,8 +1256,8 @@ static logical c_false = FALSE_;
 /*     Standard SPICE error handling. */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
     if (return_()) {
@@ -1269,7 +1282,7 @@ static logical c_false = FALSE_;
 	setmsg_("Workspace window count was #; count must be at least #.", (
 		ftnlen)55);
 	errint_("#", nw, (ftnlen)1);
-	errint_("#", &c__5, (ftnlen)1);
+	errint_("#", &__state->c__5, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
 	chkout_("GFPA", (ftnlen)4);
 	return 0;
@@ -1305,7 +1318,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1315,17 +1328,17 @@ static logical c_false = FALSE_;
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Look for solutions. */
 
 /*     Progress report and interrupt options are set to .FALSE. */
 
-    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "PHASE ANGLE", &c__4, qpnams, 
-	    qcpars, qdpars, qipars, qlpars, relate, refval, &tol, adjust, 
-	    cnfine, &c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, mw,
-	     &c__5, work, &c_false, (L_fp)gfbail_, result, (ftnlen)11, (
-	    ftnlen)80, (ftnlen)80, relate_len);
+    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "PHASE ANGLE", &__state->c__4, 
+	    qpnams, qcpars, qdpars, qipars, qlpars, relate, refval, &tol, 
+	    adjust, cnfine, &__state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
+	    U_fp)gfrepf_, mw, &__state->c__5, work, &__state->c_false, (L_fp)
+	    gfbail_, result, (ftnlen)11, (ftnlen)80, (ftnlen)80, relate_len);
     chkout_("GFPA", (ftnlen)4);
     return 0;
 } /* gfpa_ */

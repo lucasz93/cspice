@@ -1,9 +1,17 @@
-/* lstlec.f -- translated by f2c (version 19980913).
+/* lstlec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstlec_state_t;
+static lstlec_state_t* get_lstlec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTLEC ( Last character element less than or equal to. ) */
 integer lstlec_(char *string, integer *n, char *array, ftnlen string_len, 
@@ -17,8 +25,15 @@ integer lstlec_(char *string, integer *n, char *array, ftnlen string_len,
 	     ftnlen), l_le(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstlec_state_t* __state = get_lstlec_state();
 /* $ Abstract */
 
 /*      Given a character string and an ordered array of character */

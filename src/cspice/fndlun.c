@@ -1,18 +1,27 @@
-/* fndlun.f -- translated by f2c (version 19980913).
+/* fndlun.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern fndlun_init_t __fndlun_init;
+static fndlun_state_t* get_fndlun_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->fndlun)
+		state->fndlun = __cspice_allocate_module(sizeof(
+	fndlun_state_t), &__fndlun_init, sizeof(__fndlun_init));
+	return state->fndlun;
+
+}
 
 /* $Procedure      FNDLUN ( Find a free logical unit ) */
 /* Subroutine */ int fndlun_0_(int n__, integer *unit)
 {
     /* Initialized data */
 
-    static integer last = 1;
-    static logical first = TRUE_;
-    static integer resnum[3] = { 5,6,7 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -22,10 +31,9 @@
     integer s_rnge(char *, integer, char *, integer), f_inqu(inlist *);
 
     /* Local variables */
-    static integer i__;
-    static logical resvd[99], opened;
-    static integer iostat;
 
+    /* Module state */
+    fndlun_state_t* __state = get_fndlun_state();
 /* $ Abstract */
 
 /*     Return the number of a free logical unit, if one is available. */
@@ -520,34 +528,35 @@
 
 /*     Initialize RESVD if it hasn't already been done. */
 
-    if (first) {
-	for (i__ = 1; i__ <= 99; ++i__) {
-	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)533)] = FALSE_;
+    if (__state->first) {
+	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
+	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
+		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)533)] = FALSE_;
 	}
-	for (i__ = 1; i__ <= 3; ++i__) {
-	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)537)] - 1) < 99 
-		    && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", (
-		    ftnlen)537)] = TRUE_;
+	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
+		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
+		     (ftnlen)537)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
+		    "resvd", i__2, "fndlun_", (ftnlen)537)] = TRUE_;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Begin with the unit following the last one returned. */
 /*     Cycle through the available units. Skip reserved units, */
 /*     INQUIRE about others. */
 
-    for (i__ = last + 1; i__ <= 99; ++i__) {
-	if (resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)551)]) {
-	    opened = TRUE_;
+    for (__state->i__ = __state->last + 1; __state->i__ <= 99; ++__state->i__)
+	     {
+	if (__state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
+		: s_rnge("resvd", i__1, "fndlun_", (ftnlen)551)]) {
+	    __state->opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
-	    ioin__1.inunit = i__;
+	    ioin__1.inunit = __state->i__;
 	    ioin__1.infile = 0;
 	    ioin__1.inex = 0;
-	    ioin__1.inopen = &opened;
+	    ioin__1.inopen = &__state->opened;
 	    ioin__1.innum = 0;
 	    ioin__1.innamed = 0;
 	    ioin__1.inname = 0;
@@ -560,15 +569,15 @@
 	    ioin__1.inrecl = 0;
 	    ioin__1.innrec = 0;
 	    ioin__1.inblank = 0;
-	    iostat = f_inqu(&ioin__1);
-	    if (iostat > 0) {
-		*unit = -iostat;
+	    __state->iostat = f_inqu(&ioin__1);
+	    if (__state->iostat > 0) {
+		*unit = -__state->iostat;
 		return 0;
 	    }
 	}
-	if (! opened) {
-	    *unit = i__;
-	    last = *unit;
+	if (! __state->opened) {
+	    *unit = __state->i__;
+	    __state->last = *unit;
 	    return 0;
 	}
     }
@@ -577,17 +586,17 @@
 /*     the list again, up to the last unit returned. Once again, */
 /*     skip reserved units, INQUIRE about others. */
 
-    i__1 = last;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if (resvd[(i__2 = i__ - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge("resvd", 
-		i__2, "fndlun_", (ftnlen)578)]) {
-	    opened = TRUE_;
+    i__1 = __state->last;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	if (__state->resvd[(i__2 = __state->i__ - 1) < 99 && 0 <= i__2 ? i__2 
+		: s_rnge("resvd", i__2, "fndlun_", (ftnlen)578)]) {
+	    __state->opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
-	    ioin__1.inunit = i__;
+	    ioin__1.inunit = __state->i__;
 	    ioin__1.infile = 0;
 	    ioin__1.inex = 0;
-	    ioin__1.inopen = &opened;
+	    ioin__1.inopen = &__state->opened;
 	    ioin__1.innum = 0;
 	    ioin__1.innamed = 0;
 	    ioin__1.inname = 0;
@@ -600,15 +609,15 @@
 	    ioin__1.inrecl = 0;
 	    ioin__1.innrec = 0;
 	    ioin__1.inblank = 0;
-	    iostat = f_inqu(&ioin__1);
-	    if (iostat > 0) {
-		*unit = -iostat;
+	    __state->iostat = f_inqu(&ioin__1);
+	    if (__state->iostat > 0) {
+		*unit = -__state->iostat;
 		return 0;
 	    }
 	}
-	if (! opened) {
-	    *unit = i__;
-	    last = *unit;
+	if (! __state->opened) {
+	    *unit = __state->i__;
+	    __state->last = *unit;
 	    return 0;
 	}
     }
@@ -800,26 +809,26 @@ L_reslun:
 
 /*     Initialize RESVD if it hasn't already been done. */
 
-    if (first) {
-	for (i__ = 1; i__ <= 99; ++i__) {
-	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)801)] = FALSE_;
+    if (__state->first) {
+	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
+	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
+		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)801)] = FALSE_;
 	}
-	for (i__ = 1; i__ <= 3; ++i__) {
-	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)805)] - 1) < 99 
-		    && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", (
-		    ftnlen)805)] = TRUE_;
+	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
+		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
+		     (ftnlen)805)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
+		    "resvd", i__2, "fndlun_", (ftnlen)805)] = TRUE_;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     If UNIT is in the proper range, set the corresponding flag */
 /*     to TRUE. */
 
     if (*unit >= 1 && *unit <= 99) {
-	resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)817)] = TRUE_;
+	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(
+		"resvd", i__1, "fndlun_", (ftnlen)817)] = TRUE_;
     }
     return 0;
 /* $Procedure FRELUN ( Free a reserved logical unit ) */
@@ -1010,32 +1019,34 @@ L_frelun:
 
 /*     Initialize RESVD if it hasn't already been done. */
 
-    if (first) {
-	for (i__ = 1; i__ <= 99; ++i__) {
-	    resvd[(i__1 = i__ - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		    i__1, "fndlun_", (ftnlen)1022)] = FALSE_;
+    if (__state->first) {
+	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
+	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
+		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)1022)] = 
+		    FALSE_;
 	}
-	for (i__ = 1; i__ <= 3; ++i__) {
-	    resvd[(i__2 = resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1026)] - 1) < 
-		    99 && 0 <= i__2 ? i__2 : s_rnge("resvd", i__2, "fndlun_", 
-		    (ftnlen)1026)] = TRUE_;
+	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
+		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
+		     (ftnlen)1026)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
+		    "resvd", i__2, "fndlun_", (ftnlen)1026)] = TRUE_;
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     If UNIT is in the proper range and it has not been reserved by */
 /*     default, set the corresponding flag to FALSE. */
 
     if (*unit >= 1 && *unit <= 99) {
-	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (*unit == resnum[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("resnum", i__1, "fndlun_", (ftnlen)1040)]) {
+	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	    if (*unit == __state->resnum[(i__1 = __state->i__ - 1) < 3 && 0 <=
+		     i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_", (ftnlen)
+		    1040)]) {
 		return 0;
 	    }
 	}
-	resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge("resvd", 
-		i__1, "fndlun_", (ftnlen)1045)] = FALSE_;
+	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(
+		"resvd", i__1, "fndlun_", (ftnlen)1045)] = FALSE_;
     }
     return 0;
 } /* fndlun_ */

@@ -1,13 +1,21 @@
-/* spke09.f -- translated by f2c (version 19980913).
+/* spke09.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern spke09_init_t __spke09_init;
+static spke09_state_t* get_spke09_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke09)
+		state->spke09 = __cspice_allocate_module(sizeof(
+	spke09_state_t), &__spke09_init, sizeof(__spke09_init));
+	return state->spke09;
+
+}
 
 /* $Procedure      SPKE09 ( S/P Kernel, evaluate, type 9 ) */
 /* Subroutine */ int spke09_(doublereal *et, doublereal *record, doublereal *
@@ -20,7 +28,8 @@ static integer c__6 = 6;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, n;
+    integer i__;
+    integer n;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal locrec[198];
     extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
@@ -28,8 +37,12 @@ static integer c__6 = 6;
     extern /* Subroutine */ int xposeg_(doublereal *, integer *, integer *, 
 	    doublereal *);
     extern logical return_(void);
-    integer xstart, ystart;
+    integer xstart;
+    integer ystart;
 
+
+    /* Module state */
+    spke09_state_t* __state = get_spke09_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 9 */
@@ -311,7 +324,7 @@ static integer c__6 = 6;
 /*     its work space usage.) */
 
     n = i_dnnt(record);
-    xposeg_(&record[1], &c__6, &n, locrec);
+    xposeg_(&record[1], &__state->c__6, &n, locrec);
     i__1 = n * 6;
     moved_(locrec, &i__1, &record[1]);
 

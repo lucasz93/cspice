@@ -1,14 +1,21 @@
-/* dasacu.f -- translated by f2c (version 19980913).
+/* dasacu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__22 = 22;
-static integer c__1 = 1;
+extern dasacu_init_t __dasacu_init;
+static dasacu_state_t* get_dasacu_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasacu)
+		state->dasacu = __cspice_allocate_module(sizeof(
+	dasacu_state_t), &__dasacu_init, sizeof(__dasacu_init));
+	return state->dasacu;
+
+}
 
 /* $Procedure      DASACU ( DAS add comments from a logical unit ) */
 /* Subroutine */ int dasacu_(integer *comlun, char *begmrk, char *endmrk, 
@@ -30,9 +37,10 @@ static integer c__1 = 1;
     /* Local variables */
     char line[255];
     logical more;
-    integer i__, j;
-    extern /* Subroutine */ int dasac_(integer *, integer *, char *, ftnlen), 
-	    chkin_(char *, ftnlen);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int dasac_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer ncomr;
@@ -45,24 +53,29 @@ static integer c__1 = 1;
     char combuf[255*22];
     extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    integer length, intchr;
+    integer length;
+    integer intchr;
     char idword[8];
     extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen);
+	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numcom;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nresvc;
     extern /* Subroutine */ int getlun_(integer *);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer scrlun;
     extern /* Subroutine */ int writla_(integer *, char *, integer *, ftnlen);
     extern logical return_(void);
     integer nresvr;
     logical eof;
 
+
+    /* Module state */
+    dasacu_state_t* __state = get_dasacu_state();
 /* $ Abstract */
 
 /*     Add comments to a previously opened binary DAS file from a */
@@ -573,7 +586,8 @@ static integer c__1 = 1;
 
 	while(! eof) {
 	    numcom = 0;
-	    readla_(comlun, &c__22, &numcom, combuf, &eof, (ftnlen)255);
+	    readla_(comlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)
+		    255);
 	    if (failed_()) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
@@ -645,7 +659,8 @@ static integer c__1 = 1;
 	more = TRUE_;
 	while(more) {
 	    numcom = 0;
-	    readla_(comlun, &c__22, &numcom, combuf, &eof, (ftnlen)255);
+	    readla_(comlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)
+		    255);
 	    if (failed_()) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
@@ -759,7 +774,7 @@ static integer c__1 = 1;
 /*     we insert the blank line. Otherwise, just add the comments. */
 
     if (*insbln && ncomc > 0) {
-	dasac_(handle, &c__1, " ", (ftnlen)1);
+	dasac_(handle, &__state->c__1, " ", (ftnlen)1);
 	if (failed_()) {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = scrlun;
@@ -786,7 +801,7 @@ static integer c__1 = 1;
 
 /*        Read in a buffer of comment lines. */
 
-	readla_(&scrlun, &c__22, &numcom, combuf, &eof, (ftnlen)255);
+	readla_(&scrlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)255);
 
 /*        If we got some, add them to the comment area of the DAS file. */
 

@@ -1,16 +1,21 @@
-/* sclu01.f -- translated by f2c (version 19980913).
+/* sclu01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__9 = 9;
-static integer c__14 = 14;
+extern sclu01_init_t __sclu01_init;
+static sclu01_state_t* get_sclu01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sclu01)
+		state->sclu01 = __cspice_allocate_module(sizeof(
+	sclu01_state_t), &__sclu01_init, sizeof(__sclu01_init));
+	return state->sclu01;
+
+}
 
 /* $Procedure      SCLU01 ( SCLK look up, type 1 ) */
 /* Subroutine */ int sclu01_0_(int n__, char *name__, integer *sc, integer *
@@ -18,37 +23,6 @@ static integer c__14 = 14;
 {
     /* Initialized data */
 
-    static char namlst[80*9] = "SCLK01_COEFFICIENTS                         "
-	    "                                    " "SCLK_PARTITION_START     "
-	    "                                                       " "SCLK_P"
-	    "ARTITION_END                                                    "
-	    "          " "SCLK01_N_FIELDS                                    "
-	    "                             " "SCLK01_OFFSETS                  "
-	    "                                                " "SCLK01_MODULI"
-	    "                                                                "
-	    "   " "SCLK01_OUTPUT_DELIM                                       "
-	    "                      " "SCLK01_KERNEL_ID                       "
-	    "                                         " "SCLK01_TIME_SYSTEM  "
-	    "                                                            ";
-    static integer lb[9] = { 3,1,1,1,1,1,1,1,0 };
-    static char nfdmsg[320] = "# not found. Did you load the SCLK kernel?   "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                   ";
-    static char nummsg[320] = "Invalid number of values found for #:  #.    "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                   ";
-    static char bvlmsg[320] = "Invalid value found for #:  #.               "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                   ";
 
     /* System generated locals */
     integer i__1;
@@ -61,26 +35,35 @@ static integer c__14 = 14;
     /* Local variables */
     char type__[1];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
-	    integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
+	    , char *, ftnlen, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen), sigerr_(char *, ftnlen);
+	    *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char tmpnam[80];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[320];
     extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer 
-	    *, ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen), 
-	    gdpool_(char *, integer *, integer *, integer *, doublereal *, 
-	    logical *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
+	    *, doublereal *, logical *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sclu01_state_t* __state = get_sclu01_state();
 /* $ Abstract */
 
 /*     Look up type 1 SCLK kernel data. */
@@ -683,7 +666,7 @@ L_scli01:
 /*     can be returned. */
 
     s_copy(tmpnam, name__, (ftnlen)80, name_len);
-    suffix_("_#", &c__0, tmpnam, (ftnlen)2, (ftnlen)80);
+    suffix_("_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)80);
     i__1 = -(*sc);
     repmi_(tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, (ftnlen)80);
 
@@ -700,7 +683,7 @@ L_scli01:
 	chkout_("SCLI01", (ftnlen)6);
 	return 0;
     }
-    gipool_(tmpnam, &c__1, maxnv, n, ival, &found, (ftnlen)80);
+    gipool_(tmpnam, &__state->c__1, maxnv, n, ival, &found, (ftnlen)80);
 
 /*     Make sure we found what we were looking for, if the item */
 /*     is required. */
@@ -711,11 +694,11 @@ L_scli01:
 /*        system specification.  In any case, no values will be returned. */
 
 	*n = 0;
-	if (s_cmp(name__, namlst + 640, name_len, (ftnlen)80) == 0) {
+	if (s_cmp(name__, __state->namlst + 640, name_len, (ftnlen)80) == 0) {
 	    chkout_("SCLI01", (ftnlen)6);
 	    return 0;
 	} else {
-	    setmsg_(nfdmsg, (ftnlen)320);
+	    setmsg_(__state->nfdmsg, (ftnlen)320);
 	    errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
 	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
 	    chkout_("SCLI01", (ftnlen)6);
@@ -742,12 +725,13 @@ L_scli01:
 /*     See if the input name is in the list of items we know about. */
 /*     If it is, perform the bound checks that apply. */
 
-    i__ = isrchc_(name__, &c__9, namlst, name_len, (ftnlen)80);
+    i__ = isrchc_(name__, &__state->c__9, __state->namlst, name_len, (ftnlen)
+	    80);
     if (i__ != 0) {
-	if (*n < lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("lb", 
-		i__1, "sclu01_", (ftnlen)681)]) {
-	    repmc_(nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-		    ftnlen)80, (ftnlen)320);
+	if (*n < __state->lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
+		s_rnge("lb", i__1, "sclu01_", (ftnlen)681)]) {
+	    repmc_(__state->nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
+		    1, (ftnlen)80, (ftnlen)320);
 	    repmi_(errmsg, "#", n, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
 		    320);
 	    setmsg_(errmsg, (ftnlen)320);
@@ -759,10 +743,10 @@ L_scli01:
 
 /*     Check the value of the delimiter code itself. */
 
-    if (s_cmp(name__, namlst + 480, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(name__, __state->namlst + 480, name_len, (ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 5) {
-	    repmc_(bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-		    ftnlen)80, (ftnlen)320);
+	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
+		    1, (ftnlen)80, (ftnlen)320);
 	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
 		    320);
 	    setmsg_(errmsg, (ftnlen)320);
@@ -774,10 +758,10 @@ L_scli01:
 
 /*     Check the value of the field count, too. */
 
-    if (s_cmp(name__, namlst + 240, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(name__, __state->namlst + 240, name_len, (ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 10) {
-	    repmc_(bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-		    ftnlen)80, (ftnlen)320);
+	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
+		    1, (ftnlen)80, (ftnlen)320);
 	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
 		    320);
 	    setmsg_(errmsg, (ftnlen)320);
@@ -789,10 +773,10 @@ L_scli01:
 
 /*     Check the value of the time system code. */
 
-    if (s_cmp(name__, namlst + 640, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(name__, __state->namlst + 640, name_len, (ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 2) {
-	    repmc_(bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-		    ftnlen)80, (ftnlen)320);
+	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
+		    1, (ftnlen)80, (ftnlen)320);
 	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
 		    320);
 	    setmsg_(errmsg, (ftnlen)320);
@@ -1097,7 +1081,7 @@ L_scld01:
 /*     Form the name of the kernel pool datum, and do the lookup. */
 
     s_copy(tmpnam, name__, (ftnlen)80, name_len);
-    suffix_("_#", &c__0, tmpnam, (ftnlen)2, (ftnlen)80);
+    suffix_("_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)80);
     i__1 = -(*sc);
     repmi_(tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, (ftnlen)80);
 
@@ -1114,7 +1098,7 @@ L_scld01:
 	chkout_("SCLD01", (ftnlen)6);
 	return 0;
     }
-    gdpool_(tmpnam, &c__1, maxnv, n, dval, &found, (ftnlen)80);
+    gdpool_(tmpnam, &__state->c__1, maxnv, n, dval, &found, (ftnlen)80);
 
 /*     Make sure we found what we were looking for. */
 
@@ -1123,7 +1107,7 @@ L_scld01:
 /*        No values are returned in this case. */
 
 	*n = 0;
-	setmsg_(nfdmsg, (ftnlen)320);
+	setmsg_(__state->nfdmsg, (ftnlen)320);
 	errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
 	chkout_("SCLD01", (ftnlen)6);
@@ -1148,12 +1132,13 @@ L_scld01:
 /*     See if the input name is in the list of items we know about. */
 /*     If it is, perform the bounds checks that apply. */
 
-    i__ = isrchc_(name__, &c__9, namlst, name_len, (ftnlen)80);
+    i__ = isrchc_(name__, &__state->c__9, __state->namlst, name_len, (ftnlen)
+	    80);
     if (i__ != 0) {
-	if (*n < lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("lb", 
-		i__1, "sclu01_", (ftnlen)1121)]) {
-	    repmc_(nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-		    ftnlen)80, (ftnlen)320);
+	if (*n < __state->lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
+		s_rnge("lb", i__1, "sclu01_", (ftnlen)1121)]) {
+	    repmc_(__state->nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
+		    1, (ftnlen)80, (ftnlen)320);
 	    repmi_(errmsg, "#", n, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
 		    320);
 	    setmsg_(errmsg, (ftnlen)320);
@@ -1165,14 +1150,14 @@ L_scld01:
 
 /*     Check the values of the moduli themselves. */
 
-    if (s_cmp(name__, namlst + 400, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(name__, __state->namlst + 400, name_len, (ftnlen)80) == 0) {
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (dval[0] < 1.) {
-		repmc_(bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)1, (
-			ftnlen)80, (ftnlen)320);
-		repmd_(errmsg, "#", dval, &c__14, errmsg, (ftnlen)320, (
-			ftnlen)1, (ftnlen)320);
+		repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (
+			ftnlen)1, (ftnlen)80, (ftnlen)320);
+		repmd_(errmsg, "#", dval, &__state->c__14, errmsg, (ftnlen)
+			320, (ftnlen)1, (ftnlen)320);
 		setmsg_(errmsg, (ftnlen)320);
 		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 		chkout_("SCLD01", (ftnlen)6);

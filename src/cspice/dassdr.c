@@ -1,25 +1,27 @@
-/* dassdr.f -- translated by f2c (version 19980913).
+/* dassdr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__3 = 3;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__0 = 0;
+extern dassdr_init_t __dassdr_init;
+static dassdr_state_t* get_dassdr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dassdr)
+		state->dassdr = __cspice_allocate_module(sizeof(
+	dassdr_state_t), &__dassdr_init, sizeof(__dassdr_init));
+	return state->dassdr;
+
+}
 
 /* $Procedure      DASSDR ( DAS, segregate data records ) */
 /* Subroutine */ int dassdr_(integer *handle)
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
-    static integer prev[3] = { 3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -31,43 +33,75 @@ static integer c__0 = 0;
     integer base;
     char crec[1024];
     doublereal drec[128];
-    integer free, irec[256], lrec, dest;
+    integer free;
+    integer irec[256];
+    integer lrec;
+    integer dest;
     logical more;
-    integer unit, type__, i__, j, n;
+    integer unit;
+    integer type__;
+    integer i__;
+    integer j;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncomc;
     extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
 	    integer *);
     char savec[1024];
     doublereal saved[128];
-    integer recno, savei[256];
+    integer recno;
+    integer savei[256];
     extern integer sumai_(integer *, integer *);
-    integer ncomr, total, lword, count[4], ltype, start;
+    integer ncomr;
+    integer total;
+    integer lword;
+    integer count[4];
+    integer ltype;
+    integer start;
     extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
-	    cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
     integer drbase;
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen), dasiod_(char *, integer *, integer *, doublereal 
-	    *, ftnlen), dasllc_(integer *), dasrdi_(integer *, integer *, 
-	    integer *, integer *), dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     dasudi_(integer *, integer *, integer *, integer *);
-    integer minadr, maxadr, scrhan, lastla[3];
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen), dashlu_(
-	    integer *, integer *), daswbr_(integer *), dasrri_(integer *, 
-	    integer *, integer *, integer *, integer *);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dasiod_(char *, integer *, integer *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int dasllc_(integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer minadr;
+    integer maxadr;
+    integer scrhan;
+    integer lastla[3];
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int daswbr_(integer *);
+    extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
+	    integer *, integer *);
     integer offset;
     extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
 	    *, ftnlen);
     integer lastrc[3];
-    extern /* Subroutine */ int dasops_(integer *), dasufs_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *), chkout_(char *, ftnlen);
-    integer lastwd[3], nresvc;
+    extern /* Subroutine */ int dasops_(integer *);
+    extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lastwd[3];
+    integer nresvc;
     extern logical return_(void);
-    integer nresvr, savtyp, prvtyp, loc, pos;
+    integer nresvr;
+    integer savtyp;
+    integer prvtyp;
+    integer loc;
+    integer pos;
 
+
+    /* Module state */
+    dassdr_state_t* __state = get_dassdr_state();
 /* $ Abstract */
 
 /*     Segregate the data records in a DAS file into clusters, using */
@@ -371,7 +405,7 @@ static integer c__0 = 0;
 
 /*     We also must maintain a count of records of each type. */
 
-    cleari_(&c__4, count);
+    cleari_(&__state->c__4, count);
 
 /*     Get the file summary for the DAS file to be segregated. */
 
@@ -386,7 +420,7 @@ static integer c__0 = 0;
 /*     descriptor in the file, and also find the type of the descriptor */
 /*     LTYPE. */
 
-    maxai_(lastrc, &c__3, &lrec, &loc);
+    maxai_(lastrc, &__state->c__3, &lrec, &loc);
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
@@ -406,7 +440,7 @@ static integer c__0 = 0;
 
 /*        Read the directory record. */
 
-	dasrri_(handle, &recno, &c__1, &c__256, irec);
+	dasrri_(handle, &recno, &__state->c__1, &__state->c__256, irec);
 	if (failed_()) {
 	    chkout_("DASSDR", (ftnlen)6);
 	    return 0;
@@ -419,8 +453,8 @@ static integer c__0 = 0;
 /*        Add the data type (`directory') and count (1) of the current */
 /*        record to the inverse order vector. */
 
-	dasadi_(&scrhan, &c__1, &c__4);
-	dasadi_(&scrhan, &c__1, &count[3]);
+	dasadi_(&scrhan, &__state->c__1, &__state->c__4);
+	dasadi_(&scrhan, &__state->c__1, &count[3]);
 	if (failed_()) {
 	    chkout_("DASSDR", (ftnlen)6);
 	    return 0;
@@ -430,8 +464,8 @@ static integer c__0 = 0;
 /*        types of the records described by the last read directory. */
 
 	type__ = irec[8];
-	prvtyp = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"prev", i__1, "dassdr_", (ftnlen)498)];
+	prvtyp = __state->prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("prev", i__1, "dassdr_", (ftnlen)498)];
 
 /*        Now traverse the directory and update the inverse order */
 /*        vector based on the descriptors we find. */
@@ -450,10 +484,10 @@ static integer c__0 = 0;
 
 	    i__1 = n;
 	    for (j = 1; j <= i__1; ++j) {
-		dasadi_(&scrhan, &c__1, &type__);
+		dasadi_(&scrhan, &__state->c__1, &type__);
 		i__3 = count[(i__2 = type__ - 1) < 4 && 0 <= i__2 ? i__2 : 
 			s_rnge("count", i__2, "dassdr_", (ftnlen)521)] + j;
-		dasadi_(&scrhan, &c__1, &i__3);
+		dasadi_(&scrhan, &__state->c__1, &i__3);
 		if (failed_()) {
 		    chkout_("DASSDR", (ftnlen)6);
 		    return 0;
@@ -475,12 +509,14 @@ static integer c__0 = 0;
 	    } else {
 		if (irec[(i__1 = i__ - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
 			"irec", i__1, "dassdr_", (ftnlen)547)] > 0) {
-		    type__ = next[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("next", i__1, "dassdr_", (ftnlen)548)];
+		    type__ = __state->next[(i__1 = type__ - 1) < 3 && 0 <= 
+			    i__1 ? i__1 : s_rnge("next", i__1, "dassdr_", (
+			    ftnlen)548)];
 		} else if (irec[(i__1 = i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
 			s_rnge("irec", i__1, "dassdr_", (ftnlen)550)] < 0) {
-		    type__ = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("prev", i__1, "dassdr_", (ftnlen)551)];
+		    type__ = __state->prev[(i__1 = type__ - 1) < 3 && 0 <= 
+			    i__1 ? i__1 : s_rnge("prev", i__1, "dassdr_", (
+			    ftnlen)551)];
 		} else {
 		    more = FALSE_;
 		}
@@ -499,7 +535,7 @@ static integer c__0 = 0;
 /*     seen.  Set TOTAL to the total number of records that we've going */
 /*     to permute. */
 
-    total = sumai_(count, &c__4);
+    total = sumai_(count, &__state->c__4);
 
 /*     The next step is to build a true order vector.  Let BASE be */
 /*     the base address for the order vector; this address is the */
@@ -522,7 +558,7 @@ static integer c__0 = 0;
 
     i__1 = total << 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dasadi_(&scrhan, &c__1, &c__0);
+	dasadi_(&scrhan, &__state->c__1, &__state->c__0);
     }
     if (failed_()) {
 	chkout_("DASSDR", (ftnlen)6);
@@ -849,7 +885,7 @@ static integer c__0 = 0;
 
 
     recno = drbase + 1;
-    cleari_(&c__256, irec);
+    cleari_(&__state->c__256, irec);
 
 /*     Set the logical address ranges in the directory record, for each */
 /*     data type. */
@@ -897,9 +933,9 @@ static integer c__0 = 0;
 /*              Place an appropriately signed count at location POS in */
 /*              the directory. */
 
-		if (type__ == next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("next", i__1, "dassdr_", (ftnlen)1000)])
-			 {
+		if (type__ == __state->next[(i__1 = prvtyp - 1) < 3 && 0 <= 
+			i__1 ? i__1 : s_rnge("next", i__1, "dassdr_", (ftnlen)
+			1000)]) {
 		    irec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
 			    "irec", i__1, "dassdr_", (ftnlen)1001)] = count[(
 			    i__2 = type__ - 1) < 4 && 0 <= i__2 ? i__2 : 

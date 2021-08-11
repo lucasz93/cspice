@@ -1,9 +1,17 @@
-/* bschoc.f -- translated by f2c (version 19980913).
+/* bschoc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bschoc_state_t;
+static bschoc_state_t* get_bschoc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure BSCHOC ( Binary search with order vector, character ) */
 integer bschoc_(char *value, integer *ndim, char *array, integer *order, 
@@ -17,8 +25,13 @@ integer bschoc_(char *value, integer *ndim, char *array, integer *order,
     logical l_lt(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer left, i__, right;
+    integer left;
+    integer i__;
+    integer right;
 
+
+    /* Module state */
+    bschoc_state_t* __state = get_bschoc_state();
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a character array, */

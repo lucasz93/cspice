@@ -1,9 +1,10 @@
-/* cbput_1.f -- translated by f2c (version 19980913).
+/* cbput_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure CBPUT ( Character buffer, put ) */
 /* Subroutine */ int cbput_1__(integer *begin, integer *end, char *string, 

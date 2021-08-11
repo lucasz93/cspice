@@ -1,9 +1,17 @@
-/* b1950.f -- translated by f2c (version 19980913).
+/* b1950.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int b1950_state_t;
+static b1950_state_t* get_b1950_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure B1950 ( Besselian Date 1950.0 ) */
 doublereal b1950_(void)
@@ -11,6 +19,9 @@ doublereal b1950_(void)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    b1950_state_t* __state = get_b1950_state();
 /* $ Abstract */
 
 /*     Return the Julian Date corresponding to Besselian Date 1950.0. */

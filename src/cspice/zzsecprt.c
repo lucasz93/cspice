@@ -1,9 +1,17 @@
-/* zzsecprt.f -- translated by f2c (version 19980913).
+/* zzsecprt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzsecprt_state_t;
+static zzsecprt_state_t* get_zzsecprt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZSECPRT ( Calculate dot terms for DPSPCE perturbation ) */
 /* Subroutine */ int zzsecprt_(integer *isynfl, doublereal *dg, doublereal *
@@ -15,8 +23,13 @@
     double sin(doublereal), cos(doublereal);
 
     /* Local variables */
-    doublereal xomi, x2omi, x2li;
+    doublereal xomi;
+    doublereal x2omi;
+    doublereal x2li;
 
+
+    /* Module state */
+    zzsecprt_state_t* __state = get_zzsecprt_state();
 /* $ Abstract */
 
 /*    Routine to calculate the dot terms for the secular perturbation */

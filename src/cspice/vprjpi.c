@@ -1,13 +1,21 @@
-/* vprjpi.f -- translated by f2c (version 19980913).
+/* vprjpi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b3 = 1.;
+extern vprjpi_init_t __vprjpi_init;
+static vprjpi_state_t* get_vprjpi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->vprjpi)
+		state->vprjpi = __cspice_allocate_module(sizeof(
+	vprjpi_state_t), &__vprjpi_init, sizeof(__vprjpi_init));
+	return state->vprjpi;
+
+}
 
 /* $Procedure      VPRJPI ( Vector projection onto plane, inverted ) */
 /* Subroutine */ int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *
@@ -17,20 +25,27 @@ static doublereal c_b3 = 1.;
     doublereal d__1;
 
     /* Local variables */
-    doublereal invc, invn[3];
+    doublereal invc;
+    doublereal invn[3];
     extern doublereal vdot_(doublereal *, doublereal *);
     doublereal mult;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
     extern doublereal dpmax_(void);
-    doublereal projc, limit;
+    doublereal projc;
+    doublereal limit;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    doublereal numer, projn[3];
+    doublereal numer;
+    doublereal projn[3];
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *), chkout_(char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    vprjpi_state_t* __state = get_vprjpi_state();
 /* $ Abstract */
 
 /*     Find the vector in a specified plane that maps to a specified */
@@ -338,7 +353,7 @@ static doublereal c_b3 = 1.;
 /*        We can find VOUT after all. */
 
 	mult = numer / denom;
-	vlcom_(&c_b3, vin, &mult, projn, vout);
+	vlcom_(&__state->c_b3, vin, &mult, projn, vout);
 	*found = TRUE_;
     } else {
 

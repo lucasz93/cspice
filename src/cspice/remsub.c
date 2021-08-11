@@ -1,9 +1,17 @@
-/* remsub.f -- translated by f2c (version 19980913).
+/* remsub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int remsub_state_t;
+static remsub_state_t* get_remsub_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REMSUB ( Remove a substring ) */
 /* Subroutine */ int remsub_(char *in, integer *left, integer *right, char *
@@ -17,16 +25,23 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, l, r__;
+    integer i__;
+    integer j;
+    integer l;
+    integer r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer inlen;
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer outlen;
     extern logical return_(void);
 
+
+    /* Module state */
+    remsub_state_t* __state = get_remsub_state();
 /* $ Abstract */
 
 /*      Remove the substring (LEFT:RIGHT) from a character string. */

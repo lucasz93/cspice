@@ -1,14 +1,21 @@
-/* spke21.f -- translated by f2c (version 19980913).
+/* spke21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__25 = 25;
-static integer c__1 = 1;
+extern spke21_init_t __spke21_init;
+static spke21_state_t* get_spke21_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke21)
+		state->spke21 = __cspice_allocate_module(sizeof(
+	spke21_state_t), &__spke21_init, sizeof(__spke21_init));
+	return state->spke21;
+
+}
 
 /* $Procedure      SPKE21 ( S/P Kernel, evaluate, type 21 ) */
 /* Subroutine */ int spke21_(doublereal *et, doublereal *record, doublereal *
@@ -16,7 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal fc[25] = { 1. };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -25,28 +31,16 @@ static integer c__1 = 1;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal g[25];
-    static integer i__, j;
-    static doublereal w[27], delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
-    static integer kqmax1;
-    static doublereal dt[75]	/* was [25][3] */, wc[24];
-    static integer kq[3], ks;
-    static doublereal tl;
-    static integer jx;
-    static doublereal tp;
-    static integer maxdim;
-    static doublereal refvel[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static doublereal refpos[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static integer mq2, ks1, kqq;
-    static doublereal sum;
 
+    /* Module state */
+    spke21_state_t* __state = get_spke21_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 21 */
@@ -302,15 +296,15 @@ static integer c__1 = 1;
 /*     The first element of the input record is the dimension */
 /*     of the difference table MAXDIM. */
 
-    maxdim = i_dnnt(record);
-    if (maxdim > 25) {
+    __state->maxdim = i_dnnt(record);
+    if (__state->maxdim > 25) {
 	chkin_("SPKE21", (ftnlen)6);
 	setmsg_("The input record has a maximum table dimension of #, while "
 		"the maximum supported by this routine is #. It is possible t"
 		"hat this problem is due to your SPICE Toolkit being out of d"
 		"ate.", (ftnlen)183);
-	errint_("#", &maxdim, (ftnlen)1);
-	errint_("#", &c__25, (ftnlen)1);
+	errint_("#", &__state->maxdim, (ftnlen)1);
+	errint_("#", &__state->c__25, (ftnlen)1);
 	sigerr_("SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
 	chkout_("SPKE21", (ftnlen)6);
 	return 0;
@@ -330,17 +324,17 @@ static integer c__1 = 1;
 
 /*     For our purposes, NTE is always 3. */
 
-    moved_(&record[1], &c__1, &tl);
-    moved_(&record[2], &maxdim, g);
+    moved_(&record[1], &__state->c__1, &__state->tl);
+    moved_(&record[2], &__state->maxdim, __state->g);
 
 /*     Collect the reference position and velocity. */
 
-    refpos[0] = record[maxdim + 2];
-    refvel[0] = record[maxdim + 3];
-    refpos[1] = record[maxdim + 4];
-    refvel[1] = record[maxdim + 5];
-    refpos[2] = record[maxdim + 6];
-    refvel[2] = record[maxdim + 7];
+    __state->refpos[0] = record[__state->maxdim + 2];
+    __state->refvel[0] = record[__state->maxdim + 3];
+    __state->refpos[1] = record[__state->maxdim + 4];
+    __state->refvel[1] = record[__state->maxdim + 5];
+    __state->refpos[2] = record[__state->maxdim + 6];
+    __state->refvel[2] = record[__state->maxdim + 7];
 
 /*     Initializing the difference table is one aspect of this routine */
 /*     that's a bit different from SPKE01. Here the first dimension of */
@@ -348,22 +342,22 @@ static integer c__1 = 1;
 /*     must transfer separately the portions of the table corresponding */
 /*     to each component. */
 
-    for (i__ = 1; i__ <= 3; ++i__) {
-	moved_(&record[i__ * maxdim + 8], &maxdim, &dt[(i__1 = i__ * 25 - 25) 
-		< 75 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, "spke21_", (
-		ftnlen)289)]);
+    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	moved_(&record[__state->i__ * __state->maxdim + 8], &__state->maxdim, 
+		&__state->dt[(i__1 = __state->i__ * 25 - 25) < 75 && 0 <= 
+		i__1 ? i__1 : s_rnge("dt", i__1, "spke21_", (ftnlen)289)]);
     }
-    kqmax1 = (integer) record[(maxdim << 2) + 8];
-    kq[0] = (integer) record[(maxdim << 2) + 9];
-    kq[1] = (integer) record[(maxdim << 2) + 10];
-    kq[2] = (integer) record[(maxdim << 2) + 11];
+    __state->kqmax1 = (integer) record[(__state->maxdim << 2) + 8];
+    __state->kq[0] = (integer) record[(__state->maxdim << 2) + 9];
+    __state->kq[1] = (integer) record[(__state->maxdim << 2) + 10];
+    __state->kq[2] = (integer) record[(__state->maxdim << 2) + 11];
 
 /*     Next we set up for the computation of the various differences */
 
-    delta = *et - tl;
-    tp = delta;
-    mq2 = kqmax1 - 2;
-    ks = kqmax1 - 1;
+    __state->delta = *et - __state->tl;
+    __state->tp = __state->delta;
+    __state->mq2 = __state->kqmax1 - 2;
+    __state->ks = __state->kqmax1 - 1;
 
 /*     This is clearly collecting some kind of coefficients. */
 /*     The problem is that we have no idea what they are... */
@@ -375,37 +369,41 @@ static integer c__1 = 1;
 /*     difference line's reference epoch. We then change it from DELTA */
 /*     by the components of the stepsize vector G. */
 
-    i__1 = mq2;
-    for (j = 1; j <= i__1; ++j) {
+    i__1 = __state->mq2;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
 
 /*        Make sure we're not about to attempt division by zero. */
 
-	if (g[(i__2 = j - 1) < 25 && 0 <= i__2 ? i__2 : s_rnge("g", i__2, 
-		"spke21_", (ftnlen)320)] == 0.) {
+	if (__state->g[(i__2 = __state->j - 1) < 25 && 0 <= i__2 ? i__2 : 
+		s_rnge("g", i__2, "spke21_", (ftnlen)320)] == 0.) {
 	    chkin_("SPKE21", (ftnlen)6);
 	    setmsg_("A  value of zero was found at index # of the step size "
 		    "vector.", (ftnlen)62);
-	    errint_("#", &j, (ftnlen)1);
+	    errint_("#", &__state->j, (ftnlen)1);
 	    sigerr_("SPICE(ZEROSTEP)", (ftnlen)15);
 	    chkout_("SPKE21", (ftnlen)6);
 	    return 0;
 	}
-	fc[(i__2 = j) < 25 && 0 <= i__2 ? i__2 : s_rnge("fc", i__2, "spke21_",
-		 (ftnlen)332)] = tp / g[(i__3 = j - 1) < 25 && 0 <= i__3 ? 
-		i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)332)];
-	wc[(i__2 = j - 1) < 24 && 0 <= i__2 ? i__2 : s_rnge("wc", i__2, "spk"
-		"e21_", (ftnlen)333)] = delta / g[(i__3 = j - 1) < 25 && 0 <= 
-		i__3 ? i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)333)];
-	tp = delta + g[(i__2 = j - 1) < 25 && 0 <= i__2 ? i__2 : s_rnge("g", 
-		i__2, "spke21_", (ftnlen)334)];
+	__state->fc[(i__2 = __state->j) < 25 && 0 <= i__2 ? i__2 : s_rnge(
+		"fc", i__2, "spke21_", (ftnlen)332)] = __state->tp / 
+		__state->g[(i__3 = __state->j - 1) < 25 && 0 <= i__3 ? i__3 : 
+		s_rnge("g", i__3, "spke21_", (ftnlen)332)];
+	__state->wc[(i__2 = __state->j - 1) < 24 && 0 <= i__2 ? i__2 : s_rnge(
+		"wc", i__2, "spke21_", (ftnlen)333)] = __state->delta / 
+		__state->g[(i__3 = __state->j - 1) < 25 && 0 <= i__3 ? i__3 : 
+		s_rnge("g", i__3, "spke21_", (ftnlen)333)];
+	__state->tp = __state->delta + __state->g[(i__2 = __state->j - 1) < 
+		25 && 0 <= i__2 ? i__2 : s_rnge("g", i__2, "spke21_", (ftnlen)
+		334)];
     }
 
 /*     Collect KQMAX1 reciprocals. */
 
-    i__1 = kqmax1;
-    for (j = 1; j <= i__1; ++j) {
-	w[(i__2 = j - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, "spke2"
-		"1_", (ftnlen)342)] = 1. / (doublereal) j;
+    i__1 = __state->kqmax1;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	__state->w[(i__2 = __state->j - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge(
+		"w", i__2, "spke21_", (ftnlen)342)] = 1. / (doublereal) 
+		__state->j;
     }
 
 /*     Compute the W(K) terms needed for the position interpolation */
@@ -413,79 +411,88 @@ static integer c__1 = 1;
 /*     starts out as KQMAX1-1 (the ``maximum integration'') */
 /*     is at least 2. */
 
-    jx = 0;
-    ks1 = ks - 1;
-    while(ks >= 2) {
-	++jx;
-	i__1 = jx;
-	for (j = 1; j <= i__1; ++j) {
-	    w[(i__2 = j + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2,
-		     "spke21_", (ftnlen)359)] = fc[(i__3 = j) < 25 && 0 <= 
-		    i__3 ? i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)359)] 
-		    * w[(i__4 = j + ks1 - 1) < 27 && 0 <= i__4 ? i__4 : 
-		    s_rnge("w", i__4, "spke21_", (ftnlen)359)] - wc[(i__5 = j 
-		    - 1) < 24 && 0 <= i__5 ? i__5 : s_rnge("wc", i__5, "spke"
-		    "21_", (ftnlen)359)] * w[(i__6 = j + ks - 1) < 27 && 0 <= 
-		    i__6 ? i__6 : s_rnge("w", i__6, "spke21_", (ftnlen)359)];
+    __state->jx = 0;
+    __state->ks1 = __state->ks - 1;
+    while(__state->ks >= 2) {
+	++__state->jx;
+	i__1 = __state->jx;
+	for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	    __state->w[(i__2 = __state->j + __state->ks - 1) < 27 && 0 <= 
+		    i__2 ? i__2 : s_rnge("w", i__2, "spke21_", (ftnlen)359)] =
+		     __state->fc[(i__3 = __state->j) < 25 && 0 <= i__3 ? i__3 
+		    : s_rnge("fc", i__3, "spke21_", (ftnlen)359)] * 
+		    __state->w[(i__4 = __state->j + __state->ks1 - 1) < 27 && 
+		    0 <= i__4 ? i__4 : s_rnge("w", i__4, "spke21_", (ftnlen)
+		    359)] - __state->wc[(i__5 = __state->j - 1) < 24 && 0 <= 
+		    i__5 ? i__5 : s_rnge("wc", i__5, "spke21_", (ftnlen)359)] 
+		    * __state->w[(i__6 = __state->j + __state->ks - 1) < 27 &&
+		     0 <= i__6 ? i__6 : s_rnge("w", i__6, "spke21_", (ftnlen)
+		    359)];
 	}
-	ks = ks1;
-	--ks1;
+	__state->ks = __state->ks1;
+	--__state->ks1;
     }
 
 /*     Perform position interpolation: (Note that KS = 1 right now. */
 /*     We don't know much more than that.) */
 
-    for (i__ = 1; i__ <= 3; ++i__) {
-	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke21_", (ftnlen)373)];
-	sum = 0.;
-	for (j = kqq; j >= 1; --j) {
-	    sum += dt[(i__1 = j + i__ * 25 - 26) < 75 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke21_", (ftnlen)377)] * w[(i__2 = j 
-		    + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke21_", (ftnlen)377)];
+    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	__state->kqq = __state->kq[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 
+		? i__1 : s_rnge("kq", i__1, "spke21_", (ftnlen)373)];
+	__state->sum = 0.;
+	for (__state->j = __state->kqq; __state->j >= 1; --__state->j) {
+	    __state->sum += __state->dt[(i__1 = __state->j + __state->i__ * 
+		    25 - 26) < 75 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, 
+		    "spke21_", (ftnlen)377)] * __state->w[(i__2 = __state->j 
+		    + __state->ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge(
+		    "w", i__2, "spke21_", (ftnlen)377)];
 	}
-	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke21_", (ftnlen)380)] = refpos[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("refpos", i__2, "spke21_", (ftnlen)
-		380)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+	state[(i__1 = __state->i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		"state", i__1, "spke21_", (ftnlen)380)] = __state->refpos[(
+		i__2 = __state->i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"refpos", i__2, "spke21_", (ftnlen)380)] + __state->delta * (
+		__state->refvel[(i__3 = __state->i__ - 1) < 3 && 0 <= i__3 ? 
 		i__3 : s_rnge("refvel", i__3, "spke21_", (ftnlen)380)] + 
-		delta * sum);
+		__state->delta * __state->sum);
     }
 
 /*     Again we need to compute the W(K) coefficients that are */
 /*     going to be used in the velocity interpolation. */
 /*     (Note, at this point, KS = 1, KS1 = 0.) */
 
-    i__1 = jx;
-    for (j = 1; j <= i__1; ++j) {
-	w[(i__2 = j + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		"spke21_", (ftnlen)390)] = fc[(i__3 = j) < 25 && 0 <= i__3 ? 
-		i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)390)] * w[(i__4 =
-		 j + ks1 - 1) < 27 && 0 <= i__4 ? i__4 : s_rnge("w", i__4, 
-		"spke21_", (ftnlen)390)] - wc[(i__5 = j - 1) < 24 && 0 <= 
-		i__5 ? i__5 : s_rnge("wc", i__5, "spke21_", (ftnlen)390)] * w[
-		(i__6 = j + ks - 1) < 27 && 0 <= i__6 ? i__6 : s_rnge("w", 
-		i__6, "spke21_", (ftnlen)390)];
+    i__1 = __state->jx;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	__state->w[(i__2 = __state->j + __state->ks - 1) < 27 && 0 <= i__2 ? 
+		i__2 : s_rnge("w", i__2, "spke21_", (ftnlen)390)] = 
+		__state->fc[(i__3 = __state->j) < 25 && 0 <= i__3 ? i__3 : 
+		s_rnge("fc", i__3, "spke21_", (ftnlen)390)] * __state->w[(
+		i__4 = __state->j + __state->ks1 - 1) < 27 && 0 <= i__4 ? 
+		i__4 : s_rnge("w", i__4, "spke21_", (ftnlen)390)] - 
+		__state->wc[(i__5 = __state->j - 1) < 24 && 0 <= i__5 ? i__5 :
+		 s_rnge("wc", i__5, "spke21_", (ftnlen)390)] * __state->w[(
+		i__6 = __state->j + __state->ks - 1) < 27 && 0 <= i__6 ? i__6 
+		: s_rnge("w", i__6, "spke21_", (ftnlen)390)];
     }
-    --ks;
+    --__state->ks;
 
 /*     Perform velocity interpolation: */
 
-    for (i__ = 1; i__ <= 3; ++i__) {
-	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke21_", (ftnlen)400)];
-	sum = 0.;
-	for (j = kqq; j >= 1; --j) {
-	    sum += dt[(i__1 = j + i__ * 25 - 26) < 75 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke21_", (ftnlen)404)] * w[(i__2 = j 
-		    + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke21_", (ftnlen)404)];
+    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	__state->kqq = __state->kq[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 
+		? i__1 : s_rnge("kq", i__1, "spke21_", (ftnlen)400)];
+	__state->sum = 0.;
+	for (__state->j = __state->kqq; __state->j >= 1; --__state->j) {
+	    __state->sum += __state->dt[(i__1 = __state->j + __state->i__ * 
+		    25 - 26) < 75 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, 
+		    "spke21_", (ftnlen)404)] * __state->w[(i__2 = __state->j 
+		    + __state->ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge(
+		    "w", i__2, "spke21_", (ftnlen)404)];
 	}
-	state[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke21_", (ftnlen)407)] = refvel[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("refvel", i__2, "spke21_", (ftnlen)
-		407)] + delta * sum;
+	state[(i__1 = __state->i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		"state", i__1, "spke21_", (ftnlen)407)] = __state->refvel[(
+		i__2 = __state->i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"refvel", i__2, "spke21_", (ftnlen)407)] + __state->delta * 
+		__state->sum;
     }
     return 0;
 } /* spke21_ */

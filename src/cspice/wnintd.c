@@ -1,9 +1,17 @@
-/* wnintd.f -- translated by f2c (version 19980913).
+/* wnintd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnintd_state_t;
+static wnintd_state_t* get_wnintd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNINTD ( Intersect two DP windows ) */
 /* Subroutine */ int wnintd_(doublereal *a, doublereal *b, doublereal *c__)
@@ -12,18 +20,26 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    integer over, acard, bcard;
+    integer over;
+    integer acard;
+    integer bcard;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer csize;
     extern integer sized_(doublereal *);
-    integer ap, bp, cp;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), excess_(
-	    integer *, char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char 
-	    *, ftnlen);
+    integer ap;
+    integer bp;
+    integer cp;
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     char use[1];
 
+
+    /* Module state */
+    wnintd_state_t* __state = get_wnintd_state();
 /* $ Abstract */
 
 /*      Place the intersection of two double precision windows into */

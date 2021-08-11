@@ -1,9 +1,17 @@
-/* enchar.f -- translated by f2c (version 19980913).
+/* enchar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int enchar_state_t;
+static enchar_state_t* get_enchar_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ENCHAR ( Encode a character string ) */
 /* Subroutine */ int enchar_0_(int n__, integer *number, char *string, ftnlen 
@@ -13,15 +21,19 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer base, i__;
+    integer base;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer chbase_(void);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer num;
 
+
+    /* Module state */
+    enchar_state_t* __state = get_enchar_state();
 /* $ Abstract */
 
 /*     Encode a nonnegative integer number into a character string */

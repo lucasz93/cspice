@@ -1,34 +1,48 @@
-/* ckw04e.f -- translated by f2c (version 19980913).
+/* ckw04e.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckw04e_init_t __ckw04e_init;
+static ckw04e_state_t* get_ckw04e_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw04e)
+		state->ckw04e = __cspice_allocate_module(sizeof(
+	ckw04e_state_t), &__ckw04e_init, sizeof(__ckw04e_init));
+	return state->ckw04e;
+
+}
 
 /* $Procedure      CKW04E ( CK type 04: End a segment ) */
 /* Subroutine */ int ckw04e_(integer *handle, doublereal *endtim)
 {
-    extern /* Subroutine */ int dafgs_(doublereal *), chkin_(char *, ftnlen), 
-	    dafps_(integer *, integer *, doublereal *, integer *, doublereal *
-	    ), dafrs_(doublereal *);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dafrs_(doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     logical found;
-    extern /* Subroutine */ int sgwes_(integer *), dafbbs_(integer *), 
-	    daffpa_(logical *);
+    extern /* Subroutine */ int sgwes_(integer *);
+    extern /* Subroutine */ int dafbbs_(integer *);
+    extern /* Subroutine */ int daffpa_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    ckw04e_state_t* __state = get_ckw04e_state();
 /* $ Abstract */
 
 /*     End the type 04 CK segment currently being written to the DAF */
@@ -318,9 +332,9 @@ static integer c__6 = 6;
 /*     in the file. */
 
     dafgs_(descr);
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     dcd[1] = *endtim;
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
     dafrs_(descr);
 
 /*     All done. */

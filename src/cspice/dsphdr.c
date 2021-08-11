@@ -1,27 +1,43 @@
-/* dsphdr.f -- translated by f2c (version 19980913).
+/* dsphdr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dsphdr_state_t;
+static dsphdr_state_t* get_dsphdr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DSPHDR ( Derivative of spherical w.r.t. rectangular ) */
 /* Subroutine */ int dsphdr_(doublereal *x, doublereal *y, doublereal *z__, 
 	doublereal *jacobi)
 {
-    doublereal long__, r__;
+    doublereal long__;
+    doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal colat;
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
-    doublereal injacb[9]	/* was [3][3] */, rectan[3];
+    doublereal injacb[9]	/* was [3][3] */;
+    doublereal rectan[3];
     extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), drdsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen);
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int drdsph_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int invort_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    dsphdr_state_t* __state = get_dsphdr_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

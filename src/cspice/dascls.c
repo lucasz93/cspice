@@ -1,21 +1,27 @@
-/* dascls.f -- translated by f2c (version 19980913).
+/* dascls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5000 = 5000;
-static logical c_false = FALSE_;
+extern dascls_init_t __dascls_init;
+static dascls_state_t* get_dascls_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dascls)
+		state->dascls = __cspice_allocate_module(sizeof(
+	dascls_state_t), &__dascls_init, sizeof(__dascls_init));
+	return state->dascls;
+
+}
 
 /* $Procedure      DASCLS ( DAS, close file ) */
 /* Subroutine */ int dascls_(integer *handle)
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
 
     /* System generated locals */
     inlist ioin__1;
@@ -29,20 +35,25 @@ static logical c_false = FALSE_;
 	    integer *, ftnlen);
     extern logical elemi_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer fhset[5006];
     extern logical failed_(void);
-    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen), dasllc_(
-	    integer *), dashof_(integer *);
+    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasllc_(integer *);
+    extern /* Subroutine */ int dashof_(integer *);
     char method[10];
-    extern /* Subroutine */ int dassdr_(integer *), daswbr_(integer *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int dassdr_(integer *);
+    extern /* Subroutine */ int daswbr_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ssizei_(
-	    integer *, integer *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
     logical notscr;
     extern logical return_(void);
 
+
+    /* Module state */
+    dascls_state_t* __state = get_dascls_state();
 /* $ Abstract */
 
 /*     Close a DAS file. */
@@ -307,9 +318,9 @@ static logical c_false = FALSE_;
 	return 0;
     }
     chkin_("DASCLS", (ftnlen)6);
-    if (pass1) {
-	ssizei_(&c__5000, fhset);
-	pass1 = FALSE_;
+    if (__state->pass1) {
+	ssizei_(&__state->c__5000, __state->fhset);
+	__state->pass1 = FALSE_;
     }
 
 /*     There are only four items on our worklist: */
@@ -330,8 +341,8 @@ static logical c_false = FALSE_;
 /*     See whether the input handle designates an open DAS file.  If not, */
 /*     return now. */
 
-    dashof_(fhset);
-    if (! elemi_(handle, fhset)) {
+    dashof_(__state->fhset);
+    if (! elemi_(handle, __state->fhset)) {
 	chkout_("DASCLS", (ftnlen)6);
 	return 0;
     }
@@ -350,7 +361,7 @@ static logical c_false = FALSE_;
 /*        We cannot directly test the status of the file, but if */
 /*        the file is unnamed, it must be a scratch file. */
 
-	zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 	if (failed_()) {
 	    chkout_("DASCLS", (ftnlen)6);
 	    return 0;

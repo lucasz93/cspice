@@ -1,9 +1,17 @@
-/* removi.f -- translated by f2c (version 19980913).
+/* removi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int removi_state_t;
+static removi_state_t* get_removi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REMOVI ( Remove an item from an integer set ) */
 /* Subroutine */ int removi_(integer *item, integer *a)
@@ -12,7 +20,8 @@
     integer i__1;
 
     /* Local variables */
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical in;
@@ -22,6 +31,9 @@
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    removi_state_t* __state = get_removi_state();
 /* $ Abstract */
 
 /*      Remove an item from an integer set. */

@@ -1,15 +1,21 @@
-/* zzekad06.f -- translated by f2c (version 19980913).
+/* zzekad06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__1 = 1;
-static logical c_false = FALSE_;
+extern zzekad06_init_t __zzekad06_init;
+static zzekad06_state_t* get_zzekad06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekad06)
+		state->zzekad06 = __cspice_allocate_module(sizeof(
+	zzekad06_state_t), &__zzekad06_init, sizeof(__zzekad06_init));
+	return state->zzekad06;
+
+}
 
 /* $Procedure     ZZEKAD06 ( EK, add data to class 6 column ) */
 /* Subroutine */ int zzekad06_(integer *handle, integer *segdsc, integer *
@@ -18,7 +24,6 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -28,33 +33,31 @@ static logical c_false = FALSE_;
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer npad, nrec;
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    static integer room;
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *), 
-	    zzekglnk_(integer *, integer *, integer *, integer *), zzeksfwd_(
-	    integer *, integer *, integer *, integer *), zzekslnk_(integer *, 
-	    integer *, integer *, integer *);
-    static integer n, p, mbase, pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer recno, cvlen, nchrs, ncols, lastw, p2;
-    extern logical failed_(void);
-    static integer np;
-    static char padbuf[100];
-    static integer padlen, colidx, datptr, eltidx, mnroom, nlinks, nwrite, 
-	    ptrloc, remain, strlen, wp;
-    static logical fstpag;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasudi_(integer *, integer *, integer *, integer *), 
-	    dasudc_(integer *, integer *, integer *, integer *, integer *, 
-	    char *, ftnlen);
-    static logical pad;
-    static integer pos;
-    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *), 
-	    zzekaps_(integer *, integer *, integer *, logical *, integer *, 
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical failed_(void);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekad06_state_t* __state = get_zzekad06_state();
 /* $ Abstract */
 
 /*     Add a column entry to a specified record in a class 6 column. */
@@ -794,24 +797,24 @@ static logical c_false = FALSE_;
 
 /*     Use discovery check-in. */
 
-    if (first) {
-	s_copy(padbuf, " ", (ftnlen)100, (ftnlen)1);
-	first = FALSE_;
+    if (__state->first) {
+	s_copy(__state->padbuf, " ", (ftnlen)100, (ftnlen)1);
+	__state->first = FALSE_;
     }
 
 /*     Make sure the record exists. */
 
-    nrec = segdsc[5];
-    colidx = coldsc[8];
+    __state->nrec = segdsc[5];
+    __state->colidx = coldsc[8];
 
 /*     Make sure the column exists. */
 
-    ncols = segdsc[4];
-    if (colidx < 1 || colidx > ncols) {
+    __state->ncols = segdsc[4];
+    if (__state->colidx < 1 || __state->colidx > __state->ncols) {
 	chkin_("ZZEKAD06", (ftnlen)8);
 	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
+	errint_("#", &__state->colidx, (ftnlen)1);
+	errint_("#", &__state->nrec, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKAD06", (ftnlen)8);
 	return 0;
@@ -821,14 +824,14 @@ static logical c_false = FALSE_;
 /*     in this column. */
 
     if (*isnull && coldsc[7] != 1) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
+	__state->recno = zzekrp2n_(handle, &segdsc[1], recptr);
 	chkin_("ZZEKAD06", (ftnlen)8);
 	setmsg_("Column having index # in segment # does not allow nulls, bu"
 		"t a null value was supplied for the element in record #.", (
 		ftnlen)115);
-	errint_("#", &colidx, (ftnlen)1);
+	errint_("#", &__state->colidx, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
+	errint_("#", &__state->recno, (ftnlen)1);
 	sigerr_("SPICE(BADATTRIBUTE)", (ftnlen)19);
 	chkout_("ZZEKAD06", (ftnlen)8);
 	return 0;
@@ -842,7 +845,7 @@ static logical c_false = FALSE_;
 	chkin_("ZZEKAD06", (ftnlen)8);
 	setmsg_("COLIDX = #;  segment = #; NVALS = #;  NVALS must be positiv"
 		"e ", (ftnlen)61);
-	errint_("#", &colidx, (ftnlen)1);
+	errint_("#", &__state->colidx, (ftnlen)1);
 	errint_("#", &segdsc[1], (ftnlen)1);
 	errint_("#", nvals, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
@@ -854,7 +857,7 @@ static logical c_false = FALSE_;
 	    chkin_("ZZEKAD06", (ftnlen)8);
 	    setmsg_("COLIDX = #;  segment = #; NVALS = #; declared entry siz"
 		    "e = #.  Sizes must match.", (ftnlen)80);
-	    errint_("#", &colidx, (ftnlen)1);
+	    errint_("#", &__state->colidx, (ftnlen)1);
 	    errint_("#", &segdsc[1], (ftnlen)1);
 	    errint_("#", nvals, (ftnlen)1);
 	    errint_("#", &coldsc[3], (ftnlen)1);
@@ -866,134 +869,138 @@ static logical c_false = FALSE_;
 
 /*     Compute the data pointer location. */
 
-    ptrloc = *recptr + 2 + colidx;
+    __state->ptrloc = *recptr + 2 + __state->colidx;
     if (*isnull) {
 
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n2);
+	dasudi_(handle, &__state->ptrloc, &__state->ptrloc, &__state->c_n2);
     } else {
 
 /*        Decide now whether we will need to pad the input entry */
 /*        elements with trailing blanks, and if so how much padding */
 /*        we'll need. */
 
-	strlen = coldsc[2];
-	cvlen = i_len(cvals, cvals_len);
-	pad = cvlen < strlen;
-	if (pad) {
-	    padlen = strlen - cvlen;
+	__state->strlen = coldsc[2];
+	__state->cvlen = i_len(cvals, cvals_len);
+	__state->pad = __state->cvlen < __state->strlen;
+	if (__state->pad) {
+	    __state->padlen = __state->strlen - __state->cvlen;
 	}
-	lastw = segdsc[18];
-	room = 1014 - lastw;
-	fstpag = TRUE_;
+	__state->lastw = segdsc[18];
+	__state->room = 1014 - __state->lastw;
+	__state->fstpag = TRUE_;
 
 /*        Initialize the page base and target data pointer, if possible. */
 /*        If the current page is full, these functions will be performed */
 /*        below in the code section in which a new page is allocated. */
 
-	if (lastw < 1014) {
-	    p = segdsc[15];
-	    zzekpgbs_(&c__1, &p, &pbase);
-	    datptr = pbase + lastw + 1;
+	if (__state->lastw < 1014) {
+	    __state->p = segdsc[15];
+	    zzekpgbs_(&__state->c__1, &__state->p, &__state->pbase);
+	    __state->datptr = __state->pbase + __state->lastw + 1;
 	}
-	eltidx = 1;
-	while(eltidx <= *nvals && ! failed_()) {
+	__state->eltidx = 1;
+	while(__state->eltidx <= *nvals && ! failed_()) {
 
 /*           Write out the element having index ELTIDX. */
 
-	    pos = 0;
-	    remain = strlen;
-	    while(remain > 0) {
+	    __state->pos = 0;
+	    __state->remain = __state->strlen;
+	    while(__state->remain > 0) {
 
 /*              Decide where to write the data values.  In order to write */
 /*              a new entry, we require enough room for the count */
 /*              and at least one character of data. */
 
-		if (fstpag) {
-		    mnroom = 6;
+		if (__state->fstpag) {
+		    __state->mnroom = 6;
 		} else {
-		    mnroom = 1;
+		    __state->mnroom = 1;
 		}
-		if (room >= mnroom) {
+		if (__state->room >= __state->mnroom) {
 
 /*                 There's room in the current page.  If this is the */
 /*                 first page this entry is written on, set the data */
 /*                 pointer and count.  Write as much of the value as */
 /*                 possible to the current page. */
 
-		    if (fstpag) {
-			dasudi_(handle, &ptrloc, &ptrloc, &datptr);
-			zzeksei_(handle, &datptr, nvals);
-			room += -5;
-			datptr += 5;
+		    if (__state->fstpag) {
+			dasudi_(handle, &__state->ptrloc, &__state->ptrloc, &
+				__state->datptr);
+			zzeksei_(handle, &__state->datptr, nvals);
+			__state->room += -5;
+			__state->datptr += 5;
 
 /*                    The first page containing some or all of the data */
 /*                    item gains a link. */
 
-			zzekglnk_(handle, &c__1, &p, &nlinks);
-			i__1 = nlinks + 1;
-			zzekslnk_(handle, &c__1, &p, &i__1);
+			zzekglnk_(handle, &__state->c__1, &__state->p, &
+				__state->nlinks);
+			i__1 = __state->nlinks + 1;
+			zzekslnk_(handle, &__state->c__1, &__state->p, &i__1);
 		    }
 
 /*                 Write the characters we can fit onto the current page. */
 
-		    nwrite = min(remain,room);
-		    n = nwrite;
-		    while(n > 0) {
-			if (pos < cvlen) {
+		    __state->nwrite = min(__state->remain,__state->room);
+		    __state->n = __state->nwrite;
+		    while(__state->n > 0) {
+			if (__state->pos < __state->cvlen) {
 
 /*                       Take data from the input string CVALS(ELTIDX). */
 
 /* Computing MIN */
-			    i__1 = n, i__2 = cvlen - pos;
-			    nchrs = min(i__1,i__2);
-			    i__1 = datptr + nchrs - 1;
-			    i__2 = pos + 1;
-			    i__3 = pos + nchrs;
-			    dasudc_(handle, &datptr, &i__1, &i__2, &i__3, 
-				    cvals + (eltidx - 1) * cvals_len, 
-				    cvals_len);
-			    n -= nchrs;
-			    pos += nchrs;
-			    datptr += nchrs;
-			} else if (pad) {
+			    i__1 = __state->n, i__2 = __state->cvlen - 
+				    __state->pos;
+			    __state->nchrs = min(i__1,i__2);
+			    i__1 = __state->datptr + __state->nchrs - 1;
+			    i__2 = __state->pos + 1;
+			    i__3 = __state->pos + __state->nchrs;
+			    dasudc_(handle, &__state->datptr, &i__1, &i__2, &
+				    i__3, cvals + (__state->eltidx - 1) * 
+				    cvals_len, cvals_len);
+			    __state->n -= __state->nchrs;
+			    __state->pos += __state->nchrs;
+			    __state->datptr += __state->nchrs;
+			} else if (__state->pad) {
 
 /*                       We must add trailing blanks to the column */
 /*                       entry at this point. */
 
-			    npad = min(n,padlen);
-			    np = npad;
-			    while(np > 0) {
-				wp = min(np,100);
-				i__1 = datptr + wp - 1;
-				dasudc_(handle, &datptr, &i__1, &c__1, &wp, 
-					padbuf, (ftnlen)100);
-				np -= wp;
-				datptr += wp;
+			    __state->npad = min(__state->n,__state->padlen);
+			    __state->np = __state->npad;
+			    while(__state->np > 0) {
+				__state->wp = min(__state->np,100);
+				i__1 = __state->datptr + __state->wp - 1;
+				dasudc_(handle, &__state->datptr, &i__1, &
+					__state->c__1, &__state->wp, 
+					__state->padbuf, (ftnlen)100);
+				__state->np -= __state->wp;
+				__state->datptr += __state->wp;
 			    }
-			    n -= npad;
-			    pos += npad;
+			    __state->n -= __state->npad;
+			    __state->pos += __state->npad;
 			}
 		    }
 
 /*                 We've written all we can to the current page. */
 
-		    remain -= nwrite;
-		    room -= nwrite;
+		    __state->remain -= __state->nwrite;
+		    __state->room -= __state->nwrite;
 
 /*                 The last character word in use must be updated. */
 /*                 Account for the count, if this is the first page on */
 /*                 which the current entry is written. */
 
-		    if (fstpag) {
-			lastw = lastw + 5 + nwrite;
-			segdsc[18] = lastw;
-			fstpag = FALSE_;
+		    if (__state->fstpag) {
+			__state->lastw = __state->lastw + 5 + __state->nwrite;
+			segdsc[18] = __state->lastw;
+			__state->fstpag = FALSE_;
 		    } else {
-			lastw += nwrite;
-			segdsc[18] = lastw;
+			__state->lastw += __state->nwrite;
+			segdsc[18] = __state->lastw;
 		    }
 		} else {
 
@@ -1001,42 +1008,45 @@ static logical c_false = FALSE_;
 /*                 first data page written to, link the previous page to */
 /*                 the current one. */
 
-		    zzekaps_(handle, segdsc, &c__1, &c_false, &p2, &pbase);
-		    if (! fstpag) {
-			zzeksfwd_(handle, &c__1, &p, &p2);
+		    zzekaps_(handle, segdsc, &__state->c__1, &
+			    __state->c_false, &__state->p2, &__state->pbase);
+		    if (! __state->fstpag) {
+			zzeksfwd_(handle, &__state->c__1, &__state->p, &
+				__state->p2);
 		    }
-		    p = p2;
-		    lastw = 0;
-		    segdsc[15] = p;
-		    segdsc[18] = lastw;
-		    room = 1014;
-		    datptr = pbase + 1;
+		    __state->p = __state->p2;
+		    __state->lastw = 0;
+		    segdsc[15] = __state->p;
+		    segdsc[18] = __state->lastw;
+		    __state->room = 1014;
+		    __state->datptr = __state->pbase + 1;
 
 /*                 Set the link count.  If this is the first page */
 /*                 onto which the input column entry is written, */
 /*                 just zero out the count; the count will be set above. */
 /*                 Additional pages get one link. */
 
-		    if (fstpag) {
-			nlinks = 0;
+		    if (__state->fstpag) {
+			__state->nlinks = 0;
 		    } else {
-			nlinks = 1;
+			__state->nlinks = 1;
 		    }
-		    zzekslnk_(handle, &c__1, &p, &nlinks);
+		    zzekslnk_(handle, &__state->c__1, &__state->p, &
+			    __state->nlinks);
 		}
 	    }
 
 /*           We've written out the current element. */
 
-	    ++eltidx;
+	    ++__state->eltidx;
 	}
     }
 
 /*     Write out the updated segment descriptor. */
 
-    mbase = segdsc[2];
-    i__1 = mbase + 1;
-    i__2 = mbase + 24;
+    __state->mbase = segdsc[2];
+    i__1 = __state->mbase + 1;
+    i__2 = __state->mbase + 24;
     dasudi_(handle, &i__1, &i__2, segdsc);
 
 /*     Class 6 columns are not indexed, so we need not update any */

@@ -1,13 +1,21 @@
-/* intord.f -- translated by f2c (version 19980913).
+/* intord.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern intord_init_t __intord_init;
+static intord_state_t* get_intord_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->intord)
+		state->intord = __cspice_allocate_module(sizeof(
+	intord_state_t), &__intord_init, sizeof(__intord_init));
+	return state->intord;
+
+}
 
 /* $Procedure      INTORD ( Convert an integer to ordinal text ) */
 /* Subroutine */ int intord_(integer *n, char *string, ftnlen string_len)
@@ -17,12 +25,17 @@ static integer c__0 = 0;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer last, i__;
+    integer last;
+    integer i__;
     char mystr[148];
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen), inttxt_(integer *, char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int inttxt_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    intord_state_t* __state = get_intord_state();
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent written ordinal phrase. */
@@ -218,7 +231,7 @@ static integer c__0 = 0;
     } else if (*(unsigned char *)&mystr[last - 1] == 'Y') {
 	s_copy(mystr + (last - 1), "IETH", 148 - (last - 1), (ftnlen)4);
     } else {
-	suffix_("TH", &c__0, mystr, (ftnlen)2, (ftnlen)148);
+	suffix_("TH", &__state->c__0, mystr, (ftnlen)2, (ftnlen)148);
     }
 
 /*     Now simply put MYSTR into STRING and return. */

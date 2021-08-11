@@ -1,14 +1,21 @@
-/* cknm06.f -- translated by f2c (version 19980913).
+/* cknm06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern cknm06_init_t __cknm06_init;
+static cknm06_state_t* get_cknm06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cknm06)
+		state->cknm06 = __cspice_allocate_module(sizeof(
+	cknm06_state_t), &__cknm06_init, sizeof(__cknm06_init));
+	return state->cknm06;
+
+}
 
 /* $Procedure CKNM06 ( C-kernel, number of mini-segments, type 06 ) */
 /* Subroutine */ int cknm06_(integer *handle, doublereal *descr, integer *
@@ -18,18 +25,24 @@ static integer c__6 = 6;
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
-	     integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     doublereal dc[2];
     integer ic[6];
     extern logical failed_(void);
     doublereal dpdata[1];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    cknm06_state_t* __state = get_cknm06_state();
 /* $ Abstract */
 
 /*     Given the handle of a CK file and the descriptor of a type 6 */
@@ -447,7 +460,7 @@ static integer c__6 = 6;
 /*        IC(6)  Final address of segment data */
 
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     If this segment is not of data type 6, then signal an error. */
 

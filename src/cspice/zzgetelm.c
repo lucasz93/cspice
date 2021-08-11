@@ -1,15 +1,21 @@
-/* zzgetelm.f -- translated by f2c (version 19980913).
+/* zzgetelm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2 = 2;
-static integer c__4 = 4;
+extern zzgetelm_init_t __zzgetelm_init;
+static zzgetelm_state_t* get_zzgetelm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgetelm)
+		state->zzgetelm = __cspice_allocate_module(sizeof(
+	zzgetelm_state_t), &__zzgetelm_init, sizeof(__zzgetelm_init));
+	return state->zzgetelm;
+
+}
 
 /* $Procedure ZZGETELM ( Get the components from two-line elements) */
 /* Subroutine */ int zzgetelm_(integer *frstyr, char *lines, doublereal *
@@ -18,7 +24,6 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3], a__2[2];
@@ -31,50 +36,27 @@ static integer c__4 = 4;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static doublereal ndd60;
-    static char cday[32];
-    static doublereal incl, ndt20;
-    static integer bexp, year;
-    static doublereal tvec[8];
-    static char term[160*13];
-    static integer nexp;
-    static doublereal node0;
-    static integer i__, k;
-    static char cndd60[32], cincl[32];
-    static doublereal omega;
-    static char cndt20[32];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char cyear[32];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
-	    integer *, char *, ftnlen, ftnlen, ftnlen);
-    static char ciexp[32];
-    static integer begyr;
-    static doublereal bstar;
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
+	    , char *, ftnlen, ftnlen, ftnlen);
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static doublereal power[75];
     extern doublereal twopi_(void);
-    static char cnode0[32], comega[32];
-    static doublereal mo, no;
-    static char cibexp[32];
-    static integer yr;
-    static char cbstar[32];
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen), nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), chkout_(char *, ftnlen);
-    static doublereal d2r, pi2;
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
 	    ftnlen);
-    static char errprs[160*13];
     extern logical return_(void);
-    static doublereal ecc, day;
-    static char cmo[32], cno[32];
     extern doublereal rpd_(void);
-    static integer ptr;
-    static char cecc[32];
 
+    /* Module state */
+    zzgetelm_state_t* __state = get_zzgetelm_state();
 /* $ Abstract */
 
 /*    Given a the "lines" of a two-line element set, parse the */
@@ -463,51 +445,64 @@ static integer c__4 = 4;
 
 /*     First entry initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Define two constants. This initialization proves the most */
 /*        useful when processing thousands of TLE sets. */
 
-	d2r = rpd_();
-	pi2 = twopi_();
-	first = FALSE_;
-	power[37] = 1.;
-	for (i__ = 1; i__ <= 37; ++i__) {
-	    power[(i__1 = i__ + 37) < 75 && 0 <= i__1 ? i__1 : s_rnge("power",
-		     i__1, "zzgetelm_", (ftnlen)535)] = power[(i__2 = i__ + 
-		    36) < 75 && 0 <= i__2 ? i__2 : s_rnge("power", i__2, 
-		    "zzgetelm_", (ftnlen)535)] * 10.;
-	    power[(i__1 = -i__ + 37) < 75 && 0 <= i__1 ? i__1 : s_rnge("power"
-		    , i__1, "zzgetelm_", (ftnlen)536)] = 1. / power[(i__2 = 
-		    i__ + 37) < 75 && 0 <= i__2 ? i__2 : s_rnge("power", i__2,
-		     "zzgetelm_", (ftnlen)536)];
+	__state->d2r = rpd_();
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
+	__state->power[37] = 1.;
+	for (__state->i__ = 1; __state->i__ <= 37; ++__state->i__) {
+	    __state->power[(i__1 = __state->i__ + 37) < 75 && 0 <= i__1 ? 
+		    i__1 : s_rnge("power", i__1, "zzgetelm_", (ftnlen)535)] = 
+		    __state->power[(i__2 = __state->i__ + 36) < 75 && 0 <= 
+		    i__2 ? i__2 : s_rnge("power", i__2, "zzgetelm_", (ftnlen)
+		    535)] * 10.;
+	    __state->power[(i__1 = -__state->i__ + 37) < 75 && 0 <= i__1 ? 
+		    i__1 : s_rnge("power", i__1, "zzgetelm_", (ftnlen)536)] = 
+		    1. / __state->power[(i__2 = __state->i__ + 37) < 75 && 0 
+		    <= i__2 ? i__2 : s_rnge("power", i__2, "zzgetelm_", (
+		    ftnlen)536)];
 	}
-	s_copy(term, "\"YEAR\" (characters 19 to 20 of the first line of a t"
-		"wo-line element set)", (ftnlen)160, (ftnlen)72);
-	s_copy(term + 160, "\"DAY\" (characters 21 to 32 of the first line o"
-		"f a two-line element set)", (ftnlen)160, (ftnlen)71);
-	s_copy(term + 320, "\"NDT20\" (characters 34 to 43 of the first line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)73);
-	s_copy(term + 480, "\"NDD60\" (characters 45 to 45 of the first line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)73);
-	s_copy(term + 640, "\"IEXP\" (characters 51 to 52 of the first line "
-		"of a two-line element set)", (ftnlen)160, (ftnlen)72);
-	s_copy(term + 800, "\"BSTAR\" (characters 54 to 54 of the first line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)73);
-	s_copy(term + 960, "\"IBEXP\" (characters 60 to 61 of the first line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)73);
-	s_copy(term + 1120, "\"INCL\" (characters 9 to 16 of the second line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)72);
-	s_copy(term + 1280, "\"NODE0\" (characters 18 to 25 of the second li"
-		"ne of a two-line element set)", (ftnlen)160, (ftnlen)74);
-	s_copy(term + 1440, "\"ECC\" (characters 27 to 33 of the second line"
-		" of a two-line element set)", (ftnlen)160, (ftnlen)72);
-	s_copy(term + 1600, "\"OMEGA\" (characters 35 to 42 of the second li"
-		"ne of a two-line element set)", (ftnlen)160, (ftnlen)74);
-	s_copy(term + 1760, "\"MO\" (characters 44 to 51 of the second line "
-		"of a two-line element set)", (ftnlen)160, (ftnlen)71);
-	s_copy(term + 1920, "\"NO\" (characters 53 to 63 of the second line "
-		"of a two-line element set)", (ftnlen)160, (ftnlen)71);
+	s_copy(__state->term, "\"YEAR\" (characters 19 to 20 of the first li"
+		"ne of a two-line element set)", (ftnlen)160, (ftnlen)72);
+	s_copy(__state->term + 160, "\"DAY\" (characters 21 to 32 of the fir"
+		"st line of a two-line element set)", (ftnlen)160, (ftnlen)71);
+	s_copy(__state->term + 320, "\"NDT20\" (characters 34 to 43 of the f"
+		"irst line of a two-line element set)", (ftnlen)160, (ftnlen)
+		73);
+	s_copy(__state->term + 480, "\"NDD60\" (characters 45 to 45 of the f"
+		"irst line of a two-line element set)", (ftnlen)160, (ftnlen)
+		73);
+	s_copy(__state->term + 640, "\"IEXP\" (characters 51 to 52 of the fi"
+		"rst line of a two-line element set)", (ftnlen)160, (ftnlen)72)
+		;
+	s_copy(__state->term + 800, "\"BSTAR\" (characters 54 to 54 of the f"
+		"irst line of a two-line element set)", (ftnlen)160, (ftnlen)
+		73);
+	s_copy(__state->term + 960, "\"IBEXP\" (characters 60 to 61 of the f"
+		"irst line of a two-line element set)", (ftnlen)160, (ftnlen)
+		73);
+	s_copy(__state->term + 1120, "\"INCL\" (characters 9 to 16 of the se"
+		"cond line of a two-line element set)", (ftnlen)160, (ftnlen)
+		72);
+	s_copy(__state->term + 1280, "\"NODE0\" (characters 18 to 25 of the "
+		"second line of a two-line element set)", (ftnlen)160, (ftnlen)
+		74);
+	s_copy(__state->term + 1440, "\"ECC\" (characters 27 to 33 of the se"
+		"cond line of a two-line element set)", (ftnlen)160, (ftnlen)
+		72);
+	s_copy(__state->term + 1600, "\"OMEGA\" (characters 35 to 42 of the "
+		"second line of a two-line element set)", (ftnlen)160, (ftnlen)
+		74);
+	s_copy(__state->term + 1760, "\"MO\" (characters 44 to 51 of the sec"
+		"ond line of a two-line element set)", (ftnlen)160, (ftnlen)71)
+		;
+	s_copy(__state->term + 1920, "\"NO\" (characters 53 to 63 of the sec"
+		"ond line of a two-line element set)", (ftnlen)160, (ftnlen)71)
+		;
     }
 
 /*     Ensure the vehicle IDs match in each line. */
@@ -531,12 +526,12 @@ static integer c__4 = 4;
 
 /*    Check line format and length. */
 
-    for (k = 1; k <= 2; ++k) {
-	if (lastnb_(lines + ((i__1 = k - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		"lines", i__1, "zzgetelm_", (ftnlen)604)) * lines_len, 
-		lines_len) != 68 && lastnb_(lines + ((i__2 = k - 1) < 2 && 0 
-		<= i__2 ? i__2 : s_rnge("lines", i__2, "zzgetelm_", (ftnlen)
-		604)) * lines_len, lines_len) != 69) {
+    for (__state->k = 1; __state->k <= 2; ++__state->k) {
+	if (lastnb_(lines + ((i__1 = __state->k - 1) < 2 && 0 <= i__1 ? i__1 :
+		 s_rnge("lines", i__1, "zzgetelm_", (ftnlen)604)) * lines_len,
+		 lines_len) != 68 && lastnb_(lines + ((i__2 = __state->k - 1) 
+		< 2 && 0 <= i__2 ? i__2 : s_rnge("lines", i__2, "zzgetelm_", (
+		ftnlen)604)) * lines_len, lines_len) != 69) {
 
 /*          The TLE data line was not 68 or 69 characters long (ignoring */
 /*          trailing whitespace). Flag an error. */
@@ -544,16 +539,17 @@ static integer c__4 = 4;
 	    s_copy(error, "Line #1 of the TLE has incorrect data length. Exp"
 		    "ected length 68 or 69 elements, actual length: #2. TLE l"
 		    "ine value: #3", error_len, (ftnlen)118);
-	    repmi_(error, "#1", &k, error, error_len, (ftnlen)2, error_len);
-	    i__2 = lastnb_(lines + ((i__1 = k - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lines", i__1, "zzgetelm_", (ftnlen)615)) * 
-		    lines_len, lines_len);
+	    repmi_(error, "#1", &__state->k, error, error_len, (ftnlen)2, 
+		    error_len);
+	    i__2 = lastnb_(lines + ((i__1 = __state->k - 1) < 2 && 0 <= i__1 ?
+		     i__1 : s_rnge("lines", i__1, "zzgetelm_", (ftnlen)615)) *
+		     lines_len, lines_len);
 	    repmi_(error, "#2", &i__2, error, error_len, (ftnlen)2, error_len)
 		    ;
-	    repmc_(error, "#3", lines + ((i__1 = k - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lines", i__1, "zzgetelm_", (ftnlen)616)) * 
-		    lines_len, error, error_len, (ftnlen)2, lines_len, 
-		    error_len);
+	    repmc_(error, "#3", lines + ((i__1 = __state->k - 1) < 2 && 0 <= 
+		    i__1 ? i__1 : s_rnge("lines", i__1, "zzgetelm_", (ftnlen)
+		    616)) * lines_len, error, error_len, (ftnlen)2, lines_len,
+		     error_len);
 	    *ok = FALSE_;
 	    chkout_("ZZGETELM", (ftnlen)8);
 	    return 0;
@@ -587,66 +583,80 @@ static integer c__4 = 4;
 /*     this data (as well as the code in THETAG) show that it's a lot */
 /*     easier to capture the year and day of year separately. */
 
-    s_copy(cyear, lines + 18, (ftnlen)32, (ftnlen)2);
-    s_copy(cday, lines + 20, (ftnlen)32, (ftnlen)12);
-    s_copy(cndt20, lines + 33, (ftnlen)32, (ftnlen)10);
+    s_copy(__state->cyear, lines + 18, (ftnlen)32, (ftnlen)2);
+    s_copy(__state->cday, lines + 20, (ftnlen)32, (ftnlen)12);
+    s_copy(__state->cndt20, lines + 33, (ftnlen)32, (ftnlen)10);
 /* Writing concatenation */
     i__3[0] = 1, a__1[0] = lines + 44;
     i__3[1] = 1, a__1[1] = ".";
     i__3[2] = 5, a__1[2] = lines + 45;
-    s_cat(cndd60, a__1, i__3, &c__3, (ftnlen)32);
-    s_copy(ciexp, lines + 50, (ftnlen)32, (ftnlen)2);
+    s_cat(__state->cndd60, a__1, i__3, &__state->c__3, (ftnlen)32);
+    s_copy(__state->ciexp, lines + 50, (ftnlen)32, (ftnlen)2);
 /* Writing concatenation */
     i__3[0] = 1, a__1[0] = lines + 53;
     i__3[1] = 1, a__1[1] = ".";
     i__3[2] = 5, a__1[2] = lines + 54;
-    s_cat(cbstar, a__1, i__3, &c__3, (ftnlen)32);
-    s_copy(cibexp, lines + 59, (ftnlen)32, (ftnlen)2);
-    s_copy(cincl, lines + (lines_len + 8), (ftnlen)32, (ftnlen)8);
-    s_copy(cnode0, lines + (lines_len + 17), (ftnlen)32, (ftnlen)8);
+    s_cat(__state->cbstar, a__1, i__3, &__state->c__3, (ftnlen)32);
+    s_copy(__state->cibexp, lines + 59, (ftnlen)32, (ftnlen)2);
+    s_copy(__state->cincl, lines + (lines_len + 8), (ftnlen)32, (ftnlen)8);
+    s_copy(__state->cnode0, lines + (lines_len + 17), (ftnlen)32, (ftnlen)8);
 /* Writing concatenation */
     i__4[0] = 2, a__2[0] = "0.";
     i__4[1] = 7, a__2[1] = lines + (lines_len + 26);
-    s_cat(cecc, a__2, i__4, &c__2, (ftnlen)32);
-    s_copy(comega, lines + (lines_len + 34), (ftnlen)32, (ftnlen)8);
-    s_copy(cmo, lines + (lines_len + 43), (ftnlen)32, (ftnlen)8);
-    s_copy(cno, lines + (lines_len + 52), (ftnlen)32, (ftnlen)11);
+    s_cat(__state->cecc, a__2, i__4, &__state->c__2, (ftnlen)32);
+    s_copy(__state->comega, lines + (lines_len + 34), (ftnlen)32, (ftnlen)8);
+    s_copy(__state->cmo, lines + (lines_len + 43), (ftnlen)32, (ftnlen)8);
+    s_copy(__state->cno, lines + (lines_len + 52), (ftnlen)32, (ftnlen)11);
 
 /*     Parse the numerical values from the data string. */
 
-    nparsi_(cyear, &yr, errprs, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cday, &day, errprs + 160, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cndt20, &ndt20, errprs + 320, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cndd60, &ndd60, errprs + 480, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsi_(ciexp, &nexp, errprs + 640, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cbstar, &bstar, errprs + 800, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsi_(cibexp, &bexp, errprs + 960, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cincl, &incl, errprs + 1120, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cnode0, &node0, errprs + 1280, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cecc, &ecc, errprs + 1440, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(comega, &omega, errprs + 1600, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cmo, &mo, errprs + 1760, &ptr, (ftnlen)32, (ftnlen)160);
-    nparsd_(cno, &no, errprs + 1920, &ptr, (ftnlen)32, (ftnlen)160);
+    nparsi_(__state->cyear, &__state->yr, __state->errprs, &__state->ptr, (
+	    ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cday, &__state->day, __state->errprs + 160, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cndt20, &__state->ndt20, __state->errprs + 320, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cndd60, &__state->ndd60, __state->errprs + 480, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsi_(__state->ciexp, &__state->nexp, __state->errprs + 640, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cbstar, &__state->bstar, __state->errprs + 800, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsi_(__state->cibexp, &__state->bexp, __state->errprs + 960, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cincl, &__state->incl, __state->errprs + 1120, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cnode0, &__state->node0, __state->errprs + 1280, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cecc, &__state->ecc, __state->errprs + 1440, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->comega, &__state->omega, __state->errprs + 1600, &
+	    __state->ptr, (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cmo, &__state->mo, __state->errprs + 1760, &__state->ptr,
+	     (ftnlen)32, (ftnlen)160);
+    nparsd_(__state->cno, &__state->no, __state->errprs + 1920, &__state->ptr,
+	     (ftnlen)32, (ftnlen)160);
 
 /*     Check for parse errors. */
 
-    for (i__ = 1; i__ <= 13; ++i__) {
-	if (s_cmp(errprs + ((i__1 = i__ - 1) < 13 && 0 <= i__1 ? i__1 : 
-		s_rnge("errprs", i__1, "zzgetelm_", (ftnlen)692)) * 160, 
-		" ", (ftnlen)160, (ftnlen)1) != 0) {
+    for (__state->i__ = 1; __state->i__ <= 13; ++__state->i__) {
+	if (s_cmp(__state->errprs + ((i__1 = __state->i__ - 1) < 13 && 0 <= 
+		i__1 ? i__1 : s_rnge("errprs", i__1, "zzgetelm_", (ftnlen)692)
+		) * 160, " ", (ftnlen)160, (ftnlen)1) != 0) {
 
 /*           Something could not parse. Set the error message then */
 /*           return. */
 
 	    s_copy(error, "An error occurred while trying to parse the term "
 		    "#. The diagnostic was:  # ", error_len, (ftnlen)75);
-	    repmc_(error, "#", term + ((i__1 = i__ - 1) < 13 && 0 <= i__1 ? 
-		    i__1 : s_rnge("term", i__1, "zzgetelm_", (ftnlen)700)) * 
-		    160, error, error_len, (ftnlen)1, (ftnlen)160, error_len);
-	    repmc_(error, "#", errprs + ((i__1 = i__ - 1) < 13 && 0 <= i__1 ? 
-		    i__1 : s_rnge("errprs", i__1, "zzgetelm_", (ftnlen)701)) *
-		     160, error, error_len, (ftnlen)1, (ftnlen)160, error_len)
-		    ;
+	    repmc_(error, "#", __state->term + ((i__1 = __state->i__ - 1) < 
+		    13 && 0 <= i__1 ? i__1 : s_rnge("term", i__1, "zzgetelm_",
+		     (ftnlen)700)) * 160, error, error_len, (ftnlen)1, (
+		    ftnlen)160, error_len);
+	    repmc_(error, "#", __state->errprs + ((i__1 = __state->i__ - 1) < 
+		    13 && 0 <= i__1 ? i__1 : s_rnge("errprs", i__1, "zzgetel"
+		    "m_", (ftnlen)701)) * 160, error, error_len, (ftnlen)1, (
+		    ftnlen)160, error_len);
 	    *ok = FALSE_;
 	    chkout_("ZZGETELM", (ftnlen)8);
 	    return 0;
@@ -656,18 +666,20 @@ static integer c__4 = 4;
 /*     Check for reasonable exponets; a single digit. These should */
 /*     probably be LE 0. */
 
-    if (abs(nexp) > 9) {
+    if (abs(__state->nexp) > 9) {
 	s_copy(error, "NEXP (exponent) not a single digit. Actual value #1", 
 		error_len, (ftnlen)51);
-	repmi_(error, "#1", &nexp, error, error_len, (ftnlen)2, error_len);
+	repmi_(error, "#1", &__state->nexp, error, error_len, (ftnlen)2, 
+		error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
     }
-    if (abs(bexp) > 9) {
+    if (abs(__state->bexp) > 9) {
 	s_copy(error, "BEXP (exponent) not a single digit. Actual value #1", 
 		error_len, (ftnlen)51);
-	repmi_(error, "#1", &bexp, error, error_len, (ftnlen)2, error_len);
+	repmi_(error, "#1", &__state->bexp, error, error_len, (ftnlen)2, 
+		error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -677,11 +689,11 @@ static integer c__4 = 4;
 
 /*     NODE0 - right ascension of the ascending node, [0,360) */
 
-    if (node0 < 0. || node0 >= 360.) {
+    if (__state->node0 < 0. || __state->node0 >= 360.) {
 	s_copy(error, "NODE0 (RA acend node) expected bounds [0,360). Actual"
 		" value #1", error_len, (ftnlen)62);
-	repmd_(error, "#1", &node0, &c__4, error, error_len, (ftnlen)2, 
-		error_len);
+	repmd_(error, "#1", &__state->node0, &__state->c__4, error, error_len,
+		 (ftnlen)2, error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -689,11 +701,11 @@ static integer c__4 = 4;
 
 /*     OMEAGA - argument of the periapsis, [0,360) */
 
-    if (omega < 0. || omega >= 360.) {
+    if (__state->omega < 0. || __state->omega >= 360.) {
 	s_copy(error, "OMEGA (arg periap) expected bounds [0,360). Actual va"
 		"lue #1", error_len, (ftnlen)59);
-	repmd_(error, "#1", &omega, &c__4, error, error_len, (ftnlen)2, 
-		error_len);
+	repmd_(error, "#1", &__state->omega, &__state->c__4, error, error_len,
+		 (ftnlen)2, error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -701,11 +713,11 @@ static integer c__4 = 4;
 
 /*     MO - mean anomoly, [0,360) */
 
-    if (mo < 0. || mo >= 360.) {
+    if (__state->mo < 0. || __state->mo >= 360.) {
 	s_copy(error, "MO (mean anomoly) expected bounds [0,360). Actual val"
 		"ue #1", error_len, (ftnlen)58);
-	repmd_(error, "#1", &mo, &c__4, error, error_len, (ftnlen)2, 
-		error_len);
+	repmd_(error, "#1", &__state->mo, &__state->c__4, error, error_len, (
+		ftnlen)2, error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -713,11 +725,11 @@ static integer c__4 = 4;
 
 /*     INCL - inclination, [0,180] */
 
-    if (incl < 0. || incl > 180.) {
+    if (__state->incl < 0. || __state->incl > 180.) {
 	s_copy(error, "INCL (inclination) expected bounds [0,180). Actual va"
 		"lue #1", error_len, (ftnlen)59);
-	repmd_(error, "#1", &incl, &c__4, error, error_len, (ftnlen)2, 
-		error_len);
+	repmd_(error, "#1", &__state->incl, &__state->c__4, error, error_len, 
+		(ftnlen)2, error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -725,11 +737,11 @@ static integer c__4 = 4;
 
 /*     NO - mean motion (0,20) (Earth orbiter). */
 
-    if (no > 20. || no < 0.) {
+    if (__state->no > 20. || __state->no < 0.) {
 	s_copy(error, "NO (mean motion) expected bounds (0,20). Actual value"
 		" #1", error_len, (ftnlen)56);
-	repmd_(error, "#1", &no, &c__4, error, error_len, (ftnlen)2, 
-		error_len);
+	repmd_(error, "#1", &__state->no, &__state->c__4, error, error_len, (
+		ftnlen)2, error_len);
 	*ok = FALSE_;
 	chkout_("ZZGETELM", (ftnlen)8);
 	return 0;
@@ -737,54 +749,54 @@ static integer c__4 = 4;
 
 /*     Finish up the computation of NDD60 and BSTAR */
 
-    ndd60 *= power[(i__1 = nexp + 37) < 75 && 0 <= i__1 ? i__1 : s_rnge("pow"
-	    "er", i__1, "zzgetelm_", (ftnlen)827)];
-    bstar *= power[(i__1 = bexp + 37) < 75 && 0 <= i__1 ? i__1 : s_rnge("pow"
-	    "er", i__1, "zzgetelm_", (ftnlen)828)];
+    __state->ndd60 *= __state->power[(i__1 = __state->nexp + 37) < 75 && 0 <= 
+	    i__1 ? i__1 : s_rnge("power", i__1, "zzgetelm_", (ftnlen)827)];
+    __state->bstar *= __state->power[(i__1 = __state->bexp + 37) < 75 && 0 <= 
+	    i__1 ? i__1 : s_rnge("power", i__1, "zzgetelm_", (ftnlen)828)];
 
 /*     Convert everything from degrees to radians ... */
 
-    node0 *= d2r;
-    omega *= d2r;
-    mo *= d2r;
-    incl *= d2r;
+    __state->node0 *= __state->d2r;
+    __state->omega *= __state->d2r;
+    __state->mo *= __state->d2r;
+    __state->incl *= __state->d2r;
 
 /*     ... and from revolutions/day**n to radians/minutes**n */
 
-    no = no * pi2 / 1440.;
-    ndt20 = ndt20 * pi2 / 1440. / 1440.;
-    ndd60 = ndd60 * pi2 / 1440. / 1440. / 1440.;
+    __state->no = __state->no * __state->pi2 / 1440.;
+    __state->ndt20 = __state->ndt20 * __state->pi2 / 1440. / 1440.;
+    __state->ndd60 = __state->ndd60 * __state->pi2 / 1440. / 1440. / 1440.;
 
 /*     Finally, we need to convert the input epoch to */
 /*     seconds past 2000. First let's adjust the year. */
 /*     Add to YR the largest multiple of 100 that is */
 /*     less than or equal to FRSTYR */
 
-    begyr = *frstyr / 100 * 100;
-    year = begyr + yr;
-    if (year < *frstyr) {
-	year += 100;
+    __state->begyr = *frstyr / 100 * 100;
+    __state->year = __state->begyr + __state->yr;
+    if (__state->year < *frstyr) {
+	__state->year += 100;
     }
 
 /*     Compute the epoch of the year and date. */
 
-    tvec[0] = (doublereal) year;
-    tvec[1] = day;
-    ttrans_("YD.D", "TDB", tvec, (ftnlen)4, (ftnlen)3);
-    *epoch = tvec[0];
+    __state->tvec[0] = (doublereal) __state->year;
+    __state->tvec[1] = __state->day;
+    ttrans_("YD.D", "TDB", __state->tvec, (ftnlen)4, (ftnlen)3);
+    *epoch = __state->tvec[0];
 
 /*     That's it.  Load ELEMS with the elements and ship them */
 /*     back to the calling routine. */
 
-    elems[0] = ndt20;
-    elems[1] = ndd60;
-    elems[2] = bstar;
-    elems[3] = incl;
-    elems[4] = node0;
-    elems[5] = ecc;
-    elems[6] = omega;
-    elems[7] = mo;
-    elems[8] = no;
+    elems[0] = __state->ndt20;
+    elems[1] = __state->ndd60;
+    elems[2] = __state->bstar;
+    elems[3] = __state->incl;
+    elems[4] = __state->node0;
+    elems[5] = __state->ecc;
+    elems[6] = __state->omega;
+    elems[7] = __state->mo;
+    elems[8] = __state->no;
     elems[9] = *epoch;
     chkout_("ZZGETELM", (ftnlen)8);
     return 0;

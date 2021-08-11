@@ -1,9 +1,17 @@
-/* stdio.f -- translated by f2c (version 19980913).
+/* stdio.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int stdio_state_t;
+static stdio_state_t* get_stdio_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      STDIO ( Standard IO ) */
 /* Subroutine */ int stdio_(char *name__, integer *unit, ftnlen name_len)
@@ -12,14 +20,19 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), ljust_(
-	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char myname[8];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    stdio_state_t* __state = get_stdio_state();
 /* $ Abstract */
 
 /*    Return the logical unit associated with some standard input or */

@@ -1,9 +1,17 @@
-/* zzekordi.f -- translated by f2c (version 19980913).
+/* zzekordi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekordi_state_t;
+static zzekordi_state_t* get_zzekordi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKORDI ( Order of an integer EK column ) */
 /* Subroutine */ int zzekordi_(integer *ivals, logical *nullok, logical *
@@ -13,10 +21,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    zzekordi_state_t* __state = get_zzekordi_state();
 /* $ Abstract */
 
 /*     Determine the order of elements in an integer EK column, using */

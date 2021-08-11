@@ -1,9 +1,17 @@
-/* spke19.f -- translated by f2c (version 19980913).
+/* spke19.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke19_state_t;
+static spke19_state_t* get_spke19_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE19 ( SPK, evaluate record, type 19 ) */
 /* Subroutine */ int spke19_(doublereal *et, doublereal *record, doublereal *
@@ -19,23 +27,31 @@
     integer from;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal work[792]	/* was [396][2] */;
-    integer i__, j, n;
+    integer i__;
+    integer j;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal vbuff[6];
     integer to;
     doublereal locrec[198];
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern /* Subroutine */ int hrmint_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *), setmsg_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), xpsgip_(
-	    integer *, integer *, doublereal *);
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int xpsgip_(integer *, integer *, doublereal *);
     extern logical return_(void);
-    integer xstart, subtyp, ystart;
+    integer xstart;
+    integer subtyp;
+    integer ystart;
 
+
+    /* Module state */
+    spke19_state_t* __state = get_spke19_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 19 SPK segment. */

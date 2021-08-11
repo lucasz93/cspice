@@ -1,9 +1,17 @@
-/* zzeksz06.f -- translated by f2c (version 19980913).
+/* zzeksz06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeksz06_state_t;
+static zzeksz06_state_t* get_zzeksz06_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZEKSZ06 ( EK, element entry size, class 6 ) */
 integer zzeksz06_(integer *handle, integer *segdsc, integer *coldsc, integer *
@@ -18,11 +26,18 @@ integer zzeksz06_(integer *handle, integer *segdsc, integer *coldsc, integer *
     integer ncols;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    integer colidx, datptr, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekgei_(integer *, integer *, integer *);
+    integer colidx;
+    integer datptr;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekgei_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzeksz06_state_t* __state = get_zzeksz06_state();
 /* $ Abstract */
 
 /*     Return the size of a specified entry in a class 6 column. */

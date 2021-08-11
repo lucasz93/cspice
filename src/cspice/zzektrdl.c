@@ -1,42 +1,85 @@
-/* zzektrdl.f -- translated by f2c (version 19980913).
+/* zzektrdl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_n1 = -1;
+extern zzektrdl_init_t __zzektrdl_init;
+static zzektrdl_state_t* get_zzektrdl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrdl)
+		state->zzektrdl = __cspice_allocate_module(sizeof(
+	zzektrdl_state_t), &__zzektrdl_init, sizeof(__zzektrdl_init));
+	return state->zzektrdl;
+
+}
 
 /* $Procedure      ZZEKTRDL ( EK tree, delete value ) */
 /* Subroutine */ int zzektrdl_(integer *handle, integer *tree, integer *key)
 {
-    integer node, lsib, left, rsib, lkey, pkey, rkey, root;
+    integer node;
+    integer lsib;
+    integer left;
+    integer rsib;
+    integer lkey;
+    integer pkey;
+    integer rkey;
+    integer root;
     extern /* Subroutine */ int zzektrbn_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzektrki_(integer *, integer *, 
-	    integer *, integer *, integer *), zzektrsb_(integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *), zzektrlk_(
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrki_(integer *, integer *, integer *, 
 	    integer *, integer *);
+    extern /* Subroutine */ int zzektrsb_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
     extern integer zzektrnk_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzektrud_(integer *, integer *, integer *, 
-	    integer *, logical *), zzektrpi_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzektrrk_(integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    integer lnode, mnode, level, llsib, rnode, lrsib, right, rlsib, llkey, 
-	    lnkey, lpidx, lpkey, rrsib, lrkey, rlkey, rpidx, nkeys, rpkey, 
-	    state, rrkey, trust;
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrrk_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    integer lnode;
+    integer mnode;
+    integer level;
+    integer llsib;
+    integer rnode;
+    integer lrsib;
+    integer right;
+    integer rlsib;
+    integer llkey;
+    integer lnkey;
+    integer lpidx;
+    integer lpkey;
+    integer rrsib;
+    integer lrkey;
+    integer rlkey;
+    integer rpidx;
+    integer nkeys;
+    integer rpkey;
+    integer state;
+    integer rrkey;
+    integer trust;
     extern logical failed_(void);
     integer parent;
     logical undrfl;
-    integer noffst, poffst, trgkey, idx, ptr;
-    extern /* Subroutine */ int zzektr31_(integer *, integer *), zzektr32_(
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, logical *);
+    integer noffst;
+    integer poffst;
+    integer trgkey;
+    integer idx;
+    integer ptr;
+    extern /* Subroutine */ int zzektr31_(integer *, integer *);
+    extern /* Subroutine */ int zzektr32_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *);
 
+
+    /* Module state */
+    zzektrdl_state_t* __state = get_zzektrdl_state();
 /* $ Abstract */
 
 /*     Delete a value from an EK tree at a specified location. */
@@ -701,7 +744,7 @@ static integer c_n1 = -1;
 		    zzektrpi_(handle, tree, &lkey, &parent, &pkey, &poffst, &
 			    lpidx, &lpkey, &llsib, &rpidx, &rpkey, &lrsib);
 		    zzektrrk_(handle, tree, &llsib, &lsib, &parent, &lpidx, &
-			    c__1);
+			    __state->c__1);
 
 /*                 Now LSIB has a one-key surplus, so we can balance */
 /*                 LSIB and NODE. */
@@ -750,7 +793,7 @@ static integer c_n1 = -1;
 		    zzektrpi_(handle, tree, &rkey, &parent, &pkey, &poffst, &
 			    lpidx, &lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
 		    zzektrrk_(handle, tree, &rsib, &rrsib, &parent, &rpidx, &
-			    c_n1);
+			    __state->c_n1);
 
 /*                 Now RSIB has a one-key surplus, so we can balance */
 /*                 RSIB and NODE. */
@@ -812,7 +855,7 @@ static integer c_n1 = -1;
 /*           leftmost node LNODE.  The first key of LNODE won't be */
 /*           touched by the merge. */
 
-	    zzektrki_(handle, tree, &lnkey, &c__1, &trust);
+	    zzektrki_(handle, tree, &lnkey, &__state->c__1, &trust);
 	    zzektrpi_(handle, tree, &lnkey, &parent, &pkey, &poffst, &lpidx, &
 		    lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
 

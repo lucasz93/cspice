@@ -1,23 +1,31 @@
-/* zzdynbid.f -- translated by f2c (version 19980913).
+/* zzdynbid.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__32 = 32;
-static integer c__1 = 1;
+extern zzdynbid_init_t __zzdynbid_init;
+static zzdynbid_state_t* get_zzdynbid_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdynbid)
+		state->zzdynbid = __cspice_allocate_module(sizeof(
+	zzdynbid_state_t), &__zzdynbid_init, sizeof(__zzdynbid_init));
+	return state->zzdynbid;
+
+}
 
 /* $Procedure ZZDYNBID ( Fetch body ID kernel variable ) */
 /* Subroutine */ int zzdynbid_(char *frname, integer *frcode, char *item, 
 	integer *idcode, ftnlen frname_len, ftnlen item_len)
 {
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
@@ -26,19 +34,29 @@ static integer c__1 = 1;
     extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     char bodnam[36];
-    integer codeln, nameln;
-    char kvname[32], cdestr[32];
-    integer itemln, reqnam;
+    integer codeln;
+    integer nameln;
+    char kvname[32];
+    char cdestr[32];
+    integer itemln;
+    integer reqnam;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer reqnum;
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), dtpool_(
-	    char *, logical *, integer *, char *, ftnlen, ftnlen), setmsg_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen), gcpool_(char *, integer *, integer *, integer *, char 
-	    *, logical *, ftnlen, ftnlen), gipool_(char *, integer *, integer 
-	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
+	    *, integer *, logical *, ftnlen);
 
+
+    /* Module state */
+    zzdynbid_state_t* __state = get_zzdynbid_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -818,7 +836,7 @@ static integer c__1 = 1;
 	    errch_("#", frname, (ftnlen)1, frname_len);
 	    errch_("#", item, (ftnlen)1, item_len);
 	    errint_("#", &reqnam, (ftnlen)1);
-	    errint_("#", &c__32, (ftnlen)1);
+	    errint_("#", &__state->c__32, (ftnlen)1);
 	    sigerr_("SPICE(VARNAMETOOLONG)", (ftnlen)21);
 	    chkout_("ZZDYNBID", (ftnlen)8);
 	    return 0;
@@ -846,7 +864,7 @@ static integer c__1 = 1;
 	    errch_("#", frname, (ftnlen)1, frname_len);
 	    errch_("#", item, (ftnlen)1, item_len);
 	    errint_("#", &reqnam, (ftnlen)1);
-	    errint_("#", &c__32, (ftnlen)1);
+	    errint_("#", &__state->c__32, (ftnlen)1);
 	    errch_("#", frname, (ftnlen)1, frname_len);
 	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
 	    chkout_("ZZDYNBID", (ftnlen)8);
@@ -887,7 +905,7 @@ static integer c__1 = 1;
 	    errint_("#", frcode, (ftnlen)1);
 	    errch_("#", item, (ftnlen)1, item_len);
 	    errint_("#", &reqnum, (ftnlen)1);
-	    errint_("#", &c__32, (ftnlen)1);
+	    errint_("#", &__state->c__32, (ftnlen)1);
 	    errch_("#", frname, (ftnlen)1, frname_len);
 	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
 	    chkout_("ZZDYNBID", (ftnlen)8);
@@ -942,8 +960,8 @@ static integer c__1 = 1;
 
 /*        Look up the kernel variable. */
 
-	gcpool_(kvname, &c__1, &c__1, &n, bodnam, &found, (ftnlen)32, (ftnlen)
-		36);
+	gcpool_(kvname, &__state->c__1, &__state->c__1, &n, bodnam, &found, (
+		ftnlen)32, (ftnlen)36);
 	if (! found) {
 	    setmsg_("Variable # not found after DTPOOL indicated it was pres"
 		    "ent in pool.", (ftnlen)67);
@@ -984,7 +1002,8 @@ static integer c__1 = 1;
 
 /*        Look up the kernel variable. */
 
-	gipool_(kvname, &c__1, &c__1, &n, idcode, &found, (ftnlen)32);
+	gipool_(kvname, &__state->c__1, &__state->c__1, &n, idcode, &found, (
+		ftnlen)32);
 	if (! found) {
 	    setmsg_("Variable # not found after DTPOOL indicated it was pres"
 		    "ent in pool.", (ftnlen)67);

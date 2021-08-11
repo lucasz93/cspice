@@ -1,15 +1,21 @@
-/* ekfind.f -- translated by f2c (version 19980913).
+/* ekfind.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27869 = 27869;
-static integer c__100 = 100;
-static integer c__500 = 500;
+extern ekfind_init_t __ekfind_init;
+static ekfind_state_t* get_ekfind_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekfind)
+		state->ekfind = __cspice_allocate_module(sizeof(
+	ekfind_state_t), &__ekfind_init, sizeof(__ekfind_init));
+	return state->ekfind;
+
+}
 
 /* $Procedure      EKFIND ( EK, find data ) */
 /* Subroutine */ int ekfind_(char *query, integer *nmrows, logical *error, 
@@ -18,28 +24,42 @@ static integer c__500 = 500;
     extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, doublereal 
 	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen), zzeksemc_(char *, integer *, char *, logical *, 
-	    char *, integer *, ftnlen, ftnlen, ftnlen), zzekqini_(integer *, 
-	    integer *, integer *, char *, doublereal *, ftnlen), zzekpars_(
-	    char *, integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, char *, integer *, integer *, integer *, char *, 
-	    doublereal *, logical *, char *, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    zzeknres_(char *, integer *, char *, logical *, char *, integer *,
-	     ftnlen, ftnlen, ftnlen), zzektres_(char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeksemc_(char *, integer *, char *, logical *
+	    , char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekpars_(char *, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, char *, integer *, 
+	    integer *, integer *, char *, doublereal *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeknres_(char *, integer *, char *, logical *
+	    , char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektres_(char *, integer *, char *, 
 	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
-	    ftnlen), chkin_(char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     char eqryc[2000];
     doublereal eqryd[100];
-    integer eqryi[27875], chbegs[500], chends[500];
+    integer eqryi[27875];
+    integer chbegs[500];
+    integer chends[500];
     char chrbuf[2000];
     extern logical return_(void);
     doublereal numvls[100];
-    integer errptr, lxbegs[500], lxends[500], ntoken, tokens[500], values[500]
-	    ;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), eksrch_(integer *, 
-	    char *, doublereal *, integer *, logical *, char *, ftnlen, 
-	    ftnlen);
+    integer errptr;
+    integer lxbegs[500];
+    integer lxends[500];
+    integer ntoken;
+    integer tokens[500];
+    integer values[500];
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int eksrch_(integer *, char *, doublereal *, 
+	    integer *, logical *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    ekfind_state_t* __state = get_ekfind_state();
 /* $ Abstract */
 
 /*     Find E-kernel data that satisfy a set of constraints. */
@@ -1273,13 +1293,14 @@ static integer c__500 = 500;
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&c__27869, &c__100, eqryi, eqryc, eqryd, (ftnlen)2000);
+    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, (
+	    ftnlen)2000);
 
 /*     Find the tokens in the input query. */
 
-    zzekscan_(query, &c__500, &c__100, &ntoken, tokens, lxbegs, lxends, 
-	    values, numvls, chrbuf, chbegs, chends, error, errmsg, query_len, 
-	    (ftnlen)2000, errmsg_len);
+    zzekscan_(query, &__state->c__500, &__state->c__100, &ntoken, tokens, 
+	    lxbegs, lxends, values, numvls, chrbuf, chbegs, chends, error, 
+	    errmsg, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
 	chkout_("EKFIND", (ftnlen)6);
 	return 0;

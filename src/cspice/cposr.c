@@ -1,9 +1,17 @@
-/* cposr.f -- translated by f2c (version 19980913).
+/* cposr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cposr_state_t;
+static cposr_state_t* get_cposr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            CPOSR ( Character position, reverse ) */
 integer cposr_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen 
@@ -20,6 +28,9 @@ integer cposr_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen
     logical found;
     integer lenstr;
 
+
+    /* Module state */
+    cposr_state_t* __state = get_cposr_state();
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a character belonging */

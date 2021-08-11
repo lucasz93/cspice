@@ -1,9 +1,17 @@
-/* jyear.f -- translated by f2c (version 19980913).
+/* jyear.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int jyear_state_t;
+static jyear_state_t* get_jyear_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      JYEAR ( Seconds per julian year ) */
 doublereal jyear_(void)
@@ -11,6 +19,9 @@ doublereal jyear_(void)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    jyear_state_t* __state = get_jyear_state();
 /* $ Abstract */
 
 /*     Return the number of seconds in a julian year. */

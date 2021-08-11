@@ -1,20 +1,27 @@
-/* zzrtnmat.f -- translated by f2c (version 19980913).
+/* zzrtnmat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
+extern zzrtnmat_init_t __zzrtnmat_init;
+static zzrtnmat_state_t* get_zzrtnmat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrtnmat)
+		state->zzrtnmat = __cspice_allocate_module(sizeof(
+	zzrtnmat_state_t), &__zzrtnmat_init, sizeof(__zzrtnmat_init));
+	return state->zzrtnmat;
+
+}
 
 /* $Procedure ZZRTNMAT ( RTN transformation matrix ) */
 /* Subroutine */ int zzrtnmat_(doublereal *v, doublereal *m)
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,15 +35,22 @@ static integer c__9 = 9;
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal vlon[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal north[3];
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *), cleard_(integer *, doublereal *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+	    *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    doublereal rad[3], lon;
+    doublereal rad[3];
+    doublereal lon;
 
+
+    /* Module state */
+    zzrtnmat_state_t* __state = get_zzrtnmat_state();
 /* $ Abstract */
 
 /*     Given a vector, return a transformation matrix that maps from the */
@@ -218,7 +232,7 @@ static integer c__9 = 9;
 	return 0;
     }
     if (v[0] == 0. && v[1] == 0.) {
-	cleard_(&c__9, m);
+	cleard_(&__state->c__9, m);
 	chkin_("ZZRTNMAT", (ftnlen)8);
 	setmsg_("Input vector (# # #) lies on Z-axis; tangential and normal "
 		"directions are undefined.", (ftnlen)84);
@@ -247,7 +261,7 @@ static integer c__9 = 9;
 /*        without much loss of precision, since VLON is */
 /*        orthogonal to Z and EAST is orthogonal to V. */
 
-	ucrss_(z__, vlon, east);
+	ucrss_(__state->z__, vlon, east);
 	ucrss_(v, east, north);
 	vhat_(v, rad);
 

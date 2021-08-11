@@ -1,29 +1,42 @@
-/* cknr04.f -- translated by f2c (version 19980913).
+/* cknr04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__12 = 12;
+extern cknr04_init_t __cknr04_init;
+static cknr04_state_t* get_cknr04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cknr04)
+		state->cknr04 = __cspice_allocate_module(sizeof(
+	cknr04_state_t), &__cknr04_init, sizeof(__cknr04_init));
+	return state->cknr04;
+
+}
 
 /* $Procedure      CKNR04 ( C-kernel, number of records, data type 4 ) */
 /* Subroutine */ int cknr04_(integer *handle, doublereal *descr, integer *
 	nrec)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), sgmeta_(integer *,
-	     doublereal *, integer *, integer *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    cknr04_state_t* __state = get_cknr04_state();
 /* $ Abstract */
 
 /*     Given the handle of a CK file and the descriptor of a type 4 */
@@ -453,7 +466,7 @@ static integer c__12 = 12;
 /*     Check whether our segment is of the type 4 by unpacking */
 /*     descriptor and checking value of its third integer component. */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 4) {
 	setmsg_("Data type of the segment should be 4: Passed descriptor sho"
 		"ws type = #.", (ftnlen)71);
@@ -467,7 +480,7 @@ static integer c__12 = 12;
 /*     SGMETA. This number is a meta item 12 (see sgparam.inc for */
 /*     details.) */
 
-    sgmeta_(handle, descr, &c__12, nrec);
+    sgmeta_(handle, descr, &__state->c__12, nrec);
 
 /*     All done. */
 

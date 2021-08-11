@@ -1,13 +1,21 @@
-/* ekrcec.f -- translated by f2c (version 19980913).
+/* ekrcec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern ekrcec_init_t __ekrcec_init;
+static ekrcec_state_t* get_ekrcec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekrcec)
+		state->ekrcec = __cspice_allocate_module(sizeof(
+	ekrcec_state_t), &__ekrcec_init, sizeof(__ekrcec_init));
+	return state->ekrcec;
+
+}
 
 /* $Procedure   EKRCEC ( EK, read column entry element, character ) */
 /* Subroutine */ int ekrcec_(integer *handle, integer *segno, integer *recno, 
@@ -15,26 +23,37 @@ static integer c__1 = 1;
 	column_len, ftnlen cvals_len)
 {
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
-	    zzektrdp_(integer *, integer *, integer *, integer *);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+	    integer *);
     extern integer zzekesiz_(integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, cvlen;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer cvlen;
     logical found;
     integer dtype;
     extern logical failed_(void);
-    integer coldsc[11], segdsc[24];
+    integer coldsc[11];
+    integer segdsc[24];
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekrd03_(integer *, integer *, integer *, integer *, 
-	    integer *, char *, logical *, ftnlen), zzekrd06_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    logical *, logical *, ftnlen), zzekrd09_(integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekrd03_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekrd06_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekrd09_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, logical *, ftnlen);
 
+
+    /* Module state */
+    ekrcec_state_t* __state = get_ekrcec_state();
 /* $ Abstract */
 
 /*     Read data from a character column in a specified EK record. */
@@ -565,8 +584,8 @@ static integer c__1 = 1;
     } else if (class__ == 6) {
 	zzektrdp_(handle, &segdsc[6], recno, &recptr);
 	*nvals = zzekesiz_(handle, segdsc, coldsc, &recptr);
-	zzekrd06_(handle, segdsc, coldsc, &recptr, &c__1, nvals, cvals, 
-		isnull, &found, cvals_len);
+	zzekrd06_(handle, segdsc, coldsc, &recptr, &__state->c__1, nvals, 
+		cvals, isnull, &found, cvals_len);
     } else if (class__ == 9) {
 
 /*        Records in class 9 columns are identified by a record number */

@@ -1,13 +1,21 @@
-/* zzgfrru.f -- translated by f2c (version 19980913).
+/* zzgfrru.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzgfrru_init_t __zzgfrru_init;
+static zzgfrru_state_t* get_zzgfrru_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfrru)
+		state->zzgfrru = __cspice_allocate_module(sizeof(
+	zzgfrru_state_t), &__zzgfrru_init, sizeof(__zzgfrru_init));
+	return state->zzgfrru;
+
+}
 
 /* $Procedure ZZGFRRU ( Private --- GF, range rate utility routine ) */
 /* Subroutine */ int zzgfrru_0_(int n__, char *target, char *abcorr, char *
@@ -25,34 +33,37 @@ static integer c__0 = 0;
     /* Local variables */
     doublereal dfdt[6];
     extern doublereal vdot_(doublereal *, doublereal *);
-    static doublereal svdt;
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), dvhat_(
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
     logical found;
-    doublereal drvel, state[6], srhat[6];
-    static char svref[32];
-    static integer svobs;
+    doublereal drvel;
+    doublereal state[6];
+    doublereal srhat[6];
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen), bods2c_(
-	    char *, integer *, logical *, ftnlen);
+	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     doublereal lt;
-    static char svabco[5];
     logical attblk[15];
     extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen);
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal states[12]	/* was [6][2] */;
-    static integer svtarg;
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzgfrrq_(doublereal *, integer *, integer *, 
 	    char *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    zzgfrru_state_t* __state = get_zzgfrru_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -624,7 +635,7 @@ L_zzgfrrin:
 
 /*     Find NAIF IDs for TARGET and OBSRVR. */
 
-    bods2c_(target, &svtarg, &found, target_len);
+    bods2c_(target, &__state->svtarg, &found, target_len);
     if (! found) {
 	setmsg_("The target object, '#', is not a recognized name for an eph"
 		"emeris object. The cause of this problem may be that you nee"
@@ -634,7 +645,7 @@ L_zzgfrrin:
 	chkout_("ZZGFRRIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &svobs, &found, obsrvr_len);
+    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -647,7 +658,7 @@ L_zzgfrrin:
 
 /*     Make sure the observer and target are distinct. */
 
-    if (svtarg == svobs) {
+    if (__state->svtarg == __state->svobs) {
 	setmsg_("The observer and target must be distinct objects, but are n"
 		"ot: OBSRVR = #; TARGET = #.", (ftnlen)86);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -660,13 +671,14 @@ L_zzgfrrin:
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &c__0, abcorr, svabco, (ftnlen)1, abcorr_len, (ftnlen)5);
-    ucase_(svabco, svabco, (ftnlen)5, (ftnlen)5);
+    cmprss_(" ", &__state->c__0, abcorr, __state->svabco, (ftnlen)1, 
+	    abcorr_len, (ftnlen)5);
+    ucase_(__state->svabco, __state->svabco, (ftnlen)5, (ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(svabco, attblk, (ftnlen)5);
+    zzvalcor_(__state->svabco, attblk, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFRRIN", (ftnlen)8);
 	return 0;
@@ -684,8 +696,8 @@ L_zzgfrrin:
 
 /*     Save the DT value. */
 
-    s_copy(svref, "J2000", (ftnlen)32, (ftnlen)5);
-    svdt = *dt;
+    s_copy(__state->svref, "J2000", (ftnlen)32, (ftnlen)5);
+    __state->svdt = *dt;
     chkout_("ZZGFRRIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFRRDC (  Private --- GF, when range rate is decreasing ) */
@@ -836,12 +848,12 @@ L_zzgfrrdc:
 /*     The function requires the acceleration of SVTARG relative */
 /*     to SVOBS. */
 
-    d__1 = *et - svdt;
-    spkez_(&svtarg, &d__1, svref, svabco, &svobs, states, &lt, (ftnlen)32, (
-	    ftnlen)5);
-    d__1 = *et + svdt;
-    spkez_(&svtarg, &d__1, svref, svabco, &svobs, &states[6], &lt, (ftnlen)32,
-	     (ftnlen)5);
+    d__1 = *et - __state->svdt;
+    spkez_(&__state->svtarg, &d__1, __state->svref, __state->svabco, &
+	    __state->svobs, states, &lt, (ftnlen)32, (ftnlen)5);
+    d__1 = *et + __state->svdt;
+    spkez_(&__state->svtarg, &d__1, __state->svref, __state->svabco, &
+	    __state->svobs, &states[6], &lt, (ftnlen)32, (ftnlen)5);
 
 /*     Approximate the derivative of the position and velocity by */
 /*     finding the derivative of a quadratic approximating function. */
@@ -853,9 +865,9 @@ L_zzgfrrdc:
 /*        DFDT(5) = Ay */
 /*        DFDT(6) = Az */
 
-    qderiv_(&n, states, &states[6], &svdt, dfdt);
-    spkez_(&svtarg, et, svref, svabco, &svobs, state, &lt, (ftnlen)32, (
-	    ftnlen)5);
+    qderiv_(&n, states, &states[6], &__state->svdt, dfdt);
+    spkez_(&__state->svtarg, et, __state->svref, __state->svabco, &
+	    __state->svobs, state, &lt, (ftnlen)32, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFRRDC", (ftnlen)8);
 	return 0;
@@ -986,7 +998,8 @@ L_zzgfrrgq:
 /*     get range rate between two bodies */
 
 /* -& */
-    zzgfrrq_(et, &svtarg, &svobs, svabco, rvl, (ftnlen)5);
+    zzgfrrq_(et, &__state->svtarg, &__state->svobs, __state->svabco, rvl, (
+	    ftnlen)5);
     return 0;
 /* $Procedure ZZGFRRX ( Private -- GF, retrieve ZZGFRRIN values ) */
 
@@ -1101,10 +1114,10 @@ L_zzgfrrx:
 /*     get saved range rate parameters */
 
 /* -& */
-    *xtarg = svtarg;
-    s_copy(xabcor, svabco, xabcor_len, (ftnlen)5);
-    *xobs = svobs;
-    *xdt = svdt;
+    *xtarg = __state->svtarg;
+    s_copy(xabcor, __state->svabco, xabcor_len, (ftnlen)5);
+    *xobs = __state->svobs;
+    *xdt = __state->svdt;
     return 0;
 } /* zzgfrru_ */
 

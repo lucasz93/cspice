@@ -1,15 +1,21 @@
-/* zzddhman.f -- translated by f2c (version 19980913).
+/* zzddhman.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__2 = 2;
-static integer c__0 = 0;
+extern zzddhman_init_t __zzddhman_init;
+static zzddhman_state_t* get_zzddhman_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhman)
+		state->zzddhman = __cspice_allocate_module(sizeof(
+	zzddhman_state_t), &__zzddhman_init, sizeof(__zzddhman_init));
+	return state->zzddhman;
+
+}
 
 /* $Procedure ZZDDHMAN ( Private --- DAF/DAS Handle Manager ) */
 /* Subroutine */ int zzddhman_0_(int n__, logical *lock, char *arch, char *
@@ -19,12 +25,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical opnfst = TRUE_;
-    static integer nft = 0;
-    static integer next = 0;
-    static integer nut = 0;
-    static integer reqcnt = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -43,60 +43,58 @@ static integer c__0 = 0;
 	    integer *, integer *, integer *, char *, integer *, doublereal *, 
 	    integer *, integer *, integer *, logical *, integer *, integer *, 
 	    logical *, logical *, integer *, logical *, doublereal *, ftnlen, 
-	    ftnlen), zzddhini_(integer *, integer *, integer *, char *, char *
-	    , char *, ftnlen, ftnlen, ftnlen), zzddhrcm_(integer *, integer *,
-	     integer *);
+	    ftnlen);
+    extern /* Subroutine */ int zzddhini_(integer *, integer *, integer *, 
+	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhrcm_(integer *, integer *, integer *);
     extern integer zzddhclu_(logical *, integer *);
-    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *), 
-	    zzddhgtu_(integer *, integer *, logical *, integer *, integer *, 
-	    integer *), zzddhrmu_(integer *, integer *, integer *, integer *, 
-	    logical *, integer *, integer *), zzpltchk_(logical *);
+    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzddhgtu_(integer *, integer *, logical *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzddhrmu_(integer *, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzpltchk_(logical *);
     integer i__;
-    static integer ftbff[5000];
     integer lchar;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ftabs[5000], ftamh[5000], ftarc[5000], fthan[5000];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
-    static char ftnam[255*5000];
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer uthan[23];
-    static doublereal ftmnm[5000];
-    static logical utlck[23];
     logical error;
-    static integer ftrtm[5000];
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    static integer utcst[23], utlun[23];
     extern logical failed_(void);
-    integer accmet, filarc, locked;
-    static integer natbff;
+    integer accmet;
+    integer filarc;
+    integer locked;
     logical locfnd;
-    extern integer bsrchi_(integer *, integer *, integer *), isrchc_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern integer bsrchi_(integer *, integer *, integer *);
+    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     char locfnm[255];
     integer inqhan;
     extern integer isrchi_(integer *, integer *, integer *);
     logical platok;
     integer loclun;
-    static char strbff[8*4], stramh[8*4], strarc[8*2];
-    integer findex, uindex;
-    static integer supbff[4];
+    integer findex;
+    integer uindex;
     integer iostat;
-    logical inqopn, inqext;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    logical inqopn;
+    logical inqext;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer supidx;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), frelun_(
-	    integer *);
-    static integer numsup;
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frelun_(integer *);
     char tmpstr[8];
     integer bff;
     doublereal mnm;
 
+
+    /* Module state */
+    zzddhman_state_t* __state = get_zzddhman_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -877,9 +875,10 @@ L_zzddhopn:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() to handle the unlikely event that */
 /*        ZZDDHINI signaled SPICE(BUG). */
@@ -891,12 +890,12 @@ L_zzddhopn:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     On first pass, perform any runtime environment checks. */
 
-    if (opnfst) {
+    if (__state->opnfst) {
 	zzpltchk_(&platok);
 	if (failed_()) {
 	    chkout_("ZZDDHOPN", (ftnlen)8);
@@ -905,7 +904,7 @@ L_zzddhopn:
 
 /*        Clear OPNFST, since we've performed the diagnostics. */
 
-	opnfst = FALSE_;
+	__state->opnfst = FALSE_;
     }
 
 /*     Initialize the value of HANDLE to 0.  In the event an error */
@@ -923,7 +922,8 @@ L_zzddhopn:
 
     s_copy(tmpstr, method, (ftnlen)8, method_len);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    accmet = isrchc_(tmpstr, &c__4, stramh, (ftnlen)8, (ftnlen)8);
+    accmet = isrchc_(tmpstr, &__state->c__4, __state->stramh, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Check if the code was located. */
 
@@ -946,7 +946,8 @@ L_zzddhopn:
 
     s_copy(tmpstr, arch, (ftnlen)8, arch_len);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    filarc = isrchc_(tmpstr, &c__2, strarc, (ftnlen)8, (ftnlen)8);
+    filarc = isrchc_(tmpstr, &__state->c__2, __state->strarc, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Check if the code was located. */
 
@@ -975,7 +976,7 @@ L_zzddhopn:
 /*        in the unit table.  If not, signal an error as all files */
 /*        open with SCRTCH access must be locked to their units. */
 
-	locked = zzddhclu_(utlck, &nut);
+	locked = zzddhclu_(__state->utlck, &__state->nut);
 	if (locked >= 21) {
 
 /*           Recall HANDLE was initialized to 0, and this invalid */
@@ -1018,9 +1019,12 @@ L_zzddhopn:
 /*        Check to see if the file associated with LOCFNM is already in */
 /*        the file table. */
 
-	zzddhf2h_(locfnm, ftabs, ftamh, ftarc, ftbff, fthan, ftnam, ftrtm, 
-		ftmnm, &nft, utcst, uthan, utlck, utlun, &nut, &inqext, &
-		inqopn, &inqhan, &locfnd, &mnm, (ftnlen)255, (ftnlen)255);
+	zzddhf2h_(locfnm, __state->ftabs, __state->ftamh, __state->ftarc, 
+		__state->ftbff, __state->fthan, __state->ftnam, 
+		__state->ftrtm, __state->ftmnm, &__state->nft, __state->utcst,
+		 __state->uthan, __state->utlck, __state->utlun, &
+		__state->nut, &inqext, &inqopn, &inqhan, &locfnd, &mnm, (
+		ftnlen)255, (ftnlen)255);
 
 /*        First, check FAILED(), and return if anything has gone awry. */
 /*        Recall HANDLE was initialized to 0, and this invalid */
@@ -1104,13 +1108,14 @@ L_zzddhopn:
 
 	if (locfnd) {
 	    i__1 = abs(inqhan);
-	    findex = bsrchi_(&i__1, &nft, ftabs);
+	    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
 
 /*           Check to see if the requested architecture does not match */
 /*           that of the entry in the file table. */
 
-	    if (filarc != ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)912)]) {
+	    if (filarc != __state->ftarc[(i__1 = findex - 1) < 5000 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)
+		    912)]) {
 
 /*              Recall HANDLE was initialized to 0, and this invalid */
 /*              value is returned to the caller. */
@@ -1118,14 +1123,14 @@ L_zzddhopn:
 		setmsg_("The attempt to load file '#' as a # has failed beca"
 			"use it is already loaded as a #.", (ftnlen)83);
 		errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
-		errch_("#", strarc + (((i__1 = filarc - 1) < 2 && 0 <= i__1 ? 
-			i__1 : s_rnge("strarc", i__1, "zzddhman_", (ftnlen)
-			922)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", strarc + (((i__2 = ftarc[(i__1 = findex - 1) < 
-			5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, 
-			"zzddhman_", (ftnlen)923)] - 1) < 2 && 0 <= i__2 ? 
-			i__2 : s_rnge("strarc", i__2, "zzddhman_", (ftnlen)
-			923)) << 3), (ftnlen)1, (ftnlen)8);
+		errch_("#", __state->strarc + (((i__1 = filarc - 1) < 2 && 0 
+			<= i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhman_", (
+			ftnlen)922)) << 3), (ftnlen)1, (ftnlen)8);
+		errch_("#", __state->strarc + (((i__2 = __state->ftarc[(i__1 =
+			 findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"ftarc", i__1, "zzddhman_", (ftnlen)923)] - 1) < 2 && 
+			0 <= i__2 ? i__2 : s_rnge("strarc", i__2, "zzddhman_",
+			 (ftnlen)923)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(FILARCMISMATCH)", (ftnlen)21);
 		chkout_("ZZDDHOPN", (ftnlen)8);
 		return 0;
@@ -1152,8 +1157,9 @@ L_zzddhopn:
 /*           for READ access.  Check to make certain it is not */
 /*           already loaded with another method. */
 
-	    if (accmet != ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)955)]) {
+	    if (accmet != __state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)
+		    955)]) {
 
 /*              Recall HANDLE was initialized to 0, and this invalid */
 /*              value is returned to the caller. */
@@ -1161,14 +1167,14 @@ L_zzddhopn:
 		setmsg_("Unable to load file '#' for # access.  It is alread"
 			"y loaded with the conflicting access #.", (ftnlen)90);
 		errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
-		errch_("#", stramh + (((i__1 = accmet - 1) < 4 && 0 <= i__1 ? 
-			i__1 : s_rnge("stramh", i__1, "zzddhman_", (ftnlen)
-			965)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", stramh + (((i__2 = ftamh[(i__1 = findex - 1) < 
-			5000 && 0 <= i__1 ? i__1 : s_rnge("ftamh", i__1, 
-			"zzddhman_", (ftnlen)966)] - 1) < 4 && 0 <= i__2 ? 
-			i__2 : s_rnge("stramh", i__2, "zzddhman_", (ftnlen)
-			966)) << 3), (ftnlen)1, (ftnlen)8);
+		errch_("#", __state->stramh + (((i__1 = accmet - 1) < 4 && 0 
+			<= i__1 ? i__1 : s_rnge("stramh", i__1, "zzddhman_", (
+			ftnlen)965)) << 3), (ftnlen)1, (ftnlen)8);
+		errch_("#", __state->stramh + (((i__2 = __state->ftamh[(i__1 =
+			 findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			"ftamh", i__1, "zzddhman_", (ftnlen)966)] - 1) < 4 && 
+			0 <= i__2 ? i__2 : s_rnge("stramh", i__2, "zzddhman_",
+			 (ftnlen)966)) << 3), (ftnlen)1, (ftnlen)8);
 		sigerr_("SPICE(RWCONFLICT)", (ftnlen)17);
 		chkout_("ZZDDHOPN", (ftnlen)8);
 		return 0;
@@ -1178,8 +1184,8 @@ L_zzddhopn:
 /*           and all the sanity checks have passed. Return to the */
 /*           caller as this is effectively a no-op. */
 
-	    *handle = fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "zzddhman_", (ftnlen)978)];
+	    *handle = __state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ?
+		     i__1 : s_rnge("fthan", i__1, "zzddhman_", (ftnlen)978)];
 	    chkout_("ZZDDHOPN", (ftnlen)8);
 	    return 0;
 	}
@@ -1188,14 +1194,14 @@ L_zzddhopn:
 /*     Now check to see if there is room in the file table for this */
 /*     new file. */
 
-    if (nft == 5000) {
+    if (__state->nft == 5000) {
 
 /*        Recall HANDLE was initialized to 0, and this invalid */
 /*        value is returned to the caller. */
 
 	setmsg_("The file table is full, with # entries. As a result, the fi"
 		"le '#' could not be loaded.", (ftnlen)86);
-	errint_("#", &nft, (ftnlen)1);
+	errint_("#", &__state->nft, (ftnlen)1);
 	errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(FTFULL)", (ftnlen)13);
 	chkout_("ZZDDHOPN", (ftnlen)8);
@@ -1205,11 +1211,12 @@ L_zzddhopn:
 /*     We are about to attempt a HANDLE to LUN connection, increment */
 /*     the request counter. */
 
-    zzddhrcm_(&nut, utcst, &reqcnt);
+    zzddhrcm_(&__state->nut, __state->utcst, &__state->reqcnt);
 
 /*     Free up a logical unit in the UNIT table for our usage. */
 
-    zzddhgtu_(utcst, uthan, utlck, utlun, &nut, &uindex);
+    zzddhgtu_(__state->utcst, __state->uthan, __state->utlck, __state->utlun, 
+	    &__state->nut, &uindex);
 
 /*     Check FAILED() since ZZDDHGTU may have invoked GETLUN. */
 /*     Recall HANDLE was initialized to 0, and this invalid */
@@ -1229,17 +1236,17 @@ L_zzddhopn:
 /*     If we have made it this far, then we're ready to perform the */
 /*     appropriate open.  First get the handle ready. */
 
-    ++next;
+    ++__state->next;
 
 /*     Determine the sign of the new handle based on the requested */
 /*     METHOD. */
 
     if (accmet == 1) {
-	uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("uthan", 
-		i__1, "zzddhman_", (ftnlen)1047)] = next;
+	__state->uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+		"uthan", i__1, "zzddhman_", (ftnlen)1047)] = __state->next;
     } else {
-	uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("uthan", 
-		i__1, "zzddhman_", (ftnlen)1049)] = -next;
+	__state->uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+		"uthan", i__1, "zzddhman_", (ftnlen)1049)] = -__state->next;
     }
 
 /*     The code that follows is structured a little strangely.  This */
@@ -1289,8 +1296,8 @@ L_zzddhopn:
 
     if (accmet == 3) {
 	o__1.oerr = 1;
-	o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1101)];
+	o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1101)];
 	o__1.ofnm = 0;
 	o__1.orl = 1024;
 	o__1.osta = "SCRATCH";
@@ -1298,11 +1305,11 @@ L_zzddhopn:
 	o__1.ofm = 0;
 	o__1.oblnk = 0;
 	iostat = f_open(&o__1);
-	bff = natbff;
+	bff = __state->natbff;
     } else if (accmet == 4) {
 	o__1.oerr = 1;
-	o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1111)];
+	o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1111)];
 	o__1.ofnmlen = lchar;
 	o__1.ofnm = locfnm;
 	o__1.orl = 1024;
@@ -1311,11 +1318,11 @@ L_zzddhopn:
 	o__1.ofm = 0;
 	o__1.oblnk = 0;
 	iostat = f_open(&o__1);
-	bff = natbff;
+	bff = __state->natbff;
     } else if (accmet == 1) {
 	o__1.oerr = 1;
-	o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1122)];
+	o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1122)];
 	o__1.ofnmlen = lchar;
 	o__1.ofnm = locfnm;
 	o__1.orl = 1024;
@@ -1326,8 +1333,8 @@ L_zzddhopn:
 	iostat = f_open(&o__1);
     } else if (accmet == 2) {
 	o__1.oerr = 1;
-	o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1131)];
+	o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1131)];
 	o__1.ofnmlen = lchar;
 	o__1.ofnm = locfnm;
 	o__1.orl = 1024;
@@ -1360,9 +1367,9 @@ L_zzddhopn:
 		    "as #.", (ftnlen)60);
 	}
 	errch_("$", locfnm, (ftnlen)1, (ftnlen)255);
-	errch_("%", stramh + (((i__1 = accmet - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("stramh", i__1, "zzddhman_", (ftnlen)1166)) << 3), (
-		ftnlen)1, (ftnlen)8);
+	errch_("%", __state->stramh + (((i__1 = accmet - 1) < 4 && 0 <= i__1 ?
+		 i__1 : s_rnge("stramh", i__1, "zzddhman_", (ftnlen)1166)) << 
+		3), (ftnlen)1, (ftnlen)8);
 	errint_("#", &iostat, (ftnlen)1);
 	sigerr_("SPICE(FILEOPENFAIL)", (ftnlen)19);
 
@@ -1377,12 +1384,13 @@ L_zzddhopn:
 /*        the INQUIRE does not replace it. */
 
 	s_copy(locfnm, "# SCRATCH FILE", (ftnlen)255, (ftnlen)14);
-	repmc_(locfnm, "#", strarc + (((i__1 = filarc - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("strarc", i__1, "zzddhman_", (ftnlen)1183)) << 
-		3), locfnm, (ftnlen)255, (ftnlen)1, (ftnlen)8, (ftnlen)255);
+	repmc_(locfnm, "#", __state->strarc + (((i__1 = filarc - 1) < 2 && 0 
+		<= i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhman_", (ftnlen)
+		1183)) << 3), locfnm, (ftnlen)255, (ftnlen)1, (ftnlen)8, (
+		ftnlen)255);
 	ioin__1.inerr = 1;
-	ioin__1.inunit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1185)];
+	ioin__1.inunit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 
+		? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1185)];
 	ioin__1.infile = 0;
 	ioin__1.inex = 0;
 	ioin__1.inopen = 0;
@@ -1406,10 +1414,10 @@ L_zzddhopn:
 
 	if (iostat != 0) {
 	    s_copy(locfnm, "# SCRATCH FILE", (ftnlen)255, (ftnlen)14);
-	    repmc_(locfnm, "#", strarc + (((i__1 = filarc - 1) < 2 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhman_", (ftnlen)
-		    1196)) << 3), locfnm, (ftnlen)255, (ftnlen)1, (ftnlen)8, (
-		    ftnlen)255);
+	    repmc_(locfnm, "#", __state->strarc + (((i__1 = filarc - 1) < 2 &&
+		     0 <= i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhman_", (
+		    ftnlen)1196)) << 3), locfnm, (ftnlen)255, (ftnlen)1, (
+		    ftnlen)8, (ftnlen)255);
 	}
 
 /*        Store the RTRIM value of this filename in LCHAR. */
@@ -1421,9 +1429,9 @@ L_zzddhopn:
 /*        and determine the binary file format of the preexisting */
 /*        file LOCFNM. */
 
-	zzddhppf_(&utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1213)], &filarc, &
-		bff);
+	zzddhppf_(&__state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1213)], &
+		filarc, &bff);
 
 /*        Set ERROR. */
 
@@ -1439,7 +1447,7 @@ L_zzddhopn:
 /*           format codes are listed in SUPBFF. */
 
 	    if (accmet == 1) {
-		supidx = isrchi_(&bff, &numsup, supbff);
+		supidx = isrchi_(&bff, &__state->numsup, __state->supbff);
 		if (supidx == 0) {
 
 /*                 Delay clean up and check out. */
@@ -1462,10 +1470,10 @@ L_zzddhopn:
 				"Convert User's Guide for details.", (ftnlen)
 				252);
 			errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
-			errch_("#", strbff + (((i__1 = bff - 1) < 4 && 0 <= 
-				i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhm"
-				"an_", (ftnlen)1266)) << 3), (ftnlen)1, (
-				ftnlen)8);
+			errch_("#", __state->strbff + (((i__1 = bff - 1) < 4 
+				&& 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, 
+				"zzddhman_", (ftnlen)1266)) << 3), (ftnlen)1, 
+				(ftnlen)8);
 			sigerr_("SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
 		    }
 		}
@@ -1486,7 +1494,7 @@ L_zzddhopn:
 			    "ype.", (ftnlen)195);
 		    errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
 		    sigerr_("SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
-		} else if (bff != natbff) {
+		} else if (bff != __state->natbff) {
 		    error = TRUE_;
 		    setmsg_("Attempt to open file, '#', for write access has"
 			    " failed.  This file utilizes the non-native bina"
@@ -1495,12 +1503,13 @@ L_zzddhopn:
 			    "access.  See the Convert User's Guide for detail"
 			    "s.", (ftnlen)241);
 		    errch_("#", locfnm, (ftnlen)1, (ftnlen)255);
-		    errch_("#", strbff + (((i__1 = bff - 1) < 4 && 0 <= i__1 ?
-			     i__1 : s_rnge("strbff", i__1, "zzddhman_", (
-			    ftnlen)1310)) << 3), (ftnlen)1, (ftnlen)8);
-		    errch_("#", strbff + (((i__1 = natbff - 1) < 4 && 0 <= 
-			    i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhman_", 
-			    (ftnlen)1311)) << 3), (ftnlen)1, (ftnlen)8);
+		    errch_("#", __state->strbff + (((i__1 = bff - 1) < 4 && 0 
+			    <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhma"
+			    "n_", (ftnlen)1310)) << 3), (ftnlen)1, (ftnlen)8);
+		    errch_("#", __state->strbff + (((i__1 = __state->natbff - 
+			    1) < 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", 
+			    i__1, "zzddhman_", (ftnlen)1311)) << 3), (ftnlen)
+			    1, (ftnlen)8);
 		    sigerr_("SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
 		}
 	    }
@@ -1517,14 +1526,16 @@ L_zzddhopn:
 
 	if (accmet == 4) {
 	    cl__1.cerr = 0;
-	    cl__1.cunit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 :
-		     s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1333)];
+	    cl__1.cunit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= 
+		    i__1 ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)
+		    1333)];
 	    cl__1.csta = "DELETE";
 	    f_clos(&cl__1);
 	} else {
 	    cl__1.cerr = 0;
-	    cl__1.cunit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 :
-		     s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1335)];
+	    cl__1.cunit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= 
+		    i__1 ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)
+		    1335)];
 	    cl__1.csta = 0;
 	    f_clos(&cl__1);
 	}
@@ -1532,12 +1543,13 @@ L_zzddhopn:
 /*        Remove the unit from the unit table, since this UNIT */
 /*        is no longer in use. */
 
-	zzddhrmu_(&uindex, &nft, utcst, uthan, utlck, utlun, &nut);
+	zzddhrmu_(&uindex, &__state->nft, __state->utcst, __state->uthan, 
+		__state->utlck, __state->utlun, &__state->nut);
 
 /*        Decrement NEXT since this handle was never assigned to */
 /*        a file. */
 
-	--next;
+	--__state->next;
 
 /*        Recall HANDLE was initialized to 0, and this invalid */
 /*        value is returned to the caller. */
@@ -1548,56 +1560,56 @@ L_zzddhopn:
 
 /*     Finish filling out the unit table. */
 
-    utcst[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utcst", i__1,
-	     "zzddhman_", (ftnlen)1363)] = reqcnt;
+    __state->utcst[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+	    "utcst", i__1, "zzddhman_", (ftnlen)1363)] = __state->reqcnt;
 
 /*     Only scratch files get the units locked to handles, this is */
 /*     because they only exist as long as they have a unit. */
 
-    utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utlck", i__1,
-	     "zzddhman_", (ftnlen)1369)] = accmet == 3;
+    __state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+	    "utlck", i__1, "zzddhman_", (ftnlen)1369)] = accmet == 3;
 
 /*     Now fill out the file table. */
 
-    ++nft;
+    ++__state->nft;
 
 /*     Use the absolute value of the handle used to index the file */
 /*     table. */
 
-    ftabs[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftabs", i__1, 
-	    "zzddhman_", (ftnlen)1380)] = (i__3 = uthan[(i__2 = uindex - 1) < 
-	    23 && 0 <= i__2 ? i__2 : s_rnge("uthan", i__2, "zzddhman_", (
-	    ftnlen)1380)], abs(i__3));
+    __state->ftabs[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftabs", i__1, "zzddhman_", (ftnlen)1380)] = (i__3 = 
+	    __state->uthan[(i__2 = uindex - 1) < 23 && 0 <= i__2 ? i__2 : 
+	    s_rnge("uthan", i__2, "zzddhman_", (ftnlen)1380)], abs(i__3));
 
 /*     Assign access method, file architecture, and native binary file */
 /*     format to the appropriate columns. */
 
-    ftamh[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftamh", i__1, 
-	    "zzddhman_", (ftnlen)1386)] = accmet;
-    ftarc[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, 
-	    "zzddhman_", (ftnlen)1387)] = filarc;
-    ftbff[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftbff", i__1, 
-	    "zzddhman_", (ftnlen)1388)] = bff;
+    __state->ftamh[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)1386)] = accmet;
+    __state->ftarc[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)1387)] = filarc;
+    __state->ftbff[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftbff", i__1, "zzddhman_", (ftnlen)1388)] = bff;
 
 /*     Assign the handle, filename, RTRIM ( FTNAM(NFT) ) as FTRTM, and */
 /*     unique DP number as FTMNM. */
 
-    fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "zzddhman_", (ftnlen)1394)] = uthan[(i__2 = uindex - 1) < 23 && 0 
-	    <= i__2 ? i__2 : s_rnge("uthan", i__2, "zzddhman_", (ftnlen)1394)]
-	    ;
-    s_copy(ftnam + ((i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftnam", i__1, "zzddhman_", (ftnlen)1395)) * 255, locfnm, (ftnlen)
-	    255, lchar);
-    ftrtm[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftrtm", i__1, 
-	    "zzddhman_", (ftnlen)1396)] = lchar;
-    ftmnm[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftmnm", i__1, 
-	    "zzddhman_", (ftnlen)1397)] = mnm;
+    __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("fthan", i__1, "zzddhman_", (ftnlen)1394)] = 
+	    __state->uthan[(i__2 = uindex - 1) < 23 && 0 <= i__2 ? i__2 : 
+	    s_rnge("uthan", i__2, "zzddhman_", (ftnlen)1394)];
+    s_copy(__state->ftnam + ((i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)1395)) * 255, 
+	    locfnm, (ftnlen)255, lchar);
+    __state->ftrtm[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftrtm", i__1, "zzddhman_", (ftnlen)1396)] = lchar;
+    __state->ftmnm[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftmnm", i__1, "zzddhman_", (ftnlen)1397)] = mnm;
 
 /*     Assign HANDLE the value of the new handle. */
 
-    *handle = fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)1402)];
+    *handle = __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("fthan", i__1, "zzddhman_", (ftnlen)1402)];
     chkout_("ZZDDHOPN", (ftnlen)8);
     return 0;
 /* $Procedure ZZDDHCLS ( Private --- Close file ) */
@@ -1775,9 +1787,10 @@ L_zzddhcls:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() only to trap the possibility of ZZDDHINI */
 /*        signaling SPICE(BUG). */
@@ -1789,21 +1802,21 @@ L_zzddhcls:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Find the file in the handle table. */
 
     i__1 = abs(*handle);
-    findex = bsrchi_(&i__1, &nft, ftabs);
+    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
 
 /*     Check to see whether we found the handle or not. */
 
     if (findex == 0) {
 	chkout_("ZZDDHCLS", (ftnlen)8);
 	return 0;
-    } else if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)1620)] != *handle) {
+    } else if (__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
+	     s_rnge("fthan", i__1, "zzddhman_", (ftnlen)1620)] != *handle) {
 	chkout_("ZZDDHCLS", (ftnlen)8);
 	return 0;
     }
@@ -1814,24 +1827,26 @@ L_zzddhcls:
 
     s_copy(tmpstr, arch, (ftnlen)8, arch_len);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    filarc = isrchc_(tmpstr, &c__2, strarc, (ftnlen)8, (ftnlen)8);
+    filarc = isrchc_(tmpstr, &__state->c__2, __state->strarc, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Check to see if FILARC matches the code stored in the FTARC */
 /*     column of the file table for this handle.  If it doesn't, */
 /*     signal an error. */
 
-    if (filarc != ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)1639)]) {
+    if (filarc != __state->ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)1639)]) {
 	setmsg_("Logical unit associated with # file $, is trying to be clos"
 		"ed by routines in in the % system.", (ftnlen)93);
-	errch_("#", strarc + (((i__2 = ftarc[(i__1 = findex - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)
-		1644)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("strarc", i__2, 
-		"zzddhman_", (ftnlen)1644)) << 3), (ftnlen)1, (ftnlen)8);
+	errch_("#", __state->strarc + (((i__2 = __state->ftarc[(i__1 = findex 
+		- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzd"
+		"dhman_", (ftnlen)1644)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
+		"strarc", i__2, "zzddhman_", (ftnlen)1644)) << 3), (ftnlen)1, 
+		(ftnlen)8);
 	errch_("%", tmpstr, (ftnlen)1, (ftnlen)8);
-	errch_("$", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)1646)) * 255, (
-		ftnlen)1, (ftnlen)255);
+	errch_("$", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 
+		? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)1646)) * 
+		255, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(FILARCMISMATCH)", (ftnlen)21);
 	chkout_("ZZDDHCLS", (ftnlen)8);
 	return 0;
@@ -1840,17 +1855,18 @@ L_zzddhcls:
 /*     Now check that if KILL is set, the file is accessible for */
 /*     WRITE. */
 
-    if (*kill && ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)1657)] == 1) {
+    if (*kill && __state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)1657)] == 1) {
 	setmsg_("# file $ is open for READ access.  Attempt to close and del"
 		"ete file has failed. ", (ftnlen)80);
-	errch_("#", strarc + (((i__2 = ftarc[(i__1 = findex - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)
-		1661)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("strarc", i__2, 
-		"zzddhman_", (ftnlen)1661)) << 3), (ftnlen)1, (ftnlen)8);
-	errch_("#", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)1662)) * 255, (
-		ftnlen)1, (ftnlen)255);
+	errch_("#", __state->strarc + (((i__2 = __state->ftarc[(i__1 = findex 
+		- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzd"
+		"dhman_", (ftnlen)1661)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
+		"strarc", i__2, "zzddhman_", (ftnlen)1661)) << 3), (ftnlen)1, 
+		(ftnlen)8);
+	errch_("#", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 
+		? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)1662)) * 
+		255, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(INVALIDACCESS)", (ftnlen)20);
 	chkout_("ZZDDHCLS", (ftnlen)8);
 	return 0;
@@ -1859,74 +1875,77 @@ L_zzddhcls:
 /*     Buffer the access method for HANDLE, since we may need it */
 /*     when deciding which close to perform. */
 
-    accmet = ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftamh", i__1, "zzddhman_", (ftnlen)1673)];
+    accmet = __state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)1673)];
 
 /*     If we reach here, we need to remove the row FINDEX from */
 /*     the file table. */
 
-    i__1 = nft;
+    i__1 = __state->nft;
     for (i__ = findex + 1; i__ <= i__1; ++i__) {
-	ftabs[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftabs", 
-		i__2, "zzddhman_", (ftnlen)1681)] = ftabs[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftabs", i__3, "zzddhman_", 
-		(ftnlen)1681)];
-	ftamh[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftamh", 
-		i__2, "zzddhman_", (ftnlen)1682)] = ftamh[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftamh", i__3, "zzddhman_", 
-		(ftnlen)1682)];
-	ftarc[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftarc", 
-		i__2, "zzddhman_", (ftnlen)1683)] = ftarc[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftarc", i__3, "zzddhman_", 
-		(ftnlen)1683)];
-	ftbff[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftbff", 
-		i__2, "zzddhman_", (ftnlen)1684)] = ftbff[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftbff", i__3, "zzddhman_", 
-		(ftnlen)1684)];
-	fthan[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "zzddhman_", (ftnlen)1685)] = fthan[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "zzddhman_", 
-		(ftnlen)1685)];
-	s_copy(ftnam + ((i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnam", i__2, "zzddhman_", (ftnlen)1686)) * 255, ftnam + ((
-		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftnam", 
-		i__3, "zzddhman_", (ftnlen)1686)) * 255, (ftnlen)255, (ftnlen)
-		255);
-	ftrtm[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftrtm", 
-		i__2, "zzddhman_", (ftnlen)1687)] = ftrtm[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftrtm", i__3, "zzddhman_", 
-		(ftnlen)1687)];
-	ftmnm[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftmnm", 
-		i__2, "zzddhman_", (ftnlen)1688)] = ftmnm[(i__3 = i__ - 1) < 
-		5000 && 0 <= i__3 ? i__3 : s_rnge("ftmnm", i__3, "zzddhman_", 
-		(ftnlen)1688)];
+	__state->ftabs[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftabs", i__2, "zzddhman_", (ftnlen)1681)] = __state->ftabs[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftabs", 
+		i__3, "zzddhman_", (ftnlen)1681)];
+	__state->ftamh[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftamh", i__2, "zzddhman_", (ftnlen)1682)] = __state->ftamh[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftamh", 
+		i__3, "zzddhman_", (ftnlen)1682)];
+	__state->ftarc[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftarc", i__2, "zzddhman_", (ftnlen)1683)] = __state->ftarc[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftarc", 
+		i__3, "zzddhman_", (ftnlen)1683)];
+	__state->ftbff[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftbff", i__2, "zzddhman_", (ftnlen)1684)] = __state->ftbff[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftbff", 
+		i__3, "zzddhman_", (ftnlen)1684)];
+	__state->fthan[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"fthan", i__2, "zzddhman_", (ftnlen)1685)] = __state->fthan[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", 
+		i__3, "zzddhman_", (ftnlen)1685)];
+	s_copy(__state->ftnam + ((i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 :
+		 s_rnge("ftnam", i__2, "zzddhman_", (ftnlen)1686)) * 255, 
+		__state->ftnam + ((i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 
+		: s_rnge("ftnam", i__3, "zzddhman_", (ftnlen)1686)) * 255, (
+		ftnlen)255, (ftnlen)255);
+	__state->ftrtm[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftrtm", i__2, "zzddhman_", (ftnlen)1687)] = __state->ftrtm[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftrtm", 
+		i__3, "zzddhman_", (ftnlen)1687)];
+	__state->ftmnm[(i__2 = i__ - 2) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftmnm", i__2, "zzddhman_", (ftnlen)1688)] = __state->ftmnm[(
+		i__3 = i__ - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftmnm", 
+		i__3, "zzddhman_", (ftnlen)1688)];
     }
-    --nft;
+    --__state->nft;
 
 /*     Locate HANDLE in the unit table. */
 
-    uindex = isrchi_(handle, &nut, uthan);
+    uindex = isrchi_(handle, &__state->nut, __state->uthan);
     if (uindex != 0) {
 
 /*        Close the unit. */
 
 	if (*kill && accmet != 3) {
 	    cl__1.cerr = 0;
-	    cl__1.cunit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 :
-		     s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1705)];
+	    cl__1.cunit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= 
+		    i__1 ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)
+		    1705)];
 	    cl__1.csta = "DELETE";
 	    f_clos(&cl__1);
 	} else {
 	    cl__1.cerr = 0;
-	    cl__1.cunit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 :
-		     s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1707)];
+	    cl__1.cunit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= 
+		    i__1 ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)
+		    1707)];
 	    cl__1.csta = 0;
 	    f_clos(&cl__1);
 	}
 
 /*        Remove its entry from the unit table. */
 
-	zzddhrmu_(&uindex, &nft, utcst, uthan, utlck, utlun, &nut);
+	zzddhrmu_(&uindex, &__state->nft, __state->utcst, __state->uthan, 
+		__state->utlck, __state->utlun, &__state->nut);
     } else {
 
 /*        First, check to see if KILL is set, if it is signal an error */
@@ -1944,8 +1963,8 @@ L_zzddhcls:
 /*        If we were unable to find the HANDLE in the unit table, */
 /*        check to see if we have to clean up the UNIT table. */
 
-	if (nft < nut) {
-	    uindex = isrchi_(&c__0, &nut, uthan);
+	if (__state->nft < __state->nut) {
+	    uindex = isrchi_(&__state->c__0, &__state->nut, __state->uthan);
 
 /*           Now check to see if we located a zero valued handle. */
 /*           If we did not manage to, then this is an error condition, */
@@ -1964,34 +1983,38 @@ L_zzddhcls:
 
 /*           Free the unit. */
 
-	    frelun_(&utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		    s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1759)]);
+	    frelun_(&__state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+		    i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)1759)]);
 
 /*           Compress the table. */
 
-	    i__1 = nut;
+	    i__1 = __state->nut;
 	    for (i__ = uindex + 1; i__ <= i__1; ++i__) {
-		utcst[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : s_rnge(
-			"utcst", i__2, "zzddhman_", (ftnlen)1766)] = utcst[(
-			i__3 = i__ - 1) < 23 && 0 <= i__3 ? i__3 : s_rnge(
-			"utcst", i__3, "zzddhman_", (ftnlen)1766)];
-		uthan[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : s_rnge(
-			"uthan", i__2, "zzddhman_", (ftnlen)1767)] = uthan[(
-			i__3 = i__ - 1) < 23 && 0 <= i__3 ? i__3 : s_rnge(
-			"uthan", i__3, "zzddhman_", (ftnlen)1767)];
-		utlck[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : s_rnge(
-			"utlck", i__2, "zzddhman_", (ftnlen)1768)] = utlck[(
-			i__3 = i__ - 1) < 23 && 0 <= i__3 ? i__3 : s_rnge(
-			"utlck", i__3, "zzddhman_", (ftnlen)1768)];
-		utlun[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : s_rnge(
-			"utlun", i__2, "zzddhman_", (ftnlen)1769)] = utlun[(
-			i__3 = i__ - 1) < 23 && 0 <= i__3 ? i__3 : s_rnge(
-			"utlun", i__3, "zzddhman_", (ftnlen)1769)];
+		__state->utcst[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : 
+			s_rnge("utcst", i__2, "zzddhman_", (ftnlen)1766)] = 
+			__state->utcst[(i__3 = i__ - 1) < 23 && 0 <= i__3 ? 
+			i__3 : s_rnge("utcst", i__3, "zzddhman_", (ftnlen)
+			1766)];
+		__state->uthan[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : 
+			s_rnge("uthan", i__2, "zzddhman_", (ftnlen)1767)] = 
+			__state->uthan[(i__3 = i__ - 1) < 23 && 0 <= i__3 ? 
+			i__3 : s_rnge("uthan", i__3, "zzddhman_", (ftnlen)
+			1767)];
+		__state->utlck[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : 
+			s_rnge("utlck", i__2, "zzddhman_", (ftnlen)1768)] = 
+			__state->utlck[(i__3 = i__ - 1) < 23 && 0 <= i__3 ? 
+			i__3 : s_rnge("utlck", i__3, "zzddhman_", (ftnlen)
+			1768)];
+		__state->utlun[(i__2 = i__ - 2) < 23 && 0 <= i__2 ? i__2 : 
+			s_rnge("utlun", i__2, "zzddhman_", (ftnlen)1769)] = 
+			__state->utlun[(i__3 = i__ - 1) < 23 && 0 <= i__3 ? 
+			i__3 : s_rnge("utlun", i__3, "zzddhman_", (ftnlen)
+			1769)];
 	    }
 
 /*           Decrement NUT. */
 
-	    --nut;
+	    --__state->nut;
 	}
     }
     chkout_("ZZDDHCLS", (ftnlen)8);
@@ -2151,9 +2174,10 @@ L_zzddhhlu:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() only to trap the possibility of ZZDDHINI */
 /*        signaling SPICE(BUG). */
@@ -2166,17 +2190,17 @@ L_zzddhhlu:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Locate HANDLE in the file table. */
 
     i__1 = abs(*handle);
-    findex = bsrchi_(&i__1, &nft, ftabs);
+    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
     if (findex == 0) {
 	error = TRUE_;
-    } else if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)1974)] != *handle) {
+    } else if (__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
+	     s_rnge("fthan", i__1, "zzddhman_", (ftnlen)1974)] != *handle) {
 	error = TRUE_;
     } else {
 	error = FALSE_;
@@ -2196,25 +2220,27 @@ L_zzddhhlu:
 
     s_copy(tmpstr, arch, (ftnlen)8, arch_len);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    filarc = isrchc_(tmpstr, &c__2, strarc, (ftnlen)8, (ftnlen)8);
+    filarc = isrchc_(tmpstr, &__state->c__2, __state->strarc, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Check to see if FILARC matches the code stored in the FTARC */
 /*     column of the file table for this handle.  If it doesn't, */
 /*     signal an error. */
 
-    if (filarc != ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)2005)]) {
+    if (filarc != __state->ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)2005)]) {
 	*unit = 0;
 	setmsg_("Logical unit associated with # file $, is trying to be unlo"
 		"cked by routines in in the % system.", (ftnlen)95);
-	errch_("#", strarc + (((i__2 = ftarc[(i__1 = findex - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)
-		2012)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("strarc", i__2, 
-		"zzddhman_", (ftnlen)2012)) << 3), (ftnlen)1, (ftnlen)8);
+	errch_("#", __state->strarc + (((i__2 = __state->ftarc[(i__1 = findex 
+		- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzd"
+		"dhman_", (ftnlen)2012)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
+		"strarc", i__2, "zzddhman_", (ftnlen)2012)) << 3), (ftnlen)1, 
+		(ftnlen)8);
 	errch_("%", tmpstr, (ftnlen)1, (ftnlen)8);
-	errch_("$", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2014)) * 255, (
-		ftnlen)1, (ftnlen)255);
+	errch_("$", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 
+		? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2014)) * 
+		255, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(FILARCMISMATCH)", (ftnlen)21);
 	chkout_("ZZDDHHLU", (ftnlen)8);
 	return 0;
@@ -2223,12 +2249,12 @@ L_zzddhhlu:
 /*     If we make it this far, then we will be processing a handle */
 /*     to logical unit request.  Increment REQCNT. */
 
-    zzddhrcm_(&nut, utcst, &reqcnt);
+    zzddhrcm_(&__state->nut, __state->utcst, &__state->reqcnt);
 
 /*     Now check to see if the handle is already present in the */
 /*     unit table. */
 
-    uindex = isrchi_(handle, &nut, uthan);
+    uindex = isrchi_(handle, &__state->nut, __state->uthan);
 
 /*     Check to see if we didn't locate the HANDLE in the table. */
 /*     If we didn't, open the file associated with HANDLE again, */
@@ -2238,7 +2264,8 @@ L_zzddhhlu:
 
 /*        We need a unit from the unit table, get one. */
 
-	zzddhgtu_(utcst, uthan, utlck, utlun, &nut, &uindex);
+	zzddhgtu_(__state->utcst, __state->uthan, __state->utlck, 
+		__state->utlun, &__state->nut, &uindex);
 
 /*        Check FAILED, since ZZDDHGTU may have invoked GETLUN. */
 
@@ -2251,34 +2278,39 @@ L_zzddhhlu:
 /*        Re-attach the file to a logical unit.  Branch based on the */
 /*        access method stored in the file table. */
 
-	if (ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"ftamh", i__1, "zzddhman_", (ftnlen)2060)] == 4 || ftamh[(
-		i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftamh"
-		, i__2, "zzddhman_", (ftnlen)2060)] == 2) {
+	if (__state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+		s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)2060)] == 4 || 
+		__state->ftamh[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 
+		: s_rnge("ftamh", i__2, "zzddhman_", (ftnlen)2060)] == 2) {
 	    o__1.oerr = 1;
-	    o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		    s_rnge("utlun", i__1, "zzddhman_", (ftnlen)2063)];
-	    o__1.ofnmlen = ftrtm[(i__3 = findex - 1) < 5000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("ftrtm", i__3, "zzddhman_", (ftnlen)2063)];
-	    o__1.ofnm = ftnam + ((i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftnam", i__2, "zzddhman_", (ftnlen)2063)) *
-		     255;
+	    o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 
+		    ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)2063)]
+		    ;
+	    o__1.ofnmlen = __state->ftrtm[(i__3 = findex - 1) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge("ftrtm", i__3, "zzddhman_", (ftnlen)
+		    2063)];
+	    o__1.ofnm = __state->ftnam + ((i__2 = findex - 1) < 5000 && 0 <= 
+		    i__2 ? i__2 : s_rnge("ftnam", i__2, "zzddhman_", (ftnlen)
+		    2063)) * 255;
 	    o__1.orl = 1024;
 	    o__1.osta = "OLD";
 	    o__1.oacc = "DIRECT";
 	    o__1.ofm = 0;
 	    o__1.oblnk = 0;
 	    iostat = f_open(&o__1);
-	} else if (ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)2070)] == 1) {
+	} else if (__state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+		i__1 : s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)2070)] == 1)
+		 {
 	    o__1.oerr = 1;
-	    o__1.ounit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-		    s_rnge("utlun", i__1, "zzddhman_", (ftnlen)2072)];
-	    o__1.ofnmlen = ftrtm[(i__3 = findex - 1) < 5000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("ftrtm", i__3, "zzddhman_", (ftnlen)2072)];
-	    o__1.ofnm = ftnam + ((i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftnam", i__2, "zzddhman_", (ftnlen)2072)) *
-		     255;
+	    o__1.ounit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 
+		    ? i__1 : s_rnge("utlun", i__1, "zzddhman_", (ftnlen)2072)]
+		    ;
+	    o__1.ofnmlen = __state->ftrtm[(i__3 = findex - 1) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge("ftrtm", i__3, "zzddhman_", (ftnlen)
+		    2072)];
+	    o__1.ofnm = __state->ftnam + ((i__2 = findex - 1) < 5000 && 0 <= 
+		    i__2 ? i__2 : s_rnge("ftnam", i__2, "zzddhman_", (ftnlen)
+		    2072)) * 255;
 	    o__1.orl = 1024;
 	    o__1.osta = "OLD";
 	    o__1.oacc = "DIRECT";
@@ -2305,16 +2337,17 @@ L_zzddhhlu:
 /*           know the unit will remain since we have not decreased */
 /*           the entries in the file table. */
 
-	    zzddhrmu_(&uindex, &nft, utcst, uthan, utlck, utlun, &nut);
+	    zzddhrmu_(&uindex, &__state->nft, __state->utcst, __state->uthan, 
+		    __state->utlck, __state->utlun, &__state->nut);
 
 /*           Now signal the error. */
 
 	    *unit = 0;
 	    setmsg_("Attempt to reconnect logical unit to file '#' failed. I"
 		    "OSTAT was #.", (ftnlen)67);
-	    errch_("#", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2113)) *
-		     255, (ftnlen)1, (ftnlen)255);
+	    errch_("#", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)
+		    2113)) * 255, (ftnlen)1, (ftnlen)255);
 	    errint_("#", &iostat, (ftnlen)1);
 	    sigerr_("SPICE(FILEOPENFAIL)", (ftnlen)19);
 	    chkout_("ZZDDHHLU", (ftnlen)8);
@@ -2323,12 +2356,12 @@ L_zzddhhlu:
 
 /*        Lastly populate the unit table values. */
 
-	uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("uthan", 
-		i__1, "zzddhman_", (ftnlen)2124)] = fthan[(i__2 = findex - 1) 
-		< 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", i__2, "zzddhman_"
-		, (ftnlen)2124)];
-	utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utlck", 
-		i__1, "zzddhman_", (ftnlen)2125)] = FALSE_;
+	__state->uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+		"uthan", i__1, "zzddhman_", (ftnlen)2124)] = __state->fthan[(
+		i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
+		, i__2, "zzddhman_", (ftnlen)2124)];
+	__state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+		"utlck", i__1, "zzddhman_", (ftnlen)2125)] = FALSE_;
     }
 
 /*     At this point UINDEX points to the row in the unit table that */
@@ -2336,35 +2369,35 @@ L_zzddhhlu:
 /*     row with the new value of REQCNT, and then set the lock row to */
 /*     TRUE if a lock request was made. */
 
-    utcst[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utcst", i__1,
-	     "zzddhman_", (ftnlen)2135)] = reqcnt;
-    if (*lock && ! utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
-	    s_rnge("utlck", i__1, "zzddhman_", (ftnlen)2137)]) {
+    __state->utcst[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+	    "utcst", i__1, "zzddhman_", (ftnlen)2135)] = __state->reqcnt;
+    if (*lock && ! __state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? 
+	    i__1 : s_rnge("utlck", i__1, "zzddhman_", (ftnlen)2137)]) {
 
 /*        First check to see if we have enough lockable units */
 /*        left in the unit table. */
 
-	locked = zzddhclu_(utlck, &nut);
+	locked = zzddhclu_(__state->utlck, &__state->nut);
 	if (locked >= 20) {
 	    *unit = 0;
 	    setmsg_("Unable to lock handle for file '#' to a logical unit.  "
 		    "There are no rows available for locking in the unit tabl"
 		    "e.", (ftnlen)113);
-	    errch_("#", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2152)) *
-		     255, (ftnlen)1, (ftnlen)255);
+	    errch_("#", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)
+		    2152)) * 255, (ftnlen)1, (ftnlen)255);
 	    sigerr_("SPICE(HLULOCKFAILED)", (ftnlen)20);
 	    chkout_("ZZDDHHLU", (ftnlen)8);
 	    return 0;
 	}
-	utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utlck", 
-		i__1, "zzddhman_", (ftnlen)2159)] = TRUE_;
+	__state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+		"utlck", i__1, "zzddhman_", (ftnlen)2159)] = TRUE_;
     }
 
 /*     Set the value of UNIT and return. */
 
-    *unit = utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utl"
-	    "un", i__1, "zzddhman_", (ftnlen)2166)];
+    *unit = __state->utlun[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
+	    s_rnge("utlun", i__1, "zzddhman_", (ftnlen)2166)];
     chkout_("ZZDDHHLU", (ftnlen)8);
     return 0;
 /* $Procedure ZZDDHUNL ( Private --- Unlock Logical Unit from Handle ) */
@@ -2502,9 +2535,10 @@ L_zzddhunl:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() only to trap the possibility of ZZDDHINI */
 /*        signaling SPICE(BUG).  No check out is performed, see the */
@@ -2516,7 +2550,7 @@ L_zzddhunl:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Prevent the user from locating zero handle rows.  This is not */
@@ -2530,7 +2564,7 @@ L_zzddhunl:
 
 /*     Look up the handle in the unit table. */
 
-    uindex = isrchi_(handle, &nut, uthan);
+    uindex = isrchi_(handle, &__state->nut, __state->uthan);
 
 /*     Now check the results of the lookup.  If HANDLE was not found */
 /*     in the unit table or the unit was not locked, just return as */
@@ -2538,8 +2572,8 @@ L_zzddhunl:
 
     if (uindex == 0) {
 	return 0;
-    } else if (! utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
-	    "utlck", i__1, "zzddhman_", (ftnlen)2354)]) {
+    } else if (! __state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 :
+	     s_rnge("utlck", i__1, "zzddhman_", (ftnlen)2354)]) {
 	return 0;
     }
 
@@ -2547,7 +2581,7 @@ L_zzddhunl:
 /*     list in increasing order. */
 
     i__1 = abs(*handle);
-    findex = bsrchi_(&i__1, &nft, ftabs);
+    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
 
 /*     Check to see if HANDLE is in the file table.  We know it has */
 /*     to be since it is in the unit table if we make it this far. */
@@ -2562,8 +2596,8 @@ L_zzddhunl:
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZDDHUNL", (ftnlen)8);
 	return 0;
-    } else if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)2380)] != *handle) {
+    } else if (__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
+	     s_rnge("fthan", i__1, "zzddhman_", (ftnlen)2380)] != *handle) {
 	chkin_("ZZDDHUNL", (ftnlen)8);
 	setmsg_("HANDLE # was not found in the file table but was located in"
 		" the unit table.  This error should never occur.", (ftnlen)
@@ -2580,25 +2614,27 @@ L_zzddhunl:
 
     s_copy(tmpstr, arch, (ftnlen)8, arch_len);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    filarc = isrchc_(tmpstr, &c__2, strarc, (ftnlen)8, (ftnlen)8);
+    filarc = isrchc_(tmpstr, &__state->c__2, __state->strarc, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Check to see if FILARC matches the code stored in the FTARC */
 /*     column of the file table for this handle.  If it doesn't, */
 /*     signal an error. */
 
-    if (filarc != ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)2407)]) {
+    if (filarc != __state->ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)2407)]) {
 	chkin_("ZZDDHUNL", (ftnlen)8);
 	setmsg_("Logical unit associated with # file $, is trying to be unlo"
 		"cked by routines in in the % system.", (ftnlen)95);
-	errch_("#", strarc + (((i__2 = ftarc[(i__1 = findex - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)
-		2413)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("strarc", i__2, 
-		"zzddhman_", (ftnlen)2413)) << 3), (ftnlen)1, (ftnlen)8);
+	errch_("#", __state->strarc + (((i__2 = __state->ftarc[(i__1 = findex 
+		- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftarc", i__1, "zzd"
+		"dhman_", (ftnlen)2413)] - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
+		"strarc", i__2, "zzddhman_", (ftnlen)2413)) << 3), (ftnlen)1, 
+		(ftnlen)8);
 	errch_("%", tmpstr, (ftnlen)1, (ftnlen)8);
-	errch_("$", ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2415)) * 255, (
-		ftnlen)1, (ftnlen)255);
+	errch_("$", __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 
+		? i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2415)) * 
+		255, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(FILARCMISMATCH)", (ftnlen)21);
 	chkout_("ZZDDHUNL", (ftnlen)8);
 	return 0;
@@ -2608,12 +2644,12 @@ L_zzddhunl:
 /*     scratch access.  If it is, just return, since scratch files */
 /*     can not have their units unlocked. */
 
-    if (ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftamh",
-	     i__1, "zzddhman_", (ftnlen)2427)] == 3) {
+    if (__state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)2427)] == 3) {
 	return 0;
     }
-    utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("utlck", i__1,
-	     "zzddhman_", (ftnlen)2431)] = FALSE_;
+    __state->utlck[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
+	    "utlck", i__1, "zzddhman_", (ftnlen)2431)] = FALSE_;
     return 0;
 /* $Procedure ZZDDHNFO ( Private --- Get information about a Handle ) */
 
@@ -2770,9 +2806,10 @@ L_zzddhnfo:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED(), and return on failure.  We are not checking */
 /*        out or in since this routine would be error free if not for */
@@ -2785,14 +2822,14 @@ L_zzddhnfo:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Look up the handle in the table.  Remember FTABS is sorted */
 /*     listed in increasing order. */
 
     i__1 = abs(*handle);
-    findex = bsrchi_(&i__1, &nft, ftabs);
+    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
 
 /*     Check to see if HANDLE is in the handle table.  Remember that */
 /*     we are indexing the table using the absolute value of handle. */
@@ -2805,8 +2842,8 @@ L_zzddhnfo:
 	*intamh = 0;
 	*found = FALSE_;
 	return 0;
-    } else if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)2635)] != *handle) {
+    } else if (__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
+	     s_rnge("fthan", i__1, "zzddhman_", (ftnlen)2635)] != *handle) {
 	s_copy(fname, " ", fname_len, (ftnlen)1);
 	*intarc = 0;
 	*intbff = 0;
@@ -2819,16 +2856,16 @@ L_zzddhnfo:
 /*     the handle table at row FINDEX. */
 
     *found = TRUE_;
-    s_copy(fname, ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2649)) * 255, 
-	    fname_len, ftrtm[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-	    s_rnge("ftrtm", i__2, "zzddhman_", (ftnlen)2649)]);
-    *intarc = ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftarc", i__1, "zzddhman_", (ftnlen)2650)];
-    *intbff = ftbff[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftbff", i__1, "zzddhman_", (ftnlen)2651)];
-    *intamh = ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ftamh", i__1, "zzddhman_", (ftnlen)2652)];
+    s_copy(fname, __state->ftnam + ((i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
+	    i__1 : s_rnge("ftnam", i__1, "zzddhman_", (ftnlen)2649)) * 255, 
+	    fname_len, __state->ftrtm[(i__2 = findex - 1) < 5000 && 0 <= i__2 
+	    ? i__2 : s_rnge("ftrtm", i__2, "zzddhman_", (ftnlen)2649)]);
+    *intarc = __state->ftarc[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftarc", i__1, "zzddhman_", (ftnlen)2650)];
+    *intbff = __state->ftbff[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftbff", i__1, "zzddhman_", (ftnlen)2651)];
+    *intamh = __state->ftamh[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftamh", i__1, "zzddhman_", (ftnlen)2652)];
     return 0;
 /* $Procedure ZZDDHISN ( Private --- Is Handle Native? ) */
 
@@ -2957,9 +2994,10 @@ L_zzddhisn:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED(), and return on failure.  We are not checking */
 /*        out or in since this routine would be error free if not for */
@@ -2972,14 +3010,14 @@ L_zzddhisn:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Look up the handle in the table. Remember FTABS is sorted */
 /*     listed in increasing order. */
 
     i__1 = abs(*handle);
-    findex = bsrchi_(&i__1, &nft, ftabs);
+    findex = bsrchi_(&i__1, &__state->nft, __state->ftabs);
 
 /*     Check to see if HANDLE is in the handle table.  Remember */
 /*     that we are indexing the table using the absolute value of */
@@ -2988,8 +3026,8 @@ L_zzddhisn:
     if (findex == 0) {
 	*found = FALSE_;
 	return 0;
-    } else if (fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "zzddhman_", (ftnlen)2824)] != *handle) {
+    } else if (__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
+	     s_rnge("fthan", i__1, "zzddhman_", (ftnlen)2824)] != *handle) {
 	*found = FALSE_;
 	return 0;
     }
@@ -2997,8 +3035,9 @@ L_zzddhisn:
 /*     If we make it this far, then we have found HANDLE in the file */
 /*     table.  Set NATIVE appropriately and FOUND to TRUE. */
 
-    *native = natbff == ftbff[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 :
-	     s_rnge("ftbff", i__1, "zzddhman_", (ftnlen)2833)];
+    *native = __state->natbff == __state->ftbff[(i__1 = findex - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge("ftbff", i__1, "zzddhman_", (ftnlen)
+	    2833)];
     *found = TRUE_;
     return 0;
 /* $Procedure ZZDDHFNH ( Private --- Filename to Handle ) */
@@ -3130,9 +3169,10 @@ L_zzddhfnh:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED() only to trap the possibility of ZZDDHINI */
 /*        signaling SPICE(BUG). */
@@ -3145,7 +3185,7 @@ L_zzddhfnh:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Left justify FNAME to trim any leading white space. */
@@ -3154,9 +3194,11 @@ L_zzddhfnh:
 
 /*     Look up FNAME in the handle table. */
 
-    zzddhf2h_(locfnm, ftabs, ftamh, ftarc, ftbff, fthan, ftnam, ftrtm, ftmnm, 
-	    &nft, utcst, uthan, utlck, utlun, &nut, &inqext, &inqopn, &inqhan,
-	     found, &mnm, (ftnlen)255, (ftnlen)255);
+    zzddhf2h_(locfnm, __state->ftabs, __state->ftamh, __state->ftarc, 
+	    __state->ftbff, __state->fthan, __state->ftnam, __state->ftrtm, 
+	    __state->ftmnm, &__state->nft, __state->utcst, __state->uthan, 
+	    __state->utlck, __state->utlun, &__state->nut, &inqext, &inqopn, &
+	    inqhan, found, &mnm, (ftnlen)255, (ftnlen)255);
 
 /*     Check found and set HANDLE if we have got one.  No need to */
 /*     check FAILED() since ZZDDHF2H returns FOUND set to FALSE on */
@@ -3292,9 +3334,10 @@ L_zzddhluh:
 
 /*     Do the initialization tasks. */
 
-    if (first) {
-	zzddhini_(&natbff, supbff, &numsup, stramh, strarc, strbff, (ftnlen)8,
-		 (ftnlen)8, (ftnlen)8);
+    if (__state->first) {
+	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, 
+		__state->stramh, __state->strarc, __state->strbff, (ftnlen)8, 
+		(ftnlen)8, (ftnlen)8);
 
 /*        Check FAILED(), and return on failure.  We are not checking */
 /*        out or in since this routine would be error free if not for */
@@ -3308,18 +3351,18 @@ L_zzddhluh:
 
 /*        Clear FIRST since we've done the initialization. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Look up the unit in the table. */
 
-    uindex = isrchi_(unit, &nut, utlun);
+    uindex = isrchi_(unit, &__state->nut, __state->utlun);
     if (uindex == 0) {
 	*handle = 0;
 	*found = FALSE_;
 	return 0;
-    } else if (uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
-	    "uthan", i__1, "zzddhman_", (ftnlen)3183)] == 0) {
+    } else if (__state->uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
+	    s_rnge("uthan", i__1, "zzddhman_", (ftnlen)3183)] == 0) {
 	*handle = 0;
 	*found = FALSE_;
 	return 0;
@@ -3327,8 +3370,8 @@ L_zzddhluh:
 
 /*     We've got a handle, store the value and return. */
 
-    *handle = uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(
-	    "uthan", i__1, "zzddhman_", (ftnlen)3192)];
+    *handle = __state->uthan[(i__1 = uindex - 1) < 23 && 0 <= i__1 ? i__1 : 
+	    s_rnge("uthan", i__1, "zzddhman_", (ftnlen)3192)];
     *found = TRUE_;
     return 0;
 } /* zzddhman_ */

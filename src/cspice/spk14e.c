@@ -1,17 +1,29 @@
-/* spk14e.f -- translated by f2c (version 19980913).
+/* spk14e.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spk14e_state_t;
+static spk14e_state_t* get_spk14e_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPK14E ( SPK type 14: End a segment. ) */
 /* Subroutine */ int spk14e_(integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sgwes_(integer *), 
-	    chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sgwes_(integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spk14e_state_t* __state = get_spk14e_state();
 /* $ Abstract */
 
 /*     End the type 14 SPK segment currently being written to the SPK */

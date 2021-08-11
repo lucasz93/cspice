@@ -1,20 +1,34 @@
-/* seterr.f -- translated by f2c (version 19980913).
+/* seterr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern seterr_init_t __seterr_init;
+static seterr_state_t* get_seterr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->seterr)
+		state->seterr = __cspice_allocate_module(sizeof(
+	seterr_state_t), &__seterr_init, sizeof(__seterr_init));
+	return state->seterr;
+
+}
 
 /* $Procedure      SETERR ( Set Error Status ) */
 logical seterr_0_(int n__, logical *status)
 {
     /* Initialized data */
 
-    static logical svstat = FALSE_;
 
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    seterr_state_t* __state = get_seterr_state();
 /* $ Abstract */
 
 /*     Set the SPICELIB error status.  DO NOT CALL THIS ROUTINE. */
@@ -163,7 +177,7 @@ logical seterr_0_(int n__, logical *status)
 
 /*     Executable Code: */
 
-    svstat = *status;
+    __state->svstat = *status;
 
 /*     Give SETERR a value; the value does not have any */
 /*     meaning, but it appears standard FORTRAN requires this. */
@@ -412,7 +426,7 @@ L_failed:
 
 /*     Grab saved status value: */
 
-    ret_val = svstat;
+    ret_val = __state->svstat;
     return ret_val;
 } /* seterr_ */
 

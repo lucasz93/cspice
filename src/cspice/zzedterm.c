@@ -1,14 +1,21 @@
-/* zzedterm.f -- translated by f2c (version 19980913).
+/* zzedterm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b30 = 0.;
-static doublereal c_b35 = 1.;
+extern zzedterm_init_t __zzedterm_init;
+static zzedterm_state_t* get_zzedterm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzedterm)
+		state->zzedterm = __cspice_allocate_module(sizeof(
+	zzedterm_state_t), &__zzedterm_init, sizeof(__zzedterm_init));
+	return state->zzedterm;
+
+}
 
 /* $Procedure ZZEDTERM ( Ellipsoid terminator ) */
 /* Subroutine */ int zzedterm_(char *type__, doublereal *a, doublereal *b, 
@@ -28,29 +35,45 @@ static doublereal c_b35 = 1.;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal rmin, rmax;
+    doublereal rmin;
+    doublereal rmax;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     integer nitr;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal d__, e[3];
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal d__;
+    doublereal e[3];
     integer i__;
-    doublereal s, angle, v[3], x[3], delta, y[3], z__[3], inang;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), frame_(doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal s;
+    doublereal angle;
+    doublereal v[3];
+    doublereal x[3];
+    doublereal delta;
+    doublereal y[3];
+    doublereal z__[3];
+    doublereal inang;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
+	    *);
     doublereal plane[4];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen), vpack_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
     doublereal theta;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal trans[9]	/* was [3][3] */, srcpt[3], vtemp[3];
-    extern doublereal vnorm_(doublereal *), twopi_(void);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    pl2nvc_(doublereal *, doublereal *, doublereal *);
+    doublereal trans[9]	/* was [3][3] */;
+    doublereal srcpt[3];
+    doublereal vtemp[3];
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal lambda;
     extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
 	    doublereal *);
@@ -58,14 +81,19 @@ static doublereal c_b35 = 1.;
     doublereal minrad;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal maxrad, angerr;
+    doublereal maxrad;
+    doublereal angerr;
     logical umbral;
     extern doublereal touchd_(doublereal *);
-    doublereal offset[3], prvdif;
+    doublereal offset[3];
+    doublereal prvdif;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    doublereal outang, plcons, prvang;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    doublereal outang;
+    doublereal plcons;
+    doublereal prvang;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char loctyp[50];
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
@@ -74,6 +102,9 @@ static doublereal c_b35 = 1.;
 	    ;
     doublereal vtx[3];
 
+
+    /* Module state */
+    zzedterm_state_t* __state = get_zzedterm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -453,7 +484,7 @@ static doublereal c_b35 = 1.;
 /*        the X-Y plane of the frame produced by FRAME */
 /*        and corresponding to the angle THETA. */
 
-	latrec_(srcrad, &theta, &c_b30, srcpt);
+	latrec_(srcrad, &theta, &__state->c_b30, srcpt);
 
 /*        Now solve for the angle by which SRCPT must be rotated (toward */
 /*        +Z in the umbral case, away from +Z in the penumbral case) */
@@ -551,14 +582,14 @@ static doublereal c_b35 = 1.;
 	    d__2 = *b * v[1];
 	    d__3 = *c__ * v[2];
 	    vpack_(&d__1, &d__2, &d__3, e);
-	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 
+	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 
 		    && 0 <= i__2 ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", 
 		    (ftnlen)582)]);
 
 /*           Make a new estimate of the plane rotation required to touch */
 /*           the target. */
 
-	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < trmpts_dim2 * 3 && 0 <= i__2 
+	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 && 0 <= i__2 
 		    ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", (ftnlen)588)]
 		    , vtx, offset);
 
@@ -571,7 +602,7 @@ static doublereal c_b35 = 1.;
 /*           S is positive, the plane is above E. */
 
 	    d__1 = vdot_(e, dir);
-	    s = d_sign(&c_b35, &d__1);
+	    s = d_sign(&__state->c_b35, &d__1);
 	    if (umbral) {
 
 /*              If the plane is above the target, increase the */

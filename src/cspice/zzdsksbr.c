@@ -1,15 +1,21 @@
-/* zzdsksbr.f -- translated by f2c (version 19980913).
+/* zzdsksbr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__24 = 24;
-static integer c__8 = 8;
-static integer c__3 = 3;
+extern zzdsksbr_init_t __zzdsksbr_init;
+static zzdsksbr_state_t* get_zzdsksbr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksbr)
+		state->zzdsksbr = __cspice_allocate_module(sizeof(
+	zzdsksbr_state_t), &__zzdsksbr_init, sizeof(__zzdsksbr_init));
+	return state->zzdsksbr;
+
+}
 
 /* $Procedure ZZDSKSBR ( DSK, remove entries from API segment buffer ) */
 /* Subroutine */ int zzdsksbr_(integer *needed, integer *maxbod, integer *
@@ -21,15 +27,23 @@ static integer c__3 = 3;
     integer i__1;
 
     /* Local variables */
-    integer i__, j, avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), movei_(integer *, integer *, integer *);
-    integer nbtdel, nstdel;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer i__;
+    integer j;
+    integer avail;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    integer nbtdel;
+    integer nstdel;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzdsksbr_state_t* __state = get_zzdsksbr_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -668,10 +682,14 @@ static integer c__3 = 3;
 	    for (i__ = nstdel + 1; i__ <= i__1; ++i__) {
 		j = i__ - nstdel;
 		sthan[j - 1] = sthan[i__ - 1];
-		moved_(&stdscr[i__ * 24 - 24], &c__24, &stdscr[j * 24 - 24]);
-		movei_(&stdlad[(i__ << 3) - 8], &c__8, &stdlad[(j << 3) - 8]);
-		moved_(&stoff[i__ * 3 - 3], &c__3, &stoff[j * 3 - 3]);
-		moved_(&stctr[i__ * 3 - 3], &c__3, &stctr[j * 3 - 3]);
+		moved_(&stdscr[i__ * 24 - 24], &__state->c__24, &stdscr[j * 
+			24 - 24]);
+		movei_(&stdlad[(i__ << 3) - 8], &__state->c__8, &stdlad[(j << 
+			3) - 8]);
+		moved_(&stoff[i__ * 3 - 3], &__state->c__3, &stoff[j * 3 - 3])
+			;
+		moved_(&stctr[i__ * 3 - 3], &__state->c__3, &stctr[j * 3 - 3])
+			;
 		strad[j - 1] = strad[i__ - 1];
 	    }
 	    *stfree -= nstdel;

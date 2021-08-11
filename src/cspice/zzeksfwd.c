@@ -1,9 +1,17 @@
-/* zzeksfwd.f -- translated by f2c (version 19980913).
+/* zzeksfwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeksfwd_state_t;
+static zzeksfwd_state_t* get_zzeksfwd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSFWD ( EK, set forward pointer for data page ) */
 /* Subroutine */ int zzeksfwd_(integer *handle, integer *type__, integer *p, 
@@ -18,9 +26,14 @@
     doublereal dpptr;
     extern logical failed_(void);
     extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
-	    doublereal *), dasudi_(integer *, integer *, integer *, integer *)
-	    , zzeksei_(integer *, integer *, integer *);
+	    doublereal *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzeksfwd_state_t* __state = get_zzeksfwd_state();
 /* $ Abstract */
 
 /*     Set the forward data pointer for a specified EK data page. */

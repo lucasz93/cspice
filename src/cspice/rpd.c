@@ -1,16 +1,27 @@
-/* rpd.f -- translated by f2c (version 19980913).
+/* rpd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern rpd_init_t __rpd_init;
+static rpd_state_t* get_rpd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rpd)
+		state->rpd = __cspice_allocate_module(sizeof(rpd_state_t), &
+	__rpd_init, sizeof(__rpd_init));
+	return state->rpd;
+
+}
 
 /* $Procedure                     RPD ( Radians per degree ) */
 doublereal rpd_(void)
 {
     /* Initialized data */
 
-    static doublereal value = 0.;
 
     /* System generated locals */
     doublereal ret_val;
@@ -18,6 +29,9 @@ doublereal rpd_(void)
     /* Builtin functions */
     double acos(doublereal);
 
+
+    /* Module state */
+    rpd_state_t* __state = get_rpd_state();
 /* $ Abstract */
 
 /*     Return the number of radians per degree. */
@@ -149,10 +163,10 @@ doublereal rpd_(void)
 
 /*     What is there to say? */
 
-    if (value == 0.) {
-	value = acos(-1.) / 180.;
+    if (__state->value == 0.) {
+	__state->value = acos(-1.) / 180.;
     }
-    ret_val = value;
+    ret_val = __state->value;
     return ret_val;
 } /* rpd_ */
 

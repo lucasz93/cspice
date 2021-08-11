@@ -1,15 +1,21 @@
-/* errdp.f -- translated by f2c (version 19980913).
+/* errdp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__14 = 14;
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern errdp_init_t __errdp_init;
+static errdp_state_t* get_errdp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->errdp)
+		state->errdp = __cspice_allocate_module(sizeof(errdp_state_t),
+	 &__errdp_init, sizeof(__errdp_init));
+	return state->errdp;
+
+}
 
 /* $Procedure      ERRDP  ( Insert D.P. Number into Error Message Text ) */
 /* Subroutine */ int errdp_(char *marker, doublereal *dpnum, ftnlen 
@@ -26,16 +32,21 @@ static integer c__2 = 2;
 
     /* Local variables */
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
-	    ftnlen), ljust_(char *, char *, ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern logical allowd_(void);
     extern integer lastnb_(char *, ftnlen);
     char lngmsg[1840];
     extern /* Subroutine */ int getlms_(char *, ftnlen);
     extern integer frstnb_(char *, ftnlen);
-    char dpstrg[21], tmpmsg[1840];
+    char dpstrg[21];
+    char tmpmsg[1840];
     extern /* Subroutine */ int putlms_(char *, ftnlen);
     integer strpos;
 
+
+    /* Module state */
+    errdp_state_t* __state = get_errdp_state();
 /* $ Abstract */
 
 /*     Substitute a double precision number for the first occurrence of */
@@ -318,7 +329,7 @@ static integer c__2 = 2;
 /*     string. */
 
     getlms_(lngmsg, (ftnlen)1840);
-    dpstr_(dpnum, &c__14, dpstrg, (ftnlen)21);
+    dpstr_(dpnum, &__state->c__14, dpstrg, (ftnlen)21);
     ljust_(dpstrg, dpstrg, (ftnlen)21, (ftnlen)21);
 
 /*     Locate the leftmost occurrence of MARKER, if there is one */
@@ -346,12 +357,12 @@ static integer c__2 = 2;
 		i__2[0] = strpos - 1, a__1[0] = lngmsg;
 		i__2[1] = lastnb_(dpstrg, (ftnlen)21), a__1[1] = dpstrg;
 		i__2[2] = 1840 - i__1, a__1[2] = lngmsg + i__1;
-		s_cat(tmpmsg, a__1, i__2, &c__3, (ftnlen)1840);
+		s_cat(tmpmsg, a__1, i__2, &__state->c__3, (ftnlen)1840);
 	    } else {
 /* Writing concatenation */
 		i__3[0] = strpos - 1, a__2[0] = lngmsg;
 		i__3[1] = lastnb_(dpstrg, (ftnlen)21), a__2[1] = dpstrg;
-		s_cat(tmpmsg, a__2, i__3, &c__2, (ftnlen)1840);
+		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
 	    }
 	} else {
 
@@ -367,7 +378,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 		i__3[0] = lastnb_(dpstrg, (ftnlen)21), a__2[0] = dpstrg;
 		i__3[1] = 1840 - i__1, a__2[1] = lngmsg + i__1;
-		s_cat(tmpmsg, a__2, i__3, &c__2, (ftnlen)1840);
+		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
 	    } else {
 
 /*              The marker's the whole string: */

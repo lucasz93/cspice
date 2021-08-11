@@ -1,13 +1,21 @@
-/* writln.f -- translated by f2c (version 19980913).
+/* writln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern writln_init_t __writln_init;
+static writln_state_t* get_writln_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->writln)
+		state->writln = __cspice_allocate_module(sizeof(
+	writln_state_t), &__writln_init, sizeof(__writln_init));
+	return state->writln;
+
+}
 
 /* $Procedure      WRITLN ( Write a text line to a logical unit ) */
 /* Subroutine */ int writln_(char *line, integer *unit, ftnlen line_len)
@@ -21,11 +29,16 @@ static integer c__1 = 1;
     /* Local variables */
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    writln_state_t* __state = get_writln_state();
 /* $ Abstract */
 
 /*     Write a single line of text to the Fortran logical unit UNIT. */
@@ -393,7 +406,7 @@ static integer c__1 = 1;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, line, rtrim_(line, line_len));
+    iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
     if (iostat != 0) {
 	goto L100001;
     }

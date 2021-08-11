@@ -1,14 +1,21 @@
-/* dasrdi.f -- translated by f2c (version 19980913).
+/* dasrdi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern dasrdi_init_t __dasrdi_init;
+static dasrdi_state_t* get_dasrdi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasrdi)
+		state->dasrdi = __cspice_allocate_module(sizeof(
+	dasrdi_state_t), &__dasrdi_init, sizeof(__dasrdi_init));
+	return state->dasrdi;
+
+}
 
 /* $Procedure      DASRDI ( DAS, read data, integer ) */
 /* Subroutine */ int dasrdi_(integer *handle, integer *first, integer *last, 
@@ -18,15 +25,22 @@ static integer c__1 = 1;
     integer i__1, i__2;
 
     /* Local variables */
-    integer n, nread, recno;
+    integer n;
+    integer nread;
+    integer recno;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
     extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
 	    integer *, integer *);
-    integer clsize, wordno, numint;
+    integer clsize;
+    integer wordno;
+    integer numint;
 
+
+    /* Module state */
+    dasrdi_state_t* __state = get_dasrdi_state();
 /* $ Abstract */
 
 /*     Read integer data from a range of DAS logical addresses. */
@@ -270,7 +284,7 @@ static integer c__1 = 1;
 /*     Find out the physical location of the first integer.  If FIRST */
 /*     is invalid, DASA2L will take care of the problem. */
 
-    dasa2l_(handle, &c__3, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(handle, &__state->c__3, first, &clbase, &clsize, &recno, &wordno);
 
 /*     Decide how many integers to read. */
 
@@ -307,7 +321,7 @@ static integer c__1 = 1;
 /* Computing MIN */
 	    i__1 = numint - nread;
 	    n = min(i__1,256);
-	    dasrri_(handle, &recno, &c__1, &n, &data[nread]);
+	    dasrri_(handle, &recno, &__state->c__1, &n, &data[nread]);
 	    nread += n;
 	    ++recno;
 	} else {
@@ -317,7 +331,8 @@ static integer c__1 = 1;
 /*           cluster has address FIRST + NREAD. */
 
 	    i__1 = *first + nread;
-	    dasa2l_(handle, &c__3, &i__1, &clbase, &clsize, &recno, &wordno);
+	    dasa2l_(handle, &__state->c__3, &i__1, &clbase, &clsize, &recno, &
+		    wordno);
 	}
     }
     return 0;

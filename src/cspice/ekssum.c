@@ -1,9 +1,21 @@
-/* ekssum.f -- translated by f2c (version 19980913).
+/* ekssum.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern ekssum_init_t __ekssum_init;
+static ekssum_state_t* get_ekssum_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekssum)
+		state->ekssum = __cspice_allocate_module(sizeof(
+	ekssum_state_t), &__ekssum_init, sizeof(__ekssum_init));
+	return state->ekssum;
+
+}
 
 /* $Procedure      EKSSUM ( EK, return segment summary ) */
 /* Subroutine */ int ekssum_(integer *handle, integer *segno, char *tabnam, 
@@ -13,7 +25,6 @@
 {
     /* Initialized data */
 
-    static char typstr[4*4] = "CHR " "DP  " "INT " "TIME";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -28,10 +39,14 @@
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    integer segdsc[24], cdscrs[1100]	/* was [11][100] */;
+    integer segdsc[24];
+    integer cdscrs[1100]	/* was [11][100] */;
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    ekssum_state_t* __state = get_ekssum_state();
 /* $ Abstract */
 
 /*     Return summary information for a specified segment in a */
@@ -696,11 +711,11 @@
     *ncols = segdsc[4];
     i__1 = *ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(dtypes + (i__ - 1) * dtypes_len, typstr + (((i__3 = cdscrs[(
-		i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : s_rnge(
-		"cdscrs", i__2, "ekssum_", (ftnlen)355)] - 1) < 4 && 0 <= 
-		i__3 ? i__3 : s_rnge("typstr", i__3, "ekssum_", (ftnlen)355)) 
-		<< 2), dtypes_len, (ftnlen)4);
+	s_copy(dtypes + (i__ - 1) * dtypes_len, __state->typstr + (((i__3 = 
+		cdscrs[(i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : 
+		s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)355)] - 1) < 4 && 0 
+		<= i__3 ? i__3 : s_rnge("typstr", i__3, "ekssum_", (ftnlen)
+		355)) << 2), dtypes_len, (ftnlen)4);
 	sizes[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 8) < 1100 && 0 <= i__2 ? 
 		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)357)];
 	if (cdscrs[(i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : s_rnge(

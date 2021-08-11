@@ -1,15 +1,21 @@
-/* zzekac07.f -- translated by f2c (version 19980913).
+/* zzekac07.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__256 = 256;
-static integer c__2 = 2;
+extern zzekac07_init_t __zzekac07_init;
+static zzekac07_state_t* get_zzekac07_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekac07)
+		state->zzekac07 = __cspice_allocate_module(sizeof(
+	zzekac07_state_t), &__zzekac07_init, sizeof(__zzekac07_init));
+	return state->zzekac07;
+
+}
 
 /* $Procedure     ZZEKAC07 ( EK, add class 7 column to segment ) */
 /* Subroutine */ int zzekac07_(integer *handle, integer *segdsc, integer *
@@ -22,28 +28,52 @@ static integer c__2 = 2;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], from;
+    integer page[256];
+    integer from;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekacps_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *), zzekordi_(integer *, logical *, logical *, 
-	    integer *, integer *), zzekwpai_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekwpal_(integer *, integer *, 
-	    integer *, logical *, integer *, integer *), zzekpgwi_(integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekordi_(integer *, logical *, logical *, 
 	    integer *, integer *);
-    integer p, mbase, npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, nrows, cmbase;
+    extern /* Subroutine */ int zzekwpai_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekwpal_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    integer p;
+    integer mbase;
+    integer npage;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer nrows;
+    integer cmbase;
     extern logical return_(void);
     char column[32];
-    integer colidx, datbas, dscbas, idxbas, idxpag, idxtyp, nflbas, nflpag, 
-	    nulptr, to;
-    logical indexd, nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), cleari_(integer *, integer *), dasudi_(integer *, 
-	    integer *, integer *, integer *);
+    integer colidx;
+    integer datbas;
+    integer dscbas;
+    integer idxbas;
+    integer idxpag;
+    integer idxtyp;
+    integer nflbas;
+    integer nflpag;
+    integer nulptr;
+    integer to;
+    logical indexd;
+    logical nullok;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    zzekac07_state_t* __state = get_zzekac07_state();
 /* $ Abstract */
 
 /*     Add an entire class 7 column to an EK segment. */
@@ -867,14 +897,14 @@ static integer c__2 = 2;
 /*     allocate that many new, contiguous pages. */
 
     npage = (nrows + 253) / 254;
-    zzekacps_(handle, segdsc, &c__3, &npage, &p, &datbas);
+    zzekacps_(handle, segdsc, &__state->c__3, &npage, &p, &datbas);
 
 /*     We'll use FROM to indicate the element of IVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    cleari_(&c__256, page);
+    cleari_(&__state->c__256, page);
     i__1 = nrows;
     for (from = 1; from <= i__1; ++from) {
 
@@ -938,7 +968,7 @@ static integer c__2 = 2;
 	dasudi_(handle, &i__1, &i__2, &idxbas);
 	i__1 = dscbas + 6;
 	i__2 = dscbas + 6;
-	dasudi_(handle, &i__1, &i__2, &c__2);
+	dasudi_(handle, &i__1, &i__2, &__state->c__2);
     }
     if (nullok) {
 

@@ -1,15 +1,21 @@
-/* ckgp.f -- translated by f2c (version 19980913).
+/* ckgp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__9 = 9;
+extern ckgp_init_t __ckgp_init;
+static ckgp_state_t* get_ckgp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgp)
+		state->ckgp = __cspice_allocate_module(sizeof(ckgp_state_t), &
+	__ckgp_init, sizeof(__ckgp_init));
+	return state->ckgp;
+
+}
 
 /* $Procedure      CKGP ( C-kernel, get pointing ) */
 /* Subroutine */ int ckgp_(integer *inst, doublereal *sclkdp, doublereal *tol,
@@ -18,42 +24,46 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
-    logical pfnd, sfnd;
+    logical pfnd;
+    logical sfnd;
     integer sclk;
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *),
-	     zznamfrm_(integer *, char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    integer type1, type2;
+    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    integer type1;
+    integer type2;
     extern /* Subroutine */ int zzctruin_(integer *);
     char segid[40];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), ckbss_(integer *, doublereal *, 
-	    doublereal *, logical *), ckpfs_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
-	     doublereal *, logical *), moved_(doublereal *, integer *, 
-	    doublereal *), cksns_(integer *, doublereal *, char *, logical *, 
-	    ftnlen);
-    static char svref[32];
+	    doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
+	    logical *);
+    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
+	     logical *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
+	    logical *, ftnlen);
     logical gotit;
-    static integer svctr1[2];
     extern logical failed_(void);
-    doublereal av[3], et;
+    doublereal av[3];
+    doublereal et;
     integer handle;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     logical needav;
     extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
-    integer refseg, center;
+    integer refseg;
+    integer center;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
 	    integer *, logical *);
-    integer refreq, typeid;
+    integer refreq;
+    integer typeid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpmat[9]	/* was [3][3] */;
-    static integer svrefr;
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
@@ -61,6 +71,9 @@ static integer c__9 = 9;
 	    ;
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    ckgp_state_t* __state = get_ckgp_state();
 /* $ Abstract */
 
 /*     Get pointing (attitude) for a specified spacecraft clock time. */
@@ -1027,12 +1040,12 @@ static integer c__9 = 9;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Don't need angular velocity data. */
@@ -1068,13 +1081,13 @@ static integer c__9 = 9;
 /*           Found one. If the C-matrix doesn't already rotate from the */
 /*           requested frame, convert it to one that does. */
 
-	    dafus_(descr, &c__2, &c__6, dcd, icd);
+	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 	    refseg = icd[1];
 
 /*           Look up the id code for the requested reference frame. */
 
-	    zznamfrm_(svctr1, svref, &svrefr, ref, &refreq, (ftnlen)32, 
-		    ref_len);
+	    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefr, ref, 
+		    &refreq, (ftnlen)32, ref_len);
 	    if (refreq != refseg) {
 
 /*              We may need to convert the output ticks CLKOUT to ET */
@@ -1116,7 +1129,7 @@ static integer c__9 = 9;
 /*              it maps from request frame to C-matrix frame. */
 
 		mxm_(cmat, rot, tmpmat);
-		moved_(tmpmat, &c__9, cmat);
+		moved_(tmpmat, &__state->c__9, cmat);
 	    }
 	    *found = TRUE_;
 	    chkout_("CKGP", (ftnlen)4);

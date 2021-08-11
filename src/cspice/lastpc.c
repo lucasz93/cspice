@@ -1,9 +1,17 @@
-/* lastpc.f -- translated by f2c (version 19980913).
+/* lastpc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lastpc_state_t;
+static lastpc_state_t* get_lastpc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             LASTPC ( Last printable character ) */
 integer lastpc_(char *string, ftnlen string_len)
@@ -17,6 +25,9 @@ integer lastpc_(char *string, ftnlen string_len)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    lastpc_state_t* __state = get_lastpc_state();
 /* $ Abstract */
 
 /*     Return the index of the last printable character in a character */

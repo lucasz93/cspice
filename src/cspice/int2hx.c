@@ -1,9 +1,21 @@
-/* int2hx.f -- translated by f2c (version 19980913).
+/* int2hx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern int2hx_init_t __int2hx_init;
+static int2hx_state_t* get_int2hx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->int2hx)
+		state->int2hx = __cspice_allocate_module(sizeof(
+	int2hx_state_t), &__int2hx_init, sizeof(__int2hx_init));
+	return state->int2hx;
+
+}
 
 /* $Procedure  INT2HX  ( Integer to signed hexadecimal string ) */
 /* Subroutine */ int int2hx_(integer *number, char *string, integer *length, 
@@ -11,8 +23,6 @@
 {
     /* Initialized data */
 
-    static char digits[1*16] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" 
-	    "B" "C" "D" "E" "F";
 
     /* System generated locals */
     integer i__1;
@@ -22,9 +32,15 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer begin, itemp, remndr, result;
+    integer begin;
+    integer itemp;
+    integer remndr;
+    integer result;
     char tmpstr[255];
 
+
+    /* Module state */
+    int2hx_state_t* __state = get_int2hx_state();
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent signed hexadecimal string. */
@@ -285,9 +301,9 @@
 	    result = itemp / 16;
 	    remndr = (result << 4) - itemp;
 	    itemp = result;
-	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&digits[(
-		    i__1 = remndr) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "int2hx_", (ftnlen)301)];
+	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = remndr) < 16 && 0 <= i__1 ? i__1 :
+		     s_rnge("digits", i__1, "int2hx_", (ftnlen)301)];
 	}
 
 /*        Put the minus sign in place. */
@@ -305,16 +321,17 @@
 	    result = itemp / 16;
 	    remndr = itemp - (result << 4);
 	    itemp = result;
-	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&digits[(
-		    i__1 = remndr) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits",
-		     i__1, "int2hx_", (ftnlen)322)];
+	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&
+		    __state->digits[(i__1 = remndr) < 16 && 0 <= i__1 ? i__1 :
+		     s_rnge("digits", i__1, "int2hx_", (ftnlen)322)];
 	}
     } else {
 
 /*        Treat zero as a special case, because it's easier. */
 
 	--begin;
-	*(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&digits[0];
+	*(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&
+		__state->digits[0];
     }
 
 /*     Set the value of the output string before returning. Let the */

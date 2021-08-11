@@ -1,39 +1,57 @@
-/* zzdynoac.f -- translated by f2c (version 19980913).
+/* zzdynoac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__32 = 32;
-static integer c__1 = 1;
+extern zzdynoac_init_t __zzdynoac_init;
+static zzdynoac_state_t* get_zzdynoac_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdynoac)
+		state->zzdynoac = __cspice_allocate_module(sizeof(
+	zzdynoac_state_t), &__zzdynoac_init, sizeof(__zzdynoac_init));
+	return state->zzdynoac;
+
+}
 
 /* $Procedure ZZDYNOAC ( Fetch optional array, character frame variable ) */
 /* Subroutine */ int zzdynoac_(char *frname, integer *frcode, char *item, 
 	integer *maxn, integer *n, char *values, logical *found, ftnlen 
 	frname_len, ftnlen item_len, ftnlen values_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen), repmi_(char *, char *, integer *, char *,
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     char dtype[1];
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
-    integer codeln, nameln;
-    char kvname[32], cdestr[32];
-    integer itemln, reqnam;
+    integer codeln;
+    integer nameln;
+    char kvname[32];
+    char cdestr[32];
+    integer itemln;
+    integer reqnam;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     integer reqnum;
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), dtpool_(
-	    char *, logical *, integer *, char *, ftnlen, ftnlen), setmsg_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen), gcpool_(char *, integer *, integer *, integer *, char 
-	    *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
+	    *, char *, logical *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzdynoac_state_t* __state = get_zzdynoac_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -677,7 +695,7 @@ static integer c__1 = 1;
 	    errch_("#", frname, (ftnlen)1, frname_len);
 	    errch_("#", item, (ftnlen)1, item_len);
 	    errint_("#", &reqnam, (ftnlen)1);
-	    errint_("#", &c__32, (ftnlen)1);
+	    errint_("#", &__state->c__32, (ftnlen)1);
 	    sigerr_("SPICE(VARNAMETOOLONG)", (ftnlen)21);
 	    chkout_("ZZDYNOAC", (ftnlen)8);
 	    return 0;
@@ -743,7 +761,8 @@ static integer c__1 = 1;
 
 /*     Look up the kernel variable. */
 
-    gcpool_(kvname, &c__1, maxn, n, values, found, (ftnlen)32, values_len);
+    gcpool_(kvname, &__state->c__1, maxn, n, values, found, (ftnlen)32, 
+	    values_len);
     if (! (*found)) {
 	setmsg_("Variable # not found after DTPOOL indicated it was present "
 		"in pool.", (ftnlen)67);

@@ -1,20 +1,33 @@
-/* dvcrss.f -- translated by f2c (version 19980913).
+/* dvcrss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dvcrss_state_t;
+static dvcrss_state_t* get_dvcrss_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DVCRSS ( Derivative of Vector cross product ) */
 /* Subroutine */ int dvcrss_(doublereal *s1, doublereal *s2, doublereal *sout)
 {
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal vtemp[3];
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    doublereal dvtmp1[3], dvtmp2[3];
+    doublereal dvtmp1[3];
+    doublereal dvtmp2[3];
 
+
+    /* Module state */
+    dvcrss_state_t* __state = get_dvcrss_state();
 /* $ Abstract */
 
 /*     Compute the cross product of two 3-dimensional vectors */

@@ -1,13 +1,21 @@
-/* zzekmloc.f -- translated by f2c (version 19980913).
+/* zzekmloc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekmloc_init_t __zzekmloc_init;
+static zzekmloc_state_t* get_zzekmloc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekmloc)
+		state->zzekmloc = __cspice_allocate_module(sizeof(
+	zzekmloc_state_t), &__zzekmloc_init, sizeof(__zzekmloc_init));
+	return state->zzekmloc;
+
+}
 
 /* $Procedure      ZZEKMLOC ( EK, return integer metadata location ) */
 /* Subroutine */ int zzekmloc_(integer *handle, integer *segno, integer *page,
@@ -17,7 +25,8 @@ static integer c__1 = 1;
     integer i__1, i__2;
 
     /* Local variables */
-    integer nseg, tree;
+    integer nseg;
+    integer tree;
     extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
 	    integer *);
     extern integer zzektrbs_(integer *);
@@ -26,10 +35,14 @@ static integer c__1 = 1;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
     extern integer eknseg_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekmloc_state_t* __state = get_zzekmloc_state();
 /* $ Abstract */
 
 /*     Return the integer metadata location of a specified segment.  The */
@@ -258,7 +271,7 @@ static integer c__1 = 1;
 /*     Find the segment in the segment tree. */
 /*     Obtain the base address of the first integer page. */
 
-    tbase = zzektrbs_(&c__1);
+    tbase = zzektrbs_(&__state->c__1);
 
 /*     Look up the head node of the segment tree. */
 

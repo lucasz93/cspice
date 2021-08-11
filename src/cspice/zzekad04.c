@@ -1,16 +1,21 @@
-/* zzekad04.f -- translated by f2c (version 19980913).
+/* zzekad04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
-static integer c__0 = 0;
+extern zzekad04_init_t __zzekad04_init;
+static zzekad04_state_t* get_zzekad04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekad04)
+		state->zzekad04 = __cspice_allocate_module(sizeof(
+	zzekad04_state_t), &__zzekad04_init, sizeof(__zzekad04_init));
+	return state->zzekad04;
+
+}
 
 /* $Procedure     ZZEKAD04 ( EK, add data to class 4 column ) */
 /* Subroutine */ int zzekad04_(integer *handle, integer *segdsc, integer *
@@ -24,22 +29,41 @@ static integer c__0 = 0;
     integer nrec;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     integer room;
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *), 
-	    zzekglnk_(integer *, integer *, integer *, integer *), zzeksfwd_(
-	    integer *, integer *, integer *, integer *), zzekslnk_(integer *, 
-	    integer *, integer *, integer *);
-    integer p, mbase, pbase;
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer mbase;
+    integer pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, lastw, start, p2;
+    integer recno;
+    integer ncols;
+    integer lastw;
+    integer start;
+    integer p2;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *);
-    integer remain, colidx, datptr, nlinks, nwrite, ptrloc;
+    integer remain;
+    integer colidx;
+    integer datptr;
+    integer nlinks;
+    integer nwrite;
+    integer ptrloc;
     logical fstpag;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekaps_(integer *, integer *, integer *, logical *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekad04_state_t* __state = get_zzekad04_state();
 /* $ Abstract */
 
 /*     Add a column entry to a specified record in a class 4 column. */
@@ -834,7 +858,7 @@ static integer c__0 = 0;
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n2);
+	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n2);
     } else {
 	lastw = segdsc[20];
 	room = 254 - lastw;
@@ -855,7 +879,7 @@ static integer c__0 = 0;
 /*              the current page. */
 
 		p = segdsc[17];
-		zzekpgbs_(&c__3, &p, &pbase);
+		zzekpgbs_(&__state->c__3, &p, &pbase);
 		datptr = pbase + lastw + 1;
 		if (fstpag) {
 		    dasudi_(handle, &ptrloc, &ptrloc, &datptr);
@@ -872,9 +896,9 @@ static integer c__0 = 0;
 
 /*              The page containing the data item gains a link. */
 
-		zzekglnk_(handle, &c__3, &p, &nlinks);
+		zzekglnk_(handle, &__state->c__3, &p, &nlinks);
 		i__1 = nlinks + 1;
-		zzekslnk_(handle, &c__3, &p, &i__1);
+		zzekslnk_(handle, &__state->c__3, &p, &i__1);
 
 /*              The last integer word in use must be updated.  Account */
 /*              for the count, if this is the first page on which the */
@@ -892,9 +916,10 @@ static integer c__0 = 0;
 /*              page written to, link the previous page to the current */
 /*              one. */
 
-		zzekaps_(handle, segdsc, &c__3, &c_false, &p2, &pbase);
+		zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &
+			p2, &pbase);
 		if (! fstpag) {
-		    zzeksfwd_(handle, &c__3, &p, &p2);
+		    zzeksfwd_(handle, &__state->c__3, &p, &p2);
 		}
 
 /*              The last integer page and word in use must be updated. */
@@ -907,7 +932,7 @@ static integer c__0 = 0;
 
 /*              Make sure the link count is zeroed out. */
 
-		zzekslnk_(handle, &c__3, &p, &c__0);
+		zzekslnk_(handle, &__state->c__3, &p, &__state->c__0);
 	    }
 	}
     }

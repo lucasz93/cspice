@@ -1,9 +1,17 @@
-/* polyds.f -- translated by f2c (version 19980913).
+/* polyds.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int polyds_state_t;
+static polyds_state_t* get_polyds_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      POLYDS ( Compute a Polynomial and its Derivatives ) */
 /* Subroutine */ int polyds_(doublereal *coeffs, integer *deg, integer *
@@ -13,9 +21,13 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, k;
+    integer i__;
+    integer k;
     doublereal scale;
 
+
+    /* Module state */
+    polyds_state_t* __state = get_polyds_state();
 /* $ Abstract */
 
 /*     Compute the value of a polynomial and it's first */

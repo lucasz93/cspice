@@ -1,9 +1,21 @@
-/* zzektrlk.f -- translated by f2c (version 19980913).
+/* zzektrlk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzektrlk_init_t __zzektrlk_init;
+static zzektrlk_state_t* get_zzektrlk_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrlk)
+		state->zzektrlk = __cspice_allocate_module(sizeof(
+	zzektrlk_state_t), &__zzektrlk_init, sizeof(__zzektrlk_init));
+	return state->zzektrlk;
+
+}
 
 /* $Procedure      ZZEKTRLK ( EK tree, locate key ) */
 /* Subroutine */ int zzektrlk_(integer *handle, integer *tree, integer *key, 
@@ -12,25 +24,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer oldval = 0;
-    static integer page[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-	    0,0,0 };
-    static integer oldhan = 0;
-    static integer oldidx = 0;
-    static integer oldkey = 0;
-    static integer oldlvl = 0;
-    static integer oldmax = 0;
-    static integer oldnod = 0;
-    static integer oldnof = 0;
-    static integer oldtre = 0;
 
     /* System generated locals */
     integer i__1;
@@ -40,24 +33,19 @@
 	    char *, integer);
 
     /* Local variables */
-    static logical leaf;
-    static integer prev, plus;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    static integer child;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer depth;
-    static logical found;
-    static integer minus;
-    static char access[15];
-    static integer datbas;
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
     extern integer lstlei_(integer *, integer *, integer *);
-    static integer newkey, prvkey, totkey;
-    static logical samkey, samtre, rdonly;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzektrlk_state_t* __state = get_zzektrlk_state();
 /* $ Abstract */
 
 /*     Locate a specified key.  Return metadata describing the node */
@@ -612,17 +600,18 @@
 
 /*     Nothing found to begin with. */
 
-    found = FALSE_;
-    if (first) {
+    __state->found = FALSE_;
+    if (__state->first) {
 
 /*        Find out the access method for the current file. */
 
-	dasham_(handle, access, (ftnlen)15);
-	rdonly = s_cmp(access, "READ", (ftnlen)15, (ftnlen)4) == 0;
-	samkey = FALSE_;
-	samtre = FALSE_;
-	leaf = FALSE_;
-	first = FALSE_;
+	dasham_(handle, __state->access, (ftnlen)15);
+	__state->rdonly = s_cmp(__state->access, "READ", (ftnlen)15, (ftnlen)
+		4) == 0;
+	__state->samkey = FALSE_;
+	__state->samtre = FALSE_;
+	__state->leaf = FALSE_;
+	__state->first = FALSE_;
     } else {
 
 /*        See whether we're looking at the same key, or at least */
@@ -630,14 +619,15 @@
 /*        be guaranteed to be the same, it must belong to a file open */
 /*        for read access only. */
 
-	if (*handle != oldhan) {
-	    dasham_(handle, access, (ftnlen)15);
-	    rdonly = s_cmp(access, "READ", (ftnlen)15, (ftnlen)4) == 0;
-	    samtre = FALSE_;
-	    samkey = FALSE_;
+	if (*handle != __state->oldhan) {
+	    dasham_(handle, __state->access, (ftnlen)15);
+	    __state->rdonly = s_cmp(__state->access, "READ", (ftnlen)15, (
+		    ftnlen)4) == 0;
+	    __state->samtre = FALSE_;
+	    __state->samkey = FALSE_;
 	} else {
-	    samtre = *tree == oldtre && rdonly;
-	    samkey = *key == oldkey && samtre;
+	    __state->samtre = *tree == __state->oldtre && __state->rdonly;
+	    __state->samkey = *key == __state->oldkey && __state->samtre;
 	}
     }
 
@@ -646,42 +636,44 @@
 /*     very close to the previously requested key, we still may make */
 /*     out pretty well. */
 
-    if (samkey) {
+    if (__state->samkey) {
 
 /*        It's the same key as last time. */
 
-	*idx = oldidx;
-	*node = oldnod;
-	*noffst = oldnof;
-	*level = oldlvl;
-	*value = oldval;
+	*idx = __state->oldidx;
+	*node = __state->oldnod;
+	*noffst = __state->oldnof;
+	*level = __state->oldlvl;
+	*value = __state->oldval;
 	return 0;
-    } else if (samtre && leaf) {
+    } else if (__state->samtre && __state->leaf) {
 
 /*        Compute the margins around the old key.  Keys that fall within */
 /*        the interval defined by the old key and these margins are on */
 /*        the same page as the old key. */
 
-	plus = oldmax - oldidx;
-	minus = oldidx - 1;
-	if (*key <= oldkey + plus && *key >= oldkey - minus) {
+	__state->plus = __state->oldmax - __state->oldidx;
+	__state->minus = __state->oldidx - 1;
+	if (*key <= __state->oldkey + __state->plus && *key >= 
+		__state->oldkey - __state->minus) {
 
 /*           The requested key lies on the same page as the old key. */
 
-	    *level = oldlvl;
+	    *level = __state->oldlvl;
 	    if (*level == 1) {
-		datbas = 172;
+		__state->datbas = 172;
 	    } else {
-		datbas = 128;
+		__state->datbas = 128;
 	    }
-	    *idx = oldidx + (*key - oldkey);
-	    *node = oldnod;
-	    *noffst = oldnof;
-	    *value = page[(i__1 = datbas + *idx - 1) < 256 && 0 <= i__1 ? 
-		    i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)332)];
-	    oldidx = *idx;
-	    oldkey = *key;
-	    oldval = *value;
+	    *idx = __state->oldidx + (*key - __state->oldkey);
+	    *node = __state->oldnod;
+	    *noffst = __state->oldnof;
+	    *value = __state->page[(i__1 = __state->datbas + *idx - 1) < 256 
+		    && 0 <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
+		    ftnlen)332)];
+	    __state->oldidx = *idx;
+	    __state->oldkey = *key;
+	    __state->oldval = *value;
 	    return 0;
 	}
     }
@@ -690,19 +682,19 @@
 /*     Start out by looking at the root page.  Save the tree depth; */
 /*     we'll use this for error checking. */
 
-    zzekpgri_(handle, tree, page);
-    depth = page[3];
+    zzekpgri_(handle, tree, __state->page);
+    __state->depth = __state->page[3];
     *level = 1;
 
 /*     Find out how many keys are in the tree.  If KEY is outside */
 /*     this range, we won't find it. */
 
-    totkey = page[2];
-    if (*key < 1 || *key > totkey) {
+    __state->totkey = __state->page[2];
+    if (*key < 1 || *key > __state->totkey) {
 	chkin_("ZZEKTRLK", (ftnlen)8);
 	setmsg_("Key = #; valid range = 1:#. Tree = #, file = #", (ftnlen)46);
 	errint_("#", key, (ftnlen)1);
-	errint_("#", &totkey, (ftnlen)1);
+	errint_("#", &__state->totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
@@ -713,33 +705,34 @@
 /*     Find the last key at this level that is less than or equal to */
 /*     the requested key. */
 
-    prev = lstlei_(key, &page[4], &page[5]);
-    if (prev > 0) {
-	prvkey = page[(i__1 = prev + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrlk_", (ftnlen)381)];
+    __state->prev = lstlei_(key, &__state->page[4], &__state->page[5]);
+    if (__state->prev > 0) {
+	__state->prvkey = __state->page[(i__1 = __state->prev + 4) < 256 && 0 
+		<= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)
+		381)];
     } else {
-	prvkey = 0;
+	__state->prvkey = 0;
     }
 
 /*     If we were lucky enough to get an exact match, set our outputs */
 /*     and return.  The key offset in the root is zero. */
 
-    if (prvkey == *key) {
+    if (__state->prvkey == *key) {
 	*noffst = 0;
-	*idx = prev;
+	*idx = __state->prev;
 	*node = *tree;
-	*value = page[(i__1 = *idx + 171) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrlk_", (ftnlen)395)];
-	oldhan = *handle;
-	oldtre = *tree;
-	oldkey = *key;
-	oldnof = *noffst;
-	oldnod = *node;
-	oldidx = *idx;
-	oldlvl = *level;
-	oldval = *value;
-	oldmax = page[4];
-	leaf = *level == depth;
+	*value = __state->page[(i__1 = *idx + 171) < 256 && 0 <= i__1 ? i__1 :
+		 s_rnge("page", i__1, "zzektrlk_", (ftnlen)395)];
+	__state->oldhan = *handle;
+	__state->oldtre = *tree;
+	__state->oldkey = *key;
+	__state->oldnof = *noffst;
+	__state->oldnod = *node;
+	__state->oldidx = *idx;
+	__state->oldlvl = *level;
+	__state->oldval = *value;
+	__state->oldmax = __state->page[4];
+	__state->leaf = *level == __state->depth;
 
 /*        The root has no parent or siblings, so these values */
 /*        remain set to zero.  The same is true of the parent keys. */
@@ -750,21 +743,21 @@
 /*     Still here?  Traverse the pointer path until we find the key */
 /*     or run out of progeny. */
 
-    child = page[(i__1 = prev + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("page",
-	     i__1, "zzektrlk_", (ftnlen)421)];
-    *noffst = prvkey;
-    while(child > 0 && ! found) {
+    __state->child = __state->page[(i__1 = __state->prev + 88) < 256 && 0 <= 
+	    i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)421)];
+    *noffst = __state->prvkey;
+    while(__state->child > 0 && ! __state->found) {
 
 /*        Look up the child node. */
 
-	zzekpgri_(handle, &child, page);
+	zzekpgri_(handle, &__state->child, __state->page);
 	++(*level);
-	if (*level > depth) {
+	if (*level > __state->depth) {
 	    chkin_("ZZEKTRLK", (ftnlen)8);
 	    setmsg_("Runaway node pointer chain.  Key = #; valid range = 1:#"
 		    ". Tree = #, file = #", (ftnlen)75);
 	    errint_("#", key, (ftnlen)1);
-	    errint_("#", &totkey, (ftnlen)1);
+	    errint_("#", &__state->totkey, (ftnlen)1);
 	    errint_("#", tree, (ftnlen)1);
 	    errhan_("#", handle, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
@@ -778,52 +771,55 @@
 /*        current node, we must subtract from KEY the position of the */
 /*        node preceding the first key of this subtree. */
 
-	newkey = *key - *noffst;
-	prev = lstlei_(&newkey, page, &page[1]);
-	if (prev > 0) {
-	    prvkey = page[(i__1 = prev) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "page", i__1, "zzektrlk_", (ftnlen)460)];
+	__state->newkey = *key - *noffst;
+	__state->prev = lstlei_(&__state->newkey, __state->page, &
+		__state->page[1]);
+	if (__state->prev > 0) {
+	    __state->prvkey = __state->page[(i__1 = __state->prev) < 256 && 0 
+		    <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
+		    ftnlen)460)];
 	} else {
-	    prvkey = 0;
+	    __state->prvkey = 0;
 	}
 
 /*        If we were lucky enough to get an exact match, set our outputs */
 /*        and return.  The key offset for the current node is stored */
 /*        in NOFFST. */
 
-	if (prvkey == newkey) {
-	    found = TRUE_;
-	    *idx = prev;
-	    *node = child;
-	    *value = page[(i__1 = *idx + 127) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)475)];
-	    oldhan = *handle;
-	    oldtre = *tree;
-	    oldkey = *key;
-	    oldnof = *noffst;
-	    oldnod = *node;
-	    oldidx = *idx;
-	    oldlvl = *level;
-	    oldval = *value;
-	    oldmax = page[0];
-	    leaf = *level == depth;
+	if (__state->prvkey == __state->newkey) {
+	    __state->found = TRUE_;
+	    *idx = __state->prev;
+	    *node = __state->child;
+	    *value = __state->page[(i__1 = *idx + 127) < 256 && 0 <= i__1 ? 
+		    i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)475)];
+	    __state->oldhan = *handle;
+	    __state->oldtre = *tree;
+	    __state->oldkey = *key;
+	    __state->oldnof = *noffst;
+	    __state->oldnod = *node;
+	    __state->oldidx = *idx;
+	    __state->oldlvl = *level;
+	    __state->oldval = *value;
+	    __state->oldmax = __state->page[0];
+	    __state->leaf = *level == __state->depth;
 	} else {
-	    child = page[(i__1 = prev + 64) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrlk_", (ftnlen)491)];
-	    *noffst = prvkey + *noffst;
+	    __state->child = __state->page[(i__1 = __state->prev + 64) < 256 
+		    && 0 <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
+		    ftnlen)491)];
+	    *noffst = __state->prvkey + *noffst;
 	}
     }
 
 /*     If we found the key, our outputs are already set.  If not, we've */
 /*     got trouble. */
 
-    if (! found) {
+    if (! __state->found) {
 	chkin_("ZZEKTRLK", (ftnlen)8);
 	setmsg_("Key #; valid range = 1:#. Tree = #, file = #.  Key was not "
 		"found.  This probably indicates a corrupted file or a bug in"
 		" the EK code.", (ftnlen)132);
 	errint_("#", key, (ftnlen)1);
-	errint_("#", &totkey, (ftnlen)1);
+	errint_("#", &__state->totkey, (ftnlen)1);
 	errint_("#", tree, (ftnlen)1);
 	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);

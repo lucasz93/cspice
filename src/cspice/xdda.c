@@ -1,15 +1,21 @@
-/* xdda.f -- translated by f2c (version 19980913).
+/* xdda.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b67 = 0.;
-static doublereal c_b68 = 1.;
+extern xdda_init_t __xdda_init;
+static xdda_state_t* get_xdda_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->xdda)
+		state->xdda = __cspice_allocate_module(sizeof(xdda_state_t), &
+	__xdda_init, sizeof(__xdda_init));
+	return state->xdda;
+
+}
 
 /* $Procedure  XDDA  ( list voxels intersected by a ray ) */
 /* Subroutine */ int xdda_(doublereal *vertex, doublereal *raydir, integer *
@@ -17,7 +23,6 @@ static doublereal c_b68 = 1.;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -27,26 +32,34 @@ static doublereal c_b68 = 1.;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer step[3], i__;
+    integer step[3];
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer iaxis[3];
     doublereal limit;
     extern logical vzero_(doublereal *);
-    doublereal ax2err, ax3err, s12, s13;
+    doublereal ax2err;
+    doublereal ax3err;
+    doublereal s12;
+    doublereal s13;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     extern integer brckti_(integer *, integer *, integer *);
     integer icoord[3];
     doublereal maxcmp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal vtxoff[3];
     extern logical return_(void);
     integer intvtx[3];
     extern logical zzingrd_(integer *, integer *);
 
+
+    /* Module state */
+    xdda_state_t* __state = get_xdda_state();
 /* $ Abstract */
 
 /*     Given a ray and a voxel grid, return a list of voxels the ray */
@@ -457,10 +470,10 @@ static doublereal c_b68 = 1.;
 /*     labeled by IAXIS(1), IAXIS(2), and IAXIS(3):  the third axis is */
 /*     the cross product of the first and second. */
 
-    iaxis[1] = next[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "next", i__1, "xdda_", (ftnlen)472)];
-    iaxis[2] = next[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "next", i__1, "xdda_", (ftnlen)473)];
+    iaxis[1] = __state->next[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
+	    s_rnge("next", i__1, "xdda_", (ftnlen)472)];
+    iaxis[2] = __state->next[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : 
+	    s_rnge("next", i__1, "xdda_", (ftnlen)473)];
 
 /*     Which voxel contains the vertex? Truncate the vertex */
 /*     coordinates to integers. Add 1 to each coord to compensate */
@@ -479,10 +492,10 @@ static doublereal c_b68 = 1.;
 	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("icoord", 
 		i__1, "xdda_", (ftnlen)486)] = brckti_(&icoord[(i__2 = i__ - 
 		1) < 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
-		ftnlen)486)], &c__1, &grdext[(i__4 = iaxis[(i__3 = i__ - 1) < 
-		3 && 0 <= i__3 ? i__3 : s_rnge("iaxis", i__3, "xdda_", (
-		ftnlen)486)] - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("grdext", 
-		i__4, "xdda_", (ftnlen)486)]);
+		ftnlen)486)], &__state->c__1, &grdext[(i__4 = iaxis[(i__3 = 
+		i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("iaxis", i__3, 
+		"xdda_", (ftnlen)486)] - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
+		"grdext", i__4, "xdda_", (ftnlen)486)]);
 	voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("iaxis"
 		, i__1, "xdda_", (ftnlen)488)] - 1] = icoord[(i__2 = i__ - 1) 
 		< 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
@@ -512,17 +525,18 @@ static doublereal c_b68 = 1.;
 		- (icoord[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
 		"icoord", i__4, "xdda_", (ftnlen)513)] - 1);
 	vtxoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vtxoff", 
-		i__1, "xdda_", (ftnlen)513)] = brcktd_(&d__1, &c_b67, &c_b68);
+		i__1, "xdda_", (ftnlen)513)] = brcktd_(&d__1, &__state->c_b67,
+		 &__state->c_b68);
     }
 
 /*     Compute the lower limit on the magnitudes of RAYDIR( IAXIS(2) ) */
 /*     and of RAYDIR( IAXIS(3) ) for which we'll treat those components */
 /*     of the direction vector as non-zero. */
 
-    limit = 1e-20 / grdext[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("grdext", i__1, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
-	    i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-	    i__2, "xdda_", (ftnlen)523)], abs(d__1));
+    limit = 1e-20 / grdext[(i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : 
+	    s_rnge("grdext", i__2, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
+	    i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("raydir", 
+	    i__1, "xdda_", (ftnlen)523)], abs(d__1));
 
 /*     If the magnitude of RAYDIR( IAXIS(J) ), J = 2 or 3, is below */
 /*     LIMIT, then the ray can pass through the entire grid in the */

@@ -1,23 +1,34 @@
-/* reset.f -- translated by f2c (version 19980913).
+/* reset.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static logical c_true = TRUE_;
+extern reset_init_t __reset_init;
+static reset_state_t* get_reset_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->reset)
+		state->reset = __cspice_allocate_module(sizeof(reset_state_t),
+	 &__reset_init, sizeof(__reset_init));
+	return state->reset;
+
+}
 
 /* $Procedure      RESET ( Reset Error Status ) */
 /* Subroutine */ int reset_(void)
 {
     logical stat;
-    extern logical accept_(logical *), seterr_(logical *);
-    extern /* Subroutine */ int putlms_(char *, ftnlen), putsms_(char *, 
-	    ftnlen);
+    extern logical accept_(logical *);
+    extern logical seterr_(logical *);
+    extern /* Subroutine */ int putlms_(char *, ftnlen);
+    extern /* Subroutine */ int putsms_(char *, ftnlen);
 
+
+    /* Module state */
+    reset_state_t* __state = get_reset_state();
 /* $ Abstract */
 
 /*     Reset the SPICELIB error status to a value of "no error." */
@@ -224,7 +235,7 @@ static logical c_true = TRUE_;
 /*     This odd-looking function reference resets the error */
 /*     status to indicate "no error": */
 
-    stat = seterr_(&c_false);
+    stat = seterr_(&__state->c_false);
 
 /*     Wipe out the short and long error messages: */
 
@@ -233,7 +244,7 @@ static logical c_true = TRUE_;
 
 /*     Allow long error message to be updated: */
 
-    stat = accept_(&c_true);
+    stat = accept_(&__state->c_true);
     return 0;
 } /* reset_ */
 

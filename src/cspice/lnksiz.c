@@ -1,9 +1,17 @@
-/* lnksiz.f -- translated by f2c (version 19980913).
+/* lnksiz.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lnksiz_state_t;
+static lnksiz_state_t* get_lnksiz_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LNKSIZ ( LNK, size ) */
 integer lnksiz_(integer *pool)
@@ -11,6 +19,9 @@ integer lnksiz_(integer *pool)
     /* System generated locals */
     integer ret_val;
 
+
+    /* Module state */
+    lnksiz_state_t* __state = get_lnksiz_state();
 /* $ Abstract */
 
 /*     Return the size of a doubly linked list pool. */

@@ -1,9 +1,17 @@
-/* bsrchd.f -- translated by f2c (version 19980913).
+/* bsrchd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bsrchd_state_t;
+static bsrchd_state_t* get_bsrchd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure        BSRCHD ( Binary search for double precision value ) */
 integer bsrchd_(doublereal *value, integer *ndim, doublereal *array)
@@ -12,8 +20,13 @@ integer bsrchd_(doublereal *value, integer *ndim, doublereal *array)
     integer ret_val;
 
     /* Local variables */
-    integer left, i__, right;
+    integer left;
+    integer i__;
+    integer right;
 
+
+    /* Module state */
+    bsrchd_state_t* __state = get_bsrchd_state();
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a DOUBLE PRECISION */

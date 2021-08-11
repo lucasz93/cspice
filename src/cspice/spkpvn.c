@@ -1,65 +1,110 @@
-/* spkpvn.f -- translated by f2c (version 19980913).
+/* spkpvn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
-static integer c__198 = 198;
+extern spkpvn_init_t __spkpvn_init;
+static spkpvn_state_t* get_spkpvn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkpvn)
+		state->spkpvn = __cspice_allocate_module(sizeof(
+	spkpvn_state_t), &__spkpvn_init, sizeof(__spkpvn_init));
+	return state->spkpvn;
+
+}
 
 /* $Procedure SPKPVN ( S/P Kernel, position and velocity in native frame ) */
 /* Subroutine */ int spkpvn_(integer *handle, doublereal *descr, doublereal *
 	et, integer *ref, doublereal *state, integer *center)
 {
     integer type__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), spke01_(
-	    doublereal *, doublereal *, doublereal *), spke02_(doublereal *, 
-	    doublereal *, doublereal *), spke03_(doublereal *, doublereal *, 
-	    doublereal *), spke10_(doublereal *, doublereal *, doublereal *), 
-	    spke05_(doublereal *, doublereal *, doublereal *), spke12_(
-	    doublereal *, doublereal *, doublereal *), spke13_(doublereal *, 
-	    doublereal *, doublereal *), spke08_(doublereal *, doublereal *, 
-	    doublereal *), spke09_(doublereal *, doublereal *, doublereal *), 
-	    spke14_(doublereal *, doublereal *, doublereal *), spke15_(
-	    doublereal *, doublereal *, doublereal *), spke17_(doublereal *, 
-	    doublereal *, doublereal *), spke18_(doublereal *, doublereal *, 
-	    doublereal *), spkr01_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr02_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr03_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr05_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr10_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr12_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr08_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr09_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr13_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr14_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr15_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr17_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr18_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spkr19_(integer *, doublereal *, doublereal *, 
-	    doublereal *), spke19_(doublereal *, doublereal *, doublereal *), 
-	    spkr20_(integer *, doublereal *, doublereal *, doublereal *), 
-	    spke20_(doublereal *, doublereal *, doublereal *), spkr21_(
-	    integer *, doublereal *, doublereal *, doublereal *), spke21_(
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int spke01_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke02_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke03_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke10_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke05_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke12_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke13_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke08_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke09_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke14_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke15_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke17_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spke18_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spkr01_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr02_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr03_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr05_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr10_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr12_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr08_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr09_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr13_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr14_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr15_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr17_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr18_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spkr19_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spke19_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spkr20_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spke20_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int spkr21_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int spke21_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal dc[2];
     integer ic[6];
     extern logical failed_(void);
     doublereal record[198];
     extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *), sigerr_(char *, ftnlen), chkout_(char *,
-	     ftnlen);
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkpvn_state_t* __state = get_spkpvn_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -400,7 +445,7 @@ static integer c__198 = 198;
 /*     Unpacking the segment descriptor will tell us the center, */
 /*     reference frame, and data type for this segment. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     *center = ic[1];
     *ref = ic[2];
     type__ = ic[3];
@@ -452,7 +497,7 @@ static integer c__198 = 198;
 /*        in RECORD. The number of coefficients is the first constant */
 /*        value in the generic segment. */
 
-	sgfcon_(handle, descr, &c__1, &c__1, record);
+	sgfcon_(handle, descr, &__state->c__1, &__state->c__1, record);
 	if (failed_()) {
 	    chkout_("SPKPVN", (ftnlen)6);
 	    return 0;
@@ -464,7 +509,7 @@ static integer c__198 = 198;
 		    "date the parameter MAXREC in the subroutine SPKPVN and n"
 		    "otify the NAIF group of this problem.", (ftnlen)204);
 	    errint_("#", &recsiz, (ftnlen)1);
-	    errint_("#", &c__198, (ftnlen)1);
+	    errint_("#", &__state->c__198, (ftnlen)1);
 	    sigerr_("SPICE(SPKRECTOOLARGE)", (ftnlen)21);
 	    chkout_("SPKPVN", (ftnlen)6);
 	    return 0;

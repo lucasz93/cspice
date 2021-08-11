@@ -1,9 +1,17 @@
-/* elemi.f -- translated by f2c (version 19980913).
+/* elemi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int elemi_state_t;
+static elemi_state_t* get_elemi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            ELEMI ( Element of an integer set ) */
 logical elemi_(integer *item, integer *a)
@@ -19,6 +27,9 @@ logical elemi_(integer *item, integer *a)
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    elemi_state_t* __state = get_elemi_state();
 /* $ Abstract */
 
 /*      Determine whether an item is an element of an integer set. */

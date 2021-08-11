@@ -1,15 +1,21 @@
-/* zzektcnv.f -- translated by f2c (version 19980913).
+/* zzektcnv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__3 = 3;
+extern zzektcnv_init_t __zzektcnv_init;
+static zzektcnv_state_t* get_zzektcnv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektcnv)
+		state->zzektcnv = __cspice_allocate_module(sizeof(
+	zzektcnv_state_t), &__zzektcnv_init, sizeof(__zzektcnv_init));
+	return state->zzektcnv;
+
+}
 
 /* $Procedure  ZZEKTCNV ( Private: EK, time conversion ) */
 /* Subroutine */ int zzektcnv_(char *timstr, doublereal *et, logical *error, 
@@ -28,22 +34,28 @@ static integer c__3 = 3;
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     integer clkid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     integer ntvec;
     extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    scn2id_(char *, integer *, logical *, ftnlen), str2et_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int scn2id_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int str2et_(char *, doublereal *, ftnlen);
     extern logical failed_(void);
     doublereal sclkdp;
-    char modify[32*10], sclmsg[160];
-    logical succes, yabbrv;
+    char modify[32*10];
+    char sclmsg[160];
+    logical succes;
+    logical yabbrv;
     extern /* Subroutine */ int scpars_(integer *, char *, logical *, char *, 
-	    doublereal *, ftnlen, ftnlen), chkout_(char *, ftnlen), suffix_(
-	    char *, integer *, char *, ftnlen, ftnlen);
-    char locstr[80], pictur[80];
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    char locstr[80];
+    char pictur[80];
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
@@ -53,6 +65,9 @@ static integer c__3 = 3;
     logical fnd;
     integer loc;
 
+
+    /* Module state */
+    zzektcnv_state_t* __state = get_zzektcnv_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -300,7 +315,8 @@ static integer c__3 = 3;
 /*     match, remove the identifying substring (of the form */
 /*     'MO SCLK', 'VGR1 SCLK', etc.). */
 
-    cmprss_(" ", &c__1, timstr, locstr, (ftnlen)1, timstr_len, (ftnlen)80);
+    cmprss_(" ", &__state->c__1, timstr, locstr, (ftnlen)1, timstr_len, (
+	    ftnlen)80);
     ljust_(locstr, locstr, (ftnlen)80, (ftnlen)80);
     ucase_(locstr, locstr, (ftnlen)80, (ftnlen)80);
     i__1 = rtrim_(locstr, (ftnlen)80);
@@ -342,8 +358,8 @@ static integer c__3 = 3;
 	    *error = TRUE_;
 	    s_copy(errmsg, "Unexpected SPICELIB error encountered while atte"
 		    "mpting to parse the string <", errmsg_len, (ftnlen)76);
-	    suffix_(timstr, &c__0, errmsg, timstr_len, errmsg_len);
-	    suffix_(">", &c__0, errmsg, (ftnlen)1, errmsg_len);
+	    suffix_(timstr, &__state->c__0, errmsg, timstr_len, errmsg_len);
+	    suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
 	    chkout_("ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	} else if (*error) {
@@ -351,7 +367,7 @@ static integer c__3 = 3;
 		    "k string.", errmsg_len, (ftnlen)57);
 	    repmc_(errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1, 
 		    timstr_len, errmsg_len);
-	    suffix_(sclmsg, &c__3, errmsg, (ftnlen)160, errmsg_len);
+	    suffix_(sclmsg, &__state->c__3, errmsg, (ftnlen)160, errmsg_len);
 	    chkout_("ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	} else {
@@ -361,8 +377,9 @@ static integer c__3 = 3;
 		s_copy(errmsg, "Unexpected SPICELIB error encountered while "
 			"attempting to parse the string <", errmsg_len, (
 			ftnlen)76);
-		suffix_(timstr, &c__0, errmsg, timstr_len, errmsg_len);
-		suffix_(">", &c__0, errmsg, (ftnlen)1, errmsg_len);
+		suffix_(timstr, &__state->c__0, errmsg, timstr_len, 
+			errmsg_len);
+		suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
 		chkout_("ZZEKTCNV", (ftnlen)8);
 		return 0;
 	    }
@@ -385,8 +402,9 @@ static integer c__3 = 3;
 		s_copy(errmsg, "Unexpected SPICELIB error encountered while "
 			"attempting to parse the string <", errmsg_len, (
 			ftnlen)76);
-		suffix_(timstr, &c__0, errmsg, timstr_len, errmsg_len);
-		suffix_(">", &c__0, errmsg, (ftnlen)1, errmsg_len);
+		suffix_(timstr, &__state->c__0, errmsg, timstr_len, 
+			errmsg_len);
+		suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
 		chkout_("ZZEKTCNV", (ftnlen)8);
 		return 0;
 	    }

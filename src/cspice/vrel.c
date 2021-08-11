@@ -1,9 +1,17 @@
-/* vrel.f -- translated by f2c (version 19980913).
+/* vrel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vrel_state_t;
+static vrel_state_t* get_vrel_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  VREL ( Vector relative difference, 3 dimensions ) */
 doublereal vrel_(doublereal *v1, doublereal *v2)
@@ -12,10 +20,14 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
     doublereal ret_val, d__1, d__2;
 
     /* Local variables */
-    extern doublereal vdist_(doublereal *, doublereal *), vnorm_(doublereal *)
-	    ;
-    doublereal denorm, nunorm;
+    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vnorm_(doublereal *);
+    doublereal denorm;
+    doublereal nunorm;
 
+
+    /* Module state */
+    vrel_state_t* __state = get_vrel_state();
 /* $ Abstract */
 
 /*   Return the relative difference between two 3-dimensional vectors. */

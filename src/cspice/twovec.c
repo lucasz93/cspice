@@ -1,13 +1,21 @@
-/* twovec.f -- translated by f2c (version 19980913).
+/* twovec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
+extern twovec_init_t __twovec_init;
+static twovec_state_t* get_twovec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->twovec)
+		state->twovec = __cspice_allocate_module(sizeof(
+	twovec_state_t), &__twovec_init, sizeof(__twovec_init));
+	return state->twovec;
+
+}
 
 /* $Procedure      TWOVEC ( Two vectors defining an orthonormal frame ) */
 /* Subroutine */ int twovec_(doublereal *axdef, integer *indexa, doublereal *
@@ -15,7 +23,6 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static integer seqnce[5] = { 1,2,3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -24,16 +31,25 @@ static integer c__9 = 9;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), chkin_(
-	    char *, ftnlen), moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal mtemp[9]	/* was [3][3] */;
-    integer i1, i2, i3;
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *), ucrss_(
-	    doublereal *, doublereal *, doublereal *), sigerr_(char *, ftnlen)
-	    , chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *
-	    , integer *, ftnlen);
+    integer i1;
+    integer i2;
+    integer i3;
+    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    twovec_state_t* __state = get_twovec_state();
 /* $ Abstract */
 
 /*     Find the transformation to the right-handed frame having a */
@@ -265,10 +281,10 @@ static integer c__9 = 9;
 
 /*     ... then the other two. */
 
-    i2 = seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce", 
-	    i__1, "twovec_", (ftnlen)270)];
-    i3 = seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce"
-	    , i__1, "twovec_", (ftnlen)271)];
+    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "seqnce", i__1, "twovec_", (ftnlen)270)];
+    i3 = __state->seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : 
+	    s_rnge("seqnce", i__1, "twovec_", (ftnlen)271)];
 
 /*     Row I1 contains normalized AXDEF (store in columns for now) */
 
@@ -312,7 +328,7 @@ static integer c__9 = 9;
 /*     Transpose MOUT. */
 
     xpose_(mout, mtemp);
-    moved_(mtemp, &c__9, mout);
+    moved_(mtemp, &__state->c__9, mout);
     chkout_("TWOVEC", (ftnlen)6);
     return 0;
 } /* twovec_ */

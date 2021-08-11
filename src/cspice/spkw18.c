@@ -1,16 +1,21 @@
-/* spkw18.f -- translated by f2c (version 19980913).
+/* spkw18.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__15 = 15;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spkw18_init_t __spkw18_init;
+static spkw18_state_t* get_spkw18_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw18)
+		state->spkw18 = __cspice_allocate_module(sizeof(
+	spkw18_state_t), &__spkw18_init, sizeof(__spkw18_init));
+	return state->spkw18;
+
+}
 
 /* $Procedure      SPKW18 ( Write SPK segment, type 18 ) */
 /* Subroutine */ int spkw18_(integer *handle, integer *subtyp, integer *body, 
@@ -24,31 +29,36 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
     doublereal dc[2];
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
 	    ftnlen);
     integer ic[6];
     extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod;
+    integer chrcod;
+    integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal maxtim;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer winsiz;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    spkw18_state_t* __state = get_spkw18_state();
 /* $ Abstract */
 
 /*     Write a type 18 segment to an SPK file. */
@@ -470,7 +480,7 @@ static integer c__1 = 1;
 	setmsg_("The interpolating polynomials have degree #; the valid degr"
 		"ee range is [1, #]", (ftnlen)77);
 	errint_("#", degree, (ftnlen)1);
-	errint_("#", &c__15, (ftnlen)1);
+	errint_("#", &__state->c__15, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	chkout_("SPKW18", (ftnlen)6);
 	return 0;
@@ -569,7 +579,7 @@ static integer c__1 = 1;
     ic[3] = 18;
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&c__2, &c__6, dc, ic, descr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
@@ -624,14 +634,14 @@ static integer c__1 = 1;
     dafada_(epochs, n);
     i__1 = (*n - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &c__1);
+	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) (*subtyp);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) winsiz;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

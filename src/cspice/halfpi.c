@@ -1,16 +1,27 @@
-/* halfpi.f -- translated by f2c (version 19980913).
+/* halfpi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern halfpi_init_t __halfpi_init;
+static halfpi_state_t* get_halfpi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->halfpi)
+		state->halfpi = __cspice_allocate_module(sizeof(
+	halfpi_state_t), &__halfpi_init, sizeof(__halfpi_init));
+	return state->halfpi;
+
+}
 
 /* $Procedure                     HALFPI ( Half the value of pi ) */
 doublereal halfpi_(void)
 {
     /* Initialized data */
 
-    static doublereal value = 0.;
 
     /* System generated locals */
     doublereal ret_val;
@@ -18,6 +29,9 @@ doublereal halfpi_(void)
     /* Builtin functions */
     double acos(doublereal);
 
+
+    /* Module state */
+    halfpi_state_t* __state = get_halfpi_state();
 /* $ Abstract */
 
 /*     Return half the value of pi (the ratio of the circumference of */
@@ -171,10 +185,10 @@ doublereal halfpi_(void)
 
 /*     What is there to say? */
 
-    if (value == 0.) {
-	value = acos(-1.) * .5;
+    if (__state->value == 0.) {
+	__state->value = acos(-1.) * .5;
     }
-    ret_val = value;
+    ret_val = __state->value;
     return ret_val;
 } /* halfpi_ */
 

@@ -1,9 +1,17 @@
-/* reordc.f -- translated by f2c (version 19980913).
+/* reordc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reordc_state_t;
+static reordc_state_t* get_reordc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REORDC ( Reorder a character array ) */
 /* Subroutine */ int reordc_(integer *iorder, integer *ndim, char *array, 
@@ -18,8 +26,13 @@
     /* Local variables */
     integer hold;
     char temp[1];
-    integer c__, index, start;
+    integer c__;
+    integer index;
+    integer start;
 
+
+    /* Module state */
+    reordc_state_t* __state = get_reordc_state();
 /* $ Abstract */
 
 /*      Re-order the elements of an array of character strings */

@@ -1,27 +1,43 @@
-/* dcyldr.f -- translated by f2c (version 19980913).
+/* dcyldr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dcyldr_state_t;
+static dcyldr_state_t* get_dcyldr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DCYLDR (Derivative of cylindrical w.r.t. rectangular ) */
 /* Subroutine */ int dcyldr_(doublereal *x, doublereal *y, doublereal *z__, 
 	doublereal *jacobi)
 {
-    doublereal long__, r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vpack_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    doublereal injacb[9]	/* was [3][3] */, rectan[3];
+    doublereal long__;
+    doublereal r__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    doublereal injacb[9]	/* was [3][3] */;
+    doublereal rectan[3];
     extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), drdcyl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int drdcyl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     doublereal zz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int invort_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    dcyldr_state_t* __state = get_dcyldr_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

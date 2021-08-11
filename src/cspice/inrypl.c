@@ -1,14 +1,21 @@
-/* inrypl.f -- translated by f2c (version 19980913).
+/* inrypl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b16 = 1.;
+extern inrypl_init_t __inrypl_init;
+static inrypl_state_t* get_inrypl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->inrypl)
+		state->inrypl = __cspice_allocate_module(sizeof(
+	inrypl_state_t), &__inrypl_init, sizeof(__inrypl_init));
+	return state->inrypl;
+
+}
 
 /* $Procedure      INRYPL ( Intersection of ray and plane ) */
 /* Subroutine */ int inrypl_(doublereal *vertex, doublereal *dir, doublereal *
@@ -19,8 +26,9 @@ static doublereal c_b16 = 1.;
 
     /* Local variables */
     doublereal udir[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vscl_(
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
+	    );
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal scale;
@@ -28,19 +36,30 @@ static doublereal c_b16 = 1.;
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    doublereal const__, prjvn;
+    doublereal const__;
+    doublereal prjvn;
     extern doublereal vnorm_(doublereal *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *), cleard_(integer *, doublereal *);
-    doublereal mscale, prjdif, sclcon, toobig, normal[3], prjdir;
+	    doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    doublereal mscale;
+    doublereal prjdif;
+    doublereal sclcon;
+    doublereal toobig;
+    doublereal normal[3];
+    doublereal prjdir;
     extern logical smsgnd_(doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal sclvtx[3];
 
+
+    /* Module state */
+    inrypl_state_t* __state = get_inrypl_state();
 /* $ Abstract */
 
 /*     Find the intersection of a ray and a plane. */
@@ -744,7 +763,7 @@ static doublereal c_b16 = 1.;
 /*        The ray is parallel to or points away from the plane. */
 
 	*nxpts = 0;
-	cleard_(&c__3, xpt);
+	cleard_(&__state->c__3, xpt);
 	return 0;
     }
 
@@ -771,7 +790,7 @@ static doublereal c_b16 = 1.;
 /*        exists. */
 
 	*nxpts = 0;
-	cleard_(&c__3, xpt);
+	cleard_(&__state->c__3, xpt);
 	return 0;
     }
 
@@ -782,7 +801,7 @@ static doublereal c_b16 = 1.;
 
     *nxpts = 1;
     scale = abs(prjdif) / abs(prjdir);
-    vlcom_(&c_b16, sclvtx, &scale, udir, xpt);
+    vlcom_(&__state->c_b16, sclvtx, &scale, udir, xpt);
 
 /*     Re-scale XPT.  This is safe, since TOOBIG has already been */
 /*     scaled to allow for any growth of XPT at this step. */

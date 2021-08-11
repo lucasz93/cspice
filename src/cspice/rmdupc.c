@@ -1,9 +1,17 @@
-/* rmdupc.f -- translated by f2c (version 19980913).
+/* rmdupc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rmdupc_state_t;
+static rmdupc_state_t* get_rmdupc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RMDUPC ( Remove duplicates from a character array ) */
 /* Subroutine */ int rmdupc_(integer *nelt, char *array, ftnlen array_len)
@@ -16,9 +24,13 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int shellc_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    rmdupc_state_t* __state = get_rmdupc_state();
 /* $ Abstract */
 
 /*      Remove duplicate elements from a character array. */

@@ -1,13 +1,21 @@
-/* zzwind2d.f -- translated by f2c (version 19980913).
+/* zzwind2d.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern zzwind2d_init_t __zzwind2d_init;
+static zzwind2d_state_t* get_zzwind2d_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzwind2d)
+		state->zzwind2d = __cspice_allocate_module(sizeof(
+	zzwind2d_state_t), &__zzwind2d_init, sizeof(__zzwind2d_init));
+	return state->zzwind2d;
+
+}
 
 /* $Procedure  ZZWIND2D ( Find winding number of polygon about point ) */
 integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
@@ -21,22 +29,28 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
     /* Local variables */
     doublereal rvec[2];
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *), vsepg_(
-	    doublereal *, doublereal *, integer *);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
+    extern doublereal vsepg_(doublereal *, doublereal *, integer *);
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
-    doublereal rperp[2], rnext[2];
+    doublereal rperp[2];
+    doublereal rnext[2];
     extern doublereal twopi_(void);
     doublereal atotal;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal sep;
 
+
+    /* Module state */
+    zzwind2d_state_t* __state = get_zzwind2d_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -291,8 +305,8 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 /*     The total "wrap angle" starts at zero. */
 
     atotal = 0.;
-    vsubg_(&vertcs[(i__1 = 0) < vertcs_dim2 << 1 ? i__1 : s_rnge("vertcs", 
-	    i__1, "zzwind2d_", (ftnlen)285)], point, &c__2, rvec);
+    vsubg_(&vertcs[(i__1 = 0) < 2 * vertcs_dim2 ? i__1 : s_rnge("vertcs", 
+	    i__1, "zzwind2d_", (ftnlen)285)], point, &__state->c__2, rvec);
     i__1 = *n + 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (i__ <= *n) {
@@ -304,10 +318,10 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 /*        Find the angular separation of RVEC and the next vector */
 /*        RNEXT. */
 
-	vsubg_(&vertcs[(i__2 = (j << 1) - 2) < vertcs_dim2 << 1 && 0 <= i__2 ?
-		 i__2 : s_rnge("vertcs", i__2, "zzwind2d_", (ftnlen)299)], 
-		point, &c__2, rnext);
-	sep = vsepg_(rnext, rvec, &c__2);
+	vsubg_(&vertcs[(i__2 = (j << 1) - 2) < 2 * vertcs_dim2 && 0 <= i__2 ? 
+		i__2 : s_rnge("vertcs", i__2, "zzwind2d_", (ftnlen)299)], 
+		point, &__state->c__2, rnext);
+	sep = vsepg_(rnext, rvec, &__state->c__2);
 
 /*        Create a normal vector to RVEC by rotating RVEC pi/2 radians */
 /*        counterclockwise.  We'll use this vector RPERP to determine */
@@ -316,7 +330,7 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
 	rperp[0] = -rvec[1];
 	rperp[1] = rvec[0];
-	if (vdotg_(rnext, rperp, &c__2) >= 0.) {
+	if (vdotg_(rnext, rperp, &__state->c__2) >= 0.) {
 
 /*           RNEXT is reached by counterclockwise rotation from */
 /*           RVEC.  Note that in the case of zero rotation, the */
@@ -329,7 +343,7 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
 /*        Update RVEC. */
 
-	moved_(rnext, &c__2, rvec);
+	moved_(rnext, &__state->c__2, rvec);
     }
 
 /*     The above sum is 2 * pi * <the number of times the polygon */

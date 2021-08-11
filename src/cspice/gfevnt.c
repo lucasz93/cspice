@@ -1,15 +1,21 @@
-/* gfevnt.f -- translated by f2c (version 19980913).
+/* gfevnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__8 = 8;
-static integer c__10 = 10;
-static integer c__7 = 7;
+extern gfevnt_init_t __gfevnt_init;
+static gfevnt_state_t* get_gfevnt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfevnt)
+		state->gfevnt = __cspice_allocate_module(sizeof(
+	gfevnt_state_t), &__gfevnt_init, sizeof(__gfevnt_init));
+	return state->gfevnt;
+
+}
 
 /* $Procedure GFEVNT ( GF, Geometric event finder ) */
 /* Subroutine */ int gfevnt_(U_fp udstep, U_fp udrefn, char *gquant, integer *
@@ -23,135 +29,6 @@ static integer c__7 = 7;
 {
     /* Initialized data */
 
-    static char dref[80] = "                                                "
-	    "                                ";
-    static logical first = TRUE_;
-    static char qnames[80*8] = "ANGULAR SEPARATION                          "
-	    "                                    " "DISTANCE                 "
-	    "                                                       " "COORDI"
-	    "NATE                                                            "
-	    "          " "RANGE RATE                                         "
-	    "                             " "PHASE ANGLE                     "
-	    "                                                " "ILLUMINATION "
-	    "ANGLE                                                           "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         ";
-    static char cnames[80*7] = ">                                           "
-	    "                                    " "=                        "
-	    "                                                       " "<     "
-	    "                                                                "
-	    "          " "ABSMAX                                             "
-	    "                             " "ABSMIN                          "
-	    "                                                " "LOCMAX       "
-	    "                                                                "
-	    "   " "LOCMIN                                                    "
-	    "                      ";
-    static char qpars[80*10*8] = "TARGET1                                   "
-	    "                                      " "FRAME1                 "
-	    "                                                         " "SHAP"
-	    "E1                                                              "
-	    "            " "TARGET2                                          "
-	    "                               " "FRAME2                        "
-	    "                                                  " "SHAPE2     "
-	    "                                                                "
-	    "     " "OBSERVER                                                "
-	    "                        " "ABCORR                               "
-	    "                                           " "                  "
-	    "                                                              " 
-	    "                                                               "
-	    "                 " "TARGET                                      "
-	    "                                    " "OBSERVER                 "
-	    "                                                       " "ABCORR"
-	    "                                                                "
-	    "          " "                                                   "
-	    "                             " "                                "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 " "TARGET                                      "
-	    "                                    " "OBSERVER                 "
-	    "                                                       " "ABCORR"
-	    "                                                                "
-	    "          " "COORDINATE SYSTEM                                  "
-	    "                             " "COORDINATE                      "
-	    "                                                " "REFERENCE FRA"
-	    "ME                                                              "
-	    "   " "VECTOR DEFINITION                                         "
-	    "                      " "METHOD                                 "
-	    "                                         " "DVEC                "
-	    "                                                            " 
-	    "DREF                                                           "
-	    "                 " "TARGET                                      "
-	    "                                    " "OBSERVER                 "
-	    "                                                       " "ABCORR"
-	    "                                                                "
-	    "          " "                                                   "
-	    "                             " "                                "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 " "TARGET                                      "
-	    "                                    " "OBSERVER                 "
-	    "                                                       " "ILLUM "
-	    "                                                                "
-	    "          " "ABCORR                                             "
-	    "                             " "                                "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 " "TARGET                                      "
-	    "                                    " "ILLUM                    "
-	    "                                                       " "OBSERV"
-	    "ER                                                              "
-	    "          " "ABCORR                                             "
-	    "                             " "REFERENCE FRAME                 "
-	    "                                                " "ANGTYP       "
-	    "                                                                "
-	    "   " "METHOD                                                    "
-	    "                      " "SPOINT                                 "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 " "TARGET1                                     "
-	    "                                    " "TARGET2                  "
-	    "                                                       " "OBSERV"
-	    "ER                                                              "
-	    "          " "ABCORR                                             "
-	    "                             " "REFERENCE FRAME                 "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 " "TARGET                                      "
-	    "                                    " "OBSERVER                 "
-	    "                                                       " "ABCORR"
-	    "                                                                "
-	    "          " "REFERENCE FRAME                                    "
-	    "                             " "                                "
-	    "                                                " "             "
-	    "                                                                "
-	    "   " "                                                          "
-	    "                      " "                                       "
-	    "                                         " "                    "
-	    "                                                            " 
-	    "                                                               "
-	    "                 ";
 
     /* System generated locals */
     integer work_dim1, work_offset, i__1, i__2, i__3;
@@ -164,13 +41,17 @@ static integer c__7 = 7;
     /* Local variables */
     doublereal dvec[3];
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzgfdidc_(), zzgfpadc_(), zzgfildc_();
+    extern /* Subroutine */ int zzgfdidc_();
+    extern /* Subroutine */ int zzgfpadc_();
+    extern /* Subroutine */ int zzgfildc_();
     extern /* Subroutine */ int zzgfdiin_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
     extern /* Subroutine */ int zzgfdigq_();
     extern /* Subroutine */ int zzgfpain_(char *, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfpagq_(), zzgfspdc_(), zzgfrrdc_();
+    extern /* Subroutine */ int zzgfpagq_();
+    extern /* Subroutine */ int zzgfspdc_();
+    extern /* Subroutine */ int zzgfrrdc_();
     extern /* Subroutine */ int zzgfilin_(char *, char *, char *, char *, 
 	    char *, char *, char *, doublereal *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen);
@@ -184,23 +65,25 @@ static integer c__7 = 7;
     extern /* Subroutine */ int zzgfudlt_();
     extern /* Subroutine */ int zzgfspin_(char *, char *, char *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfspgq_(), zzgfrrgq_();
+    extern /* Subroutine */ int zzgfspgq_();
+    extern /* Subroutine */ int zzgfrrgq_();
     extern /* Subroutine */ int zzgfrelx_(U_fp, U_fp, U_fp, U_fp, U_fp, char *
 	    , doublereal *, doublereal *, doublereal *, doublereal *, integer 
 	    *, integer *, doublereal *, logical *, U_fp, U_fp, U_fp, char *, 
-	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen), 
-	    zzgfrrin_(char *, char *, char *, doublereal *, ftnlen, ftnlen, 
-	    ftnlen);
+	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfrrin_(char *, char *, char *, doublereal *
+	    , ftnlen, ftnlen, ftnlen);
     integer i__;
     char frame[80*2];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     char shape[80*2];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     char cpars[80*10];
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    char illum[80], quant[80];
+    char illum[80];
+    char quant[80];
     integer npass;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     integer qtnum;
@@ -209,19 +92,29 @@ static integer c__7 = 7;
     char vecdef[80];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    char abcorr[80], angtyp[80], cornam[80], corsys[80], method[80], obsrvr[
-	    80], pnames[80*10], target[80], rptpre[55*2];
-    static char srcpre[55*2*8], srcsuf[13*2*8];
+    char abcorr[80];
+    char angtyp[80];
+    char cornam[80];
+    char corsys[80];
+    char method[80];
+    char obsrvr[80];
+    char pnames[80*10];
+    char target[80];
+    char rptpre[55*2];
     logical localx;
     char ref[80];
     integer loc;
     logical noadjx;
     doublereal spoint[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char uop[6];
 
+
+    /* Module state */
+    gfevnt_state_t* __state = get_gfevnt_state();
 /* $ Abstract */
 
 /*     Determine time intervals when a specified geometric quantity */
@@ -2095,8 +1988,8 @@ static integer c__7 = 7;
 /*     Initial values */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
 
@@ -2122,58 +2015,63 @@ static integer c__7 = 7;
 	return 0;
     }
     chkin_("GFEVNT", (ftnlen)6);
-    if (first) {
+    if (__state->first) {
 
 /*        Set the progress report prefix and suffix strings for */
 /*        each quantity. No need to set coordinate quantity strings. */
 /*        The coordinate solver performs that function. */
 
-	first = FALSE_;
-	s_copy(srcpre, "Angular separation pass 1 of #", (ftnlen)55, (ftnlen)
-		30);
-	s_copy(srcpre + 55, "Angular separation pass 2 of #", (ftnlen)55, (
-		ftnlen)30);
-	s_copy(srcpre + 110, "Distance pass 1 of # ", (ftnlen)55, (ftnlen)21);
-	s_copy(srcpre + 165, "Distance pass 2 of # ", (ftnlen)55, (ftnlen)21);
-	s_copy(srcpre + 660, "Angular Rate pass 1 of #", (ftnlen)55, (ftnlen)
-		24);
-	s_copy(srcpre + 715, "Angular Rate pass 2 of #", (ftnlen)55, (ftnlen)
-		24);
-	s_copy(srcpre + 330, "Range Rate pass 1 of #", (ftnlen)55, (ftnlen)22)
-		;
-	s_copy(srcpre + 385, "Range Rate pass 2 of #", (ftnlen)55, (ftnlen)22)
-		;
-	s_copy(srcpre + 440, "Phase angle search pass 1 of #", (ftnlen)55, (
-		ftnlen)30);
-	s_copy(srcpre + 495, "Phase angle search pass 2 of #", (ftnlen)55, (
-		ftnlen)30);
-	s_copy(srcpre + 770, "Diameter pass 1 of #", (ftnlen)55, (ftnlen)20);
-	s_copy(srcpre + 825, "Diameter pass 2 of #", (ftnlen)55, (ftnlen)20);
-	s_copy(srcpre + 550, "Illumination angle pass 1 of #", (ftnlen)55, (
-		ftnlen)30);
-	s_copy(srcpre + 605, "Illumination angle pass 2 of #", (ftnlen)55, (
-		ftnlen)30);
-	s_copy(srcsuf, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 13, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 26, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 39, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 156, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 169, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 78, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 91, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 104, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 117, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 182, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 195, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 130, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(srcsuf + 143, "done.", (ftnlen)13, (ftnlen)5);
+	__state->first = FALSE_;
+	s_copy(__state->srcpre, "Angular separation pass 1 of #", (ftnlen)55, 
+		(ftnlen)30);
+	s_copy(__state->srcpre + 55, "Angular separation pass 2 of #", (
+		ftnlen)55, (ftnlen)30);
+	s_copy(__state->srcpre + 110, "Distance pass 1 of # ", (ftnlen)55, (
+		ftnlen)21);
+	s_copy(__state->srcpre + 165, "Distance pass 2 of # ", (ftnlen)55, (
+		ftnlen)21);
+	s_copy(__state->srcpre + 660, "Angular Rate pass 1 of #", (ftnlen)55, 
+		(ftnlen)24);
+	s_copy(__state->srcpre + 715, "Angular Rate pass 2 of #", (ftnlen)55, 
+		(ftnlen)24);
+	s_copy(__state->srcpre + 330, "Range Rate pass 1 of #", (ftnlen)55, (
+		ftnlen)22);
+	s_copy(__state->srcpre + 385, "Range Rate pass 2 of #", (ftnlen)55, (
+		ftnlen)22);
+	s_copy(__state->srcpre + 440, "Phase angle search pass 1 of #", (
+		ftnlen)55, (ftnlen)30);
+	s_copy(__state->srcpre + 495, "Phase angle search pass 2 of #", (
+		ftnlen)55, (ftnlen)30);
+	s_copy(__state->srcpre + 770, "Diameter pass 1 of #", (ftnlen)55, (
+		ftnlen)20);
+	s_copy(__state->srcpre + 825, "Diameter pass 2 of #", (ftnlen)55, (
+		ftnlen)20);
+	s_copy(__state->srcpre + 550, "Illumination angle pass 1 of #", (
+		ftnlen)55, (ftnlen)30);
+	s_copy(__state->srcpre + 605, "Illumination angle pass 2 of #", (
+		ftnlen)55, (ftnlen)30);
+	s_copy(__state->srcsuf, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 13, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 26, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 39, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 156, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 169, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 78, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 91, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 104, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 117, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 182, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 195, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 130, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(__state->srcsuf + 143, "done.", (ftnlen)13, (ftnlen)5);
     }
 
 /*     Make sure the requested quantity is one we recognize. */
 
     ljust_(gquant, quant, gquant_len, (ftnlen)80);
     ucase_(quant, quant, (ftnlen)80, (ftnlen)80);
-    qtnum = isrchc_(quant, &c__8, qnames, (ftnlen)80, (ftnlen)80);
+    qtnum = isrchc_(quant, &__state->c__8, __state->qnames, (ftnlen)80, (
+	    ftnlen)80);
     if (qtnum == 0) {
 	setmsg_("The geometric quantity, # is not recognized. Supported quan"
 		"tities are: DISTANCE, PHASE ANGLE, COORDINATE, RANGE RATE, A"
@@ -2190,7 +2088,7 @@ static integer c__7 = 7;
 	setmsg_("Number of quantity definition parameters = #;  must be in r"
 		"ange 0:#.", (ftnlen)68);
 	errint_("#", qnpars, (ftnlen)1);
-	errint_("#", &c__10, (ftnlen)1);
+	errint_("#", &__state->c__10, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("GFEVNT", (ftnlen)6);
 	return 0;
@@ -2220,25 +2118,26 @@ static integer c__7 = 7;
 /*     quantity. */
 
     for (i__ = 1; i__ <= 10; ++i__) {
-	if (s_cmp(qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 <= i__1 ? 
-		i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)1843)) * 80, 
-		" ", (ftnlen)80, (ftnlen)1) != 0) {
+	if (s_cmp(__state->qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 
+		<= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)
+		1843)) * 80, " ", (ftnlen)80, (ftnlen)1) != 0) {
 
 /*           The Ith parameter must be supplied by the caller. */
 
-	    loc = isrchc_(qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 <=
-		     i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)
-		    1847)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)80);
+	    loc = isrchc_(__state->qpars + ((i__1 = i__ + qtnum * 10 - 11) < 
+		    80 && 0 <= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", 
+		    (ftnlen)1847)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)
+		    80);
 	    if (loc == 0) {
 		setmsg_("The parameter # is required in order to compute eve"
 			"nts pertaining to the quantity #; this parameter was"
 			" not supplied.", (ftnlen)117);
-		errch_("#", qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 
-			<= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (
-			ftnlen)1856)) * 80, (ftnlen)1, (ftnlen)80);
-		errch_("#", qnames + ((i__1 = qtnum - 1) < 8 && 0 <= i__1 ? 
-			i__1 : s_rnge("qnames", i__1, "gfevnt_", (ftnlen)1857)
-			) * 80, (ftnlen)1, (ftnlen)80);
+		errch_("#", __state->qpars + ((i__1 = i__ + qtnum * 10 - 11) <
+			 80 && 0 <= i__1 ? i__1 : s_rnge("qpars", i__1, "gfe"
+			"vnt_", (ftnlen)1856)) * 80, (ftnlen)1, (ftnlen)80);
+		errch_("#", __state->qnames + ((i__1 = qtnum - 1) < 8 && 0 <= 
+			i__1 ? i__1 : s_rnge("qnames", i__1, "gfevnt_", (
+			ftnlen)1857)) * 80, (ftnlen)1, (ftnlen)80);
 		sigerr_("SPICE(MISSINGVALUE)", (ftnlen)19);
 		chkout_("GFEVNT", (ftnlen)6);
 		return 0;
@@ -2415,9 +2314,9 @@ static integer c__7 = 7;
 
     loc = isrchc_("DREF", qnpars, pnames, (ftnlen)4, (ftnlen)80);
     if (loc > 0) {
-	s_copy(dref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2092)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(__state->dref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? 
+		i__1 : s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2092)) * 80, (
+		ftnlen)80, (ftnlen)80);
     }
 
 /*     -ANGTYP- */
@@ -2441,7 +2340,8 @@ static integer c__7 = 7;
 
     ljust_(op, uop, op_len, (ftnlen)6);
     ucase_(uop, uop, (ftnlen)6, (ftnlen)6);
-    loc = isrchc_(uop, &c__7, cnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(uop, &__state->c__7, __state->cnames, (ftnlen)6, (ftnlen)80)
+	    ;
     if (loc == 0) {
 	setmsg_("The comparison operator, # is not recognized.  Supported op"
 		"erators are: >, =, <, ABSMAX, ABSMIN, LOCMAX, LOCMIN. ", (
@@ -2480,11 +2380,12 @@ static integer c__7 = 7;
 
 	i__1 = npass;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    repmi_(srcpre + ((i__2 = i__ + (qtnum << 1) - 3) < 16 && 0 <= 
-		    i__2 ? i__2 : s_rnge("srcpre", i__2, "gfevnt_", (ftnlen)
-		    2182)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 1) < 2 
-		    && 0 <= i__3 ? i__3 : s_rnge("rptpre", i__3, "gfevnt_", (
-		    ftnlen)2182)) * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
+	    repmi_(__state->srcpre + ((i__2 = i__ + (qtnum << 1) - 3) < 16 && 
+		    0 <= i__2 ? i__2 : s_rnge("srcpre", i__2, "gfevnt_", (
+		    ftnlen)2182)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 
+		    1) < 2 && 0 <= i__3 ? i__3 : s_rnge("rptpre", i__3, "gfe"
+		    "vnt_", (ftnlen)2182)) * 55, (ftnlen)55, (ftnlen)1, (
+		    ftnlen)55);
 	}
     }
 
@@ -2503,8 +2404,8 @@ static integer c__7 = 7;
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfspdc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfspgq_, op, refval, tol, adjust, cnfine, 
 		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, srcsuf, bail, (L_fp)udbail, result, op_len, (ftnlen)
-		55, (ftnlen)13);
+		rptpre, __state->srcsuf, bail, (L_fp)udbail, result, op_len, (
+		ftnlen)55, (ftnlen)13);
     } else if (qtnum == 2) {
 
 /*        Distance condition initializer. */
@@ -2513,18 +2414,18 @@ static integer c__7 = 7;
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfdidc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfdigq_, op, refval, tol, adjust, cnfine, 
 		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, srcsuf + 26, bail, (L_fp)udbail, result, op_len, (
-		ftnlen)55, (ftnlen)13);
+		rptpre, __state->srcsuf + 26, bail, (L_fp)udbail, result, 
+		op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 3) {
 
 /*        Solve for a coordinate condition. ZZGFCSLV calls the coordinate */
 /*        event initializer. */
 
-	zzgfcslv_(vecdef, method, target, ref, abcorr, obsrvr, dref, dvec, 
-		corsys, cornam, op, refval, tol, adjust, (U_fp)udstep, (U_fp)
-		udrefn, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, bail, (
-		L_fp)udbail, mw, nw, work, cnfine, result, (ftnlen)80, (
-		ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (
+	zzgfcslv_(vecdef, method, target, ref, abcorr, obsrvr, __state->dref, 
+		dvec, corsys, cornam, op, refval, tol, adjust, (U_fp)udstep, (
+		U_fp)udrefn, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
+		bail, (L_fp)udbail, mw, nw, work, cnfine, result, (ftnlen)80, 
+		(ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (
 		ftnlen)80, (ftnlen)80, (ftnlen)80, op_len);
     } else if (qtnum == 7) {
 
@@ -2546,8 +2447,8 @@ static integer c__7 = 7;
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfrrdc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfrrgq_, op, refval, tol, adjust, cnfine, 
 		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, srcsuf + 78, bail, (L_fp)udbail, result, op_len, (
-		ftnlen)55, (ftnlen)13);
+		rptpre, __state->srcsuf + 78, bail, (L_fp)udbail, result, 
+		op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 5) {
 
 /*        Phase angle condition initializer. */
@@ -2557,8 +2458,8 @@ static integer c__7 = 7;
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfpadc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfpagq_, op, refval, tol, adjust, cnfine, 
 		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, srcsuf + 104, bail, (L_fp)udbail, result, op_len, (
-		ftnlen)55, (ftnlen)13);
+		rptpre, __state->srcsuf + 104, bail, (L_fp)udbail, result, 
+		op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 8) {
 
 /*                ---Not yet implemented--- */
@@ -2573,8 +2474,8 @@ static integer c__7 = 7;
 	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfildc_, (U_fp)
 		zzgfudlt_, (U_fp)zzgfilgq_, op, refval, tol, adjust, cnfine, 
 		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, srcsuf + 130, bail, (L_fp)udbail, result, op_len, (
-		ftnlen)55, (ftnlen)13);
+		rptpre, __state->srcsuf + 130, bail, (L_fp)udbail, result, 
+		op_len, (ftnlen)55, (ftnlen)13);
     } else {
 
 /*        QTNUM is not a recognized event code. This block should */

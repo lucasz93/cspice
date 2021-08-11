@@ -1,9 +1,17 @@
-/* opsgni.f -- translated by f2c (version 19980913).
+/* opsgni.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int opsgni_state_t;
+static opsgni_state_t* get_opsgni_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            OPSGNI  ( Opposite Sign Integers ) */
 logical opsgni_(integer *x, integer *y)
@@ -11,6 +19,9 @@ logical opsgni_(integer *x, integer *y)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    opsgni_state_t* __state = get_opsgni_state();
 /* $ Abstract */
 
 /*     Function: true if the input arguments have opposite signs. */

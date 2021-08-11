@@ -1,14 +1,21 @@
-/* zzekwpai.f -- translated by f2c (version 19980913).
+/* zzekwpai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__256 = 256;
+extern zzekwpai_init_t __zzekwpai_init;
+static zzekwpai_state_t* get_zzekwpai_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekwpai)
+		state->zzekwpai = __cspice_allocate_module(sizeof(
+	zzekwpai_state_t), &__zzekwpai_init, sizeof(__zzekwpai_init));
+	return state->zzekwpai;
+
+}
 
 /* $Procedure     ZZEKWPAI ( EK, write paged array, integer ) */
 /* Subroutine */ int zzekwpai_(integer *handle, integer *segdsc, integer *
@@ -21,17 +28,21 @@ static integer c__256 = 256;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], from;
+    integer page[256];
+    integer from;
     extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekpgwi_(integer *, integer *, 
-	    integer *);
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cleari_(integer *, 
-	    integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
     integer to;
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekwpai_state_t* __state = get_zzekwpai_state();
 /* $ Abstract */
 
 /*     Write an integer array out to a contiguous set of EK pages. */
@@ -569,14 +580,14 @@ static integer c__256 = 256;
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + 253) / 254;
-    zzekacps_(handle, segdsc, &c__3, &npage, p, base);
+    zzekacps_(handle, segdsc, &__state->c__3, &npage, p, base);
 
 /*     We'll use FROM to indicate the element of IVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    cleari_(&c__256, page);
+    cleari_(&__state->c__256, page);
     i__1 = *nvals;
     for (from = 1; from <= i__1; ++from) {
 

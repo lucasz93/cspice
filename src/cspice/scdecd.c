@@ -1,14 +1,21 @@
-/* scdecd.f -- translated by f2c (version 19980913).
+/* scdecd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9999 = 9999;
-static integer c__0 = 0;
+extern scdecd_init_t __scdecd_init;
+static scdecd_state_t* get_scdecd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->scdecd)
+		state->scdecd = __cspice_allocate_module(sizeof(
+	scdecd_state_t), &__scdecd_init, sizeof(__scdecd_init));
+	return state->scdecd;
+
+}
 
 /* $Procedure      SCDECD ( Decode spacecraft clock ) */
 /* Subroutine */ int scdecd_(integer *sc, doublereal *sclkdp, char *sclkch, 
@@ -24,9 +31,10 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
 
     /* Local variables */
-    integer part, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    integer part;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal ticks;
     extern /* Subroutine */ int scfmt_(integer *, doublereal *, char *, 
 	    ftnlen);
@@ -38,9 +46,13 @@ static integer c__0 = 0;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer suflen;
     extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
-	    doublereal *), chkout_(char *, ftnlen), prefix_(char *, integer *,
-	     char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(char *,
-	     integer *, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
+	    doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     integer nparts;
     doublereal pstart[9999];
@@ -49,6 +61,9 @@ static integer c__0 = 0;
     doublereal ptotls[9999];
     char prtstr[5];
 
+
+    /* Module state */
+    scdecd_state_t* __state = get_scdecd_state();
 /* $ Abstract */
 
 /*     Convert double precision encoding of spacecraft clock time into */
@@ -577,7 +592,7 @@ static integer c__0 = 0;
 		"alue for parameter MXPART, #.", (ftnlen)88);
 	errint_("#", &nparts, (ftnlen)1);
 	errint_("#", sc, (ftnlen)1);
-	errint_("#", &c__9999, (ftnlen)1);
+	errint_("#", &__state->c__9999, (ftnlen)1);
 	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
 	chkout_("SCDECD", (ftnlen)6);
 	return 0;
@@ -648,7 +663,7 @@ static integer c__0 = 0;
 /*     it to the output string. */
 
     intstr_(&part, prtstr, (ftnlen)5);
-    suffix_("/", &c__0, prtstr, (ftnlen)1, (ftnlen)5);
+    suffix_("/", &__state->c__0, prtstr, (ftnlen)1, (ftnlen)5);
     prelen = lastnb_(prtstr, (ftnlen)5);
     suflen = lastnb_(sclkch, sclkch_len);
     if (i_len(sclkch, sclkch_len) - suflen < prelen) {
@@ -664,7 +679,7 @@ static integer c__0 = 0;
 	chkout_("SCDECD", (ftnlen)6);
 	return 0;
     }
-    prefix_(prtstr, &c__0, sclkch, (ftnlen)5, sclkch_len);
+    prefix_(prtstr, &__state->c__0, sclkch, (ftnlen)5, sclkch_len);
     chkout_("SCDECD", (ftnlen)6);
     return 0;
 } /* scdecd_ */

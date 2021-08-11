@@ -1,32 +1,48 @@
-/* zzdskbbl.f -- translated by f2c (version 19980913).
+/* zzdskbbl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzdskbbl_init_t __zzdskbbl_init;
+static zzdskbbl_state_t* get_zzdskbbl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdskbbl)
+		state->zzdskbbl = __cspice_allocate_module(sizeof(
+	zzdskbbl_state_t), &__zzdskbbl_init, sizeof(__zzdskbbl_init));
+	return state->zzdskbbl;
+
+}
 
 /* $Procedure ZZDSKBBL ( DSK, build BSR segment list ) */
 /* Subroutine */ int zzdskbbl_(integer *bodyid)
 {
     /* Initialized data */
 
-    static integer ctr[2] = { 0,0 };
-    static logical first = TRUE_;
-    static integer prvbod = 0;
 
-    extern /* Subroutine */ int zzdskchk_(integer *, logical *), zzdskbss_(
-	    integer *);
+    extern /* Subroutine */ int zzdskchk_(integer *, logical *);
+    extern /* Subroutine */ int zzdskbss_(integer *);
     extern /* Subroutine */ int zzdsknot_();
-    extern /* Subroutine */ int zzctruin_(integer *), zzdsksns_(U_fp, integer 
-	    *, integer *, doublereal *, logical *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
+	    doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    integer dladsc[8], handle;
+    integer dladsc[8];
+    integer handle;
     logical segfnd;
     extern logical return_(void);
     doublereal dskdsc[24];
-    logical newbod, update;
+    logical newbod;
+    logical update;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzdskbbl_state_t* __state = get_zzdskbbl_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -773,22 +789,22 @@
 	return 0;
     }
     chkin_("ZZDSKBBL", (ftnlen)8);
-    if (first) {
-	zzctruin_(ctr);
-	first = FALSE_;
+    if (__state->first) {
+	zzctruin_(__state->ctr);
+	__state->first = FALSE_;
 	newbod = TRUE_;
     } else {
 
 /*        PRVBOD is the last body for which a successful list */
 /*        build was performed. */
 
-	newbod = *bodyid != prvbod;
+	newbod = *bodyid != __state->prvbod;
     }
 
 /*     See whether the state of the loaded DSK set has changed */
 /*     since the last call. */
 
-    zzdskchk_(ctr, &update);
+    zzdskchk_(__state->ctr, &update);
     if (update || newbod) {
 
 /*        Force the BSR subsystem to build a complete segment list */
@@ -802,7 +818,7 @@
 	zzdskbss_(bodyid);
 	zzdsksns_((U_fp)zzdsknot_, &handle, dladsc, dskdsc, &segfnd);
 	if (! failed_()) {
-	    prvbod = *bodyid;
+	    __state->prvbod = *bodyid;
 	}
     }
     chkout_("ZZDSKBBL", (ftnlen)8);

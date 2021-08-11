@@ -1,13 +1,21 @@
-/* zzgfpau.f -- translated by f2c (version 19980913).
+/* zzgfpau.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzgfpau_init_t __zzgfpau_init;
+static zzgfpau_state_t* get_zzgfpau_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfpau)
+		state->zzgfpau = __cspice_allocate_module(sizeof(
+	zzgfpau_state_t), &__zzgfpau_init, sizeof(__zzgfpau_init));
+	return state->zzgfpau;
+
+}
 
 /* $Procedure ZZGFPAU ( Private --- GF, phase angle utility routine ) */
 /* Subroutine */ int zzgfpau_0_(int n__, char *target, char *illmn, char *
@@ -25,29 +33,29 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal dsep, uvec[3];
+    doublereal dsep;
+    doublereal uvec[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern doublereal dvsep_(doublereal *, doublereal *);
-    static integer svobs;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    doublereal s1[6], s2[6];
+    doublereal s1[6];
+    doublereal s2[6];
     extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     doublereal lt;
     extern doublereal clight_(void);
-    static char svabco[5];
-    static logical svablk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
-	    ftnlen);
-    static integer svillm, svtarg;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
@@ -55,6 +63,9 @@ static integer c__0 = 0;
     extern /* Subroutine */ int zzgfpaq_(doublereal *, integer *, integer *, 
 	    integer *, char *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    zzgfpau_state_t* __state = get_zzgfpau_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -589,7 +600,7 @@ L_zzgfpain:
 
 /*     Find NAIF IDs for TARGET, ILLMN, and OBSRVR. */
 
-    bods2c_(target, &svtarg, &found, target_len);
+    bods2c_(target, &__state->svtarg, &found, target_len);
     if (! found) {
 	setmsg_("The target object, '#', is not a recognized name for an eph"
 		"emeris object. The cause of this problem may be that you nee"
@@ -599,7 +610,7 @@ L_zzgfpain:
 	chkout_("ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(illmn, &svillm, &found, illmn_len);
+    bods2c_(illmn, &__state->svillm, &found, illmn_len);
     if (! found) {
 	setmsg_("The illuminator object, '#', is not a recognized name for a"
 		"n ephemeris object. The cause of this problem may be that yo"
@@ -610,7 +621,7 @@ L_zzgfpain:
 	chkout_("ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &svobs, &found, obsrvr_len);
+    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
 	setmsg_("The observer object, '#', is not a recognized name for an e"
 		"phemeris object. The cause of this problem may be that you n"
@@ -623,7 +634,8 @@ L_zzgfpain:
 
 /*     Make sure the observer, illuminator, and target are distinct. */
 
-    if (svtarg == svobs || svtarg == svillm || svobs == svillm) {
+    if (__state->svtarg == __state->svobs || __state->svtarg == 
+	    __state->svillm || __state->svobs == __state->svillm) {
 	setmsg_("The observer, illuminator, and target must be distinct obje"
 		"cts, but are not: OBSRVR = #, TARGET = #, are not: ILLMN= #.",
 		 (ftnlen)119);
@@ -638,13 +650,14 @@ L_zzgfpain:
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &c__0, abcorr, svabco, (ftnlen)1, abcorr_len, (ftnlen)5);
-    ucase_(svabco, svabco, (ftnlen)5, (ftnlen)5);
+    cmprss_(" ", &__state->c__0, abcorr, __state->svabco, (ftnlen)1, 
+	    abcorr_len, (ftnlen)5);
+    ucase_(__state->svabco, __state->svabco, (ftnlen)5, (ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(svabco, svablk, (ftnlen)5);
+    zzvalcor_(__state->svabco, __state->svablk, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFPAIN", (ftnlen)8);
 	return 0;
@@ -652,7 +665,7 @@ L_zzgfpain:
 
 /*     Restrict correction to reception cases. */
 
-    if (svablk[4]) {
+    if (__state->svablk[4]) {
 	setmsg_("Invalid aberration correction '#'. Phase angle geometry cal"
 		"culations currently restricted to reception cases.", (ftnlen)
 		109);
@@ -798,8 +811,8 @@ L_zzgfpadc:
 
 /*     Get the state of the TARG object relative to OBS at ET. */
 
-    spkez_(&svtarg, et, "J2000", svabco, &svobs, s1, &lt, (ftnlen)5, (ftnlen)
-	    5);
+    spkez_(&__state->svtarg, et, "J2000", __state->svabco, &__state->svobs, 
+	    s1, &lt, (ftnlen)5, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZGFPADC", (ftnlen)8);
 	return 0;
@@ -808,16 +821,16 @@ L_zzgfpadc:
 /*     Get the state of the ILLMN object relative to TARG at ET */
 /*     for no aberration correction, or ET - LT otherwise. */
 
-    if (svablk[0]) {
+    if (__state->svablk[0]) {
 
 /*        No correction, geometric. */
 
-	spkez_(&svillm, et, "J2000", svabco, &svtarg, s2, &lt, (ftnlen)5, (
-		ftnlen)5);
+	spkez_(&__state->svillm, et, "J2000", __state->svabco, &
+		__state->svtarg, s2, &lt, (ftnlen)5, (ftnlen)5);
     } else {
 	d__1 = *et - lt;
-	spkez_(&svillm, &d__1, "J2000", svabco, &svtarg, s2, &lt, (ftnlen)5, (
-		ftnlen)5);
+	spkez_(&__state->svillm, &d__1, "J2000", __state->svabco, &
+		__state->svtarg, s2, &lt, (ftnlen)5, (ftnlen)5);
 	if (failed_()) {
 	    chkout_("ZZGFPADC", (ftnlen)8);
 	    return 0;
@@ -989,7 +1002,8 @@ L_zzgfpagq:
 /*     get phase angle between two bodies */
 
 /* -& */
-    zzgfpaq_(et, &svtarg, &svillm, &svobs, svabco, rvl, (ftnlen)5);
+    zzgfpaq_(et, &__state->svtarg, &__state->svillm, &__state->svobs, 
+	    __state->svabco, rvl, (ftnlen)5);
     return 0;
 /* $Procedure ZZGFPAX ( Private -- GF, retrieve ZZGFPAIN values ) */
 
@@ -1110,15 +1124,15 @@ L_zzgfpax:
 /*     get saved phase angle parameters */
 
 /* -& */
-    *xtarg = svtarg;
-    *xillmn = svillm;
-    s_copy(xabcor, svabco, xabcor_len, (ftnlen)5);
-    *xobs = svobs;
+    *xtarg = __state->svtarg;
+    *xillmn = __state->svillm;
+    s_copy(xabcor, __state->svabco, xabcor_len, (ftnlen)5);
+    *xobs = __state->svobs;
     for (i__ = 1; i__ <= 6; ++i__) {
 	xablk[(i__1 = i__ - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("xablk", 
-		i__1, "zzgfpau_", (ftnlen)1083)] = svablk[(i__2 = i__ - 1) < 
-		15 && 0 <= i__2 ? i__2 : s_rnge("svablk", i__2, "zzgfpau_", (
-		ftnlen)1083)];
+		i__1, "zzgfpau_", (ftnlen)1083)] = __state->svablk[(i__2 = 
+		i__ - 1) < 15 && 0 <= i__2 ? i__2 : s_rnge("svablk", i__2, 
+		"zzgfpau_", (ftnlen)1083)];
     }
     return 0;
 } /* zzgfpau_ */

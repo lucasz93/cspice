@@ -1,9 +1,17 @@
-/* latcyl.f -- translated by f2c (version 19980913).
+/* latcyl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int latcyl_state_t;
+static latcyl_state_t* get_latcyl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LATCYL ( Latitudinal to cylindrical coordinates ) */
 /* Subroutine */ int latcyl_(doublereal *radius, doublereal *long__, 
@@ -13,8 +21,12 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal rh, zz;
+    doublereal rh;
+    doublereal zz;
 
+
+    /* Module state */
+    latcyl_state_t* __state = get_latcyl_state();
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to cylindrical coordinates. */

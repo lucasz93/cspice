@@ -1,9 +1,17 @@
-/* sumai.f -- translated by f2c (version 19980913).
+/* sumai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sumai_state_t;
+static sumai_state_t* get_sumai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SUMAI ( Sum of an integer array ) */
 integer sumai_(integer *array, integer *n)
@@ -12,8 +20,12 @@ integer sumai_(integer *array, integer *n)
     integer ret_val, i__1;
 
     /* Local variables */
-    integer i__, sum;
+    integer i__;
+    integer sum;
 
+
+    /* Module state */
+    sumai_state_t* __state = get_sumai_state();
 /* $ Abstract */
 
 /*      Return the sum of the elements of an integer array. */

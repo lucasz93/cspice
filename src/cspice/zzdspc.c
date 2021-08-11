@@ -1,9 +1,17 @@
-/* zzdspc.f -- translated by f2c (version 19980913).
+/* zzdspc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzdspc_state_t;
+static zzdspc_state_t* get_zzdspc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDSPC ( SGP4 deep space routine ) */
 /* Subroutine */ int zzdspc_(integer *irez, doublereal *d2201, doublereal *
@@ -28,17 +36,36 @@
     /* Local variables */
     doublereal delt;
     integer iret;
-    doublereal xndt, xomi, fasx2, fasx4, fasx6, step2, x2omi;
+    doublereal xndt;
+    doublereal xomi;
+    doublereal fasx2;
+    doublereal fasx4;
+    doublereal fasx6;
+    doublereal step2;
+    doublereal x2omi;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal theta, xnddt;
+    doublereal theta;
+    doublereal xnddt;
     integer iretn;
-    doublereal stepn, xldot, rptim, stepp;
+    doublereal stepn;
+    doublereal xldot;
+    doublereal rptim;
+    doublereal stepp;
     extern doublereal twopi_(void);
-    doublereal g22, g32, g52, g44, g54, ft, xl;
+    doublereal g22;
+    doublereal g32;
+    doublereal g52;
+    doublereal g44;
+    doublereal g54;
+    doublereal ft;
+    doublereal xl;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     doublereal x2li;
 
+
+    /* Module state */
+    zzdspc_state_t* __state = get_zzdspc_state();
 /* $ Abstract */
 
 /*     This subroutine provides deep space contributions to mean */

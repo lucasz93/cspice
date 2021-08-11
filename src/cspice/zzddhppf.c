@@ -1,26 +1,30 @@
-/* zzddhppf.f -- translated by f2c (version 19980913).
+/* zzddhppf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__5 = 5;
-static integer c__4 = 4;
+extern zzddhppf_init_t __zzddhppf_init;
+static zzddhppf_state_t* get_zzddhppf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhppf)
+		state->zzddhppf = __cspice_allocate_module(sizeof(
+	zzddhppf_state_t), &__zzddhppf_init, sizeof(__zzddhppf_init));
+	return state->zzddhppf;
+
+}
 
 /* $Procedure ZZDDHPPF ( Private --- DDH Prepare Preexisting File ) */
 /* Subroutine */ int zzddhppf_(integer *unit, integer *arch, integer *bff)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
-    integer i__1;
+    integer i__1, i__2, i__3, i__4;
     char ch__1[1];
 
     /* Builtin functions */
@@ -29,39 +33,45 @@ static integer c__4 = 4;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static char null[1];
     extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
-	    ftnlen), zzddhivf_(char *, integer *, logical *, ftnlen), 
-	    zzftpchk_(char *, logical *, ftnlen), zzplatfm_(char *, char *, 
-	    ftnlen, ftnlen);
-    integer i__, fdrec;
-    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen), chkin_(char *, ftnlen), ucase_(
-	    char *, char *, ftnlen, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int zzddhivf_(char *, integer *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzftpchk_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
+    integer i__;
+    integer fdrec;
+    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
-    char filarc[4], bffidw[8], chrrec[1000];
+    char filarc[4];
+    char bffidw[8];
+    char chrrec[1000];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char ftpdlm[1], ftpmem[16], ftplft[6], strarc[8*2], strbff[8*5];
-    integer iostat, tstarc;
-    static char ftprgt[6];
+    integer iostat;
+    integer tstarc;
     char filtyp[4];
     logical ftperr;
     integer ftppos;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), errfnm_(char *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___11 = { 1, 0, 1, 0, 1 };
-    static cilist io___20 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    zzddhppf_state_t* __state = get_zzddhppf_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -769,9 +779,9 @@ static integer c__4 = 4;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -787,40 +797,41 @@ static integer c__4 = 4;
 /*     BFF parameters, the names of the ARCH parameters, and the */
 /*     local copy of the FTP string. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Construct and store the NULL valued byte. */
 
-	*(unsigned char *)null = '\0';
+	*(unsigned char *)__state->null = '\0';
 
 /*        Retrieve the BFF and ARCH names. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 5 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhppf_", (ftnlen)
-		    504)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 5 &&
+		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhppf_", (
+		    ftnlen)504)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    zzddhgsd_("ARCH", &i__, strarc + (((i__1 = i__ - 1) < 2 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)
-		    508)) << 3), (ftnlen)4, (ftnlen)8);
+	    zzddhgsd_("ARCH", &i__, __state->strarc + (((i__1 = i__ - 1) < 2 
+		    && 0 <= i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhppf_", 
+		    (ftnlen)508)) << 3), (ftnlen)4, (ftnlen)8);
 	}
 
 /*        Extend STRBFF to include the null BFFID.  This addresses */
 /*        the N0051 Sun Solaris Native C toolkit binary files. */
 
 	for (i__ = 1; i__ <= 8; ++i__) {
-	    *(unsigned char *)&strbff[i__ + 31] = *(unsigned char *)null;
+	    *(unsigned char *)&__state->strbff[i__ + 31] = *(unsigned char *)
+		    __state->null;
 	}
 
 /*        Fetch the FTP string. */
 
-	zzftpstr_(ftpmem, ftplft, ftprgt, ftpdlm, (ftnlen)16, (ftnlen)6, (
-		ftnlen)6, (ftnlen)1);
+	zzftpstr_(__state->ftpmem, __state->ftplft, __state->ftprgt, 
+		__state->ftpdlm, (ftnlen)16, (ftnlen)6, (ftnlen)6, (ftnlen)1);
 
 /*        Set FIRST to FALSE so we will not reassign any of these values. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Get the simple consistency checks out of the way first.  Is */
@@ -839,12 +850,12 @@ static integer c__4 = 4;
 /*     Read the first record from the file as a string of NUMCHR */
 /*     characters. */
 
-    io___11.ciunit = *unit;
-    iostat = s_rdue(&io___11);
+    __state->io___11.ciunit = *unit;
+    iostat = s_rdue(&__state->io___11);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, chrrec, (ftnlen)1000);
+    iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1000);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -870,7 +881,8 @@ L100001:
 
 /*     Now locate FILARC in the STRARC array. */
 
-    tstarc = isrchc_(filarc, &c__2, strarc, (ftnlen)4, (ftnlen)8);
+    tstarc = isrchc_(filarc, &__state->c__2, __state->strarc, (ftnlen)4, (
+	    ftnlen)8);
 
 /*     If FILARC was not found, signal an appropriate error. */
 
@@ -891,13 +903,13 @@ L100001:
 	*bff = 0;
 	setmsg_("A request to load the # file, $, has been made by the % sys"
 		"tem.  This operation is not permitted.", (ftnlen)97);
-	errch_("#", strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)608)) << 3), (
-		ftnlen)1, (ftnlen)8);
+	errch_("#", __state->strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ?
+		 i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)608)) << 
+		3), (ftnlen)1, (ftnlen)8);
 	errfnm_("$", unit, (ftnlen)1);
-	errch_("%", strarc + (((i__1 = *arch - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)610)) << 3), (
-		ftnlen)1, (ftnlen)8);
+	errch_("%", __state->strarc + (((i__1 = *arch - 1) < 2 && 0 <= i__1 ? 
+		i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)610)) << 3)
+		, (ftnlen)1, (ftnlen)8);
 	sigerr_("SPICE(FILARCHMISMATCH)", (ftnlen)22);
 	chkout_("ZZDDHPPF", (ftnlen)8);
 	return 0;
@@ -912,9 +924,9 @@ L100001:
 		"likely been corrupted by an ASCII mode FTP transfer. Obtain "
 		"the file using IMAGE or BINARY transfer mode from the source."
 		, (ftnlen)180);
-	errch_("$", strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)631)) << 3), (
-		ftnlen)1, (ftnlen)8);
+	errch_("$", __state->strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ?
+		 i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)631)) << 
+		3), (ftnlen)1, (ftnlen)8);
 	errfnm_("#", unit, (ftnlen)1);
 	sigerr_("SPICE(FTPXFERERROR)", (ftnlen)19);
 	chkout_("ZZDDHPPF", (ftnlen)8);
@@ -927,7 +939,8 @@ L100001:
 /*     and we can expect to locate the binary file format */
 /*     identification string. */
 
-    ftppos = pos_(chrrec + 499, ftplft, &c__1, (ftnlen)501, (ftnlen)6);
+    ftppos = pos_(chrrec + 499, __state->ftplft, &__state->c__1, (ftnlen)501, 
+	    (ftnlen)6);
 
 /*     Check to see if we found FTPLFT.  If so extract the binary */
 /*     file format ID word from the file record. */
@@ -944,7 +957,8 @@ L100001:
 
 /*        See if we can find BFFIDW in the STRBFF list. */
 
-	*bff = isrchc_(bffidw, &c__5, strbff, (ftnlen)8, (ftnlen)8);
+	*bff = isrchc_(bffidw, &__state->c__5, __state->strbff, (ftnlen)8, (
+		ftnlen)8);
 
 /*        Check to see if BFF is 0, if it is, signal an error since */
 /*        this indicates an unrecognized BFF. */
@@ -975,7 +989,8 @@ L100001:
     if (*arch == 2) {
 	zzplatfm_("FILE_FORMAT", bffidw, (ftnlen)11, (ftnlen)8);
 	ucase_(bffidw, bffidw, (ftnlen)8, (ftnlen)8);
-	*bff = isrchc_(bffidw, &c__4, strbff, (ftnlen)8, (ftnlen)8);
+	*bff = isrchc_(bffidw, &__state->c__4, __state->strbff, (ftnlen)8, (
+		ftnlen)8);
 	if (*bff == 0) {
 	    setmsg_("The native architecture for this platform is unknown to"
 		    " this version of the toolkit. This is a severe problem t"
@@ -1022,37 +1037,58 @@ L100001:
 
 /*     where VAL is some non-zero value. */
 
-    if (*(unsigned char *)&chrrec[12] == *(unsigned char *)null && *(unsigned 
-	    char *)&chrrec[13] == *(unsigned char *)null && *(unsigned char *)
-	    &chrrec[14] == *(unsigned char *)null && *(unsigned char *)&
-	    chrrec[15] != *(unsigned char *)null) {
+    if (*(unsigned char *)&chrrec[12] == *(unsigned char *)__state->null && *(
+	    unsigned char *)&chrrec[13] == *(unsigned char *)__state->null && 
+	    *(unsigned char *)&chrrec[14] == *(unsigned char *)__state->null 
+	    && *(unsigned char *)&chrrec[15] != *(unsigned char *)
+	    __state->null) {
 	*bff = 1;
-    } else if (*(unsigned char *)&chrrec[12] != *(unsigned char *)null && *(
-	    unsigned char *)&chrrec[13] == *(unsigned char *)null && *(
-	    unsigned char *)&chrrec[14] == *(unsigned char *)null && *(
-	    unsigned char *)&chrrec[15] == *(unsigned char *)null) {
+    } else if (*(unsigned char *)&chrrec[12] != *(unsigned char *)
+	    __state->null && *(unsigned char *)&chrrec[13] == *(unsigned char 
+	    *)__state->null && *(unsigned char *)&chrrec[14] == *(unsigned 
+	    char *)__state->null && *(unsigned char *)&chrrec[15] == *(
+	    unsigned char *)__state->null) {
 
 /*        At this point we know we are dealing with a little endian */
 /*        file.  Locate the first descriptor record. */
 
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[76];
-	fdrec = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[77];
-	fdrec = (*(unsigned char *)&ch__1[0] << 4) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 4) + 
+		fdrec;
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[78];
-	fdrec = (*(unsigned char *)&ch__1[0] << 8) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 8) + 
+		fdrec;
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)&chrrec[79];
-	fdrec = (*(unsigned char *)&ch__1[0] << 12) + fdrec;
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	fdrec = (*(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8) << 12) + 
+		fdrec;
 
 /*        Read the record into CHRREC. */
 
-	io___20.ciunit = *unit;
-	io___20.cirec = fdrec;
-	iostat = s_rdue(&io___20);
+	__state->io___20.ciunit = *unit;
+	__state->io___20.cirec = fdrec;
+	iostat = s_rdue(&__state->io___20);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__1, chrrec, (ftnlen)1000);
+	iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -1075,14 +1111,16 @@ L100002:
 /*        Now examine the NSUM DP in this record to determine the */
 /*        architecture. */
 
-	if (*(unsigned char *)&chrrec[16] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[17] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[18] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[19] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[20] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[21] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[22] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[23] == *(unsigned char *)null) {
+	if (*(unsigned char *)&chrrec[16] == *(unsigned char *)__state->null 
+		&& *(unsigned char *)&chrrec[17] == *(unsigned char *)
+		__state->null && *(unsigned char *)&chrrec[18] == *(unsigned 
+		char *)__state->null && *(unsigned char *)&chrrec[19] == *(
+		unsigned char *)__state->null && *(unsigned char *)&chrrec[20]
+		 == *(unsigned char *)__state->null && *(unsigned char *)&
+		chrrec[21] == *(unsigned char *)__state->null && *(unsigned 
+		char *)&chrrec[22] == *(unsigned char *)__state->null && *(
+		unsigned char *)&chrrec[23] == *(unsigned char *)
+		__state->null) {
 
 /*           In this case we have an empty DAF, and can not distinguish */
 /*           between little endian formats.  Signal an error and return. */
@@ -1095,10 +1133,11 @@ L100002:
 	    sigerr_("SPICE(UNKNOWNBFF)", (ftnlen)17);
 	    chkout_("ZZDDHPPF", (ftnlen)8);
 	    return 0;
-	} else if (*(unsigned char *)&chrrec[16] == *(unsigned char *)null && 
-		*(unsigned char *)&chrrec[17] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[18] == *(unsigned char *)null && *(
-		unsigned char *)&chrrec[19] == *(unsigned char *)null) {
+	} else if (*(unsigned char *)&chrrec[16] == *(unsigned char *)
+		__state->null && *(unsigned char *)&chrrec[17] == *(unsigned 
+		char *)__state->null && *(unsigned char *)&chrrec[18] == *(
+		unsigned char *)__state->null && *(unsigned char *)&chrrec[19]
+		 == *(unsigned char *)__state->null) {
 
 /*           In this case the file is little endian IEEE.  Set BFF. */
 

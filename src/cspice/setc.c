@@ -1,9 +1,17 @@
-/* setc.f -- translated by f2c (version 19980913).
+/* setc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int setc_state_t;
+static setc_state_t* get_setc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SETC ( Compare character sets ) */
 logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen 
@@ -16,15 +24,28 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer cond, carda, cardb;
+    integer cond;
+    integer carda;
+    integer cardb;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer condab, condoa, condob, indexa, condeq, indexb, condgt, condlt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer condab;
+    integer condoa;
+    integer condob;
+    integer indexa;
+    integer condeq;
+    integer indexb;
+    integer condgt;
+    integer condlt;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    setc_state_t* __state = get_setc_state();
 /* $ Abstract */
 
 /*     Given a relational operator, compare two character sets. */

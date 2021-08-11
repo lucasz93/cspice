@@ -1,9 +1,17 @@
-/* pcke20.f -- translated by f2c (version 19980913).
+/* pcke20.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pcke20_state_t;
+static pcke20_state_t* get_pcke20_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PCKE20 ( PCK, evaluate record, type 20 ) */
 /* Subroutine */ int pcke20_(doublereal *et, doublereal *record, doublereal *
@@ -16,12 +24,16 @@
     double d_mod(doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spke20_(doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int spke20_(doublereal *, doublereal *, 
+	    doublereal *);
     extern doublereal twopi_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pcke20_state_t* __state = get_pcke20_state();
 /* $ Abstract */
 
 /*     Evaluate a single PCK data record from a segment of type 20 */

@@ -1,9 +1,17 @@
-/* drdcyl.f -- translated by f2c (version 19980913).
+/* drdcyl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int drdcyl_state_t;
+static drdcyl_state_t* get_drdcyl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DRDCYL (Derivative of rectangular w.r.t. cylindrical) */
 /* Subroutine */ int drdcyl_(doublereal *r__, doublereal *long__, doublereal *
@@ -12,6 +20,9 @@
     /* Builtin functions */
     double cos(doublereal), sin(doublereal);
 
+
+    /* Module state */
+    drdcyl_state_t* __state = get_drdcyl_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

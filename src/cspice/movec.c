@@ -1,9 +1,17 @@
-/* movec.f -- translated by f2c (version 19980913).
+/* movec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int movec_state_t;
+static movec_state_t* get_movec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MOVEC  ( Move a character array to another ) */
 /* Subroutine */ int movec_(char *arrfrm, integer *ndim, char *arrto, ftnlen 
@@ -18,6 +26,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    movec_state_t* __state = get_movec_state();
 /* $ Abstract */
 
 /*      Copy the elements of one character array into another */

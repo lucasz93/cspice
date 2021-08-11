@@ -1,9 +1,17 @@
-/* zzekqcon.f -- translated by f2c (version 19980913).
+/* zzekqcon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekqcon_state_t;
+static zzekqcon_state_t* get_zzekqcon_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKQCON ( Private: EK, read constraints from query ) */
 /* Subroutine */ int zzekqcon_(integer *eqryi, char *eqryc, doublereal *eqryd,
@@ -18,17 +26,27 @@
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    integer base, ntab, ncns;
+    integer base;
+    integer ntab;
+    integer ncns;
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen), chkin_(char *, ftnlen);
-    integer cb, ce;
-    extern logical failed_(void);
-    integer icheck, tb, te;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
 	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer cb;
+    integer ce;
+    extern logical failed_(void);
+    integer icheck;
+    integer tb;
+    integer te;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer ptr;
 
+
+    /* Module state */
+    zzekqcon_state_t* __state = get_zzekqcon_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

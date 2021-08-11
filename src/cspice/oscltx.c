@@ -1,20 +1,21 @@
-/* oscltx.f -- translated by f2c (version 19980913).
+/* oscltx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__12 = 12;
-static doublereal c_b5 = 0.;
-static doublereal c_b6 = 1e-10;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static doublereal c_b13 = .66666666666666663;
-static doublereal c_b14 = .33333333333333331;
-static doublereal c_b15 = 1.5;
+extern oscltx_init_t __oscltx_init;
+static oscltx_state_t* get_oscltx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->oscltx)
+		state->oscltx = __cspice_allocate_module(sizeof(
+	oscltx_state_t), &__oscltx_init, sizeof(__oscltx_init));
+	return state->oscltx;
+
+}
 
 /* $Procedure  OSCLTX ( Extended osculating elements from state ) */
 /* Subroutine */ int oscltx_(doublereal *state, doublereal *et, doublereal *
@@ -22,8 +23,6 @@ static doublereal c_b15 = 1.5;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static doublereal limit = 0.;
 
     /* System generated locals */
     doublereal d__1;
@@ -32,36 +31,55 @@ static doublereal c_b15 = 1.5;
     double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    doublereal rmag, vmag, rhat[3], pole[3], xmat[9]	/* was [3][3] */;
+    doublereal rmag;
+    doublereal vmag;
+    doublereal rhat[3];
+    doublereal pole[3];
+    doublereal xmat[9]	/* was [3][3] */;
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal a, b, e, range;
+    doublereal a;
+    doublereal b;
+    doublereal e;
+    doublereal range;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal exact_(doublereal *, doublereal *, doublereal *), 
-	    dpmax_(void);
+    extern doublereal exact_(doublereal *, doublereal *, doublereal *);
+    extern doublereal dpmax_(void);
     doublereal rperi[3];
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    doublereal c1, c2;
+    doublereal c1;
+    doublereal c2;
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *), unorm_(doublereal *, doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *), twopi_(void);
+	    *);
+    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
     extern logical failed_(void);
     doublereal eccvec[3];
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), recrad_(
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal nu;
     logical cmptau;
     extern /* Subroutine */ int oscelt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     doublereal mucubr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), twovec_(doublereal *,
-	     integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
+	     integer *, doublereal *);
     extern logical return_(void);
-    doublereal ecc, dec, vel[3], tau;
+    doublereal ecc;
+    doublereal dec;
+    doublereal vel[3];
+    doublereal tau;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    oscltx_state_t* __state = get_oscltx_state();
 /* $ Abstract */
 
 /*     Determine the set of osculating conic orbital elements that */
@@ -387,16 +405,16 @@ static doublereal c_b15 = 1.5;
 	return 0;
     }
     chkin_("OSCLTX", (ftnlen)6);
-    if (pass1) {
-	limit = dpmax_() / 200.;
-	pass1 = FALSE_;
+    if (__state->pass1) {
+	__state->limit = dpmax_() / 200.;
+	__state->pass1 = FALSE_;
     }
 
 /*     Initialize the members of ELTS that won't be set by OSCELT. This */
 /*     is necessary because this routine may return early if A or TAU */
 /*     cannot be computed. */
 
-    cleard_(&c__12, &elts[8]);
+    cleard_(&__state->c__12, &elts[8]);
     nu = 0.;
     tau = 0.;
     a = 0.;
@@ -441,7 +459,7 @@ static doublereal c_b15 = 1.5;
     unorm_(state, rhat, &rmag);
     vequ_(&state[3], vel);
     vmag = vnorm_(vel);
-    ecc = exact_(&elts[1], &c_b5, &c_b6);
+    ecc = exact_(&elts[1], &__state->c_b5, &__state->c_b6);
     if (ecc != 0.) {
 /*                                 _   _ */
 /*        C1 is the coefficient of r/||r|| in (1) above: */
@@ -465,7 +483,7 @@ static doublereal c_b15 = 1.5;
 /*        Compute the transformation from the frame of the input state */
 /*        to the perifocal frame. */
 
-	twovec_(eccvec, &c__1, pole, &c__3, xmat);
+	twovec_(eccvec, &__state->c__1, pole, &__state->c__3, xmat);
 	if (failed_()) {
 	    chkout_("OSCLTX", (ftnlen)6);
 	    return 0;
@@ -532,7 +550,7 @@ static doublereal c_b15 = 1.5;
 	chkout_("OSCLTX", (ftnlen)6);
 	return 0;
     }
-    if (rmag <= *mu / limit) {
+    if (rmag <= *mu / __state->limit) {
 
 /*        We need RMAG > MU/LIMIT to make E computable. */
 
@@ -547,7 +565,7 @@ static doublereal c_b15 = 1.5;
 /* Computing 2nd power */
     d__1 = vmag;
     e = d__1 * d__1 * .5 - *mu / rmag;
-    if (abs(e) < abs(*mu) / limit) {
+    if (abs(e) < abs(*mu) / __state->limit) {
 
 /*        We can't safely compute A. The case of E equal to 0 */
 /*        gets the code to this point. */
@@ -591,9 +609,9 @@ static doublereal c_b15 = 1.5;
 /*        Note that the case of non-positive MU has already */
 /*        been ruled out. */
 
-	d__1 = limit / twopi_();
-	b = pow_dd(&d__1, &c_b13);
-	mucubr = pow_dd(mu, &c_b14);
+	d__1 = __state->limit / twopi_();
+	b = pow_dd(&d__1, &__state->c_b13);
+	mucubr = pow_dd(mu, &__state->c_b14);
 	if (*mu >= 1.) {
 	    cmptau = a / mucubr < b;
 	} else {
@@ -601,7 +619,7 @@ static doublereal c_b15 = 1.5;
 	}
 	if (cmptau) {
 	    d__1 = a / mucubr;
-	    tau = twopi_() * pow_dd(&d__1, &c_b15);
+	    tau = twopi_() * pow_dd(&d__1, &__state->c_b15);
 	}
     }
 

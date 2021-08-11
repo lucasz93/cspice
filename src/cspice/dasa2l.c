@@ -1,15 +1,21 @@
-/* dasa2l.f -- translated by f2c (version 19980913).
+/* dasa2l.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__2 = 2;
+extern dasa2l_init_t __dasa2l_init;
+static dasa2l_state_t* get_dasa2l_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasa2l)
+		state->dasa2l = __cspice_allocate_module(sizeof(
+	dasa2l_state_t), &__dasa2l_init, sizeof(__dasa2l_init));
+	return state->dasa2l;
+
+}
 
 /* $Procedure      DASA2L ( DAS, address to physical location ) */
 /* Subroutine */ int dasa2l_(integer *handle, integer *type__, integer *
@@ -18,37 +24,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
-    static logical prvok = FALSE_;
-    static integer tbbase[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static logical tbfast[20] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer tbfwrd[20] = { -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1 };
-    static integer tbhan[20] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-    static integer tbmxad[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static logical tbrdon[20] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static integer tbsize[60]	/* was [3][20] */ = { -1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-	    -1,-1,-1,-1,-1,-1,-1,-1 };
-    static integer prev[3] = { 3,1,2 };
-    static integer nw[3] = { 1024,128,256 };
-    static integer rngloc[3] = { 3,5,7 };
-    static logical fast = FALSE_;
-    static integer fidx = 0;
-    static logical known = FALSE_;
-    static integer nfiles = 0;
-    static integer prvhan = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -58,31 +33,22 @@ static integer c__2 = 2;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer free, nrec, i__, j, range[2];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ncomc;
-    static logical segok;
-    static integer ncomr, ndirs;
     extern logical failed_(void);
-    static integer ub, hiaddr;
     extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    static integer baserc;
-    static char access[10];
-    static integer dscloc, dirrec[256];
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
-    static logical samfil;
-    static integer mxaddr;
     extern integer isrchi_(integer *, integer *, integer *);
-    static integer lstrec[3];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
-    static integer nresvc, nxtrec;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen), dasrri_(integer *, 
-	    integer *, integer *, integer *, integer *);
-    static integer lstwrd[3], nresvr, ntypes, curtyp, prvtyp;
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
+	    integer *, integer *);
 
+    /* Module state */
+    dasa2l_state_t* __state = get_dasa2l_state();
 /* $ Abstract */
 
 /*     Map a DAS address to a physical location in a specified DAS file. */
@@ -695,30 +661,31 @@ static integer c__2 = 2;
 /*     last call. We can use data from the previous call only if that */
 /*     call succeeded. */
 
-    samfil = *handle == prvhan && prvok;
+    __state->samfil = *handle == __state->prvhan && __state->prvok;
 
 /*     PRVOK defaults to .FALSE. and will be reset if this call */
 /*     succeeds. */
 
-    prvok = FALSE_;
+    __state->prvok = FALSE_;
 
 /*     Fast files get priority handling. If we have a fast file */
 /*     that we saw on the previous call, skip directly to the */
 /*     address range check. */
 
-    if (! (fast && samfil)) {
+    if (! (__state->fast && __state->samfil)) {
 
 /*        Is this a file we recognize? */
 
-	if (samfil) {
-	    known = TRUE_;
+	if (__state->samfil) {
+	    __state->known = TRUE_;
 	} else {
-	    fidx = isrchi_(handle, &nfiles, tbhan);
-	    known = fidx > 0;
+	    __state->fidx = isrchi_(handle, &__state->nfiles, __state->tbhan);
+	    __state->known = __state->fidx > 0;
 	}
-	if (known) {
-	    fast = tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbfast", i__1, "dasa2l_", (ftnlen)779)];
+	if (__state->known) {
+	    __state->fast = __state->tbfast[(i__1 = __state->fidx - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge("tbfast", i__1, "dasa2l_", (
+		    ftnlen)779)];
 	} else {
 
 /*           This file is not in our list. We'll buffer information */
@@ -730,58 +697,68 @@ static integer c__2 = 2;
 /*           Note that unused entries (those for which the DAS handle is */
 /*           0) will drop out of the list automatically. */
 
-	    ub = min(nfiles,19);
-	    for (i__ = ub; i__ >= 1; --i__) {
-		tbhan[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan", 
-			i__1, "dasa2l_", (ftnlen)796)] = tbhan[(i__2 = i__ - 
-			1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbhan", i__2, 
-			"dasa2l_", (ftnlen)796)];
-		tbrdon[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbrdon"
-			, i__1, "dasa2l_", (ftnlen)797)] = tbrdon[(i__2 = i__ 
-			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbrdon", i__2,
-			 "dasa2l_", (ftnlen)797)];
-		tbfast[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfast"
-			, i__1, "dasa2l_", (ftnlen)798)] = tbfast[(i__2 = i__ 
-			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbfast", i__2,
-			 "dasa2l_", (ftnlen)798)];
-		tbfwrd[(i__1 = i__) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfwrd"
-			, i__1, "dasa2l_", (ftnlen)799)] = tbfwrd[(i__2 = i__ 
-			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tbfwrd", i__2,
-			 "dasa2l_", (ftnlen)799)];
-		for (j = 1; j <= 3; ++j) {
-		    tbbase[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
-			    i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)
-			    802)] = tbbase[(i__2 = j + i__ * 3 - 4) < 60 && 0 
-			    <= i__2 ? i__2 : s_rnge("tbbase", i__2, "dasa2l_",
-			     (ftnlen)802)];
-		    tbsize[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
-			    i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)
-			    803)] = tbsize[(i__2 = j + i__ * 3 - 4) < 60 && 0 
-			    <= i__2 ? i__2 : s_rnge("tbsize", i__2, "dasa2l_",
-			     (ftnlen)803)];
-		    tbmxad[(i__1 = j + (i__ + 1) * 3 - 4) < 60 && 0 <= i__1 ? 
-			    i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)
-			    804)] = tbmxad[(i__2 = j + i__ * 3 - 4) < 60 && 0 
-			    <= i__2 ? i__2 : s_rnge("tbmxad", i__2, "dasa2l_",
-			     (ftnlen)804)];
+	    __state->ub = min(__state->nfiles,19);
+	    for (__state->i__ = __state->ub; __state->i__ >= 1; 
+		    --__state->i__) {
+		__state->tbhan[(i__1 = __state->i__) < 20 && 0 <= i__1 ? i__1 
+			: s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)796)] = 
+			__state->tbhan[(i__2 = __state->i__ - 1) < 20 && 0 <= 
+			i__2 ? i__2 : s_rnge("tbhan", i__2, "dasa2l_", (
+			ftnlen)796)];
+		__state->tbrdon[(i__1 = __state->i__) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)797)]
+			 = __state->tbrdon[(i__2 = __state->i__ - 1) < 20 && 
+			0 <= i__2 ? i__2 : s_rnge("tbrdon", i__2, "dasa2l_", (
+			ftnlen)797)];
+		__state->tbfast[(i__1 = __state->i__) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbfast", i__1, "dasa2l_", (ftnlen)798)]
+			 = __state->tbfast[(i__2 = __state->i__ - 1) < 20 && 
+			0 <= i__2 ? i__2 : s_rnge("tbfast", i__2, "dasa2l_", (
+			ftnlen)798)];
+		__state->tbfwrd[(i__1 = __state->i__) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbfwrd", i__1, "dasa2l_", (ftnlen)799)]
+			 = __state->tbfwrd[(i__2 = __state->i__ - 1) < 20 && 
+			0 <= i__2 ? i__2 : s_rnge("tbfwrd", i__2, "dasa2l_", (
+			ftnlen)799)];
+		for (__state->j = 1; __state->j <= 3; ++__state->j) {
+		    __state->tbbase[(i__1 = __state->j + (__state->i__ + 1) * 
+			    3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbbase",
+			     i__1, "dasa2l_", (ftnlen)802)] = __state->tbbase[
+			    (i__2 = __state->j + __state->i__ * 3 - 4) < 60 &&
+			     0 <= i__2 ? i__2 : s_rnge("tbbase", i__2, "dasa"
+			    "2l_", (ftnlen)802)];
+		    __state->tbsize[(i__1 = __state->j + (__state->i__ + 1) * 
+			    3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbsize",
+			     i__1, "dasa2l_", (ftnlen)803)] = __state->tbsize[
+			    (i__2 = __state->j + __state->i__ * 3 - 4) < 60 &&
+			     0 <= i__2 ? i__2 : s_rnge("tbsize", i__2, "dasa"
+			    "2l_", (ftnlen)803)];
+		    __state->tbmxad[(i__1 = __state->j + (__state->i__ + 1) * 
+			    3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbmxad",
+			     i__1, "dasa2l_", (ftnlen)804)] = __state->tbmxad[
+			    (i__2 = __state->j + __state->i__ * 3 - 4) < 60 &&
+			     0 <= i__2 ? i__2 : s_rnge("tbmxad", i__2, "dasa"
+			    "2l_", (ftnlen)804)];
 		}
 	    }
 
 /*           Insert the new table entry at index 1. */
 
 /* Computing MIN */
-	    i__1 = nfiles + 1;
-	    nfiles = min(i__1,20);
-	    fidx = 1;
-	    tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan",
-		     i__1, "dasa2l_", (ftnlen)813)] = *handle;
+	    i__1 = __state->nfiles + 1;
+	    __state->nfiles = min(i__1,20);
+	    __state->fidx = 1;
+	    __state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+		    i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)813)] = *
+		    handle;
 
 /*           Set FAST to .FALSE. until we find out whether the file */
 /*           is read-only and segregated. */
 
-	    fast = FALSE_;
-	    tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfa"
-		    "st", i__1, "dasa2l_", (ftnlen)819)] = fast;
+	    __state->fast = FALSE_;
+	    __state->tbfast[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+		    i__1 : s_rnge("tbfast", i__1, "dasa2l_", (ftnlen)819)] = 
+		    __state->fast;
 
 /*           FIDX is now set whether or not the current file is known. */
 
@@ -792,52 +769,59 @@ static integer c__2 = 2;
 /*           otherwise. The contents of the arrays TBBASE, TBSIZE, and */
 /*           TBMXAD are left undefined for slow files. */
 
-	    dasham_(handle, access, (ftnlen)10);
+	    dasham_(handle, __state->access, (ftnlen)10);
 	    if (failed_()) {
 
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
-		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)837)] = 0;
+		__state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)837)] 
+			= 0;
 		return 0;
 	    }
 
 /*           TBRDON(FIDX) indicates whether the file is read-only. */
 
-	    tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbrd"
-		    "on", i__1, "dasa2l_", (ftnlen)845)] = s_cmp(access, "READ"
-		    , (ftnlen)10, (ftnlen)4) == 0;
+	    __state->tbrdon[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+		    i__1 : s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)845)] = 
+		    s_cmp(__state->access, "READ", (ftnlen)10, (ftnlen)4) == 
+		    0;
 	}
 
 /*        FIDX, KNOWN and TBRDON( FIDX ) are set. */
 
 /*        Get the file summary if it isn't known already. */
 
-	if (! (known && tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)854)])) {
+	if (! (__state->known && __state->tbrdon[(i__1 = __state->fidx - 1) < 
+		20 && 0 <= i__1 ? i__1 : s_rnge("tbrdon", i__1, "dasa2l_", (
+		ftnlen)854)])) {
 
 /*           The file is new or it's writable; in either case the */
 /*           maximum addresses are unknown. Get the current address */
 /*           range for the file. */
 
-	    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, &tbmxad[(
-		    i__1 = fidx * 3 - 3) < 60 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbmxad", i__1, "dasa2l_", (ftnlen)860)], lstrec, lstwrd);
+	    dashfs_(handle, &__state->nresvr, &__state->nresvc, &
+		    __state->ncomr, &__state->ncomc, &__state->free, &
+		    __state->tbmxad[(i__1 = __state->fidx * 3 - 3) < 60 && 0 
+		    <= i__1 ? i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (
+		    ftnlen)860)], __state->lstrec, __state->lstwrd);
 	    if (failed_()) {
 
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
-		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)875)] = 0;
+		__state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)875)] 
+			= 0;
 		return 0;
 	    }
 
 /*           Set the forward cluster pointer. */
 
-	    tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfw"
-		    "rd", i__1, "dasa2l_", (ftnlen)883)] = nresvr + ncomr + 2;
+	    __state->tbfwrd[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+		    i__1 : s_rnge("tbfwrd", i__1, "dasa2l_", (ftnlen)883)] = 
+		    __state->nresvr + __state->ncomr + 2;
 	}
 
 /*        TBMXAD is set. */
@@ -845,8 +829,9 @@ static integer c__2 = 2;
 /*        If this is an unknown file and is read-only, determine */
 /*        whether the file is segregated */
 
-	if (! known && tbrdon[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tbrdon", i__1, "dasa2l_", (ftnlen)893)]) {
+	if (! __state->known && __state->tbrdon[(i__1 = __state->fidx - 1) < 
+		20 && 0 <= i__1 ? i__1 : s_rnge("tbrdon", i__1, "dasa2l_", (
+		ftnlen)893)]) {
 
 /*           The file is read-only; we need to know whether it is */
 /*           segregated. If so, there are at most three cluster */
@@ -858,11 +843,13 @@ static integer c__2 = 2;
 
 /*           NREC is the record number of the first directory record. */
 
-	    nrec = tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tbfwrd", i__1, "dasa2l_", (ftnlen)905)];
-	    dasrri_(handle, &nrec, &c__1, &c__256, dirrec);
-	    nxtrec = dirrec[1];
-	    if (nxtrec <= 0) {
+	    __state->nrec = __state->tbfwrd[(i__1 = __state->fidx - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge("tbfwrd", i__1, "dasa2l_", (
+		    ftnlen)905)];
+	    dasrri_(handle, &__state->nrec, &__state->c__1, &__state->c__256, 
+		    __state->dirrec);
+	    __state->nxtrec = __state->dirrec[1];
+	    if (__state->nxtrec <= 0) {
 
 /*              If this file is segregated, there are at most three */
 /*              cluster descriptors, and each one points to a cluster */
@@ -871,58 +858,66 @@ static integer c__2 = 2;
 /*              the size of the corresponding cluster must be large */
 /*              enough to hold all addresses of that type. */
 
-		ntypes = 0;
-		for (i__ = 1; i__ <= 3; ++i__) {
-		    if (tbmxad[(i__1 = i__ + fidx * 3 - 4) < 60 && 0 <= i__1 ?
-			     i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)
-			    924)] > 0) {
-			++ntypes;
+		__state->ntypes = 0;
+		for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+		    if (__state->tbmxad[(i__1 = __state->i__ + __state->fidx *
+			     3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbmxad"
+			    , i__1, "dasa2l_", (ftnlen)924)] > 0) {
+			++__state->ntypes;
 		    }
 		}
 
 /*              Now look at the first NTYPES cluster descriptors, */
 /*              collecting cluster bases and sizes as we go. */
 
-		baserc = nrec + 1;
-		prvtyp = prev[(i__1 = dirrec[8] - 1) < 3 && 0 <= i__1 ? i__1 :
-			 s_rnge("prev", i__1, "dasa2l_", (ftnlen)935)];
-		dscloc = 10;
-		segok = TRUE_;
-		while(dscloc <= ntypes + 9 && segok) {
+		__state->baserc = __state->nrec + 1;
+		__state->prvtyp = __state->prev[(i__1 = __state->dirrec[8] - 
+			1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, 
+			"dasa2l_", (ftnlen)935)];
+		__state->dscloc = 10;
+		__state->segok = TRUE_;
+		while(__state->dscloc <= __state->ntypes + 9 && 
+			__state->segok) {
 
 /*                 Find the type of the current descriptor. */
 
-		    if (dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? i__1 :
-			     s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)944)] 
-			    > 0) {
-			curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
-				i__1 : s_rnge("next", i__1, "dasa2l_", (
-				ftnlen)945)];
+		    if (__state->dirrec[(i__1 = __state->dscloc - 1) < 256 && 
+			    0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasa2"
+			    "l_", (ftnlen)944)] > 0) {
+			__state->curtyp = __state->next[(i__1 = 
+				__state->prvtyp - 1) < 3 && 0 <= i__1 ? i__1 :
+				 s_rnge("next", i__1, "dasa2l_", (ftnlen)945)]
+				;
 		    } else {
-			curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
-				i__1 : s_rnge("prev", i__1, "dasa2l_", (
-				ftnlen)947)];
+			__state->curtyp = __state->prev[(i__1 = 
+				__state->prvtyp - 1) < 3 && 0 <= i__1 ? i__1 :
+				 s_rnge("prev", i__1, "dasa2l_", (ftnlen)947)]
+				;
 		    }
-		    prvtyp = curtyp;
-		    tbbase[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-			    i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)
-			    951)] = baserc;
-		    tbsize[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-			    i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)
-			    952)] = (i__3 = dirrec[(i__2 = dscloc - 1) < 256 
-			    && 0 <= i__2 ? i__2 : s_rnge("dirrec", i__2, 
+		    __state->prvtyp = __state->curtyp;
+		    __state->tbbase[(i__1 = __state->curtyp + __state->fidx * 
+			    3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbbase",
+			     i__1, "dasa2l_", (ftnlen)951)] = __state->baserc;
+		    __state->tbsize[(i__1 = __state->curtyp + __state->fidx * 
+			    3 - 4) < 60 && 0 <= i__1 ? i__1 : s_rnge("tbsize",
+			     i__1, "dasa2l_", (ftnlen)952)] = (i__3 = 
+			    __state->dirrec[(i__2 = __state->dscloc - 1) < 
+			    256 && 0 <= i__2 ? i__2 : s_rnge("dirrec", i__2, 
 			    "dasa2l_", (ftnlen)952)], abs(i__3));
-		    baserc += tbsize[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 
-			    <= i__1 ? i__1 : s_rnge("tbsize", i__1, "dasa2l_",
-			     (ftnlen)953)];
-		    segok = tbmxad[(i__1 = curtyp + fidx * 3 - 4) < 60 && 0 <=
-			     i__1 ? i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (
-			    ftnlen)956)] <= tbsize[(i__2 = curtyp + fidx * 3 
-			    - 4) < 60 && 0 <= i__2 ? i__2 : s_rnge("tbsize", 
-			    i__2, "dasa2l_", (ftnlen)956)] * nw[(i__3 = 
-			    curtyp - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-			    "nw", i__3, "dasa2l_", (ftnlen)956)];
-		    ++dscloc;
+		    __state->baserc += __state->tbsize[(i__1 = 
+			    __state->curtyp + __state->fidx * 3 - 4) < 60 && 
+			    0 <= i__1 ? i__1 : s_rnge("tbsize", i__1, "dasa2"
+			    "l_", (ftnlen)953)];
+		    __state->segok = __state->tbmxad[(i__1 = __state->curtyp 
+			    + __state->fidx * 3 - 4) < 60 && 0 <= i__1 ? i__1 
+			    : s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)956)] 
+			    <= __state->tbsize[(i__2 = __state->curtyp + 
+			    __state->fidx * 3 - 4) < 60 && 0 <= i__2 ? i__2 : 
+			    s_rnge("tbsize", i__2, "dasa2l_", (ftnlen)956)] * 
+			    __state->nw[(i__3 = __state->curtyp - 1) < 3 && 0 
+			    <= i__3 ? i__3 : s_rnge("nw", i__3, "dasa2l_", (
+			    ftnlen)956)];
+		    ++__state->dscloc;
 
 /*                 This loop will terminate after at most 3 */
 /*                 iterations. No further checks are needed. */
@@ -931,9 +926,10 @@ static integer c__2 = 2;
 
 /*              Update FAST and TBFAST based on the segregation check. */
 
-		fast = segok;
-		tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbfast", i__1, "dasa2l_", (ftnlen)970)] = fast;
+		__state->fast = __state->segok;
+		__state->tbfast[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ?
+			 i__1 : s_rnge("tbfast", i__1, "dasa2l_", (ftnlen)970)
+			] = __state->fast;
 
 /*              If the file is FAST, */
 
@@ -954,22 +950,23 @@ static integer c__2 = 2;
 /*     At this point we have the logical address ranges for the */
 /*     file. Check the input address against them. */
 
-    mxaddr = tbmxad[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? i__1 :
-	     s_rnge("tbmxad", i__1, "dasa2l_", (ftnlen)992)];
-    if (*addrss < 1 || *addrss > mxaddr) {
+    __state->mxaddr = __state->tbmxad[(i__1 = *type__ + __state->fidx * 3 - 4)
+	     < 60 && 0 <= i__1 ? i__1 : s_rnge("tbmxad", i__1, "dasa2l_", (
+	    ftnlen)992)];
+    if (*addrss < 1 || *addrss > __state->mxaddr) {
 
 /*        Make sure the current table entry won't be found on a */
 /*        subsequent search. */
 
-	tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan", 
-		i__1, "dasa2l_", (ftnlen)999)] = 0;
+	__state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
+		s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)999)] = 0;
 	chkin_("DASA2L", (ftnlen)6);
 	setmsg_("ADDRSS was #; valid range for type # is # to #.  File was #",
 		 (ftnlen)59);
 	errint_("#", addrss, (ftnlen)1);
 	errint_("#", type__, (ftnlen)1);
-	errint_("#", &c__1, (ftnlen)1);
-	errint_("#", &mxaddr, (ftnlen)1);
+	errint_("#", &__state->c__1, (ftnlen)1);
+	errint_("#", &__state->mxaddr, (ftnlen)1);
 	errhan_("#", handle, (ftnlen)1);
 	sigerr_("SPICE(DASNOSUCHADDRESS)", (ftnlen)23);
 	chkout_("DASA2L", (ftnlen)6);
@@ -980,17 +977,19 @@ static integer c__2 = 2;
 /*     size. HIADDR is the highest address (not necessarily in use) in */
 /*     the cluster. */
 
-    if (tbfast[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbfast", 
-	    i__1, "dasa2l_", (ftnlen)1020)]) {
+    if (__state->tbfast[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? i__1 : 
+	    s_rnge("tbfast", i__1, "dasa2l_", (ftnlen)1020)]) {
 
 /*        The current file is "fast": read-only and segregated. */
 
-	*clbase = tbbase[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbbase", i__1, "dasa2l_", (ftnlen)1024)];
-	*clsize = tbsize[(i__1 = *type__ + fidx * 3 - 4) < 60 && 0 <= i__1 ? 
-		i__1 : s_rnge("tbsize", i__1, "dasa2l_", (ftnlen)1025)];
-	hiaddr = *clsize * nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("nw", i__1, "dasa2l_", (ftnlen)1026)];
+	*clbase = __state->tbbase[(i__1 = *type__ + __state->fidx * 3 - 4) < 
+		60 && 0 <= i__1 ? i__1 : s_rnge("tbbase", i__1, "dasa2l_", (
+		ftnlen)1024)];
+	*clsize = __state->tbsize[(i__1 = *type__ + __state->fidx * 3 - 4) < 
+		60 && 0 <= i__1 ? i__1 : s_rnge("tbsize", i__1, "dasa2l_", (
+		ftnlen)1025)];
+	__state->hiaddr = *clsize * __state->nw[(i__1 = *type__ - 1) < 3 && 0 
+		<= i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (ftnlen)1026)];
     } else {
 
 /*        If we're not looking at a "fast" file, find the cluster */
@@ -1006,36 +1005,40 @@ static integer c__2 = 2;
 /*        record that contains the address we're looking for, since */
 /*        we've already checked that the address is in range. */
 
-	nrec = tbfwrd[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tbfwrd", i__1, "dasa2l_", (ftnlen)1043)];
-	ndirs = 1;
-	i__3 = rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"rngloc", i__2, "dasa2l_", (ftnlen)1046)] + 1;
-	dasrri_(handle, &nrec, &rngloc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ?
-		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1046)], &
-		i__3, range);
-	while(range[1] < *addrss) {
+	__state->nrec = __state->tbfwrd[(i__1 = __state->fidx - 1) < 20 && 0 
+		<= i__1 ? i__1 : s_rnge("tbfwrd", i__1, "dasa2l_", (ftnlen)
+		1043)];
+	__state->ndirs = 1;
+	i__3 = __state->rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge("rngloc", i__2, "dasa2l_", (ftnlen)1046)] + 1;
+	dasrri_(handle, &__state->nrec, &__state->rngloc[(i__1 = *type__ - 1) 
+		< 3 && 0 <= i__1 ? i__1 : s_rnge("rngloc", i__1, "dasa2l_", (
+		ftnlen)1046)], &i__3, __state->range);
+	while(__state->range[1] < *addrss) {
 
 /*           The record number of the next directory is the forward */
 /*           pointer in the current directory record. Update NREC with */
 /*           this pointer. Get the address range for the specified type */
 /*           covered by this next directory record. */
 
-	    dasrri_(handle, &nrec, &c__2, &c__2, &nxtrec);
-	    nrec = nxtrec;
-	    ++ndirs;
-	    i__3 = rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rngloc", i__2, "dasa2l_", (ftnlen)1065)] + 1;
-	    dasrri_(handle, &nrec, &rngloc[(i__1 = *type__ - 1) < 3 && 0 <= 
-		    i__1 ? i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)
-		    1065)], &i__3, range);
+	    dasrri_(handle, &__state->nrec, &__state->c__2, &__state->c__2, &
+		    __state->nxtrec);
+	    __state->nrec = __state->nxtrec;
+	    ++__state->ndirs;
+	    i__3 = __state->rngloc[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? 
+		    i__2 : s_rnge("rngloc", i__2, "dasa2l_", (ftnlen)1065)] + 
+		    1;
+	    dasrri_(handle, &__state->nrec, &__state->rngloc[(i__1 = *type__ 
+		    - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rngloc", i__1, 
+		    "dasa2l_", (ftnlen)1065)], &i__3, __state->range);
 	    if (failed_()) {
 
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
-		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)1076)] = 0;
+		__state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)1076)]
+			 = 0;
 		return 0;
 	    }
 	}
@@ -1050,14 +1053,16 @@ static integer c__2 = 2;
 /*        the clusters whose descriptors we've seen. The variable HIADDR */
 /*        will contain this address. */
 
-	dasrri_(handle, &nrec, &c__1, &c__256, dirrec);
+	dasrri_(handle, &__state->nrec, &__state->c__1, &__state->c__256, 
+		__state->dirrec);
 	if (failed_()) {
 
 /*           Make sure the current table entry won't be found on a */
 /*           subsequent search. */
 
-	    tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tbhan",
-		     i__1, "dasa2l_", (ftnlen)1102)] = 0;
+	    __state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+		    i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)1102)] = 
+		    0;
 	    return 0;
 	}
 
@@ -1067,15 +1072,15 @@ static integer c__2 = 2;
 /*        this value with the number of the first data record of the */
 /*        next cluster. */
 
-	*clbase = nrec + 1;
+	*clbase = __state->nrec + 1;
 
 /*        We'll initialize HIADDR with the value preceding the lowest */
 /*        address of type TYPE described by the current directory. */
 
-	hiaddr = dirrec[(i__2 = rngloc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ?
-		 i__1 : s_rnge("rngloc", i__1, "dasa2l_", (ftnlen)1121)] - 1) 
-		< 256 && 0 <= i__2 ? i__2 : s_rnge("dirrec", i__2, "dasa2l_", 
-		(ftnlen)1121)] - 1;
+	__state->hiaddr = __state->dirrec[(i__2 = __state->rngloc[(i__1 = *
+		type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rngloc", i__1, 
+		"dasa2l_", (ftnlen)1121)] - 1) < 256 && 0 <= i__2 ? i__2 : 
+		s_rnge("dirrec", i__2, "dasa2l_", (ftnlen)1121)] - 1;
 
 /*        Initialize the number of records described by the last seen */
 /*        type descriptor. This number, when added to CLBASE, should */
@@ -1092,11 +1097,12 @@ static integer c__2 = 2;
 /*        At this point, HIADDR is less than ADDRSS, so the loop will */
 /*        always be executed at least once. */
 
-	prvtyp = prev[(i__1 = dirrec[8] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"prev", i__1, "dasa2l_", (ftnlen)1140)];
-	dscloc = 10;
-	while(hiaddr < *addrss) {
-	    if (dscloc > 256) {
+	__state->prvtyp = __state->prev[(i__1 = __state->dirrec[8] - 1) < 3 &&
+		 0 <= i__1 ? i__1 : s_rnge("prev", i__1, "dasa2l_", (ftnlen)
+		1140)];
+	__state->dscloc = 10;
+	while(__state->hiaddr < *addrss) {
+	    if (__state->dscloc > 256) {
 
 /*              This situation shouldn't occur, but it might if the */
 /*              DAS file is corrupted. */
@@ -1104,18 +1110,19 @@ static integer c__2 = 2;
 /*              Make sure the current table entry won't be found */
 /*              on a subsequent search. */
 
-		tbhan[(i__1 = fidx - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"tbhan", i__1, "dasa2l_", (ftnlen)1153)] = 0;
+		__state->tbhan[(i__1 = __state->fidx - 1) < 20 && 0 <= i__1 ? 
+			i__1 : s_rnge("tbhan", i__1, "dasa2l_", (ftnlen)1153)]
+			 = 0;
 		chkin_("DASA2L", (ftnlen)6);
 		setmsg_("Directory record # in DAS file with handle # is pro"
 			"bably corrupted. No high cluster address at or above"
 			" the input address # was found, though it should hav"
 			"e been. High address was #. Data type was #.", (
 			ftnlen)199);
-		errint_("#", &nrec, (ftnlen)1);
+		errint_("#", &__state->nrec, (ftnlen)1);
 		errint_("#", handle, (ftnlen)1);
 		errint_("#", addrss, (ftnlen)1);
-		errint_("#", &hiaddr, (ftnlen)1);
+		errint_("#", &__state->hiaddr, (ftnlen)1);
 		errint_("#", type__, (ftnlen)1);
 		sigerr_("SPICE(BADDASDIRECTORY)", (ftnlen)22);
 		chkout_("DASA2L", (ftnlen)6);
@@ -1129,37 +1136,41 @@ static integer c__2 = 2;
 
 /*           Find the type of the current descriptor. */
 
-	    if (dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dasa2l_", (ftnlen)1180)] > 0) {
-		curtyp = next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("next", i__1, "dasa2l_", (ftnlen)1181)];
+	    if (__state->dirrec[(i__1 = __state->dscloc - 1) < 256 && 0 <= 
+		    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)
+		    1180)] > 0) {
+		__state->curtyp = __state->next[(i__1 = __state->prvtyp - 1) <
+			 3 && 0 <= i__1 ? i__1 : s_rnge("next", i__1, "dasa2"
+			"l_", (ftnlen)1181)];
 	    } else {
-		curtyp = prev[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("prev", i__1, "dasa2l_", (ftnlen)1183)];
+		__state->curtyp = __state->prev[(i__1 = __state->prvtyp - 1) <
+			 3 && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, "dasa2"
+			"l_", (ftnlen)1183)];
 	    }
 
 /*           Forgetting to update PRVTYP is a Very Bad Thing (VBT). */
 
-	    prvtyp = curtyp;
+	    __state->prvtyp = __state->curtyp;
 
 /*           If the current descriptor is of the type we're interested */
 /*           in, update the highest address count. */
 
-	    if (curtyp == *type__) {
-		hiaddr += nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("nw", i__1, "dasa2l_", (ftnlen)1196)] * (i__3 =
-			 dirrec[(i__2 = dscloc - 1) < 256 && 0 <= i__2 ? i__2 
-			: s_rnge("dirrec", i__2, "dasa2l_", (ftnlen)1196)], 
-			abs(i__3));
+	    if (__state->curtyp == *type__) {
+		__state->hiaddr += __state->nw[(i__3 = *type__ - 1) < 3 && 0 
+			<= i__3 ? i__3 : s_rnge("nw", i__3, "dasa2l_", (
+			ftnlen)1196)] * (i__2 = __state->dirrec[(i__1 = 
+			__state->dscloc - 1) < 256 && 0 <= i__1 ? i__1 : 
+			s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)1196)], abs(
+			i__2));
 	    }
 
 /*           Compute the number of records described by the current */
 /*           descriptor. Update the descriptor location. */
 
-	    *clsize = (i__2 = dirrec[(i__1 = dscloc - 1) < 256 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dirrec", i__1, "dasa2l_", (ftnlen)1203)], 
-		    abs(i__2));
-	    ++dscloc;
+	    *clsize = (i__2 = __state->dirrec[(i__1 = __state->dscloc - 1) < 
+		    256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasa2l_"
+		    , (ftnlen)1203)], abs(i__2));
+	    ++__state->dscloc;
 	}
 
 /*        At this point, the variables */
@@ -1204,18 +1215,18 @@ static integer c__2 = 2;
 /*        +--------------------------------------+  CLBASE + CLSIZE - 1 */
 
 
-    *recno = *clbase + *clsize - 1 - (hiaddr - *addrss) / nw[(i__1 = *type__ 
-	    - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (
-	    ftnlen)1251)];
-    *wordno = *addrss - (*addrss - 1) / nw[(i__1 = *type__ - 1) < 3 && 0 <= 
-	    i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (ftnlen)1254)] * nw[(
-	    i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("nw", i__2, 
-	    "dasa2l_", (ftnlen)1254)];
+    *recno = *clbase + *clsize - 1 - (__state->hiaddr - *addrss) / 
+	    __state->nw[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+	    "nw", i__1, "dasa2l_", (ftnlen)1251)];
+    *wordno = *addrss - (*addrss - 1) / __state->nw[(i__1 = *type__ - 1) < 3 
+	    && 0 <= i__1 ? i__1 : s_rnge("nw", i__1, "dasa2l_", (ftnlen)1254)]
+	     * __state->nw[(i__2 = *type__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+	    s_rnge("nw", i__2, "dasa2l_", (ftnlen)1254)];
 
 /*     Update PRVHAN and set PRVOK to .TRUE. only if the call succeeded. */
 
-    prvhan = *handle;
-    prvok = TRUE_;
+    __state->prvhan = *handle;
+    __state->prvok = TRUE_;
     return 0;
 } /* dasa2l_ */
 

@@ -1,9 +1,17 @@
-/* wnfetd.f -- translated by f2c (version 19980913).
+/* wnfetd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnfetd_state_t;
+static wnfetd_state_t* get_wnfetd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNFETD ( Fetch an interval from a DP window ) */
 /* Subroutine */ int wnfetd_(doublereal *window, integer *n, doublereal *left,
@@ -11,11 +19,16 @@
 {
     integer card;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     integer end;
 
+
+    /* Module state */
+    wnfetd_state_t* __state = get_wnfetd_state();
 /* $ Abstract */
 
 /*     Fetch a particular interval from a double precision window. */

@@ -1,13 +1,21 @@
-/* qxq.f -- translated by f2c (version 19980913).
+/* qxq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = 1.;
+extern qxq_init_t __qxq_init;
+static qxq_state_t* get_qxq_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->qxq)
+		state->qxq = __cspice_allocate_module(sizeof(qxq_state_t), &
+	__qxq_init, sizeof(__qxq_init));
+	return state->qxq;
+
+}
 
 /* $Procedure QXQ (Quaternion times quaternion) */
 /* Subroutine */ int qxq_(doublereal *q1, doublereal *q2, doublereal *qout)
@@ -15,9 +23,14 @@ static doublereal c_b2 = 1.;
     extern doublereal vdot_(doublereal *, doublereal *);
     doublereal cross[3];
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *), vlcom3_(doublereal *, doublereal *, doublereal *, doublereal *
-	    , doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
 
+
+    /* Module state */
+    qxq_state_t* __state = get_qxq_state();
 /* $ Abstract */
 
 /*     Multiply two quaternions. */
@@ -435,7 +448,7 @@ static doublereal c_b2 = 1.;
 /*     a linear combination of three 3-vectors. */
 
     vcrss_(&q1[1], &q2[1], cross);
-    vlcom3_(q1, &q2[1], q2, &q1[1], &c_b2, cross, &qout[1]);
+    vlcom3_(q1, &q2[1], q2, &q1[1], &__state->c_b2, cross, &qout[1]);
     return 0;
 } /* qxq_ */
 

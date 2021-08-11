@@ -1,14 +1,21 @@
-/* spkobj.f -- translated by f2c (version 19980913).
+/* spkobj.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spkobj_init_t __spkobj_init;
+static spkobj_state_t* get_spkobj_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkobj)
+		state->spkobj = __cspice_allocate_module(sizeof(
+	spkobj_state_t), &__spkobj_init, sizeof(__spkobj_init));
+	return state->spkobj;
+
+}
 
 /* $Procedure      SPKOBJ ( SPK objects ) */
 /* Subroutine */ int spkobj_(char *spk, integer *ids, ftnlen spk_len)
@@ -18,10 +25,12 @@ static integer c__6 = 6;
 
     /* Local variables */
     char arch[80];
-    extern /* Subroutine */ int dafgs_(doublereal *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), errch_(char *, char *, ftnlen, ftnlen);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     doublereal dc[2];
     integer ic[6];
@@ -29,13 +38,20 @@ static integer c__6 = 6;
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *), getfat_(char *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen), dafopr_(char *, integer *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), insrti_(integer *, integer *);
+    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int insrti_(integer *, integer *);
     char kertyp[80];
     extern logical return_(void);
 
+
+    /* Module state */
+    spkobj_state_t* __state = get_spkobj_state();
 /* $ Abstract */
 
 /*     Find the set of ID codes of all objects in a specified SPK file. */
@@ -408,7 +424,7 @@ static integer c__6 = 6;
 /*        Fetch and unpack the segment descriptor. */
 
 	dafgs_(descr);
-	dafus_(descr, &c__2, &c__6, dc, ic);
+	dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*        Insert the current ID code into the output set. */
 /*        The insertion algorithm will handle duplicates; no special */

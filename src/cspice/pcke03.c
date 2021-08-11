@@ -1,14 +1,21 @@
-/* pcke03.f -- translated by f2c (version 19980913).
+/* pcke03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern pcke03_init_t __pcke03_init;
+static pcke03_state_t* get_pcke03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pcke03)
+		state->pcke03 = __cspice_allocate_module(sizeof(
+	pcke03_state_t), &__pcke03_init, sizeof(__pcke03_init));
+	return state->pcke03;
+
+}
 
 /* $Procedure PCKE03 ( PCK, evaluate data record from type 3 segment ) */
 /* Subroutine */ int pcke03_(doublereal *et, doublereal *record, doublereal *
@@ -23,9 +30,11 @@ static integer c__1 = 1;
     /* Local variables */
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
 	    *, integer *, integer *, integer *, doublereal *);
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vcrss_(doublereal *, 
-	    doublereal *, doublereal *);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     integer degree;
     extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
 	     doublereal *, doublereal *);
@@ -40,6 +49,9 @@ static integer c__1 = 1;
     extern doublereal rpd_(void);
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    pcke03_state_t* __state = get_pcke03_state();
 /* $ Abstract */
 
 /*     Evaluate a single PCK data record from a segment of type 03 */
@@ -311,7 +323,8 @@ static integer c__1 = 1;
 
 /*     Compute the rotation associated with the Euler angles. */
 
-    eul2m_(&eulang[2], &eulang[1], eulang, &c__3, &c__1, &c__3, rot);
+    eul2m_(&eulang[2], &eulang[1], eulang, &__state->c__3, &__state->c__1, &
+	    __state->c__3, rot);
 
 /*     This rotation transforms positions relative to the inertial */
 /*     frame to positions relative to the bodyfixed frame. */

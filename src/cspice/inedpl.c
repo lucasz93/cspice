@@ -1,14 +1,21 @@
-/* inedpl.f -- translated by f2c (version 19980913).
+/* inedpl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b32 = 0.;
-static doublereal c_b33 = 1.;
+extern inedpl_init_t __inedpl_init;
+static inedpl_state_t* get_inedpl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->inedpl)
+		state->inedpl = __cspice_allocate_module(sizeof(
+	inedpl_state_t), &__inedpl_init, sizeof(__inedpl_init));
+	return state->inedpl;
+
+}
 
 /* $Procedure      INEDPL ( Intersection of ellipsoid and plane ) */
 /* Subroutine */ int inedpl_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -23,28 +30,43 @@ static doublereal c_b33 = 1.;
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal dist, span1[3], span2[3];
+    doublereal dist;
+    doublereal span1[3];
+    doublereal span2[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    doublereal const__, point[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal const__;
+    doublereal point[3];
     extern doublereal vnorm_(doublereal *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *), pl2psv_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *), psv2pl_(doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
 	    doublereal *);
+    extern /* Subroutine */ int pl2psv_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal dplane[4];
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    doublereal maxrad, rcircl, center[3], normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
-	    ftnlen);
+    doublereal maxrad;
+    doublereal rcircl;
+    doublereal center[3];
+    doublereal normal[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal invdst[3];
     extern logical return_(void);
-    doublereal dstort[3], vec1[3], vec2[3];
+    doublereal dstort[3];
+    doublereal vec1[3];
+    doublereal vec2[3];
 
+
+    /* Module state */
+    inedpl_state_t* __state = get_inedpl_state();
 /* $ Abstract */
 
 /*     Find the intersection of a triaxial ellipsoid and a plane. */
@@ -484,7 +506,7 @@ static doublereal c_b33 = 1.;
 /* Computing 2nd power */
     d__2 = dist;
     d__1 = 1. - d__2 * d__2;
-    rcircl = sqrt(brcktd_(&d__1, &c_b32, &c_b33));
+    rcircl = sqrt(brcktd_(&d__1, &__state->c_b32, &__state->c_b33));
     vsclip_(&rcircl, vec1);
     vsclip_(&rcircl, vec2);
 

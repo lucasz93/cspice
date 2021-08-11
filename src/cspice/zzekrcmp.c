@@ -1,14 +1,21 @@
-/* zzekrcmp.f -- translated by f2c (version 19980913).
+/* zzekrcmp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__24 = 24;
-static integer c__11 = 11;
+extern zzekrcmp_init_t __zzekrcmp_init;
+static zzekrcmp_state_t* get_zzekrcmp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrcmp)
+		state->zzekrcmp = __cspice_allocate_module(sizeof(
+	zzekrcmp_state_t), &__zzekrcmp_init, sizeof(__zzekrcmp_init));
+	return state->zzekrcmp;
+
+}
 
 /* $Procedure ZZEKRCMP ( EK, row comparison ) */
 logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
@@ -19,17 +26,25 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
     logical ret_val;
 
     /* Local variables */
-    integer hans[2], elts[2], rows[2];
+    integer hans[2];
+    integer elts[2];
+    integer rows[2];
     extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
-    integer cldscs[22]	/* was [11][2] */, sgdscs[48]	/* was [24][2] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    integer col, rel;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    integer cldscs[22]	/* was [11][2] */;
+    integer sgdscs[48]	/* was [24][2] */;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer col;
+    integer rel;
 
+
+    /* Module state */
+    zzekrcmp_state_t* __state = get_zzekrcmp_state();
 /* $ Abstract */
 
 /*     Compare two EK rows, using as the order relation dictionary */
@@ -745,8 +760,8 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 
     hans[0] = *han1;
     hans[1] = *han2;
-    movei_(sgdsc1, &c__24, sgdscs);
-    movei_(sgdsc2, &c__24, &sgdscs[24]);
+    movei_(sgdsc1, &__state->c__24, sgdscs);
+    movei_(sgdsc2, &__state->c__24, &sgdscs[24]);
     rows[0] = *row1;
     rows[1] = *row2;
     rel = 1;
@@ -756,8 +771,8 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 /*        Compare the entries in the two rows in the columns indicated */
 /*        by the Nth column descriptor pair. */
 
-	movei_(&cdlst1[col * 11 - 11], &c__11, cldscs);
-	movei_(&cdlst2[col * 11 - 11], &c__11, &cldscs[11]);
+	movei_(&cdlst1[col * 11 - 11], &__state->c__11, cldscs);
+	movei_(&cdlst2[col * 11 - 11], &__state->c__11, &cldscs[11]);
 	elts[0] = elts1[col - 1];
 	elts[1] = elts2[col - 1];
 	rel = zzekecmp_(hans, sgdscs, cldscs, rows, elts);

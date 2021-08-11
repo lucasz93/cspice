@@ -1,9 +1,17 @@
-/* ucrss.f -- translated by f2c (version 19980913).
+/* ucrss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ucrss_state_t;
+static ucrss_state_t* get_ucrss_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      UCRSS ( Unitized cross product, 3x3 ) */
 /* Subroutine */ int ucrss_(doublereal *v1, doublereal *v2, doublereal *vout)
@@ -12,10 +20,17 @@
     doublereal d__1, d__2;
 
     /* Local variables */
-    doublereal vmag, maxv1, maxv2;
+    doublereal vmag;
+    doublereal maxv1;
+    doublereal maxv2;
     extern doublereal vnorm_(doublereal *);
-    doublereal vcross[3], tv1[3], tv2[3];
+    doublereal vcross[3];
+    doublereal tv1[3];
+    doublereal tv2[3];
 
+
+    /* Module state */
+    ucrss_state_t* __state = get_ucrss_state();
 /* $ Abstract */
 
 /*      Compute the normalized cross product of two 3-vectors. */

@@ -1,13 +1,21 @@
-/* zzeknres.f -- translated by f2c (version 19980913).
+/* zzeknres.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzeknres_init_t __zzeknres_init;
+static zzeknres_state_t* get_zzeknres_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeknres)
+		state->zzeknres = __cspice_allocate_module(sizeof(
+	zzeknres_state_t), &__zzeknres_init, sizeof(__zzeknres_init));
+	return state->zzeknres;
+
+}
 
 /* $Procedure  ZZEKNRES ( Private: EK, resolve names in encoded query ) */
 /* Subroutine */ int zzeknres_(char *query, integer *eqryi, char *eqryc, 
@@ -23,15 +31,25 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, ntab, ncnj, ncns, nord, nsel;
+    integer base;
+    integer ntab;
+    integer ncnj;
+    integer ncns;
+    integer nord;
+    integer nsel;
     extern /* Subroutine */ int zzekcchk_(char *, integer *, char *, integer *
 	    , char *, char *, integer *, logical *, char *, integer *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen), zzekqtab_(integer *, char *, 
-	    integer *, char *, char *, ftnlen, ftnlen, ftnlen), zzekreqi_(
-	    integer *, char *, integer *, ftnlen), zzekweqi_(char *, integer *
-	    , integer *, ftnlen);
-    integer i__, j;
-    char table[64*10], alias[64*10];
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
+	    ftnlen);
+    integer i__;
+    integer j;
+    char table[64*10];
+    char alias[64*10];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nload;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
@@ -41,13 +59,20 @@ static integer c__1 = 1;
     char ltable[64];
     extern /* Subroutine */ int ekntab_(integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    integer cnstyp, iparse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), ektnam_(integer *, char *, 
-	    ftnlen), ekccnt_(char *, integer *, ftnlen);
+    integer cnstyp;
+    integer iparse;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ektnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
     logical fnd;
-    integer lxb, lxe;
+    integer lxb;
+    integer lxe;
 
+
+    /* Module state */
+    zzeknres_state_t* __state = get_zzeknres_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -968,7 +993,7 @@ static integer c__1 = 1;
 
 /*     Indicate completion of name resolution. */
 
-    zzekweqi_("NAMES_RESOLVED", &c__1, eqryi, (ftnlen)14);
+    zzekweqi_("NAMES_RESOLVED", &__state->c__1, eqryi, (ftnlen)14);
     return 0;
 } /* zzeknres_ */
 

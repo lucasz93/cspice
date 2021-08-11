@@ -1,9 +1,17 @@
-/* diffc.f -- translated by f2c (version 19980913).
+/* diffc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int diffc_state_t;
+static diffc_state_t* get_diffc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DIFFC ( Difference of two character sets ) */
 /* Subroutine */ int diffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen 
@@ -19,19 +27,27 @@
     logical l_lt(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer over, acard;
+    integer over;
+    integer acard;
     extern integer cardc_(char *, ftnlen);
-    integer bcard, ccard;
+    integer bcard;
+    integer ccard;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizec_(char *, ftnlen);
     integer csize;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    integer apoint, bpoint;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), excess_(integer *, char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    integer apoint;
+    integer bpoint;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    diffc_state_t* __state = get_diffc_state();
 /* $ Abstract */
 
 /*      Take the difference of two character sets to form a third set. */

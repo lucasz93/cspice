@@ -1,14 +1,21 @@
-/* dafrcr.f -- translated by f2c (version 19980913).
+/* dafrcr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern dafrcr_init_t __dafrcr_init;
+static dafrcr_state_t* get_dafrcr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafrcr)
+		state->dafrcr = __cspice_allocate_module(sizeof(
+	dafrcr_state_t), &__dafrcr_init, sizeof(__dafrcr_init));
+	return state->dafrcr;
+
+}
 
 /* $Procedure DAFRCR ( DAF, read character record ) */
 /* Subroutine */ int dafrcr_(integer *handle, integer *recno, char *crec, 
@@ -24,18 +31,23 @@ static integer c__1 = 1;
     /* Local variables */
     integer unit;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    dafrcr_state_t* __state = get_dafrcr_state();
 /* $ Abstract */
 
 /*     Read the contents of a character record from a DAF. */
@@ -226,18 +238,18 @@ static integer c__1 = 1;
 /*        Retrieve a logical unit for this handle.  This has the */
 /*        side-effect of locking this UNIT to HANDLE. */
 
-	zzddhhlu_(handle, "DAF", &c_false, &unit, (ftnlen)3);
+	zzddhhlu_(handle, "DAF", &__state->c_false, &unit, (ftnlen)3);
 	if (failed_()) {
 	    chkout_("DAFRCR", (ftnlen)6);
 	    return 0;
 	}
-	io___3.ciunit = unit;
-	io___3.cirec = *recno;
-	iostat = s_rdue(&io___3);
+	__state->io___3.ciunit = unit;
+	__state->io___3.cirec = *recno;
+	iostat = s_rdue(&__state->io___3);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, crec, crec_len);
+	iostat = do_uio(&__state->c__1, crec, crec_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}

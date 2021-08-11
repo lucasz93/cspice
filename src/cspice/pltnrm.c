@@ -1,9 +1,17 @@
-/* pltnrm.f -- translated by f2c (version 19980913).
+/* pltnrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pltnrm_state_t;
+static pltnrm_state_t* get_pltnrm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure PLTNRM ( DSK, compute outward normal of plate ) */
 /* Subroutine */ int pltnrm_(doublereal *v1, doublereal *v2, doublereal *v3, 
@@ -11,10 +19,14 @@
 {
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal edge1[3], edge2[3];
+    doublereal edge1[3];
+    doublereal edge2[3];
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
 
+
+    /* Module state */
+    pltnrm_state_t* __state = get_pltnrm_state();
 /* $ Abstract */
 
 /*     Compute an outward normal vector of a triangular plate. */

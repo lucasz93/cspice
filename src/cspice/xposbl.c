@@ -1,9 +1,17 @@
-/* xposbl.f -- translated by f2c (version 19980913).
+/* xposbl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int xposbl_state_t;
+static xposbl_state_t* get_xposbl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      XPOSBL ( Transpose a matrix by blocks    ) */
 /* Subroutine */ int xposbl_(doublereal *bmat, integer *nrow, integer *ncol, 
@@ -18,13 +26,19 @@
 
     /* Local variables */
     doublereal temp;
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer cb, rb;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer cb;
+    integer rb;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    xposbl_state_t* __state = get_xposbl_state();
 /* $ Abstract */
 
 /*     Transpose the square blocks within a matrix. */
@@ -305,10 +319,10 @@
     /* Parameter adjustments */
     btmat_dim1 = *nrow;
     btmat_dim2 = *ncol;
-    btmat_offset = btmat_dim1 + 1;
+    btmat_offset = 1 + btmat_dim1 * 1;
     bmat_dim1 = *nrow;
     bmat_dim2 = *ncol;
-    bmat_offset = bmat_dim1 + 1;
+    bmat_offset = 1 + bmat_dim1 * 1;
 
     /* Function Body */
     if (*bsize < 1) {
@@ -372,28 +386,28 @@
 		for (j = 1; j <= i__6; ++j) {
 		    if (i__ == j) {
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)370)] = bmat[(i__8 = rb + i__ + 
-				(cb + j) * bmat_dim1 - bmat_offset) < 
-				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)370)] = bmat[(i__8 = rb + 
+				i__ + (cb + j) * bmat_dim1 - bmat_offset) < 1 
+				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
 				s_rnge("bmat", i__8, "xposbl_", (ftnlen)370)];
 		    } else {
 			temp = bmat[(i__7 = rb + i__ + (cb + j) * bmat_dim1 - 
-				bmat_offset) < bmat_dim1 * bmat_dim2 && 0 <= 
-				i__7 ? i__7 : s_rnge("bmat", i__7, "xposbl_", 
-				(ftnlen)372)];
+				bmat_offset) < 1 * bmat_dim1 * bmat_dim2 && 0 
+				<= i__7 ? i__7 : s_rnge("bmat", i__7, "xposb"
+				"l_", (ftnlen)372)];
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)373)] = bmat[(i__8 = rb + j + (
-				cb + i__) * bmat_dim1 - bmat_offset) < 
-				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)373)] = bmat[(i__8 = rb + 
+				j + (cb + i__) * bmat_dim1 - bmat_offset) < 1 
+				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
 				s_rnge("bmat", i__8, "xposbl_", (ftnlen)373)];
 			btmat[(i__7 = rb + j + (cb + i__) * btmat_dim1 - 
-				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)374)] = temp;
+				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
+				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
+				"xposbl_", (ftnlen)374)] = temp;
 		    }
 		}
 	    }

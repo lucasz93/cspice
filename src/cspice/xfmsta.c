@@ -1,16 +1,21 @@
-/* xfmsta.f -- translated by f2c (version 19980913).
+/* xfmsta.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__6 = 6;
-static integer c__3 = 3;
-static doublereal c_b65 = 0.;
+extern xfmsta_init_t __xfmsta_init;
+static xfmsta_state_t* get_xfmsta_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->xfmsta)
+		state->xfmsta = __cspice_allocate_module(sizeof(
+	xfmsta_state_t), &__xfmsta_init, sizeof(__xfmsta_init));
+	return state->xfmsta;
+
+}
 
 /* $Procedure      XFMSTA ( Transform state between coordinate systems) */
 /* Subroutine */ int xfmsta_(doublereal *istate, char *icosys, char *ocosys, 
@@ -19,12 +24,6 @@ static doublereal c_b65 = 0.;
 {
     /* Initialized data */
 
-    static char cosys[40*6] = "RECTANGULAR                             " 
-	    "CYLINDRICAL                             " "LATITUDINAL         "
-	    "                    " "SPHERICAL                               " 
-	    "GEODETIC                                " "PLANETOGRAPHIC      "
-	    "                    ";
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -37,60 +36,77 @@ static doublereal c_b65 = 0.;
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    doublereal ivel[3], ipos[3];
+    doublereal ivel[3];
+    doublereal ipos[3];
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    integer isys, osys;
+    integer isys;
+    integer osys;
     doublereal f;
     extern /* Subroutine */ int zzctruin_(integer *);
-    integer i__, j;
+    integer i__;
+    integer j;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), vpack_(doublereal *, doublereal *, doublereal *,
-	     doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
     extern doublereal dpmax_(void);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), vequg_(
-	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
     doublereal sqtmp;
-    char isysu[40], osysu[40];
-    static logical svfnd1;
-    static integer svctr1[2];
+    char isysu[40];
+    char osysu[40];
     extern logical failed_(void);
     doublereal jacobi[9]	/* was [3][3] */;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen), georec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), drdgeo_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), dgeodr_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int georec_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int drdgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int dgeodr_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
     integer bodyid;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static integer svbdid;
     extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), drdlat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), cylrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), drdcyl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int drdlat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cylrec_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int drdcyl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     doublereal toobig;
     extern /* Subroutine */ int sphrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), drdsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), pgrrec_(char *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen), drdpgr_(char *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, ftnlen), 
-	    reccyl_(doublereal *, doublereal *, doublereal *, doublereal *), 
-	    reclat_(doublereal *, doublereal *, doublereal *, doublereal *), 
-	    sigerr_(char *, ftnlen), recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), chkout_(char *, ftnlen), recpgr_(
-	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, ftnlen), dcyldr_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), dlatdr_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), ljucrs_(integer *, 
-	    char *, char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), dsphdr_(
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    static char svbody[36];
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int drdsph_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int pgrrec_(char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int drdpgr_(char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int recpgr_(char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dcyldr_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int dlatdr_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dsphdr_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     extern /* Subroutine */ int dpgrdr_(char *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
@@ -98,6 +114,9 @@ static doublereal c_b65 = 0.;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    xfmsta_state_t* __state = get_xfmsta_state();
 /* $ Abstract */
 
 /*     Transform a state between coordinate systems. */
@@ -825,27 +844,29 @@ static doublereal c_b65 = 0.;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Remove initial and trailing spaces. */
 /*     Convert the input coordinate systems to upper case. */
 
-    ljucrs_(&c__0, icosys, isysu, icosys_len, (ftnlen)40);
-    ljucrs_(&c__0, ocosys, osysu, ocosys_len, (ftnlen)40);
+    ljucrs_(&__state->c__0, icosys, isysu, icosys_len, (ftnlen)40);
+    ljucrs_(&__state->c__0, ocosys, osysu, ocosys_len, (ftnlen)40);
 
 /*     Check to see if the input and output coordinate systems */
 /*     provided by the user are acceptable. Store the integer */
 /*     code of the input and output coordinate systems into */
 /*     ISYS and OSYS. */
 
-    isys = isrchc_(isysu, &c__6, cosys, (ftnlen)40, (ftnlen)40);
-    osys = isrchc_(osysu, &c__6, cosys, (ftnlen)40, (ftnlen)40);
+    isys = isrchc_(isysu, &__state->c__6, __state->cosys, (ftnlen)40, (ftnlen)
+	    40);
+    osys = isrchc_(osysu, &__state->c__6, __state->cosys, (ftnlen)40, (ftnlen)
+	    40);
 
 /*     If the coordinate systems are not acceptable, an error is */
 /*     signaled. */
@@ -891,7 +912,7 @@ static doublereal c_b65 = 0.;
 /*     place. */
 
     if (isys == osys) {
-	vequg_(istate, &c__6, ostate);
+	vequg_(istate, &__state->c__6, ostate);
 	chkout_("XFMSTA", (ftnlen)6);
 	return 0;
     }
@@ -906,14 +927,14 @@ static doublereal c_b65 = 0.;
 
 /*        Find the NAIF ID code */
 
-	zzbods2c_(svctr1, svbody, &svbdid, &svfnd1, body, &bodyid, &found, (
-		ftnlen)36, body_len);
+	zzbods2c_(__state->svctr1, __state->svbody, &__state->svbdid, &
+		__state->svfnd1, body, &bodyid, &found, (ftnlen)36, body_len);
 
 /*        If the body's name was found, find the body's radii and */
 /*        compute flattening coefficient. Otherwise, signal an error. */
 
 	if (found) {
-	    bodvcd_(&bodyid, "RADII", &c__3, &dim, radii, (ftnlen)5);
+	    bodvcd_(&bodyid, "RADII", &__state->c__3, &dim, radii, (ftnlen)5);
 	    if (failed_()) {
 		chkout_("XFMSTA", (ftnlen)6);
 		return 0;
@@ -963,8 +984,8 @@ static doublereal c_b65 = 0.;
 		errdp_("#", radii, (ftnlen)1);
 		errdp_("#", &radii[1], (ftnlen)1);
 		errdp_("#", &radii[2], (ftnlen)1);
-		errch_("#", cosys + 160, (ftnlen)1, (ftnlen)40);
-		errch_("#", cosys + 200, (ftnlen)1, (ftnlen)40);
+		errch_("#", __state->cosys + 160, (ftnlen)1, (ftnlen)40);
+		errch_("#", __state->cosys + 200, (ftnlen)1, (ftnlen)40);
 		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
 		chkout_("XFMSTA", (ftnlen)6);
 		return 0;
@@ -1139,31 +1160,36 @@ static doublereal c_b65 = 0.;
 
 /*                  ... to cylindrical */
 
-		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
+		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
+			    ostate[3]);
 		    reccyl_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 3) {
 
 /*                  ... to latitudinal */
 
-		    vpack_(&ivel[2], &c_b65, &c_b65, &ostate[3]);
+		    vpack_(&ivel[2], &__state->c_b65, &__state->c_b65, &
+			    ostate[3]);
 		    reclat_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 4) {
 
 /*                  ... to spherical */
 
-		    vpack_(&ivel[2], &c_b65, &c_b65, &ostate[3]);
+		    vpack_(&ivel[2], &__state->c_b65, &__state->c_b65, &
+			    ostate[3]);
 		    recsph_(ipos, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 5) {
 
 /*                  ... to geodetic */
 
-		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
+		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
+			    ostate[3]);
 		    recgeo_(ipos, radii, &f, ostate, &ostate[1], &ostate[2]);
 		} else if (osys == 6) {
 
 /*                  ... to planetographic */
 
-		    vpack_(&c_b65, &c_b65, &ivel[2], &ostate[3]);
+		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
+			    ostate[3]);
 		    recpgr_(body, ipos, radii, &f, ostate, &ostate[1], &
 			    ostate[2], body_len);
 		} else {

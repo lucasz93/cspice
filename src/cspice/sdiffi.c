@@ -1,24 +1,40 @@
-/* sdiffi.f -- translated by f2c (version 19980913).
+/* sdiffi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sdiffi_state_t;
+static sdiffi_state_t* get_sdiffi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SDIFFI ( Symmetric difference of two integer sets ) */
 /* Subroutine */ int sdiffi_(integer *a, integer *b, integer *c__)
 {
-    integer over, acard, bcard, ccard;
+    integer over;
+    integer acard;
+    integer bcard;
+    integer ccard;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer csize;
     extern integer sizei_(integer *);
     extern /* Subroutine */ int scardi_(integer *, integer *);
-    integer apoint, bpoint;
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer apoint;
+    integer bpoint;
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sdiffi_state_t* __state = get_sdiffi_state();
 /* $ Abstract */
 
 /*      Take the symmetric difference of two integer sets to form */

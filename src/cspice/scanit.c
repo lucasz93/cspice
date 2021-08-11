@@ -1,9 +1,17 @@
-/* scanit.f -- translated by f2c (version 19980913).
+/* scanit.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int scanit_state_t;
+static scanit_state_t* get_scanit_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCANIT ( Scan a character string ) */
 /* Subroutine */ int scanit_0_(int n__, char *string, integer *start, integer 
@@ -18,23 +26,42 @@
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer last, jump, test, slot, stop, last1, this1, i__, j, l, n, fchar, 
-	    lchar;
+    integer last;
+    integer jump;
+    integer test;
+    integer slot;
+    integer stop;
+    integer last1;
+    integer this1;
+    integer i__;
+    integer j;
+    integer l;
+    integer n;
+    integer fchar;
+    integer lchar;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical equal;
     extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
     logical known;
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    integer eblock, backup, finish, lbound, offset;
+    integer eblock;
+    integer backup;
+    integer finish;
+    integer lbound;
+    integer offset;
     extern /* Subroutine */ int rmdupc_(integer *, char *, ftnlen);
-    integer ubound, intval;
+    integer ubound;
+    integer intval;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char letter[1];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    scanit_state_t* __state = get_scanit_state();
 /* $ Abstract */
 
 /*     This routine serves as an umbrella routine for routines */

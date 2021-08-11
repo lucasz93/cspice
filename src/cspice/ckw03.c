@@ -1,17 +1,21 @@
-/* ckw03.f -- translated by f2c (version 19980913).
+/* ckw03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__4 = 4;
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern ckw03_init_t __ckw03_init;
+static ckw03_state_t* get_ckw03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw03)
+		state->ckw03 = __cspice_allocate_module(sizeof(ckw03_state_t),
+	 &__ckw03_init, sizeof(__ckw03_init));
+	return state->ckw03;
+
+}
 
 /* $Procedure  CKW03 ( C-Kernel, write segment to C-kernel, data type 3 ) */
 /* Subroutine */ int ckw03_(integer *handle, doublereal *begtim, doublereal *
@@ -27,26 +31,36 @@ static integer c__1 = 1;
     /* Local variables */
     integer i__;
     logical match;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer nidir, index, value;
+    integer nidir;
+    integer index;
+    integer value;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer nrdir;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafbna_(
-	    integer *, doublereal *, char *, ftnlen), dafena_(void);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
-    extern logical vzerog_(doublereal *, integer *), return_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical vzerog_(doublereal *, integer *);
+    extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    ckw03_state_t* __state = get_ckw03_state();
 /* $ Abstract */
 
 /*     Add a type 3 segment to a C-kernel. */
@@ -757,7 +771,7 @@ static integer c__1 = 1;
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Check that all the characters in the segid can be printed. */
 
@@ -873,7 +887,7 @@ static integer c__1 = 1;
 
     i__1 = *nrec;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (vzerog_(&quats[(i__ << 2) - 4], &c__4)) {
+	if (vzerog_(&quats[(i__ << 2) - 4], &__state->c__4)) {
 	    setmsg_("The quaternion at index # has magnitude zero.", (ftnlen)
 		    45);
 	    errint_("#", &i__, (ftnlen)1);
@@ -897,8 +911,8 @@ static integer c__1 = 1;
     if (*avflag) {
 	i__1 = *nrec;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    dafada_(&quats[(i__ << 2) - 4], &c__4);
-	    dafada_(&avvs[i__ * 3 - 3], &c__3);
+	    dafada_(&quats[(i__ << 2) - 4], &__state->c__4);
+	    dafada_(&avvs[i__ * 3 - 3], &__state->c__3);
 	}
     } else {
 	i__1 = *nrec << 2;
@@ -916,7 +930,7 @@ static integer c__1 = 1;
     index = 100;
     i__1 = nrdir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&sclkdp[index - 1], &c__1);
+	dafada_(&sclkdp[index - 1], &__state->c__1);
 	index += 100;
     }
 
@@ -931,16 +945,16 @@ static integer c__1 = 1;
     index = 100;
     i__1 = nidir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&starts[index - 1], &c__1);
+	dafada_(&starts[index - 1], &__state->c__1);
 	index += 100;
     }
 
 /*     Finally, the number of intervals and records. */
 
     d__1 = (doublereal) (*nints);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*nrec);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     End the segment. */
 

@@ -1,14 +1,21 @@
-/* pckr02.f -- translated by f2c (version 19980913).
+/* pckr02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__5 = 5;
+extern pckr02_init_t __pckr02_init;
+static pckr02_state_t* get_pckr02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckr02)
+		state->pckr02 = __cspice_allocate_module(sizeof(
+	pckr02_state_t), &__pckr02_init, sizeof(__pckr02_init));
+	return state->pckr02;
+
+}
 
 /* $Procedure PCKR02 ( PCK, read record from type 2 segment ) */
 /* Subroutine */ int pckr02_(integer *handle, doublereal *descr, doublereal *
@@ -21,19 +28,24 @@ static integer c__5 = 5;
     integer nrec;
     doublereal init;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer recno;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
-    integer ic[5], recadr;
+    integer ic[5];
+    integer recadr;
     doublereal intlen;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern logical return_(void);
     integer end;
 
+
+    /* Module state */
+    pckr02_state_t* __state = get_pckr02_state();
 /* $ Abstract */
 
 /*     Read a single PCK data record from a segment of type 2 */
@@ -194,7 +206,7 @@ static integer c__5 = 5;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__5, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__5, dc, ic);
     begin = ic[3];
     end = ic[4];
 

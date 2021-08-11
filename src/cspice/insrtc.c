@@ -1,9 +1,17 @@
-/* insrtc.f -- translated by f2c (version 19980913).
+/* insrtc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int insrtc_state_t;
+static insrtc_state_t* get_insrtc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      INSRTC ( Insert an item into a character set ) */
 /* Subroutine */ int insrtc_(char *item, char *a, ftnlen item_len, ftnlen 
@@ -17,18 +25,26 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer card, slen, last, size, i__;
+    integer card;
+    integer slen;
+    integer last;
+    integer size;
+    integer i__;
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizec_(char *, ftnlen);
     logical in;
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    insrtc_state_t* __state = get_insrtc_state();
 /* $ Abstract */
 
 /*     Insert an item into a character set. */

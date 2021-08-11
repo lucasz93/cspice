@@ -1,19 +1,31 @@
-/* zzekcix1.f -- translated by f2c (version 19980913).
+/* zzekcix1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekcix1_state_t;
+static zzekcix1_state_t* get_zzekcix1_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKCIX1 ( EK, create index, type 1 ) */
 /* Subroutine */ int zzekcix1_(integer *handle, integer *coldsc)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzektrit_(integer *, integer *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzekcix1_state_t* __state = get_zzekcix1_state();
 /* $ Abstract */
 
 /*     Create a new type 1 index for a specified EK column. */

@@ -1,15 +1,21 @@
-/* zzspkfat.f -- translated by f2c (version 19980913).
+/* zzspkfat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__3 = 3;
-static doublereal c_b15 = 1.;
+extern zzspkfat_init_t __zzspkfat_init;
+static zzspkfat_state_t* get_zzspkfat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkfat)
+		state->zzspkfat = __cspice_allocate_module(sizeof(
+	zzspkfat_state_t), &__zzspkfat_init, sizeof(__zzspkfat_init));
+	return state->zzspkfat;
+
+}
 
 /* $Procedure ZZSPKFAT (SPK function, aberration corrected state, target) */
 /* Subroutine */ int zzspkfat_(U_fp trgsub, doublereal *et, char *ref, char *
@@ -18,8 +24,6 @@ static doublereal c_b15 = 1.;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;
@@ -32,28 +36,34 @@ static doublereal c_b15 = 1.;
     /* Local variables */
     extern /* Subroutine */ int zzspkfap_(U_fp, doublereal *, char *, char *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), zzvalcor_(char *, logical *, 
-	    ftnlen);
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
     integer i__;
     doublereal t;
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    doublereal ltssb, ssblt, stobs[12]	/* was [6][2] */;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    doublereal ltssb;
+    doublereal ssblt;
+    doublereal stobs[12]	/* was [6][2] */;
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     logical attblk[15];
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), qderiv_(integer *,
-	     doublereal *, doublereal *, doublereal *, doublereal *);
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal ssbobs[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), irfnum_(char *, integer *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
     doublereal acc[3];
 
+
+    /* Module state */
+    zzspkfat_state_t* __state = get_zzspkfat_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -533,7 +543,8 @@ static doublereal c_b15 = 1.;
 	return 0;
     }
     chkin_("ZZSPKFAT", (ftnlen)8);
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -546,7 +557,7 @@ static doublereal c_b15 = 1.;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -557,8 +568,8 @@ static doublereal c_b15 = 1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	usestl = attblk[2];
-	pass1 = FALSE_;
+	__state->usestl = attblk[2];
+	__state->pass1 = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -583,12 +594,12 @@ static doublereal c_b15 = 1.;
 /*     Get the geometric state of the observer relative to the SSB, */
 /*     which we'll call SSBOBS. */
 
-    spkgeo_(obs, et, ref, &c__0, ssbobs, &ssblt, ref_len);
+    spkgeo_(obs, et, ref, &__state->c__0, ssbobs, &ssblt, ref_len);
     if (failed_()) {
 	chkout_("ZZSPKFAT", (ftnlen)8);
 	return 0;
     }
-    if (usestl) {
+    if (__state->usestl) {
 
 /*        Numerically differentiate the observer velocity relative to */
 /*        the SSB to obtain acceleration. We first evaluate the */
@@ -596,17 +607,17 @@ static doublereal c_b15 = 1.;
 /*        barycenter at ET +/- DELTA. */
 	for (i__ = 1; i__ <= 2; ++i__) {
 	    t = *et + ((i__ << 1) - 3) * 1.;
-	    spkgeo_(obs, &t, ref, &c__0, &stobs[(i__1 = i__ * 6 - 6) < 12 && 
-		    0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkfat_", (
-		    ftnlen)512)], &ltssb, ref_len);
+	    spkgeo_(obs, &t, ref, &__state->c__0, &stobs[(i__1 = i__ * 6 - 6) 
+		    < 12 && 0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkf"
+		    "at_", (ftnlen)512)], &ltssb, ref_len);
 	    if (failed_()) {
 		chkout_("ZZSPKFAT", (ftnlen)8);
 		return 0;
 	    }
 	}
-	qderiv_(&c__3, &stobs[3], &stobs[9], &c_b15, acc);
+	qderiv_(&__state->c__3, &stobs[3], &stobs[9], &__state->c_b15, acc);
     } else {
-	cleard_(&c__3, acc);
+	cleard_(&__state->c__3, acc);
     }
 
 /*     Look up the apparent state. The light time and light */

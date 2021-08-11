@@ -1,15 +1,21 @@
-/* spkw21.f -- translated by f2c (version 19980913).
+/* spkw21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__71 = 71;
-static integer c__21 = 21;
-static integer c__1 = 1;
+extern spkw21_init_t __spkw21_init;
+static spkw21_state_t* get_spkw21_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw21)
+		state->spkw21 = __cspice_allocate_module(sizeof(
+	spkw21_state_t), &__spkw21_init, sizeof(__spkw21_init));
+	return state->spkw21;
+
+}
 
 /* $Procedure      SPKW21 ( Write SPK segment, type 21 ) */
 /* Subroutine */ int spkw21_(integer *handle, integer *body, integer *center, 
@@ -25,30 +31,37 @@ static integer c__1 = 1;
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
     integer kqmax1;
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
-	    ftnlen), dafena_(void);
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod, maxdim;
+    integer chrcod;
+    integer refcod;
+    integer maxdim;
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     integer kqmloc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal prvepc;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer maxdsz;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), spkpds_(
-	    integer *, integer *, char *, integer *, doublereal *, doublereal 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkw21_state_t* __state = get_spkw21_state();
 /* $ Abstract */
 
 /*     Write a type 21 segment to an SPK file. */
@@ -406,7 +419,7 @@ static integer c__1 = 1;
 
     /* Parameter adjustments */
     dlines_dim1 = *dlsize;
-    dlines_offset = dlines_dim1 + 1;
+    dlines_offset = 1 + dlines_dim1 * 1;
 
     /* Function Body */
     if (return_()) {
@@ -434,7 +447,7 @@ static integer c__1 = 1;
 		" is due to your SPICE Toolkit being out of date.", (ftnlen)
 		167);
 	errint_("#", dlsize, (ftnlen)1);
-	errint_("#", &c__71, (ftnlen)1);
+	errint_("#", &__state->c__71, (ftnlen)1);
 	sigerr_("SPICE(DIFFLINETOOSMALL)", (ftnlen)23);
 	chkout_("SPKW21", (ftnlen)6);
 	return 0;
@@ -562,7 +575,8 @@ static integer c__1 = 1;
 
 /*     Create the segment descriptor. */
 
-    spkpds_(body, center, frame, &c__21, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__21, first, last, descr, 
+	    frame_len);
 
 /*     Begin a new segment. */
 
@@ -607,12 +621,12 @@ static integer c__1 = 1;
     dafada_(epochs, n);
     i__1 = *n / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &c__1);
+	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) maxdim;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

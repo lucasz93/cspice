@@ -1,17 +1,21 @@
-/* spkw19.f -- translated by f2c (version 19980913).
+/* spkw19.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__198 = 198;
-static integer c__27 = 27;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spkw19_init_t __spkw19_init;
+static spkw19_state_t* get_spkw19_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw19)
+		state->spkw19 = __cspice_allocate_module(sizeof(
+	spkw19_state_t), &__spkw19_init, sizeof(__spkw19_init));
+	return state->spkw19;
+
+}
 
 /* $Procedure      SPKW19 ( Write SPK segment, type 19 ) */
 /* Subroutine */ int spkw19_(integer *handle, integer *body, integer *center, 
@@ -22,7 +26,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static integer pktszs[3] = { 12,6,6 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -32,32 +35,49 @@ static integer c__1 = 1;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer isel, ndir, i__, j, k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    integer isel;
+    integer ndir;
+    integer i__;
+    integer j;
+    integer k;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer bepix, eepix;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), dafada_(
-	    doublereal *, integer *);
+    integer bepix;
+    integer eepix;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
     doublereal dc[2];
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
 	    ftnlen);
     integer ic[6];
     extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer segbeg, chrcod, refcod, segend, pktbeg;
+    integer segbeg;
+    integer chrcod;
+    integer refcod;
+    integer segend;
+    integer pktbeg;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     integer pktend;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer minisz;
     extern logical return_(void);
-    integer pktdsz, winsiz, pktsiz, subtyp;
+    integer pktdsz;
+    integer winsiz;
+    integer pktsiz;
+    integer subtyp;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    spkw19_state_t* __state = get_spkw19_state();
 /* $ Abstract */
 
 /*     Write a type 19 segment to an SPK file. */
@@ -643,8 +663,8 @@ static integer c__1 = 1;
     if (FALSE_) {
 	setmsg_("SPK type 19 record size may be as large as #, but SPKPVN re"
 		"cord size is #.", (ftnlen)74);
-	errint_("#", &c__198, (ftnlen)1);
-	errint_("#", &c__198, (ftnlen)1);
+	errint_("#", &__state->c__198, (ftnlen)1);
+	errint_("#", &__state->c__198, (ftnlen)1);
 	sigerr_("SPICE(BUG0)", (ftnlen)11);
 	chkout_("SPKW19", (ftnlen)6);
 	return 0;
@@ -799,8 +819,8 @@ static integer c__1 = 1;
 	    chkout_("SPKW19", (ftnlen)6);
 	    return 0;
 	}
-	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)699)];
+	pktsiz = __state->pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)699)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -821,7 +841,7 @@ static integer c__1 = 1;
 		    "gree #; the valid degree range is [1, #]", (ftnlen)95);
 	    errint_("#", &i__, (ftnlen)1);
 	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &c__27, (ftnlen)1);
+	    errint_("#", &__state->c__27, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	    chkout_("SPKW19", (ftnlen)6);
 	    return 0;
@@ -987,7 +1007,7 @@ static integer c__1 = 1;
     ic[3] = 19;
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&c__2, &c__6, dc, ic, descr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
@@ -1013,8 +1033,8 @@ static integer c__1 = 1;
 /*        Set the packet size, which is a function of the subtype. */
 
 	subtyp = subtps[i__ - 1];
-	pktsiz = pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "spkw19_", (ftnlen)952)];
+	pktsiz = __state->pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)952)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -1058,18 +1078,18 @@ static integer c__1 = 1;
 	i__2 = ndir;
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix - 1 + j * 100;
-	    dafada_(&epochs[k - 1], &c__1);
+	    dafada_(&epochs[k - 1], &__state->c__1);
 	}
 
 /*        Write the mini-segment's subtype, window size, and packet */
 /*        count to the segment. */
 
 	d__1 = (doublereal) subtps[i__ - 1];
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	d__1 = (doublereal) winsiz;
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	d__1 = (doublereal) npkts[i__ - 1];
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKW19", (ftnlen)6);
 	    return 0;
@@ -1092,7 +1112,7 @@ static integer c__1 = 1;
     ndir = *nintvl / 100;
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&ivlbds[i__ * 100 - 1], &c__1);
+	dafada_(&ivlbds[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now we compute and write the start/stop pointers */
@@ -1109,8 +1129,8 @@ static integer c__1 = 1;
 
 /*        Set the packet size, which is a function of the subtype. */
 
-	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1065)];
+	pktsiz = __state->pktszs[(i__2 = subtps[i__ - 1]) < 3 && 0 <= i__2 ? 
+		i__2 : s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1065)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */
@@ -1137,14 +1157,14 @@ static integer c__1 = 1;
 /*        by 1, will be written. */
 
 	d__1 = (doublereal) segbeg;
-	dafada_(&d__1, &c__1);
+	dafada_(&d__1, &__state->c__1);
     }
 
 /*     Write the last mini-segment end pointer, incremented by one. */
 /*     SEGEND was computed on the last iteration of the above loop. */
 
     d__1 = (doublereal) (segend + 1);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     Write out the interval selection flag. The input */
 /*     boolean value is represented by a numeric constant. */
@@ -1155,12 +1175,12 @@ static integer c__1 = 1;
 	isel = -1;
     }
     d__1 = (doublereal) isel;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     Write the mini-segment/interpolation interval count. */
 
     d__1 = (doublereal) (*nintvl);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     End the segment. */
 

@@ -1,17 +1,21 @@
-/* zztime.f -- translated by f2c (version 19980913).
+/* zztime.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__64 = 64;
-static integer c__320 = 320;
-static integer c__0 = 0;
-static integer c__12 = 12;
+extern zztime_init_t __zztime_init;
+static zztime_state_t* get_zztime_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zztime)
+		state->zztime = __cspice_allocate_module(sizeof(
+	zztime_state_t), &__zztime_init, sizeof(__zztime_init));
+	return state->zztime;
+
+}
 
 /* $Procedure ZZTIME ( Private, Time --- time parsing utilities ) */
 logical zztime_0_(int n__, char *string, char *transl, char *letter, char *
@@ -21,10 +25,6 @@ logical zztime_0_(int n__, char *string, char *transl, char *letter, char *
 {
     /* Initialized data */
 
-    static integer size = 0;
-    static logical first = TRUE_;
-    static char months[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -37,68 +37,44 @@ logical zztime_0_(int n__, char *string, char *transl, char *letter, char *
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    static integer case__, begs[64], kind, nsec, ends[64];
-    static logical ampm;
-    static integer nday, item, from;
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer last, nmin, nmon;
-    static char this__[1];
-    static integer ndoy, next;
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
 	    , char *, ftnlen, ftnlen, ftnlen);
-    static integer f[95];
     extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen), zztknerr_(char *, char *, char *, char *,
-	     logical *, ftnlen, ftnlen, ftnlen, ftnlen);
-    static integer i__, j, k, l[95];
-    static logical check;
-    static integer r__, blank, w, nchar;
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zztknerr_(char *, char *, char *, char *, 
+	    logical *, ftnlen, ftnlen, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[12*70];
-    static integer pbegs[64];
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static char names[32*95], class__[1*70];
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer pends[64], value;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    static integer nyear, width[70];
-    static char wkday[12*3*2];
-    static integer pfrom;
-    static char mnmrk[12*3*2], month[3];
-    static integer nhour;
     extern integer rtrim_(char *, ftnlen);
-    static char myerr[32];
-    static integer pnext, p1, p2;
     extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    static integer to;
     extern logical samchi_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char spcial[12];
     extern logical samsbi_(char *, integer *, integer *, char *, integer *, 
 	    integer *, ftnlen, ftnlen);
-    static char messge[320], picerr[320];
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), nparsi_(char *, 
-	    integer *, char *, integer *, ftnlen, ftnlen), chkout_(char *, 
-	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
-	    suffix_(char *, integer *, char *, ftnlen, ftnlen);
-    static char pictur[320], tknerr[320];
-    static integer mnsize[2], wksize[2];
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern /* Subroutine */ int zzmkpc_(char *, integer *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen);
-    static logical did;
-    static integer njd, get;
-    static char rep[64];
-    static doublereal hms[3];
-    static logical got;
     extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
-    static integer pto, ptr, put;
 
+    /* Module state */
+    zztime_state_t* __state = get_zztime_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -533,60 +509,66 @@ L_zzcmbt:
 
 /*     So far we haven't combined anything. */
 
-    did = FALSE_;
+    __state->did = FALSE_;
 
 /*     Look for the substring either looking from the */
 /*     left (L2R is YES) or from the right (L2R is NO). */
 
     if (*l2r) {
-	from = pos_(rep, string, &c__1, size, string_len);
+	__state->from = pos_(__state->rep, string, &__state->c__1, 
+		__state->size, string_len);
     } else {
-	from = posr_(rep, string, &size, size, string_len);
+	__state->from = posr_(__state->rep, string, &__state->size, 
+		__state->size, string_len);
     }
-    to = from + i_len(string, string_len) - 1;
-    if (from > 0) {
-	did = TRUE_;
-	ends[(i__1 = from - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", i__1,
-		 "zztime_", (ftnlen)610)] = ends[(i__2 = to - 1) < 64 && 0 <= 
-		i__2 ? i__2 : s_rnge("ends", i__2, "zztime_", (ftnlen)610)];
-	pends[(i__1 = from - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pends", 
-		i__1, "zztime_", (ftnlen)611)] = pends[(i__2 = to - 1) < 64 &&
-		 0 <= i__2 ? i__2 : s_rnge("pends", i__2, "zztime_", (ftnlen)
-		611)];
-	put = from + 1;
-	next = to + 1;
+    __state->to = __state->from + i_len(string, string_len) - 1;
+    if (__state->from > 0) {
+	__state->did = TRUE_;
+	__state->ends[(i__1 = __state->from - 1) < 64 && 0 <= i__1 ? i__1 : 
+		s_rnge("ends", i__1, "zztime_", (ftnlen)610)] = __state->ends[
+		(i__2 = __state->to - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge(
+		"ends", i__2, "zztime_", (ftnlen)610)];
+	__state->pends[(i__1 = __state->from - 1) < 64 && 0 <= i__1 ? i__1 : 
+		s_rnge("pends", i__1, "zztime_", (ftnlen)611)] = 
+		__state->pends[(i__2 = __state->to - 1) < 64 && 0 <= i__2 ? 
+		i__2 : s_rnge("pends", i__2, "zztime_", (ftnlen)611)];
+	__state->put = __state->from + 1;
+	__state->next = __state->to + 1;
 
 /*        Perform the substitution in the representation */
 
-	zzrepsub_(rep, &from, &to, letter, rep, (ftnlen)64, (ftnlen)1, (
-		ftnlen)64);
+	zzrepsub_(__state->rep, &__state->from, &__state->to, letter, 
+		__state->rep, (ftnlen)64, (ftnlen)1, (ftnlen)64);
 
 /*        Now update the begins and ends of tokens in the original */
 /*        string. */
 
-	i__1 = size;
-	for (get = next; get <= i__1; ++get) {
-	    begs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("begs", 
-		    i__2, "zztime_", (ftnlen)625)] = begs[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("begs", i__3, "zztime_", (
-		    ftnlen)625)];
-	    ends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("ends", 
-		    i__2, "zztime_", (ftnlen)626)] = ends[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("ends", i__3, "zztime_", (
-		    ftnlen)626)];
-	    pbegs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pbegs", 
-		    i__2, "zztime_", (ftnlen)627)] = pbegs[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_", 
-		    (ftnlen)627)];
-	    pends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", 
-		    i__2, "zztime_", (ftnlen)628)] = pends[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("pends", i__3, "zztime_", 
-		    (ftnlen)628)];
-	    ++put;
+	i__1 = __state->size;
+	for (__state->get = __state->next; __state->get <= i__1; 
+		++__state->get) {
+	    __state->begs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("begs", i__2, "zztime_", (ftnlen)625)] = 
+		    __state->begs[(i__3 = __state->get - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("begs", i__3, "zztime_", (ftnlen)625)];
+	    __state->ends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("ends", i__2, "zztime_", (ftnlen)626)] = 
+		    __state->ends[(i__3 = __state->get - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("ends", i__3, "zztime_", (ftnlen)626)];
+	    __state->pbegs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pbegs", i__2, "zztime_", (ftnlen)627)] = 
+		    __state->pbegs[(i__3 = __state->get - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_", (ftnlen)
+		    627)];
+	    __state->pends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pends", i__2, "zztime_", (ftnlen)628)] = 
+		    __state->pends[(i__3 = __state->get - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pends", i__3, "zztime_", (ftnlen)
+		    628)];
+	    ++__state->put;
 	}
-	size = size - i_len(string, string_len) + 1;
+	__state->size = __state->size - i_len(string, string_len) + 1;
     }
-    ret_val = did;
+    ret_val = __state->did;
     return ret_val;
 /* $Procedure ZZGREP ( Private, Time --- get representation ) */
 
@@ -706,7 +688,7 @@ L_zzgrep:
 
 
 /* -& */
-    s_copy(string, rep, string_len, (max(1,size)));
+    s_copy(string, __state->rep, string_len, (max(1,__state->size)));
     ret_val = TRUE_;
     return ret_val;
 /* $Procedure ZZISPT ( Private, Time --- is pair of tokens ) */
@@ -842,27 +824,30 @@ L_zzispt:
 
 
 /* -& */
-    did = FALSE_;
-    from = cpos_(rep, string, &c__1, (ftnlen)64, string_len);
-    while(from > 0) {
-	if (from < size) {
-	    to = from + 1;
-	    did = i_indx(string, rep + (to - 1), string_len, (ftnlen)1) > 0;
+    __state->did = FALSE_;
+    __state->from = cpos_(__state->rep, string, &__state->c__1, (ftnlen)64, 
+	    string_len);
+    while(__state->from > 0) {
+	if (__state->from < __state->size) {
+	    __state->to = __state->from + 1;
+	    __state->did = i_indx(string, __state->rep + (__state->to - 1), 
+		    string_len, (ftnlen)1) > 0;
 	} else {
 	    *b = 0;
 	    *e = 0;
 	    ret_val = FALSE_;
 	    return ret_val;
 	}
-	if (did) {
-	    *b = begs[(i__1 = from - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
-		    "begs", i__1, "zztime_", (ftnlen)922)];
-	    *e = ends[(i__1 = to - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends"
-		    , i__1, "zztime_", (ftnlen)923)];
+	if (__state->did) {
+	    *b = __state->begs[(i__1 = __state->from - 1) < 64 && 0 <= i__1 ? 
+		    i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)922)];
+	    *e = __state->ends[(i__1 = __state->to - 1) < 64 && 0 <= i__1 ? 
+		    i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)923)];
 	    ret_val = TRUE_;
 	    return ret_val;
 	}
-	from = cpos_(rep, string, &to, (ftnlen)64, string_len);
+	__state->from = cpos_(__state->rep, string, &__state->to, (ftnlen)64, 
+		string_len);
     }
     *b = 0;
     *e = 0;
@@ -987,7 +972,7 @@ L_zzist:
 
 
 /* -& */
-    ret_val = i_indx(rep, letter, size, (ftnlen)1) > 0;
+    ret_val = i_indx(__state->rep, letter, __state->size, (ftnlen)1) > 0;
     return ret_val;
 /* $Procedure ZZNOTE ( Private, Time --- note the existence and remove ) */
 
@@ -1127,43 +1112,48 @@ L_zznote:
 
 
 /* -& */
-    put = i_indx(rep, letter, (ftnlen)64, (ftnlen)1);
-    if (put > 0) {
-	*b = begs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)1212)];
-	*e = ends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)1213)];
-	next = put + 1;
-	i__1 = size;
-	for (get = next; get <= i__1; ++get) {
-	    begs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("begs", 
-		    i__2, "zztime_", (ftnlen)1219)] = begs[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("begs", i__3, "zztime_", (
-		    ftnlen)1219)];
-	    ends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("ends", 
-		    i__2, "zztime_", (ftnlen)1220)] = ends[(i__3 = get - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("ends", i__3, "zztime_", (
-		    ftnlen)1220)];
-	    pbegs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pbegs", 
-		    i__2, "zztime_", (ftnlen)1221)] = pbegs[(i__3 = get - 1) <
-		     64 && 0 <= i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_",
-		     (ftnlen)1221)];
-	    pends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", 
-		    i__2, "zztime_", (ftnlen)1222)] = pends[(i__3 = get - 1) <
-		     64 && 0 <= i__3 ? i__3 : s_rnge("pends", i__3, "zztime_",
-		     (ftnlen)1222)];
-	    *(unsigned char *)&rep[put - 1] = *(unsigned char *)&rep[get - 1];
-	    ++put;
+    __state->put = i_indx(__state->rep, letter, (ftnlen)64, (ftnlen)1);
+    if (__state->put > 0) {
+	*b = __state->begs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		: s_rnge("begs", i__1, "zztime_", (ftnlen)1212)];
+	*e = __state->ends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		: s_rnge("ends", i__1, "zztime_", (ftnlen)1213)];
+	__state->next = __state->put + 1;
+	i__1 = __state->size;
+	for (__state->get = __state->next; __state->get <= i__1; 
+		++__state->get) {
+	    __state->begs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("begs", i__2, "zztime_", (ftnlen)1219)] = 
+		    __state->begs[(i__3 = __state->get - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("begs", i__3, "zztime_", (ftnlen)1219)];
+	    __state->ends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("ends", i__2, "zztime_", (ftnlen)1220)] = 
+		    __state->ends[(i__3 = __state->get - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("ends", i__3, "zztime_", (ftnlen)1220)];
+	    __state->pbegs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pbegs", i__2, "zztime_", (ftnlen)1221)] = 
+		    __state->pbegs[(i__3 = __state->get - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_", (ftnlen)
+		    1221)];
+	    __state->pends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pends", i__2, "zztime_", (ftnlen)1222)] = 
+		    __state->pends[(i__3 = __state->get - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pends", i__3, "zztime_", (ftnlen)
+		    1222)];
+	    *(unsigned char *)&__state->rep[__state->put - 1] = *(unsigned 
+		    char *)&__state->rep[__state->get - 1];
+	    ++__state->put;
 	}
-	s_copy(rep + (size - 1), " ", 64 - (size - 1), (ftnlen)1);
-	--size;
-	did = TRUE_;
+	s_copy(__state->rep + (__state->size - 1), " ", 64 - (__state->size - 
+		1), (ftnlen)1);
+	--__state->size;
+	__state->did = TRUE_;
     } else {
 	*b = 0;
 	*e = 0;
-	did = FALSE_;
+	__state->did = FALSE_;
     }
-    ret_val = did;
+    ret_val = __state->did;
     return ret_val;
 /* $Procedure ZZREMT ( Private, Time --- remove token ) */
 
@@ -1289,41 +1279,45 @@ L_zzremt:
 
 
 /* -& */
-    put = 0;
-    did = FALSE_;
-    i__1 = size;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if (*(unsigned char *)&rep[i__ - 1] != *(unsigned char *)letter) {
-	    ++put;
-	    *(unsigned char *)&rep[put - 1] = *(unsigned char *)&rep[i__ - 1];
-	    begs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("begs", 
-		    i__2, "zztime_", (ftnlen)1378)] = begs[(i__3 = i__ - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("begs", i__3, "zztime_", (
-		    ftnlen)1378)];
-	    ends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("ends", 
-		    i__2, "zztime_", (ftnlen)1379)] = ends[(i__3 = i__ - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("ends", i__3, "zztime_", (
-		    ftnlen)1379)];
-	    pbegs[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pbegs", 
-		    i__2, "zztime_", (ftnlen)1380)] = pbegs[(i__3 = i__ - 1) <
-		     64 && 0 <= i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_",
-		     (ftnlen)1380)];
-	    pends[(i__2 = put - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", 
-		    i__2, "zztime_", (ftnlen)1381)] = pends[(i__3 = i__ - 1) <
-		     64 && 0 <= i__3 ? i__3 : s_rnge("pends", i__3, "zztime_",
-		     (ftnlen)1381)];
+    __state->put = 0;
+    __state->did = FALSE_;
+    i__1 = __state->size;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	if (*(unsigned char *)&__state->rep[__state->i__ - 1] != *(unsigned 
+		char *)letter) {
+	    ++__state->put;
+	    *(unsigned char *)&__state->rep[__state->put - 1] = *(unsigned 
+		    char *)&__state->rep[__state->i__ - 1];
+	    __state->begs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("begs", i__2, "zztime_", (ftnlen)1378)] = 
+		    __state->begs[(i__3 = __state->i__ - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("begs", i__3, "zztime_", (ftnlen)1378)];
+	    __state->ends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 :
+		     s_rnge("ends", i__2, "zztime_", (ftnlen)1379)] = 
+		    __state->ends[(i__3 = __state->i__ - 1) < 64 && 0 <= i__3 
+		    ? i__3 : s_rnge("ends", i__3, "zztime_", (ftnlen)1379)];
+	    __state->pbegs[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pbegs", i__2, "zztime_", (ftnlen)1380)] = 
+		    __state->pbegs[(i__3 = __state->i__ - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pbegs", i__3, "zztime_", (ftnlen)
+		    1380)];
+	    __state->pends[(i__2 = __state->put - 1) < 64 && 0 <= i__2 ? i__2 
+		    : s_rnge("pends", i__2, "zztime_", (ftnlen)1381)] = 
+		    __state->pends[(i__3 = __state->i__ - 1) < 64 && 0 <= 
+		    i__3 ? i__3 : s_rnge("pends", i__3, "zztime_", (ftnlen)
+		    1381)];
 	} else {
-	    did = TRUE_;
+	    __state->did = TRUE_;
 	}
     }
-    size = put;
-    if (put == 0) {
-	s_copy(rep, " ", (ftnlen)64, (ftnlen)1);
-    } else if (put < i_len(rep, (ftnlen)64)) {
-	i__1 = put;
-	s_copy(rep + i__1, " ", 64 - i__1, (ftnlen)1);
+    __state->size = __state->put;
+    if (__state->put == 0) {
+	s_copy(__state->rep, " ", (ftnlen)64, (ftnlen)1);
+    } else if (__state->put < i_len(__state->rep, (ftnlen)64)) {
+	i__1 = __state->put;
+	s_copy(__state->rep + i__1, " ", 64 - i__1, (ftnlen)1);
     }
-    ret_val = did;
+    ret_val = __state->did;
     return ret_val;
 /* $Procedure ZZSUBT ( Private, Time --- substitute tokens ) */
 
@@ -1485,31 +1479,35 @@ L_zzsubt:
 
 /*     So far we haven't combined anything. */
 
-    did = FALSE_;
-    k = i_len(string, string_len);
+    __state->did = FALSE_;
+    __state->k = i_len(string, string_len);
 
 /*     We have two special cases to deal with. */
 
-    if (*(unsigned char *)string == '<' && k > 1) {
+    if (*(unsigned char *)string == '<' && __state->k > 1) {
 /* Computing MIN */
-	i__1 = k - 1;
-	to = min(i__1,size);
-	from = 1;
-	if (s_cmp(string + 1, rep + (from - 1), k - 1, to - (from - 1)) == 0) 
-		{
-	    s_copy(rep + (from - 1), transl, to - (from - 1), transl_len);
+	i__1 = __state->k - 1;
+	__state->to = min(i__1,__state->size);
+	__state->from = 1;
+	if (s_cmp(string + 1, __state->rep + (__state->from - 1), __state->k 
+		- 1, __state->to - (__state->from - 1)) == 0) {
+	    s_copy(__state->rep + (__state->from - 1), transl, __state->to - (
+		    __state->from - 1), transl_len);
 	    ret_val = TRUE_;
 	} else {
 	    ret_val = FALSE_;
 	}
 	return ret_val;
-    } else if (*(unsigned char *)&string[k - 1] == '>' && k > 1) {
+    } else if (*(unsigned char *)&string[__state->k - 1] == '>' && __state->k 
+	    > 1) {
 /* Computing MAX */
-	i__1 = 1, i__2 = size - k + 2;
-	from = max(i__1,i__2);
-	to = size;
-	if (s_cmp(string, rep + (from - 1), k - 1, to - (from - 1)) == 0) {
-	    s_copy(rep + (from - 1), transl, to - (from - 1), transl_len);
+	i__1 = 1, i__2 = __state->size - __state->k + 2;
+	__state->from = max(i__1,i__2);
+	__state->to = __state->size;
+	if (s_cmp(string, __state->rep + (__state->from - 1), __state->k - 1, 
+		__state->to - (__state->from - 1)) == 0) {
+	    s_copy(__state->rep + (__state->from - 1), transl, __state->to - (
+		    __state->from - 1), transl_len);
 	    ret_val = TRUE_;
 	} else {
 	    ret_val = FALSE_;
@@ -1521,16 +1519,19 @@ L_zzsubt:
 /*     left (L2R is YES) or from the right (L2R is NO). */
 
     if (*l2r) {
-	from = pos_(rep, string, &c__1, (ftnlen)64, string_len);
+	__state->from = pos_(__state->rep, string, &__state->c__1, (ftnlen)64,
+		 string_len);
     } else {
-	from = posr_(rep, string, &size, (ftnlen)64, string_len);
+	__state->from = posr_(__state->rep, string, &__state->size, (ftnlen)
+		64, string_len);
     }
-    to = from + i_len(transl, transl_len) - 1;
-    if (from > 0) {
-	did = TRUE_;
-	s_copy(rep + (from - 1), transl, to - (from - 1), transl_len);
+    __state->to = __state->from + i_len(transl, transl_len) - 1;
+    if (__state->from > 0) {
+	__state->did = TRUE_;
+	s_copy(__state->rep + (__state->from - 1), transl, __state->to - (
+		__state->from - 1), transl_len);
     }
-    ret_val = did;
+    ret_val = __state->did;
     return ret_val;
 /* $Procedure ZZTOKNS ( Private, Time --- Time Tokens ) */
 
@@ -1720,26 +1721,27 @@ L_zztokns:
 /*     table. */
 
     ret_val = FALSE_;
-    if (first) {
-	first = FALSE_;
-	blank = ' ';
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->blank = ' ';
 
 /*        These are the error message templates for errors generated */
 /*        for input time strings that have too many recognizable tokens */
 /*        or are too long for their pictures to fit in the internal */
 /*        picture buffer. */
 
-	s_copy(tknerr, "The input time string '#' cannot be processed becaus"
-		"e it contains more than @ recognizable tokens. The token tha"
-		"t could not be processed was '#'.", (ftnlen)320, (ftnlen)145);
-	repmi_(tknerr, "@", &c__64, tknerr, (ftnlen)320, (ftnlen)1, (ftnlen)
-		320);
-	s_copy(picerr, "The input time string '#' cannot be processed becaus"
-		"e the internal picture describing it requires more than @ ch"
-		"aracters. The token that could not be processed was '#'.", (
-		ftnlen)320, (ftnlen)168);
-	repmi_(picerr, "@", &c__320, picerr, (ftnlen)320, (ftnlen)1, (ftnlen)
-		320);
+	s_copy(__state->tknerr, "The input time string '#' cannot be process"
+		"ed because it contains more than @ recognizable tokens. The "
+		"token that could not be processed was '#'.", (ftnlen)320, (
+		ftnlen)145);
+	repmi_(__state->tknerr, "@", &__state->c__64, __state->tknerr, (
+		ftnlen)320, (ftnlen)1, (ftnlen)320);
+	s_copy(__state->picerr, "The input time string '#' cannot be process"
+		"ed because the internal picture describing it requires more "
+		"than @ characters. The token that could not be processed was"
+		" '#'.", (ftnlen)320, (ftnlen)168);
+	repmi_(__state->picerr, "@", &__state->c__320, __state->picerr, (
+		ftnlen)320, (ftnlen)1, (ftnlen)320);
 
 /*        Below is the list of recognized substrings. The basic */
 /*        pattern here is to find the block of special tokens */
@@ -1757,829 +1759,888 @@ L_zztokns:
 /*        group to the last. */
 
 
-	for (i__ = 32; i__ <= 126; ++i__) {
-	    f[(i__1 = i__ - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		    "zztime_", (ftnlen)1856)] = 0;
-	    l[(i__1 = i__ - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		    "zztime_", (ftnlen)1857)] = -1;
-	    s_copy(names + (((i__1 = i__ - 32) < 95 && 0 <= i__1 ? i__1 : 
-		    s_rnge("names", i__1, "zztime_", (ftnlen)1858)) << 5), 
-		    "substring", (ftnlen)32, (ftnlen)9);
+	for (__state->i__ = 32; __state->i__ <= 126; ++__state->i__) {
+	    __state->f[(i__1 = __state->i__ - 32) < 95 && 0 <= i__1 ? i__1 : 
+		    s_rnge("f", i__1, "zztime_", (ftnlen)1856)] = 0;
+	    __state->l[(i__1 = __state->i__ - 32) < 95 && 0 <= i__1 ? i__1 : 
+		    s_rnge("l", i__1, "zztime_", (ftnlen)1857)] = -1;
+	    s_copy(__state->names + (((i__1 = __state->i__ - 32) < 95 && 0 <= 
+		    i__1 ? i__1 : s_rnge("names", i__1, "zztime_", (ftnlen)
+		    1858)) << 5), "substring", (ftnlen)32, (ftnlen)9);
 	}
-	s_copy(names + (((i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1862)) << 5), "\"Year Abbr"
-		"eviation Mark\"", (ftnlen)32, (ftnlen)24);
-	s_copy(names + (((i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1863)) << 5), "comma", (
-		ftnlen)32, (ftnlen)5);
-	s_copy(names + (((i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1864)) << 5), "dash", (
-		ftnlen)32, (ftnlen)4);
-	s_copy(names + (((i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1865)) << 5), "period", (
-		ftnlen)32, (ftnlen)6);
-	s_copy(names + (((i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1866)) << 5), "slash", (
-		ftnlen)32, (ftnlen)5);
-	s_copy(names + (((i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1867)) << 5), "colon", (
-		ftnlen)32, (ftnlen)5);
-	s_copy(names + (((i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1868)) << 5), "Day of Month"
-		, (ftnlen)32, (ftnlen)12);
-	s_copy(names + (((i__1 = 'H' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1869)) << 5), "Hour", (
-		ftnlen)32, (ftnlen)4);
-	s_copy(names + (((i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1870)) << 5), "Minute", (
-		ftnlen)32, (ftnlen)6);
-	s_copy(names + (((i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1871)) << 5), "AM/PM indic"
-		"ator", (ftnlen)32, (ftnlen)15);
-	s_copy(names + (((i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1872)) << 5), "UTC-Offset "
-		"indicator", (ftnlen)32, (ftnlen)20);
-	s_copy(names + (((i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1873)) << 5), "Second", (
-		ftnlen)32, (ftnlen)6);
-	s_copy(names + (((i__1 = 'Y' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1874)) << 5), "Year", (
-		ftnlen)32, (ftnlen)4);
-	s_copy(names + (((i__1 = 'Z' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1875)) << 5), "Time-Zone i"
-		"ndicator", (ftnlen)32, (ftnlen)19);
-	s_copy(names + (((i__1 = '[' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1876)) << 5), "Left Parent"
-		"hesis", (ftnlen)32, (ftnlen)16);
-	s_copy(names + (((i__1 = ']' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1877)) << 5), "Right Paren"
-		"thesis", (ftnlen)32, (ftnlen)17);
-	s_copy(names + (((i__1 = 'b' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1878)) << 5), "White Space",
-		 (ftnlen)32, (ftnlen)11);
-	s_copy(names + (((i__1 = 'd' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1879)) << 5), "Day-of-Year"
-		" indicator", (ftnlen)32, (ftnlen)21);
-	s_copy(names + (((i__1 = 'e' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1880)) << 5), "Era", (
-		ftnlen)32, (ftnlen)3);
-	s_copy(names + (((i__1 = 'i' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1881)) << 5), "Integer", (
-		ftnlen)32, (ftnlen)7);
-	s_copy(names + (((i__1 = 'j' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1882)) << 5), "Julian Date"
-		" indicator", (ftnlen)32, (ftnlen)21);
-	s_copy(names + (((i__1 = 'm' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1883)) << 5), "Month", (
-		ftnlen)32, (ftnlen)5);
-	s_copy(names + (((i__1 = 'n' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1884)) << 5), "Decimal Num"
-		"ber", (ftnlen)32, (ftnlen)14);
-	s_copy(names + (((i__1 = 'o' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1885)) << 5), "UTC-Offset "
-		"indicator", (ftnlen)32, (ftnlen)20);
-	s_copy(names + (((i__1 = 's' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1886)) << 5), "Time System"
-		" specification", (ftnlen)32, (ftnlen)25);
-	s_copy(names + (((i__1 = 't' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1887)) << 5), "ISO Time Se"
-		"parator", (ftnlen)32, (ftnlen)18);
-	s_copy(names + (((i__1 = 'w' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1888)) << 5), "Weekday", (
-		ftnlen)32, (ftnlen)7);
-	s_copy(names + (((i__1 = 'y' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		"names", i__1, "zztime_", (ftnlen)1889)) << 5), "Day of Year",
-		 (ftnlen)32, (ftnlen)11);
-	s_copy(mnmrk, "month", (ftnlen)12, (ftnlen)5);
-	s_copy(mnmrk + 12, "MONTH", (ftnlen)12, (ftnlen)5);
-	s_copy(mnmrk + 24, "Month", (ftnlen)12, (ftnlen)5);
-	s_copy(mnmrk + 36, "mon", (ftnlen)12, (ftnlen)3);
-	s_copy(mnmrk + 48, "MON", (ftnlen)12, (ftnlen)3);
-	s_copy(mnmrk + 60, "Mon", (ftnlen)12, (ftnlen)3);
-	s_copy(wkday, "weekday", (ftnlen)12, (ftnlen)7);
-	s_copy(wkday + 12, "WEEKDAY", (ftnlen)12, (ftnlen)7);
-	s_copy(wkday + 24, "Weekday", (ftnlen)12, (ftnlen)7);
-	s_copy(wkday + 36, "wkd", (ftnlen)12, (ftnlen)3);
-	s_copy(wkday + 48, "WKD", (ftnlen)12, (ftnlen)3);
-	s_copy(wkday + 60, "Wkd", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->names + (((i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 
+		: s_rnge("names", i__1, "zztime_", (ftnlen)1862)) << 5), 
+		"\"Year Abbreviation Mark\"", (ftnlen)32, (ftnlen)24);
+	s_copy(__state->names + (((i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1863)) << 5), "com"
+		"ma", (ftnlen)32, (ftnlen)5);
+	s_copy(__state->names + (((i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1864)) << 5), "dash"
+		, (ftnlen)32, (ftnlen)4);
+	s_copy(__state->names + (((i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1865)) << 5), "per"
+		"iod", (ftnlen)32, (ftnlen)6);
+	s_copy(__state->names + (((i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1866)) << 5), "sla"
+		"sh", (ftnlen)32, (ftnlen)5);
+	s_copy(__state->names + (((i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1867)) << 5), "col"
+		"on", (ftnlen)32, (ftnlen)5);
+	s_copy(__state->names + (((i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1868)) << 5), "Day"
+		" of Month", (ftnlen)32, (ftnlen)12);
+	s_copy(__state->names + (((i__1 = 'H' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1869)) << 5), "Hour"
+		, (ftnlen)32, (ftnlen)4);
+	s_copy(__state->names + (((i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1870)) << 5), "Min"
+		"ute", (ftnlen)32, (ftnlen)6);
+	s_copy(__state->names + (((i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1871)) << 5), "AM/"
+		"PM indicator", (ftnlen)32, (ftnlen)15);
+	s_copy(__state->names + (((i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1872)) << 5), "UTC"
+		"-Offset indicator", (ftnlen)32, (ftnlen)20);
+	s_copy(__state->names + (((i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1873)) << 5), "Sec"
+		"ond", (ftnlen)32, (ftnlen)6);
+	s_copy(__state->names + (((i__1 = 'Y' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1874)) << 5), "Year"
+		, (ftnlen)32, (ftnlen)4);
+	s_copy(__state->names + (((i__1 = 'Z' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1875)) << 5), "Tim"
+		"e-Zone indicator", (ftnlen)32, (ftnlen)19);
+	s_copy(__state->names + (((i__1 = '[' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1876)) << 5), "Lef"
+		"t Parenthesis", (ftnlen)32, (ftnlen)16);
+	s_copy(__state->names + (((i__1 = ']' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1877)) << 5), "Rig"
+		"ht Parenthesis", (ftnlen)32, (ftnlen)17);
+	s_copy(__state->names + (((i__1 = 'b' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1878)) << 5), "Whi"
+		"te Space", (ftnlen)32, (ftnlen)11);
+	s_copy(__state->names + (((i__1 = 'd' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1879)) << 5), "Day"
+		"-of-Year indicator", (ftnlen)32, (ftnlen)21);
+	s_copy(__state->names + (((i__1 = 'e' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1880)) << 5), "Era",
+		 (ftnlen)32, (ftnlen)3);
+	s_copy(__state->names + (((i__1 = 'i' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1881)) << 5), "Int"
+		"eger", (ftnlen)32, (ftnlen)7);
+	s_copy(__state->names + (((i__1 = 'j' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1882)) << 5), "Jul"
+		"ian Date indicator", (ftnlen)32, (ftnlen)21);
+	s_copy(__state->names + (((i__1 = 'm' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1883)) << 5), "Mon"
+		"th", (ftnlen)32, (ftnlen)5);
+	s_copy(__state->names + (((i__1 = 'n' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1884)) << 5), "Dec"
+		"imal Number", (ftnlen)32, (ftnlen)14);
+	s_copy(__state->names + (((i__1 = 'o' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1885)) << 5), "UTC"
+		"-Offset indicator", (ftnlen)32, (ftnlen)20);
+	s_copy(__state->names + (((i__1 = 's' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1886)) << 5), "Tim"
+		"e System specification", (ftnlen)32, (ftnlen)25);
+	s_copy(__state->names + (((i__1 = 't' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1887)) << 5), "ISO"
+		" Time Separator", (ftnlen)32, (ftnlen)18);
+	s_copy(__state->names + (((i__1 = 'w' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1888)) << 5), "Wee"
+		"kday", (ftnlen)32, (ftnlen)7);
+	s_copy(__state->names + (((i__1 = 'y' - 32) < 95 && 0 <= i__1 ? i__1 :
+		 s_rnge("names", i__1, "zztime_", (ftnlen)1889)) << 5), "Day"
+		" of Year", (ftnlen)32, (ftnlen)11);
+	s_copy(__state->mnmrk, "month", (ftnlen)12, (ftnlen)5);
+	s_copy(__state->mnmrk + 12, "MONTH", (ftnlen)12, (ftnlen)5);
+	s_copy(__state->mnmrk + 24, "Month", (ftnlen)12, (ftnlen)5);
+	s_copy(__state->mnmrk + 36, "mon", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->mnmrk + 48, "MON", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->mnmrk + 60, "Mon", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->wkday, "weekday", (ftnlen)12, (ftnlen)7);
+	s_copy(__state->wkday + 12, "WEEKDAY", (ftnlen)12, (ftnlen)7);
+	s_copy(__state->wkday + 24, "Weekday", (ftnlen)12, (ftnlen)7);
+	s_copy(__state->wkday + 36, "wkd", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->wkday + 48, "WKD", (ftnlen)12, (ftnlen)3);
+	s_copy(__state->wkday + 60, "Wkd", (ftnlen)12, (ftnlen)3);
 
 /*        Length of the items Month, Mon, weekday, wkd */
 
-	wksize[0] = 7;
-	wksize[1] = 3;
-	mnsize[0] = 5;
-	mnsize[1] = 3;
-	i__ = 0;
+	__state->wksize[0] = 7;
+	__state->wksize[1] = 3;
+	__state->mnsize[0] = 5;
+	__state->mnsize[1] = 3;
+	__state->i__ = 0;
 
 /*        Tokens beginning with ' ' */
 
-	++i__;
-	f[(i__1 = ' ' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1917)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1918)) * 12, " ", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1919)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1920)] = 'b';
-	l[(i__1 = ' ' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1921)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = ' ' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1917)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1918)) * 12, 
+		" ", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1919)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1920)] = 'b';
+	__state->l[(i__1 = ' ' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1921)] = __state->i__;
 
 /*        Tokens beginning with '(' */
 
-	++i__;
-	f[(i__1 = '(' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1927)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1928)) * 12, "(", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1929)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1930)] = '[';
-	l[(i__1 = '(' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1931)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = '(' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1927)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1928)) * 12, 
+		"(", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1929)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1930)] = '[';
+	__state->l[(i__1 = '(' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1931)] = __state->i__;
 
 /*        Tokens beginning with ')' */
 
-	++i__;
-	f[(i__1 = ')' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1936)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1937)) * 12, ")", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1938)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1939)] = ']';
-	l[(i__1 = ')' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1940)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = ')' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1936)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1937)) * 12, 
+		")", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1938)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1939)] = ']';
+	__state->l[(i__1 = ')' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1940)] = __state->i__;
 
 /*        Tokens beginning with ',' */
 
-	++i__;
-	f[(i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1945)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1946)) * 12, ",", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1947)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1948)] = ',';
-	l[(i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1949)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1945)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1946)) * 12, 
+		",", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1947)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1948)] = ',';
+	__state->l[(i__1 = ',' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1949)] = __state->i__;
 
 /*        Tokens beginning with '-' */
 
-	++i__;
-	f[(i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1955)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1956)) * 12, "-", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1957)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1958)] = '-';
-	l[(i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1959)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1955)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1956)) * 12, 
+		"-", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1957)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1958)] = '-';
+	__state->l[(i__1 = '-' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1959)] = __state->i__;
 
 /*        Tokens beginning with '.' */
 
-	++i__;
-	f[(i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1965)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1966)) * 12, ".", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1967)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1968)] = '.';
-	l[(i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1969)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1965)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1966)) * 12, 
+		".", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1967)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1968)] = '.';
+	__state->l[(i__1 = '.' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1969)] = __state->i__;
 
 /*        Tokens beginning with '/' */
 
-	++i__;
-	f[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1975)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1976)) * 12, "//", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1977)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1978)] = 'd';
-	l[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1979)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1982)) * 12, "/", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1983)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1984)] = '/';
-	l[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1985)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1975)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1976)) * 12, 
+		"//", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1977)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1978)] = 'd';
+	__state->l[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1979)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1982)) * 12, 
+		"/", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1983)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1984)] = '/';
+	__state->l[(i__1 = '/' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1985)] = __state->i__;
 
 /*        Tokens beginning with ':' */
 
-	++i__;
-	f[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)1990)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1991)) * 12, "::", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1992)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1993)] = 'd';
-	l[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)1994)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)1997)) * 12, ":", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)1998)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)1999)] = ':';
-	l[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2000)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)1990)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1991)) * 12, 
+		"::", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1992)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1993)] = 'd';
+	__state->l[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)1994)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)1997)) * 12, 
+		":", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)1998)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		1999)] = ':';
+	__state->l[(i__1 = ':' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2000)] = __state->i__;
 
 /*        Tokens beginning with 'A' */
 
-	++i__;
-	f[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2006)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2007)) * 12, "A.D.", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2008)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2009)] = 'e';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2010)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2013)) * 12, "AD", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2014)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2015)] = 'e';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2016)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2019)) * 12, "A.M.", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2020)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2021)] = 'N';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2022)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2025)) * 12, "AM", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2026)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2027)] = 'N';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2028)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2031)) * 12, "APRIL", (
-		ftnlen)12, (ftnlen)5);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2032)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2033)] = 'm';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2034)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2037)) * 12, "AUGUST", (
-		ftnlen)12, (ftnlen)6);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2038)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2039)] = 'm';
-	l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2040)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2006)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2007)) * 12, 
+		"A.D.", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2008)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2009)] = 'e';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2010)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2013)) * 12, 
+		"AD", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2014)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2015)] = 'e';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2016)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2019)) * 12, 
+		"A.M.", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2020)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2021)] = 'N';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2022)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2025)) * 12, 
+		"AM", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2026)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2027)] = 'N';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2028)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2031)) * 12, 
+		"APRIL", (ftnlen)12, (ftnlen)5);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2032)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2033)] = 'm';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2034)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2037)) * 12, 
+		"AUGUST", (ftnlen)12, (ftnlen)6);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2038)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2039)] = 'm';
+	__state->l[(i__1 = 'A' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2040)] = __state->i__;
 
 /*        Tokens beginning with 'B' */
 
-	++i__;
-	f[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2046)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2047)) * 12, "B.C.", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2048)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2049)] = 'e';
-	l[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2050)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2053)) * 12, "BC", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2054)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2055)] = 'e';
-	l[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2056)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2046)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2047)) * 12, 
+		"B.C.", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2048)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2049)] = 'e';
+	__state->l[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2050)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2053)) * 12, 
+		"BC", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2054)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2055)] = 'e';
+	__state->l[(i__1 = 'B' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2056)] = __state->i__;
 
 /*        Tokens beginning with 'C' */
 
-	++i__;
-	f[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2062)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2063)) * 12, "CDT", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2064)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2065)] = 'Z';
-	l[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2066)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2069)) * 12, "CST", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2070)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2071)] = 'Z';
-	l[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2072)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2062)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2063)) * 12, 
+		"CDT", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2064)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2065)] = 'Z';
+	__state->l[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2066)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2069)) * 12, 
+		"CST", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2070)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2071)] = 'Z';
+	__state->l[(i__1 = 'C' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2072)] = __state->i__;
 
 /*        Tokens beginning with 'D' */
 
-	++i__;
-	f[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2078)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2079)) * 12, "DECEMBER", (
-		ftnlen)12, (ftnlen)8);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2080)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2081)] = 'm';
-	l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2082)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2085)) * 12, "D+", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2086)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2087)] = 'E';
-	l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2088)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2091)) * 12, "D-", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2092)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2093)] = 'E';
-	l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2094)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2097)) * 12, "D", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2098)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2099)] = 'E';
-	l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2100)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2078)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2079)) * 12, 
+		"DECEMBER", (ftnlen)12, (ftnlen)8);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2080)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2081)] = 'm';
+	__state->l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2082)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2085)) * 12, 
+		"D+", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2086)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2087)] = 'E';
+	__state->l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2088)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2091)) * 12, 
+		"D-", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2092)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2093)] = 'E';
+	__state->l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2094)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2097)) * 12, 
+		"D", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2098)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2099)] = 'E';
+	__state->l[(i__1 = 'D' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2100)] = __state->i__;
 
 /*        Tokens beginning with 'E' */
 
-	++i__;
-	f[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2109)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2110)) * 12, "EDT", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2111)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2112)] = 'Z';
-	l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2113)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2116)) * 12, "EST", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2117)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2118)] = 'Z';
-	l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2119)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2122)) * 12, "E+", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2123)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2124)] = 'E';
-	l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2125)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2128)) * 12, "E-", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2129)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2130)] = 'E';
-	l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2131)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2134)) * 12, "E", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2135)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2136)] = 'E';
-	l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2137)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2109)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2110)) * 12, 
+		"EDT", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2111)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2112)] = 'Z';
+	__state->l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2113)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2116)) * 12, 
+		"EST", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2117)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2118)] = 'Z';
+	__state->l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2119)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2122)) * 12, 
+		"E+", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2123)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2124)] = 'E';
+	__state->l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2125)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2128)) * 12, 
+		"E-", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2129)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2130)] = 'E';
+	__state->l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2131)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2134)) * 12, 
+		"E", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2135)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2136)] = 'E';
+	__state->l[(i__1 = 'E' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2137)] = __state->i__;
 
 /*        Tokens beginning with 'F' */
 
-	++i__;
-	f[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2144)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2145)) * 12, "FEBRUARY", (
-		ftnlen)12, (ftnlen)8);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2146)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2147)] = 'm';
-	l[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2148)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2151)) * 12, "FRIDAY", (
-		ftnlen)12, (ftnlen)6);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2152)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2153)] = 'w';
-	l[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2154)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2144)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2145)) * 12, 
+		"FEBRUARY", (ftnlen)12, (ftnlen)8);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2146)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2147)] = 'm';
+	__state->l[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2148)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2151)) * 12, 
+		"FRIDAY", (ftnlen)12, (ftnlen)6);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2152)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2153)] = 'w';
+	__state->l[(i__1 = 'F' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2154)] = __state->i__;
 
 /*        Tokens beginning with 'J' */
 
-	++i__;
-	f[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2160)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2161)) * 12, "JANUARY", (
-		ftnlen)12, (ftnlen)7);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2162)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2163)] = 'm';
-	l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2164)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2167)) * 12, "JD", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2168)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2169)] = 'j';
-	l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2170)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2173)) * 12, "JULY", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2174)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2175)] = 'm';
-	l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2176)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2179)) * 12, "JUNE", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2180)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2181)] = 'm';
-	l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2182)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2160)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2161)) * 12, 
+		"JANUARY", (ftnlen)12, (ftnlen)7);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2162)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2163)] = 'm';
+	__state->l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2164)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2167)) * 12, 
+		"JD", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2168)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2169)] = 'j';
+	__state->l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2170)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2173)) * 12, 
+		"JULY", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2174)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2175)] = 'm';
+	__state->l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2176)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2179)) * 12, 
+		"JUNE", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2180)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2181)] = 'm';
+	__state->l[(i__1 = 'J' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2182)] = __state->i__;
 
 /*        Tokens beginning with 'M' */
 
-	++i__;
-	f[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2188)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2189)) * 12, "MARCH", (
-		ftnlen)12, (ftnlen)5);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2190)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2191)] = 'm';
-	l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2192)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2195)) * 12, "MAY", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2196)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2197)] = 'm';
-	l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2198)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2201)) * 12, "MDT", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2202)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2203)] = 'Z';
-	l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2204)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2207)) * 12, "MONDAY", (
-		ftnlen)12, (ftnlen)6);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2208)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2209)] = 'w';
-	l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2210)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2213)) * 12, "MST", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2214)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2215)] = 'Z';
-	l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2216)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2188)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2189)) * 12, 
+		"MARCH", (ftnlen)12, (ftnlen)5);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2190)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2191)] = 'm';
+	__state->l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2192)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2195)) * 12, 
+		"MAY", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2196)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2197)] = 'm';
+	__state->l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2198)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2201)) * 12, 
+		"MDT", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2202)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2203)] = 'Z';
+	__state->l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2204)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2207)) * 12, 
+		"MONDAY", (ftnlen)12, (ftnlen)6);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2208)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2209)] = 'w';
+	__state->l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2210)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2213)) * 12, 
+		"MST", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2214)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2215)] = 'Z';
+	__state->l[(i__1 = 'M' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2216)] = __state->i__;
 
 /*        Tokens beginning with 'N' */
 
-	++i__;
-	f[(i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2222)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2223)) * 12, "NOVEMBER", (
-		ftnlen)12, (ftnlen)8);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2224)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2225)] = 'm';
-	l[(i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2226)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2222)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2223)) * 12, 
+		"NOVEMBER", (ftnlen)12, (ftnlen)8);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2224)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2225)] = 'm';
+	__state->l[(i__1 = 'N' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2226)] = __state->i__;
 
 /*        Tokens beginning with 'O' */
 
-	++i__;
-	f[(i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2232)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2233)) * 12, "OCTOBER", (
-		ftnlen)12, (ftnlen)7);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2234)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2235)] = 'm';
-	l[(i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2236)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2232)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2233)) * 12, 
+		"OCTOBER", (ftnlen)12, (ftnlen)7);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2234)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2235)] = 'm';
+	__state->l[(i__1 = 'O' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2236)] = __state->i__;
 
 /*        Tokens beginning with 'P' */
 
-	++i__;
-	f[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2242)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2243)) * 12, "P.M.", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2244)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2245)] = 'N';
-	l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2246)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2249)) * 12, "PDT", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2250)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2251)] = 'Z';
-	l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2252)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2255)) * 12, "PM", (ftnlen)
-		12, (ftnlen)2);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2256)] = 2;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2257)] = 'N';
-	l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2258)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2261)) * 12, "PST", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2262)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2263)] = 'Z';
-	l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2264)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2242)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2243)) * 12, 
+		"P.M.", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2244)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2245)] = 'N';
+	__state->l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2246)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2249)) * 12, 
+		"PDT", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2250)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2251)] = 'Z';
+	__state->l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2252)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2255)) * 12, 
+		"PM", (ftnlen)12, (ftnlen)2);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2256)] = 2;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2257)] = 'N';
+	__state->l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2258)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2261)) * 12, 
+		"PST", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2262)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2263)] = 'Z';
+	__state->l[(i__1 = 'P' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2264)] = __state->i__;
 
 /*        Tokens beginning with 'S' */
 
-	++i__;
-	f[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2270)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2271)) * 12, "SATURDAY", (
-		ftnlen)12, (ftnlen)8);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2272)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2273)] = 'w';
-	l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2274)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2277)) * 12, "SEPTEMBER", (
-		ftnlen)12, (ftnlen)9);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2278)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2279)] = 'm';
-	l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2280)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2283)) * 12, "SUNDAY", (
-		ftnlen)12, (ftnlen)6);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2284)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2285)] = 'w';
-	l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2286)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2270)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2271)) * 12, 
+		"SATURDAY", (ftnlen)12, (ftnlen)8);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2272)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2273)] = 'w';
+	__state->l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2274)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2277)) * 12, 
+		"SEPTEMBER", (ftnlen)12, (ftnlen)9);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2278)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2279)] = 'm';
+	__state->l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2280)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2283)) * 12, 
+		"SUNDAY", (ftnlen)12, (ftnlen)6);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2284)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2285)] = 'w';
+	__state->l[(i__1 = 'S' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2286)] = __state->i__;
 
 /*        Tokens beginning with 'T' */
 
-	++i__;
-	f[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2292)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2293)) * 12, "TDB", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2294)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2295)] = 's';
-	l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2296)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2299)) * 12, "TDT", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2300)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2301)] = 's';
-	l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2302)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2305)) * 12, "THURSDAY", (
-		ftnlen)12, (ftnlen)8);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2306)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2307)] = 'w';
-	l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2308)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2311)) * 12, "TUESDAY", (
-		ftnlen)12, (ftnlen)7);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2312)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2313)] = 'w';
-	l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2314)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2317)) * 12, "T", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2318)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2319)] = 't';
-	l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2320)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2292)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2293)) * 12, 
+		"TDB", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2294)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2295)] = 's';
+	__state->l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2296)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2299)) * 12, 
+		"TDT", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2300)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2301)] = 's';
+	__state->l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2302)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2305)) * 12, 
+		"THURSDAY", (ftnlen)12, (ftnlen)8);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2306)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2307)] = 'w';
+	__state->l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2308)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2311)) * 12, 
+		"TUESDAY", (ftnlen)12, (ftnlen)7);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2312)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2313)] = 'w';
+	__state->l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2314)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2317)) * 12, 
+		"T", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2318)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2319)] = 't';
+	__state->l[(i__1 = 'T' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2320)] = __state->i__;
 
 /*        Tokens beginning with 'U' */
 
-	++i__;
-	f[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2326)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2327)) * 12, "UTC+", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2328)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2329)] = 'O';
-	l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2330)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2333)) * 12, "UTC-", (
-		ftnlen)12, (ftnlen)4);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2334)] = 4;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2335)] = 'o';
-	l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2336)] = i__;
-	++i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2339)) * 12, "UTC", (ftnlen)
-		12, (ftnlen)3);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2340)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2341)] = 's';
-	l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2342)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2326)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2327)) * 12, 
+		"UTC+", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2328)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2329)] = 'O';
+	__state->l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2330)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2333)) * 12, 
+		"UTC-", (ftnlen)12, (ftnlen)4);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2334)] = 4;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2335)] = 'o';
+	__state->l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2336)] = __state->i__;
+	++__state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2339)) * 12, 
+		"UTC", (ftnlen)12, (ftnlen)3);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2340)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2341)] = 's';
+	__state->l[(i__1 = 'U' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2342)] = __state->i__;
 
 /*        Tokens beginning with '''' */
 
-	++i__;
-	f[(i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2347)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2348)) * 12, "'", (ftnlen)
-		12, (ftnlen)1);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2349)] = 1;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2350)] = '\'';
-	l[(i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2351)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2347)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2348)) * 12, 
+		"'", (ftnlen)12, (ftnlen)1);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2349)] = 1;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2350)] = '\'';
+	__state->l[(i__1 = '\'' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2351)] = __state->i__;
 
 /*        Tokens beginning with 'W' */
 
-	++i__;
-	f[(i__1 = 'W' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", i__1, 
-		"zztime_", (ftnlen)2356)] = i__;
-	s_copy(recog + ((i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-		"recog", i__1, "zztime_", (ftnlen)2357)) * 12, "WEDNESDAY", (
-		ftnlen)12, (ftnlen)9);
-	width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge("width", 
-		i__1, "zztime_", (ftnlen)2358)] = 3;
-	*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 :
-		 s_rnge("class", i__1, "zztime_", (ftnlen)2359)] = 'w';
-	l[(i__1 = 'W' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zztime_", (ftnlen)2360)] = i__;
+	++__state->i__;
+	__state->f[(i__1 = 'W' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("f", 
+		i__1, "zztime_", (ftnlen)2356)] = __state->i__;
+	s_copy(__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ?
+		 i__1 : s_rnge("recog", i__1, "zztime_", (ftnlen)2357)) * 12, 
+		"WEDNESDAY", (ftnlen)12, (ftnlen)9);
+	__state->width[(i__1 = __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+		s_rnge("width", i__1, "zztime_", (ftnlen)2358)] = 3;
+	*(unsigned char *)&__state->class__[(i__1 = __state->i__ - 1) < 70 && 
+		0 <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", (ftnlen)
+		2359)] = 'w';
+	__state->l[(i__1 = 'W' - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		i__1, "zztime_", (ftnlen)2360)] = __state->i__;
     }
 
 /*     If the input string is blank, return with an error message. */
@@ -2594,150 +2655,171 @@ L_zztokns:
 /*     OK. Initializations are out of the way. We now take */
 /*     apart the string. */
 
-    did = FALSE_;
+    __state->did = FALSE_;
     s_copy(error, " ", error_len, (ftnlen)1);
-    s_copy(rep, " ", (ftnlen)64, (ftnlen)1);
-    s_copy(pictur, " ", (ftnlen)320, (ftnlen)1);
-    size = 0;
-    next = 1;
-    pnext = 1;
-    put = 0;
-    ampm = FALSE_;
-    last = rtrim_(string, string_len);
-    while(next <= last) {
+    s_copy(__state->rep, " ", (ftnlen)64, (ftnlen)1);
+    s_copy(__state->pictur, " ", (ftnlen)320, (ftnlen)1);
+    __state->size = 0;
+    __state->next = 1;
+    __state->pnext = 1;
+    __state->put = 0;
+    __state->ampm = FALSE_;
+    __state->last = rtrim_(string, string_len);
+    while(__state->next <= __state->last) {
 
 /*        FROM and NEXT point to parts of the string, PFROM and PNEXT */
 /*        point to parts of the picture we will construct. */
 
-	from = next;
-	pfrom = pnext;
-	item = *(unsigned char *)&string[next - 1];
+	__state->from = __state->next;
+	__state->pfrom = __state->pnext;
+	__state->item = *(unsigned char *)&string[__state->next - 1];
 
 /*        First we try to find an unsigned integer in the string. */
 
-	lx4uns_(string, &from, &to, &nchar, last);
-	if (nchar > 0) {
+	lx4uns_(string, &__state->from, &__state->to, &__state->nchar, 
+		__state->last);
+	if (__state->nchar > 0) {
 
 /*           We found an unsigned integer, add a letter to the */
 /*           internal representation, note the begin and end */
 /*           of the token and set NEXT to the first character */
 /*           beyond this token. */
 
-	    ++put;
-	    if (put > 64) {
-		zztknerr_(tknerr, string, string + (from - 1), error, &
-			ret_val, (ftnlen)320, string_len, to - (from - 1), 
-			error_len);
+	    ++__state->put;
+	    if (__state->put > 64) {
+		zztknerr_(__state->tknerr, string, string + (__state->from - 
+			1), error, &ret_val, (ftnlen)320, string_len, 
+			__state->to - (__state->from - 1), error_len);
 		return ret_val;
 	    }
-	    *(unsigned char *)&rep[put - 1] = 'i';
-	    begs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		    i__1, "zztime_", (ftnlen)2417)] = from;
-	    ends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		    i__1, "zztime_", (ftnlen)2418)] = to;
-	    next = to + 1;
-	    pto = pfrom + nchar - 1;
-	    if (pto > 320) {
-		zztknerr_(picerr, string, string + (from - 1), error, &
-			ret_val, (ftnlen)320, string_len, to - (from - 1), 
-			error_len);
+	    *(unsigned char *)&__state->rep[__state->put - 1] = 'i';
+	    __state->begs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("begs", i__1, "zztime_", (ftnlen)2417)] = 
+		    __state->from;
+	    __state->ends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("ends", i__1, "zztime_", (ftnlen)2418)] = 
+		    __state->to;
+	    __state->next = __state->to + 1;
+	    __state->pto = __state->pfrom + __state->nchar - 1;
+	    if (__state->pto > 320) {
+		zztknerr_(__state->picerr, string, string + (__state->from - 
+			1), error, &ret_val, (ftnlen)320, string_len, 
+			__state->to - (__state->from - 1), error_len);
 		return ret_val;
 	    }
-	    pnext = pto + 1;
-	    s_copy(pictur + (pfrom - 1), string + (from - 1), pto - (pfrom - 
-		    1), to - (from - 1));
-	    pbegs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", 
-		    i__1, "zztime_", (ftnlen)2430)] = pfrom;
-	    pends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pends", 
-		    i__1, "zztime_", (ftnlen)2431)] = pto;
-	} else if (item == blank) {
+	    __state->pnext = __state->pto + 1;
+	    s_copy(__state->pictur + (__state->pfrom - 1), string + (
+		    __state->from - 1), __state->pto - (__state->pfrom - 1), 
+		    __state->to - (__state->from - 1));
+	    __state->pbegs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2430)] = 
+		    __state->pfrom;
+	    __state->pends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pends", i__1, "zztime_", (ftnlen)2431)] = 
+		    __state->pto;
+	} else if (__state->item == __state->blank) {
 
 /*           We have a blank. We lump all consecutive */
 /*           blanks together as one big fat blank. */
 
-	    ++put;
-	    if (put > 64) {
-		zztknerr_(tknerr, string, " ", error, &ret_val, (ftnlen)320, 
-			string_len, (ftnlen)1, error_len);
+	    ++__state->put;
+	    if (__state->put > 64) {
+		zztknerr_(__state->tknerr, string, " ", error, &ret_val, (
+			ftnlen)320, string_len, (ftnlen)1, error_len);
 		return ret_val;
 	    }
-	    to = from;
-	    begs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		    i__1, "zztime_", (ftnlen)2446)] = from;
-	    *(unsigned char *)&rep[put - 1] = 'b';
-	    while(item == blank && to <= last) {
-		++to;
-		if (to <= last) {
-		    item = *(unsigned char *)&string[to - 1];
+	    __state->to = __state->from;
+	    __state->begs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("begs", i__1, "zztime_", (ftnlen)2446)] = 
+		    __state->from;
+	    *(unsigned char *)&__state->rep[__state->put - 1] = 'b';
+	    while(__state->item == __state->blank && __state->to <= 
+		    __state->last) {
+		++__state->to;
+		if (__state->to <= __state->last) {
+		    __state->item = *(unsigned char *)&string[__state->to - 1]
+			    ;
 		}
 	    }
-	    next = to;
-	    --to;
-	    ends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		    i__1, "zztime_", (ftnlen)2460)] = to;
-	    pto = pfrom + to - from;
-	    if (pto > 320) {
-		zztknerr_(picerr, string, " ", error, &ret_val, (ftnlen)320, 
-			string_len, (ftnlen)1, error_len);
+	    __state->next = __state->to;
+	    --__state->to;
+	    __state->ends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("ends", i__1, "zztime_", (ftnlen)2460)] = 
+		    __state->to;
+	    __state->pto = __state->pfrom + __state->to - __state->from;
+	    if (__state->pto > 320) {
+		zztknerr_(__state->picerr, string, " ", error, &ret_val, (
+			ftnlen)320, string_len, (ftnlen)1, error_len);
 		return ret_val;
 	    }
-	    pnext = pto + 1;
-	    s_copy(pictur + (pfrom - 1), string + (from - 1), pto - (pfrom - 
-		    1), to - (from - 1));
-	    pbegs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", 
-		    i__1, "zztime_", (ftnlen)2471)] = pfrom;
-	    pends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pends", 
-		    i__1, "zztime_", (ftnlen)2472)] = pto;
-	} else if (item == 9) {
+	    __state->pnext = __state->pto + 1;
+	    s_copy(__state->pictur + (__state->pfrom - 1), string + (
+		    __state->from - 1), __state->pto - (__state->pfrom - 1), 
+		    __state->to - (__state->from - 1));
+	    __state->pbegs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2471)] = 
+		    __state->pfrom;
+	    __state->pends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pends", i__1, "zztime_", (ftnlen)2472)] = 
+		    __state->pto;
+	} else if (__state->item == 9) {
 
 /*           We've got a tab character, we treat tabs as */
 /*           blanks. */
 
-	    ++put;
-	    if (put > 64) {
-		zztknerr_(tknerr, string, "<TAB>", error, &ret_val, (ftnlen)
-			320, string_len, (ftnlen)5, error_len);
+	    ++__state->put;
+	    if (__state->put > 64) {
+		zztknerr_(__state->tknerr, string, "<TAB>", error, &ret_val, (
+			ftnlen)320, string_len, (ftnlen)5, error_len);
 		return ret_val;
 	    }
-	    *(unsigned char *)&rep[put - 1] = 'b';
-	    begs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		    i__1, "zztime_", (ftnlen)2488)] = from;
-	    ends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		    i__1, "zztime_", (ftnlen)2489)] = from;
-	    ++next;
-	    pto = pfrom;
-	    if (pto > 320) {
-		zztknerr_(picerr, string, "<TAB>", error, &ret_val, (ftnlen)
-			320, string_len, (ftnlen)5, error_len);
+	    *(unsigned char *)&__state->rep[__state->put - 1] = 'b';
+	    __state->begs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("begs", i__1, "zztime_", (ftnlen)2488)] = 
+		    __state->from;
+	    __state->ends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 :
+		     s_rnge("ends", i__1, "zztime_", (ftnlen)2489)] = 
+		    __state->from;
+	    ++__state->next;
+	    __state->pto = __state->pfrom;
+	    if (__state->pto > 320) {
+		zztknerr_(__state->picerr, string, "<TAB>", error, &ret_val, (
+			ftnlen)320, string_len, (ftnlen)5, error_len);
 		return ret_val;
 	    }
-	    pnext = pto + 1;
-	    s_copy(pictur + (pfrom - 1), " ", pto - (pfrom - 1), (ftnlen)1);
-	    pbegs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", 
-		    i__1, "zztime_", (ftnlen)2502)] = pfrom;
-	    pends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pends", 
-		    i__1, "zztime_", (ftnlen)2503)] = pfrom;
-	} else if (item < 32 || item > 126) {
+	    __state->pnext = __state->pto + 1;
+	    s_copy(__state->pictur + (__state->pfrom - 1), " ", __state->pto 
+		    - (__state->pfrom - 1), (ftnlen)1);
+	    __state->pbegs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2502)] = 
+		    __state->pfrom;
+	    __state->pends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 ? i__1 
+		    : s_rnge("pends", i__1, "zztime_", (ftnlen)2503)] = 
+		    __state->pfrom;
+	} else if (__state->item < 32 || __state->item > 126) {
 
 /*           This is a non-printing character. This is */
 /*           regarded as an error. */
 
 	    s_copy(error, string, error_len, string_len);
-	    zzinssub_(error, "<", &next, error, error_len, (ftnlen)1, 
-		    error_len);
+	    zzinssub_(error, "<", &__state->next, error, error_len, (ftnlen)1,
+		     error_len);
 
 /*           Overwrite the non-printing character with a */
 /*           closing angle bracket. */
 
-	    if (next < i_len(error, error_len)) {
-		i__1 = next;
-		s_copy(error + i__1, ">", next + 1 - i__1, (ftnlen)1);
+	    if (__state->next < i_len(error, error_len)) {
+		i__1 = __state->next;
+		s_copy(error + i__1, ">", __state->next + 1 - i__1, (ftnlen)1)
+			;
 	    }
 	    prefix_("There is a non-printing, non-tab character (ASCII #) at"
-		    " position # of the time string: ", &c__1, error, (ftnlen)
-		    87, error_len);
-	    repmi_(error, "#", &item, error, error_len, (ftnlen)1, error_len);
-	    repmi_(error, "#", &next, error, error_len, (ftnlen)1, error_len);
+		    " position # of the time string: ", &__state->c__1, error, 
+		    (ftnlen)87, error_len);
+	    repmi_(error, "#", &__state->item, error, error_len, (ftnlen)1, 
+		    error_len);
+	    repmi_(error, "#", &__state->next, error, error_len, (ftnlen)1, 
+		    error_len);
 	    ret_val = FALSE_;
 	    return ret_val;
 	} else {
@@ -2749,193 +2831,223 @@ L_zztokns:
 /*           to begin a search. We get that code and force it */
 /*           into a suitable range. */
 
-	    ucase_(string + (next - 1), this__, (ftnlen)1, (ftnlen)1);
-	    item = *(unsigned char *)this__;
-	    from = next;
-	    check = TRUE_;
-	    i__ = f[(i__1 = item - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
-		    "f", i__1, "zztime_", (ftnlen)2547)];
-	    while(check && i__ <= l[(i__1 = item - 32) < 95 && 0 <= i__1 ? 
-		    i__1 : s_rnge("l", i__1, "zztime_", (ftnlen)2549)]) {
-		w = width[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 : s_rnge(
-			"width", i__1, "zztime_", (ftnlen)2551)];
-		to = from + w - 1;
-		got = samsbi_(string, &from, &to, recog + ((i__1 = i__ - 1) < 
-			70 && 0 <= i__1 ? i__1 : s_rnge("recog", i__1, "zzti"
-			"me_", (ftnlen)2554)) * 12, &c__1, &w, string_len, (
-			ftnlen)12);
-		if (got) {
+	    ucase_(string + (__state->next - 1), __state->this__, (ftnlen)1, (
+		    ftnlen)1);
+	    __state->item = *(unsigned char *)__state->this__;
+	    __state->from = __state->next;
+	    __state->check = TRUE_;
+	    __state->i__ = __state->f[(i__1 = __state->item - 32) < 95 && 0 <=
+		     i__1 ? i__1 : s_rnge("f", i__1, "zztime_", (ftnlen)2547)]
+		    ;
+	    while(__state->check && __state->i__ <= __state->l[(i__1 = 
+		    __state->item - 32) < 95 && 0 <= i__1 ? i__1 : s_rnge(
+		    "l", i__1, "zztime_", (ftnlen)2549)]) {
+		__state->w = __state->width[(i__1 = __state->i__ - 1) < 70 && 
+			0 <= i__1 ? i__1 : s_rnge("width", i__1, "zztime_", (
+			ftnlen)2551)];
+		__state->to = __state->from + __state->w - 1;
+		__state->got = samsbi_(string, &__state->from, &__state->to, 
+			__state->recog + ((i__1 = __state->i__ - 1) < 70 && 0 
+			<= i__1 ? i__1 : s_rnge("recog", i__1, "zztime_", (
+			ftnlen)2554)) * 12, &__state->c__1, &__state->w, 
+			string_len, (ftnlen)12);
+		if (__state->got) {
 
 /*                 We have a match. If it is the match of a month */
 /*                 or day of the week, we keep looking for the */
 /*                 end of the match. */
 
-		    if (*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 && 0 
-			    <= i__1 ? i__1 : s_rnge("class", i__1, "zztime_", 
-			    (ftnlen)2562)] == 'm' || *(unsigned char *)&
-			    class__[(i__2 = i__ - 1) < 70 && 0 <= i__2 ? i__2 
-			    : s_rnge("class", i__2, "zztime_", (ftnlen)2562)] 
-			    == 'w') {
-			s_copy(spcial, recog + ((i__1 = i__ - 1) < 70 && 0 <= 
-				i__1 ? i__1 : s_rnge("recog", i__1, "zztime_",
-				 (ftnlen)2566)) * 12, (ftnlen)12, (ftnlen)12);
-			r__ = rtrim_(spcial, (ftnlen)12);
-			++w;
-			++to;
-			while(samchi_(string, &to, spcial, &w, string_len, 
-				r__)) {
-			    ++w;
-			    ++to;
+		    if (*(unsigned char *)&__state->class__[(i__1 = 
+			    __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+			    s_rnge("class", i__1, "zztime_", (ftnlen)2562)] ==
+			     'm' || *(unsigned char *)&__state->class__[(i__2 
+			    = __state->i__ - 1) < 70 && 0 <= i__2 ? i__2 : 
+			    s_rnge("class", i__2, "zztime_", (ftnlen)2562)] ==
+			     'w') {
+			s_copy(__state->spcial, __state->recog + ((i__1 = 
+				__state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+				s_rnge("recog", i__1, "zztime_", (ftnlen)2566)
+				) * 12, (ftnlen)12, (ftnlen)12);
+			__state->r__ = rtrim_(__state->spcial, (ftnlen)12);
+			++__state->w;
+			++__state->to;
+			while(samchi_(string, &__state->to, __state->spcial, &
+				__state->w, string_len, __state->r__)) {
+			    ++__state->w;
+			    ++__state->to;
 			}
-			--to;
-			if (w > r__) {
-			    kind = 1;
+			--__state->to;
+			if (__state->w > __state->r__) {
+			    __state->kind = 1;
 			} else {
-			    kind = 2;
+			    __state->kind = 2;
 			}
-			if (*(unsigned char *)this__ != *(unsigned char *)&
-				string[next - 1]) {
-			    case__ = 1;
-			} else if (s_cmp(string + (next - 1), spcial, (ftnlen)
-				3, (ftnlen)3) == 0) {
-			    case__ = 2;
+			if (*(unsigned char *)__state->this__ != *(unsigned 
+				char *)&string[__state->next - 1]) {
+			    __state->case__ = 1;
+			} else if (s_cmp(string + (__state->next - 1), 
+				__state->spcial, (ftnlen)3, (ftnlen)3) == 0) {
+			    __state->case__ = 2;
 			} else {
-			    case__ = 3;
+			    __state->case__ = 3;
 			}
-			if (*(unsigned char *)&class__[(i__1 = i__ - 1) < 70 
-				&& 0 <= i__1 ? i__1 : s_rnge("class", i__1, 
-				"zztime_", (ftnlen)2593)] == 'm') {
-			    pto = pfrom + mnsize[(i__1 = kind - 1) < 2 && 0 <=
-				     i__1 ? i__1 : s_rnge("mnsize", i__1, 
+			if (*(unsigned char *)&__state->class__[(i__1 = 
+				__state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+				s_rnge("class", i__1, "zztime_", (ftnlen)2593)
+				] == 'm') {
+			    __state->pto = __state->pfrom + __state->mnsize[(
+				    i__1 = __state->kind - 1) < 2 && 0 <= 
+				    i__1 ? i__1 : s_rnge("mnsize", i__1, 
 				    "zztime_", (ftnlen)2595)] - 1;
-			    if (pto > 320) {
-				zztknerr_(picerr, string, string + (from - 1),
-					 error, &ret_val, (ftnlen)320, 
-					string_len, to - (from - 1), 
-					error_len);
+			    if (__state->pto > 320) {
+				zztknerr_(__state->picerr, string, string + (
+					__state->from - 1), error, &ret_val, (
+					ftnlen)320, string_len, __state->to - 
+					(__state->from - 1), error_len);
 				return ret_val;
 			    }
-			    pnext = pto + 1;
-			    s_copy(pictur + (pfrom - 1), mnmrk + ((i__1 = 
-				    case__ + kind * 3 - 4) < 6 && 0 <= i__1 ? 
-				    i__1 : s_rnge("mnmrk", i__1, "zztime_", (
-				    ftnlen)2604)) * 12, pto - (pfrom - 1), (
-				    ftnlen)12);
+			    __state->pnext = __state->pto + 1;
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    __state->mnmrk + ((i__1 = __state->case__ 
+				    + __state->kind * 3 - 4) < 6 && 0 <= i__1 
+				    ? i__1 : s_rnge("mnmrk", i__1, "zztime_", 
+				    (ftnlen)2604)) * 12, __state->pto - (
+				    __state->pfrom - 1), (ftnlen)12);
 			} else {
-			    pto = pfrom + wksize[(i__1 = kind - 1) < 2 && 0 <=
-				     i__1 ? i__1 : s_rnge("wksize", i__1, 
+			    __state->pto = __state->pfrom + __state->wksize[(
+				    i__1 = __state->kind - 1) < 2 && 0 <= 
+				    i__1 ? i__1 : s_rnge("wksize", i__1, 
 				    "zztime_", (ftnlen)2608)] - 1;
-			    if (pto > 320) {
-				zztknerr_(picerr, string, string + (from - 1),
-					 error, &ret_val, (ftnlen)320, 
-					string_len, to - (from - 1), 
-					error_len);
+			    if (__state->pto > 320) {
+				zztknerr_(__state->picerr, string, string + (
+					__state->from - 1), error, &ret_val, (
+					ftnlen)320, string_len, __state->to - 
+					(__state->from - 1), error_len);
 				return ret_val;
 			    }
-			    pnext = pto + 1;
-			    s_copy(pictur + (pfrom - 1), wkday + ((i__1 = 
-				    case__ + kind * 3 - 4) < 6 && 0 <= i__1 ? 
-				    i__1 : s_rnge("wkday", i__1, "zztime_", (
-				    ftnlen)2617)) * 12, pto - (pfrom - 1), (
-				    ftnlen)12);
+			    __state->pnext = __state->pto + 1;
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    __state->wkday + ((i__1 = __state->case__ 
+				    + __state->kind * 3 - 4) < 6 && 0 <= i__1 
+				    ? i__1 : s_rnge("wkday", i__1, "zztime_", 
+				    (ftnlen)2617)) * 12, __state->pto - (
+				    __state->pfrom - 1), (ftnlen)12);
 			}
-		    } else if (*(unsigned char *)&class__[(i__1 = i__ - 1) < 
-			    70 && 0 <= i__1 ? i__1 : s_rnge("class", i__1, 
-			    "zztime_", (ftnlen)2621)] == 'e') {
-			pto = pfrom + 2;
-			if (pto > 320) {
-			    zztknerr_(picerr, string, string + (from - 1), 
-				    error, &ret_val, (ftnlen)320, string_len, 
-				    to - (from - 1), error_len);
+		    } else if (*(unsigned char *)&__state->class__[(i__1 = 
+			    __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+			    s_rnge("class", i__1, "zztime_", (ftnlen)2621)] ==
+			     'e') {
+			__state->pto = __state->pfrom + 2;
+			if (__state->pto > 320) {
+			    zztknerr_(__state->picerr, string, string + (
+				    __state->from - 1), error, &ret_val, (
+				    ftnlen)320, string_len, __state->to - (
+				    __state->from - 1), error_len);
 			    return ret_val;
 			}
-			pnext = pto + 1;
-			if (*(unsigned char *)&string[from - 1] == *(unsigned 
-				char *)this__) {
-			    s_copy(pictur + (pfrom - 1), "ERA", pto - (pfrom 
-				    - 1), (ftnlen)3);
+			__state->pnext = __state->pto + 1;
+			if (*(unsigned char *)&string[__state->from - 1] == *(
+				unsigned char *)__state->this__) {
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    "ERA", __state->pto - (__state->pfrom - 1)
+				    , (ftnlen)3);
 			} else {
-			    s_copy(pictur + (pfrom - 1), "era", pto - (pfrom 
-				    - 1), (ftnlen)3);
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    "era", __state->pto - (__state->pfrom - 1)
+				    , (ftnlen)3);
 			}
-		    } else if (*(unsigned char *)&class__[(i__1 = i__ - 1) < 
-			    70 && 0 <= i__1 ? i__1 : s_rnge("class", i__1, 
-			    "zztime_", (ftnlen)2639)] == 'N') {
-			pto = pfrom + 3;
-			if (pto > 320) {
-			    zztknerr_(picerr, string, string + (from - 1), 
-				    error, &ret_val, (ftnlen)320, string_len, 
-				    to - (from - 1), error_len);
+		    } else if (*(unsigned char *)&__state->class__[(i__1 = 
+			    __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+			    s_rnge("class", i__1, "zztime_", (ftnlen)2639)] ==
+			     'N') {
+			__state->pto = __state->pfrom + 3;
+			if (__state->pto > 320) {
+			    zztknerr_(__state->picerr, string, string + (
+				    __state->from - 1), error, &ret_val, (
+				    ftnlen)320, string_len, __state->to - (
+				    __state->from - 1), error_len);
 			    return ret_val;
 			}
-			pnext = pto + 1;
-			if (*(unsigned char *)&string[from - 1] == *(unsigned 
-				char *)this__) {
-			    s_copy(pictur + (pfrom - 1), "AMPM", pto - (pfrom 
-				    - 1), (ftnlen)4);
+			__state->pnext = __state->pto + 1;
+			if (*(unsigned char *)&string[__state->from - 1] == *(
+				unsigned char *)__state->this__) {
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    "AMPM", __state->pto - (__state->pfrom - 
+				    1), (ftnlen)4);
 			} else {
-			    s_copy(pictur + (pfrom - 1), "ampm", pto - (pfrom 
-				    - 1), (ftnlen)4);
+			    s_copy(__state->pictur + (__state->pfrom - 1), 
+				    "ampm", __state->pto - (__state->pfrom - 
+				    1), (ftnlen)4);
 			}
-			ampm = TRUE_;
+			__state->ampm = TRUE_;
 		    } else {
-			pto = pfrom + to - from;
-			if (pto > 320) {
-			    zztknerr_(picerr, string, string + (from - 1), 
-				    error, &ret_val, (ftnlen)320, string_len, 
-				    to - (from - 1), error_len);
+			__state->pto = __state->pfrom + __state->to - 
+				__state->from;
+			if (__state->pto > 320) {
+			    zztknerr_(__state->picerr, string, string + (
+				    __state->from - 1), error, &ret_val, (
+				    ftnlen)320, string_len, __state->to - (
+				    __state->from - 1), error_len);
 			    return ret_val;
 			}
-			pnext = pto + 1;
-			s_copy(pictur + (pfrom - 1), string + (from - 1), pto 
-				- (pfrom - 1), to - (from - 1));
+			__state->pnext = __state->pto + 1;
+			s_copy(__state->pictur + (__state->pfrom - 1), string 
+				+ (__state->from - 1), __state->pto - (
+				__state->pfrom - 1), __state->to - (
+				__state->from - 1));
 		    }
-		    ++put;
-		    if (put > 64) {
-			zztknerr_(tknerr, string, string + (from - 1), error, 
-				&ret_val, (ftnlen)320, string_len, to - (from 
+		    ++__state->put;
+		    if (__state->put > 64) {
+			zztknerr_(__state->tknerr, string, string + (
+				__state->from - 1), error, &ret_val, (ftnlen)
+				320, string_len, __state->to - (__state->from 
 				- 1), error_len);
 			return ret_val;
 		    }
-		    *(unsigned char *)&rep[put - 1] = *(unsigned char *)&
-			    class__[(i__1 = i__ - 1) < 70 && 0 <= i__1 ? i__1 
-			    : s_rnge("class", i__1, "zztime_", (ftnlen)2681)];
-		    begs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
-			    "begs", i__1, "zztime_", (ftnlen)2682)] = from;
-		    ends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
-			    "ends", i__1, "zztime_", (ftnlen)2683)] = to;
-		    pbegs[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
-			    "pbegs", i__1, "zztime_", (ftnlen)2684)] = pfrom;
-		    pends[(i__1 = put - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
-			    "pends", i__1, "zztime_", (ftnlen)2685)] = pto;
-		    check = FALSE_;
-		    next = to + 1;
+		    *(unsigned char *)&__state->rep[__state->put - 1] = *(
+			    unsigned char *)&__state->class__[(i__1 = 
+			    __state->i__ - 1) < 70 && 0 <= i__1 ? i__1 : 
+			    s_rnge("class", i__1, "zztime_", (ftnlen)2681)];
+		    __state->begs[(i__1 = __state->put - 1) < 64 && 0 <= i__1 
+			    ? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)
+			    2682)] = __state->from;
+		    __state->ends[(i__1 = __state->put - 1) < 64 && 0 <= i__1 
+			    ? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)
+			    2683)] = __state->to;
+		    __state->pbegs[(i__1 = __state->put - 1) < 64 && 0 <= 
+			    i__1 ? i__1 : s_rnge("pbegs", i__1, "zztime_", (
+			    ftnlen)2684)] = __state->pfrom;
+		    __state->pends[(i__1 = __state->put - 1) < 64 && 0 <= 
+			    i__1 ? i__1 : s_rnge("pends", i__1, "zztime_", (
+			    ftnlen)2685)] = __state->pto;
+		    __state->check = FALSE_;
+		    __state->next = __state->to + 1;
 		}
-		++i__;
+		++__state->i__;
 	    }
 
 /*           If we reach the end of the loop and CHECK is still */
 /*           set to TRUE, we have a bit of unrecognizable string. */
 
-	    if (check) {
+	    if (__state->check) {
 		s_copy(error, string, error_len, string_len);
-		i__1 = from + 1;
+		i__1 = __state->from + 1;
 		zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, 
 			error_len);
-		zzinssub_(error, "<", &from, error, error_len, (ftnlen)1, 
-			error_len);
+		zzinssub_(error, "<", &__state->from, error, error_len, (
+			ftnlen)1, error_len);
 		prefix_("The input string contains an unrecognizable substri"
 			"ng beginning at the character marked by <#>: \"", &
-			c__0, error, (ftnlen)97, error_len);
-		suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-		repmc_(error, "#", string + (from - 1), error, error_len, (
-			ftnlen)1, (ftnlen)1, error_len);
+			__state->c__0, error, (ftnlen)97, error_len);
+		suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+		repmc_(error, "#", string + (__state->from - 1), error, 
+			error_len, (ftnlen)1, (ftnlen)1, error_len);
 		ret_val = FALSE_;
 		return ret_val;
 	    }
 	}
     }
-    size = put;
+    __state->size = __state->put;
     ret_val = TRUE_;
     return ret_val;
 /* $Procedure ZZUNPCK ( Private, Time --- Unpack a time string ) */
@@ -3117,194 +3229,216 @@ L_zzunpck:
 
 
 /* -& */
-    nyear = 0;
-    nmon = 0;
-    nday = 0;
-    nhour = 0;
-    nmin = 0;
-    nsec = 0;
-    ndoy = 0;
-    njd = 0;
+    __state->nyear = 0;
+    __state->nmon = 0;
+    __state->nday = 0;
+    __state->nhour = 0;
+    __state->nmin = 0;
+    __state->nsec = 0;
+    __state->ndoy = 0;
+    __state->njd = 0;
     *e = 0;
     s_copy(transl, " ", transl_len, (ftnlen)1);
-    hms[0] = 0.;
-    hms[1] = 0.;
-    hms[2] = 0.;
-    for (i__ = size; i__ >= 1; --i__) {
-	item = *(unsigned char *)&rep[i__ - 1];
+    __state->hms[0] = 0.;
+    __state->hms[1] = 0.;
+    __state->hms[2] = 0.;
+    for (__state->i__ = __state->size; __state->i__ >= 1; --__state->i__) {
+	__state->item = *(unsigned char *)&__state->rep[__state->i__ - 1];
 
 /*        Confirm ITEM range [32,126]. */
 
-	if (item < 32 || item > 126) {
+	if (__state->item < 32 || __state->item > 126) {
 
 /*           A non-printing character found in REP. This is */
 /*           an error. */
 
 	    s_copy(error, "A character at location #1 does not have ASCII va"
 		    "lue [32,126] for REP string.", error_len, (ftnlen)77);
-	    repmi_(error, "#1", &i__, error, error_len, (ftnlen)2, error_len);
+	    repmi_(error, "#1", &__state->i__, error, error_len, (ftnlen)2, 
+		    error_len);
 
 /*           Error condition, return. */
 
 	    ret_val = FALSE_;
 	    return ret_val;
 	}
-	j = begs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)2954)];
-	k = ends[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)2955)];
-	if (item == 'Y') {
-	    ++nyear;
+	__state->j = __state->begs[(i__1 = __state->i__ - 1) < 64 && 0 <= 
+		i__1 ? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)2954)];
+	__state->k = __state->ends[(i__1 = __state->i__ - 1) < 64 && 0 <= 
+		i__1 ? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)2955)];
+	if (__state->item == 'Y') {
+	    ++__state->nyear;
 	    ++(*e);
-	    nparsd_(string + (j - 1), tvec, error, &ptr, k - (j - 1), 
-		    error_len);
+	    nparsd_(string + (__state->j - 1), tvec, error, &__state->ptr, 
+		    __state->k - (__state->j - 1), error_len);
 	    if (*yabbrv) {
-		zzrepsub_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2964)]
-			, &pends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-			s_rnge("pends", i__2, "zztime_", (ftnlen)2964)], 
-			"YR", pictur, (ftnlen)320, (ftnlen)2, (ftnlen)320);
+		zzrepsub_(__state->pictur, &__state->pbegs[(i__1 = 
+			__state->i__ - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
+			"pbegs", i__1, "zztime_", (ftnlen)2964)], &
+			__state->pends[(i__2 = __state->i__ - 1) < 64 && 0 <= 
+			i__2 ? i__2 : s_rnge("pends", i__2, "zztime_", (
+			ftnlen)2964)], "YR", __state->pictur, (ftnlen)320, (
+			ftnlen)2, (ftnlen)320);
 	    } else {
-		zzrepsub_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2967)]
-			, &pends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-			s_rnge("pends", i__2, "zztime_", (ftnlen)2967)], 
-			"YYYY", pictur, (ftnlen)320, (ftnlen)4, (ftnlen)320);
+		zzrepsub_(__state->pictur, &__state->pbegs[(i__1 = 
+			__state->i__ - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
+			"pbegs", i__1, "zztime_", (ftnlen)2967)], &
+			__state->pends[(i__2 = __state->i__ - 1) < 64 && 0 <= 
+			i__2 ? i__2 : s_rnge("pends", i__2, "zztime_", (
+			ftnlen)2967)], "YYYY", __state->pictur, (ftnlen)320, (
+			ftnlen)4, (ftnlen)320);
 	    }
-	} else if (item == 'm') {
-	    ++nmon;
+	} else if (__state->item == 'm') {
+	    ++__state->nmon;
 	    ++(*e);
-	    ucase_(string + (j - 1), month, k - (j - 1), (ftnlen)3);
-	    value = isrchc_(month, &c__12, months, (ftnlen)3, (ftnlen)3);
-	    if (value == 0) {
-		nparsd_(string + (j - 1), &tvec[1], error, &ptr, k - (j - 1), 
+	    ucase_(string + (__state->j - 1), __state->month, __state->k - (
+		    __state->j - 1), (ftnlen)3);
+	    __state->value = isrchc_(__state->month, &__state->c__12, 
+		    __state->months, (ftnlen)3, (ftnlen)3);
+	    if (__state->value == 0) {
+		nparsd_(string + (__state->j - 1), &tvec[1], error, &
+			__state->ptr, __state->k - (__state->j - 1), 
 			error_len);
-		zzrepsub_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("pbegs", i__1, "zztime_", (ftnlen)2981)]
-			, &pends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-			s_rnge("pends", i__2, "zztime_", (ftnlen)2981)], 
-			"MM", pictur, (ftnlen)320, (ftnlen)2, (ftnlen)320);
+		zzrepsub_(__state->pictur, &__state->pbegs[(i__1 = 
+			__state->i__ - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge(
+			"pbegs", i__1, "zztime_", (ftnlen)2981)], &
+			__state->pends[(i__2 = __state->i__ - 1) < 64 && 0 <= 
+			i__2 ? i__2 : s_rnge("pends", i__2, "zztime_", (
+			ftnlen)2981)], "MM", __state->pictur, (ftnlen)320, (
+			ftnlen)2, (ftnlen)320);
 	    } else {
-		tvec[1] = (doublereal) value;
+		tvec[1] = (doublereal) __state->value;
 	    }
-	} else if (item == 'D') {
-	    ++nday;
+	} else if (__state->item == 'D') {
+	    ++__state->nday;
 	    ++(*e);
-	    nparsd_(string + (j - 1), &tvec[2], error, &ptr, k - (j - 1), 
-		    error_len);
-	    zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 :
-		     s_rnge("pbegs", i__1, "zztime_", (ftnlen)2994)], &pends[(
-		    i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends",
-		     i__2, "zztime_", (ftnlen)2994)], "DD", string + (j - 1), 
-		    (ftnlen)320, (ftnlen)2, k - (j - 1));
-	} else if (item == 'y') {
-	    ++ndoy;
+	    nparsd_(string + (__state->j - 1), &tvec[2], error, &__state->ptr,
+		     __state->k - (__state->j - 1), error_len);
+	    zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ - 1)
+		     < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, "zztim"
+		    "e_", (ftnlen)2994)], &__state->pends[(i__2 = __state->i__ 
+		    - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", i__2, 
+		    "zztime_", (ftnlen)2994)], "DD", string + (__state->j - 1)
+		    , (ftnlen)320, (ftnlen)2, __state->k - (__state->j - 1));
+	} else if (__state->item == 'y') {
+	    ++__state->ndoy;
 	    ++(*e);
-	    nparsd_(string + (j - 1), &tvec[1], error, &ptr, k - (j - 1), 
-		    error_len);
-	    zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 :
-		     s_rnge("pbegs", i__1, "zztime_", (ftnlen)3004)], &pends[(
-		    i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends",
-		     i__2, "zztime_", (ftnlen)3004)], "DOY", string + (j - 1),
-		     (ftnlen)320, (ftnlen)3, k - (j - 1));
-	} else if (item == 'H') {
-	    ++nhour;
+	    nparsd_(string + (__state->j - 1), &tvec[1], error, &__state->ptr,
+		     __state->k - (__state->j - 1), error_len);
+	    zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ - 1)
+		     < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, "zztim"
+		    "e_", (ftnlen)3004)], &__state->pends[(i__2 = __state->i__ 
+		    - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", i__2, 
+		    "zztime_", (ftnlen)3004)], "DOY", string + (__state->j - 
+		    1), (ftnlen)320, (ftnlen)3, __state->k - (__state->j - 1))
+		    ;
+	} else if (__state->item == 'H') {
+	    ++__state->nhour;
 	    ++(*e);
-	    nparsd_(string + (j - 1), hms, error, &ptr, k - (j - 1), 
-		    error_len);
+	    nparsd_(string + (__state->j - 1), __state->hms, error, &
+		    __state->ptr, __state->k - (__state->j - 1), error_len);
 
 /*           We have to handle the hour component based on the */
 /*           presence of the AM/PM mark in the picture. We earlier */
 /*           set up the logical AMPM to indicate its presence. */
 
-	    if (ampm) {
-		zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("pbegs", i__1, "zztime_", (ftnlen)3020)]
-			, &pends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-			s_rnge("pends", i__2, "zztime_", (ftnlen)3020)], 
-			"AP", string + (j - 1), (ftnlen)320, (ftnlen)2, k - (
-			j - 1));
+	    if (__state->ampm) {
+		zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ 
+			- 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, 
+			"zztime_", (ftnlen)3020)], &__state->pends[(i__2 = 
+			__state->i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge(
+			"pends", i__2, "zztime_", (ftnlen)3020)], "AP", 
+			string + (__state->j - 1), (ftnlen)320, (ftnlen)2, 
+			__state->k - (__state->j - 1));
 	    } else {
-		zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("pbegs", i__1, "zztime_", (ftnlen)3025)]
-			, &pends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-			s_rnge("pends", i__2, "zztime_", (ftnlen)3025)], 
-			"HR", string + (j - 1), (ftnlen)320, (ftnlen)2, k - (
-			j - 1));
+		zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ 
+			- 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, 
+			"zztime_", (ftnlen)3025)], &__state->pends[(i__2 = 
+			__state->i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge(
+			"pends", i__2, "zztime_", (ftnlen)3025)], "HR", 
+			string + (__state->j - 1), (ftnlen)320, (ftnlen)2, 
+			__state->k - (__state->j - 1));
 	    }
-	} else if (item == 'M') {
-	    ++nmin;
+	} else if (__state->item == 'M') {
+	    ++__state->nmin;
 	    ++(*e);
-	    nparsd_(string + (j - 1), &hms[1], error, &ptr, k - (j - 1), 
-		    error_len);
-	    zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 :
-		     s_rnge("pbegs", i__1, "zztime_", (ftnlen)3037)], &pends[(
-		    i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends",
-		     i__2, "zztime_", (ftnlen)3037)], "MN", string + (j - 1), 
-		    (ftnlen)320, (ftnlen)2, k - (j - 1));
-	} else if (item == 'S') {
-	    ++nsec;
+	    nparsd_(string + (__state->j - 1), &__state->hms[1], error, &
+		    __state->ptr, __state->k - (__state->j - 1), error_len);
+	    zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ - 1)
+		     < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, "zztim"
+		    "e_", (ftnlen)3037)], &__state->pends[(i__2 = __state->i__ 
+		    - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", i__2, 
+		    "zztime_", (ftnlen)3037)], "MN", string + (__state->j - 1)
+		    , (ftnlen)320, (ftnlen)2, __state->k - (__state->j - 1));
+	} else if (__state->item == 'S') {
+	    ++__state->nsec;
 	    ++(*e);
-	    nparsd_(string + (j - 1), &hms[2], error, &ptr, k - (j - 1), 
-		    error_len);
-	    zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 :
-		     s_rnge("pbegs", i__1, "zztime_", (ftnlen)3047)], &pends[(
-		    i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends",
-		     i__2, "zztime_", (ftnlen)3047)], "SC", string + (j - 1), 
-		    (ftnlen)320, (ftnlen)2, k - (j - 1));
-	} else if (item == 'J') {
-	    ++njd;
+	    nparsd_(string + (__state->j - 1), &__state->hms[2], error, &
+		    __state->ptr, __state->k - (__state->j - 1), error_len);
+	    zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ - 1)
+		     < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, "zztim"
+		    "e_", (ftnlen)3047)], &__state->pends[(i__2 = __state->i__ 
+		    - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", i__2, 
+		    "zztime_", (ftnlen)3047)], "SC", string + (__state->j - 1)
+		    , (ftnlen)320, (ftnlen)2, __state->k - (__state->j - 1));
+	} else if (__state->item == 'J') {
+	    ++__state->njd;
 	    ++(*e);
-	    nparsd_(string + (j - 1), tvec, error, &ptr, k - (j - 1), 
-		    error_len);
-	    zzmkpc_(pictur, &pbegs[(i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 :
-		     s_rnge("pbegs", i__1, "zztime_", (ftnlen)3057)], &pends[(
-		    i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends",
-		     i__2, "zztime_", (ftnlen)3057)], "JULIAND", string + (j 
-		    - 1), (ftnlen)320, (ftnlen)7, k - (j - 1));
-	} else if (item == 'i') {
+	    nparsd_(string + (__state->j - 1), tvec, error, &__state->ptr, 
+		    __state->k - (__state->j - 1), error_len);
+	    zzmkpc_(__state->pictur, &__state->pbegs[(i__1 = __state->i__ - 1)
+		     < 64 && 0 <= i__1 ? i__1 : s_rnge("pbegs", i__1, "zztim"
+		    "e_", (ftnlen)3057)], &__state->pends[(i__2 = __state->i__ 
+		    - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("pends", i__2, 
+		    "zztime_", (ftnlen)3057)], "JULIAND", string + (
+		    __state->j - 1), (ftnlen)320, (ftnlen)7, __state->k - (
+		    __state->j - 1));
+	} else if (__state->item == 'i') {
 	    s_copy(error, string, error_len, string_len);
-	    i__1 = k + 1;
+	    i__1 = __state->k + 1;
 	    zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, 
 		    error_len);
-	    zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
+	    zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		    error_len);
 	    prefix_("The meaning of the integer <#> could not be determined:"
-		    " '", &c__1, error, (ftnlen)57, error_len);
-	    suffix_("'", &c__0, error, (ftnlen)1, error_len);
-	    repmc_(error, "#", string + (j - 1), error, error_len, (ftnlen)1, 
-		    k - (j - 1), error_len);
+		    " '", &__state->c__1, error, (ftnlen)57, error_len);
+	    suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
+	    repmc_(error, "#", string + (__state->j - 1), error, error_len, (
+		    ftnlen)1, __state->k - (__state->j - 1), error_len);
 	    *e = 0;
 	    s_copy(pic, " ", pic_len, (ftnlen)1);
 	    ret_val = FALSE_;
 	    return ret_val;
-	} else if (item == 'n') {
+	} else if (__state->item == 'n') {
 	    s_copy(error, string, error_len, string_len);
-	    i__1 = k + 1;
+	    i__1 = __state->k + 1;
 	    zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, 
 		    error_len);
-	    zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
+	    zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		    error_len);
 	    prefix_("The meaning of the decimal number <#> could not be dete"
-		    "rmined: ", &c__1, error, (ftnlen)63, error_len);
-	    repmc_(error, "#", string + (j - 1), error, error_len, (ftnlen)1, 
-		    k - (j - 1), error_len);
+		    "rmined: ", &__state->c__1, error, (ftnlen)63, error_len);
+	    repmc_(error, "#", string + (__state->j - 1), error, error_len, (
+		    ftnlen)1, __state->k - (__state->j - 1), error_len);
 	    *e = 0;
 	    s_copy(pic, " ", pic_len, (ftnlen)1);
 	    ret_val = FALSE_;
 	    return ret_val;
 	} else {
 	    s_copy(error, string, error_len, string_len);
-	    i__1 = k + 1;
+	    i__1 = __state->k + 1;
 	    zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, 
 		    error_len);
-	    zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
+	    zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		    error_len);
 	    prefix_("An unexpected # (\"#\") was encountered in the time str"
-		    "ing: ", &c__1, error, (ftnlen)58, error_len);
-	    repmc_(error, "#", names + (((i__1 = item - 32) < 95 && 0 <= i__1 
-		    ? i__1 : s_rnge("names", i__1, "zztime_", (ftnlen)3105)) 
-		    << 5), error, error_len, (ftnlen)1, (ftnlen)32, error_len)
-		    ;
-	    repmc_(error, "#", string + (j - 1), error, error_len, (ftnlen)1, 
-		    k - (j - 1), error_len);
+		    "ing: ", &__state->c__1, error, (ftnlen)58, error_len);
+	    repmc_(error, "#", __state->names + (((i__1 = __state->item - 32) 
+		    < 95 && 0 <= i__1 ? i__1 : s_rnge("names", i__1, "zztime_"
+		    , (ftnlen)3105)) << 5), error, error_len, (ftnlen)1, (
+		    ftnlen)32, error_len);
+	    repmc_(error, "#", string + (__state->j - 1), error, error_len, (
+		    ftnlen)1, __state->k - (__state->j - 1), error_len);
 	    s_copy(pic, " ", pic_len, (ftnlen)1);
 	    *e = 0;
 	    ret_val = FALSE_;
@@ -3318,25 +3452,30 @@ L_zzunpck:
 /*     and RETURN. Note regardless of the correctness of the parsing */
 /*     we have a legitimate format picture at this point so we keep it. */
 
-    s_copy(pic, pictur, pic_len, (ftnlen)320);
-    if (nyear == 1 && nmon == 1 && nday == 1 && ndoy == 0 && njd == 0 && 
-	    nhour <= 1 && nmin <= nhour && nsec <= nmin) {
-	tvec[3] = hms[0];
-	tvec[4] = hms[1];
-	tvec[5] = hms[2];
+    s_copy(pic, __state->pictur, pic_len, (ftnlen)320);
+    if (__state->nyear == 1 && __state->nmon == 1 && __state->nday == 1 && 
+	    __state->ndoy == 0 && __state->njd == 0 && __state->nhour <= 1 && 
+	    __state->nmin <= __state->nhour && __state->nsec <= __state->nmin)
+	     {
+	tvec[3] = __state->hms[0];
+	tvec[4] = __state->hms[1];
+	tvec[5] = __state->hms[2];
 	s_copy(transl, "YMD", transl_len, (ftnlen)3);
 	ret_val = TRUE_;
 	return ret_val;
-    } else if (nyear == 1 && nmon == 0 && nday == 0 && njd == 0 && ndoy == 1 
-	    && nhour <= 1 && nmin <= nhour && nsec <= nmin) {
-	tvec[2] = hms[0];
-	tvec[3] = hms[1];
-	tvec[4] = hms[2];
+    } else if (__state->nyear == 1 && __state->nmon == 0 && __state->nday == 
+	    0 && __state->njd == 0 && __state->ndoy == 1 && __state->nhour <= 
+	    1 && __state->nmin <= __state->nhour && __state->nsec <= 
+	    __state->nmin) {
+	tvec[2] = __state->hms[0];
+	tvec[3] = __state->hms[1];
+	tvec[4] = __state->hms[2];
 	s_copy(transl, "YD", transl_len, (ftnlen)2);
 	ret_val = TRUE_;
 	return ret_val;
-    } else if (nyear == 0 && nmon == 0 && nday == 0 && njd == 1 && ndoy == 0 
-	    && nhour <= 0 && nmin <= 0 && nsec <= 0) {
+    } else if (__state->nyear == 0 && __state->nmon == 0 && __state->nday == 
+	    0 && __state->njd == 1 && __state->ndoy == 0 && __state->nhour <= 
+	    0 && __state->nmin <= 0 && __state->nsec <= 0) {
 	s_copy(transl, "JD", transl_len, (ftnlen)2);
 	ret_val = TRUE_;
 	return ret_val;
@@ -3347,269 +3486,317 @@ L_zzunpck:
 /*     problems. */
 
     *e = 0;
-    if (nyear == 0 && nday == 0 && njd == 0 && ndoy == 0 && nhour == 0 && 
-	    nmin == 0 && nsec == 0) {
+    if (__state->nyear == 0 && __state->nday == 0 && __state->njd == 0 && 
+	    __state->ndoy == 0 && __state->nhour == 0 && __state->nmin == 0 &&
+	     __state->nsec == 0) {
 	s_copy(error, "No numeric components were supplied in the time strin"
 		"g. ", error_len, (ftnlen)56);
-    } else if (njd == 1) {
+    } else if (__state->njd == 1) {
 	s_copy(error, "The string possesses calendar components in addition "
 		"to Julian Date specifier. ", error_len, (ftnlen)79);
-    } else if (njd > 1) {
+    } else if (__state->njd > 1) {
 	s_copy(error, "There is more than one Julian Date specified in the e"
 		"poch string. ", error_len, (ftnlen)66);
-    } else if (nyear == 0) {
+    } else if (__state->nyear == 0) {
 	s_copy(error, "The year associated with the calendar string \"#\" co"
 		"uld not be identified. ", error_len, (ftnlen)74);
 	repmc_(error, "#", string, error, error_len, (ftnlen)1, string_len, 
 		error_len);
-    } else if (nyear > 1) {
+    } else if (__state->nyear > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings indicating a calendar year were ident"
-		"ified in the input time string <#> and <#>: \"", (ftnlen)320, 
-		(ftnlen)97);
-	p1 = pos_(rep, "Y", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "Y", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3224)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3225)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings indicating a calendar year w"
+		"ere identified in the input time string <#> and <#>: \"", (
+		ftnlen)320, (ftnlen)97);
+	__state->p1 = pos_(__state->rep, "Y", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "Y", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3224)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3225)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3231)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3232)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3231)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3232)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nmon > 0 && ndoy > 0) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nmon > 0 && __state->ndoy > 0) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Both a day of year and month were identified in the "
-		"input string. \"", (ftnlen)320, (ftnlen)67);
+	s_copy(__state->messge, "Both a day of year and month were identifie"
+		"d in the input string. \"", (ftnlen)320, (ftnlen)67);
 /* Computing MAX */
-	i__1 = pos_(rep, "m", &c__1, (ftnlen)64, (ftnlen)1), i__2 = pos_(rep, 
-		"y", &c__1, (ftnlen)64, (ftnlen)1);
-	p2 = max(i__1,i__2);
+	i__1 = pos_(__state->rep, "m", &__state->c__1, (ftnlen)64, (ftnlen)1),
+		 i__2 = pos_(__state->rep, "y", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	__state->p2 = max(i__1,i__2);
 /* Computing MIN */
-	i__1 = pos_(rep, "m", &c__1, (ftnlen)64, (ftnlen)1), i__2 = pos_(rep, 
-		"y", &c__1, (ftnlen)64, (ftnlen)1);
-	p1 = min(i__1,i__2);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3254)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3255)];
-	i__1 = k + 1;
+	i__1 = pos_(__state->rep, "m", &__state->c__1, (ftnlen)64, (ftnlen)1),
+		 i__2 = pos_(__state->rep, "y", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	__state->p1 = min(i__1,i__2);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3254)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3255)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3260)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3261)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3260)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3261)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nmon > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nmon > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings indicating a calendar month were iden"
-		"tified in the input time string <#> and <#>: \"", (ftnlen)320,
-		 (ftnlen)98);
-	p1 = pos_(rep, "m", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "m", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3280)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3281)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings indicating a calendar month "
+		"were identified in the input time string <#> and <#>: \"", (
+		ftnlen)320, (ftnlen)98);
+	__state->p1 = pos_(__state->rep, "m", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "m", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3280)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3281)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3287)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3288)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3287)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3288)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (ndoy > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->ndoy > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings indicating a day of year were identif"
-		"ied in the input time string <#> and <#>: \"", (ftnlen)320, (
-		ftnlen)95);
-	p1 = pos_(rep, "y", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "y", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3308)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3309)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings indicating a day of year wer"
+		"e identified in the input time string <#> and <#>: \"", (
+		ftnlen)320, (ftnlen)95);
+	__state->p1 = pos_(__state->rep, "y", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "y", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3308)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3309)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3315)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3316)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3315)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3316)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nday > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nday > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings indicating a day of month were identi"
-		"fied in the input time string <#> and <#>: \"", (ftnlen)320, (
-		ftnlen)96);
-	p1 = pos_(rep, "D", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "D", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3336)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3337)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings indicating a day of month we"
+		"re identified in the input time string <#> and <#>: \"", (
+		ftnlen)320, (ftnlen)96);
+	__state->p1 = pos_(__state->rep, "D", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "D", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3336)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3337)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3343)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3344)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3343)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3344)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nhour > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nhour > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings representing an hour of the day were "
-		"identified in the input time string <#> and <#>: \"", (ftnlen)
-		320, (ftnlen)102);
-	p1 = pos_(rep, "H", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "H", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3364)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3365)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings representing an hour of the "
+		"day were identified in the input time string <#> and <#>: \"",
+		 (ftnlen)320, (ftnlen)102);
+	__state->p1 = pos_(__state->rep, "H", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "H", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3364)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3365)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3371)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3372)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3371)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3372)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nmin > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nmin > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings representing minutes of the hour were"
-		" identified in the input time string <#> and <#>: \"", (
-		ftnlen)320, (ftnlen)103);
-	p1 = pos_(rep, "M", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "M", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3392)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3393)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings representing minutes of the "
+		"hour were identified in the input time string <#> and <#>: \""
+		, (ftnlen)320, (ftnlen)103);
+	__state->p1 = pos_(__state->rep, "M", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "M", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3392)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3393)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3399)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3400)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3399)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3400)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (nsec > 1) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->nsec > 1) {
 	s_copy(error, string, error_len, string_len);
-	s_copy(messge, "Two substrings representing seconds were identified "
-		"in the input time string <#> and <#>: \"", (ftnlen)320, (
-		ftnlen)91);
-	p1 = pos_(rep, "S", &c__1, (ftnlen)64, (ftnlen)1);
-	i__1 = p1 + 1;
-	p2 = pos_(rep, "S", &i__1, (ftnlen)64, (ftnlen)1);
-	j = begs[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3420)];
-	k = ends[(i__1 = p2 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3421)];
-	i__1 = k + 1;
+	s_copy(__state->messge, "Two substrings representing seconds were id"
+		"entified in the input time string <#> and <#>: \"", (ftnlen)
+		320, (ftnlen)91);
+	__state->p1 = pos_(__state->rep, "S", &__state->c__1, (ftnlen)64, (
+		ftnlen)1);
+	i__1 = __state->p1 + 1;
+	__state->p2 = pos_(__state->rep, "S", &i__1, (ftnlen)64, (ftnlen)1);
+	__state->j = __state->begs[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3420)];
+	__state->k = __state->ends[(i__1 = __state->p2 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3421)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	j = begs[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("begs", 
-		i__1, "zztime_", (ftnlen)3427)];
-	k = ends[(i__1 = p1 - 1) < 64 && 0 <= i__1 ? i__1 : s_rnge("ends", 
-		i__1, "zztime_", (ftnlen)3428)];
-	i__1 = k + 1;
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	__state->j = __state->begs[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("begs", i__1, "zztime_", (ftnlen)3427)];
+	__state->k = __state->ends[(i__1 = __state->p1 - 1) < 64 && 0 <= i__1 
+		? i__1 : s_rnge("ends", i__1, "zztime_", (ftnlen)3428)];
+	i__1 = __state->k + 1;
 	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &j, error, error_len, (ftnlen)1, error_len);
-	repmc_(messge, "#", string + (j - 1), messge, (ftnlen)320, (ftnlen)1, 
-		k - (j - 1), (ftnlen)320);
-	prefix_(messge, &c__1, error, (ftnlen)320, error_len);
-	suffix_("\"", &c__0, error, (ftnlen)1, error_len);
-    } else if (ndoy == 0 && nmon == 0) {
+	zzinssub_(error, "<", &__state->j, error, error_len, (ftnlen)1, 
+		error_len);
+	repmc_(__state->messge, "#", string + (__state->j - 1), 
+		__state->messge, (ftnlen)320, (ftnlen)1, __state->k - (
+		__state->j - 1), (ftnlen)320);
+	prefix_(__state->messge, &__state->c__1, error, (ftnlen)320, 
+		error_len);
+	suffix_("\"", &__state->c__0, error, (ftnlen)1, error_len);
+    } else if (__state->ndoy == 0 && __state->nmon == 0) {
 	s_copy(error, "Neither a month nor day of year could be identified i"
 		"n the input time string: \"#\" ", error_len, (ftnlen)82);
 	repmc_(error, "#", string, error, error_len, (ftnlen)1, string_len, 
 		error_len);
-    } else if (nmon == 1 && nday == 0) {
+    } else if (__state->nmon == 1 && __state->nday == 0) {
 	s_copy(error, "A month was identified in the time string \"#\", but "
 		"a day of month could not be identified. ", error_len, (ftnlen)
 		91);
 	repmc_(error, "#", string, error, error_len, (ftnlen)1, string_len, 
 		error_len);
-    } else if (nmon == 0 && nday == 1) {
+    } else if (__state->nmon == 0 && __state->nday == 1) {
 	s_copy(error, "A day of month was identified in the time string \""
 		"#\", but the month it belongs to could not be identified. ", 
 		error_len, (ftnlen)107);
 	repmc_(error, "#", string, error, error_len, (ftnlen)1, string_len, 
 		error_len);
-    } else if (nmin > nhour) {
+    } else if (__state->nmin > __state->nhour) {
 	s_copy(error, "A minutes components of the time  was identified in t"
 		"he time string \"#\", but the hours component could not be i"
 		"dentified. ", error_len, (ftnlen)122);
 	repmc_(error, "#", string, error, error_len, (ftnlen)1, string_len, 
 		error_len);
-    } else if (nsec > nmin) {
+    } else if (__state->nsec > __state->nmin) {
 	s_copy(error, "A seconds components of the time was identified in th"
 		"e time string \"#\", but the minutes component could not be "
 		"identified. ", error_len, (ftnlen)123);
@@ -3759,31 +3946,36 @@ L_zzvalt:
 
 /*     So far no translations have been performed. */
 
-    did = FALSE_;
+    __state->did = FALSE_;
 
 /*     Examine each token to see if it is an integer. */
 
-    i__1 = size;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	item = *(unsigned char *)&rep[i__ - 1];
-	if (item == 'i') {
+    i__1 = __state->size;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	__state->item = *(unsigned char *)&__state->rep[__state->i__ - 1];
+	if (__state->item == 'i') {
 
 /*           We've got an integer. Parse it to see if it */
 /*           is in the specified range. */
 
-	    j = begs[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("begs"
-		    , i__2, "zztime_", (ftnlen)3639)];
-	    k = ends[(i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("ends"
-		    , i__2, "zztime_", (ftnlen)3640)];
-	    nparsi_(string + (j - 1), &value, myerr, &ptr, k - (j - 1), (
-		    ftnlen)32);
-	    if (ptr == 0 && value >= *b && value <= *e) {
-		*(unsigned char *)&rep[i__ - 1] = *(unsigned char *)letter;
-		did = TRUE_;
+	    __state->j = __state->begs[(i__2 = __state->i__ - 1) < 64 && 0 <= 
+		    i__2 ? i__2 : s_rnge("begs", i__2, "zztime_", (ftnlen)
+		    3639)];
+	    __state->k = __state->ends[(i__2 = __state->i__ - 1) < 64 && 0 <= 
+		    i__2 ? i__2 : s_rnge("ends", i__2, "zztime_", (ftnlen)
+		    3640)];
+	    nparsi_(string + (__state->j - 1), &__state->value, 
+		    __state->myerr, &__state->ptr, __state->k - (__state->j - 
+		    1), (ftnlen)32);
+	    if (__state->ptr == 0 && __state->value >= *b && __state->value <=
+		     *e) {
+		*(unsigned char *)&__state->rep[__state->i__ - 1] = *(
+			unsigned char *)letter;
+		__state->did = TRUE_;
 	    }
 	}
     }
-    ret_val = did;
+    ret_val = __state->did;
     return ret_val;
 } /* zztime_ */
 

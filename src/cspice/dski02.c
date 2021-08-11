@@ -1,9 +1,21 @@
-/* dski02.f -- translated by f2c (version 19980913).
+/* dski02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern dski02_init_t __dski02_init;
+static dski02_state_t* get_dski02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dski02)
+		state->dski02 = __cspice_allocate_module(sizeof(
+	dski02_state_t), &__dski02_init, sizeof(__dski02_init));
+	return state->dski02;
+
+}
 
 /* $Procedure DSKI02 ( DSK, fetch integer type 2 data ) */
 /* Subroutine */ int dski02_(integer *handle, integer *dladsc, integer *item, 
@@ -11,23 +23,29 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    integer ncgr, size, b, e, ibase, ibuff[10];
+    integer ncgr;
+    integer size;
+    integer b;
+    integer e;
+    integer ibase;
+    integer ibuff[10];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    static integer cgscal, np, nv;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer nvxtot, prvbas, prvhan, voxnpl, voxnpt, vtxnpl;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dski02_state_t* __state = get_dski02_state();
 /* $ Abstract */
 
 /*     Fetch integer data from a type 2 DSK segment. */
@@ -1046,18 +1064,18 @@
 /*     however that this routine does not meet SPICE standards for */
 /*     discovery check-in eligibility. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Make sure we treat the input handle as new on the first pass. */
 /*        Set PRVHAN to an invalid handle value. */
 
-	prvhan = 0;
+	__state->prvhan = 0;
 
 /*        Set the previous segment base integer address to an invalid */
 /*        value as well. */
 
-	prvbas = -1;
-	first = FALSE_;
+	__state->prvbas = -1;
+	__state->first = FALSE_;
     }
     if (*room <= 0) {
 	chkin_("DSKI02", (ftnlen)6);
@@ -1081,7 +1099,7 @@
 /*     but they can't share an integer base address with a type 2 */
 /*     segment. */
 
-    if (*handle != prvhan || ibase != prvbas) {
+    if (*handle != __state->prvhan || ibase != __state->prvbas) {
 
 /*        Treat the input file and segment as new. */
 
@@ -1101,7 +1119,7 @@
 	    chkin_("DSKI02", (ftnlen)6);
 	    setmsg_("Coarse voxel grid scale is #; this scale should be an i"
 		    "nteger > 1", (ftnlen)65);
-	    errint_("#", &cgscal, (ftnlen)1);
+	    errint_("#", &__state->cgscal, (ftnlen)1);
 	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	    chkout_("DSKI02", (ftnlen)6);
 	    return 0;
@@ -1110,21 +1128,21 @@
 /*        All checks have passed. We can safely store the segment */
 /*        parameters. */
 
-	nv = ibuff[0];
-	np = ibuff[1];
-	nvxtot = ibuff[2];
-	cgscal = ibuff[6];
-	vtxnpl = ibuff[9];
-	voxnpt = ibuff[7];
-	voxnpl = ibuff[8];
+	__state->nv = ibuff[0];
+	__state->np = ibuff[1];
+	__state->nvxtot = ibuff[2];
+	__state->cgscal = ibuff[6];
+	__state->vtxnpl = ibuff[9];
+	__state->voxnpt = ibuff[7];
+	__state->voxnpl = ibuff[8];
 
 /*        Update the saved handle value. */
 
-	prvhan = *handle;
+	__state->prvhan = *handle;
 
 /*        Update the saved base integer address. */
 
-	prvbas = ibase;
+	__state->prvbas = ibase;
     }
 
 /*     Branch based on the item to be returned. */
@@ -1137,7 +1155,7 @@
 /*        Return the number of vertices. */
 
 	*n = 1;
-	values[0] = nv;
+	values[0] = __state->nv;
 
 /*        As long as START is valid, we can return. Otherwise, */
 /*        let control pass to the error handling block near */
@@ -1151,7 +1169,7 @@
 /*        Return the number of plates. */
 
 	*n = 1;
-	values[0] = np;
+	values[0] = __state->np;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1160,7 +1178,7 @@
 /*        Return the total number of voxels. */
 
 	*n = 1;
-	values[0] = nvxtot;
+	values[0] = __state->nvxtot;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1175,7 +1193,7 @@
 /*        Return the coarse voxel grid scale. */
 
 	*n = 1;
-	values[0] = cgscal;
+	values[0] = __state->cgscal;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1184,7 +1202,7 @@
 /*        Return the voxel-plate pointer list size. */
 
 	*n = 1;
-	values[0] = voxnpt;
+	values[0] = __state->voxnpt;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1193,7 +1211,7 @@
 /*        Return the voxel-plate list size. */
 
 	*n = 1;
-	values[0] = voxnpl;
+	values[0] = __state->voxnpl;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1202,7 +1220,7 @@
 /*        Return the vertex-plate list size. */
 
 	*n = 1;
-	values[0] = vtxnpl;
+	values[0] = __state->vtxnpl;
 	if (*start == 1) {
 	    return 0;
 	}
@@ -1211,43 +1229,45 @@
 /*        Return plate data.  There are 3*NP values in all.  First */
 /*        locate the data. */
 
-	size = np * 3;
+	size = __state->np * 3;
 	b = ibase + 11 + *start - 1;
     } else if (*item == 10) {
 
 /*        Return voxel pointer data.  There are VOXNPT values in all. */
 /*        First locate the data. */
 
-	size = voxnpt;
-	b = ibase + 11 + np * 3 + *start - 1;
+	size = __state->voxnpt;
+	b = ibase + 11 + __state->np * 3 + *start - 1;
     } else if (*item == 11) {
 
 /*        Return voxel-plate list data.  There are VOXNPL values in all. */
 /*        First locate the data. */
 
-	size = voxnpl;
-	b = ibase + 11 + np * 3 + voxnpt + *start - 1;
+	size = __state->voxnpl;
+	b = ibase + 11 + __state->np * 3 + __state->voxnpt + *start - 1;
     } else if (*item == 12) {
 
 /*        Return vertex-plate pointer data.  There are NV values in all. */
 /*        First locate the data. */
 
-	size = nv;
-	b = ibase + 11 + np * 3 + voxnpt + voxnpl + *start - 1;
+	size = __state->nv;
+	b = ibase + 11 + __state->np * 3 + __state->voxnpt + __state->voxnpl 
+		+ *start - 1;
     } else if (*item == 13) {
 
 /*        Return vertex-plate list data.  There are VTXNPL values in */
 /*        all. First locate the data. */
 
-	size = vtxnpl;
-	b = ibase + 11 + np * 3 + voxnpt + voxnpl + nv + *start - 1;
+	size = __state->vtxnpl;
+	b = ibase + 11 + __state->np * 3 + __state->voxnpt + __state->voxnpl 
+		+ __state->nv + *start - 1;
     } else if (*item == 14) {
 
 /*        Compute the coarse grid size. */
 
 /* Computing 3rd power */
-	i__1 = cgscal;
-	ncgr = nvxtot / (i__1 * (i__1 * i__1));
+	i__1 = __state->cgscal;
+	ncgr = __state->nvxtot / (i__1 * (i__1 * i__1));
 
 /*        Return the coarse voxel grid occupancy pointers.  There are */
 
@@ -1256,7 +1276,8 @@
 /*        values in all. First locate the data. */
 
 	size = ncgr;
-	b = ibase + 11 + np * 3 + voxnpt + voxnpl + nv + vtxnpl + *start - 1;
+	b = ibase + 11 + __state->np * 3 + __state->voxnpt + __state->voxnpl 
+		+ __state->nv + __state->vtxnpl + *start - 1;
     } else {
 	chkin_("DSKI02", (ftnlen)6);
 	setmsg_("Keyword parameter # was not recognized.", (ftnlen)39);

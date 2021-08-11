@@ -1,9 +1,20 @@
-/* zztanutl.f -- translated by f2c (version 19980913).
+/* zztanutl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+static zztanutl_state_t* get_zztanutl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zztanutl)
+		state->zztanutl = __cspice_allocate_module(sizeof(
+	zztanutl_state_t), 0, 0);
+	return state->zztanutl;
+
+}
 
 /* $Procedure ZZTANUTL ( DSK, tangent ray utilities ) */
 /* Subroutine */ int zztanutl_0_(int n__, integer *curve, doublereal *srcrad, 
@@ -18,32 +29,33 @@
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
     doublereal apex[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vequ_(
-	    doublereal *, doublereal *);
-    static doublereal svet;
-    extern /* Subroutine */ int zzsuelin_(integer *), zzsudski_(integer *, 
-	    integer *, integer *, integer *), zzraysfx_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *), chkin_(char 
-	    *, ftnlen), errdp_(char *, doublereal *, ftnlen), vcrss_(
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzsuelin_(integer *);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
     extern doublereal pi_(void);
     doublereal raydir[3];
-    static doublereal svirad;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal vrtoff[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), vhatip_(doublereal *), vsclip_(doublereal *, 
-	    doublereal *);
-    static doublereal svaxis[3];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
     extern logical return_(void);
-    static doublereal svnrml[3];
-    static integer svcurv;
-    static doublereal svvrtx[3];
 
+    /* Module state */
+    zztanutl_state_t* __state = get_zztanutl_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -585,7 +597,7 @@ L_zztanini:
 	chkout_("ZZTANINI", (ftnlen)8);
 	return 0;
     }
-    svcurv = *curve;
+    __state->svcurv = *curve;
 
 /*     Save the illumination source radius. */
 
@@ -599,14 +611,14 @@ L_zztanini:
 	    return 0;
 	}
     }
-    svirad = *srcrad;
+    __state->svirad = *srcrad;
 
 /*     Compute a normal vector to the plane defined by */
 /*     AXIS and PLNVEC. The direction of positive rotation */
 /*     about the normal is from AXIS toward PLNVEC. */
 
-    vcrss_(axis, plnvec, svnrml);
-    if (vzero_(svnrml)) {
+    vcrss_(axis, plnvec, __state->svnrml);
+    if (vzero_(__state->svnrml)) {
 	setmsg_("Input reference vector and axis vector are linearly depende"
 		"nt.", (ftnlen)62);
 	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
@@ -616,7 +628,7 @@ L_zztanini:
 
 /*     Scale the normal vector to unit length. */
 
-    vhatip_(svnrml);
+    vhatip_(__state->svnrml);
 
 /*     Save a unit-length copy of the input axis. */
 /*     Save the original axis as the ray's vertex; this */
@@ -624,9 +636,9 @@ L_zztanini:
 /*     will be used, after addition of an offset, in the */
 /*     terminator computations. Save the evaluation epoch. */
 
-    vequ_(axis, svvrtx);
-    vhat_(axis, svaxis);
-    svet = *et;
+    vequ_(axis, __state->svvrtx);
+    vhat_(axis, __state->svaxis);
+    __state->svet = *et;
 
 /*     Prepare the DSK SINCPT utilities for a computation with */
 /*     the input surface set. */
@@ -837,15 +849,15 @@ L_zztansta:
 	return 0;
     }
     chkin_("ZZTANSTA", (ftnlen)8);
-    if (svcurv == 0) {
+    if (__state->svcurv == 0) {
 
 /*        This is the limb case. */
 
 /*        We'll rotate SVAXIS by ANGLE to achieve the desired result. */
 
-	vrotv_(svaxis, svnrml, angle, raydir);
-	zzraysfx_(svvrtx, raydir, &svet, point, ocultd);
-    } else if (svcurv == 1) {
+	vrotv_(__state->svaxis, __state->svnrml, angle, raydir);
+	zzraysfx_(__state->svvrtx, raydir, &__state->svet, point, ocultd);
+    } else if (__state->svcurv == 1) {
 
 /*        This is the umbral terminator case. */
 
@@ -853,7 +865,7 @@ L_zztansta:
 /*        the axis about the cutting half-plane normal by */
 /*        the input angle. */
 
-	vrotv_(svaxis, svnrml, angle, raydir);
+	vrotv_(__state->svaxis, __state->svnrml, angle, raydir);
 
 /*        Produce the offset of the ray's vertex from the */
 /*        center of the source by rotating the axis */
@@ -862,11 +874,11 @@ L_zztansta:
 /*        has unit length. */
 
 	d__1 = *angle - pi_() / 2;
-	vrotv_(svaxis, svnrml, &d__1, vrtoff);
-	vsclip_(&svirad, vrtoff);
-	vadd_(svvrtx, vrtoff, apex);
-	zzraysfx_(apex, raydir, &svet, point, ocultd);
-    } else if (svcurv == 2) {
+	vrotv_(__state->svaxis, __state->svnrml, &d__1, vrtoff);
+	vsclip_(&__state->svirad, vrtoff);
+	vadd_(__state->svvrtx, vrtoff, apex);
+	zzraysfx_(apex, raydir, &__state->svet, point, ocultd);
+    } else if (__state->svcurv == 2) {
 
 /*        This is the penumbral terminator case. */
 
@@ -875,7 +887,7 @@ L_zztansta:
 /*        the *negative* of the input angle. */
 
 	d__1 = -(*angle);
-	vrotv_(svaxis, svnrml, &d__1, raydir);
+	vrotv_(__state->svaxis, __state->svnrml, &d__1, raydir);
 
 /*        Produce the ray's vertex by rotating the axis */
 /*        vector about the normal, *not its negative,* */
@@ -883,17 +895,17 @@ L_zztansta:
 /*        must be SRCRAD. The saved axis has unit length. */
 
 	d__1 = pi_() * 1.5 - *angle;
-	vrotv_(svaxis, svnrml, &d__1, vrtoff);
-	vsclip_(&svirad, vrtoff);
-	vadd_(svvrtx, vrtoff, apex);
-	zzraysfx_(apex, raydir, &svet, point, ocultd);
+	vrotv_(__state->svaxis, __state->svnrml, &d__1, vrtoff);
+	vsclip_(&__state->svirad, vrtoff);
+	vadd_(__state->svvrtx, vrtoff, apex);
+	zzraysfx_(apex, raydir, &__state->svet, point, ocultd);
     } else {
 
 /*        This case should have been ruled out by a check in */
 /*        ZZTANINI. Check again anyway. */
 
 	setmsg_("Bad curve type code #.", (ftnlen)22);
-	errint_("#", &svcurv, (ftnlen)1);
+	errint_("#", &__state->svcurv, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZTANSTA", (ftnlen)8);
 	return 0;

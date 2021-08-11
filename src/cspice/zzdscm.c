@@ -1,9 +1,17 @@
-/* zzdscm.f -- translated by f2c (version 19980913).
+/* zzdscm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzdscm_state_t;
+static zzdscm_state_t* get_zzdscm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDSCM ( SGP4 deep space common calculations ) */
 /* Subroutine */ int zzdscm_(doublereal *epoch, doublereal *eccp, doublereal *
@@ -39,20 +47,61 @@
 	    doublereal *, doublereal *), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal ctem, stem, xnoi;
+    doublereal ctem;
+    doublereal stem;
+    doublereal xnoi;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer lsflg;
-    doublereal a1, a2, a3, a4, a5, a6, a7, a8, a9, zcosg, zcosh, zcosi, zsing,
-	     zsinh, zsini;
+    doublereal a1;
+    doublereal a2;
+    doublereal a3;
+    doublereal a4;
+    doublereal a5;
+    doublereal a6;
+    doublereal a7;
+    doublereal a8;
+    doublereal a9;
+    doublereal zcosg;
+    doublereal zcosh;
+    doublereal zcosi;
+    doublereal zsing;
+    doublereal zsinh;
+    doublereal zsini;
     extern doublereal twopi_(void);
-    doublereal x1, x2, x3, x4, x5, x6, x7, x8, a10, cc, betasq, xnodce, zx, 
-	    zy;
+    doublereal x1;
+    doublereal x2;
+    doublereal x3;
+    doublereal x4;
+    doublereal x5;
+    doublereal x6;
+    doublereal x7;
+    doublereal x8;
+    doublereal a10;
+    doublereal cc;
+    doublereal betasq;
+    doublereal xnodce;
+    doublereal zx;
+    doublereal zy;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal c1l, zcosgl, zcoshl, zcosil, zsingl, zsinhl, zcosgs, zsinil, 
-	    zcosis, zsings, zsinis;
+    doublereal c1l;
+    doublereal zcosgl;
+    doublereal zcoshl;
+    doublereal zcosil;
+    doublereal zsingl;
+    doublereal zsinhl;
+    doublereal zcosgs;
+    doublereal zsinil;
+    doublereal zcosis;
+    doublereal zsings;
+    doublereal zsinis;
     extern logical return_(void);
-    doublereal zel, zes, c1ss;
+    doublereal zel;
+    doublereal zes;
+    doublereal c1ss;
 
+
+    /* Module state */
+    zzdscm_state_t* __state = get_zzdscm_state();
 /* $ Abstract */
 
 /*     This subroutine provides deep space common items used by both the */

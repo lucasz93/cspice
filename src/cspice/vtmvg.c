@@ -1,9 +1,17 @@
-/* vtmvg.f -- translated by f2c (version 19980913).
+/* vtmvg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vtmvg_state_t;
+static vtmvg_state_t* get_vtmvg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  VTMVG  ( Vector transpose times matrix times vector ) */
 doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer 
@@ -18,8 +26,12 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer k, l;
+    integer k;
+    integer l;
 
+
+    /* Module state */
+    vtmvg_state_t* __state = get_vtmvg_state();
 /* $ Abstract */
 
 /*      Multiply the transpose of a n-dimensional column vector, */
@@ -178,7 +190,7 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     v2_dim1 = *ncol;
     matrix_dim1 = *nrow;
     matrix_dim2 = *ncol;
-    matrix_offset = matrix_dim1 + 1;
+    matrix_offset = 1 + matrix_dim1 * 1;
 
     /* Function Body */
     ret_val = 0.;
@@ -186,13 +198,13 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     for (k = 1; k <= i__1; ++k) {
 	i__2 = *ncol;
 	for (l = 1; l <= i__2; ++l) {
-	    ret_val += v1[(i__3 = k - 1) < v1_dim1 && 0 <= i__3 ? i__3 : 
+	    ret_val += v1[(i__3 = k - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : 
 		    s_rnge("v1", i__3, "vtmvg_", (ftnlen)171)] * matrix[(i__4 
-		    = k + l * matrix_dim1 - matrix_offset) < matrix_dim1 * 
-		    matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
-		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < v2_dim1 && 
-		    0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (ftnlen)
-		    171)];
+		    = k + l * matrix_dim1 - matrix_offset) < 1 * matrix_dim1 *
+		     matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
+		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < 1 * v2_dim1 
+		    && 0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (
+		    ftnlen)171)];
 	}
     }
     return ret_val;

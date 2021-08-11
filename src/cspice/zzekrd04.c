@@ -1,13 +1,21 @@
-/* zzekrd04.f -- translated by f2c (version 19980913).
+/* zzekrd04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzekrd04_init_t __zzekrd04_init;
+static zzekrd04_state_t* get_zzekrd04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrd04)
+		state->zzekrd04 = __cspice_allocate_module(sizeof(
+	zzekrd04_state_t), &__zzekrd04_init, sizeof(__zzekrd04_init));
+	return state->zzekrd04;
+
+}
 
 /* $Procedure   ZZEKRD04 ( EK, read class 4 column entry elements ) */
 /* Subroutine */ int zzekrd04_(integer *handle, integer *segdsc, integer *
@@ -18,22 +26,39 @@ static integer c__3 = 3;
     integer i__1, i__2;
 
     /* Local variables */
-    integer base, nelt;
+    integer base;
+    integer nelt;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzekgfwd_(integer *, integer *, integer *, 
-	    integer *), zzekpgbs_(integer *, integer *, integer *), zzekpgpg_(
-	    integer *, integer *, integer *, integer *);
-    integer p, nread;
+	    integer *);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer nread;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, ptemp, start;
+    integer recno;
+    integer ncols;
+    integer ptemp;
+    integer start;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    integer remain, colidx, datptr, maxidx, minidx, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errhan_(char *, integer *, ftnlen);
+    integer remain;
+    integer colidx;
+    integer datptr;
+    integer maxidx;
+    integer minidx;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekrd04_state_t* __state = get_zzekrd04_state();
 /* $ Abstract */
 
 /*     Read a specified element range from a column entry in a specified */
@@ -814,7 +839,7 @@ static integer c__3 = 3;
 /*        The request is valid, so read the data.  The first step is to */
 /*        locate the element at index BEG. */
 
-	zzekpgpg_(&c__3, &datptr, &p, &base);
+	zzekpgpg_(&__state->c__3, &datptr, &p, &base);
 	minidx = 1;
 	maxidx = base + 254 - datptr;
 	datptr += *beg;
@@ -829,7 +854,7 @@ static integer c__3 = 3;
 /*           Determine the highest-indexed element of the column entry */
 /*           located on the current page. */
 
-	    zzekpgbs_(&c__3, &p, &base);
+	    zzekpgbs_(&__state->c__3, &p, &base);
 	    minidx = maxidx + 1;
 /* Computing MIN */
 	    i__1 = maxidx + 254;
@@ -861,9 +886,9 @@ static integer c__3 = 3;
 
 /*           Locate the page on which the element is continued. */
 
-	    zzekgfwd_(handle, &c__3, &p, &ptemp);
+	    zzekgfwd_(handle, &__state->c__3, &p, &ptemp);
 	    p = ptemp;
-	    zzekpgbs_(&c__3, &p, &base);
+	    zzekpgbs_(&__state->c__3, &p, &base);
 	    datptr = base + 1;
 	    start += nread;
 	    nread = min(remain,254);

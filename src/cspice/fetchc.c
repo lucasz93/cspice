@@ -1,9 +1,17 @@
-/* fetchc.f -- translated by f2c (version 19980913).
+/* fetchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int fetchc_state_t;
+static fetchc_state_t* get_fetchc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            FETCHC ( Fetch from a character set ) */
 integer fetchc_(integer *nth, char *set, ftnlen set_len)
@@ -13,11 +21,16 @@ integer fetchc_(integer *nth, char *set, ftnlen set_len)
 
     /* Local variables */
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    fetchc_state_t* __state = get_fetchc_state();
 /* $ Abstract */
 
 /*      Returns the location within the set array of the NTH element */

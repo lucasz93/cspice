@@ -1,9 +1,17 @@
-/* smsgnd.f -- translated by f2c (version 19980913).
+/* smsgnd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int smsgnd_state_t;
+static smsgnd_state_t* get_smsgnd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SMSGND  ( Same Sign Double Precision Numbers ) */
 logical smsgnd_(doublereal *x, doublereal *y)
@@ -11,6 +19,9 @@ logical smsgnd_(doublereal *x, doublereal *y)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    smsgnd_state_t* __state = get_smsgnd_state();
 /* $ Abstract */
 
 /*      A logical function that is true if the input arguments have the */

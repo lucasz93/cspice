@@ -1,14 +1,21 @@
-/* rdenci.f -- translated by f2c (version 19980913).
+/* rdenci.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
+extern rdenci_init_t __rdenci_init;
+static rdenci_state_t* get_rdenci_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdenci)
+		state->rdenci = __cspice_allocate_module(sizeof(
+	rdenci_state_t), &__rdenci_init, sizeof(__rdenci_init));
+	return state->rdenci;
+
+}
 
 /* $Procedure  RDENCI  ( Read encoded integers from text file ) */
 /* Subroutine */ int rdenci_(integer *unit, integer *n, integer *data)
@@ -23,15 +30,15 @@ static integer c__1 = 1;
     /* Local variables */
     char work[64*64];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical error;
     integer nitms;
     extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
 	    ftnlen, ftnlen);
     integer itmbeg;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[80];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
@@ -39,9 +46,11 @@ static integer c__1 = 1;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    rdenci_state_t* __state = get_rdenci_state();
 /* $ Abstract */
 
 /*     Read N encoded integers from a text file, decoding them into */
@@ -260,16 +269,16 @@ static integer c__1 = 1;
 
 /*        Read in a block of data items to be decoded. */
 
-	io___4.ciunit = *unit;
-	iostat = s_rsle(&io___4);
+	__state->io___4.ciunit = *unit;
+	iostat = s_rsle(&__state->io___4);
 	if (iostat != 0) {
 	    goto L100001;
 	}
 	i__1 = nitms;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    iostat = do_lio(&c__9, &c__1, work + (((i__2 = i__ - 1) < 64 && 0 
-		    <= i__2 ? i__2 : s_rnge("work", i__2, "rdenci_", (ftnlen)
-		    252)) << 6), (ftnlen)64);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, work + (((i__2 = 
+		    i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, 
+		    "rdenci_", (ftnlen)252)) << 6), (ftnlen)64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }

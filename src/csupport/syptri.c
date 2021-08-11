@@ -1,9 +1,10 @@
-/* syptri.f -- translated by f2c (version 19980913).
+/* syptri.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure       SYPTRI ( Symbol table, fetch pointers, generic ) */
 /* Subroutine */ int syptri_(char *name__, char *symnam, integer *symptr, 

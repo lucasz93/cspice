@@ -1,17 +1,21 @@
-/* spkw03.f -- translated by f2c (version 19980913).
+/* spkw03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27 = 27;
-static integer c__40 = 40;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spkw03_init_t __spkw03_init;
+static spkw03_state_t* get_spkw03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw03)
+		state->spkw03 = __cspice_allocate_module(sizeof(
+	spkw03_state_t), &__spkw03_init, sizeof(__spkw03_init));
+	return state->spkw03;
+
+}
 
 /* $Procedure SPKW03 ( SPK, write segment, type 3 ) */
 /* Subroutine */ int spkw03_(integer *handle, integer *body, integer *center, 
@@ -24,9 +28,11 @@ static integer c__1 = 1;
     doublereal d__1, d__2;
 
     /* Local variables */
-    integer i__, k;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen), dafps_(integer *, integer *, doublereal *, 
+    integer i__;
+    integer k;
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
 	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
@@ -34,23 +40,32 @@ static integer c__1 = 1;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal rsize;
     char etstr[40];
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafbna_(
-	    integer *, doublereal *, char *, ftnlen), dafena_(void);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     extern /* Subroutine */ int chckid_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    integer refcod, ninrec;
+    integer refcod;
+    integer ninrec;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    doublereal radius, numrec;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal radius;
+    doublereal numrec;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char netstr[40];
     doublereal dcd[2];
     integer icd[6];
-    doublereal mid, tol;
+    doublereal mid;
+    doublereal tol;
 
+
+    /* Module state */
+    spkw03_state_t* __state = get_spkw03_state();
 /* $ Abstract */
 
 /*     Write a type 3 segment to an SPK file. */
@@ -504,7 +519,7 @@ static integer c__1 = 1;
 	setmsg_("The interpolating polynomials have degree #; the valid degr"
 		"ee range is [0, #].", (ftnlen)78);
 	errint_("#", polydg, (ftnlen)1);
-	errint_("#", &c__27, (ftnlen)1);
+	errint_("#", &__state->c__27, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	chkout_("SPKW03", (ftnlen)6);
 	return 0;
@@ -592,7 +607,8 @@ static integer c__1 = 1;
 
 /*     Now check the validity of the segment identifier. */
 
-    chckid_("SPK segment identifier", &c__40, segid, (ftnlen)22, segid_len);
+    chckid_("SPK segment identifier", &__state->c__40, segid, (ftnlen)22, 
+	    segid_len);
     if (failed_()) {
 	chkout_("SPKW03", (ftnlen)6);
 	return 0;
@@ -613,7 +629,7 @@ static integer c__1 = 1;
 
 /*     Pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Begin a new segment of SPK type 3 form: */
 
@@ -649,8 +665,8 @@ static integer c__1 = 1;
 
 	radius = *intlen / 2;
 	mid = *btime + radius + (i__ - 1) * *intlen;
-	dafada_(&mid, &c__1);
-	dafada_(&radius, &c__1);
+	dafada_(&mid, &__state->c__1);
+	dafada_(&radius, &__state->c__1);
 
 /*        Put one set of coefficients into the segment. */
 
@@ -660,21 +676,21 @@ static integer c__1 = 1;
 
 /*     Store the initial epoch of the first record. */
 
-    dafada_(btime, &c__1);
+    dafada_(btime, &__state->c__1);
 
 /*     Store the length of interval covered by each record. */
 
-    dafada_(intlen, &c__1);
+    dafada_(intlen, &__state->c__1);
 
 /*     Store the size of each record (total number of array elements). */
 
     rsize = (doublereal) (ninrec + 2);
-    dafada_(&rsize, &c__1);
+    dafada_(&rsize, &__state->c__1);
 
 /*     Store the number of records contained in the segment. */
 
     numrec = (doublereal) (*n);
-    dafada_(&numrec, &c__1);
+    dafada_(&numrec, &__state->c__1);
 
 /*     End this segment. */
 

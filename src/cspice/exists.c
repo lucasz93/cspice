@@ -1,9 +1,17 @@
-/* exists.f -- translated by f2c (version 19980913).
+/* exists.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int exists_state_t;
+static exists_state_t* get_exists_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             EXISTS ( Does the file exist? ) */
 logical exists_(char *file, ftnlen file_len)
@@ -19,13 +27,17 @@ logical exists_(char *file, ftnlen file_len)
     integer r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     logical myexst;
 
+
+    /* Module state */
+    exists_state_t* __state = get_exists_state();
 /* $ Abstract */
 
 /*      Determine whether a file exists. */

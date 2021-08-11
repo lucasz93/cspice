@@ -1,13 +1,21 @@
-/* vprjp.f -- translated by f2c (version 19980913).
+/* vprjp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b3 = 1.;
+extern vprjp_init_t __vprjp_init;
+static vprjp_state_t* get_vprjp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->vprjp)
+		state->vprjp = __cspice_allocate_module(sizeof(vprjp_state_t),
+	 &__vprjp_init, sizeof(__vprjp_init));
+	return state->vprjp;
+
+}
 
 /* $Procedure      VPRJP ( Vector projection onto plane ) */
 /* Subroutine */ int vprjp_(doublereal *vin, doublereal *plane, doublereal *
@@ -18,8 +26,9 @@ static doublereal c_b3 = 1.;
 
     /* Local variables */
     extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vlcom_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
     doublereal const__;
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
 	    doublereal *);
@@ -27,6 +36,9 @@ static doublereal c_b3 = 1.;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    vprjp_state_t* __state = get_vprjp_state();
 /* $ Abstract */
 
 /*     Project a vector onto a specified plane, orthogonally. */
@@ -192,7 +204,7 @@ static doublereal c_b3 = 1.;
 /*     Subtracting this multiple of NORMAL from VIN yields VOUT. */
 
     d__1 = const__ - vdot_(vin, normal);
-    vlcom_(&c_b3, vin, &d__1, normal, vout);
+    vlcom_(&__state->c_b3, vin, &d__1, normal, vout);
     chkout_("VPRJP", (ftnlen)5);
     return 0;
 } /* vprjp_ */

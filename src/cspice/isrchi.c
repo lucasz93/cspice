@@ -1,9 +1,17 @@
-/* isrchi.f -- translated by f2c (version 19980913).
+/* isrchi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isrchi_state_t;
+static isrchi_state_t* get_isrchi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             ISRCHI  ( Search in an integer array ) */
 integer isrchi_(integer *value, integer *ndim, integer *array)
@@ -14,6 +22,9 @@ integer isrchi_(integer *value, integer *ndim, integer *array)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    isrchi_state_t* __state = get_isrchi_state();
 /* $ Abstract */
 
 /*      Search for a given value within a integer array. Return */

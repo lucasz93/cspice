@@ -1,9 +1,17 @@
-/* pcwid.f -- translated by f2c (version 19980913).
+/* pcwid.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pcwid_state_t;
+static pcwid_state_t* get_pcwid_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            PCWID ( Printable width of a character array ) */
 integer pcwid_(char *array, integer *nelt, ftnlen array_len)
@@ -15,8 +23,13 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, j, strlen;
+    integer i__;
+    integer j;
+    integer strlen;
 
+
+    /* Module state */
+    pcwid_state_t* __state = get_pcwid_state();
 /* $ Abstract */
 
 /*     Determine the printable width of a character array. */

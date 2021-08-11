@@ -1,13 +1,21 @@
-/* dpstr.f -- translated by f2c (version 19980913).
+/* dpstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern dpstr_init_t __dpstr_init;
+static dpstr_state_t* get_dpstr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpstr)
+		state->dpstr = __cspice_allocate_module(sizeof(dpstr_state_t),
+	 &__dpstr_init, sizeof(__dpstr_init));
+	return state->dpstr;
+
+}
 
 /* $Procedure      DPSTR ( Double Precision Number to Character ) */
 /* Subroutine */ int dpstr_(doublereal *x, integer *sigdig, char *string, 
@@ -15,16 +23,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static doublereal power[18] = { 1.,10.,100.,1e3,1e4,1e5,1e6,1e7,1e8,1e9,
-	    1e10,1e11,1e12,1e13,1e14,1e15,1e16,1e17 };
-    static doublereal ipower[18] = { 1.,.1,.01,.001,1e-4,1e-5,1e-6,1e-7,1e-8,
-	    1e-9,1e-10,1e-11,1e-12,1e-13,1e-14,1e-15,1e-16,1e-17 };
-    static char digits[1*10] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9";
-    static doublereal values[10] = { 0.,1.,2.,3.,4.,5.,6.,7.,8.,9. };
-    static char vaxexp[2*41] = "00" "01" "02" "03" "04" "05" "06" "07" "08" 
-	    "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" 
-	    "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" 
-	    "35" "36" "37" "38" "39" "40";
 
     /* System generated locals */
     address a__1[2];
@@ -44,10 +42,17 @@ static integer c__2 = 2;
     integer last;
     doublereal copy;
     char zero[28];
-    integer i__, k, postn, maxsig, expont;
+    integer i__;
+    integer k;
+    integer postn;
+    integer maxsig;
+    integer expont;
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
     char numstr[32];
 
+
+    /* Module state */
+    dpstr_state_t* __state = get_dpstr_state();
 /* $ Abstract */
 
 /*     Take a double precision number and convert it to */
@@ -353,7 +358,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 	i__3[0] = maxsig + 2, a__1[0] = zero;
 	i__3[1] = 4, a__1[1] = "E+00";
-	s_cat(numstr, a__1, i__3, &c__2, (ftnlen)32);
+	s_cat(numstr, a__1, i__3, &__state->c__2, (ftnlen)32);
 	s_copy(string, numstr, string_len, (ftnlen)32);
 	return 0;
     }
@@ -379,8 +384,8 @@ static integer c__2 = 2;
 	    k += -16;
 	}
 	if (k != 0) {
-	    copy *= power[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : s_rnge("power"
-		    , i__1, "dpstr_", (ftnlen)434)];
+	    copy *= __state->power[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : 
+		    s_rnge("power", i__1, "dpstr_", (ftnlen)434)];
 	}
     } else {
 	expont = (integer) exp10;
@@ -390,17 +395,18 @@ static integer c__2 = 2;
 	    k += -16;
 	}
 	if (k != 0) {
-	    copy *= ipower[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : s_rnge("ipo"
-		    "wer", i__1, "dpstr_", (ftnlen)449)];
+	    copy *= __state->ipower[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : 
+		    s_rnge("ipower", i__1, "dpstr_", (ftnlen)449)];
 	}
     }
 
 /*     Round off the last significant digit. */
 
-    d__1 = copy * power[(i__1 = maxsig - 1) < 18 && 0 <= i__1 ? i__1 : s_rnge(
-	    "power", i__1, "dpstr_", (ftnlen)460)];
-    copy = (d_nint(&d__1) + .125) * ipower[(i__2 = maxsig - 1) < 18 && 0 <= 
-	    i__2 ? i__2 : s_rnge("ipower", i__2, "dpstr_", (ftnlen)460)];
+    d__1 = copy * __state->power[(i__1 = maxsig - 1) < 18 && 0 <= i__1 ? i__1 
+	    : s_rnge("power", i__1, "dpstr_", (ftnlen)460)];
+    copy = (d_nint(&d__1) + .125) * __state->ipower[(i__2 = maxsig - 1) < 18 
+	    && 0 <= i__2 ? i__2 : s_rnge("ipower", i__2, "dpstr_", (ftnlen)
+	    460)];
 
 /*     We might have accidently made copy as big as 10 by the */
 /*     round off process.  If we did we need to divide by 10 and add 1 */
@@ -414,11 +420,11 @@ static integer c__2 = 2;
 /*     Get the first digit of the decimal expansion of X. */
 
     i__ = (integer) copy;
-    *(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&digits[(i__1 = 
-	    i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, "dpstr_", (
-	    ftnlen)476)];
-    copy = (copy - values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "values", i__1, "dpstr_", (ftnlen)478)]) * 10.;
+    *(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&__state->digits[
+	    (i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, 
+	    "dpstr_", (ftnlen)476)];
+    copy = (copy - __state->values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : 
+	    s_rnge("values", i__1, "dpstr_", (ftnlen)478)]) * 10.;
 
 /*     Set the string pointer to the next position and compute the */
 /*     position of the last significant digit */
@@ -431,11 +437,11 @@ static integer c__2 = 2;
 
     while(postn < last) {
 	i__ = (integer) copy;
-	*(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&digits[(
-		i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, 
-		"dpstr_", (ftnlen)494)];
-	copy = (copy - values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "dpstr_", (ftnlen)495)]) * 10.;
+	*(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&
+		__state->digits[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : 
+		s_rnge("digits", i__1, "dpstr_", (ftnlen)494)];
+	copy = (copy - __state->values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 :
+		 s_rnge("values", i__1, "dpstr_", (ftnlen)495)]) * 10.;
 	++postn;
     }
 
@@ -456,9 +462,9 @@ static integer c__2 = 2;
 /*     Now get the numeric representation. */
 
     if (expont <= 40) {
-	s_copy(expc, vaxexp + (((i__1 = expont) < 41 && 0 <= i__1 ? i__1 : 
-		s_rnge("vaxexp", i__1, "dpstr_", (ftnlen)524)) << 1), (ftnlen)
-		20, (ftnlen)2);
+	s_copy(expc, __state->vaxexp + (((i__1 = expont) < 41 && 0 <= i__1 ? 
+		i__1 : s_rnge("vaxexp", i__1, "dpstr_", (ftnlen)524)) << 1), (
+		ftnlen)20, (ftnlen)2);
     } else {
 	intstr_(&expont, expc, (ftnlen)20);
     }

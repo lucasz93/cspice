@@ -1,9 +1,17 @@
-/* spke17.f -- translated by f2c (version 19980913).
+/* spke17.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke17_state_t;
+static spke17_state_t* get_spke17_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE17 ( Evaluate a type 17 SPK data record) */
 /* Subroutine */ int spke17_(doublereal *et, doublereal *recin, doublereal *
@@ -13,17 +21,25 @@
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal a, h__, k;
+    doublereal a;
+    doublereal h__;
+    doublereal k;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal decpol, rapole;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), eqncpv_(doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    doublereal decpol;
+    doublereal rapole;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int eqncpv_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal ecc;
 
+
+    /* Module state */
+    spke17_state_t* __state = get_spke17_state();
 /* $ Abstract */
 
 /*     Evaluates a single SPK data record from a segment of type 17 */

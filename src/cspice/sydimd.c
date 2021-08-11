@@ -1,9 +1,17 @@
-/* sydimd.f -- translated by f2c (version 19980913).
+/* sydimd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sydimd_state_t;
+static sydimd_state_t* get_sydimd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SYDIMD ( Return the dimension of a symbol ) */
 integer sydimd_(char *name__, char *tabsym, integer *tabptr, doublereal *
@@ -21,6 +29,9 @@ integer sydimd_(char *name__, char *tabsym, integer *tabptr, doublereal *
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sydimd_state_t* __state = get_sydimd_state();
 /* $ Abstract */
 
 /*     Return the dimension of a particular symbol in a double precision */

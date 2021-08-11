@@ -1,9 +1,17 @@
-/* drdlat.f -- translated by f2c (version 19980913).
+/* drdlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int drdlat_state_t;
+static drdlat_state_t* get_drdlat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DRDLAT ( Derivative of rectangular w.r.t. latitudinal ) */
 /* Subroutine */ int drdlat_(doublereal *r__, doublereal *long__, doublereal *
@@ -12,6 +20,9 @@
     /* Builtin functions */
     double cos(doublereal), sin(doublereal);
 
+
+    /* Module state */
+    drdlat_state_t* __state = get_drdlat_state();
 /* $ Abstract */
 
 /*     Compute the Jacobian of the transformation from latitudinal to */

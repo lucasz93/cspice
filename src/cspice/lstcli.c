@@ -1,9 +1,17 @@
-/* lstcli.f -- translated by f2c (version 19980913).
+/* lstcli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstcli_state_t;
+static lstcli_state_t* get_lstcli_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTCLI ( Closest integer array element ) */
 integer lstcli_(integer *x, integer *n, integer *array)
@@ -12,8 +20,15 @@ integer lstcli_(integer *x, integer *n, integer *array)
     integer ret_val;
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstcli_state_t* __state = get_lstcli_state();
 /* $ Abstract */
 
 /*     Given a number X and an array of non-decreasing integers, find */

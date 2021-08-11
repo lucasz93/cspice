@@ -1,14 +1,21 @@
-/* illum.f -- translated by f2c (version 19980913).
+/* illum.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__3 = 3;
+extern illum_init_t __illum_init;
+static illum_state_t* get_illum_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->illum)
+		state->illum = __cspice_allocate_module(sizeof(illum_state_t),
+	 &__illum_init, sizeof(__illum_init));
+	return state->illum;
+
+}
 
 /* $Procedure ILLUM ( Illumination angles ) */
 /* Subroutine */ int illum_(char *target, doublereal *et, char *abcorr, char *
@@ -18,23 +25,22 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *), zzctruin_(integer *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
     integer obscde;
     doublereal lt;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
@@ -44,22 +50,26 @@ static integer c__3 = 3;
 	    *, ftnlen);
     char frname[80];
     integer trgcde;
-    doublereal offobs[3], obsvec[3], tepoch, normal[3];
-    static integer svtcde;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static integer svobsc;
+    doublereal offobs[3];
+    doublereal obsvec[3];
+    doublereal tepoch;
+    doublereal normal[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal offsun[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    doublereal sstate[6], sunvec[3], tstate[6];
-    static char svtarg[36];
+    doublereal sstate[6];
+    doublereal sunvec[3];
+    doublereal tstate[6];
     extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
-    static char svobsr[36];
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     doublereal lts;
 
+
+    /* Module state */
+    illum_state_t* __state = get_illum_state();
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -742,19 +752,19 @@ static integer c__3 = 3;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &found, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &found, (ftnlen)36, target_len);
     if (! found) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -764,8 +774,8 @@ static integer c__3 = 3;
 	chkout_("ILLUM", (ftnlen)5);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &found, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &found, (ftnlen)36, obsrvr_len);
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -820,8 +830,8 @@ static integer c__3 = 3;
 /*     Find the body-fixed state of the Sun as seen from the target at */
 /*     TEPOCH. */
 
-    spkez_(&c__10, &tepoch, frname, abcorr, &trgcde, sstate, &lts, (ftnlen)80,
-	     abcorr_len);
+    spkez_(&__state->c__10, &tepoch, frname, abcorr, &trgcde, sstate, &lts, (
+	    ftnlen)80, abcorr_len);
 
 /*     Grab the position portions of the states (the first three */
 /*     elements of each state).  Negate the observer-target vector, */
@@ -844,7 +854,7 @@ static integer c__3 = 3;
 /*     Find the surface normal at SPOINT.  We'll need the radii of the */
 /*     target body. */
 
-    bodvcd_(&trgcde, "RADII", &c__3, &n, radii, (ftnlen)5);
+    bodvcd_(&trgcde, "RADII", &__state->c__3, &n, radii, (ftnlen)5);
     surfnm_(radii, &radii[1], &radii[2], spoint, normal);
 
 /*     Find the illumination angles.  VSEP will give us angular */

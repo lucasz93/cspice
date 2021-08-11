@@ -1,9 +1,17 @@
-/* zzddhgtu.f -- translated by f2c (version 19980913).
+/* zzddhgtu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzddhgtu_state_t;
+static zzddhgtu_state_t* get_zzddhgtu_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDDHGTU ( Private --- DDH Get Unit ) */
 /* Subroutine */ int zzddhgtu_(integer *utcst, integer *uthan, logical *utlck,
@@ -21,13 +29,18 @@
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int orderi_(integer *, integer *, integer *), 
-	    frelun_(integer *), sigerr_(char *, ftnlen), getlun_(integer *), 
-	    chkout_(char *, ftnlen);
+    extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int frelun_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer orderv[23];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzddhgtu_state_t* __state = get_zzddhgtu_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

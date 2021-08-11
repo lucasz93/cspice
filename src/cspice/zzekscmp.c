@@ -1,9 +1,17 @@
-/* zzekscmp.f -- translated by f2c (version 19980913).
+/* zzekscmp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekscmp_state_t;
+static zzekscmp_state_t* get_zzekscmp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSCMP ( EK, scalar value comparison ) */
 logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
@@ -25,23 +33,32 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
     integer elti;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer cvlen;
-    logical found, enull;
-    extern logical failed_(void), matchi_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    logical found;
+    logical enull;
+    extern logical failed_(void);
+    extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
     integer cmplen;
     doublereal numval;
-    integer coltyp, strlen;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errhan_(char *, integer *, ftnlen);
+    integer coltyp;
+    integer strlen;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer rel;
     extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen), zzekrsd_(integer *, integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *, logical *), zzekrsi_(integer *
-	    , integer *, integer *, integer *, integer *, integer *, logical *
-	    , logical *);
+	    ftnlen);
+    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *, logical *);
+    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, logical *, logical *);
 
+
+    /* Module state */
+    zzekscmp_state_t* __state = get_zzekscmp_state();
 /* $ Abstract */
 
 /*     Compare a specified scalar EK column entry with a scalar value. */

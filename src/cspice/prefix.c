@@ -1,9 +1,17 @@
-/* prefix.f -- translated by f2c (version 19980913).
+/* prefix.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prefix_state_t;
+static prefix_state_t* get_prefix_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PREFIX (Prefix a character string) */
 /* Subroutine */ int prefix_(char *pref, integer *spaces, char *string, 
@@ -14,11 +22,16 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer plen, slen, shift;
+    integer plen;
+    integer slen;
+    integer shift;
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int shiftr_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
 
+
+    /* Module state */
+    prefix_state_t* __state = get_prefix_state();
 /* $ Abstract */
 
 /*      Add a prefix to a character string. */

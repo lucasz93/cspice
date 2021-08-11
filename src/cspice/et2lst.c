@@ -1,23 +1,21 @@
-/* et2lst.f -- translated by f2c (version 19980913).
+/* et2lst.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b4 = 0.;
-static doublereal c_b6 = 1.;
-static integer c__10 = 10;
-static integer c__2 = 2;
-static integer c__1 = 1;
-static doublereal c_b32 = -43200.;
-static doublereal c_b33 = 43200.;
-static doublereal c_b34 = 3600.;
-static doublereal c_b35 = 60.;
-static integer c__5 = 5;
-static integer c__7 = 7;
+extern et2lst_init_t __et2lst_init;
+static et2lst_state_t* get_et2lst_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->et2lst)
+		state->et2lst = __cspice_allocate_module(sizeof(
+	et2lst_state_t), &__et2lst_init, sizeof(__et2lst_init));
+	return state->et2lst;
+
+}
 
 /* $Procedure ET2LST ( ET to Local Solar Time ) */
 /* Subroutine */ int et2lst_(doublereal *et, integer *body, doublereal *
@@ -35,21 +33,27 @@ static integer c__7 = 7;
 	     char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    doublereal rate, slat, mins;
-    char h__[2], m[2];
+    doublereal rate;
+    doublereal slat;
+    doublereal mins;
+    char h__[2];
+    char m[2];
     integer n;
     doublereal q;
     char s[2];
     doublereal angle;
     char frame[32];
     doublereal range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), dpfmt_(
-	    doublereal *, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    doublereal state[6], slong;
+    doublereal state[6];
+    doublereal slong;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     doublereal hours;
@@ -64,7 +68,8 @@ static integer c__7 = 7;
 	    *, ftnlen);
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), rmaind_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int rmaind_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     doublereal secnds;
     extern /* Subroutine */ int pgrrec_(char *, doublereal *, doublereal *, 
@@ -76,17 +81,23 @@ static integer c__7 = 7;
 	    *, doublereal *, logical *, ftnlen);
     char amorpm[4];
     doublereal tmpsec;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dtpool_(char *, logical *, integer *, char *, ftnlen, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
-    doublereal mylong, spoint[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    doublereal mylong;
+    doublereal spoint[3];
     extern logical return_(void);
     char kwtype[1];
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
     char mytype[32];
     doublereal lat;
 
+
+    /* Module state */
+    et2lst_state_t* __state = get_et2lst_state();
 /* $ Abstract */
 
 /*     Given an ephemeris epoch ET, compute the local solar time for */
@@ -441,8 +452,8 @@ static integer c__7 = 7;
 /*            Equatorial radius = 1 */
 /*            Flattening factor = 0 */
 
-	pgrrec_(bodnam, long__, &c_b4, &c_b4, &c_b6, &c_b4, spoint, (ftnlen)
-		36);
+	pgrrec_(bodnam, long__, &__state->c_b4, &__state->c_b4, &
+		__state->c_b6, &__state->c_b4, spoint, (ftnlen)36);
 
 /*        The output MYLONG is planetocentric longitude.  The other */
 /*        outputs are not used.  Note that the variable RANGE appears */
@@ -486,8 +497,8 @@ static integer c__7 = 7;
 	chkout_("ET2LST", (ftnlen)6);
 	return 0;
     }
-    spkez_(&c__10, et, frame, "LT+S", body, state, &lt, (ftnlen)32, (ftnlen)4)
-	    ;
+    spkez_(&__state->c__10, et, frame, "LT+S", body, state, &lt, (ftnlen)32, (
+	    ftnlen)4);
     reclat_(state, &range, &slong, &slat);
     angle = mylong - slong;
 
@@ -522,7 +533,8 @@ static integer c__7 = 7;
 
 /*        If the rotation rate is negative, invert the angle. */
 
-	gdpool_(bpmkwd, &c__2, &c__1, &n, &rate, &found, (ftnlen)32);
+	gdpool_(bpmkwd, &__state->c__2, &__state->c__1, &n, &rate, &found, (
+		ftnlen)32);
 	if (rate < 0.) {
 	    angle = -angle;
 	}
@@ -531,12 +543,12 @@ static integer c__7 = 7;
 /*     Convert the angle to "angle seconds" before or after local noon. */
 
     secnds = angle * 86400. / twopi_();
-    secnds = brcktd_(&secnds, &c_b32, &c_b33);
+    secnds = brcktd_(&secnds, &__state->c_b32, &__state->c_b33);
 
 /*     Get the hour, and minutes components of the local time. */
 
-    rmaind_(&secnds, &c_b34, &hours, &tmpsec);
-    rmaind_(&tmpsec, &c_b35, &mins, &secnds);
+    rmaind_(&secnds, &__state->c_b34, &hours, &tmpsec);
+    rmaind_(&tmpsec, &__state->c_b35, &mins, &secnds);
 
 /*     Construct the integer components of the local time. */
 
@@ -578,7 +590,7 @@ static integer c__7 = 7;
     i__1[2] = 2, a__1[2] = m;
     i__1[3] = 1, a__1[3] = ":";
     i__1[4] = 2, a__1[4] = s;
-    s_cat(time, a__1, i__1, &c__5, time_len);
+    s_cat(time, a__1, i__1, &__state->c__5, time_len);
     hours = (doublereal) hrampm;
     dpfmt_(&hours, "0x", h__, (ftnlen)2, (ftnlen)2);
 /* Writing concatenation */
@@ -589,7 +601,7 @@ static integer c__7 = 7;
     i__2[4] = 2, a__2[4] = s;
     i__2[5] = 1, a__2[5] = " ";
     i__2[6] = 4, a__2[6] = amorpm;
-    s_cat(ampm, a__2, i__2, &c__7, ampm_len);
+    s_cat(ampm, a__2, i__2, &__state->c__7, ampm_len);
     chkout_("ET2LST", (ftnlen)6);
     return 0;
 } /* et2lst_ */

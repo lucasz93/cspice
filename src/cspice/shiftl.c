@@ -1,9 +1,17 @@
-/* shiftl.f -- translated by f2c (version 19980913).
+/* shiftl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int shiftl_state_t;
+static shiftl_state_t* get_shiftl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SHIFTL ( Shift left ) */
 /* Subroutine */ int shiftl_(char *in, integer *nshift, char *fillc, char *
@@ -17,8 +25,17 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, n, s, nfill, inlen, nsave, outlen;
+    integer i__;
+    integer n;
+    integer s;
+    integer nfill;
+    integer inlen;
+    integer nsave;
+    integer outlen;
 
+
+    /* Module state */
+    shiftl_state_t* __state = get_shiftl_state();
 /* $ Abstract */
 
 /*      Shift the contents of a character string to the left. */

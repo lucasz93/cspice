@@ -1,31 +1,43 @@
-/* ckfxfm.f -- translated by f2c (version 19980913).
+/* ckfxfm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckfxfm_init_t __ckfxfm_init;
+static ckfxfm_state_t* get_ckfxfm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckfxfm)
+		state->ckfxfm = __cspice_allocate_module(sizeof(
+	ckfxfm_state_t), &__ckfxfm_init, sizeof(__ckfxfm_init));
+	return state->ckfxfm;
+
+}
 
 /* $Procedure      CKFXFM ( C-kernel, find transformation ) */
 /* Subroutine */ int ckfxfm_(integer *inst, doublereal *et, doublereal *xform,
 	 integer *ref, logical *found)
 {
-    logical have, pfnd, sfnd;
+    logical have;
+    logical pfnd;
+    logical sfnd;
     doublereal time;
     extern /* Subroutine */ int sce2c_(integer *, doublereal *, doublereal *);
     char segid[40];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), ckbss_(integer *, doublereal *, 
-	    doublereal *, logical *), ckpfs_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
-	     doublereal *, logical *), cksns_(integer *, doublereal *, char *,
-	     logical *, ftnlen);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
+	    logical *);
+    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
+	     logical *);
+    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
+	    logical *, ftnlen);
     doublereal ref2in[36]	/* was [6][6] */;
     extern /* Subroutine */ int rav2xf_(doublereal *, doublereal *, 
 	    doublereal *);
@@ -38,12 +50,17 @@ static integer c__6 = 6;
     integer sclkid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal clkout;
-    extern logical return_(void), zzsclk_(integer *, integer *);
+    extern logical return_(void);
+    extern logical zzsclk_(integer *, integer *);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
     doublereal dcd[2];
     integer icd[6];
-    doublereal tol, rot[9]	/* was [3][3] */;
+    doublereal tol;
+    doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    ckfxfm_state_t* __state = get_ckfxfm_state();
 /* $ Abstract */
 
 /*     Find the transformation from a C-kernel Id to the native */
@@ -326,7 +343,7 @@ static integer c__6 = 6;
 /*           Found one. Fetch the ID code of the reference frame */
 /*           from the descriptor. */
 
-	    dafus_(descr, &c__2, &c__6, dcd, icd);
+	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 	    *ref = icd[1];
 	    *found = TRUE_;
 

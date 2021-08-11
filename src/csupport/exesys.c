@@ -1,9 +1,10 @@
-/* exesys.f -- translated by f2c (version 19980913).
+/* exesys.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure   EXESYS  ( Execute system command ) */
 /* Subroutine */ int exesys_(char *cmd, ftnlen cmd_len)
@@ -16,7 +17,7 @@
 	    ftnlen);
     extern logical return_(void);
     integer status;
-    extern integer system_(char *, ftnlen);
+    extern /* Subroutine */ int system_(char *, integer *, ftnlen);
 
 /* $ Abstract */
 
@@ -314,9 +315,6 @@
 /*     SPICELIB functions */
 
 
-/*     System functions */
-
-
 /*     Local variables */
 
 
@@ -327,9 +325,7 @@
     } else {
 	chkin_("EXESYS", (ftnlen)6);
     }
-
-
-    status = system_(cmd, rtrim_(cmd, cmd_len));
+    system_(cmd, &status, rtrim_(cmd, cmd_len));
     if (status != 0) {
 
 /*        Uh, we've got a problem. */

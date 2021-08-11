@@ -1,13 +1,21 @@
-/* getmsg.f -- translated by f2c (version 19980913).
+/* getmsg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern getmsg_init_t __getmsg_init;
+static getmsg_state_t* get_getmsg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->getmsg)
+		state->getmsg = __cspice_allocate_module(sizeof(
+	getmsg_state_t), &__getmsg_init, sizeof(__getmsg_init));
+	return state->getmsg;
+
+}
 
 /* $Procedure      GETMSG ( Get Error Message ) */
 /* Subroutine */ int getmsg_(char *option, char *msg, ftnlen option_len, 
@@ -24,17 +32,20 @@ static integer c__2 = 2;
 	     char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    expln_(char *, char *, ftnlen, ftnlen), ljust_(char *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int expln_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char upopt[10];
-    extern /* Subroutine */ int getlms_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int getlms_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char locopt[10];
-    extern /* Subroutine */ int getsms_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int getsms_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     char shrtms[25];
 
+
+    /* Module state */
+    getmsg_state_t* __state = get_getmsg_state();
 /* $ Abstract */
 
 /*     Retrieve the current short error message, */
@@ -300,7 +311,7 @@ static integer c__2 = 2;
 		"ut.  Valid choices are 'SHORT',       'EXPLAIN', or 'LONG'. "
 		" The value that was input was:  ";
 	i__1[1] = 10, a__1[1] = locopt;
-	s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)144);
+	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)144);
 	setmsg_(ch__1, (ftnlen)144);
 	sigerr_("SPICE(INVALIDMSGTYPE)", (ftnlen)21);
     }

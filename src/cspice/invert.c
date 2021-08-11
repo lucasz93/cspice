@@ -1,24 +1,36 @@
-/* invert.f -- translated by f2c (version 19980913).
+/* invert.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = 0.;
-static integer c__9 = 9;
+extern invert_init_t __invert_init;
+static invert_state_t* get_invert_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->invert)
+		state->invert = __cspice_allocate_module(sizeof(
+	invert_state_t), &__invert_init, sizeof(__invert_init));
+	return state->invert;
+
+}
 
 /* $Procedure      INVERT ( Invert a 3x3 matrix ) */
 /* Subroutine */ int invert_(doublereal *m1, doublereal *mout)
 {
     doublereal mdet;
-    extern /* Subroutine */ int filld_(doublereal *, integer *, doublereal *),
-	     vsclg_(doublereal *, doublereal *, integer *, doublereal *);
-    doublereal mtemp[9]	/* was [3][3] */, invdet;
+    extern /* Subroutine */ int filld_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
+    doublereal mtemp[9]	/* was [3][3] */;
+    doublereal invdet;
     extern doublereal det_(doublereal *);
 
+
+    /* Module state */
+    invert_state_t* __state = get_invert_state();
 /* $ Abstract */
 
 /*      Generate the inverse of a 3x3 matrix. */
@@ -169,7 +181,7 @@ static integer c__9 = 9;
 
     mdet = det_(m1);
     if (abs(mdet) < 1e-16) {
-	filld_(&c_b2, &c__9, mout);
+	filld_(&__state->c_b2, &__state->c__9, mout);
 	return 0;
     }
 
@@ -188,7 +200,7 @@ static integer c__9 = 9;
 /*  Multiply the cofactor matrix by 1/MDET to obtain the inverse */
 
     invdet = 1. / mdet;
-    vsclg_(&invdet, mtemp, &c__9, mout);
+    vsclg_(&invdet, mtemp, &__state->c__9, mout);
 
     return 0;
 } /* invert_ */

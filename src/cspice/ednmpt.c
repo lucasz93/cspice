@@ -1,13 +1,21 @@
-/* ednmpt.f -- translated by f2c (version 19980913).
+/* ednmpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b25 = -.5;
+extern ednmpt_init_t __ednmpt_init;
+static ednmpt_state_t* get_ednmpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ednmpt)
+		state->ednmpt = __cspice_allocate_module(sizeof(
+	ednmpt_state_t), &__ednmpt_init, sizeof(__ednmpt_init));
+	return state->ednmpt;
+
+}
 
 /* $Procedure EDNMPT ( Ellipsoid normal vector to surface point ) */
 /* Subroutine */ int ednmpt_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -21,18 +29,26 @@ static doublereal c_b25 = -.5;
 
     /* Local variables */
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern logical vzero_(doublereal *);
-    doublereal lambda, sa, sb, sc;
+    doublereal lambda;
+    doublereal sa;
+    doublereal sb;
+    doublereal sc;
     extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    doublereal na2, nb2, nc2;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    doublereal na2;
+    doublereal nb2;
+    doublereal nc2;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal arg;
 
+
+    /* Module state */
+    ednmpt_state_t* __state = get_ednmpt_state();
 /* $ Abstract */
 
 /*     Return the unique point on an ellipsoid's surface where the */
@@ -445,7 +461,7 @@ static doublereal c_b25 = -.5;
 /*     Compute LAMBDA as above, and scale it too. This will place */
 /*     POINT on the original ellipsoid. */
 
-    lambda = pow_dd(&arg, &c_b25) * scale;
+    lambda = pow_dd(&arg, &__state->c_b25) * scale;
     point[0] = lambda * na2;
     point[1] = lambda * nb2;
     point[2] = lambda * nc2;

@@ -1,9 +1,17 @@
-/* lstltc.f -- translated by f2c (version 19980913).
+/* lstltc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstltc_state_t;
+static lstltc_state_t* get_lstltc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTLTC ( Last character element less than ) */
 integer lstltc_(char *string, integer *n, char *array, ftnlen string_len, 
@@ -17,8 +25,15 @@ integer lstltc_(char *string, integer *n, char *array, ftnlen string_len,
 	     ftnlen);
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstltc_state_t* __state = get_lstltc_state();
 /* $ Abstract */
 
 /*      Given a character string and an ordered array of character */

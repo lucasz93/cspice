@@ -1,15 +1,21 @@
-/* zzgfcprx.f -- translated by f2c (version 19980913).
+/* zzgfcprx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b15 = 1.;
-static doublereal c_b39 = 0.;
+extern zzgfcprx_init_t __zzgfcprx_init;
+static zzgfcprx_state_t* get_zzgfcprx_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfcprx)
+		state->zzgfcprx = __cspice_allocate_module(sizeof(
+	zzgfcprx_state_t), &__zzgfcprx_init, sizeof(__zzgfcprx_init));
+	return state->zzgfcprx;
+
+}
 
 /* $Procedure ZZGFCPRX ( GF, coordinate derivative proxy ) */
 /* Subroutine */ int zzgfcprx_(doublereal *state, char *corsys, doublereal *
@@ -31,27 +37,38 @@ static doublereal c_b39 = 0.;
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int zzrtnmat_(doublereal *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), vpack_(doublereal *, doublereal *, doublereal *,
-	     doublereal *);
-    extern logical vzero_(doublereal *), failed_(void);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern logical vzero_(doublereal *);
+    extern logical failed_(void);
     doublereal dp;
-    extern /* Subroutine */ int cleari_(integer *, integer *), recgeo_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), latrec_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     integer dpsign;
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
-	    , chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *
-	    , integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal rtnvel[3];
     integer rtnsgn[3];
     extern logical return_(void);
-    doublereal alt, lat, vel[3], lon;
+    doublereal alt;
+    doublereal lat;
+    doublereal vel[3];
+    doublereal lon;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    zzgfcprx_state_t* __state = get_zzgfcprx_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -517,7 +534,7 @@ static doublereal c_b39 = 0.;
 /*        logic of the rest of the routine, since the case of */
 /*        zero-velocity can be ignored. */
 
-	cleari_(&c__3, cdsign);
+	cleari_(&__state->c__3, cdsign);
 	chkout_("ZZGFCPRX", (ftnlen)8);
 	return 0;
     } else {
@@ -544,9 +561,9 @@ static doublereal c_b39 = 0.;
 /*              is positive or negative. See reference [1] for a */
 /*              discussion of this Fortran intrinsic function. */
 
-		d__1 = d_sign(&c_b15, &vel[(i__2 = i__ - 1) < 3 && 0 <= i__2 ?
-			 i__2 : s_rnge("vel", i__2, "zzgfcprx_", (ftnlen)415)]
-			);
+		d__1 = d_sign(&__state->c_b15, &vel[(i__2 = i__ - 1) < 3 && 0 
+			<= i__2 ? i__2 : s_rnge("vel", i__2, "zzgfcprx_", (
+			ftnlen)415)]);
 		cdsign[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
 			"cdsign", i__1, "zzgfcprx_", (ftnlen)415)] = i_dnnt(&
 			d__1);
@@ -607,7 +624,7 @@ static doublereal c_b39 = 0.;
 	    if (dp == 0.) {
 		dpsign = 0;
 	    } else {
-		d__1 = d_sign(&c_b15, &dp);
+		d__1 = d_sign(&__state->c_b15, &dp);
 		dpsign = i_dnnt(&d__1);
 	    }
 	} else {
@@ -699,7 +716,7 @@ static doublereal c_b39 = 0.;
 	    if (vel[2] == 0.) {
 		cdsign[2] = 0;
 	    } else {
-		d__1 = d_sign(&c_b15, &vel[2]);
+		d__1 = d_sign(&__state->c_b15, &vel[2]);
 		cdsign[2] = i_dnnt(&d__1);
 	    }
 	} else {
@@ -740,13 +757,13 @@ static doublereal c_b39 = 0.;
 	    chkout_("ZZGFCPRX", (ftnlen)8);
 	    return 0;
 	}
-	latrec_(&c_b15, &lon, &lat, normal);
+	latrec_(&__state->c_b15, &lon, &lat, normal);
     } else if (s_cmp(corsys, "CYLINDRICAL", corsys_len, (ftnlen)11) == 0) {
 
 /*        The normal vector is aligned with the local radial */
 /*        direction; this vector is parallel to the X-Y plane. */
 
-	vpack_(state, &state[1], &c_b39, normal);
+	vpack_(state, &state[1], &__state->c_b39, normal);
 	vhatip_(normal);
     } else {
 
@@ -770,8 +787,9 @@ static doublereal c_b39 = 0.;
 	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rtnsgn",
 		     i__1, "zzgfcprx_", (ftnlen)661)] = 0;
 	} else {
-	    d__1 = d_sign(&c_b15, &rtnvel[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rtnvel", i__2, "zzgfcprx_", (ftnlen)663)]);
+	    d__1 = d_sign(&__state->c_b15, &rtnvel[(i__2 = i__ - 1) < 3 && 0 
+		    <= i__2 ? i__2 : s_rnge("rtnvel", i__2, "zzgfcprx_", (
+		    ftnlen)663)]);
 	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rtnsgn",
 		     i__1, "zzgfcprx_", (ftnlen)663)] = i_dnnt(&d__1);
 	}

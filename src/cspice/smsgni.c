@@ -1,9 +1,17 @@
-/* smsgni.f -- translated by f2c (version 19980913).
+/* smsgni.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int smsgni_state_t;
+static smsgni_state_t* get_smsgni_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SMSGNI  ( Same Sign Integer Numbers ) */
 logical smsgni_(integer *x, integer *y)
@@ -11,6 +19,9 @@ logical smsgni_(integer *x, integer *y)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    smsgni_state_t* __state = get_smsgni_state();
 /* $ Abstract */
 
 /*      A logical function that is true if the input arguments have the */

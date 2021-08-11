@@ -1,9 +1,17 @@
-/* zzekqsel.f -- translated by f2c (version 19980913).
+/* zzekqsel.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekqsel_state_t;
+static zzekqsel_state_t* get_zzekqsel_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKQSEL ( Private: EK, read SELECT columns from query ) */
 /* Subroutine */ int zzekqsel_(integer *eqryi, char *eqryc, integer *n, 
@@ -15,16 +23,31 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, ntab, ncnj, ncns, nord, nsel;
+    integer base;
+    integer ntab;
+    integer ncnj;
+    integer ncns;
+    integer nord;
+    integer nsel;
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen), chkin_(char *, ftnlen);
-    integer cb, ce;
-    extern logical failed_(void);
-    integer tb, te, buflen, iparse, resolv;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
 	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer cb;
+    integer ce;
+    extern logical failed_(void);
+    integer tb;
+    integer te;
+    integer buflen;
+    integer iparse;
+    integer resolv;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekqsel_state_t* __state = get_zzekqsel_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

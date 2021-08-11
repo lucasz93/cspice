@@ -1,14 +1,21 @@
-/* dskv02.f -- translated by f2c (version 19980913).
+/* dskv02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__19 = 19;
+extern dskv02_init_t __dskv02_init;
+static dskv02_state_t* get_dskv02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskv02)
+		state->dskv02 = __cspice_allocate_module(sizeof(
+	dskv02_state_t), &__dskv02_init, sizeof(__dskv02_init));
+	return state->dskv02;
+
+}
 
 /* $Procedure DSKV02 ( DSK, fetch type 2 vertex data ) */
 /* Subroutine */ int dskv02_(integer *handle, integer *dladsc, integer *start,
@@ -16,18 +23,28 @@ static integer c__19 = 19;
 {
     integer unit;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), dskd02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *), chkin_(char *, 
-	    ftnlen), dskgd_(integer *, integer *, doublereal *), dskz02_(
-	    integer *, integer *, integer *, integer *);
-    integer np, nv;
+	    integer *, ftnlen);
+    extern /* Subroutine */ int dskd02_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dskz02_(integer *, integer *, integer *, 
+	    integer *);
+    integer np;
+    integer nv;
     extern logical return_(void);
     doublereal dskdsc[24];
-    integer lcroom, lcstrt;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer lcroom;
+    integer lcstrt;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskv02_state_t* __state = get_dskv02_state();
 /* $ Abstract */
 
 /*     Fetch vertices from a type 2 DSK segment. */
@@ -948,7 +965,7 @@ static integer c__19 = 19;
 /*     Check START. */
 
     if (*start < 1 || *start > nv) {
-	zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 	setmsg_("Segment in DSK file # with DAS base addresses INT = #, DP ="
 		" #, CHR = # contains # vertices, so START must be in the ran"
 		"ge 1:#; actual value was #.", (ftnlen)146);
@@ -971,7 +988,7 @@ static integer c__19 = 19;
 
     lcstrt = (*start - 1) * 3 + 1;
     lcroom = *room * 3;
-    dskd02_(handle, dladsc, &c__19, &lcstrt, &lcroom, n, vrtces);
+    dskd02_(handle, dladsc, &__state->c__19, &lcstrt, &lcroom, n, vrtces);
 
 /*     Change the output count from one of d.p. numbers to one of */
 /*     vertices. */

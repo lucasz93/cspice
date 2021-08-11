@@ -1,13 +1,21 @@
-/* sydupd.f -- translated by f2c (version 19980913).
+/* sydupd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sydupd_init_t __sydupd_init;
+static sydupd_state_t* get_sydupd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sydupd)
+		state->sydupd = __cspice_allocate_module(sizeof(
+	sydupd_state_t), &__sydupd_init, sizeof(__sydupd_init));
+	return state->sydupd;
+
+}
 
 /* $Procedure      SYDUPD ( Create a duplicate of a symbol ) */
 /* Subroutine */ int sydupd_(char *name__, char *copy, char *tabsym, integer *
@@ -21,17 +29,26 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nptr, nsym, i__;
-    extern integer cardc_(char *, ftnlen), cardd_(doublereal *), cardi_(
+    integer nval;
+    integer nptr;
+    integer nsym;
+    integer i__;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardd_(doublereal *);
+    extern integer cardi_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sizec_(char *, ftnlen);
+    extern integer sized_(doublereal *);
+    extern integer sumai_(integer *, integer *);
+    extern integer sizei_(integer *);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
 	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen), sized_(doublereal *), sumai_(
-	    integer *, integer *), sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), scardd_(
-	    integer *, doublereal *), remlad_(integer *, integer *, 
-	    doublereal *, integer *), scardi_(integer *, integer *), inslac_(
-	    char *, integer *, integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     integer dimval[2];
     extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
 	    integer *, integer *);
@@ -39,13 +56,16 @@ static integer c__1 = 1;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym[2];
     logical oldsym[2];
     extern logical return_(void);
     integer newsym;
 
+
+    /* Module state */
+    sydupd_state_t* __state = get_sydupd_state();
 /* $ Abstract */
 
 /*     Create a duplicate of a symbol within a double precision symbol */
@@ -306,11 +326,11 @@ static integer c__1 = 1;
 		}
 	    } else {
 		i__1 = locsym[1] + 1;
-		inslac_(copy, &c__1, &i__1, tabsym + tabsym_len * 6, &nsym, 
-			copy_len, tabsym_len);
+		inslac_(copy, &__state->c__1, &i__1, tabsym + tabsym_len * 6, 
+			&nsym, copy_len, tabsym_len);
 		scardc_(&nsym, tabsym, tabsym_len);
 		i__1 = locsym[1] + 1;
-		inslai_(dimval, &c__1, &i__1, &tabptr[6], &nptr);
+		inslai_(dimval, &__state->c__1, &i__1, &tabptr[6], &nptr);
 		scardi_(&nptr, tabptr);
 	    }
 

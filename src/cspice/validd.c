@@ -1,21 +1,35 @@
-/* validd.f -- translated by f2c (version 19980913).
+/* validd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int validd_state_t;
+static validd_state_t* get_validd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VALIDD ( Validate a double precision set ) */
 /* Subroutine */ int validd_(integer *size, integer *n, doublereal *a)
 {
     integer card;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scardd_(integer *, 
-	    doublereal *), sigerr_(char *, ftnlen), rmdupd_(integer *, 
-	    doublereal *), chkout_(char *, ftnlen), ssized_(integer *, 
-	    doublereal *), setmsg_(char *, ftnlen), errint_(char *, integer *,
-	     ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int rmdupd_(integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssized_(integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    validd_state_t* __state = get_validd_state();
 /* $ Abstract */
 
 /*      Create a valid set from a double precision set array. */

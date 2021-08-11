@@ -1,9 +1,17 @@
-/* ljust.f -- translated by f2c (version 19980913).
+/* ljust.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ljust_state_t;
+static ljust_state_t* get_ljust_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure LJUST ( Left justify a character string ) */
 /* Subroutine */ int ljust_(char *input, char *output, ftnlen input_len, 
@@ -14,8 +22,15 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, j, li, lo, pos;
+    integer i__;
+    integer j;
+    integer li;
+    integer lo;
+    integer pos;
 
+
+    /* Module state */
+    ljust_state_t* __state = get_ljust_state();
 /* $ Abstract */
 
 /*     Left justify a character string. */

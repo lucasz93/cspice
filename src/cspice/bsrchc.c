@@ -1,9 +1,17 @@
-/* bsrchc.f -- translated by f2c (version 19980913).
+/* bsrchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bsrchc_state_t;
+static bsrchc_state_t* get_bsrchc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            BSRCHC ( Binary search for a character string ) */
 integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
@@ -17,8 +25,13 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
     logical l_lt(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer left, i__, right;
+    integer left;
+    integer i__;
+    integer right;
 
+
+    /* Module state */
+    bsrchc_state_t* __state = get_bsrchc_state();
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a character array, */

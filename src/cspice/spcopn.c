@@ -1,25 +1,35 @@
-/* spcopn.f -- translated by f2c (version 19980913).
+/* spcopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__0 = 0;
+extern spcopn_init_t __spcopn_init;
+static spcopn_state_t* get_spcopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spcopn)
+		state->spcopn = __cspice_allocate_module(sizeof(
+	spcopn_state_t), &__spcopn_init, sizeof(__spcopn_init));
+	return state->spcopn;
+
+}
 
 /* $Procedure SPCOPN ( SPK or CK, open new file ) */
 /* Subroutine */ int spcopn_(char *spc, char *ifname, integer *handle, ftnlen 
 	spc_len, ftnlen ifname_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafopn_(char *, 
-	    integer *, integer *, char *, integer *, integer *, ftnlen, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
+	    integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spcopn_state_t* __state = get_spcopn_state();
 /* $ Abstract */
 
 /*     Open a new SPK or CK file for subsequent write requests. */
@@ -203,7 +213,8 @@ static integer c__0 = 0;
 /*     ND and NI which are specific to SPK and CK.  We'll not */
 /*     reserve any records. */
 
-    dafopn_(spc, &c__2, &c__6, ifname, &c__0, handle, spc_len, ifname_len);
+    dafopn_(spc, &__state->c__2, &__state->c__6, ifname, &__state->c__0, 
+	    handle, spc_len, ifname_len);
     chkout_("SPCOPN", (ftnlen)6);
     return 0;
 } /* spcopn_ */

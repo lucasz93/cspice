@@ -1,9 +1,17 @@
-/* spkssb.f -- translated by f2c (version 19980913).
+/* spkssb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spkssb_state_t;
+static spkssb_state_t* get_spkssb_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SPKSSB ( S/P Kernel, solar system barycenter ) */
 /* Subroutine */ int spkssb_(integer *targ, doublereal *et, char *ref, 
@@ -13,10 +21,13 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal lt;
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), chkout_(char *, 
-	    ftnlen);
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkssb_state_t* __state = get_spkssb_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */

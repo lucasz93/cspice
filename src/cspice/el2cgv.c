@@ -1,9 +1,17 @@
-/* el2cgv.f -- translated by f2c (version 19980913).
+/* el2cgv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int el2cgv_state_t;
+static el2cgv_state_t* get_el2cgv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      EL2CGV ( Ellipse to center and generating vectors ) */
 /* Subroutine */ int el2cgv_(doublereal *ellips, doublereal *center, 
@@ -11,6 +19,9 @@
 {
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    el2cgv_state_t* __state = get_el2cgv_state();
 /* $ Abstract */
 
 /*     Convert a SPICELIB ellipse to a center vector and two generating */

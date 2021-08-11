@@ -1,28 +1,39 @@
-/* pckuds.f -- translated by f2c (version 19980913).
+/* pckuds.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__5 = 5;
+extern pckuds_init_t __pckuds_init;
+static pckuds_state_t* get_pckuds_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckuds)
+		state->pckuds = __cspice_allocate_module(sizeof(
+	pckuds_state_t), &__pckuds_init, sizeof(__pckuds_init));
+	return state->pckuds;
+
+}
 
 /* $Procedure PCKUDS (PCK, unpack segment descriptor ) */
 /* Subroutine */ int pckuds_(doublereal *descr, integer *body, integer *frame,
 	 integer *type__, doublereal *first, doublereal *last, integer *begin,
 	 integer *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer ipart[5];
     extern logical failed_(void);
     doublereal dppart[2];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pckuds_state_t* __state = get_pckuds_state();
 /* $ Abstract */
 
 /*     Unpack the contents of a PCK segment descriptor */
@@ -191,7 +202,7 @@ static integer c__5 = 5;
 /*     unpack it.  If things were done right when the descriptor */
 /*     was created, it should be fine now. */
 
-    dafus_(descr, &c__2, &c__5, dppart, ipart);
+    dafus_(descr, &__state->c__2, &__state->c__5, dppart, ipart);
     if (failed_()) {
 	chkout_("PCKUDS", (ftnlen)6);
 	return 0;

@@ -1,13 +1,21 @@
-/* benum.f -- translated by f2c (version 19980913).
+/* benum.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern benum_init_t __benum_init;
+static benum_state_t* get_benum_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->benum)
+		state->benum = __cspice_allocate_module(sizeof(benum_state_t),
+	 &__benum_init, sizeof(__benum_init));
+	return state->benum;
+
+}
 
 /* $Procedure            BENUM  ( Be a number? ) */
 logical benum_(char *string, ftnlen string_len)
@@ -21,9 +29,15 @@ logical benum_(char *string, ftnlen string_len)
     /* Local variables */
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
     extern logical bedec_(char *, ftnlen);
-    integer d__, e, f, l;
+    integer d__;
+    integer e;
+    integer f;
+    integer l;
     extern logical beint_(char *, ftnlen);
 
+
+    /* Module state */
+    benum_state_t* __state = get_benum_state();
 /* $ Abstract */
 
 /*     Determine whether a string represents a number. */
@@ -191,7 +205,7 @@ logical benum_(char *string, ftnlen string_len)
 /*     string. */
 
     l = i_len(string, string_len);
-    e = cpos_(string, "EeDd", &c__1, string_len, (ftnlen)4);
+    e = cpos_(string, "EeDd", &__state->c__1, string_len, (ftnlen)4);
     d__ = e - 1;
     f = e + 1;
     if (e == 0) {

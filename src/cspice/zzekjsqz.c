@@ -1,9 +1,17 @@
-/* zzekjsqz.f -- translated by f2c (version 19980913).
+/* zzekjsqz.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekjsqz_state_t;
+static zzekjsqz_state_t* get_zzekjsqz_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKJSQZ ( Private: EK, join row set squeeze ) */
 /* Subroutine */ int zzekjsqz_(integer *jrsbas)
@@ -15,15 +23,42 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer ntab, size;
+    integer ntab;
+    integer size;
     extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    integer i__, j, delta, rbase, nrloc, ptarg, ntloc, rtarg, vtarg;
+    integer i__;
+    integer j;
+    integer delta;
+    integer rbase;
+    integer nrloc;
+    integer ptarg;
+    integer ntloc;
+    integer rtarg;
+    integer vtarg;
     extern logical failed_(void);
-    integer rc, nr, segvec[10], pcpair[2], ptbase, setbas, cntloc, nsvdel, 
-	    nrvdel, svbase, nsvloc, ptrloc, rowvec[11], sizloc, newnsv, 
-	    rvsize, svsize, nsv;
+    integer rc;
+    integer nr;
+    integer segvec[10];
+    integer pcpair[2];
+    integer ptbase;
+    integer setbas;
+    integer cntloc;
+    integer nsvdel;
+    integer nrvdel;
+    integer svbase;
+    integer nsvloc;
+    integer ptrloc;
+    integer rowvec[11];
+    integer sizloc;
+    integer newnsv;
+    integer rvsize;
+    integer svsize;
+    integer nsv;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekjsqz_state_t* __state = get_zzekjsqz_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

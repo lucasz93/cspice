@@ -1,9 +1,17 @@
-/* touchd.f -- translated by f2c (version 19980913).
+/* touchd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int touchd_state_t;
+static touchd_state_t* get_touchd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TOUCHD ( Touch a variable ) */
 doublereal touchd_(doublereal *dp)
@@ -11,6 +19,9 @@ doublereal touchd_(doublereal *dp)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    touchd_state_t* __state = get_touchd_state();
 /* $ Abstract */
 
 /*     Return the value of a double precision number. */

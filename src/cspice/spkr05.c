@@ -1,15 +1,21 @@
-/* spkr05.f -- translated by f2c (version 19980913).
+/* spkr05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__12 = 12;
+extern spkr05_init_t __spkr05_init;
+static spkr05_state_t* get_spkr05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr05)
+		state->spkr05 = __cspice_allocate_module(sizeof(
+	spkr05_state_t), &__spkr05_init, sizeof(__spkr05_init));
+	return state->spkr05;
+
+}
 
 /* $Procedure  SPKR05 ( Read SPK record from segment, type 5 ) */
 /* Subroutine */ int spkr05_(integer *handle, doublereal *descr, doublereal *
@@ -23,23 +29,38 @@ static integer c__12 = 12;
 
     /* Local variables */
     doublereal data[100];
-    integer nrec, ndir, skip, type__, i__, n, begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), moved_(doublereal 
-	    *, integer *, doublereal *);
+    integer nrec;
+    integer ndir;
+    integer skip;
+    integer type__;
+    integer i__;
+    integer n;
+    integer begin;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     integer group;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
-    integer ic[6], grpadd, remain, dirloc, addrss;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer ic[6];
+    integer grpadd;
+    integer remain;
+    integer dirloc;
+    integer addrss;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lstltd_(doublereal *, integer *, doublereal *);
     extern logical return_(void);
     integer end;
     logical fnd;
 
+
+    /* Module state */
+    spkr05_state_t* __state = get_spkr05_state();
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 5 */
@@ -242,7 +263,7 @@ static integer c__12 = 12;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -405,8 +426,8 @@ static integer c__12 = 12;
 	    record[13] = data[0];
 	    i__1 = begin + 5;
 	    dafgda_(handle, &begin, &i__1, data);
-	    moved_(data, &c__6, record);
-	    moved_(data, &c__6, &record[6]);
+	    moved_(data, &__state->c__6, record);
+	    moved_(data, &__state->c__6, &record[6]);
 	    chkout_("SPKR05", (ftnlen)6);
 	    return 0;
 	} else {
@@ -434,8 +455,8 @@ static integer c__12 = 12;
 	    addrss = begin + (nrec - 1) * 6;
 	    i__1 = addrss + 5;
 	    dafgda_(handle, &addrss, &i__1, data);
-	    moved_(data, &c__6, record);
-	    moved_(data, &c__6, &record[6]);
+	    moved_(data, &__state->c__6, record);
+	    moved_(data, &__state->c__6, &record[6]);
 	    chkout_("SPKR05", (ftnlen)6);
 	    return 0;
 	} else {
@@ -469,7 +490,7 @@ static integer c__12 = 12;
     addrss = begin + (skip + i__ - 1) * 6;
     i__1 = addrss + 11;
     dafgda_(handle, &addrss, &i__1, data);
-    moved_(data, &c__12, record);
+    moved_(data, &__state->c__12, record);
     chkout_("SPKR05", (ftnlen)6);
     return 0;
 } /* spkr05_ */

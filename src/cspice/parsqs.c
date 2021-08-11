@@ -1,9 +1,17 @@
-/* parsqs.f -- translated by f2c (version 19980913).
+/* parsqs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int parsqs_state_t;
+static parsqs_state_t* get_parsqs_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  PARSQS ( Parse quoted string token ) */
 /* Subroutine */ int parsqs_(char *string, char *qchar, char *value, integer *
@@ -18,11 +26,19 @@
     integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer last, ipos, opos, inlen, first;
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    integer last;
+    integer ipos;
+    integer opos;
+    integer inlen;
+    integer first;
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
     integer outlen;
     char chr[1];
 
+
+    /* Module state */
+    parsqs_state_t* __state = get_parsqs_state();
 /* $ Abstract */
 
 /*     Parse a quoted string token. */

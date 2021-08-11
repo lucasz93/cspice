@@ -1,9 +1,17 @@
-/* ekacli.f -- translated by f2c (version 19980913).
+/* ekacli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekacli_state_t;
+static ekacli_state_t* get_ekacli_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     EKACLI ( EK, add integer column to segment ) */
 /* Subroutine */ int ekacli_(integer *handle, integer *segno, char *column, 
@@ -11,19 +19,30 @@
 	integer *wkindx, ftnlen column_len)
 {
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
-	    chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer class__, dtype;
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer dtype;
     extern logical failed_(void);
-    integer coldsc[11], segdsc[24];
+    integer coldsc[11];
+    integer segdsc[24];
     extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), zzekac01_(integer *, integer *, integer *, integer *, 
-	    logical *, integer *, integer *), zzekac04_(integer *, integer *, 
-	    integer *, integer *, integer *, logical *), zzekac07_(integer *, 
-	    integer *, integer *, integer *, logical *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int zzekac01_(integer *, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekac04_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekac07_(integer *, integer *, integer *, 
+	    integer *, logical *, integer *);
 
+
+    /* Module state */
+    ekacli_state_t* __state = get_ekacli_state();
 /* $ Abstract */
 
 /*     Add an entire integer column to an EK segment. */

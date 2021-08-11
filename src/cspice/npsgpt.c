@@ -1,9 +1,17 @@
-/* npsgpt.f -- translated by f2c (version 19980913).
+/* npsgpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int npsgpt_state_t;
+static npsgpt_state_t* get_npsgpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NPSGPT ( Nearest point on line segment ) */
 /* Subroutine */ int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *
@@ -11,16 +19,23 @@
 {
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal lnear[3];
     extern doublereal vdist_(doublereal *, doublereal *);
-    extern logical vzero_(doublereal *), failed_(void);
-    doublereal offdot, segdot, offset[3];
+    extern logical vzero_(doublereal *);
+    extern logical failed_(void);
+    doublereal offdot;
+    doublereal segdot;
+    doublereal offset[3];
     extern /* Subroutine */ int nplnpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
     doublereal seg[3];
 
+
+    /* Module state */
+    npsgpt_state_t* __state = get_npsgpt_state();
 /* $ Abstract */
 
 /*     Find the nearest point on a line segment to a given point. */

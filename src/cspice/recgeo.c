@@ -1,9 +1,17 @@
-/* recgeo.f -- translated by f2c (version 19980913).
+/* recgeo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int recgeo_state_t;
+static recgeo_state_t* get_recgeo_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RECGEO ( Rectangular to geodetic ) */
 /* Subroutine */ int recgeo_(doublereal *rectan, doublereal *re, doublereal *
@@ -13,18 +21,28 @@
     double atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal base[3], a, b, c__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), reclat_(doublereal *, doublereal *, 
+    doublereal base[3];
+    doublereal a;
+    doublereal b;
+    doublereal c__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal radius, normal[3];
+    doublereal radius;
+    doublereal normal[3];
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen),
-	     surfnm_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    recgeo_state_t* __state = get_recgeo_state();
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to geodetic coordinates. */

@@ -1,9 +1,10 @@
-/* m2name.f -- translated by f2c (version 19980913).
+/* m2name.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2NAME ( Determine whether or not a word is a name ) */
 logical m2name_(char *word, ftnlen word_len)

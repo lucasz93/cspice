@@ -1,9 +1,17 @@
-/* repmot.f -- translated by f2c (version 19980913).
+/* repmot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int repmot_state_t;
+static repmot_state_t* get_repmot_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  REPMOT  ( Replace marker with ordinal text ) */
 /* Subroutine */ int repmot_(char *in, char *marker, integer *value, char *
@@ -16,24 +24,30 @@
     integer i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen), 
-	    chkin_(char *, ftnlen), ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen), ljust_(char *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     integer mrknbf;
     extern integer lastnb_(char *, ftnlen);
     integer mrknbl;
     char tmpcas[1];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern integer frstnb_(char *, ftnlen);
-    integer mrkpsb, mrkpse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), intord_(integer *, 
-	    char *, ftnlen), repsub_(char *, integer *, integer *, char *, 
+    integer mrkpsb;
+    integer mrkpse;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int intord_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int repsub_(char *, integer *, integer *, char *, 
 	    char *, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
     char ord[147];
 
+
+    /* Module state */
+    repmot_state_t* __state = get_repmot_state();
 /* $ Abstract */
 
 /*     Replace a marker with the text representation of an */

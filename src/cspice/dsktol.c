@@ -1,23 +1,27 @@
-/* dsktol.f -- translated by f2c (version 19980913).
+/* dsktol.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern dsktol_init_t __dsktol_init;
+static dsktol_state_t* get_dsktol_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dsktol)
+		state->dsktol = __cspice_allocate_module(sizeof(
+	dsktol_state_t), &__dsktol_init, sizeof(__dsktol_init));
+	return state->dsktol;
+
+}
 
 /* $Procedure DSKTOL ( DSK, tolerance umbrella ) */
 /* Subroutine */ int dsktol_0_(int n__, integer *keywrd, doublereal *dpval)
 {
     /* Initialized data */
 
-    static doublereal dppars[6] = { 1e-10,1e-8,1e-10,1e-7,1e-12,1e-12 };
-    static logical isfixd[6] = { FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_ };
-    static char names[6*6] = "XFRACT" "SGREED" "SGPADM" "PTMEMM" "ANGMRG" 
-	    "LONALI";
 
     /* System generated locals */
     integer i__1;
@@ -26,11 +30,17 @@ static integer c__6 = 6;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen)
-	    , setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dsktol_state_t* __state = get_dsktol_state();
 /* $ Abstract */
 
 /*     Umbrella routine for DSK tolerance and margin parameter access */
@@ -503,14 +513,14 @@ L_dskgtl:
     if (*keywrd < 1 || *keywrd > 6) {
 	chkin_("DSKGTL", (ftnlen)6);
 	setmsg_("Valid keyword range is 1:#; keyword was #.", (ftnlen)42);
-	errint_("#", &c__6, (ftnlen)1);
+	errint_("#", &__state->c__6, (ftnlen)1);
 	errint_("#", keywrd, (ftnlen)1);
 	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKGTL", (ftnlen)6);
 	return 0;
     }
-    *dpval = dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "dppars", i__1, "dsktol_", (ftnlen)366)];
+    *dpval = __state->dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : 
+	    s_rnge("dppars", i__1, "dsktol_", (ftnlen)366)];
     return 0;
 /* $Procedure DSKSTL ( DSK, set tolerance ) */
 
@@ -667,18 +677,18 @@ L_dskstl:
     chkin_("DSKSTL", (ftnlen)6);
     if (*keywrd < 1 || *keywrd > 6) {
 	setmsg_("Valid keyword range is 1:#; keyword was #.", (ftnlen)42);
-	errint_("#", &c__6, (ftnlen)1);
+	errint_("#", &__state->c__6, (ftnlen)1);
 	errint_("#", keywrd, (ftnlen)1);
 	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKSTL", (ftnlen)6);
 	return 0;
     }
-    if (isfixd[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("isfixd",
-	     i__1, "dsktol_", (ftnlen)543)]) {
+    if (__state->isfixd[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+	    "isfixd", i__1, "dsktol_", (ftnlen)543)]) {
 	setmsg_("The parameter # cannot be modified.", (ftnlen)35);
-	errch_("#", names + ((i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : 
-		s_rnge("names", i__1, "dsktol_", (ftnlen)546)) * 6, (ftnlen)1,
-		 (ftnlen)6);
+	errch_("#", __state->names + ((i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? 
+		i__1 : s_rnge("names", i__1, "dsktol_", (ftnlen)546)) * 6, (
+		ftnlen)1, (ftnlen)6);
 	sigerr_("SPICE(IMMUTABLEVALUE)", (ftnlen)21);
 	chkout_("DSKSTL", (ftnlen)6);
 	return 0;
@@ -688,8 +698,8 @@ L_dskstl:
 /*     the new parameter value; the user presumably knows */
 /*     the reason for change. */
 
-    dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("dppars", 
-	    i__1, "dsktol_", (ftnlen)558)] = *dpval;
+    __state->dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+	    "dppars", i__1, "dsktol_", (ftnlen)558)] = *dpval;
     chkout_("DSKSTL", (ftnlen)6);
     return 0;
 } /* dsktol_ */

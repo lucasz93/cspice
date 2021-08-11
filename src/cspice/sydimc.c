@@ -1,9 +1,17 @@
-/* sydimc.f -- translated by f2c (version 19980913).
+/* sydimc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sydimc_state_t;
+static sydimc_state_t* get_sydimc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SYDIMC ( Return the dimension of a symbol ) */
 integer sydimc_(char *name__, char *tabsym, integer *tabptr, char *tabval, 
@@ -21,6 +29,9 @@ integer sydimc_(char *name__, char *tabsym, integer *tabptr, char *tabval,
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sydimc_state_t* __state = get_sydimc_state();
 /* $ Abstract */
 
 /*     Return the dimension of a particular symbol in a character symbol */

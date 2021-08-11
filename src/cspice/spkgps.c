@@ -1,15 +1,21 @@
-/* spkgps.f -- translated by f2c (version 19980913).
+/* spkgps.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__0 = 0;
+extern spkgps_init_t __spkgps_init;
+static spkgps_state_t* get_spkgps_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkgps)
+		state->spkgps = __cspice_allocate_module(sizeof(
+	spkgps_state_t), &__spkgps_init, sizeof(__spkgps_init));
+	return state->spkgps;
+
+}
 
 /* $Procedure SPKGPS ( S/P Kernel, geometric position ) */
 /* Subroutine */ int spkgps_(integer *targ, doublereal *et, char *ref, 
@@ -17,7 +23,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -29,12 +34,15 @@ static integer c__0 = 0;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    integer cobs, legs;
+    integer cobs;
+    integer legs;
     doublereal sobs[6];
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *), zznamfrm_(integer *, char *,
-	     integer *, char *, integer *, ftnlen, ftnlen), zzctruin_(integer 
-	    *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
     extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
     integer refid;
@@ -42,51 +50,56 @@ static integer c__0 = 0;
     char oname[40];
     doublereal descr[5];
     integer ctarg[20];
-    char ident[40], tname[40];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    moved_(doublereal *, integer *, doublereal *);
+    char ident[40];
+    char tname[40];
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     doublereal starg[120]	/* was [6][20] */;
     logical nofrm;
-    static char svref[32];
     doublereal stemp[6];
     integer ctpos;
     doublereal vtemp[6];
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
-    static integer svctr1[2];
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    integer handle, cframe;
+    integer handle;
+    integer cframe;
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     extern doublereal clight_(void);
     integer tframe[20];
     extern integer isrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer svrefi;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), prefix_(
-	    char *, integer *, char *, ftnlen, ftnlen), setmsg_(char *, 
-	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer tmpfrm;
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *), 
-	    spksfs_(integer *, doublereal *, integer *, doublereal *, char *, 
-	    logical *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int spksfs_(integer *, doublereal *, integer *, 
+	    doublereal *, char *, logical *, ftnlen);
     extern integer frstnp_(char *, ftnlen);
     extern logical return_(void);
     doublereal psxfrm[9]	/* was [3][3] */;
     extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *), intstr_(integer *, char *, 
-	    ftnlen);
+	     integer *, doublereal *, integer *);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
     integer nct;
     doublereal rot[9]	/* was [3][3] */;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
     char tstring[80];
 
+
+    /* Module state */
+    spkgps_state_t* __state = get_spkgps_state();
 /* $ Abstract */
 
 /*     Compute the geometric position of a target body relative to an */
@@ -552,12 +565,12 @@ static integer c__0 = 0;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     We take care of the obvious case first.  It TARG and OBS are the */
@@ -565,7 +578,7 @@ static integer c__0 = 0;
 
     if (*targ == *obs) {
 	*lt = 0.;
-	cleard_(&c__3, pos);
+	cleard_(&__state->c__3, pos);
 	chkout_("SPKGPS", (ftnlen)6);
 	return 0;
     }
@@ -634,7 +647,8 @@ static integer c__0 = 0;
 /*     up) and calls IRFNUM again to reset the 'DEFAULT's frame ID */
 /*     should it change between the calls. */
 
-    zznamfrm_(svctr1, svref, &svrefi, ref, &refid, (ftnlen)32, ref_len);
+    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefi, ref, &refid, 
+	    (ftnlen)32, ref_len);
     if (refid == 0) {
 	irfnum_(ref, &refid, ref_len);
     }
@@ -685,8 +699,8 @@ static integer c__0 = 0;
     ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", i__1, 
 	    "spkgps_", (ftnlen)603)] = *targ;
     found = TRUE_;
-    cleard_(&c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-	    s_rnge("starg", i__1, "spkgps_", (ftnlen)606)]);
+    cleard_(&__state->c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? 
+	    i__1 : s_rnge("starg", i__1, "spkgps_", (ftnlen)606)]);
     while(found && i__ < 20 && ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
 	    i__1 : s_rnge("ctarg", i__1, "spkgps_", (ftnlen)608)] != *obs && 
 	    ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ctarg", 
@@ -760,7 +774,7 @@ static integer c__0 = 0;
 /*              the last element of STARG. */
 
 		if (tframe[19] == tmpfrm) {
-		    moved_(&starg[114], &c__3, vtemp);
+		    moved_(&starg[114], &__state->c__3, vtemp);
 		} else if (tmpfrm > 0 && tmpfrm <= 21 && tframe[19] > 0 && 
 			tframe[19] <= 21) {
 		    irfrot_(&tframe[19], &tmpfrm, rot);
@@ -807,7 +821,7 @@ static integer c__0 = 0;
 /*     the first values for COBS and SOBS. */
 
     cobs = *obs;
-    cleard_(&c__6, sobs);
+    cleard_(&__state->c__6, sobs);
 
 /*     Perhaps we have a common node already. */
 /*     If so it will be the last node on the */
@@ -920,8 +934,8 @@ static integer c__0 = 0;
     if (ctpos == 0) {
 	bodc2n_(targ, tname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &c__0, tname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &c__0, tname, (ftnlen)1, (ftnlen)40);
+	    prefix_("# (", &__state->c__0, tname, (ftnlen)3, (ftnlen)40);
+	    suffix_(")", &__state->c__0, tname, (ftnlen)1, (ftnlen)40);
 	    repmi_(tname, "#", targ, tname, (ftnlen)40, (ftnlen)1, (ftnlen)40)
 		    ;
 	} else {
@@ -929,8 +943,8 @@ static integer c__0 = 0;
 	}
 	bodc2n_(obs, oname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &c__0, oname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &c__0, oname, (ftnlen)1, (ftnlen)40);
+	    prefix_("# (", &__state->c__0, oname, (ftnlen)3, (ftnlen)40);
+	    suffix_(")", &__state->c__0, oname, (ftnlen)1, (ftnlen)40);
 	    repmi_(oname, "#", obs, oname, (ftnlen)40, (ftnlen)1, (ftnlen)40);
 	} else {
 	    intstr_(obs, oname, (ftnlen)40);
@@ -996,9 +1010,9 @@ static integer c__0 = 0;
 		    s_rnge("starg", i__2, "spkgps_", (ftnlen)962)], &starg[(
 		    i__3 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__3 ? i__3 : 
 		    s_rnge("starg", i__3, "spkgps_", (ftnlen)962)], stemp);
-	    moved_(stemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
-		    963)]);
+	    moved_(stemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_",
+		     (ftnlen)963)]);
 	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
 		"tframe", i__3, "spkgps_", (ftnlen)965)] > 0 && tframe[(i__3 =
 		 i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, "spk"
@@ -1015,9 +1029,9 @@ static integer c__0 = 0;
 	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
 		    ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)969)], 
 		    vtemp);
-	    moved_(vtemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
-		    970)]);
+	    moved_(vtemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_",
+		     (ftnlen)970)]);
 	} else {
 	    refchg_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
 		    s_rnge("tframe", i__2, "spkgps_", (ftnlen)974)], &tframe[(
@@ -1033,9 +1047,9 @@ static integer c__0 = 0;
 	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
 		    ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)982)], 
 		    vtemp);
-	    moved_(vtemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
-		    983)]);
+	    moved_(vtemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_",
+		     (ftnlen)983)]);
 	}
     }
 
@@ -1116,7 +1130,7 @@ static integer c__0 = 0;
 
 	irfrot_(&cframe, &refid, rot);
 	mxv_(rot, pos, stemp);
-	moved_(stemp, &c__3, pos);
+	moved_(stemp, &__state->c__3, pos);
     } else {
 	refchg_(&cframe, &refid, et, psxfrm);
 	if (failed_()) {
@@ -1124,7 +1138,7 @@ static integer c__0 = 0;
 	    return 0;
 	}
 	mxv_(psxfrm, pos, stemp);
-	moved_(stemp, &c__3, pos);
+	moved_(stemp, &__state->c__3, pos);
     }
     *lt = vnorm_(pos) / clight_();
     chkout_("SPKGPS", (ftnlen)6);

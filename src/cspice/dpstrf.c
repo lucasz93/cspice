@@ -1,15 +1,21 @@
-/* dpstrf.f -- translated by f2c (version 19980913).
+/* dpstrf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static logical c_false = FALSE_;
-static logical c_true = TRUE_;
+extern dpstrf_init_t __dpstrf_init;
+static dpstrf_state_t* get_dpstrf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dpstrf)
+		state->dpstrf = __cspice_allocate_module(sizeof(
+	dpstrf_state_t), &__dpstrf_init, sizeof(__dpstrf_init));
+	return state->dpstrf;
+
+}
 
 /* $Procedure      DPSTRF ( Double Precision Number to Character ) */
 /* Subroutine */ int dpstrf_(doublereal *x, integer *sigdig, char *format, 
@@ -23,7 +29,9 @@ static logical c_true = TRUE_;
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer last, i__, j;
+    integer last;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int zzvsbstr_(integer *, integer *, logical *, 
 	    char *, logical *, ftnlen);
     doublereal y;
@@ -32,10 +40,14 @@ static logical c_true = TRUE_;
     integer first;
     extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
 	    ftnlen);
-    integer maxdig, lastch;
+    integer maxdig;
+    integer lastch;
     logical ovflow;
     integer exp__;
 
+
+    /* Module state */
+    dpstrf_state_t* __state = get_dpstrf_state();
 /* $ Abstract */
 
 /*     Take a double precision number and convert it to an */
@@ -306,8 +318,8 @@ static logical c_true = TRUE_;
 
     if (*x == 0.) {
 	zzvststr_(x, " ", &exp__, (ftnlen)1);
-	zzvsbstr_(&c_n1, &maxdig, &c_false, string + 1, &ovflow, string_len - 
-		1);
+	zzvsbstr_(&__state->c_n1, &maxdig, &__state->c_false, string + 1, &
+		ovflow, string_len - 1);
 	return 0;
     }
 
@@ -335,11 +347,12 @@ static logical c_true = TRUE_;
 	++last;
     }
     first = min(-1,first);
-    zzvsbstr_(&first, &last, &c_true, string + 1, &ovflow, string_len - 1);
+    zzvsbstr_(&first, &last, &__state->c_true, string + 1, &ovflow, 
+	    string_len - 1);
     if (ovflow) {
 	--first;
-	zzvsbstr_(&first, &last, &c_true, string + 1, &ovflow, string_len - 1)
-		;
+	zzvsbstr_(&first, &last, &__state->c_true, string + 1, &ovflow, 
+		string_len - 1);
 
 /*        We need to blank out the last digit of string. */
 

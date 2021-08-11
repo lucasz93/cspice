@@ -1,13 +1,21 @@
-/* zzpdtbox.f -- translated by f2c (version 19980913).
+/* zzpdtbox.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b34 = 0.;
+extern zzpdtbox_init_t __zzpdtbox_init;
+static zzpdtbox_state_t* get_zzpdtbox_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzpdtbox)
+		state->zzpdtbox = __cspice_allocate_module(sizeof(
+	zzpdtbox_state_t), &__zzpdtbox_init, sizeof(__zzpdtbox_init));
+	return state->zzpdtbox;
+
+}
 
 /* $Procedure ZZPDTBOX (Bounding box for planetodetic volume element) */
 /* Subroutine */ int zzpdtbox_(doublereal *bounds, doublereal *corpar, 
@@ -21,24 +29,46 @@ static doublereal c_b34 = 0.;
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal diag[3], midr, minv[3], botv[3], maxv[3], minz, maxz, topv[3], 
-	    f;
+    doublereal diag[3];
+    doublereal midr;
+    doublereal minv[3];
+    doublereal botv[3];
+    doublereal maxv[3];
+    doublereal minz;
+    doublereal maxz;
+    doublereal topv[3];
+    doublereal f;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal inrad, hdlon;
+    doublereal inrad;
+    doublereal hdlon;
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *), errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *), twopi_(void);
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal twopi_(void);
     doublereal re;
     extern doublereal halfpi_(void);
     extern /* Subroutine */ int georec_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    doublereal maxabs, midlon, minalt, minlat, maxalt, maxlat, maxlon, minlon,
-	     outrad;
+    doublereal maxabs;
+    doublereal midlon;
+    doublereal minalt;
+    doublereal minlat;
+    doublereal maxalt;
+    doublereal maxlat;
+    doublereal maxlon;
+    doublereal minlon;
+    doublereal outrad;
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), cylrec_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cylrec_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
 
+
+    /* Module state */
+    zzpdtbox_state_t* __state = get_zzpdtbox_state();
 /* $ Abstract */
 
 /*     Create a bounding box for a planetodetic volume element. */
@@ -653,15 +683,15 @@ static doublereal c_b34 = 0.;
 /*     latitude is maximum. */
 
     if (minlat >= 0.) {
-	georec_(&c_b34, &minlat, &maxalt, &re, &f, maxv);
-	georec_(&c_b34, &maxlat, &minalt, &re, &f, minv);
+	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, maxv);
+	georec_(&__state->c_b34, &maxlat, &minalt, &re, &f, minv);
 	maxv[2] = 0.;
 	minv[2] = 0.;
 	outrad = vnorm_(maxv);
 	inrad = vnorm_(minv);
     } else if (maxlat <= 0.) {
-	georec_(&c_b34, &maxlat, &maxalt, &re, &f, maxv);
-	georec_(&c_b34, &minlat, &minalt, &re, &f, minv);
+	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, maxv);
+	georec_(&__state->c_b34, &minlat, &minalt, &re, &f, minv);
 	maxv[2] = 0.;
 	minv[2] = 0.;
 	outrad = vnorm_(maxv);
@@ -671,7 +701,7 @@ static doublereal c_b34 = 0.;
 /* Computing MAX */
 	d__1 = abs(maxlat), d__2 = abs(minlat);
 	maxabs = max(d__1,d__2);
-	georec_(&c_b34, &maxabs, &minalt, &re, &f, minv);
+	georec_(&__state->c_b34, &maxabs, &minalt, &re, &f, minv);
 	minv[2] = 0.;
 	inrad = vnorm_(minv);
     }
@@ -706,14 +736,14 @@ static doublereal c_b34 = 0.;
 /*     on the element. */
 
     if (minlat >= 0.) {
-	georec_(&c_b34, &maxlat, &maxalt, &re, &f, topv);
-	georec_(&c_b34, &minlat, &minalt, &re, &f, botv);
+	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, topv);
+	georec_(&__state->c_b34, &minlat, &minalt, &re, &f, botv);
     } else if (maxlat < 0.) {
-	georec_(&c_b34, &maxlat, &minalt, &re, &f, topv);
-	georec_(&c_b34, &minlat, &maxalt, &re, &f, botv);
+	georec_(&__state->c_b34, &maxlat, &minalt, &re, &f, topv);
+	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, botv);
     } else {
-	georec_(&c_b34, &maxlat, &maxalt, &re, &f, topv);
-	georec_(&c_b34, &minlat, &maxalt, &re, &f, botv);
+	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, topv);
+	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, botv);
     }
     maxz = topv[2];
     minz = botv[2];

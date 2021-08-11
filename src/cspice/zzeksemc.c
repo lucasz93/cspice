@@ -1,13 +1,21 @@
-/* zzeksemc.f -- translated by f2c (version 19980913).
+/* zzeksemc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzeksemc_init_t __zzeksemc_init;
+static zzeksemc_state_t* get_zzeksemc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeksemc)
+		state->zzeksemc = __cspice_allocate_module(sizeof(
+	zzeksemc_state_t), &__zzeksemc_init, sizeof(__zzeksemc_init));
+	return state->zzeksemc;
+
+}
 
 /* $Procedure  ZZEKSEMC ( Private: EK, semantically check encoded query ) */
 /* Subroutine */ int zzeksemc_(char *query, integer *eqryi, char *eqryc, 
@@ -16,9 +24,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char typstr[32*4] = "CHARACTER                       " "DOUBLE PR"
-	    "ECISION                " "INTEGER                         " "TIM"
-	    "E                            ";
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,27 +33,53 @@ static integer c__1 = 1;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, ntab, ncnj, ncns, nord;
+    integer base;
+    integer ntab;
+    integer ncnj;
+    integer ncns;
+    integer nord;
     extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen), zzekreqi_(integer *, char *, 
-	    integer *, ftnlen), zzekweqi_(char *, integer *, integer *, 
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
 	    ftnlen);
     integer i__;
     extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     char alias[64];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), repmi_(char *, 
-	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern logical failed_(void);
-    char colnam[32], lhstab[64], ordtab[64], rhstab[64];
-    integer attdsc[6], cnstyp, colidx, irsolv, lhssiz, lhstyp, opcode, rhssiz,
-	     rhstyp, tabidx, trsolv;
-    logical likeop, nulval;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
-    integer lxb[2], lxe[2];
+    char colnam[32];
+    char lhstab[64];
+    char ordtab[64];
+    char rhstab[64];
+    integer attdsc[6];
+    integer cnstyp;
+    integer colidx;
+    integer irsolv;
+    integer lhssiz;
+    integer lhstyp;
+    integer opcode;
+    integer rhssiz;
+    integer rhstyp;
+    integer tabidx;
+    integer trsolv;
+    logical likeop;
+    logical nulval;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lxb[2];
+    integer lxe[2];
 
+
+    /* Module state */
+    zzeksemc_state_t* __state = get_zzeksemc_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1002,10 +1033,10 @@ static integer c__1 = 1;
 	    i__2 = lxb[0] - 1;
 	    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (ftnlen)1, 
 		    lxe[0] - i__2, errmsg_len);
-	    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 0 <= 
-		    i__2 ? i__2 : s_rnge("typstr", i__2, "zzeksemc_", (ftnlen)
-		    379)) << 5), errmsg, errmsg_len, (ftnlen)1, (ftnlen)32, 
-		    errmsg_len);
+	    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 1) < 4 &&
+		     0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeksemc_", (
+		    ftnlen)379)) << 5), errmsg, errmsg_len, (ftnlen)1, (
+		    ftnlen)32, errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
 	}
@@ -1056,17 +1087,17 @@ static integer c__1 = 1;
 		    i__2 = lxb[0] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[0] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 
-			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)440)) << 5), errmsg, errmsg_len, (
-			    ftnlen)1, (ftnlen)32, errmsg_len);
+		    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 
+			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
+			    i__2, "zzeksemc_", (ftnlen)440)) << 5), errmsg, 
+			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[1] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", typstr + (((i__2 = rhstyp - 1) < 4 && 
-			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)442)) << 5), errmsg, errmsg_len, (
-			    ftnlen)1, (ftnlen)32, errmsg_len);
+		    repmc_(errmsg, "#", __state->typstr + (((i__2 = rhstyp - 
+			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
+			    i__2, "zzeksemc_", (ftnlen)442)) << 5), errmsg, 
+			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;
 		}
@@ -1100,17 +1131,17 @@ static integer c__1 = 1;
 		    i__2 = lxb[0] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[0] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", typstr + (((i__2 = lhstyp - 1) < 4 && 
-			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)484)) << 5), errmsg, errmsg_len, (
-			    ftnlen)1, (ftnlen)32, errmsg_len);
+		    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 
+			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
+			    i__2, "zzeksemc_", (ftnlen)484)) << 5), errmsg, 
+			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
 		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
 			    ftnlen)1, lxe[1] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", typstr + (((i__2 = rhstyp - 1) < 4 && 
-			    0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeks"
-			    "emc_", (ftnlen)486)) << 5), errmsg, errmsg_len, (
-			    ftnlen)1, (ftnlen)32, errmsg_len);
+		    repmc_(errmsg, "#", __state->typstr + (((i__2 = rhstyp - 
+			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
+			    i__2, "zzeksemc_", (ftnlen)486)) << 5), errmsg, 
+			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;
 		}
@@ -1157,7 +1188,7 @@ static integer c__1 = 1;
 
 /*     Indicate completion of semantic checking. */
 
-    zzekweqi_("SEM_CHECKED", &c__1, eqryi, (ftnlen)11);
+    zzekweqi_("SEM_CHECKED", &__state->c__1, eqryi, (ftnlen)11);
     return 0;
 } /* zzeksemc_ */
 

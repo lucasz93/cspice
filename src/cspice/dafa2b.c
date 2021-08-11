@@ -1,9 +1,17 @@
-/* dafa2b.f -- translated by f2c (version 19980913).
+/* dafa2b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafa2b_state_t;
+static dafa2b_state_t* get_dafa2b_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DAFA2B ( DAF, ASCII to binary ) */
 /* Subroutine */ int dafa2b_(char *ascii, char *binary, integer *resv, ftnlen 
@@ -17,13 +25,16 @@
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), daft2b_(integer *, 
-	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int daft2b_(integer *, char *, integer *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int txtopr_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    dafa2b_state_t* __state = get_dafa2b_state();
 /* $ Abstract */
 
 /*     Deprecated. The routine DAFTB supersedes this routine. */

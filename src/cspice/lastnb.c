@@ -1,9 +1,17 @@
-/* lastnb.f -- translated by f2c (version 19980913).
+/* lastnb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lastnb_state_t;
+static lastnb_state_t* get_lastnb_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             LASTNB ( Last non-blank character ) */
 integer lastnb_(char *string, ftnlen string_len)
@@ -17,6 +25,9 @@ integer lastnb_(char *string, ftnlen string_len)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    lastnb_state_t* __state = get_lastnb_state();
 /* $ Abstract */
 
 /*      Return the index of the last non-blank character in */

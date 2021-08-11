@@ -1,9 +1,17 @@
-/* rmaind.f -- translated by f2c (version 19980913).
+/* rmaind.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int rmaind_state_t;
+static rmaind_state_t* get_rmaind_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RMAIND ( Remainder --- double precision ) */
 /* Subroutine */ int rmaind_(doublereal *num, doublereal *denom, doublereal *
@@ -18,10 +26,14 @@
     /* Local variables */
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal mynum;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal mydnom;
 
+
+    /* Module state */
+    rmaind_state_t* __state = get_rmaind_state();
 /* $ Abstract */
 
 /*     Compute the integer quotient and non-negative remainder */

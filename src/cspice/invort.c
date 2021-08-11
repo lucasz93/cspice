@@ -1,16 +1,27 @@
-/* invort.f -- translated by f2c (version 19980913).
+/* invort.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern invort_init_t __invort_init;
+static invort_state_t* get_invort_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->invort)
+		state->invort = __cspice_allocate_module(sizeof(
+	invort_state_t), &__invort_init, sizeof(__invort_init));
+	return state->invort;
+
+}
 
 /* $Procedure      INVORT ( Invert nearly orthogonal matrices ) */
 /* Subroutine */ int invort_(doublereal *m, doublereal *mit)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -23,16 +34,21 @@
     integer i__;
     doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal bound;
     extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), xpose_(
-	    doublereal *, doublereal *), unorm_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
+	    *);
     doublereal length;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vsclip_(doublereal *, doublereal *), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    invort_state_t* __state = get_invort_state();
 /* $ Abstract */
 
 /*     Construct the inverse of a 3x3 matrix with orthogonal columns */
@@ -201,9 +217,9 @@
 
 /*     The first time through, get a copy of DPMAX. */
 
-    if (first) {
-	bound = dpmax_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->bound = dpmax_();
+	__state->first = FALSE_;
     }
 
 /*     For each column, construct a scaled copy. However, make sure */
@@ -227,7 +243,7 @@
 /*        Make sure we can actually rescale the rows. */
 
 	if (length < 1.) {
-	    if (length * bound < 1.) {
+	    if (length * __state->bound < 1.) {
 		chkin_("INVORT", (ftnlen)6);
 		setmsg_("The length of column # is #. This number cannot be "
 			"inverted.  For this reason, the scaled transpose of "

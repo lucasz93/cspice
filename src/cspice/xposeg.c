@@ -1,9 +1,17 @@
-/* xposeg.f -- translated by f2c (version 19980913).
+/* xposeg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int xposeg_state_t;
+static xposeg_state_t* get_xposeg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      XPOSEG ( Transpose a matrix, general ) */
 /* Subroutine */ int xposeg_(doublereal *matrix, integer *nrow, integer *ncol,
@@ -11,10 +19,18 @@
 {
     integer dest;
     doublereal temp;
-    integer k, m, n, r__, moved, start;
+    integer k;
+    integer m;
+    integer n;
+    integer r__;
+    integer moved;
+    integer start;
     doublereal source;
     integer nmoves;
 
+
+    /* Module state */
+    xposeg_state_t* __state = get_xposeg_state();
 /* $ Abstract */
 
 /*     Transpose a matrix of arbitrary size (the matrix */

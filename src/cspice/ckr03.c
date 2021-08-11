@@ -1,14 +1,21 @@
-/* ckr03.f -- translated by f2c (version 19980913).
+/* ckr03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckr03_init_t __ckr03_init;
+static ckr03_state_t* get_ckr03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckr03)
+		state->ckr03 = __cspice_allocate_module(sizeof(ckr03_state_t),
+	 &__ckr03_init, sizeof(__ckr03_init));
+	return state->ckr03;
+
+}
 
 /* $Procedure      CKR03 ( C-kernel, read pointing record, data type 3 ) */
 /* Subroutine */ int ckr03_(integer *handle, doublereal *descr, doublereal *
@@ -17,11 +24,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal prevs = -1.;
-    static doublereal prevn = -1.;
-    static integer lhand = 0;
-    static integer lbeg = -1;
-    static integer lend = -1;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -30,13 +32,18 @@ static integer c__6 = 6;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer addr__, skip, psiz, i__, n;
+    integer addr__;
+    integer skip;
+    integer psiz;
+    integer i__;
+    integer n;
     doublereal ldiff;
     integer laddr;
     doublereal rdiff;
     integer raddr;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer nidir;
     doublereal lsclk;
     extern doublereal dpmax_(void);
@@ -50,20 +57,27 @@ static integer c__6 = 6;
     extern logical failed_(void);
     integer grpadd;
     doublereal buffer[100];
-    integer remain, dirloc;
+    integer remain;
+    integer dirloc;
     extern integer lstled_(doublereal *, integer *, doublereal *);
     integer numrec;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lstltd_(doublereal *, integer *, doublereal *);
     integer numint;
     doublereal nstart;
     extern logical return_(void);
     doublereal dcd[2];
-    integer beg, icd[6], end;
+    integer beg;
+    integer icd[6];
+    integer end;
     logical fnd;
 
+
+    /* Module state */
+    ckr03_state_t* __state = get_ckr03_state();
 /* $ Abstract */
 
 /*     Read a pointing record from a CK segment, data type 3. */
@@ -467,7 +481,7 @@ static integer c__6 = 6;
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check to make sure that the segment is type 3. */
 
@@ -792,10 +806,11 @@ static integer c__6 = 6;
 /*     LEND       segment in the file LHAND that PREVS and PREVN */
 /*                were found in. */
 
-    if (*handle == lhand && beg == lbeg && end == lend && *sclkdp >= prevs && 
-	    *sclkdp < prevn) {
-	start = prevs;
-	nstart = prevn;
+    if (*handle == __state->lhand && beg == __state->lbeg && end == 
+	    __state->lend && *sclkdp >= __state->prevs && *sclkdp < 
+	    __state->prevn) {
+	start = __state->prevs;
+	nstart = __state->prevn;
     } else {
 
 /*        The START times of all of the intervals are stored in the */
@@ -934,11 +949,11 @@ static integer c__6 = 6;
 
 /*        Save the information about the interval and segment. */
 
-	lhand = *handle;
-	lbeg = beg;
-	lend = end;
-	prevs = start;
-	prevn = nstart;
+	__state->lhand = *handle;
+	__state->lbeg = beg;
+	__state->lend = end;
+	__state->prevs = start;
+	__state->prevn = nstart;
     }
 
 /*     Check and see if the bracketing pointing instances belong */

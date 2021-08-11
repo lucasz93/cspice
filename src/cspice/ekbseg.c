@@ -1,16 +1,21 @@
-/* ekbseg.f -- translated by f2c (version 19980913).
+/* ekbseg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__512 = 512;
-static integer c__32 = 32;
-static integer c__1 = 1;
-static integer c__100 = 100;
+extern ekbseg_init_t __ekbseg_init;
+static ekbseg_state_t* get_ekbseg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekbseg)
+		state->ekbseg = __cspice_allocate_module(sizeof(
+	ekbseg_state_t), &__ekbseg_init, sizeof(__ekbseg_init));
+	return state->ekbseg;
+
+}
 
 /* $Procedure      EKBSEG ( EK, start new segment ) */
 /* Subroutine */ int ekbseg_(integer *handle, char *tabnam, integer *ncols, 
@@ -19,7 +24,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,13 +32,13 @@ static integer c__100 = 100;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekpdec_(char *, integer *, ftnlen), 
-	    zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekpdec_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
     integer i__;
     extern integer zzekstyp_(integer *, integer *);
     integer idend;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer stype;
     extern logical failed_(void);
     extern /* Subroutine */ int chckid_(char *, integer *, char *, ftnlen, 
@@ -42,16 +46,23 @@ static integer c__100 = 100;
     extern integer lastnb_(char *, ftnlen);
     extern logical return_(void);
     integer cdscrs[1100]	/* was [11][100] */;
-    static integer idspec[518];
     integer nchars;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), ssizei_(integer *, 
-	    integer *), lxdfid_(integer *), lxidnt_(integer *, char *, 
-	    integer *, integer *, integer *, ftnlen), setmsg_(char *, ftnlen),
-	     sigerr_(char *, ftnlen), errint_(char *, integer *, ftnlen), 
-	    zzekbs01_(integer *, char *, integer *, char *, integer *, 
-	    integer *, ftnlen, ftnlen), zzekbs02_(integer *, char *, integer *
-	    , char *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int lxdfid_(integer *);
+    extern /* Subroutine */ int lxidnt_(integer *, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekbs01_(integer *, char *, integer *, char *
+	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekbs02_(integer *, char *, integer *, char *
+	    , integer *, integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    ekbseg_state_t* __state = get_ekbseg_state();
 /* $ Abstract */
 
 /*     Start a new segment in an E-kernel. */
@@ -1277,16 +1288,16 @@ static integer c__100 = 100;
 
 /*     Get the default identifier specification the first time through. */
 
-    if (first) {
-	ssizei_(&c__512, idspec);
-	lxdfid_(idspec);
-	first = FALSE_;
+    if (__state->first) {
+	ssizei_(&__state->c__512, __state->idspec);
+	lxdfid_(__state->idspec);
+	__state->first = FALSE_;
     }
 
 /*     The table name must not be too long, and all of its characters */
 /*     must be printable (it's ok for it to unprintable). */
 
-    chckid_("EK table name", &c__32, tabnam, (ftnlen)13, tabnam_len);
+    chckid_("EK table name", &__state->c__32, tabnam, (ftnlen)13, tabnam_len);
     if (failed_()) {
 	chkout_("EKBSEG", (ftnlen)6);
 	return 0;
@@ -1295,7 +1306,8 @@ static integer c__100 = 100;
 /*     Make sure the table name satisfies all of our restrictions on */
 /*     allowed characters. */
 
-    lxidnt_(idspec, tabnam, &c__1, &idend, &nchars, tabnam_len);
+    lxidnt_(__state->idspec, tabnam, &__state->c__1, &idend, &nchars, 
+	    tabnam_len);
     if (nchars == 0 || nchars < lastnb_(tabnam, tabnam_len)) {
 	setmsg_("Table name <#> violates syntax rules.", (ftnlen)37);
 	errch_("#", tabnam, (ftnlen)1, tabnam_len);
@@ -1308,7 +1320,7 @@ static integer c__100 = 100;
 
     if (*ncols < 1 || *ncols > 100) {
 	setmsg_("Number of columns must be in range 1:#, was #.", (ftnlen)46);
-	errint_("#", &c__100, (ftnlen)1);
+	errint_("#", &__state->c__100, (ftnlen)1);
 	errint_("#", ncols, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("EKBSEG", (ftnlen)6);
@@ -1319,8 +1331,8 @@ static integer c__100 = 100;
 
     i__1 = *ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	chckid_("EK column name", &c__32, cnames + (i__ - 1) * cnames_len, (
-		ftnlen)14, cnames_len);
+	chckid_("EK column name", &__state->c__32, cnames + (i__ - 1) * 
+		cnames_len, (ftnlen)14, cnames_len);
 	if (failed_()) {
 	    chkout_("EKBSEG", (ftnlen)6);
 	    return 0;
@@ -1329,8 +1341,8 @@ static integer c__100 = 100;
 /*        Make sure each column name satisfies all of our restrictions on */
 /*        allowed characters. */
 
-	lxidnt_(idspec, cnames + (i__ - 1) * cnames_len, &c__1, &idend, &
-		nchars, cnames_len);
+	lxidnt_(__state->idspec, cnames + (i__ - 1) * cnames_len, &
+		__state->c__1, &idend, &nchars, cnames_len);
 	if (nchars == 0 || nchars < lastnb_(cnames + (i__ - 1) * cnames_len, 
 		cnames_len)) {
 	    setmsg_("Column name <#> violates syntax rules.", (ftnlen)38);

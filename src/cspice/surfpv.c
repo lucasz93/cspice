@@ -1,13 +1,21 @@
-/* surfpv.f -- translated by f2c (version 19980913).
+/* surfpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b13 = 1.;
+extern surfpv_init_t __surfpv_init;
+static surfpv_state_t* get_surfpv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->surfpv)
+		state->surfpv = __cspice_allocate_module(sizeof(
+	surfpv_state_t), &__surfpv_init, sizeof(__surfpv_init));
+	return state->surfpv;
+
+}
 
 /* $Procedure      SURFPV ( Surface point and velocity ) */
 /* Subroutine */ int surfpv_(doublereal *stvrtx, doublereal *stdir, 
@@ -22,10 +30,16 @@ static doublereal c_b13 = 1.;
 	    );
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal m, n[3], r__, u[3], v[3], x[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dvhat_(doublereal *, 
-	    doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal m;
+    doublereal n[3];
+    doublereal r__;
+    doublereal u[3];
+    doublereal v[3];
+    doublereal x[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
     doublereal level;
     extern doublereal dpmax_(void);
     doublereal third[3];
@@ -36,16 +50,25 @@ static doublereal c_b13 = 1.;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     extern logical failed_(void);
-    doublereal du[3], dv[3], second[3], stdhat[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), surfnm_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    doublereal du[3];
+    doublereal dv[3];
+    doublereal second[3];
+    doublereal stdhat[6];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
 	    ;
-    doublereal udn, vmx[3];
+    doublereal udn;
+    doublereal vmx[3];
 
+
+    /* Module state */
+    surfpv_state_t* __state = get_surfpv_state();
 /* $ Abstract */
 
 /*     Find the state (position and velocity) of the surface intercept */
@@ -669,7 +692,7 @@ static doublereal c_b13 = 1.;
 /* Computing 2nd power */
     d__3 = r__;
     d__2 = -(d__3 * d__3);
-    vlcom3_(&c_b13, dv, &d__1, second, &d__2, third, &stx[3]);
+    vlcom3_(&__state->c_b13, dv, &d__1, second, &d__2, third, &stx[3]);
 
 /*     Since we could compute the velocity, we can assign the */
 /*     intercept point, and set the found flag to .TRUE. */

@@ -1,38 +1,70 @@
-/* zzektrin.f -- translated by f2c (version 19980913).
+/* zzektrin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzektrin_init_t __zzektrin_init;
+static zzektrin_state_t* get_zzektrin_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrin)
+		state->zzektrin = __cspice_allocate_module(sizeof(
+	zzektrin_state_t), &__zzektrin_init, sizeof(__zzektrin_init));
+	return state->zzektrin;
+
+}
 
 /* $Procedure      ZZEKTRIN ( EK tree, insert value ) */
 /* Subroutine */ int zzektrin_(integer *handle, integer *tree, integer *key, 
 	integer *value)
 {
-    integer node, left, lval, lkey, pkey, root;
+    integer node;
+    integer left;
+    integer lval;
+    integer lkey;
+    integer pkey;
+    integer root;
     extern /* Subroutine */ int zzektrbn_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzektrki_(integer *, integer *, 
-	    integer *, integer *, integer *), zzektrlk_(integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrki_(integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
     extern integer zzektrnk_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzektrui_(integer *, integer *, 
-	    integer *, integer *, logical *);
-    integer lnode, level, rnode, right, pkidx, lpidx, state, lpkey, nsize, 
-	    nkeys, rpidx, rpkey, trust;
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrui_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    integer lnode;
+    integer level;
+    integer rnode;
+    integer right;
+    integer pkidx;
+    integer lpidx;
+    integer state;
+    integer lpkey;
+    integer nsize;
+    integer nkeys;
+    integer rpidx;
+    integer rpkey;
+    integer trust;
     extern logical failed_(void);
     integer parent;
     logical overfl;
-    integer noffst, poffst, idx;
-    extern /* Subroutine */ int zzektr13_(integer *, integer *), zzektr23_(
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    logical *);
+    integer noffst;
+    integer poffst;
+    integer idx;
+    extern /* Subroutine */ int zzektr13_(integer *, integer *);
+    extern /* Subroutine */ int zzektr23_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
 
+
+    /* Module state */
+    zzektrin_state_t* __state = get_zzektrin_state();
 /* $ Abstract */
 
 /*     Insert a value into an EK tree at a specified location. */
@@ -653,7 +685,7 @@ static integer c__1 = 1;
 
 /*              Save the first key from NODE. */
 
-		zzektrki_(handle, tree, &lkey, &c__1, &trust);
+		zzektrki_(handle, tree, &lkey, &__state->c__1, &trust);
 	    } else {
 
 /*              Save the last key from NODE. */

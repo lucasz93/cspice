@@ -1,13 +1,21 @@
-/* zzsrfini.f -- translated by f2c (version 19980913).
+/* zzsrfini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzsrfini_init_t __zzsrfini_init;
+static zzsrfini_state_t* get_zzsrfini_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsrfini)
+		state->zzsrfini = __cspice_allocate_module(sizeof(
+	zzsrfini_state_t), &__zzsrfini_init, sizeof(__zzsrfini_init));
+	return state->zzsrfini;
+
+}
 
 /* $Procedure ZZSRFINI ( Private --- Surface-Code Hash Initialization ) */
 /* Subroutine */ int zzsrfini_(char *nornam, integer *codes, integer *bodies, 
@@ -19,26 +27,33 @@ static integer c__0 = 0;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer head, node;
+    integer head;
+    integer node;
     logical full;
-    extern /* Subroutine */ int zzhscini_(integer *, integer *, integer *), 
-	    zzhsiini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzhscini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical idnew;
     extern /* Subroutine */ int cleari_(integer *, integer *);
     integer itemat;
-    logical namnew, lfound;
+    logical namnew;
+    logical lfound;
     integer lookat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), cmprss_(char *, integer *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     char sqshnm[36];
-    extern integer zzhash2_(char *, integer *, ftnlen), zzhashi_(integer *, 
-	    integer *);
+    extern integer zzhash2_(char *, integer *, ftnlen);
+    extern integer zzhashi_(integer *, integer *);
 
+
+    /* Module state */
+    zzsrfini_state_t* __state = get_zzsrfini_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -417,8 +432,8 @@ static integer c__0 = 0;
 
 /*        Use hash function to get index of the head node. */
 
-	cmprss_(" ", &c__0, nornam + (i__ - 1) * nornam_len, sqshnm, (ftnlen)
-		1, nornam_len, (ftnlen)36);
+	cmprss_(" ", &__state->c__0, nornam + (i__ - 1) * nornam_len, sqshnm, 
+		(ftnlen)1, nornam_len, (ftnlen)36);
 	lookat = zzhash2_(sqshnm, &snmpol[5], (ftnlen)36);
 	head = snmhls[lookat - 1];
 

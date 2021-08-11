@@ -1,13 +1,21 @@
-/* edterm.f -- translated by f2c (version 19980913).
+/* edterm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern edterm_init_t __edterm_init;
+static edterm_state_t* get_edterm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->edterm)
+		state->edterm = __cspice_allocate_module(sizeof(
+	edterm_state_t), &__edterm_init, sizeof(__edterm_init));
+	return state->edterm;
+
+}
 
 /* $Procedure EDTERM ( Ellipsoid terminator ) */
 /* Subroutine */ int edterm_(char *trmtyp, char *source, char *target, 
@@ -18,58 +26,56 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen), zznamfrm_(integer *, char *, integer *, char *, integer *
-	    , ftnlen, ftnlen), zzedterm_(char *, doublereal *, doublereal *, 
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzedterm_(char *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     ftnlen), zzctruin_(integer *);
+	     ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer n;
     doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer obsid;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer srcid, trgid;
+    integer srcid;
+    integer trgid;
     logical found;
     doublereal ltsrc;
-    static logical svfnd1, svfnd2, svfnd3;
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
 	    *, doublereal *, ftnlen);
-    integer frcode, frclas;
+    integer frcode;
+    integer frclas;
     doublereal srcrad[3];
-    integer center, clssid;
+    integer center;
+    integer clssid;
     doublereal trgrad[3];
-    static integer svfrcd;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
 	    integer *, logical *);
-    static char svfref[32];
     doublereal lttarg;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static integer svtgid;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    static char svtarg[36], svscre[36];
-    static integer svobsi;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal srcpos[3];
-    static integer svsrci;
     extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
 	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     doublereal trgpos[3];
-    static char svobsr[36];
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    edterm_state_t* __state = get_edterm_state();
 /* $ Abstract */
 
 /*     Compute a set of points on the umbral or penumbral terminator of */
@@ -910,21 +916,21 @@ static integer c__3 = 3;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	zzctruin_(svctr4);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	zzctruin_(__state->svctr4);
+	__state->first = FALSE_;
     }
 
 /*     Get the input frame code and frame info. */
 
-    zznamfrm_(svctr4, svfref, &svfrcd, fixref, &frcode, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr4, __state->svfref, &__state->svfrcd, fixref, &
+	    frcode, (ftnlen)32, fixref_len);
     if (frcode == 0) {
 	setmsg_("Input frame # has no associated frame ID code.", (ftnlen)46);
 	errch_("#", fixref, (ftnlen)1, fixref_len);
@@ -945,8 +951,8 @@ static integer c__3 = 3;
 
 /*     Get the ID codes of the target, source, and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtgid, &svfnd1, target, &trgid, &found, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
+	    __state->svfnd1, target, &trgid, &found, (ftnlen)36, target_len);
     if (! found) {
 	setmsg_("Input target # has no associated body ID code.", (ftnlen)46);
 	errch_("#", target, (ftnlen)1, target_len);
@@ -954,8 +960,8 @@ static integer c__3 = 3;
 	chkout_("EDTERM", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svscre, &svsrci, &svfnd2, source, &srcid, &found, (
-	    ftnlen)36, source_len);
+    zzbods2c_(__state->svctr2, __state->svscre, &__state->svsrci, &
+	    __state->svfnd2, source, &srcid, &found, (ftnlen)36, source_len);
     if (! found) {
 	setmsg_("Input source # has no associated body ID code.", (ftnlen)46);
 	errch_("#", source, (ftnlen)1, source_len);
@@ -963,8 +969,8 @@ static integer c__3 = 3;
 	chkout_("EDTERM", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr3, svobsr, &svobsi, &svfnd3, obsrvr, &obsid, &found, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr3, __state->svobsr, &__state->svobsi, &
+	    __state->svfnd3, obsrvr, &obsid, &found, (ftnlen)36, obsrvr_len);
     if (! found) {
 	setmsg_("Input observer # has no associated body ID code.", (ftnlen)
 		48);
@@ -989,7 +995,7 @@ static integer c__3 = 3;
 
 /*     Look up the radii associated with the target body. */
 
-    bodvcd_(&trgid, "RADII", &c__3, &n, trgrad, (ftnlen)5);
+    bodvcd_(&trgid, "RADII", &__state->c__3, &n, trgrad, (ftnlen)5);
     if (n != 3) {
 	setmsg_("Three radii are required for the target body's (#) shape mo"
 		"del, but # were found.", (ftnlen)81);
@@ -1002,7 +1008,7 @@ static integer c__3 = 3;
 
 /*     Look up the radii associated with the light source. */
 
-    bodvcd_(&srcid, "RADII", &c__3, &n, srcrad, (ftnlen)5);
+    bodvcd_(&srcid, "RADII", &__state->c__3, &n, srcrad, (ftnlen)5);
     if (n != 3) {
 	setmsg_("Three radii are required for the light source's (#) shape m"
 		"odel, but # were found.", (ftnlen)82);

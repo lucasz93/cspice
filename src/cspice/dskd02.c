@@ -1,9 +1,21 @@
-/* dskd02.f -- translated by f2c (version 19980913).
+/* dskd02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern dskd02_init_t __dskd02_init;
+static dskd02_state_t* get_dskd02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskd02)
+		state->dskd02 = __cspice_allocate_module(sizeof(
+	dskd02_state_t), &__dskd02_init, sizeof(__dskd02_init));
+	return state->dskd02;
+
+}
 
 /* $Procedure DSKD02 ( DSK, fetch d.p. type 2 data ) */
 /* Subroutine */ int dskd02_(integer *handle, integer *dladsc, integer *item, 
@@ -11,25 +23,30 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    integer size, b, e, dbase, ibase;
+    integer size;
+    integer b;
+    integer e;
+    integer dbase;
+    integer ibase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
 	    doublereal *);
-    static integer nv;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer prvhan, prvbas;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskd02_state_t* __state = get_dskd02_state();
 /* $ Abstract */
 
 /*     Fetch double precision data from a type 2 DSK segment. */
@@ -995,18 +1012,18 @@
 /*     however that this routine does not meet SPICE standards for */
 /*     discovery check-in eligibility. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Make sure we treat the input handle as new on the first pass. */
 /*        Set PRVHAN to an invalid handle value. */
 
-	prvhan = 0;
+	__state->prvhan = 0;
 
 /*        Set previous segment base integer address to an invalid value */
 /*        as well. */
 
-	prvbas = -1;
-	first = FALSE_;
+	__state->prvbas = -1;
+	__state->first = FALSE_;
     }
     if (*room <= 0) {
 	chkin_("DSKD02", (ftnlen)6);
@@ -1031,7 +1048,7 @@
 /*     but they can't share an integer base address with a type 2 */
 /*     segment. */
 
-    if (*handle != prvhan || ibase != prvbas) {
+    if (*handle != __state->prvhan || ibase != __state->prvbas) {
 
 /*        Treat the input file and segment as new. */
 
@@ -1039,18 +1056,18 @@
 
 	i__1 = ibase + 1;
 	i__2 = ibase + 1;
-	dasrdi_(handle, &i__1, &i__2, &nv);
+	dasrdi_(handle, &i__1, &i__2, &__state->nv);
 	if (failed_()) {
 	    return 0;
 	}
 
 /*        Update the saved handle value. */
 
-	prvhan = *handle;
+	__state->prvhan = *handle;
 
 /*        Update the saved integer base address. */
 
-	prvbas = ibase;
+	__state->prvbas = ibase;
     }
 
 /*     Branch based on the item to be returned. */
@@ -1063,7 +1080,7 @@
 /*        Return vertices.  There are 3*NV values in all. */
 /*        First locate the data. */
 
-	size = nv * 3;
+	size = __state->nv * 3;
 	b = dbase + 35 + *start - 1;
     } else if (*item == 15) {
 

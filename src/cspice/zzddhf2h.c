@@ -1,9 +1,17 @@
-/* zzddhf2h.f -- translated by f2c (version 19980913).
+/* zzddhf2h.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzddhf2h_state_t;
+static zzddhf2h_state_t* get_zzddhf2h_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDDHF2H ( Private --- DDH Filename to Handle ) */
 /* Subroutine */ int zzddhf2h_(char *fname, integer *ftabs, integer *ftamh, 
@@ -26,8 +34,9 @@
     integer unit;
     extern doublereal zzddhmnm_(integer *);
     extern /* Subroutine */ int zzddhgtu_(integer *, integer *, logical *, 
-	    integer *, integer *, integer *), zzddhrmu_(integer *, integer *, 
-	    integer *, integer *, logical *, integer *, integer *);
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzddhrmu_(integer *, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer rchar;
@@ -39,12 +48,15 @@
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer uindex;
     logical locexs;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzddhf2h_state_t* __state = get_zzddhf2h_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

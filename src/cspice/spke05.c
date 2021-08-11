@@ -1,14 +1,21 @@
-/* spke05.f -- translated by f2c (version 19980913).
+/* spke05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__12 = 12;
-static integer c__6 = 6;
+extern spke05_init_t __spke05_init;
+static spke05_state_t* get_spke05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke05)
+		state->spke05 = __cspice_allocate_module(sizeof(
+	spke05_state_t), &__spke05_init, sizeof(__spke05_init));
+	return state->spke05;
+
+}
 
 /* $Procedure SPKE05 ( Evaluate SPK record, type 5 ) */
 /* Subroutine */ int spke05_(doublereal *et, doublereal *record, doublereal *
@@ -28,21 +35,31 @@ static integer c__6 = 6;
     doublereal w;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    doublereal vcomp[3], numer, s1[6], s2[6], t1, t2;
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    doublereal vcomp[3];
+    doublereal numer;
+    doublereal s1[6];
+    doublereal s2[6];
+    doublereal t1;
+    doublereal t2;
     extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     doublereal gm;
     extern doublereal pi_(void);
-    doublereal dargdt, pv[12]	/* was [6][2] */;
+    doublereal dargdt;
+    doublereal pv[12]	/* was [6][2] */;
     extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *), chkout_(char *, 
-	    ftnlen);
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    doublereal arg, vel[3];
+    doublereal arg;
+    doublereal vel[3];
 
+
+    /* Module state */
+    spke05_state_t* __state = get_spke05_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 5 */
@@ -267,7 +284,7 @@ static integer c__6 = 6;
 
 /*     Unpack the record, for easier reading. */
 
-    moved_(record, &c__12, pv);
+    moved_(record, &__state->c__12, pv);
     t1 = record[12];
     t2 = record[13];
     gm = record[14];
@@ -313,7 +330,7 @@ static integer c__6 = 6;
 	w = cos(arg) * .5 + .5;
 	dwdt = sin(arg) * -.5 * dargdt;
 	d__1 = 1. - w;
-	vlcomg_(&c__6, &w, s1, &d__1, s2, state);
+	vlcomg_(&__state->c__6, &w, s1, &d__1, s2, state);
 	d__1 = -dwdt;
 	vlcom_(&dwdt, s1, &d__1, s2, vcomp);
 	vadd_(&state[3], vcomp, vel);

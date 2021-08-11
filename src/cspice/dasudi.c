@@ -1,13 +1,21 @@
-/* dasudi.f -- translated by f2c (version 19980913).
+/* dasudi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern dasudi_init_t __dasudi_init;
+static dasudi_state_t* get_dasudi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasudi)
+		state->dasudi = __cspice_allocate_module(sizeof(
+	dasudi_state_t), &__dasudi_init, sizeof(__dasudi_init));
+	return state->dasudi;
+
+}
 
 /* $Procedure      DASUDI ( DAS, update data, integer ) */
 /* Subroutine */ int dasudi_(integer *handle, integer *first, integer *last, 
@@ -19,22 +27,31 @@ static integer c__3 = 3;
     /* Local variables */
     integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer lastc, lastd, recno, lasti;
+    integer lastc;
+    integer lastd;
+    integer recno;
+    integer lasti;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *), dasuri_(integer *, integer *, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
+	    integer *, integer *);
     integer clsize;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
-    integer wordno, numint;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer wordno;
+    integer numint;
     extern logical return_(void);
     integer nwritn;
 
+
+    /* Module state */
+    dasudi_state_t* __state = get_dasudi_state();
 /* $ Abstract */
 
 /*     Update data in a specified range of integer addresses in a DAS */
@@ -341,7 +358,7 @@ static integer c__3 = 3;
 /*     base record number and size of the cluster of integer records that */
 /*     the address FIRST lies within. */
 
-    dasa2l_(handle, &c__3, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(handle, &__state->c__3, first, &clbase, &clsize, &recno, &wordno);
 
 /*     Set the number of integer words already written.  Keep */
 /*     writing to the file until this number equals the number of */
@@ -385,8 +402,8 @@ static integer c__3 = 3;
 		wordno = 1;
 	    } else {
 		i__1 = *first + nwritn;
-		dasa2l_(handle, &c__3, &i__1, &clbase, &clsize, &recno, &
-			wordno);
+		dasa2l_(handle, &__state->c__3, &i__1, &clbase, &clsize, &
+			recno, &wordno);
 	    }
 	}
     }

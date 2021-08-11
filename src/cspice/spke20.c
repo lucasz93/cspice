@@ -1,9 +1,17 @@
-/* spke20.f -- translated by f2c (version 19980913).
+/* spke20.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke20_state_t;
+static spke20_state_t* get_spke20_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE20 ( SPK, evaluate Chebyshev polynomials, type 20 ) */
 /* Subroutine */ int spke20_(doublereal *et, doublereal *record, doublereal *
@@ -18,16 +26,24 @@
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    integer degp, ncof, i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chbigr_(integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
+    integer degp;
+    integer ncof;
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chbigr_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal intgrl[3];
     integer posloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spke20_state_t* __state = get_spke20_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from an SPK or PCK segment of type */

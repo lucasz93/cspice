@@ -1,16 +1,21 @@
-/* deltet.f -- translated by f2c (version 19980913).
+/* deltet.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__200 = 200;
-static integer c__400 = 400;
+extern deltet_init_t __deltet_init;
+static deltet_state_t* get_deltet_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->deltet)
+		state->deltet = __cspice_allocate_module(sizeof(
+	deltet_state_t), &__deltet_init, sizeof(__deltet_init));
+	return state->deltet;
+
+}
 
 /* $Procedure      DELTET ( Delta ET, ET - UTC ) */
 /* Subroutine */ int deltet_(doublereal *epoch, char *eptype, doublereal *
@@ -18,9 +23,6 @@ static integer c__400 = 400;
 {
     /* Initialized data */
 
-    static char missed[20*5] = "DELTET/DELTA_T_A, # " "DELTET/K, #         " 
-	    "DELTET/EB, #        " "DELTET/M, #         " "DELTET/DELTA_AT, "
-	    "#  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -34,25 +36,37 @@ static integer c__400 = 400;
     /* Local variables */
     char type__[4];
     integer i__;
-    doublereal k, m[2];
+    doublereal k;
+    doublereal m[2];
     integer n;
     doublereal dleap[400]	/* was [2][200] */;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nleap;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
-    doublereal leaps, ettai;
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    doublereal leaps;
+    doublereal ettai;
     logical found[5];
     char dtype[1];
-    doublereal ea, eb, ma, et;
+    doublereal ea;
+    doublereal eb;
+    doublereal ma;
+    doublereal et;
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), dtpool_(char *, logical *, integer *, 
-	    char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    doublereal dta, aet;
+    doublereal dta;
+    doublereal aet;
 
+
+    /* Module state */
+    deltet_state_t* __state = get_deltet_state();
 /* $ Abstract */
 
 /*     Return the value of Delta ET (ET-UTC) for an input epoch. */
@@ -300,10 +314,14 @@ static integer c__400 = 400;
 /*     DLEAP(1,i) is the number of leap seconds at DLEAP(2,i) UTC */
 /*     seconds past J2000. */
 
-    gdpool_("DELTET/DELTA_T_A", &c__1, &c__1, &n, &dta, found, (ftnlen)16);
-    gdpool_("DELTET/K", &c__1, &c__1, &n, &k, &found[1], (ftnlen)8);
-    gdpool_("DELTET/EB", &c__1, &c__1, &n, &eb, &found[2], (ftnlen)9);
-    gdpool_("DELTET/M", &c__1, &c__2, &n, m, &found[3], (ftnlen)8);
+    gdpool_("DELTET/DELTA_T_A", &__state->c__1, &__state->c__1, &n, &dta, 
+	    found, (ftnlen)16);
+    gdpool_("DELTET/K", &__state->c__1, &__state->c__1, &n, &k, &found[1], (
+	    ftnlen)8);
+    gdpool_("DELTET/EB", &__state->c__1, &__state->c__1, &n, &eb, &found[2], (
+	    ftnlen)9);
+    gdpool_("DELTET/M", &__state->c__1, &__state->c__2, &n, m, &found[3], (
+	    ftnlen)8);
 
 /*     Check that the number of leapseconds is not too great for our */
 /*     buffer size (not likely). */
@@ -315,13 +333,13 @@ static integer c__400 = 400;
 		"an be buffered, #.", (ftnlen)77);
 	i__1 = nleap / 2;
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__200, (ftnlen)1);
+	errint_("#", &__state->c__200, (ftnlen)1);
 	sigerr_("SPICE(BUFFERTOOSMALL)", (ftnlen)21);
 	chkout_("DELTET", (ftnlen)6);
 	return 0;
     }
-    gdpool_("DELTET/DELTA_AT", &c__1, &c__400, &nleap, dleap, &found[4], (
-	    ftnlen)15);
+    gdpool_("DELTET/DELTA_AT", &__state->c__1, &__state->c__400, &nleap, 
+	    dleap, &found[4], (ftnlen)15);
     nleap /= 2;
     if (! (found[0] && found[1] && found[2] && found[3] && found[4])) {
 	setmsg_("The following, needed to compute Delta ET (ET - UTC), could"
@@ -329,9 +347,9 @@ static integer c__400 = 400;
 	for (i__ = 1; i__ <= 5; ++i__) {
 	    if (! found[(i__1 = i__ - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
 		    "found", i__1, "deltet_", (ftnlen)341)]) {
-		errch_("#", missed + ((i__1 = i__ - 1) < 5 && 0 <= i__1 ? 
-			i__1 : s_rnge("missed", i__1, "deltet_", (ftnlen)342))
-			 * 20, (ftnlen)1, (ftnlen)20);
+		errch_("#", __state->missed + ((i__1 = i__ - 1) < 5 && 0 <= 
+			i__1 ? i__1 : s_rnge("missed", i__1, "deltet_", (
+			ftnlen)342)) * 20, (ftnlen)1, (ftnlen)20);
 	    }
 	}
 	errch_(", #", ".", (ftnlen)3, (ftnlen)1);

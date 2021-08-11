@@ -1,9 +1,17 @@
-/* delfil.f -- translated by f2c (version 19980913).
+/* delfil.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int delfil_state_t;
+static delfil_state_t* get_delfil_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DELFIL ( Delete a file  ) */
 /* Subroutine */ int delfil_(char *filnam, ftnlen filnam_len)
@@ -18,17 +26,22 @@
 	    olist *), f_clos(cllist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer lunit;
     logical opened;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), getlun_(integer *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     logical exists;
 
+
+    /* Module state */
+    delfil_state_t* __state = get_delfil_state();
 /* $ Abstract */
 
 /*     Delete a file. */

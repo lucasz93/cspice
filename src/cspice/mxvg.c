@@ -1,9 +1,17 @@
-/* mxvg.f -- translated by f2c (version 19980913).
+/* mxvg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int mxvg_state_t;
+static mxvg_state_t* get_mxvg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      MXVG ( Matrix time vector, general dimension ) */
 /* Subroutine */ int mxvg_(doublereal *m1, doublereal *v2, integer *nr1, 
@@ -17,9 +25,13 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, k;
+    integer i__;
+    integer k;
     doublereal sum;
 
+
+    /* Module state */
+    mxvg_state_t* __state = get_mxvg_state();
 /* $ Abstract */
 
 /*     Multiply a matrix and a vector of arbitrary size. */
@@ -166,7 +178,7 @@
     v2_dim1 = *nc1r2;
     m1_dim1 = *nr1;
     m1_dim2 = *nc1r2;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
 
     /* Function Body */
     i__1 = *nr1;
@@ -174,13 +186,13 @@
 	sum = 0.;
 	i__2 = *nc1r2;
 	for (k = 1; k <= i__2; ++k) {
-	    sum += m1[(i__3 = i__ + k * m1_dim1 - m1_offset) < m1_dim1 * 
+	    sum += m1[(i__3 = i__ + k * m1_dim1 - m1_offset) < 1 * m1_dim1 * 
 		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mxvg_", 
-		    (ftnlen)163)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 ?
-		     i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)163)];
+		    (ftnlen)163)] * v2[(i__4 = k - 1) < 1 * v2_dim1 && 0 <= 
+		    i__4 ? i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)163)];
 	}
-	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "mxvg_", (ftnlen)165)] = sum;
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"vout", i__2, "mxvg_", (ftnlen)165)] = sum;
     }
     return 0;
 } /* mxvg_ */

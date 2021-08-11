@@ -1,9 +1,17 @@
-/* zzeklerd.f -- translated by f2c (version 19980913).
+/* zzeklerd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeklerd_state_t;
+static zzeklerd_state_t* get_zzeklerd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZEKLERD ( EK, LLE, using record numbers, d.p. ) */
 /* Subroutine */ int zzeklerd_(integer *handle, integer *segdsc, integer *
@@ -11,17 +19,24 @@
 	prvidx, integer *prvptr)
 {
     extern /* Subroutine */ int zzekerd1_(integer *, integer *, integer *, 
-	    doublereal *, integer *, logical *, integer *, integer *), 
-	    zzekcnam_(integer *, integer *, char *, ftnlen), chkin_(char *, 
-	    ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer dtype, itype;
+	    doublereal *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer dtype;
+    integer itype;
     extern logical failed_(void);
     logical indexd;
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzeklerd_state_t* __state = get_zzeklerd_state();
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */

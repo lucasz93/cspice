@@ -1,13 +1,21 @@
-/* zzutcpm.f -- translated by f2c (version 19980913).
+/* zzutcpm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzutcpm_init_t __zzutcpm_init;
+static zzutcpm_state_t* get_zzutcpm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzutcpm)
+		state->zzutcpm = __cspice_allocate_module(sizeof(
+	zzutcpm_state_t), &__zzutcpm_init, sizeof(__zzutcpm_init));
+	return state->zzutcpm;
+
+}
 
 /* $Procedure      ZZUTCPM ( UTC Plus or Minus Parse ) */
 /* Subroutine */ int zzutcpm_(char *string, integer *start, doublereal *hoff, 
@@ -21,19 +29,25 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer need;
-    doublereal sign, x;
+    doublereal sign;
+    doublereal x;
     extern logical samch_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen);
     integer nchar;
     char error[80];
-    integer unsat, unsto;
+    integer unsat;
+    integer unsto;
     extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    integer length, signat;
+    integer length;
+    integer signat;
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
     integer ptr;
 
+
+    /* Module state */
+    zzutcpm_state_t* __state = get_zzutcpm_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -217,7 +231,7 @@ static integer c__1 = 1;
 
     *succes = TRUE_;
     i__1 = unsto + 1;
-    if (samch_(string, &i__1, ":", &c__1, string_len, (ftnlen)1)) {
+    if (samch_(string, &i__1, ":", &__state->c__1, string_len, (ftnlen)1)) {
 	unsat = unsto + 2;
     } else {
 	return 0;

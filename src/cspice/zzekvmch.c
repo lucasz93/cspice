@@ -1,14 +1,21 @@
-/* zzekvmch.f -- translated by f2c (version 19980913).
+/* zzekvmch.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__24 = 24;
-static integer c__11 = 11;
+extern zzekvmch_init_t __zzekvmch_init;
+static zzekvmch_state_t* get_zzekvmch_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekvmch)
+		state->zzekvmch = __cspice_allocate_module(sizeof(
+	zzekvmch_state_t), &__zzekvmch_init, sizeof(__zzekvmch_init));
+	return state->zzekvmch;
+
+}
 
 /* $Procedure      ZZEKVMCH ( EK, vector match ) */
 logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
@@ -25,28 +32,36 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 
     /* Local variables */
     char cval[1024*2];
-    integer hans[2], elts[2];
+    integer hans[2];
+    integer elts[2];
     logical null[2];
     integer rows[2];
     extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
 	    integer *);
-    integer i__, n;
+    integer i__;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer cvlen[2];
     logical found;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen);
-    integer cldscs[22]	/* was [11][2] */, cmplen[2], sgdscs[48]	/* 
-	    was [24][2] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errhan_(char *, 
-	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer cldscs[22]	/* was [11][2] */;
+    integer cmplen[2];
+    integer sgdscs[48]	/* was [24][2] */;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer rel;
     extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, logical *, logical *, 
 	    ftnlen);
 
+
+    /* Module state */
+    zzekvmch_state_t* __state = get_zzekvmch_state();
 /* $ Abstract */
 
 /*     Determine whether a vector of constraints involving comparisons of */
@@ -891,14 +906,14 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 
 	    hans[0] = lhans[n - 1];
 	    hans[1] = rhans[n - 1];
-	    movei_(&lsdscs[n * 24 - 24], &c__24, sgdscs);
-	    movei_(&rsdscs[n * 24 - 24], &c__24, &sgdscs[24]);
+	    movei_(&lsdscs[n * 24 - 24], &__state->c__24, sgdscs);
+	    movei_(&rsdscs[n * 24 - 24], &__state->c__24, &sgdscs[24]);
 	    rows[0] = lrows[n - 1];
 	    rows[1] = rrows[n - 1];
 	    elts[0] = lelts[n - 1];
 	    elts[1] = relts[n - 1];
-	    movei_(&lcdscs[n * 11 - 11], &c__11, cldscs);
-	    movei_(&rcdscs[n * 11 - 11], &c__11, &cldscs[11]);
+	    movei_(&lcdscs[n * 11 - 11], &__state->c__11, cldscs);
+	    movei_(&rcdscs[n * 11 - 11], &__state->c__11, &cldscs[11]);
 	    rel = zzekecmp_(hans, sgdscs, cldscs, rows, elts);
 
 /*           Determine the truth of the Nth input relational expression, */

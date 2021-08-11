@@ -1,17 +1,21 @@
-/* zzsgp4.f -- translated by f2c (version 19980913).
+/* zzsgp4.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b10 = -.66666666666666663;
-static doublereal c_b11 = .33333333333333331;
-static doublereal c_b16 = 3.5;
-static doublereal c_b22 = 1.5;
-static logical c_false = FALSE_;
+extern zzsgp4_init_t __zzsgp4_init;
+static zzsgp4_state_t* get_zzsgp4_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsgp4)
+		state->zzsgp4 = __cspice_allocate_module(sizeof(
+	zzsgp4_state_t), &__zzsgp4_init, sizeof(__zzsgp4_init));
+	return state->zzsgp4;
+
+}
 
 /* $Procedure ZZSGP4 ( SGP4 wrapper ) */
 /* Subroutine */ int zzsgp4_0_(int n__, doublereal *geophs, doublereal *elems,
@@ -27,117 +31,181 @@ static logical c_false = FALSE_;
 
     /* Local variables */
     doublereal eccm;
-    static doublereal ecco;
-    doublereal eccp, coef, eeta;
-    static doublereal alta, dedt;
+    doublereal eccp;
+    doublereal coef;
+    doublereal eeta;
     doublereal cnod;
-    static doublereal con41;
-    doublereal con42, delm;
-    static doublereal didt, dmdt;
+    doublereal con42;
+    doublereal delm;
     doublereal dndt;
-    static doublereal pgho;
-    doublereal ainv, cosi;
-    static doublereal altp;
+    doublereal ainv;
+    doublereal cosi;
     doublereal axnl;
-    static doublereal mdot;
-    doublereal aynl, emsq;
-    static doublereal j3oj2;
-    doublereal sini, snod, cosu, temp;
-    static doublereal gsto;
-    doublereal sinu, tvec[8], xinc;
-    static doublereal zmol;
-    doublereal posq, xmdf;
+    doublereal aynl;
+    doublereal emsq;
+    doublereal sini;
+    doublereal snod;
+    doublereal cosu;
+    doublereal temp;
+    doublereal sinu;
+    doublereal tvec[8];
+    doublereal xinc;
+    doublereal posq;
+    doublereal xmdf;
     integer iter;
-    static integer irez;
-    static doublereal zmos;
-    doublereal coef1, cc1sq;
-    static doublereal t2cof, t3cof, t4cof, t5cof;
-    doublereal temp1, temp2, temp3, temp4, cos2u, sin2u;
-    static doublereal a;
-    doublereal betal, u;
+    doublereal coef1;
+    doublereal cc1sq;
+    doublereal temp1;
+    doublereal temp2;
+    doublereal temp3;
+    doublereal temp4;
+    doublereal cos2u;
+    doublereal sin2u;
+    doublereal betal;
+    doublereal u;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal eccsq;
-    static doublereal atime, aycof;
     doublereal cnodm;
-    static doublereal inclo, xfact, pinco;
     doublereal argpm;
-    static doublereal argpo, xlcof, xmcof;
     doublereal argpp;
-    static doublereal bstar;
     doublereal cosim;
-    static doublereal xlamo;
     doublereal cosio;
-    static doublereal x1mth2;
     doublereal cosip;
-    static doublereal delmo, d2, d3, x7thm1, e3, d4, dnodt;
     doublereal cossu;
-    static doublereal domdt;
-    doublereal ecose, epoch, esine, etasq, inclm;
-    static doublereal j2;
-    doublereal j3, j4, nodem;
-    static doublereal nodeo;
-    doublereal nodep, psisq, qzms24, rdotl, rvdot, s1, s2, s3, s4, s5, s6, s7,
-	     sfour, sinim, sinio, sinip, coseo1, sinsu, snodm, t2, t3, cosio2,
-	     sineo1, cosio4, t4, tempa, tempe, templ, tumin, tzero, xhdot1, 
-	    xincp, xnode, z1, z2, z3;
+    doublereal ecose;
+    doublereal epoch;
+    doublereal esine;
+    doublereal etasq;
+    doublereal inclm;
+    doublereal j3;
+    doublereal j4;
+    doublereal nodem;
+    doublereal nodep;
+    doublereal psisq;
+    doublereal qzms24;
+    doublereal rdotl;
+    doublereal rvdot;
+    doublereal s1;
+    doublereal s2;
+    doublereal s3;
+    doublereal s4;
+    doublereal s5;
+    doublereal s6;
+    doublereal s7;
+    doublereal sfour;
+    doublereal sinim;
+    doublereal sinio;
+    doublereal sinip;
+    doublereal coseo1;
+    doublereal sinsu;
+    doublereal snodm;
+    doublereal t2;
+    doublereal t3;
+    doublereal cosio2;
+    doublereal sineo1;
+    doublereal cosio4;
+    doublereal t4;
+    doublereal tempa;
+    doublereal tempe;
+    doublereal templ;
+    doublereal tumin;
+    doublereal tzero;
+    doublereal xhdot1;
+    doublereal xincp;
+    doublereal xnode;
+    doublereal z1;
+    doublereal z2;
+    doublereal z3;
     extern doublereal twopi_(void);
     doublereal am;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal ao;
     extern logical failed_(void);
-    static doublereal er;
     doublereal tc;
     extern doublereal pi_(void);
     doublereal mm;
-    static doublereal mo;
     doublereal mp;
-    static doublereal no;
-    doublereal mr, omgadf, pl, mv, qzms2t, rl, delomg, rp;
-    static doublereal omgcof;
-    doublereal perige, ss, su, ux, uy;
-    static doublereal xnodcf;
+    doublereal mr;
+    doublereal omgadf;
+    doublereal pl;
+    doublereal mv;
+    doublereal qzms2t;
+    doublereal rl;
+    doublereal delomg;
+    doublereal rp;
+    doublereal perige;
+    doublereal ss;
+    doublereal su;
+    doublereal ux;
+    doublereal uy;
     doublereal uz;
-    static doublereal cc1, sinmao;
     doublereal cc2;
-    static doublereal cc4, cc5, ee2;
-    doublereal cc3, cosomm, vx, cosisq, el2, eo1, omeosq, sinomm, vy, vz, 
-	    rvdotl, rtemsq;
-    static doublereal se2;
+    doublereal cc3;
+    doublereal cosomm;
+    doublereal vx;
+    doublereal cosisq;
+    doublereal el2;
+    doublereal eo1;
+    doublereal omeosq;
+    doublereal sinomm;
+    doublereal vy;
+    doublereal vz;
+    doublereal rvdotl;
+    doublereal rtemsq;
     doublereal rteosq;
-    static doublereal se3, sh2;
     doublereal pinvsq;
-    static doublereal sh3, xh2, xh3, xi2, xi3, xl2, xl3, xl4, si2, si3, sl2, 
-	    sl3, sl4;
-    doublereal ss1, ss2, ss3, ss4, ss5, ss6, ss7, sz1, sz2, sz3, xl;
-    static doublereal d2201, d2211, d3210;
+    doublereal ss1;
+    doublereal ss2;
+    doublereal ss3;
+    doublereal ss4;
+    doublereal ss5;
+    doublereal ss6;
+    doublereal ss7;
+    doublereal sz1;
+    doublereal sz2;
+    doublereal sz3;
+    doublereal xl;
     doublereal xn;
-    static doublereal d3222, d4410, d5220, d4422, d5232, d5421, d5433;
-    doublereal xnoddf, gam, xpidot, z11, z12, z13;
-    static doublereal eta;
-    doublereal z21, z22, z23, day, z31, z32, z33;
-    static integer svmode;
+    doublereal xnoddf;
+    doublereal gam;
+    doublereal xpidot;
+    doublereal z11;
+    doublereal z12;
+    doublereal z13;
+    doublereal z21;
+    doublereal z22;
+    doublereal z23;
+    doublereal day;
+    doublereal z31;
+    doublereal z32;
+    doublereal z33;
     logical doinit;
-    static doublereal peo;
-    static logical dosimp, dodeep;
-    static doublereal pho, xke, plo;
     doublereal x2o3;
-    static doublereal xli;
     doublereal kps;
-    static doublereal xni;
-    doublereal sz11, sz12, sz13, sz21, sz22, sz23, sz31, sz32, sz33, tsi, xlm;
+    doublereal sz11;
+    doublereal sz12;
+    doublereal sz13;
+    doublereal sz21;
+    doublereal sz22;
+    doublereal sz23;
+    doublereal sz31;
+    doublereal sz32;
+    doublereal sz33;
+    doublereal tsi;
+    doublereal xlm;
     extern logical return_(void);
-    static doublereal nodedot;
-    doublereal xmx, xmy;
+    doublereal xmx;
+    doublereal xmy;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal argpdot;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ttrans_(char *, char *, doublereal *, ftnlen, ftnlen), 
-	    zzinil_(doublereal *, integer *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzinil_(doublereal *, integer *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    static doublereal del1, del2, del3;
+	    doublereal *, doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int zzdscm_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -160,36 +228,38 @@ static logical c_false = FALSE_;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), zzdspr_(integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), zzdsin_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdspr_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), zzdspc_(integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, logical *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdsin_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdspc_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -198,9 +268,11 @@ static logical c_false = FALSE_;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal sgh2, sgh3, sgh4, xgh2, xgh3, xgh4;
     doublereal tem5;
 
+
+    /* Module state */
+    zzsgp4_state_t* __state = get_zzsgp4_state();
 /* $ Abstract */
 
 /*     Umbrella for the SGP4 initializer and evaluator routines. */
@@ -1049,9 +1121,9 @@ L_xxsgp4i:
 
 /*     Initialize. */
 
-    dodeep = FALSE_;
-    dosimp = FALSE_;
-    svmode = *opmode;
+    __state->dodeep = FALSE_;
+    __state->dosimp = FALSE_;
+    __state->svmode = *opmode;
 
 /*     This code block replaces the call: */
 
@@ -1068,13 +1140,13 @@ L_xxsgp4i:
 /*        mo     = xmo */
 /*        no     = xno */
 /*        nodeo  = xnodeo */
-    bstar = elems[2];
-    inclo = elems[3];
-    nodeo = elems[4];
-    ecco = elems[5];
-    argpo = elems[6];
-    mo = elems[7];
-    no = elems[8];
+    __state->bstar = elems[2];
+    __state->inclo = elems[3];
+    __state->nodeo = elems[4];
+    __state->ecco = elems[5];
+    __state->argpo = elems[6];
+    __state->mo = elems[7];
+    __state->no = elems[8];
 
 /*       Remember that sgp4 uses units of days from 0 jan 1950 */
 /*       (sgp4epoch) and minutes from the epoch (time) */
@@ -1103,30 +1175,30 @@ L_xxsgp4i:
 /*     .                  mu, radiusearthkm, xke, */
 /*     .                  j2, j3, j4, j3oj2 ) */
 
-    j2 = geophs[0];
+    __state->j2 = geophs[0];
     j3 = geophs[1];
     j4 = geophs[2];
-    er = geophs[6];
-    xke = geophs[3];
+    __state->er = geophs[6];
+    __state->xke = geophs[3];
     tumin = 1. / geophs[3];
-    j3oj2 = j3 / j2;
+    __state->j3oj2 = j3 / __state->j2;
 
 /*     The following assignment and IF block is taken */
 /*     from TWOLINE2RVSGP4. */
 
-    d__1 = no * tumin;
-    a = pow_dd(&d__1, &c_b10);
-    if ((d__1 = ecco - 1., abs(d__1)) > 1e-6) {
-	altp = a * (1. - ecco) - 1.;
-	alta = a * (ecco + 1.) - 1.;
+    d__1 = __state->no * tumin;
+    __state->a = pow_dd(&d__1, &__state->c_b10);
+    if ((d__1 = __state->ecco - 1., abs(d__1)) > 1e-6) {
+	__state->altp = __state->a * (1. - __state->ecco) - 1.;
+	__state->alta = __state->a * (__state->ecco + 1.) - 1.;
     } else {
-	alta = 999999.9;
-	d__1 = no * no;
-	altp = 4. / pow_dd(&d__1, &c_b11) * 2.;
+	__state->alta = 999999.9;
+	d__1 = __state->no * __state->no;
+	__state->altp = 4. / pow_dd(&d__1, &__state->c_b11) * 2.;
     }
-    ss = 78. / er + 1.;
+    ss = 78. / __state->er + 1.;
 /* Computing 4th power */
-    d__1 = 42. / er, d__1 *= d__1;
+    d__1 = 42. / __state->er, d__1 *= d__1;
     qzms2t = d__1 * d__1;
     x2o3 = .66666666666666663;
 
@@ -1138,9 +1210,9 @@ L_xxsgp4i:
     temp4 = 1.5e-12;
     tzero = 0.;
     doinit = TRUE_;
-    zzinil_(geophs, opmode, &ecco, &epoch, &inclo, &no, &ainv, &ao, &con41, &
-	    con42, &cosio, &cosio2, &eccsq, &omeosq, &posq, &rp, &rteosq, &
-	    sinio, &gsto);
+    zzinil_(geophs, opmode, &__state->ecco, &epoch, &__state->inclo, &
+	    __state->no, &ainv, &ao, &__state->con41, &con42, &cosio, &cosio2,
+	     &eccsq, &omeosq, &posq, &rp, &rteosq, &sinio, &__state->gsto);
     if (failed_()) {
 	chkout_("XXSGP4I", (ftnlen)7);
 	return 0;
@@ -1158,14 +1230,14 @@ L_xxsgp4i:
 
 /*       If nodeo and No are gtr 0 */
 
-    if (omeosq >= 0. || no >= 0.) {
-	dosimp = FALSE_;
-	if (rp < 220. / er + 1.) {
-	    dosimp = TRUE_;
+    if (omeosq >= 0. || __state->no >= 0.) {
+	__state->dosimp = FALSE_;
+	if (rp < 220. / __state->er + 1.) {
+	    __state->dosimp = TRUE_;
 	}
 	sfour = ss;
 	qzms24 = qzms2t;
-	perige = (rp - 1.) * er;
+	perige = (rp - 1.) * __state->er;
 
 /*           For perigees below 156 km, S and Qoms2t are altered. */
 
@@ -1175,126 +1247,155 @@ L_xxsgp4i:
 		sfour = 20.;
 	    }
 /* Computing 4th power */
-	    d__1 = (120. - sfour) / er, d__1 *= d__1;
+	    d__1 = (120. - sfour) / __state->er, d__1 *= d__1;
 	    qzms24 = d__1 * d__1;
-	    sfour = sfour / er + 1.;
+	    sfour = sfour / __state->er + 1.;
 	}
 	pinvsq = 1. / posq;
 	tsi = 1. / (ao - sfour);
-	eta = ao * ecco * tsi;
-	etasq = eta * eta;
-	eeta = ecco * eta;
+	__state->eta = ao * __state->ecco * tsi;
+	etasq = __state->eta * __state->eta;
+	eeta = __state->ecco * __state->eta;
 	psisq = (d__1 = 1. - etasq, abs(d__1));
 /* Computing 4th power */
 	d__1 = tsi, d__1 *= d__1;
 	coef = qzms24 * (d__1 * d__1);
-	coef1 = coef / pow_dd(&psisq, &c_b16);
-	cc2 = coef1 * no * (ao * (etasq * 1.5 + 1. + eeta * (etasq + 4.)) + 
-		j2 * .375 * tsi / psisq * con41 * (etasq * 3. * (etasq + 8.) 
-		+ 8.));
-	cc1 = bstar * cc2;
+	coef1 = coef / pow_dd(&psisq, &__state->c_b16);
+	cc2 = coef1 * __state->no * (ao * (etasq * 1.5 + 1. + eeta * (etasq + 
+		4.)) + __state->j2 * .375 * tsi / psisq * __state->con41 * (
+		etasq * 3. * (etasq + 8.) + 8.));
+	__state->cc1 = __state->bstar * cc2;
 	cc3 = 0.;
-	if (ecco > 1e-4) {
-	    cc3 = coef * -2. * tsi * j3oj2 * no * sinio / ecco;
+	if (__state->ecco > 1e-4) {
+	    cc3 = coef * -2. * tsi * __state->j3oj2 * __state->no * sinio / 
+		    __state->ecco;
 	}
-	x1mth2 = 1. - cosio2;
-	cc4 = no * 2. * coef1 * ao * omeosq * (eta * (etasq * .5 + 2.) + ecco 
-		* (etasq * 2. + .5) - j2 * tsi / (ao * psisq) * (con41 * -3. *
-		 (1. - eeta * 2. + etasq * (1.5 - eeta * .5)) + x1mth2 * .75 *
-		 (etasq * 2. - eeta * (etasq + 1.)) * cos(argpo * 2.)));
-	cc5 = coef1 * 2. * ao * omeosq * ((etasq + eeta) * 2.75 + 1. + eeta * 
-		etasq);
+	__state->x1mth2 = 1. - cosio2;
+	__state->cc4 = __state->no * 2. * coef1 * ao * omeosq * (__state->eta 
+		* (etasq * .5 + 2.) + __state->ecco * (etasq * 2. + .5) - 
+		__state->j2 * tsi / (ao * psisq) * (__state->con41 * -3. * (
+		1. - eeta * 2. + etasq * (1.5 - eeta * .5)) + __state->x1mth2 
+		* .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(
+		__state->argpo * 2.)));
+	__state->cc5 = coef1 * 2. * ao * omeosq * ((etasq + eeta) * 2.75 + 1. 
+		+ eeta * etasq);
 	cosio4 = cosio2 * cosio2;
-	temp1 = j2 * 1.5 * pinvsq * no;
-	temp2 = temp1 * .5 * j2 * pinvsq;
-	temp3 = j4 * -.46875 * pinvsq * pinvsq * no;
-	mdot = no + temp1 * .5 * rteosq * con41 + temp2 * .0625 * rteosq * (
-		13. - cosio2 * 78. + cosio4 * 137.);
-	argpdot = temp1 * -.5 * con42 + temp2 * .0625 * (7. - cosio2 * 114. + 
-		cosio4 * 395.) + temp3 * (3. - cosio2 * 36. + cosio4 * 49.);
+	temp1 = __state->j2 * 1.5 * pinvsq * __state->no;
+	temp2 = temp1 * .5 * __state->j2 * pinvsq;
+	temp3 = j4 * -.46875 * pinvsq * pinvsq * __state->no;
+	__state->mdot = __state->no + temp1 * .5 * rteosq * __state->con41 + 
+		temp2 * .0625 * rteosq * (13. - cosio2 * 78. + cosio4 * 137.);
+	__state->argpdot = temp1 * -.5 * con42 + temp2 * .0625 * (7. - cosio2 
+		* 114. + cosio4 * 395.) + temp3 * (3. - cosio2 * 36. + cosio4 
+		* 49.);
 	xhdot1 = -temp1 * cosio;
-	nodedot = xhdot1 + (temp2 * .5 * (4. - cosio2 * 19.) + temp3 * 2. * (
-		3. - cosio2 * 7.)) * cosio;
-	xpidot = argpdot + nodedot;
-	omgcof = bstar * cc3 * cos(argpo);
-	xmcof = 0.;
-	if (ecco > 1e-4) {
-	    xmcof = -x2o3 * coef * bstar / eeta;
+	__state->nodedot = xhdot1 + (temp2 * .5 * (4. - cosio2 * 19.) + temp3 
+		* 2. * (3. - cosio2 * 7.)) * cosio;
+	xpidot = __state->argpdot + __state->nodedot;
+	__state->omgcof = __state->bstar * cc3 * cos(__state->argpo);
+	__state->xmcof = 0.;
+	if (__state->ecco > 1e-4) {
+	    __state->xmcof = -x2o3 * coef * __state->bstar / eeta;
 	}
-	xnodcf = omeosq * 3.5 * xhdot1 * cc1;
-	t2cof = cc1 * 1.5;
+	__state->xnodcf = omeosq * 3.5 * xhdot1 * __state->cc1;
+	__state->t2cof = __state->cc1 * 1.5;
 
 /*           sgp4fix for divide by zero with xinco = 180 deg. */
 
 	if ((d__1 = cosio + 1., abs(d__1)) > 1.5e-12) {
-	    xlcof = j3oj2 * -.25 * sinio * (cosio * 5. + 3.) / (cosio + 1.);
+	    __state->xlcof = __state->j3oj2 * -.25 * sinio * (cosio * 5. + 3.)
+		     / (cosio + 1.);
 	} else {
-	    xlcof = j3oj2 * -.25 * sinio * (cosio * 5. + 3.) / temp4;
+	    __state->xlcof = __state->j3oj2 * -.25 * sinio * (cosio * 5. + 3.)
+		     / temp4;
 	}
-	aycof = j3oj2 * -.5 * sinio;
+	__state->aycof = __state->j3oj2 * -.5 * sinio;
 /* Computing 3rd power */
-	d__1 = eta * cos(mo) + 1.;
-	delmo = d__1 * (d__1 * d__1);
-	sinmao = sin(mo);
-	x7thm1 = cosio2 * 7. - 1.;
+	d__1 = __state->eta * cos(__state->mo) + 1.;
+	__state->delmo = d__1 * (d__1 * d__1);
+	__state->sinmao = sin(__state->mo);
+	__state->x7thm1 = cosio2 * 7. - 1.;
 
 /*           Deep Space Initialization */
 
-	if (twopi_() / no >= 225.) {
-	    dodeep = TRUE_;
-	    dosimp = TRUE_;
+	if (twopi_() / __state->no >= 225.) {
+	    __state->dodeep = TRUE_;
+	    __state->dosimp = TRUE_;
 	    tc = 0.;
-	    inclm = inclo;
+	    inclm = __state->inclo;
 
 /*               Common. */
 
-	    zzdscm_(&epoch, &ecco, &argpo, &tc, &inclo, &nodeo, &no, &snodm, &
-		    cnodm, &sinim, &cosim, &sinomm, &cosomm, &day, &e3, &ee2, 
-		    &eccm, &emsq, &gam, &peo, &pgho, &pho, &pinco, &plo, &
-		    rtemsq, &se2, &se3, &sgh2, &sgh3, &sgh4, &sh2, &sh3, &si2,
-		     &si3, &sl2, &sl3, &sl4, &s1, &s2, &s3, &s4, &s5, &s6, &
-		    s7, &ss1, &ss2, &ss3, &ss4, &ss5, &ss6, &ss7, &sz1, &sz2, 
-		    &sz3, &sz11, &sz12, &sz13, &sz21, &sz22, &sz23, &sz31, &
-		    sz32, &sz33, &xgh2, &xgh3, &xgh4, &xh2, &xh3, &xi2, &xi3, 
-		    &xl2, &xl3, &xl4, &xn, &z1, &z2, &z3, &z11, &z12, &z13, &
-		    z21, &z22, &z23, &z31, &z32, &z33, &zmol, &zmos);
+	    zzdscm_(&epoch, &__state->ecco, &__state->argpo, &tc, &
+		    __state->inclo, &__state->nodeo, &__state->no, &snodm, &
+		    cnodm, &sinim, &cosim, &sinomm, &cosomm, &day, &
+		    __state->e3, &__state->ee2, &eccm, &emsq, &gam, &
+		    __state->peo, &__state->pgho, &__state->pho, &
+		    __state->pinco, &__state->plo, &rtemsq, &__state->se2, &
+		    __state->se3, &__state->sgh2, &__state->sgh3, &
+		    __state->sgh4, &__state->sh2, &__state->sh3, &
+		    __state->si2, &__state->si3, &__state->sl2, &__state->sl3,
+		     &__state->sl4, &s1, &s2, &s3, &s4, &s5, &s6, &s7, &ss1, &
+		    ss2, &ss3, &ss4, &ss5, &ss6, &ss7, &sz1, &sz2, &sz3, &
+		    sz11, &sz12, &sz13, &sz21, &sz22, &sz23, &sz31, &sz32, &
+		    sz33, &__state->xgh2, &__state->xgh3, &__state->xgh4, &
+		    __state->xh2, &__state->xh3, &__state->xi2, &__state->xi3,
+		     &__state->xl2, &__state->xl3, &__state->xl4, &xn, &z1, &
+		    z2, &z3, &z11, &z12, &z13, &z21, &z22, &z23, &z31, &z32, &
+		    z33, &__state->zmol, &__state->zmos);
 
 /*               Long period perturbations. */
 
-	    zzdspr_(opmode, &e3, &ee2, &peo, &pgho, &pho, &pinco, &plo, &se2, 
-		    &se3, &sgh2, &sgh3, &sgh4, &sh2, &sh3, &si2, &si3, &sl2, &
-		    sl3, &sl4, &tzero, &xgh2, &xgh3, &xgh4, &xh2, &xh3, &xi2, 
-		    &xi3, &xl2, &xl3, &xl4, &zmol, &zmos, &inclm, &doinit, &
-		    ecco, &inclo, &nodeo, &argpo, &mo);
+	    zzdspr_(opmode, &__state->e3, &__state->ee2, &__state->peo, &
+		    __state->pgho, &__state->pho, &__state->pinco, &
+		    __state->plo, &__state->se2, &__state->se3, &
+		    __state->sgh2, &__state->sgh3, &__state->sgh4, &
+		    __state->sh2, &__state->sh3, &__state->si2, &__state->si3,
+		     &__state->sl2, &__state->sl3, &__state->sl4, &tzero, &
+		    __state->xgh2, &__state->xgh3, &__state->xgh4, &
+		    __state->xh2, &__state->xh3, &__state->xi2, &__state->xi3,
+		     &__state->xl2, &__state->xl3, &__state->xl4, &
+		    __state->zmol, &__state->zmos, &inclm, &doinit, &
+		    __state->ecco, &__state->inclo, &__state->nodeo, &
+		    __state->argpo, &__state->mo);
 	    argpm = 0.;
 	    nodem = 0.;
 	    mm = 0.;
 
 /*               Initialization */
 
-	    zzdsin_(geophs, &cosim, &emsq, &argpo, &s1, &s2, &s3, &s4, &s5, &
-		    sinim, &ss1, &ss2, &ss3, &ss4, &ss5, &sz1, &sz3, &sz11, &
-		    sz13, &sz21, &sz23, &sz31, &sz33, &tzero, &tc, &gsto, &mo,
-		     &mdot, &no, &nodeo, &nodedot, &xpidot, &z1, &z3, &z11, &
-		    z13, &z21, &z23, &z31, &z33, &ecco, &eccsq, &eccm, &argpm,
-		     &inclm, &mm, &xn, &nodem, &irez, &atime, &d2201, &d2211, 
-		    &d3210, &d3222, &d4410, &d4422, &d5220, &d5232, &d5421, &
-		    d5433, &dedt, &didt, &dmdt, &dndt, &dnodt, &domdt, &del1, 
-		    &del2, &del3, &xfact, &xlamo, &xli, &xni);
+	    zzdsin_(geophs, &cosim, &emsq, &__state->argpo, &s1, &s2, &s3, &
+		    s4, &s5, &sinim, &ss1, &ss2, &ss3, &ss4, &ss5, &sz1, &sz3,
+		     &sz11, &sz13, &sz21, &sz23, &sz31, &sz33, &tzero, &tc, &
+		    __state->gsto, &__state->mo, &__state->mdot, &__state->no,
+		     &__state->nodeo, &__state->nodedot, &xpidot, &z1, &z3, &
+		    z11, &z13, &z21, &z23, &z31, &z33, &__state->ecco, &eccsq,
+		     &eccm, &argpm, &inclm, &mm, &xn, &nodem, &__state->irez, 
+		    &__state->atime, &__state->d2201, &__state->d2211, &
+		    __state->d3210, &__state->d3222, &__state->d4410, &
+		    __state->d4422, &__state->d5220, &__state->d5232, &
+		    __state->d5421, &__state->d5433, &__state->dedt, &
+		    __state->didt, &__state->dmdt, &dndt, &__state->dnodt, &
+		    __state->domdt, &__state->del1, &__state->del2, &
+		    __state->del3, &__state->xfact, &__state->xlamo, &
+		    __state->xli, &__state->xni);
 	}
 
 /*           Set variables if not deep space or rp < 220 */
 
-	if (! dosimp) {
-	    cc1sq = cc1 * cc1;
-	    d2 = ao * 4. * tsi * cc1sq;
-	    temp = d2 * tsi * cc1 / 3.;
-	    d3 = (ao * 17. + sfour) * temp;
-	    d4 = temp * .5 * ao * tsi * (ao * 221. + sfour * 31.) * cc1;
-	    t3cof = d2 + cc1sq * 2.;
-	    t4cof = (d3 * 3. + cc1 * (d2 * 12. + cc1sq * 10.)) * .25;
-	    t5cof = (d4 * 3. + cc1 * 12. * d3 + d2 * 6. * d2 + cc1sq * 15. * (
-		    d2 * 2. + cc1sq)) * .2;
+	if (! __state->dosimp) {
+	    cc1sq = __state->cc1 * __state->cc1;
+	    __state->d2 = ao * 4. * tsi * cc1sq;
+	    temp = __state->d2 * tsi * __state->cc1 / 3.;
+	    __state->d3 = (ao * 17. + sfour) * temp;
+	    __state->d4 = temp * .5 * ao * tsi * (ao * 221. + sfour * 31.) * 
+		    __state->cc1;
+	    __state->t3cof = __state->d2 + cc1sq * 2.;
+	    __state->t4cof = (__state->d3 * 3. + __state->cc1 * (__state->d2 *
+		     12. + cc1sq * 10.)) * .25;
+	    __state->t5cof = (__state->d4 * 3. + __state->cc1 * 12. * 
+		    __state->d3 + __state->d2 * 6. * __state->d2 + cc1sq * 
+		    15. * (__state->d2 * 2. + cc1sq)) * .2;
 	}
     }
     doinit = FALSE_;
@@ -1504,44 +1605,51 @@ L_xxsgp4e:
 /*     1.5D-12, so the threshold was changed to 1.5D-12 for consistency. */
 
     temp4 = 1.5e-12;
-    kps = er * xke / 60.;
+    kps = __state->er * __state->xke / 60.;
 
 /*     UPDATE FOR SECULAR GRAVITY AND ATMOSPHERIC DRAG */
 
-    xmdf = mo + mdot * *t;
-    omgadf = argpo + argpdot * *t;
-    xnoddf = nodeo + nodedot * *t;
+    xmdf = __state->mo + __state->mdot * *t;
+    omgadf = __state->argpo + __state->argpdot * *t;
+    xnoddf = __state->nodeo + __state->nodedot * *t;
     argpm = omgadf;
     mm = xmdf;
     t2 = *t * *t;
-    nodem = xnoddf + xnodcf * t2;
-    tempa = 1. - cc1 * *t;
-    tempe = bstar * cc4 * *t;
-    templ = t2cof * t2;
-    if (! dosimp) {
-	delomg = omgcof * *t;
+    nodem = xnoddf + __state->xnodcf * t2;
+    tempa = 1. - __state->cc1 * *t;
+    tempe = __state->bstar * __state->cc4 * *t;
+    templ = __state->t2cof * t2;
+    if (! __state->dosimp) {
+	delomg = __state->omgcof * *t;
 /* Computing 3rd power */
-	d__1 = eta * cos(xmdf) + 1.;
-	delm = xmcof * (d__1 * (d__1 * d__1) - delmo);
+	d__1 = __state->eta * cos(xmdf) + 1.;
+	delm = __state->xmcof * (d__1 * (d__1 * d__1) - __state->delmo);
 	temp = delomg + delm;
 	mm = xmdf + temp;
 	argpm = omgadf - temp;
 	t3 = t2 * *t;
 	t4 = t3 * *t;
-	tempa = tempa - d2 * t2 - d3 * t3 - d4 * t4;
-	tempe += bstar * cc5 * (sin(mm) - sinmao);
-	templ = templ + t3cof * t3 + t4 * (t4cof + *t * t5cof);
+	tempa = tempa - __state->d2 * t2 - __state->d3 * t3 - __state->d4 * 
+		t4;
+	tempe += __state->bstar * __state->cc5 * (sin(mm) - __state->sinmao);
+	templ = templ + __state->t3cof * t3 + t4 * (__state->t4cof + *t * 
+		__state->t5cof);
     }
-    xn = no;
-    eccm = ecco;
-    inclm = inclo;
-    if (dodeep) {
+    xn = __state->no;
+    eccm = __state->ecco;
+    inclm = __state->inclo;
+    if (__state->dodeep) {
 	tc = *t;
-	zzdspc_(&irez, &d2201, &d2211, &d3210, &d3222, &d4410, &d4422, &d5220,
-		 &d5232, &d5421, &d5433, &dedt, &del1, &del2, &del3, &didt, &
-		dmdt, &dnodt, &domdt, &argpo, &argpdot, t, &tc, &gsto, &xfact,
-		 &xlamo, &no, &atime, &eccm, &argpm, &inclm, &xli, &mm, &xni, 
-		&nodem, &dndt, &xn);
+	zzdspc_(&__state->irez, &__state->d2201, &__state->d2211, &
+		__state->d3210, &__state->d3222, &__state->d4410, &
+		__state->d4422, &__state->d5220, &__state->d5232, &
+		__state->d5421, &__state->d5433, &__state->dedt, &
+		__state->del1, &__state->del2, &__state->del3, &__state->didt,
+		 &__state->dmdt, &__state->dnodt, &__state->domdt, &
+		__state->argpo, &__state->argpdot, t, &tc, &__state->gsto, &
+		__state->xfact, &__state->xlamo, &__state->no, &
+		__state->atime, &eccm, &argpm, &inclm, &__state->xli, &mm, &
+		__state->xni, &nodem, &dndt, &xn);
     }
 
 /*     Mean motion less than 0.0. */
@@ -1553,11 +1661,11 @@ L_xxsgp4e:
 	chkout_("XXSGP4E", (ftnlen)7);
 	return 0;
     }
-    d__1 = xke / xn;
+    d__1 = __state->xke / xn;
 /* Computing 2nd power */
     d__2 = tempa;
     am = pow_dd(&d__1, &x2o3) * (d__2 * d__2);
-    xn = xke / pow_dd(&am, &c_b22);
+    xn = __state->xke / pow_dd(&am, &__state->c_b22);
     eccm -= tempe;
 
 /*     Fix tolerance for error recognition. Vallado code used */
@@ -1587,7 +1695,7 @@ L_xxsgp4e:
     if (eccm < 1e-6) {
 	eccm = 1e-6;
     }
-    mm += no * templ;
+    mm += __state->no * templ;
     xlm = mm + argpm + nodem;
     emsq = eccm * eccm;
     temp = 1. - emsq;
@@ -1618,12 +1726,17 @@ L_xxsgp4e:
 
 /*     Use deep space perturbation if indicated. */
 
-    if (dodeep) {
-	zzdspr_(&svmode, &e3, &ee2, &peo, &pgho, &pho, &pinco, &plo, &se2, &
-		se3, &sgh2, &sgh3, &sgh4, &sh2, &sh3, &si2, &si3, &sl2, &sl3, 
-		&sl4, t, &xgh2, &xgh3, &xgh4, &xh2, &xh3, &xi2, &xi3, &xl2, &
-		xl3, &xl4, &zmol, &zmos, &inclo, &c_false, &eccp, &xincp, &
-		nodep, &argpp, &mp);
+    if (__state->dodeep) {
+	zzdspr_(&__state->svmode, &__state->e3, &__state->ee2, &__state->peo, 
+		&__state->pgho, &__state->pho, &__state->pinco, &__state->plo,
+		 &__state->se2, &__state->se3, &__state->sgh2, &__state->sgh3,
+		 &__state->sgh4, &__state->sh2, &__state->sh3, &__state->si2, 
+		&__state->si3, &__state->sl2, &__state->sl3, &__state->sl4, t,
+		 &__state->xgh2, &__state->xgh3, &__state->xgh4, &
+		__state->xh2, &__state->xh3, &__state->xi2, &__state->xi3, &
+		__state->xl2, &__state->xl3, &__state->xl4, &__state->zmol, &
+		__state->zmos, &__state->inclo, &__state->c_false, &eccp, &
+		xincp, &nodep, &argpp, &mp);
 	if (xincp < 0.) {
 	    xincp = -xincp;
 	    nodep += pi_();
@@ -1642,23 +1755,25 @@ L_xxsgp4e:
 
 /*     Update for long period periodics if a deep space trajectory. */
 
-    if (dodeep) {
+    if (__state->dodeep) {
 	sinip = sin(xincp);
 	cosip = cos(xincp);
-	aycof = j3oj2 * -.5 * sinip;
+	__state->aycof = __state->j3oj2 * -.5 * sinip;
 
 /*         sgp4fix for divide by zero with xincp = 180 deg */
 
 	if ((d__1 = cosip + 1., abs(d__1)) > 1.5e-12) {
-	    xlcof = j3oj2 * -.25 * sinip * (cosip * 5. + 3.) / (cosip + 1.);
+	    __state->xlcof = __state->j3oj2 * -.25 * sinip * (cosip * 5. + 3.)
+		     / (cosip + 1.);
 	} else {
-	    xlcof = j3oj2 * -.25 * sinip * (cosip * 5. + 3.) / temp4;
+	    __state->xlcof = __state->j3oj2 * -.25 * sinip * (cosip * 5. + 3.)
+		     / temp4;
 	}
     }
     axnl = eccp * cos(argpp);
     temp = 1. / (am * (1. - eccp * eccp));
-    aynl = eccp * sin(argpp) + temp * aycof;
-    xl = mp + argpp + nodep + temp * xlcof * axnl;
+    aynl = eccp * sin(argpp) + temp * __state->aycof;
+    xl = mp + argpp + nodep + temp * __state->xlcof * axnl;
 
 /*     Solve Kepler's equation. */
 
@@ -1714,24 +1829,25 @@ L_xxsgp4e:
     sin2u = (cosu + cosu) * sinu;
     cos2u = 1. - sinu * 2. * sinu;
     temp = 1. / pl;
-    temp1 = j2 * .5 * temp;
+    temp1 = __state->j2 * .5 * temp;
     temp2 = temp1 * temp;
 
 /*     Update for short period periodics if a deep space trajectory. */
 
-    if (dodeep) {
+    if (__state->dodeep) {
 	cosisq = cosip * cosip;
-	con41 = cosisq * 3. - 1.;
-	x1mth2 = 1. - cosisq;
-	x7thm1 = cosisq * 7. - 1.;
+	__state->con41 = cosisq * 3. - 1.;
+	__state->x1mth2 = 1. - cosisq;
+	__state->x7thm1 = cosisq * 7. - 1.;
     }
-    mr = rl * (1. - temp2 * 1.5 * betal * con41) + temp1 * .5 * x1mth2 * 
-	    cos2u;
-    su -= temp2 * .25 * x7thm1 * sin2u;
+    mr = rl * (1. - temp2 * 1.5 * betal * __state->con41) + temp1 * .5 * 
+	    __state->x1mth2 * cos2u;
+    su -= temp2 * .25 * __state->x7thm1 * sin2u;
     xnode = nodep + temp2 * 1.5 * cosip * sin2u;
     xinc = xincp + temp2 * 1.5 * cosip * sinip * cos2u;
-    mv = rdotl - xn * temp1 * x1mth2 * sin2u / xke;
-    rvdot = rvdotl + xn * temp1 * (x1mth2 * cos2u + con41 * 1.5) / xke;
+    mv = rdotl - xn * temp1 * __state->x1mth2 * sin2u / __state->xke;
+    rvdot = rvdotl + xn * temp1 * (__state->x1mth2 * cos2u + __state->con41 * 
+	    1.5) / __state->xke;
 
 /*     Orientation vectors. */
 
@@ -1752,9 +1868,9 @@ L_xxsgp4e:
 
 /*     Position and velocity. */
 
-    state[0] = mr * ux * er;
-    state[1] = mr * uy * er;
-    state[2] = mr * uz * er;
+    state[0] = mr * ux * __state->er;
+    state[1] = mr * uy * __state->er;
+    state[2] = mr * uz * __state->er;
     state[3] = (mv * ux + rvdot * vx) * kps;
     state[4] = (mv * uy + rvdot * vy) * kps;
     state[5] = (mv * uz + rvdot * vz) * kps;

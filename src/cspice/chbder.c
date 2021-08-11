@@ -1,9 +1,17 @@
-/* chbder.f -- translated by f2c (version 19980913).
+/* chbder.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int chbder_state_t;
+static chbder_state_t* get_chbder_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CHBDER ( Derivatives of a Chebyshev expansion ) */
 /* Subroutine */ int chbder_(doublereal *cp, integer *degp, doublereal *x2s, 
@@ -13,9 +21,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
-    doublereal s, scale, s2;
+    integer i__;
+    integer j;
+    doublereal s;
+    doublereal scale;
+    doublereal s2;
 
+
+    /* Module state */
+    chbder_state_t* __state = get_chbder_state();
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

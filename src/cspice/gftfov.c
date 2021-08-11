@@ -1,15 +1,21 @@
-/* gftfov.f -- translated by f2c (version 19980913).
+/* gftfov.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
+extern gftfov_init_t __gftfov_init;
+static gftfov_state_t* get_gftfov_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gftfov)
+		state->gftfov = __cspice_allocate_module(sizeof(
+	gftfov_state_t), &__gftfov_init, sizeof(__gftfov_init));
+	return state->gftfov;
+
+}
 
 /* $Procedure GFTFOV ( GF, is target in FOV? ) */
 /* Subroutine */ int gftfov_(char *inst, char *target, char *tshape, char *
@@ -20,7 +26,6 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static doublereal raydir[3] = { 0.,0.,0. };
 
     /* System generated locals */
     integer i__1;
@@ -28,23 +33,31 @@ static logical c_false = FALSE_;
     /* Local variables */
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sized_(doublereal *);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen), gfbail_();
+    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical gfbail_();
     logical ok;
-    extern /* Subroutine */ int gfrefn_(), gfrepf_(), gfrepi_();
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfrepi_();
     extern /* Subroutine */ int gffove_(char *, char *, doublereal *, char *, 
 	    char *, char *, char *, doublereal *, U_fp, U_fp, logical *, U_fp,
 	     U_fp, U_fp, logical *, L_fp, doublereal *, doublereal *, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int gfrepu_(), gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), gfsstp_(
-	    doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gftfov_state_t* __state = get_gftfov_state();
 /* $ Abstract */
 
 /*     Determine time intervals when a specified ephemeris object */
@@ -1247,7 +1260,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1257,10 +1270,11 @@ static logical c_false = FALSE_;
 
 /*     Look for solutions. */
 
-    gffove_(inst, tshape, raydir, target, tframe, abcorr, obsrvr, &tol, (U_fp)
-	    gfstep_, (U_fp)gfrefn_, &c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
-	    U_fp)gfrepf_, &c_false, (L_fp)gfbail_, cnfine, result, inst_len, 
-	    tshape_len, target_len, tframe_len, abcorr_len, obsrvr_len);
+    gffove_(inst, tshape, __state->raydir, target, tframe, abcorr, obsrvr, &
+	    tol, (U_fp)gfstep_, (U_fp)gfrefn_, &__state->c_false, (U_fp)
+	    gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &__state->c_false, (L_fp)
+	    gfbail_, cnfine, result, inst_len, tshape_len, target_len, 
+	    tframe_len, abcorr_len, obsrvr_len);
     chkout_("GFTFOV", (ftnlen)6);
     return 0;
 } /* gftfov_ */

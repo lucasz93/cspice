@@ -1,13 +1,21 @@
-/* zzgftreb.f -- translated by f2c (version 19980913).
+/* zzgftreb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzgftreb_init_t __zzgftreb_init;
+static zzgftreb_state_t* get_zzgftreb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgftreb)
+		state->zzgftreb = __cspice_allocate_module(sizeof(
+	zzgftreb_state_t), &__zzgftreb_init, sizeof(__zzgftreb_init));
+	return state->zzgftreb;
+
+}
 
 /* $Procedure ZZGFTREB ( Geometry finder: return body axes ) */
 /* Subroutine */ int zzgftreb_(integer *body, doublereal *axes)
@@ -19,13 +27,20 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), bodvcd_(integer *, 
-	    char *, integer *, integer *, doublereal *, ftnlen), sigerr_(char 
-	    *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    integer i__;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzgftreb_state_t* __state = get_zzgftreb_state();
 /* $ Abstract */
 
 /*     Return the values of the triaxial radii for any body in the */
@@ -175,7 +190,7 @@ static integer c__3 = 3;
 
 /*     Look it up in the kernel pool. */
 
-    bodvcd_(body, "RADII", &c__3, &n, axes, (ftnlen)5);
+    bodvcd_(body, "RADII", &__state->c__3, &n, axes, (ftnlen)5);
     if (n != 3) {
 	setmsg_("Only # axes were found  for ID # . Three axes are needed.", (
 		ftnlen)57);

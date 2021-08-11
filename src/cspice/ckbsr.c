@@ -1,17 +1,21 @@
-/* ckbsr.f -- translated by f2c (version 19980913).
+/* ckbsr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_b9 = 100000;
-static integer c__5000 = 5000;
-static integer c__5 = 5;
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckbsr_init_t __ckbsr_init;
+static ckbsr_state_t* get_ckbsr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckbsr)
+		state->ckbsr = __cspice_allocate_module(sizeof(ckbsr_state_t),
+	 &__ckbsr_init, sizeof(__ckbsr_init));
+	return state->ckbsr;
+
+}
 
 /* $Procedure      CKBSR ( C-kernel, buffer segments for readers ) */
 /* Subroutine */ int ckbsr_0_(int n__, char *fname, integer *handle, integer *
@@ -21,13 +25,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical fresub = FALSE_;
-    static integer nft = 0;
-    static integer nit = 0;
-    static integer next = 0;
-    static integer savep = 0;
-    static doublereal savtol = 0.;
-    static char status[40] = "BOGUS ENTRY                             ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -39,71 +36,59 @@ static integer c__6 = 6;
 	    ftnlen, ftnlen);
 
     /* Local variables */
-    integer head, tail;
-    static doublereal itlb[100], itub[100];
+    integer head;
+    integer tail;
     integer cost;
-    static doublereal reqt;
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int dafgn_(char *, ftnlen);
-    integer cheap, p;
+    integer cheap;
+    integer p;
     extern /* Subroutine */ int dafgs_(doublereal *);
-    static doublereal alpha, omega;
-    static integer itbeg[100], slbeg;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
-    static integer fthan[5000];
-    static doublereal stdcd[200000]	/* was [2][100000] */;
-    char doing[40], stack[40*2];
-    static integer sticd[600000]	/* was [6][100000] */;
-    extern doublereal dpmin_(void), dpmax_(void);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
+    char doing[40];
+    char stack[40*2];
+    extern doublereal dpmin_(void);
+    extern doublereal dpmax_(void);
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer ithfs[100], sthan[100000];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
-    static integer itlfs[100];
     extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern integer lnktl_(integer *, integer *);
-    static integer itins[100], ftnum[5000], itexp[100];
-    extern /* Subroutine */ int daffna_(logical *), dafbbs_(integer *), 
-	    daffpa_(logical *);
+    extern /* Subroutine */ int daffna_(logical *);
+    extern /* Subroutine */ int dafbbs_(integer *);
+    extern /* Subroutine */ int daffpa_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *), cleard_(integer *, 
-	    doublereal *), dafcls_(integer *);
+    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int dafcls_(integer *);
     logical fndhan;
-    static logical avneed;
-    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *), 
-	    dafopr_(char *, integer *, ftnlen);
-    static integer findex;
+    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
     extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
     extern integer isrchi_(integer *, integer *, integer *);
-    static integer iindex;
-    static logical itchkp[100];
     extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer lnknfn_(integer *);
-    static logical newsch;
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern integer intmax_(void);
     integer minexp;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char stidnt[40*100000];
     char urgent[40];
-    static doublereal itprvd[500]	/* was [5][100] */;
-    static integer itprvf[100];
     integer nxtseg;
     extern integer lnkprv_(integer *, integer *);
-    static char itprvi[40*100];
     extern integer lnknxt_(integer *, integer *);
     extern logical return_(void);
-    static integer itprvh[100], itruex[100], stpool[200012]	/* was [2][
-	    100006] */, scinst;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     doublereal dcd[2];
     integer icd[6];
-    static logical fnd;
     integer new__;
-    static integer top;
 
+    /* Module state */
+    ckbsr_state_t* __state = get_ckbsr_state();
 /* $ Abstract */
 
 /*     Load and unload files for use by the readers. Buffer segments */
@@ -1197,19 +1182,19 @@ L_cklpf:
 /*     Don't allow a search to continue after loading a file; a new */
 /*     search should be re-started. */
 
-    s_copy(status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
+    s_copy(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
 
 /*     Since a current search cannot be continued at this point, */
 /*     free the left-over partial list searched in the */
 /*     'CHECK PARTIAL LIST' state, if the list is present. */
 
-    if (fresub) {
+    if (__state->fresub) {
 
 /*        Return the partial list to the free list. */
 
-	tail = lnktl_(&slbeg, stpool);
-	lnkfsl_(&slbeg, &tail, stpool);
-	fresub = FALSE_;
+	tail = lnktl_(&__state->slbeg, __state->stpool);
+	lnkfsl_(&__state->slbeg, &tail, __state->stpool);
+	__state->fresub = FALSE_;
     }
 
 /*     Any time we load a file, there is a possibility that the */
@@ -1218,10 +1203,10 @@ L_cklpf:
 /*     the loaded file, simply indicate that all of the re-use */
 /*     intervals are invalid. */
 
-    i__1 = nit;
+    i__1 = __state->nit;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itchkp", 
-		i__2, "ckbsr_", (ftnlen)1316)] = FALSE_;
+	__state->itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
+		"itchkp", i__2, "ckbsr_", (ftnlen)1316)] = FALSE_;
     }
 
 /*     Nothing works unless at least one file has been loaded, so this */
@@ -1232,8 +1217,8 @@ L_cklpf:
 /*     want to re-initialize just because there are no instrument table */
 /*     entries. */
 
-    if (nft == 0) {
-	lnkini_(&c_b9, stpool);
+    if (__state->nft == 0) {
+	lnkini_(&__state->c_b9, __state->stpool);
     }
 
 /*     To load a new file, first try to open it for reading. */
@@ -1246,8 +1231,8 @@ L_cklpf:
 
 /*     Determine if the file is already in the table. */
 
-    findex = isrchi_(handle, &nft, fthan);
-    if (findex > 0) {
+    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    if (__state->findex > 0) {
 
 /*        The last call we made to DAFOPR added another DAF link to */
 /*        the CK file.  Remove this link. */
@@ -1256,33 +1241,33 @@ L_cklpf:
 
 /*        Handle is already in the table.  Remove it. */
 
-	--nft;
-	i__1 = nft;
-	for (i__ = findex; i__ <= i__1; ++i__) {
-	    fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
-		    , i__2, "ckbsr_", (ftnlen)1360)] = fthan[(i__3 = i__) < 
-		    5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "ckbsr_",
-		     (ftnlen)1360)];
-	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "ckbsr_", (ftnlen)1361)] = ftnum[(i__3 = i__) < 
-		    5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "ckbsr_",
-		     (ftnlen)1361)];
+	--__state->nft;
+	i__1 = __state->nft;
+	for (i__ = __state->findex; i__ <= i__1; ++i__) {
+	    __state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("fthan", i__2, "ckbsr_", (ftnlen)1360)] = 
+		    __state->fthan[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		    s_rnge("fthan", i__3, "ckbsr_", (ftnlen)1360)];
+	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)1361)] = 
+		    __state->ftnum[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		    s_rnge("ftnum", i__3, "ckbsr_", (ftnlen)1361)];
 	}
 
 /*        Unlink any segments that came from this file. */
 
 	i__ = 1;
-	while(i__ <= nit) {
-	    p = itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itbeg", i__1, "ckbsr_", (ftnlen)1371)];
+	while(i__ <= __state->nit) {
+	    p = __state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1371)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
-		nxtseg = lnknxt_(&p, stpool);
-		if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)1379)] == *
-			handle) {
+		nxtseg = lnknxt_(&p, __state->stpool);
+		if (__state->sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? 
+			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)1379)] 
+			== *handle) {
 
 /*                 The segment corresponding to node P came from */
 /*                 the file we're unloading.  Delete the node for */
@@ -1290,13 +1275,13 @@ L_cklpf:
 /*                 to be the head node for instrument I's segment list, */
 /*                 make the successor of P the head of the list. */
 
-		    lnkfsl_(&p, &p, stpool);
-		    if (p == itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1389)]) 
-			    {
-			itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1390)]
-				 = nxtseg;
+		    lnkfsl_(&p, &p, __state->stpool);
+		    if (p == __state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+			    ftnlen)1389)]) {
+			__state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
+				i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+				ftnlen)1390)] = nxtseg;
 		    }
 		}
 
@@ -1310,8 +1295,8 @@ L_cklpf:
 /*           instrument in the table into the space occupied by the */
 /*           one we've deleted. */
 
-	    if (itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itbeg", i__1, "ckbsr_", (ftnlen)1407)] <= 0) {
+	    if (__state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1407)] <= 0) {
 
 /*              Because all of the re-use intervals are invalid, we need */
 /*              not copy the saved items associated with them.  The */
@@ -1326,27 +1311,32 @@ L_cklpf:
 /*                 ITRUEX */
 /*                 ITUB */
 
-		itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itins", i__1, "ckbsr_", (ftnlen)1422)] = itins[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itins",
-			 i__2, "ckbsr_", (ftnlen)1422)];
-		itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)1423)] = itexp[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp",
-			 i__2, "ckbsr_", (ftnlen)1423)];
-		ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"ithfs", i__1, "ckbsr_", (ftnlen)1424)] = ithfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ithfs",
-			 i__2, "ckbsr_", (ftnlen)1424)];
-		itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)1425)] = itlfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlfs",
-			 i__2, "ckbsr_", (ftnlen)1425)];
-		itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)1426)] = itbeg[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itbeg",
-			 i__2, "ckbsr_", (ftnlen)1426)];
-		--nit;
+		__state->itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itins", i__1, "ckbsr_", (ftnlen)1422)] = 
+			__state->itins[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itins", i__2, "ckbsr_", (
+			ftnlen)1422)];
+		__state->itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itexp", i__1, "ckbsr_", (ftnlen)1423)] = 
+			__state->itexp[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itexp", i__2, "ckbsr_", (
+			ftnlen)1423)];
+		__state->ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)1424)] = 
+			__state->ithfs[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("ithfs", i__2, "ckbsr_", (
+			ftnlen)1424)];
+		__state->itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)1425)] = 
+			__state->itlfs[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itlfs", i__2, "ckbsr_", (
+			ftnlen)1425)];
+		__state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1426)] = 
+			__state->itbeg[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itbeg", i__2, "ckbsr_", (
+			ftnlen)1426)];
+		--__state->nit;
 	    } else {
 		++i__;
 	    }
@@ -1356,13 +1346,13 @@ L_cklpf:
 /*        This is a new file.  Make sure that there are unused slots */
 /*        in the file table. */
 
-	if (nft == 5000) {
+	if (__state->nft == 5000) {
 	    dafcls_(handle);
 	    setmsg_("Number of files loaded is at a maximum, as specified by"
 		    " the parameter FTSIZE, the value of which is #. You will"
 		    " need to either load fewer files, or change the paramete"
 		    "r FTSIZE.", (ftnlen)176);
-	    errint_("#", &c__5000, (ftnlen)1);
+	    errint_("#", &__state->c__5000, (ftnlen)1);
 	    sigerr_("SPICE(CKTOOMANYFILES)", (ftnlen)21);
 	    chkout_("CKLPF", (ftnlen)5);
 	    return 0;
@@ -1371,8 +1361,8 @@ L_cklpf:
 
 /*     Determine the next file number. */
 
-    if (next < intmax_() - 1) {
-	++next;
+    if (__state->next < intmax_() - 1) {
+	++__state->next;
     } else {
 
 /*        The user is to be congratulated:  we've run out of file */
@@ -1386,21 +1376,21 @@ L_cklpf:
 /*        Set any instrument table entries that are lower than FTNUM(1) */
 /*        to zero. */
 
-	i__1 = nit;
+	i__1 = __state->nit;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 
 /*           Re-map the HFS table for the Ith instrument. */
 
-	    j = isrchi_(&ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1485)], &nft, 
-		    ftnum);
+	    j = isrchi_(&__state->ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+		    i__2 : s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1485)], &
+		    __state->nft, __state->ftnum);
 	    if (j > 0) {
 
 /*              The highest file searched for instrument I is the Jth */
 /*              file in the file table. */
 
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1492)] = j;
+		__state->ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1492)] = j;
 	    } else {
 
 /*              The highest file searched for instrument I is not in the */
@@ -1409,22 +1399,22 @@ L_cklpf:
 /*              files appear to be "new" when a lookup for instrument */
 /*              I is performed. */
 
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1502)] = 0;
+		__state->ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1502)] = 0;
 	    }
 
 /*           Re-map the LFS table for the Ith instrument. */
 
-	    j = isrchi_(&itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1509)], &nft, 
-		    ftnum);
+	    j = isrchi_(&__state->itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+		    i__2 : s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1509)], &
+		    __state->nft, __state->ftnum);
 	    if (j > 0) {
 
 /*              The lowest file searched for instrument I is the Jth file */
 /*              in the file table. */
 
-		itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itlfs", i__2, "ckbsr_", (ftnlen)1516)] = j;
+		__state->itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1516)] = j;
 	    } else {
 
 /*              The lowest file searched for instrument I is not in the */
@@ -1433,33 +1423,33 @@ L_cklpf:
 /*              highest file searched to force reconstruction of the */
 /*              list. */
 
-		itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itlfs", i__2, "ckbsr_", (ftnlen)1526)] = 0;
-		ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ithfs", i__2, "ckbsr_", (ftnlen)1527)] = 0;
+		__state->itlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)1526)] = 0;
+		__state->ithfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)1527)] = 0;
 	    }
 	}
 
 /*        Re-map the file number table itself. */
 
-	i__1 = nft;
+	i__1 = __state->nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "ckbsr_", (ftnlen)1538)] = i__;
+	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)1538)] = i__;
 	}
 
 /*        Assign a new file number. */
 
-	next = nft + 1;
+	__state->next = __state->nft + 1;
     }
 
 /*     Now add this file to file table. */
 
-    ++nft;
-    fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "ckbsr_", (ftnlen)1553)] = *handle;
-    ftnum[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftnum", i__1, 
-	    "ckbsr_", (ftnlen)1554)] = next;
+    ++__state->nft;
+    __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)1553)] = *handle;
+    __state->ftnum[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
+	    s_rnge("ftnum", i__1, "ckbsr_", (ftnlen)1554)] = __state->next;
     chkout_("CKLPF", (ftnlen)5);
     return 0;
 /* $Procedure CKUPF ( C-kernel, Unload pointing file ) */
@@ -1692,19 +1682,19 @@ L_ckupf:
 /*     Don't allow a search to continue after unloading a file; a new */
 /*     search should be re-started. */
 
-    s_copy(status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
+    s_copy(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
 
 /*     Since a current search cannot be continued at this point, */
 /*     free the left-over partial list searched in the */
 /*     'CHECK PARTIAL LIST' state, if the list is present. */
 
-    if (fresub) {
+    if (__state->fresub) {
 
 /*        Return the partial list to the free list. */
 
-	tail = lnktl_(&slbeg, stpool);
-	lnkfsl_(&slbeg, &tail, stpool);
-	fresub = FALSE_;
+	tail = lnktl_(&__state->slbeg, __state->stpool);
+	lnkfsl_(&__state->slbeg, &tail, __state->stpool);
+	__state->fresub = FALSE_;
     }
 
 /*     All of the stored segments from the file must be removed */
@@ -1713,8 +1703,8 @@ L_ckupf:
 
 /*     Don't do anything if the given handle is not in the file table. */
 
-    findex = isrchi_(handle, &nft, fthan);
-    if (findex == 0) {
+    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    if (__state->findex == 0) {
 	chkout_("CKUPF", (ftnlen)5);
 	return 0;
     }
@@ -1723,19 +1713,19 @@ L_ckupf:
 /*     First get rid of the entry in the file table. Close the file */
 /*     before wiping out the handle. */
 
-    dafcls_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "ckbsr_", (ftnlen)1835)]);
-    --nft;
-    i__1 = nft;
-    for (i__ = findex; i__ <= i__1; ++i__) {
-	fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "ckbsr_", (ftnlen)1841)] = fthan[(i__3 = i__) < 5000 && 
-		0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "ckbsr_", (ftnlen)
-		1841)];
-	ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		i__2, "ckbsr_", (ftnlen)1842)] = ftnum[(i__3 = i__) < 5000 && 
-		0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "ckbsr_", (ftnlen)
-		1842)];
+    dafcls_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ?
+	     i__1 : s_rnge("fthan", i__1, "ckbsr_", (ftnlen)1835)]);
+    --__state->nft;
+    i__1 = __state->nft;
+    for (i__ = __state->findex; i__ <= i__1; ++i__) {
+	__state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"fthan", i__2, "ckbsr_", (ftnlen)1841)] = __state->fthan[(
+		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3,
+		 "ckbsr_", (ftnlen)1841)];
+	__state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
+		"ftnum", i__2, "ckbsr_", (ftnlen)1842)] = __state->ftnum[(
+		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3,
+		 "ckbsr_", (ftnlen)1842)];
     }
 
 /*     Check each instrument list individually. Note that the first */
@@ -1743,22 +1733,25 @@ L_ckupf:
 /*     specially. */
 
     i__ = 1;
-    while(i__ <= nit) {
-	p = itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg",
-		 i__1, "ckbsr_", (ftnlen)1854)];
+    while(i__ <= __state->nit) {
+	p = __state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+		s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1854)];
 	while(p > 0) {
-	    nxtseg = lnknxt_(&p, stpool);
-	    if (sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sthan", i__1, "ckbsr_", (ftnlen)1860)] == *handle) {
-		if (p == itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1862)]) {
-		    itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			    "itbeg", i__1, "ckbsr_", (ftnlen)1863)] = nxtseg;
+	    nxtseg = lnknxt_(&p, __state->stpool);
+	    if (__state->sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ? i__1 : 
+		    s_rnge("sthan", i__1, "ckbsr_", (ftnlen)1860)] == *handle)
+		     {
+		if (p == __state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
+			i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1862)])
+			 {
+		    __state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
+			    : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1863)] =
+			     nxtseg;
 		}
 
 /*              Free this segment table entry. */
 
-		lnkfsl_(&p, &p, stpool);
+		lnkfsl_(&p, &p, __state->stpool);
 	    }
 	    p = nxtseg;
 	}
@@ -1768,65 +1761,77 @@ L_ckupf:
 /*        instrument in the table into the space occupied by the */
 /*        one we've deleted. */
 
-	if (itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg",
-		 i__1, "ckbsr_", (ftnlen)1882)] <= 0) {
-	    if (i__ != nit) {
-		itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itins", i__1, "ckbsr_", (ftnlen)1886)] = itins[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itins",
-			 i__2, "ckbsr_", (ftnlen)1886)];
-		itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)1887)] = itexp[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp",
-			 i__2, "ckbsr_", (ftnlen)1887)];
-		ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"ithfs", i__1, "ckbsr_", (ftnlen)1888)] = ithfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ithfs",
-			 i__2, "ckbsr_", (ftnlen)1888)];
-		itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)1889)] = itlfs[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlfs",
-			 i__2, "ckbsr_", (ftnlen)1889)];
-		itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)1890)] = itbeg[(i__2 
-			= nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itbeg",
-			 i__2, "ckbsr_", (ftnlen)1890)];
-		itlb[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlb", i__1, "ckbsr_", (ftnlen)1891)] = itlb[(i__2 = 
-			nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itlb", 
-			i__2, "ckbsr_", (ftnlen)1891)];
-		itub[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itub", i__1, "ckbsr_", (ftnlen)1892)] = itub[(i__2 = 
-			nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itub", 
-			i__2, "ckbsr_", (ftnlen)1892)];
-		itprvf[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itprvf", i__1, "ckbsr_", (ftnlen)1893)] = itprvf[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itprvf", i__2, "ckbsr_", (ftnlen)1893)];
-		itprvh[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itprvh", i__1, "ckbsr_", (ftnlen)1894)] = itprvh[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itprvh", i__2, "ckbsr_", (ftnlen)1894)];
-		s_copy(itprvi + ((i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)1895)) * 40, 
-			itprvi + ((i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			 s_rnge("itprvi", i__2, "ckbsr_", (ftnlen)1895)) * 40,
-			 (ftnlen)40, (ftnlen)40);
-		itchkp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itchkp", i__1, "ckbsr_", (ftnlen)1896)] = itchkp[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itchkp", i__2, "ckbsr_", (ftnlen)1896)];
-		itruex[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itruex", i__1, "ckbsr_", (ftnlen)1897)] = itruex[(
-			i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itruex", i__2, "ckbsr_", (ftnlen)1897)];
-		moved_(&itprvd[(i__1 = nit * 5 - 5) < 500 && 0 <= i__1 ? i__1 
-			: s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)1899)], &
-			c__5, &itprvd[(i__2 = i__ * 5 - 5) < 500 && 0 <= i__2 
-			? i__2 : s_rnge("itprvd", i__2, "ckbsr_", (ftnlen)
-			1899)]);
+	if (__state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+		s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1882)] <= 0) {
+	    if (i__ != __state->nit) {
+		__state->itins[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itins", i__1, "ckbsr_", (ftnlen)1886)] = 
+			__state->itins[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itins", i__2, "ckbsr_", (
+			ftnlen)1886)];
+		__state->itexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itexp", i__1, "ckbsr_", (ftnlen)1887)] = 
+			__state->itexp[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itexp", i__2, "ckbsr_", (
+			ftnlen)1887)];
+		__state->ithfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)1888)] = 
+			__state->ithfs[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("ithfs", i__2, "ckbsr_", (
+			ftnlen)1888)];
+		__state->itlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)1889)] = 
+			__state->itlfs[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itlfs", i__2, "ckbsr_", (
+			ftnlen)1889)];
+		__state->itbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)1890)] = 
+			__state->itbeg[(i__2 = __state->nit - 1) < 100 && 0 <=
+			 i__2 ? i__2 : s_rnge("itbeg", i__2, "ckbsr_", (
+			ftnlen)1890)];
+		__state->itlb[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itlb", i__1, "ckbsr_", (ftnlen)1891)] = 
+			__state->itlb[(i__2 = __state->nit - 1) < 100 && 0 <= 
+			i__2 ? i__2 : s_rnge("itlb", i__2, "ckbsr_", (ftnlen)
+			1891)];
+		__state->itub[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itub", i__1, "ckbsr_", (ftnlen)1892)] = 
+			__state->itub[(i__2 = __state->nit - 1) < 100 && 0 <= 
+			i__2 ? i__2 : s_rnge("itub", i__2, "ckbsr_", (ftnlen)
+			1892)];
+		__state->itprvf[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)1893)] = 
+			__state->itprvf[(i__2 = __state->nit - 1) < 100 && 0 
+			<= i__2 ? i__2 : s_rnge("itprvf", i__2, "ckbsr_", (
+			ftnlen)1893)];
+		__state->itprvh[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)1894)] = 
+			__state->itprvh[(i__2 = __state->nit - 1) < 100 && 0 
+			<= i__2 ? i__2 : s_rnge("itprvh", i__2, "ckbsr_", (
+			ftnlen)1894)];
+		s_copy(__state->itprvi + ((i__1 = i__ - 1) < 100 && 0 <= i__1 
+			? i__1 : s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)
+			1895)) * 40, __state->itprvi + ((i__2 = __state->nit 
+			- 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itprvi", 
+			i__2, "ckbsr_", (ftnlen)1895)) * 40, (ftnlen)40, (
+			ftnlen)40);
+		__state->itchkp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)1896)] = 
+			__state->itchkp[(i__2 = __state->nit - 1) < 100 && 0 
+			<= i__2 ? i__2 : s_rnge("itchkp", i__2, "ckbsr_", (
+			ftnlen)1896)];
+		__state->itruex[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge("itruex", i__1, "ckbsr_", (ftnlen)1897)] = 
+			__state->itruex[(i__2 = __state->nit - 1) < 100 && 0 
+			<= i__2 ? i__2 : s_rnge("itruex", i__2, "ckbsr_", (
+			ftnlen)1897)];
+		moved_(&__state->itprvd[(i__1 = __state->nit * 5 - 5) < 500 &&
+			 0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, "ckbsr_", (
+			ftnlen)1899)], &__state->c__5, &__state->itprvd[(i__2 
+			= i__ * 5 - 5) < 500 && 0 <= i__2 ? i__2 : s_rnge(
+			"itprvd", i__2, "ckbsr_", (ftnlen)1899)]);
 	    }
-	    --nit;
+	    --__state->nit;
 	} else {
 	    ++i__;
 	}
@@ -1838,14 +1843,16 @@ L_ckupf:
 /*     with the re-use interval happens to be that of the file */
 /*     we're unloading, indicate that the re-use interval is invalid. */
 
-    i__1 = nit;
+    i__1 = __state->nit;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("itch"
-		"kp", i__2, "ckbsr_", (ftnlen)1922)]) {
-	    if (itprvh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "itprvh", i__2, "ckbsr_", (ftnlen)1924)] == *handle) {
-		itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itchkp", i__2, "ckbsr_", (ftnlen)1925)] = FALSE_;
+	if (__state->itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		s_rnge("itchkp", i__2, "ckbsr_", (ftnlen)1922)]) {
+	    if (__state->itprvh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		    s_rnge("itprvh", i__2, "ckbsr_", (ftnlen)1924)] == *
+		    handle) {
+		__state->itchkp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge("itchkp", i__2, "ckbsr_", (ftnlen)1925)] = 
+			FALSE_;
 	    }
 	}
     }
@@ -2060,13 +2067,13 @@ L_ckbss:
 /*     'CHECK PARTIAL LIST' state, free the left-over partial list */
 /*     that was searched in that state, if necessary. */
 
-    if (fresub) {
+    if (__state->fresub) {
 
 /*        Return the partial list to the free list. */
 
-	tail = lnktl_(&slbeg, stpool);
-	lnkfsl_(&slbeg, &tail, stpool);
-	fresub = FALSE_;
+	tail = lnktl_(&__state->slbeg, __state->stpool);
+	lnkfsl_(&__state->slbeg, &tail, __state->stpool);
+	__state->fresub = FALSE_;
     }
 
 /*     Make copies of the instrument ID code and angular velocity flag. */
@@ -2075,16 +2082,16 @@ L_ckbss:
 /*     And form the endpoints of the acceptable time interval using the */
 /*     input time and time tolerance. */
 
-    scinst = *inst;
-    alpha = *sclkdp - *tol;
-    omega = *sclkdp + *tol;
-    avneed = *needav;
-    reqt = *sclkdp;
-    savtol = *tol;
+    __state->scinst = *inst;
+    __state->alpha = *sclkdp - *tol;
+    __state->omega = *sclkdp + *tol;
+    __state->avneed = *needav;
+    __state->reqt = *sclkdp;
+    __state->savtol = *tol;
 
 /*     There must be at least one file loaded. */
 
-    if (nft == 0) {
+    if (__state->nft == 0) {
 	setmsg_("At least one CK file needs must be loaded by CKLPF before b"
 		"eginning a search.", (ftnlen)77);
 	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
@@ -2094,26 +2101,27 @@ L_ckbss:
 
 /*     The stack of suspended tasks is empty. */
 
-    top = 0;
+    __state->top = 0;
 
 /*     Is the instrument already in the instrument table?  The answer */
 /*     determines what the first task for CKSNS will be. */
 
-    iindex = isrchi_(&scinst, &nit, itins);
-    if (iindex == 0) {
-	s_copy(status, "NEW INSTRUMENT", (ftnlen)40, (ftnlen)14);
+    __state->iindex = isrchi_(&__state->scinst, &__state->nit, __state->itins)
+	    ;
+    if (__state->iindex == 0) {
+	s_copy(__state->status, "NEW INSTRUMENT", (ftnlen)40, (ftnlen)14);
     } else {
 
 /*        Set the status so that CKSNS will determine whether to check */
 /*        the segment list, search new files, or return data from the */
 /*        re-use interval. */
 
-	s_copy(status, "?", (ftnlen)40, (ftnlen)1);
+	s_copy(__state->status, "?", (ftnlen)40, (ftnlen)1);
     }
 
 /*     Indicate a new search has started. */
 
-    newsch = TRUE_;
+    __state->newsch = TRUE_;
     chkout_("CKBSS", (ftnlen)5);
     return 0;
 /* $Procedure CKSNS ( C-kernel, Select next segment ) */
@@ -2454,7 +2462,7 @@ L_cksns:
 /*     Initialize the segment list pointer to the saved value from */
 /*     the previous pass through this routine, if any. */
 
-    p = savep;
+    p = __state->savep;
 
 /*     CKSNS buffers segment descriptors and identifiers, to */
 /*     attempt to minimize file reads. Buffering segments involves */
@@ -2625,18 +2633,18 @@ L_cksns:
 /*        call to CKBSS was ever made. If this is the case then an */
 /*        error will be signaled. */
 
-    if (s_cmp(status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11) == 0) {
+    if (s_cmp(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11) == 0) {
 	setmsg_("Must begin a search by calling CKBSS first.", (ftnlen)43);
 	sigerr_("SPICE(CALLCKBSSFIRST)", (ftnlen)21);
 	chkout_("CKSNS", (ftnlen)5);
 	return 0;
     }
-    while(s_cmp(status, "HOPELESS", (ftnlen)40, (ftnlen)8) != 0) {
+    while(s_cmp(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8) != 0) {
 
 /*        If new files have been added, they have to be searched. */
 /*        Otherwise, go right to the list of stored segments. */
 
-	if (s_cmp(status, "?", (ftnlen)40, (ftnlen)1) == 0) {
+	if (s_cmp(__state->status, "?", (ftnlen)40, (ftnlen)1) == 0) {
 
 /*           There are two ways to get to this point. */
 
@@ -2646,19 +2654,21 @@ L_cksns:
 /*               of code as the result of finishing the read of */
 /*               a new file. */
 
-	    if (ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ithfs", i__1, "ckbsr_", (ftnlen)2775)] < ftnum[(i__2 = 
-		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "ckbsr_", (ftnlen)2775)]) {
-		s_copy(status, "NEW FILES", (ftnlen)40, (ftnlen)9);
+	    if (__state->ithfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)
+		    2775)] < __state->ftnum[(i__2 = __state->nft - 1) < 5000 
+		    && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_", (
+		    ftnlen)2775)]) {
+		s_copy(__state->status, "NEW FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
 
 /*              Much of the time, the segment used to satisfy the */
 /*              previous request will also satisfy the current */
 /*              request.  Check whether this is the case. */
 
-		if (itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2785)]) {
+		if (__state->itchkp[(i__1 = __state->iindex - 1) < 100 && 0 <=
+			 i__1 ? i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
+			ftnlen)2785)]) {
 
 /*                 The previous segment found for the current instrument */
 /*                 is a viable candidate for the current request.  See */
@@ -2670,11 +2680,13 @@ L_cksns:
 /*                 because one or both endpoints may belong to */
 /*                 higher-priority segments. */
 
-		    if (reqt > itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("itlb", i__1, "ckbsr_", (ftnlen)
-			    2797)] + savtol && reqt < itub[(i__2 = iindex - 1)
-			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2, 
-			    "ckbsr_", (ftnlen)2797)] - savtol) {
+		    if (__state->reqt > __state->itlb[(i__1 = __state->iindex 
+			    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itlb", 
+			    i__1, "ckbsr_", (ftnlen)2797)] + __state->savtol 
+			    && __state->reqt < __state->itub[(i__2 = 
+			    __state->iindex - 1) < 100 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itub", i__2, "ckbsr_", (ftnlen)2797)] - 
+			    __state->savtol) {
 
 /*                    The request time falls into the portion of */
 /*                    the re-use interval that isn't blocked by */
@@ -2682,35 +2694,39 @@ L_cksns:
 /*                    those segments is extended in either direction */
 /*                    by TOL. */
 
-			if (! avneed || itprvf[(i__1 = iindex - 1) < 100 && 0 
-				<= i__1 ? i__1 : s_rnge("itprvf", i__1, "ckb"
-				"sr_", (ftnlen)2806)] != 0) {
+			if (! __state->avneed || __state->itprvf[(i__1 = 
+				__state->iindex - 1) < 100 && 0 <= i__1 ? 
+				i__1 : s_rnge("itprvf", i__1, "ckbsr_", (
+				ftnlen)2806)] != 0) {
 
 /*                       This segment has angular velocity if we */
 /*                       need it.  The segment satisfies the */
 /*                       request. */
 
-			    *handle = itprvh[(i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvh", i__1, 
-				    "ckbsr_", (ftnlen)2813)];
-			    s_copy(segid, itprvi + ((i__1 = iindex - 1) < 100 
-				    && 0 <= i__1 ? i__1 : s_rnge("itprvi", 
-				    i__1, "ckbsr_", (ftnlen)2814)) * 40, 
-				    segid_len, (ftnlen)40);
-			    moved_(&itprvd[(i__1 = iindex * 5 - 5) < 500 && 0 
-				    <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
-				    "ckbsr_", (ftnlen)2816)], &c__5, descr);
+			    *handle = __state->itprvh[(i__1 = __state->iindex 
+				    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvh", i__1, "ckbsr_", (ftnlen)2813)];
+			    s_copy(segid, __state->itprvi + ((i__1 = 
+				    __state->iindex - 1) < 100 && 0 <= i__1 ? 
+				    i__1 : s_rnge("itprvi", i__1, "ckbsr_", (
+				    ftnlen)2814)) * 40, segid_len, (ftnlen)40)
+				    ;
+			    moved_(&__state->itprvd[(i__1 = __state->iindex * 
+				    5 - 5) < 500 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvd", i__1, "ckbsr_", (ftnlen)2816)], 
+				    &__state->c__5, descr);
 			    *found = TRUE_;
 
 /*                       We can only use the re-use interval once on */
 /*                       a given search.  If this search is continued, */
 /*                       we'll have to check the list.  Prepare now. */
 
-			    savep = itbeg[(i__1 = iindex - 1) < 100 && 0 <= 
-				    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckb"
-				    "sr_", (ftnlen)2825)];
-			    s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)
-				    10);
+			    __state->savep = __state->itbeg[(i__1 = 
+				    __state->iindex - 1) < 100 && 0 <= i__1 ? 
+				    i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+				    ftnlen)2825)];
+			    s_copy(__state->status, "CHECK LIST", (ftnlen)40, 
+				    (ftnlen)10);
 			    chkout_("CKSNS", (ftnlen)5);
 			    return 0;
 			}
@@ -2725,16 +2741,17 @@ L_cksns:
 /*                 unbuffered segment providing data for re-use, subtract */
 /*                 that component from the expense. */
 
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)2844)] = 
-			    itexp[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-			    i__2 : s_rnge("itexp", i__2, "ckbsr_", (ftnlen)
-			    2844)] - itruex[(i__3 = iindex - 1) < 100 && 0 <= 
-			    i__3 ? i__3 : s_rnge("itruex", i__3, "ckbsr_", (
-			    ftnlen)2844)];
-		    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)2845)] = 
-			    0;
+		    __state->itexp[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itexp", i__1, "ckbsr_", (
+			    ftnlen)2844)] = __state->itexp[(i__2 = 
+			    __state->iindex - 1) < 100 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)2844)] - 
+			    __state->itruex[(i__3 = __state->iindex - 1) < 
+			    100 && 0 <= i__3 ? i__3 : s_rnge("itruex", i__3, 
+			    "ckbsr_", (ftnlen)2844)];
+		    __state->itruex[(i__1 = __state->iindex - 1) < 100 && 0 <=
+			     i__1 ? i__1 : s_rnge("itruex", i__1, "ckbsr_", (
+			    ftnlen)2845)] = 0;
 
 /*                 The re-use interval becomes invalid if it didn't */
 /*                 satisfy the request.  The validity flag gets */
@@ -2751,30 +2768,32 @@ L_cksns:
 
 /*                 Carry on with the usual search algorithm. */
 
-		    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2863)] = 
-			    FALSE_;
+		    __state->itchkp[(i__1 = __state->iindex - 1) < 100 && 0 <=
+			     i__1 ? i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
+			    ftnlen)2863)] = FALSE_;
 		}
 
 /*              If the segment list for this instrument is empty, make */
 /*              sure the expense is reset to 0. */
 
-		if (itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2871)] == 0) {
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)2872)] = 
-			    0;
+		if (__state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			2871)] == 0) {
+		    __state->itexp[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itexp", i__1, "ckbsr_", (
+			    ftnlen)2872)] = 0;
 		}
 
 /*              Prepare to look at the first segment in the list for */
 /*              this instrument. */
 
-		p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2879)];
-		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
+		p = __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			2879)];
+		s_copy(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    }
-	} else if (s_cmp(status, "NEW INSTRUMENT", (ftnlen)40, (ftnlen)14) == 
-		0) {
+	} else if (s_cmp(__state->status, "NEW INSTRUMENT", (ftnlen)40, (
+		ftnlen)14) == 0) {
 
 /*           New instruments are added to the end of the instrument */
 /*           table. If the table is full, one of the current occupants */
@@ -2796,29 +2815,29 @@ L_cksns:
 /*           However, trying to handle this special case there was */
 /*           just more trouble than it was worth. */
 
-	    if (nit < 100) {
+	    if (__state->nit < 100) {
 
 /*              If the instrument table isn't full, the cheapest place is */
 /*              just the next unused row of the table. */
 
-		++nit;
-		cheap = nit;
+		++__state->nit;
+		cheap = __state->nit;
 	    } else {
 
 /*              The instrument table is full.  Find the least */
 /*              expensive instrument in the table and remove it. */
 
 		cheap = 1;
-		minexp = itexp[0];
-		i__1 = nit;
+		minexp = __state->itexp[0];
+		i__1 = __state->nit;
 		for (i__ = 2; i__ <= i__1; ++i__) {
-		    if (itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)2926)] < 
-			    minexp) {
+		    if (__state->itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itexp", i__2, "ckbsr_", (ftnlen)
+			    2926)] < minexp) {
 			cheap = i__;
-			minexp = itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itexp", i__2, "ckbsr_", (
-				ftnlen)2928)];
+			minexp = __state->itexp[(i__2 = i__ - 1) < 100 && 0 <=
+				 i__2 ? i__2 : s_rnge("itexp", i__2, "ckbsr_",
+				 (ftnlen)2928)];
 		    }
 		}
 
@@ -2826,33 +2845,36 @@ L_cksns:
 /*              least expensive instrument, we put them back on the free */
 /*              list. */
 
-		head = itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2938)];
+		head = __state->itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2938)];
 		if (head > 0) {
-		    tail = -lnkprv_(&head, stpool);
-		    lnkfsl_(&head, &tail, stpool);
+		    tail = -lnkprv_(&head, __state->stpool);
+		    lnkfsl_(&head, &tail, __state->stpool);
 		}
 	    }
 
 /*           Set up a table entry for the new instrument. */
 
-	    itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("iti"
-		    "ns", i__1, "ckbsr_", (ftnlen)2952)] = scinst;
-	    itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("ite"
-		    "xp", i__1, "ckbsr_", (ftnlen)2953)] = 0;
-	    ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("ith"
-		    "fs", i__1, "ckbsr_", (ftnlen)2954)] = ftnum[(i__2 = nft - 
-		    1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "ckbsr_", (ftnlen)2954)];
-	    itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itl"
-		    "fs", i__1, "ckbsr_", (ftnlen)2955)] = ftnum[(i__2 = nft - 
-		    1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
-		    "ckbsr_", (ftnlen)2955)] + 1;
-	    itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itb"
-		    "eg", i__1, "ckbsr_", (ftnlen)2956)] = 0;
-	    itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itchkp", i__1, "ckbsr_", (ftnlen)2957)] = FALSE_;
-	    iindex = cheap;
+	    __state->itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itins", i__1, "ckbsr_", (ftnlen)2952)] = 
+		    __state->scinst;
+	    __state->itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)2953)] = 0;
+	    __state->ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)2954)] = 
+		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
+		    i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)
+		    2954)];
+	    __state->itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)2955)] = 
+		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
+		    i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)
+		    2955)] + 1;
+	    __state->itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)2956)] = 0;
+	    __state->itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)2957)] = FALSE_;
+	    __state->iindex = cheap;
 
 /*           The following items associated with the re-use interval */
 /*           need not be initialized at this point: */
@@ -2869,27 +2891,29 @@ L_cksns:
 /*           help prevent compilation warnings from zealous */
 /*           compilers. */
 
-	    itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)2976)] = 0;
-	    itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itlb",
-		     i__1, "ckbsr_", (ftnlen)2977)] = dpmin_();
-	    itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itub",
-		     i__1, "ckbsr_", (ftnlen)2978)] = dpmax_();
-	    itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itprvf", i__1, "ckbsr_", (ftnlen)2979)] = 0;
-	    itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itprvh", i__1, "ckbsr_", (ftnlen)2980)] = 0;
-	    s_copy(itprvi + ((i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)2981)) * 40, 
-		    " ", (ftnlen)40, (ftnlen)1);
-	    cleard_(&c__5, &itprvd[(i__1 = cheap * 5 - 5) < 500 && 0 <= i__1 ?
-		     i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)2982)]);
+	    __state->itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)2976)] = 0;
+	    __state->itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)2977)] = dpmin_();
+	    __state->itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itub", i__1, "ckbsr_", (ftnlen)2978)] = dpmax_();
+	    __state->itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)2979)] = 0;
+	    __state->itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
+		    s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)2980)] = 0;
+	    s_copy(__state->itprvi + ((i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)2981)) * 
+		    40, " ", (ftnlen)40, (ftnlen)1);
+	    cleard_(&__state->c__5, &__state->itprvd[(i__1 = cheap * 5 - 5) < 
+		    500 && 0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, "ckbsr_",
+		     (ftnlen)2982)]);
 
 /*           Now search all of the files for segments relating to */
 /*           this instrument. */
 
-	    s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
-	} else if (s_cmp(status, "NEW FILES", (ftnlen)40, (ftnlen)9) == 0) {
+	    s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9);
+	} else if (s_cmp(__state->status, "NEW FILES", (ftnlen)40, (ftnlen)9) 
+		== 0) {
 
 /*           When new files exist, they should be searched in forward */
 /*           order, beginning with the oldest new file not yet searched. */
@@ -2906,31 +2930,34 @@ L_cksns:
 
 /*           Find the next file to search; set FINDEX to the */
 /*           corresponding file table entry. */
-	    findex = 1;
-	    while(ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3011)] >= ftnum[(
-		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "ckbsr_", (ftnlen)3011)]) {
-		++findex;
+	    __state->findex = 1;
+	    while(__state->ithfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)
+		    3011)] >= __state->ftnum[(i__2 = __state->findex - 1) < 
+		    5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_",
+		     (ftnlen)3011)]) {
+		++__state->findex;
 	    }
-	    ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ithfs", i__1, "ckbsr_", (ftnlen)3017)] = ftnum[(i__2 = 
-		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "ckbsr_", (ftnlen)3017)];
-	    dafbfs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3019)]);
+	    __state->ithfs[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 ? 
+		    i__1 : s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3017)] = 
+		    __state->ftnum[(i__2 = __state->findex - 1) < 5000 && 0 <=
+		     i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)
+		    3017)];
+	    dafbfs_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 
+		    <= i__1 ? i__1 : s_rnge("fthan", i__1, "ckbsr_", (ftnlen)
+		    3019)]);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
 	    }
-	    s_copy(status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12);
+	    s_copy(__state->status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12);
 
 /*           The cost of the list contributed by the new file is */
 /*           zero so far. */
 
 	    cost = 0;
-	} else if (s_cmp(status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(__state->status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)
+		12) == 0) {
 
 /*           New files are searched in forward order. Segments, when */
 /*           found, are inserted at the front of the list. Invisible */
@@ -2941,33 +2968,34 @@ L_cksns:
 
 /*           The only way to get here is from the NEW FILES block */
 /*           of the IF structure. */
-	    daffna_(&fnd);
+	    daffna_(&__state->fnd);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
 	    }
-	    if (! fnd) {
+	    if (! __state->fnd) {
 
 /*              We're out of segments in the current file.  Decide */
 /*              whether we need to examine another new file, or */
 /*              whether we're ready to check the list. */
 
-		s_copy(status, "?", (ftnlen)40, (ftnlen)1);
-		itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)3061)] = itexp[(i__2 
-			= iindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itexp", i__2, "ckbsr_", (ftnlen)3061)] + cost;
+		s_copy(__state->status, "?", (ftnlen)40, (ftnlen)1);
+		__state->itexp[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itexp", i__1, "ckbsr_", (ftnlen)
+			3061)] = __state->itexp[(i__2 = __state->iindex - 1) <
+			 100 && 0 <= i__2 ? i__2 : s_rnge("itexp", i__2, 
+			"ckbsr_", (ftnlen)3061)] + cost;
 	    } else {
 		dafgs_(descr);
-		dafus_(descr, &c__2, &c__6, dcd, icd);
+		dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
 		}
-		if (icd[0] == scinst && dcd[0] <= dcd[1]) {
+		if (icd[0] == __state->scinst && dcd[0] <= dcd[1]) {
 		    s_copy(doing, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12);
 		    s_copy(urgent, "ADD TO FRONT", (ftnlen)40, (ftnlen)12);
-		    s_copy(status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		    s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
 		}
 		++cost;
 	    }
@@ -2975,7 +3003,8 @@ L_cksns:
 /*           If we haven't reset the status, we'll return for another */
 /*           'NEW SEGMENTS' pass. */
 
-	} else if (s_cmp(status, "OLD FILES", (ftnlen)40, (ftnlen)9) == 0) {
+	} else if (s_cmp(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9) 
+		== 0) {
 
 /*           When old files must be searched (because the segments in */
 /*           the list are inadequate), they should be searched in */
@@ -2995,20 +3024,22 @@ L_cksns:
 /*           2) We have checked the current list (CHECK LIST) for */
 /*              this instrument, didn't find an applicable segment and */
 /*              have some files left that have not been searched. */
-	    findex = nft;
-	    while(itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3113)] <= ftnum[(
-		    i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftnum", i__2, "ckbsr_", (ftnlen)3113)]) {
-		--findex;
+	    __state->findex = __state->nft;
+	    while(__state->itlfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)
+		    3113)] <= __state->ftnum[(i__2 = __state->findex - 1) < 
+		    5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "ckbsr_",
+		     (ftnlen)3113)]) {
+		--__state->findex;
 	    }
-	    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "ckbsr_", (ftnlen)3117)]);
+	    dafbbs_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 
+		    <= i__1 ? i__1 : s_rnge("fthan", i__1, "ckbsr_", (ftnlen)
+		    3117)]);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
 	    }
-	    s_copy(status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12);
+	    s_copy(__state->status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12);
 
 /*           The next thing we'll do is search through all the segments */
 /*           of this file for those that applicable to this instrument. */
@@ -3024,52 +3055,56 @@ L_cksns:
 /*        Each segment examined, whether applicable or not, adds to */
 /*        the expense of the list. */
 
-	} else if (s_cmp(status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(__state->status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)
+		12) == 0) {
 
 /*           There is only one way to get here---from the */
 /*           block 'OLD FILES'.  Note we do not add to the */
 /*           expense of the list for this instrument until we've */
 /*           completely searched this file. */
 
-	    daffpa_(&fnd);
+	    daffpa_(&__state->fnd);
 	    if (failed_()) {
 		chkout_("CKSNS", (ftnlen)5);
 		return 0;
 	    }
-	    if (! fnd) {
+	    if (! __state->fnd) {
 
 /*              All of the segments in this file have been exhausted. */
 /*              Change the lowest file searched indicator for this */
 /*              instrument to be the current file, and go check the */
 /*              current list. */
 
-		itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlfs", i__1, "ckbsr_", (ftnlen)3163)] = ftnum[(i__2 
-			= findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftnum", i__2, "ckbsr_", (ftnlen)3163)];
-		itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itexp", i__1, "ckbsr_", (ftnlen)3164)] = itexp[(i__2 
-			= iindex - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"itexp", i__2, "ckbsr_", (ftnlen)3164)] + cost;
-		p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3165)];
-		s_copy(status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
+		__state->itlfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)
+			3163)] = __state->ftnum[(i__2 = __state->findex - 1) <
+			 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, 
+			"ckbsr_", (ftnlen)3163)];
+		__state->itexp[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itexp", i__1, "ckbsr_", (ftnlen)
+			3164)] = __state->itexp[(i__2 = __state->iindex - 1) <
+			 100 && 0 <= i__2 ? i__2 : s_rnge("itexp", i__2, 
+			"ckbsr_", (ftnlen)3164)] + cost;
+		p = __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			3165)];
+		s_copy(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
 	    } else {
 		dafgs_(descr);
-		dafus_(descr, &c__2, &c__6, dcd, icd);
+		dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
 		}
-		if (icd[0] == scinst && dcd[0] <= dcd[1]) {
+		if (icd[0] == __state->scinst && dcd[0] <= dcd[1]) {
 		    s_copy(doing, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12);
 		    s_copy(urgent, "ADD TO END", (ftnlen)40, (ftnlen)10);
-		    s_copy(status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		    s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
 		}
 		++cost;
 	    }
-	} else if (s_cmp(status, "CHECK LIST", (ftnlen)40, (ftnlen)10) == 0) {
+	} else if (s_cmp(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)
+		10) == 0) {
 
 /*           Okay, all the new files (and maybe an old file or two) */
 /*           have been searched. Time to look at the list of segments */
@@ -3094,82 +3129,88 @@ L_cksns:
 /*           If this is a new search, initialize the re-use interval. */
 /*           If we're resuming a search, the re-use interval is invalid. */
 
-	    if (newsch) {
-		itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itlb", i__1, "ckbsr_", (ftnlen)3220)] = dpmin_();
-		itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itub", i__1, "ckbsr_", (ftnlen)3221)] = dpmax_();
+	    if (__state->newsch) {
+		__state->itlb[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 
+			? i__1 : s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3220)]
+			 = dpmin_();
+		__state->itub[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 
+			? i__1 : s_rnge("itub", i__1, "ckbsr_", (ftnlen)3221)]
+			 = dpmax_();
 	    }
 	    while(p > 0) {
-		if (newsch) {
+		if (__state->newsch) {
 
 /*                 Trim the re-use interval if the request time lies */
 /*                 outside of the current segment. */
 
-		    if (reqt > stdcd[(i__1 = (p << 1) - 1) < 200000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
-			    ftnlen)3232)]) {
+		    if (__state->reqt > __state->stdcd[(i__1 = (p << 1) - 1) <
+			     200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
+			    i__1, "ckbsr_", (ftnlen)3232)]) {
 
 /*                    REQT is to the right of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    left, if necessary. */
 
 /* Computing MAX */
-			d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itlb", i__2, "ckbsr_", (ftnlen)
-				3238)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
-				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3238)];
-			itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3238)] 
-				= max(d__1,d__2);
-		    } else if (reqt < stdcd[(i__1 = (p << 1) - 2) < 200000 && 
-			    0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_",
-			     (ftnlen)3241)]) {
+			d__1 = __state->itlb[(i__2 = __state->iindex - 1) < 
+				100 && 0 <= i__2 ? i__2 : s_rnge("itlb", i__2,
+				 "ckbsr_", (ftnlen)3238)], d__2 = 
+				__state->stdcd[(i__3 = (p << 1) - 1) < 200000 
+				&& 0 <= i__3 ? i__3 : s_rnge("stdcd", i__3, 
+				"ckbsr_", (ftnlen)3238)];
+			__state->itlb[(i__1 = __state->iindex - 1) < 100 && 0 
+				<= i__1 ? i__1 : s_rnge("itlb", i__1, "ckbsr_"
+				, (ftnlen)3238)] = max(d__1,d__2);
+		    } else if (__state->reqt < __state->stdcd[(i__1 = (p << 1)
+			     - 2) < 200000 && 0 <= i__1 ? i__1 : s_rnge("std"
+			    "cd", i__1, "ckbsr_", (ftnlen)3241)]) {
 
 /*                    REQT is to the left of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    right, if necessary. */
 
 /* Computing MIN */
-			d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itub", i__2, "ckbsr_", (ftnlen)
-				3247)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
-				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3247)];
-			itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3247)] 
-				= min(d__1,d__2);
+			d__1 = __state->itub[(i__2 = __state->iindex - 1) < 
+				100 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2,
+				 "ckbsr_", (ftnlen)3247)], d__2 = 
+				__state->stdcd[(i__3 = (p << 1) - 2) < 200000 
+				&& 0 <= i__3 ? i__3 : s_rnge("stdcd", i__3, 
+				"ckbsr_", (ftnlen)3247)];
+			__state->itub[(i__1 = __state->iindex - 1) < 100 && 0 
+				<= i__1 ? i__1 : s_rnge("itub", i__1, "ckbsr_"
+				, (ftnlen)3247)] = min(d__1,d__2);
 		    }
 		}
-		if (omega >= stdcd[(i__1 = (p << 1) - 2) < 200000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)
-			3254)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
-			200000 && 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
-			"ckbsr_", (ftnlen)3254)]) {
+		if (__state->omega >= __state->stdcd[(i__1 = (p << 1) - 2) < 
+			200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
+			"ckbsr_", (ftnlen)3254)] && __state->alpha <= 
+			__state->stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
+			i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", (ftnlen)
+			3254)]) {
 
 /*                 The segment coverage interval intersects the request */
 /*                 interval ALPHA:OMEGA. */
 
-		    if (! avneed || sticd[(i__1 = p * 6 - 3) < 600000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("sticd", i__1, "ckbsr_", (
-			    ftnlen)3260)] != 0) {
+		    if (! __state->avneed || __state->sticd[(i__1 = p * 6 - 3)
+			     < 600000 && 0 <= i__1 ? i__1 : s_rnge("sticd", 
+			    i__1, "ckbsr_", (ftnlen)3260)] != 0) {
 
 /*                    This segment satisfies the request. */
 
-			dafps_(&c__2, &c__6, &stdcd[(i__1 = (p << 1) - 2) < 
-				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3264)], &sticd[(i__2 =
-				 p * 6 - 6) < 600000 && 0 <= i__2 ? i__2 : 
-				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3264)]
-				, descr);
-			s_copy(segid, stidnt + ((i__1 = p - 1) < 100000 && 0 
-				<= i__1 ? i__1 : s_rnge("stidnt", i__1, "ckb"
-				"sr_", (ftnlen)3267)) * 40, segid_len, (ftnlen)
-				40);
-			*handle = sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ?
-				 i__1 : s_rnge("sthan", i__1, "ckbsr_", (
-				ftnlen)3268)];
+			dafps_(&__state->c__2, &__state->c__6, &
+				__state->stdcd[(i__1 = (p << 1) - 2) < 200000 
+				&& 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
+				"ckbsr_", (ftnlen)3264)], &__state->sticd[(
+				i__2 = p * 6 - 6) < 600000 && 0 <= i__2 ? 
+				i__2 : s_rnge("sticd", i__2, "ckbsr_", (
+				ftnlen)3264)], descr);
+			s_copy(segid, __state->stidnt + ((i__1 = p - 1) < 
+				100000 && 0 <= i__1 ? i__1 : s_rnge("stidnt", 
+				i__1, "ckbsr_", (ftnlen)3267)) * 40, 
+				segid_len, (ftnlen)40);
+			*handle = __state->sthan[(i__1 = p - 1) < 100000 && 0 
+				<= i__1 ? i__1 : s_rnge("sthan", i__1, "ckbs"
+				"r_", (ftnlen)3268)];
 			*found = TRUE_;
 
 /*                    If the segment actually contains the request */
@@ -3178,72 +3219,77 @@ L_cksns:
 /*                    to be in the interior of the interval:  it */
 /*                    cannot be one of the endpoints. */
 
-			if (newsch && reqt > stdcd[(i__1 = (p << 1) - 2) < 
-				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3278)] && reqt < 
-				stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
-				i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", 
-				(ftnlen)3278)]) {
+			if (__state->newsch && __state->reqt > __state->stdcd[
+				(i__1 = (p << 1) - 2) < 200000 && 0 <= i__1 ? 
+				i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
+				ftnlen)3278)] && __state->reqt < 
+				__state->stdcd[(i__2 = (p << 1) - 1) < 200000 
+				&& 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
+				"ckbsr_", (ftnlen)3278)]) {
 
 /*                       Set the re-use interval for the current */
 /*                       instrument. */
 
 /* Computing MAX */
-			    d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
-				    i__2 ? i__2 : s_rnge("itlb", i__2, "ckbs"
-				    "r_", (ftnlen)3285)], d__2 = stdcd[(i__3 = 
-				    (p << 1) - 2) < 200000 && 0 <= i__3 ? 
-				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3285)];
-			    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itlb", i__1, "ckbsr_", (
-				    ftnlen)3285)] = max(d__1,d__2);
+			    d__1 = __state->itlb[(i__2 = __state->iindex - 1) 
+				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itlb",
+				     i__2, "ckbsr_", (ftnlen)3285)], d__2 = 
+				    __state->stdcd[(i__3 = (p << 1) - 2) < 
+				    200000 && 0 <= i__3 ? i__3 : s_rnge("std"
+				    "cd", i__3, "ckbsr_", (ftnlen)3285)];
+			    __state->itlb[(i__1 = __state->iindex - 1) < 100 
+				    && 0 <= i__1 ? i__1 : s_rnge("itlb", i__1,
+				     "ckbsr_", (ftnlen)3285)] = max(d__1,d__2)
+				    ;
 /* Computing MIN */
-			    d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
-				    i__2 ? i__2 : s_rnge("itub", i__2, "ckbs"
-				    "r_", (ftnlen)3286)], d__2 = stdcd[(i__3 = 
-				    (p << 1) - 1) < 200000 && 0 <= i__3 ? 
-				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3286)];
-			    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itub", i__1, "ckbsr_", (
-				    ftnlen)3286)] = min(d__1,d__2);
+			    d__1 = __state->itub[(i__2 = __state->iindex - 1) 
+				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itub",
+				     i__2, "ckbsr_", (ftnlen)3286)], d__2 = 
+				    __state->stdcd[(i__3 = (p << 1) - 1) < 
+				    200000 && 0 <= i__3 ? i__3 : s_rnge("std"
+				    "cd", i__3, "ckbsr_", (ftnlen)3286)];
+			    __state->itub[(i__1 = __state->iindex - 1) < 100 
+				    && 0 <= i__1 ? i__1 : s_rnge("itub", i__1,
+				     "ckbsr_", (ftnlen)3286)] = min(d__1,d__2)
+				    ;
 
 /*                       Save the returned output items, in case this */
 /*                       segment may satisfy the next request. */
 
-			    itprvh[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itprvh", i__1, "ckbsr_", (
-				    ftnlen)3292)] = *handle;
-			    s_copy(itprvi + ((i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvi", i__1, 
-				    "ckbsr_", (ftnlen)3293)) * 40, segid, (
-				    ftnlen)40, segid_len);
-			    itprvf[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itprvf", i__1, "ckbsr_", (
-				    ftnlen)3294)] = sticd[(i__2 = p * 6 - 3) <
-				     600000 && 0 <= i__2 ? i__2 : s_rnge(
-				    "sticd", i__2, "ckbsr_", (ftnlen)3294)];
-			    moved_(descr, &c__5, &itprvd[(i__1 = iindex * 5 - 
-				    5) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itprvd", i__1, "ckbsr_", (ftnlen)3296)]);
-			    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
-				    ftnlen)3298)] = TRUE_;
+			    __state->itprvh[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itprvh",
+				     i__1, "ckbsr_", (ftnlen)3292)] = *handle;
+			    s_copy(__state->itprvi + ((i__1 = __state->iindex 
+				    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvi", i__1, "ckbsr_", (ftnlen)3293)) *
+				     40, segid, (ftnlen)40, segid_len);
+			    __state->itprvf[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itprvf",
+				     i__1, "ckbsr_", (ftnlen)3294)] = 
+				    __state->sticd[(i__2 = p * 6 - 3) < 
+				    600000 && 0 <= i__2 ? i__2 : s_rnge("sti"
+				    "cd", i__2, "ckbsr_", (ftnlen)3294)];
+			    moved_(descr, &__state->c__5, &__state->itprvd[(
+				    i__1 = __state->iindex * 5 - 5) < 500 && 
+				    0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
+				    "ckbsr_", (ftnlen)3296)]);
+			    __state->itchkp[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itchkp",
+				     i__1, "ckbsr_", (ftnlen)3298)] = TRUE_;
 			}
 
 /*                    Go ahead and move the pointer up before returning */
 /*                    so that the search for the next applicable segment */
 /*                    will start at the right place. */
 
-			savep = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <=
-				 i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_"
-				, (ftnlen)3307)];
+			__state->savep = __state->stpool[(i__1 = (p << 1) + 
+				10) < 200012 && 0 <= i__1 ? i__1 : s_rnge(
+				"stpool", i__1, "ckbsr_", (ftnlen)3307)];
 
 /*                    Indicate the first pass of this search has been */
 /*                    completed. */
 
-			newsch = FALSE_;
+			__state->newsch = FALSE_;
 			chkout_("CKSNS", (ftnlen)5);
 			return 0;
 		    }
@@ -3252,9 +3298,9 @@ L_cksns:
 /*              Get the next node.  We avoid LNKNXT here in order */
 /*              to speed up the operation. */
 
-		p = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= i__1 ? 
-			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)3325)]
-			;
+		p = __state->stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= 
+			i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_", (
+			ftnlen)3325)];
 	    }
 
 /*           If we're still here we didn't have information for this */
@@ -3263,13 +3309,15 @@ L_cksns:
 /*           If there are more files, search them. */
 /*           Otherwise, things are hopeless, set the status that way. */
 
-	    if (itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itlfs", i__1, "ckbsr_", (ftnlen)3336)] > ftnum[0]) {
-		s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
+	    if (__state->itlfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)
+		    3336)] > __state->ftnum[0]) {
+		s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9);
 	    } else {
-		s_copy(status, "HOPELESS", (ftnlen)40, (ftnlen)8);
+		s_copy(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8);
 	    }
-	} else if (s_cmp(status, "MAKE ROOM", (ftnlen)40, (ftnlen)9) == 0) {
+	} else if (s_cmp(__state->status, "MAKE ROOM", (ftnlen)40, (ftnlen)9) 
+		== 0) {
 
 /*           When adding a new segment to a full table, one of the */
 /*           current instruments must be dropped.  The ideal */
@@ -3305,12 +3353,12 @@ L_cksns:
 
 	    minexp = intmax_();
 	    cheap = 0;
-	    i__1 = nit;
+	    i__1 = __state->nit;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		if (i__ != iindex) {
-		    if (itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3385)] < 
-			    minexp || cheap == 0) {
+		if (i__ != __state->iindex) {
+		    if (__state->itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge("itexp", i__2, "ckbsr_", (ftnlen)
+			    3385)] < minexp || cheap == 0) {
 
 /*                    This list is the cheapest seen so far, */
 /*                    possibly because it's the first one */
@@ -3318,9 +3366,9 @@ L_cksns:
 /*                    a candidate for removal as any. */
 
 			cheap = i__;
-			minexp = itexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itexp", i__2, "ckbsr_", (
-				ftnlen)3394)];
+			minexp = __state->itexp[(i__2 = i__ - 1) < 100 && 0 <=
+				 i__2 ? i__2 : s_rnge("itexp", i__2, "ckbsr_",
+				 (ftnlen)3394)];
 		    }
 		}
 	    }
@@ -3330,9 +3378,9 @@ L_cksns:
 /*              Do depends on the task that was suspended before */
 /*              entering MAKE ROOM. */
 
-		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "ckbsr_", (ftnlen)3409)) * 40, 
-			"ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
+		if (s_cmp(stack + ((i__1 = __state->top - 1) < 2 && 0 <= i__1 
+			? i__1 : s_rnge("stack", i__1, "ckbsr_", (ftnlen)3409)
+			) * 40, "ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
 
 /*                 The segment meta-data from the current file cannot */
 /*                 be buffered.  We'll search the partial list of */
@@ -3340,8 +3388,8 @@ L_cksns:
 /*                 the rest of the file and any other old files, until */
 /*                 we find an applicable segment or run out of segments. */
 
-		    s_copy(status, "PREPARE PARTIAL LIST", (ftnlen)40, (
-			    ftnlen)20);
+		    s_copy(__state->status, "PREPARE PARTIAL LIST", (ftnlen)
+			    40, (ftnlen)20);
 		} else {
 
 /*                 STACK(TOP) is set to 'ADD TO FRONT'. */
@@ -3354,115 +3402,132 @@ L_cksns:
 /*                 Return the current list to the segment table pool. */
 /*                 Note this list is non-empty. */
 
-		    p = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3432)];
-		    tail = -lnkprv_(&p, stpool);
-		    lnkfsl_(&p, &tail, stpool);
+		    p = __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 
+			    0 <= i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_",
+			     (ftnlen)3432)];
+		    tail = -lnkprv_(&p, __state->stpool);
+		    lnkfsl_(&p, &tail, __state->stpool);
 
 /*                 Re-initialize the table for this instrument, and */
 /*                 initiate an 'OLD FILES' search, just as in 'NEW */
 /*                 INSTRUMENT'. */
 
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3441)] = 
-			    0;
-		    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3442)] = 
-			    0;
-		    ithfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3443)] = 
-			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3443)];
-		    itlfs[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3444)] = 
-			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3444)] 
-			    + 1;
-		    s_copy(status, "OLD FILES", (ftnlen)40, (ftnlen)9);
+		    __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+			    ftnlen)3441)] = 0;
+		    __state->itexp[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itexp", i__1, "ckbsr_", (
+			    ftnlen)3442)] = 0;
+		    __state->ithfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("ithfs", i__1, "ckbsr_", (
+			    ftnlen)3443)] = __state->ftnum[(i__2 = 
+			    __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3443)];
+		    __state->itlfs[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itlfs", i__1, "ckbsr_", (
+			    ftnlen)3444)] = __state->ftnum[(i__2 = 
+			    __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge("ftnum", i__2, "ckbsr_", (ftnlen)3444)] + 
+			    1;
+		    s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)
+			    9);
 		}
 
 /*              Unwind the stack; we've set the target states already. */
 
-		top = 0;
+		__state->top = 0;
 	    } else {
 
 /*              Return this cheapest list to the segment pool.  This */
 /*              list could be empty. */
 
-		head = itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3460)];
+		head = __state->itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3460)];
 		if (head > 0) {
-		    tail = -lnkprv_(&head, stpool);
-		    lnkfsl_(&head, &tail, stpool);
+		    tail = -lnkprv_(&head, __state->stpool);
+		    lnkfsl_(&head, &tail, __state->stpool);
 		}
 
 /*              Fill the deleted instrument's space in the table with */
 /*              the final entry in the table. */
 
-		if (cheap != nit) {
-		    itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itins", i__1, "ckbsr_", (ftnlen)3476)] = 
-			    itins[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itins", i__2, "ckbsr_", (ftnlen)3476)];
-		    itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itexp", i__1, "ckbsr_", (ftnlen)3477)] = 
-			    itexp[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itexp", i__2, "ckbsr_", (ftnlen)3477)];
-		    ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)3478)] = 
-			    ithfs[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("ithfs", i__2, "ckbsr_", (ftnlen)3478)];
-		    itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)3479)] = 
-			    itlfs[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itlfs", i__2, "ckbsr_", (ftnlen)3479)];
-		    itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3480)] = 
-			    itbeg[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 :
-			     s_rnge("itbeg", i__2, "ckbsr_", (ftnlen)3480)];
-		    itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3481)] = 
-			    itlb[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itlb", i__2, "ckbsr_", (ftnlen)3481)];
-		    itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3482)] = 
-			    itub[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("itub", i__2, "ckbsr_", (ftnlen)3482)];
-		    itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)3483)] = 
-			    itprvh[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itprvh", i__2, "ckbsr_", (ftnlen)3483)];
-		    s_copy(itprvi + ((i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("itprvi", i__1, "ckbsr_", (ftnlen)
-			    3484)) * 40, itprvi + ((i__2 = nit - 1) < 100 && 
-			    0 <= i__2 ? i__2 : s_rnge("itprvi", i__2, "ckbsr_"
-			    , (ftnlen)3484)) * 40, (ftnlen)40, (ftnlen)40);
-		    itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)3485)] = 
-			    itprvf[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itprvf", i__2, "ckbsr_", (ftnlen)3485)];
-		    itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)3486)] = 
-			    itchkp[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itchkp", i__2, "ckbsr_", (ftnlen)3486)];
-		    itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3487)] = 
-			    itruex[(i__2 = nit - 1) < 100 && 0 <= i__2 ? i__2 
-			    : s_rnge("itruex", i__2, "ckbsr_", (ftnlen)3487)];
-		    moved_(&itprvd[(i__1 = nit * 5 - 5) < 500 && 0 <= i__1 ? 
-			    i__1 : s_rnge("itprvd", i__1, "ckbsr_", (ftnlen)
-			    3489)], &c__5, &itprvd[(i__2 = cheap * 5 - 5) < 
-			    500 && 0 <= i__2 ? i__2 : s_rnge("itprvd", i__2, 
-			    "ckbsr_", (ftnlen)3489)]);
+		if (cheap != __state->nit) {
+		    __state->itins[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itins", i__1, "ckbsr_", (ftnlen)
+			    3476)] = __state->itins[(i__2 = __state->nit - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("itins", i__2, 
+			    "ckbsr_", (ftnlen)3476)];
+		    __state->itexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itexp", i__1, "ckbsr_", (ftnlen)
+			    3477)] = __state->itexp[(i__2 = __state->nit - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp", i__2, 
+			    "ckbsr_", (ftnlen)3477)];
+		    __state->ithfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("ithfs", i__1, "ckbsr_", (ftnlen)
+			    3478)] = __state->ithfs[(i__2 = __state->nit - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("ithfs", i__2, 
+			    "ckbsr_", (ftnlen)3478)];
+		    __state->itlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itlfs", i__1, "ckbsr_", (ftnlen)
+			    3479)] = __state->itlfs[(i__2 = __state->nit - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("itlfs", i__2, 
+			    "ckbsr_", (ftnlen)3479)];
+		    __state->itbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			    3480)] = __state->itbeg[(i__2 = __state->nit - 1) 
+			    < 100 && 0 <= i__2 ? i__2 : s_rnge("itbeg", i__2, 
+			    "ckbsr_", (ftnlen)3480)];
+		    __state->itlb[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itlb", i__1, "ckbsr_", (ftnlen)
+			    3481)] = __state->itlb[(i__2 = __state->nit - 1) <
+			     100 && 0 <= i__2 ? i__2 : s_rnge("itlb", i__2, 
+			    "ckbsr_", (ftnlen)3481)];
+		    __state->itub[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itub", i__1, "ckbsr_", (ftnlen)
+			    3482)] = __state->itub[(i__2 = __state->nit - 1) <
+			     100 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2, 
+			    "ckbsr_", (ftnlen)3482)];
+		    __state->itprvh[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itprvh", i__1, "ckbsr_", (ftnlen)
+			    3483)] = __state->itprvh[(i__2 = __state->nit - 1)
+			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itprvh", 
+			    i__2, "ckbsr_", (ftnlen)3483)];
+		    s_copy(__state->itprvi + ((i__1 = cheap - 1) < 100 && 0 <=
+			     i__1 ? i__1 : s_rnge("itprvi", i__1, "ckbsr_", (
+			    ftnlen)3484)) * 40, __state->itprvi + ((i__2 = 
+			    __state->nit - 1) < 100 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itprvi", i__2, "ckbsr_", (ftnlen)3484)) * 
+			    40, (ftnlen)40, (ftnlen)40);
+		    __state->itprvf[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itprvf", i__1, "ckbsr_", (ftnlen)
+			    3485)] = __state->itprvf[(i__2 = __state->nit - 1)
+			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itprvf", 
+			    i__2, "ckbsr_", (ftnlen)3485)];
+		    __state->itchkp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)
+			    3486)] = __state->itchkp[(i__2 = __state->nit - 1)
+			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itchkp", 
+			    i__2, "ckbsr_", (ftnlen)3486)];
+		    __state->itruex[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
+			    i__1 : s_rnge("itruex", i__1, "ckbsr_", (ftnlen)
+			    3487)] = __state->itruex[(i__2 = __state->nit - 1)
+			     < 100 && 0 <= i__2 ? i__2 : s_rnge("itruex", 
+			    i__2, "ckbsr_", (ftnlen)3487)];
+		    moved_(&__state->itprvd[(i__1 = __state->nit * 5 - 5) < 
+			    500 && 0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
+			    "ckbsr_", (ftnlen)3489)], &__state->c__5, &
+			    __state->itprvd[(i__2 = cheap * 5 - 5) < 500 && 0 
+			    <= i__2 ? i__2 : s_rnge("itprvd", i__2, "ckbsr_", 
+			    (ftnlen)3489)]);
 		}
-		if (iindex == nit) {
-		    iindex = cheap;
+		if (__state->iindex == __state->nit) {
+		    __state->iindex = cheap;
 		}
 
 /*              One less instrument now. */
 
-		--nit;
-		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
+		--__state->nit;
+		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
 	    }
 
 /*           Either we made room by freeing a non-empty segment list, */
@@ -3470,8 +3535,8 @@ L_cksns:
 /*           latter case, the state is now 'OLD FILES' or */
 /*           'PREPARE PARTIAL LIST'. */
 
-	} else if (s_cmp(status, "ADD TO FRONT", (ftnlen)40, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(__state->status, "ADD TO FRONT", (ftnlen)40, (ftnlen)
+		12) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the head of the segment list for the current instrument, */
@@ -3480,28 +3545,30 @@ L_cksns:
 
 /*           The only way to get here is from the block NEW SEGMENTS */
 /*           after suspending that task. */
-	    if (lnknfn_(stpool) == 0) {
+	    if (lnknfn_(__state->stpool) == 0) {
 		s_copy(doing, "ADD TO FRONT", (ftnlen)40, (ftnlen)12);
 		s_copy(urgent, "MAKE ROOM", (ftnlen)40, (ftnlen)9);
-		s_copy(status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
 	    } else {
 
 /*              Allocate a node and link it to the front of the list */
 /*              for the current instrument. */
 
-		lnkan_(stpool, &new__);
-		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3535)] = 
-			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3535)];
-		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3537))
-			 * 40, (ftnlen)40);
-		dafus_(descr, &c__2, &c__6, &stdcd[(i__1 = (new__ << 1) - 2) <
-			 200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
-			"ckbsr_", (ftnlen)3539)], &sticd[(i__2 = new__ * 6 - 
-			6) < 600000 && 0 <= i__2 ? i__2 : s_rnge("sticd", 
-			i__2, "ckbsr_", (ftnlen)3539)]);
+		lnkan_(__state->stpool, &new__);
+		__state->sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
+			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3535)] 
+			= __state->fthan[(i__2 = __state->findex - 1) < 5000 
+			&& 0 <= i__2 ? i__2 : s_rnge("fthan", i__2, "ckbsr_", 
+			(ftnlen)3535)];
+		dafgn_(__state->stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= 
+			i__1 ? i__1 : s_rnge("stidnt", i__1, "ckbsr_", (
+			ftnlen)3537)) * 40, (ftnlen)40);
+		dafus_(descr, &__state->c__2, &__state->c__6, &__state->stdcd[
+			(i__1 = (new__ << 1) - 2) < 200000 && 0 <= i__1 ? 
+			i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)3539)],
+			 &__state->sticd[(i__2 = new__ * 6 - 6) < 600000 && 0 
+			<= i__2 ? i__2 : s_rnge("sticd", i__2, "ckbsr_", (
+			ftnlen)3539)]);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
@@ -3510,14 +3577,16 @@ L_cksns:
 /*              If the current list is empty, this append operation */
 /*              is a no-op. */
 
-		lnkilb_(&new__, &itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 
-			? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3550)
-			], stpool);
-		itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-			"itbeg", i__1, "ckbsr_", (ftnlen)3551)] = new__;
-		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
+		lnkilb_(&new__, &__state->itbeg[(i__1 = __state->iindex - 1) <
+			 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg", i__1, 
+			"ckbsr_", (ftnlen)3550)], __state->stpool);
+		__state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			3551)] = new__;
+		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
 	    }
-	} else if (s_cmp(status, "ADD TO END", (ftnlen)40, (ftnlen)10) == 0) {
+	} else if (s_cmp(__state->status, "ADD TO END", (ftnlen)40, (ftnlen)
+		10) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the tail of the segment list for the current instrument. */
@@ -3525,53 +3594,56 @@ L_cksns:
 /*           The only way to get to this task is from the OLD SEGMENTS */
 /*           block after suspending that task. */
 
-	    if (lnknfn_(stpool) == 0) {
+	    if (lnknfn_(__state->stpool) == 0) {
 		s_copy(doing, "ADD TO END", (ftnlen)40, (ftnlen)10);
 		s_copy(urgent, "MAKE ROOM", (ftnlen)40, (ftnlen)9);
-		s_copy(status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
 	    } else {
 
 /*              Allocate a new node in the segment table pool. */
 
-		lnkan_(stpool, &new__);
-		sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? i__1 : 
-			s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3578)] = 
-			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3578)];
-		dafgn_(stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "ckbsr_", (ftnlen)3580))
-			 * 40, (ftnlen)40);
-		dafus_(descr, &c__2, &c__6, &stdcd[(i__1 = (new__ << 1) - 2) <
-			 200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
-			"ckbsr_", (ftnlen)3582)], &sticd[(i__2 = new__ * 6 - 
-			6) < 600000 && 0 <= i__2 ? i__2 : s_rnge("sticd", 
-			i__2, "ckbsr_", (ftnlen)3582)]);
+		lnkan_(__state->stpool, &new__);
+		__state->sthan[(i__1 = new__ - 1) < 100000 && 0 <= i__1 ? 
+			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3578)] 
+			= __state->fthan[(i__2 = __state->findex - 1) < 5000 
+			&& 0 <= i__2 ? i__2 : s_rnge("fthan", i__2, "ckbsr_", 
+			(ftnlen)3578)];
+		dafgn_(__state->stidnt + ((i__1 = new__ - 1) < 100000 && 0 <= 
+			i__1 ? i__1 : s_rnge("stidnt", i__1, "ckbsr_", (
+			ftnlen)3580)) * 40, (ftnlen)40);
+		dafus_(descr, &__state->c__2, &__state->c__6, &__state->stdcd[
+			(i__1 = (new__ << 1) - 2) < 200000 && 0 <= i__1 ? 
+			i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)3582)],
+			 &__state->sticd[(i__2 = new__ * 6 - 6) < 600000 && 0 
+			<= i__2 ? i__2 : s_rnge("sticd", i__2, "ckbsr_", (
+			ftnlen)3582)]);
 		if (failed_()) {
 		    chkout_("CKSNS", (ftnlen)5);
 		    return 0;
 		}
-		if (itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3589)] <= 0) {
+		if (__state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)
+			3589)] <= 0) {
 
 /*                 This is the first node in the list for this */
 /*                 instrument. */
 
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3594)] = 
-			    new__;
+		    __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+			    ftnlen)3594)] = new__;
 		} else {
 
 /*                 Link the new node to the tail of the list. */
 
-		    tail = -lnkprv_(&itbeg[(i__1 = iindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
-			    ftnlen)3600)], stpool);
-		    lnkila_(&tail, &new__, stpool);
+		    tail = -lnkprv_(&__state->itbeg[(i__1 = __state->iindex - 
+			    1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itbeg", 
+			    i__1, "ckbsr_", (ftnlen)3600)], __state->stpool);
+		    lnkila_(&tail, &new__, __state->stpool);
 		}
-		s_copy(status, "RESUME", (ftnlen)40, (ftnlen)6);
+		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
 	    }
-	} else if (s_cmp(status, "PREPARE PARTIAL LIST", (ftnlen)40, (ftnlen)
-		20) == 0) {
+	} else if (s_cmp(__state->status, "PREPARE PARTIAL LIST", (ftnlen)40, 
+		(ftnlen)20) == 0) {
 
 /*           When the segment table is completely full, continue */
 /*           the search by looking through the unchecked portion */
@@ -3586,29 +3658,32 @@ L_cksns:
 /*           At this point, we need to initialize the cost of */
 /*           the re-use interval. */
 
-	    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)3625)] = 0;
+	    __state->itruex[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3625)] = 
+		    0;
 
 /*           Find the portion of the current instrument's segment list */
 /*           which comes from the current file of interest.  SLBEG */
 /*           will point to the beginning of this sublist. */
 
-	    slbeg = itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3632)];
+	    __state->slbeg = __state->itbeg[(i__1 = __state->iindex - 1) < 
+		    100 && 0 <= i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", 
+		    (ftnlen)3632)];
 	    fndhan = FALSE_;
-	    while(! fndhan && slbeg > 0) {
-		fndhan = sthan[(i__1 = slbeg - 1) < 100000 && 0 <= i__1 ? 
-			i__1 : s_rnge("sthan", i__1, "ckbsr_", (ftnlen)3637)] 
-			== fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-			i__2 : s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3637)];
+	    while(! fndhan && __state->slbeg > 0) {
+		fndhan = __state->sthan[(i__1 = __state->slbeg - 1) < 100000 
+			&& 0 <= i__1 ? i__1 : s_rnge("sthan", i__1, "ckbsr_", 
+			(ftnlen)3637)] == __state->fthan[(i__2 = 
+			__state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			s_rnge("fthan", i__2, "ckbsr_", (ftnlen)3637)];
 		if (! fndhan) {
 
 /*                 Get the next node.  We avoid LNKNXT here in order */
 /*                 to speed up the operation. */
 
-		    slbeg = stpool[(i__1 = (slbeg << 1) + 10) < 200012 && 0 <=
-			     i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_", (
-			    ftnlen)3644)];
+		    __state->slbeg = __state->stpool[(i__1 = (__state->slbeg 
+			    << 1) + 10) < 200012 && 0 <= i__1 ? i__1 : s_rnge(
+			    "stpool", i__1, "ckbsr_", (ftnlen)3644)];
 		}
 	    }
 
@@ -3618,47 +3693,50 @@ L_cksns:
 /*           Otherwise, finish searching old files without buffering */
 /*           anything. */
 
-	    if (slbeg > 0) {
+	    if (__state->slbeg > 0) {
 
 /*              The partial list from the current node onwards is to be */
 /*              returned to the free list.  Save this node, since */
 /*              we'll finish searching the list before freeing the */
 /*              partial list. */
 
-		p = slbeg;
+		p = __state->slbeg;
 
 /*              Record the fact that we'll need to free the partial list */
 /*              later. */
 
-		fresub = TRUE_;
+		__state->fresub = TRUE_;
 
 /*              It may be that the partial list we're going to delete is */
 /*              the entire segment list for this instrument.  If so, the */
 /*              corresponding instrument table entry should be set to */
 /*              a non-positive value to indicate an empty segment list. */
 
-		if (p == itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 :
-			 s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3678)]) {
-		    itbeg[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itbeg", i__1, "ckbsr_", (ftnlen)3680)] = 
-			    0;
+		if (p == __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 
+			0 <= i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+			ftnlen)3678)]) {
+		    __state->itbeg[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itbeg", i__1, "ckbsr_", (
+			    ftnlen)3680)] = 0;
 
 /*                 Also in this case, we must initialize the time */
 /*                 bounds for this instrument. */
 
-		    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3686)] = 
-			    dpmin_();
-		    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itub", i__1, "ckbsr_", (ftnlen)3687)] = 
-			    dpmax_();
+		    __state->itlb[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itlb", i__1, "ckbsr_", (
+			    ftnlen)3686)] = dpmin_();
+		    __state->itub[(i__1 = __state->iindex - 1) < 100 && 0 <= 
+			    i__1 ? i__1 : s_rnge("itub", i__1, "ckbsr_", (
+			    ftnlen)3687)] = dpmax_();
 		}
-		s_copy(status, "CHECK PARTIAL LIST", (ftnlen)40, (ftnlen)18);
+		s_copy(__state->status, "CHECK PARTIAL LIST", (ftnlen)40, (
+			ftnlen)18);
 	    } else {
-		s_copy(status, "SEARCH W/O BUFF", (ftnlen)40, (ftnlen)15);
+		s_copy(__state->status, "SEARCH W/O BUFF", (ftnlen)40, (
+			ftnlen)15);
 	    }
-	} else if (s_cmp(status, "CHECK PARTIAL LIST", (ftnlen)40, (ftnlen)18)
-		 == 0) {
+	} else if (s_cmp(__state->status, "CHECK PARTIAL LIST", (ftnlen)40, (
+		ftnlen)18) == 0) {
 
 /*           The only ways to get here are from the */
 /*           'PREPARE PARTIAL LIST' state, or by resuming a search of */
@@ -3678,88 +3756,93 @@ L_cksns:
 /*              If this is a new search, update the re-use interval */
 /*              and its expense. */
 
-		if (newsch) {
+		if (__state->newsch) {
 
 /*                 Every segment seen from the current file contributes */
 /*                 to the expense of the re-use interval. */
 
-		    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("itruex", i__1, "ckbsr_", (ftnlen)3726)] = 
-			    itruex[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-			    i__2 : s_rnge("itruex", i__2, "ckbsr_", (ftnlen)
-			    3726)] + 1;
+		    __state->itruex[(i__1 = __state->iindex - 1) < 100 && 0 <=
+			     i__1 ? i__1 : s_rnge("itruex", i__1, "ckbsr_", (
+			    ftnlen)3726)] = __state->itruex[(i__2 = 
+			    __state->iindex - 1) < 100 && 0 <= i__2 ? i__2 : 
+			    s_rnge("itruex", i__2, "ckbsr_", (ftnlen)3726)] + 
+			    1;
 
 /*                 Trim the re-use interval if the request time lies */
 /*                 outside the coverage of the current segment. */
 
-		    if (reqt > stdcd[(i__1 = (p << 1) - 1) < 200000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
-			    ftnlen)3732)]) {
+		    if (__state->reqt > __state->stdcd[(i__1 = (p << 1) - 1) <
+			     200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
+			    i__1, "ckbsr_", (ftnlen)3732)]) {
 
 /*                    REQT is to the right of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    left, if necessary. */
 
 /* Computing MAX */
-			d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itlb", i__2, "ckbsr_", (ftnlen)
-				3738)], d__2 = stdcd[(i__3 = (p << 1) - 1) < 
-				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3738)];
-			itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itlb", i__1, "ckbsr_", (ftnlen)3738)] 
-				= max(d__1,d__2);
-		    } else if (reqt < stdcd[(i__1 = (p << 1) - 2) < 200000 && 
-			    0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_",
-			     (ftnlen)3741)]) {
+			d__1 = __state->itlb[(i__2 = __state->iindex - 1) < 
+				100 && 0 <= i__2 ? i__2 : s_rnge("itlb", i__2,
+				 "ckbsr_", (ftnlen)3738)], d__2 = 
+				__state->stdcd[(i__3 = (p << 1) - 1) < 200000 
+				&& 0 <= i__3 ? i__3 : s_rnge("stdcd", i__3, 
+				"ckbsr_", (ftnlen)3738)];
+			__state->itlb[(i__1 = __state->iindex - 1) < 100 && 0 
+				<= i__1 ? i__1 : s_rnge("itlb", i__1, "ckbsr_"
+				, (ftnlen)3738)] = max(d__1,d__2);
+		    } else if (__state->reqt < __state->stdcd[(i__1 = (p << 1)
+			     - 2) < 200000 && 0 <= i__1 ? i__1 : s_rnge("std"
+			    "cd", i__1, "ckbsr_", (ftnlen)3741)]) {
 
 /*                    REQT is to the left of the coverage interval of */
 /*                    this segment.  Trim the re-use interval on the */
 /*                    right, if necessary. */
 
 /* Computing MIN */
-			d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("itub", i__2, "ckbsr_", (ftnlen)
-				3747)], d__2 = stdcd[(i__3 = (p << 1) - 2) < 
-				200000 && 0 <= i__3 ? i__3 : s_rnge("stdcd", 
-				i__3, "ckbsr_", (ftnlen)3747)];
-			itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("itub", i__1, "ckbsr_", (ftnlen)3747)] 
-				= min(d__1,d__2);
+			d__1 = __state->itub[(i__2 = __state->iindex - 1) < 
+				100 && 0 <= i__2 ? i__2 : s_rnge("itub", i__2,
+				 "ckbsr_", (ftnlen)3747)], d__2 = 
+				__state->stdcd[(i__3 = (p << 1) - 2) < 200000 
+				&& 0 <= i__3 ? i__3 : s_rnge("stdcd", i__3, 
+				"ckbsr_", (ftnlen)3747)];
+			__state->itub[(i__1 = __state->iindex - 1) < 100 && 0 
+				<= i__1 ? i__1 : s_rnge("itub", i__1, "ckbsr_"
+				, (ftnlen)3747)] = min(d__1,d__2);
 		    }
 		}
 
 /*              We've updated the re-use interval if so required. */
 
-		if (omega >= stdcd[(i__1 = (p << 1) - 2) < 200000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stdcd", i__1, "ckbsr_", (ftnlen)
-			3756)] && alpha <= stdcd[(i__2 = (p << 1) - 1) < 
-			200000 && 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
-			"ckbsr_", (ftnlen)3756)]) {
+		if (__state->omega >= __state->stdcd[(i__1 = (p << 1) - 2) < 
+			200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
+			"ckbsr_", (ftnlen)3756)] && __state->alpha <= 
+			__state->stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
+			i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", (ftnlen)
+			3756)]) {
 
 /*                 The segment coverage interval intersects the request */
 /*                 interval ALPHA:OMEGA. */
 
-		    if (! avneed || sticd[(i__1 = p * 6 - 3) < 600000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("sticd", i__1, "ckbsr_", (
-			    ftnlen)3762)] != 0) {
+		    if (! __state->avneed || __state->sticd[(i__1 = p * 6 - 3)
+			     < 600000 && 0 <= i__1 ? i__1 : s_rnge("sticd", 
+			    i__1, "ckbsr_", (ftnlen)3762)] != 0) {
 
 /*                    This segment satisfies the request.  Set the */
 /*                    output arguments. */
 
-			dafps_(&c__2, &c__6, &stdcd[(i__1 = (p << 1) - 2) < 
-				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3767)], &sticd[(i__2 =
-				 p * 6 - 6) < 600000 && 0 <= i__2 ? i__2 : 
-				s_rnge("sticd", i__2, "ckbsr_", (ftnlen)3767)]
-				, descr);
-			s_copy(segid, stidnt + ((i__1 = p - 1) < 100000 && 0 
-				<= i__1 ? i__1 : s_rnge("stidnt", i__1, "ckb"
-				"sr_", (ftnlen)3770)) * 40, segid_len, (ftnlen)
-				40);
-			*handle = sthan[(i__1 = p - 1) < 100000 && 0 <= i__1 ?
-				 i__1 : s_rnge("sthan", i__1, "ckbsr_", (
-				ftnlen)3771)];
+			dafps_(&__state->c__2, &__state->c__6, &
+				__state->stdcd[(i__1 = (p << 1) - 2) < 200000 
+				&& 0 <= i__1 ? i__1 : s_rnge("stdcd", i__1, 
+				"ckbsr_", (ftnlen)3767)], &__state->sticd[(
+				i__2 = p * 6 - 6) < 600000 && 0 <= i__2 ? 
+				i__2 : s_rnge("sticd", i__2, "ckbsr_", (
+				ftnlen)3767)], descr);
+			s_copy(segid, __state->stidnt + ((i__1 = p - 1) < 
+				100000 && 0 <= i__1 ? i__1 : s_rnge("stidnt", 
+				i__1, "ckbsr_", (ftnlen)3770)) * 40, 
+				segid_len, (ftnlen)40);
+			*handle = __state->sthan[(i__1 = p - 1) < 100000 && 0 
+				<= i__1 ? i__1 : s_rnge("sthan", i__1, "ckbs"
+				"r_", (ftnlen)3771)];
 			*found = TRUE_;
 
 /*                    If this is the first pass performed for the */
@@ -3772,70 +3855,76 @@ L_cksns:
 /*                    the request time to be in the interior of the */
 /*                    interval:  it cannot be one of the endpoints. */
 
-			if (newsch && reqt > stdcd[(i__1 = (p << 1) - 2) < 
-				200000 && 0 <= i__1 ? i__1 : s_rnge("stdcd", 
-				i__1, "ckbsr_", (ftnlen)3785)] && reqt < 
-				stdcd[(i__2 = (p << 1) - 1) < 200000 && 0 <= 
-				i__2 ? i__2 : s_rnge("stdcd", i__2, "ckbsr_", 
-				(ftnlen)3785)]) {
+			if (__state->newsch && __state->reqt > __state->stdcd[
+				(i__1 = (p << 1) - 2) < 200000 && 0 <= i__1 ? 
+				i__1 : s_rnge("stdcd", i__1, "ckbsr_", (
+				ftnlen)3785)] && __state->reqt < 
+				__state->stdcd[(i__2 = (p << 1) - 1) < 200000 
+				&& 0 <= i__2 ? i__2 : s_rnge("stdcd", i__2, 
+				"ckbsr_", (ftnlen)3785)]) {
 
 /*                       Adjust the re-use interval for the current */
 /*                       instrument. */
 
 /* Computing MAX */
-			    d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
-				    i__2 ? i__2 : s_rnge("itlb", i__2, "ckbs"
-				    "r_", (ftnlen)3792)], d__2 = stdcd[(i__3 = 
-				    (p << 1) - 2) < 200000 && 0 <= i__3 ? 
-				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3792)];
-			    itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itlb", i__1, "ckbsr_", (
-				    ftnlen)3792)] = max(d__1,d__2);
+			    d__1 = __state->itlb[(i__2 = __state->iindex - 1) 
+				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itlb",
+				     i__2, "ckbsr_", (ftnlen)3792)], d__2 = 
+				    __state->stdcd[(i__3 = (p << 1) - 2) < 
+				    200000 && 0 <= i__3 ? i__3 : s_rnge("std"
+				    "cd", i__3, "ckbsr_", (ftnlen)3792)];
+			    __state->itlb[(i__1 = __state->iindex - 1) < 100 
+				    && 0 <= i__1 ? i__1 : s_rnge("itlb", i__1,
+				     "ckbsr_", (ftnlen)3792)] = max(d__1,d__2)
+				    ;
 /* Computing MIN */
-			    d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
-				    i__2 ? i__2 : s_rnge("itub", i__2, "ckbs"
-				    "r_", (ftnlen)3793)], d__2 = stdcd[(i__3 = 
-				    (p << 1) - 1) < 200000 && 0 <= i__3 ? 
-				    i__3 : s_rnge("stdcd", i__3, "ckbsr_", (
-				    ftnlen)3793)];
-			    itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itub", i__1, "ckbsr_", (
-				    ftnlen)3793)] = min(d__1,d__2);
+			    d__1 = __state->itub[(i__2 = __state->iindex - 1) 
+				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itub",
+				     i__2, "ckbsr_", (ftnlen)3793)], d__2 = 
+				    __state->stdcd[(i__3 = (p << 1) - 1) < 
+				    200000 && 0 <= i__3 ? i__3 : s_rnge("std"
+				    "cd", i__3, "ckbsr_", (ftnlen)3793)];
+			    __state->itub[(i__1 = __state->iindex - 1) < 100 
+				    && 0 <= i__1 ? i__1 : s_rnge("itub", i__1,
+				     "ckbsr_", (ftnlen)3793)] = min(d__1,d__2)
+				    ;
 
 /*                       Save the returned output items, in case this */
 /*                       segment may satisfy the next request. */
 
-			    itprvh[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itprvh", i__1, "ckbsr_", (
-				    ftnlen)3798)] = *handle;
-			    s_copy(itprvi + ((i__1 = iindex - 1) < 100 && 0 <=
-				     i__1 ? i__1 : s_rnge("itprvi", i__1, 
-				    "ckbsr_", (ftnlen)3799)) * 40, segid, (
-				    ftnlen)40, segid_len);
-			    itprvf[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itprvf", i__1, "ckbsr_", (
-				    ftnlen)3800)] = sticd[(i__2 = p * 6 - 3) <
-				     600000 && 0 <= i__2 ? i__2 : s_rnge(
-				    "sticd", i__2, "ckbsr_", (ftnlen)3800)];
-			    moved_(descr, &c__5, &itprvd[(i__1 = iindex * 5 - 
-				    5) < 500 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itprvd", i__1, "ckbsr_", (ftnlen)3802)]);
-			    itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itchkp", i__1, "ckbsr_", (
-				    ftnlen)3804)] = TRUE_;
+			    __state->itprvh[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itprvh",
+				     i__1, "ckbsr_", (ftnlen)3798)] = *handle;
+			    s_copy(__state->itprvi + ((i__1 = __state->iindex 
+				    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
+				    "itprvi", i__1, "ckbsr_", (ftnlen)3799)) *
+				     40, segid, (ftnlen)40, segid_len);
+			    __state->itprvf[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itprvf",
+				     i__1, "ckbsr_", (ftnlen)3800)] = 
+				    __state->sticd[(i__2 = p * 6 - 3) < 
+				    600000 && 0 <= i__2 ? i__2 : s_rnge("sti"
+				    "cd", i__2, "ckbsr_", (ftnlen)3800)];
+			    moved_(descr, &__state->c__5, &__state->itprvd[(
+				    i__1 = __state->iindex * 5 - 5) < 500 && 
+				    0 <= i__1 ? i__1 : s_rnge("itprvd", i__1, 
+				    "ckbsr_", (ftnlen)3802)]);
+			    __state->itchkp[(i__1 = __state->iindex - 1) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge("itchkp",
+				     i__1, "ckbsr_", (ftnlen)3804)] = TRUE_;
 
 /*                       Update the expense of the list to reflect */
 /*                       the cost of locating this segment. */
 
-			    itexp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-				    i__1 : s_rnge("itexp", i__1, "ckbsr_", (
-				    ftnlen)3809)] = itexp[(i__2 = iindex - 1) 
-				    < 100 && 0 <= i__2 ? i__2 : s_rnge("itexp"
-				    , i__2, "ckbsr_", (ftnlen)3809)] + itruex[
-				    (i__3 = iindex - 1) < 100 && 0 <= i__3 ? 
-				    i__3 : s_rnge("itruex", i__3, "ckbsr_", (
-				    ftnlen)3809)];
+			    __state->itexp[(i__1 = __state->iindex - 1) < 100 
+				    && 0 <= i__1 ? i__1 : s_rnge("itexp", 
+				    i__1, "ckbsr_", (ftnlen)3809)] = 
+				    __state->itexp[(i__2 = __state->iindex - 
+				    1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
+				    "itexp", i__2, "ckbsr_", (ftnlen)3809)] + 
+				    __state->itruex[(i__3 = __state->iindex - 
+				    1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
+				    "itruex", i__3, "ckbsr_", (ftnlen)3809)];
 			}
 
 /*                    We've set the re-use interval. */
@@ -3847,9 +3936,9 @@ L_cksns:
 /*                    We avoid LNKNXT here in order to speed up the */
 /*                    operation. */
 
-			savep = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <=
-				 i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_"
-				, (ftnlen)3822)];
+			__state->savep = __state->stpool[(i__1 = (p << 1) + 
+				10) < 200012 && 0 <= i__1 ? i__1 : s_rnge(
+				"stpool", i__1, "ckbsr_", (ftnlen)3822)];
 
 /*                    We cannot free the partial list yet, because */
 /*                    we may return to search it again if the current */
@@ -3862,7 +3951,7 @@ L_cksns:
 /*                    Indicate the first pass of this search has been */
 /*                    completed. */
 
-			newsch = FALSE_;
+			__state->newsch = FALSE_;
 			chkout_("CKSNS", (ftnlen)5);
 			return 0;
 		    }
@@ -3875,9 +3964,9 @@ L_cksns:
 /*              The current segment didn't match.  Look at the next */
 /*              segment in the list. */
 
-		p = stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= i__1 ? 
-			i__1 : s_rnge("stpool", i__1, "ckbsr_", (ftnlen)3851)]
-			;
+		p = __state->stpool[(i__1 = (p << 1) + 10) < 200012 && 0 <= 
+			i__1 ? i__1 : s_rnge("stpool", i__1, "ckbsr_", (
+			ftnlen)3851)];
 	    }
 
 /*           We're done looking at the partial list. */
@@ -3891,15 +3980,16 @@ L_cksns:
 /*           Note the list is always non-empty at this point. */
 
 	    i__1 = -p;
-	    tail = -lnkprv_(&i__1, stpool);
-	    lnkfsl_(&slbeg, &tail, stpool);
-	    fresub = FALSE_;
+	    tail = -lnkprv_(&i__1, __state->stpool);
+	    lnkfsl_(&__state->slbeg, &tail, __state->stpool);
+	    __state->fresub = FALSE_;
 
 /*           Search the remaining files. */
 
-	    s_copy(status, "SEARCH W/O BUFF", (ftnlen)40, (ftnlen)15);
-	} else if (s_cmp(status, "SEARCH W/O BUFF", (ftnlen)40, (ftnlen)15) ==
-		 0) {
+	    s_copy(__state->status, "SEARCH W/O BUFF", (ftnlen)40, (ftnlen)15)
+		    ;
+	} else if (s_cmp(__state->status, "SEARCH W/O BUFF", (ftnlen)40, (
+		ftnlen)15) == 0) {
 
 /*           The only ways to get here are from the */
 /*           'PREPARE PARTIAL LIST' and 'CHECK PARTIAL LIST' states. */
@@ -3912,139 +4002,151 @@ L_cksns:
 /*           Recall that a search is already in progress and that a */
 /*           segment is currently under consideration (FND = .TRUE.). */
 
-	    while(findex > 0) {
-		while(fnd) {
-		    if (newsch) {
+	    while(__state->findex > 0) {
+		while(__state->fnd) {
+		    if (__state->newsch) {
 
 /*                    Each segment found contributes to the expense of */
 /*                    the re-use interval. */
 
-			itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 :
-				 s_rnge("itruex", i__1, "ckbsr_", (ftnlen)
-				3899)] = itruex[(i__2 = iindex - 1) < 100 && 
-				0 <= i__2 ? i__2 : s_rnge("itruex", i__2, 
-				"ckbsr_", (ftnlen)3899)] + 1;
+			__state->itruex[(i__1 = __state->iindex - 1) < 100 && 
+				0 <= i__1 ? i__1 : s_rnge("itruex", i__1, 
+				"ckbsr_", (ftnlen)3899)] = __state->itruex[(
+				i__2 = __state->iindex - 1) < 100 && 0 <= 
+				i__2 ? i__2 : s_rnge("itruex", i__2, "ckbsr_",
+				 (ftnlen)3899)] + 1;
 		    }
 		    dafgs_(descr);
-		    dafus_(descr, &c__2, &c__6, dcd, icd);
+		    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 		    if (failed_()) {
 			chkout_("CKSNS", (ftnlen)5);
 			return 0;
 		    }
-		    if (scinst == icd[0]) {
+		    if (__state->scinst == icd[0]) {
 
 /*                    This is a segment for the instrument of interest. */
-			if (newsch) {
+			if (__state->newsch) {
 
 /*                       Update the re-use interval for this instrument. */
 
-			    if (reqt > dcd[1]) {
+			    if (__state->reqt > dcd[1]) {
 
 /*                          REQT is to the right of the coverage interval */
 /*                          of this segment.  Trim the re-use interval */
 /*                          on the left, if necessary. */
 
 /* Computing MAX */
-				d__1 = itlb[(i__2 = iindex - 1) < 100 && 0 <= 
-					i__2 ? i__2 : s_rnge("itlb", i__2, 
-					"ckbsr_", (ftnlen)3926)];
-				itlb[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-					i__1 : s_rnge("itlb", i__1, "ckbsr_", 
-					(ftnlen)3926)] = max(d__1,dcd[1]);
-			    } else if (reqt < dcd[0]) {
+				d__1 = __state->itlb[(i__2 = __state->iindex 
+					- 1) < 100 && 0 <= i__2 ? i__2 : 
+					s_rnge("itlb", i__2, "ckbsr_", (
+					ftnlen)3926)];
+				__state->itlb[(i__1 = __state->iindex - 1) < 
+					100 && 0 <= i__1 ? i__1 : s_rnge(
+					"itlb", i__1, "ckbsr_", (ftnlen)3926)]
+					 = max(d__1,dcd[1]);
+			    } else if (__state->reqt < dcd[0]) {
 
 /*                          REQT is to the left of the coverage interval */
 /*                          of this segment.  Trim the re-use interval */
 /*                          on the right, if necessary. */
 
 /* Computing MIN */
-				d__1 = itub[(i__2 = iindex - 1) < 100 && 0 <= 
-					i__2 ? i__2 : s_rnge("itub", i__2, 
-					"ckbsr_", (ftnlen)3935)];
-				itub[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? 
-					i__1 : s_rnge("itub", i__1, "ckbsr_", 
-					(ftnlen)3935)] = min(d__1,dcd[0]);
+				d__1 = __state->itub[(i__2 = __state->iindex 
+					- 1) < 100 && 0 <= i__2 ? i__2 : 
+					s_rnge("itub", i__2, "ckbsr_", (
+					ftnlen)3935)];
+				__state->itub[(i__1 = __state->iindex - 1) < 
+					100 && 0 <= i__1 ? i__1 : s_rnge(
+					"itub", i__1, "ckbsr_", (ftnlen)3935)]
+					 = min(d__1,dcd[0]);
 			    }
 			}
 
 /*                    We've trimmed the re-use interval if necessary. */
 
-			if (omega >= dcd[0] && alpha <= dcd[1]) {
+			if (__state->omega >= dcd[0] && __state->alpha <= dcd[
+				1]) {
 
 /*                       The segment coverage interval intersects the */
 /*                       request interval ALPHA:OMEGA. */
 
-			    if (! avneed || icd[3] != 0) {
+			    if (! __state->avneed || icd[3] != 0) {
 
 /*                          This segment satisfies the request.  Set */
 /*                          the output arguments. */
 
-				dafps_(&c__2, &c__6, dcd, icd, descr);
+				dafps_(&__state->c__2, &__state->c__6, dcd, 
+					icd, descr);
 				dafgn_(segid, segid_len);
-				*handle = fthan[(i__1 = findex - 1) < 5000 && 
-					0 <= i__1 ? i__1 : s_rnge("fthan", 
-					i__1, "ckbsr_", (ftnlen)3959)];
+				*handle = __state->fthan[(i__1 = 
+					__state->findex - 1) < 5000 && 0 <= 
+					i__1 ? i__1 : s_rnge("fthan", i__1, 
+					"ckbsr_", (ftnlen)3959)];
 				*found = TRUE_;
-				if (newsch) {
+				if (__state->newsch) {
 
 /*                             Adjust the re-use interval for the current */
 /*                             instrument. */
 
 /* Computing MAX */
-				    d__1 = itlb[(i__2 = iindex - 1) < 100 && 
-					    0 <= i__2 ? i__2 : s_rnge("itlb", 
+				    d__1 = __state->itlb[(i__2 = 
+					    __state->iindex - 1) < 100 && 0 <=
+					     i__2 ? i__2 : s_rnge("itlb", 
 					    i__2, "ckbsr_", (ftnlen)3967)];
-				    itlb[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itlb", i__1,
-					     "ckbsr_", (ftnlen)3967)] = max(
-					    d__1,dcd[0]);
+				    __state->itlb[(i__1 = __state->iindex - 1)
+					     < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itlb", i__1, "ckbsr_", (
+					    ftnlen)3967)] = max(d__1,dcd[0]);
 /* Computing MIN */
-				    d__1 = itub[(i__2 = iindex - 1) < 100 && 
-					    0 <= i__2 ? i__2 : s_rnge("itub", 
+				    d__1 = __state->itub[(i__2 = 
+					    __state->iindex - 1) < 100 && 0 <=
+					     i__2 ? i__2 : s_rnge("itub", 
 					    i__2, "ckbsr_", (ftnlen)3968)];
-				    itub[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itub", i__1,
-					     "ckbsr_", (ftnlen)3968)] = min(
-					    d__1,dcd[1]);
+				    __state->itub[(i__1 = __state->iindex - 1)
+					     < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itub", i__1, "ckbsr_", (
+					    ftnlen)3968)] = min(d__1,dcd[1]);
 
 /*                             Save the returned output items, in case */
 /*                             this segment may satisfy the next request. */
 
-				    itprvh[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itprvh", 
-					    i__1, "ckbsr_", (ftnlen)3974)] = *
-					    handle;
-				    s_copy(itprvi + ((i__1 = iindex - 1) < 
-					    100 && 0 <= i__1 ? i__1 : s_rnge(
-					    "itprvi", i__1, "ckbsr_", (ftnlen)
-					    3975)) * 40, segid, (ftnlen)40, 
-					    segid_len);
-				    itprvf[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itprvf", 
-					    i__1, "ckbsr_", (ftnlen)3976)] = 
-					    icd[3];
-				    moved_(descr, &c__5, &itprvd[(i__1 = 
-					    iindex * 5 - 5) < 500 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itprvd", 
-					    i__1, "ckbsr_", (ftnlen)3978)]);
-				    itchkp[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itchkp", 
-					    i__1, "ckbsr_", (ftnlen)3981)] = 
-					    TRUE_;
+				    __state->itprvh[(i__1 = __state->iindex - 
+					    1) < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itprvh", i__1, "ckbsr_", (
+					    ftnlen)3974)] = *handle;
+				    s_copy(__state->itprvi + ((i__1 = 
+					    __state->iindex - 1) < 100 && 0 <=
+					     i__1 ? i__1 : s_rnge("itprvi", 
+					    i__1, "ckbsr_", (ftnlen)3975)) * 
+					    40, segid, (ftnlen)40, segid_len);
+				    __state->itprvf[(i__1 = __state->iindex - 
+					    1) < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itprvf", i__1, "ckbsr_", (
+					    ftnlen)3976)] = icd[3];
+				    moved_(descr, &__state->c__5, &
+					    __state->itprvd[(i__1 = 
+					    __state->iindex * 5 - 5) < 500 && 
+					    0 <= i__1 ? i__1 : s_rnge("itprvd"
+					    , i__1, "ckbsr_", (ftnlen)3978)]);
+				    __state->itchkp[(i__1 = __state->iindex - 
+					    1) < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itchkp", i__1, "ckbsr_", (
+					    ftnlen)3981)] = TRUE_;
 
 /*                             Update the expense of the list to reflect */
 /*                             cost of locating this segment. */
 
-				    itexp[(i__1 = iindex - 1) < 100 && 0 <= 
-					    i__1 ? i__1 : s_rnge("itexp", 
-					    i__1, "ckbsr_", (ftnlen)3987)] = 
-					    itexp[(i__2 = iindex - 1) < 100 &&
-					     0 <= i__2 ? i__2 : s_rnge("itexp"
-					    , i__2, "ckbsr_", (ftnlen)3987)] 
-					    + itruex[(i__3 = iindex - 1) < 
-					    100 && 0 <= i__3 ? i__3 : s_rnge(
-					    "itruex", i__3, "ckbsr_", (ftnlen)
-					    3987)];
+				    __state->itexp[(i__1 = __state->iindex - 
+					    1) < 100 && 0 <= i__1 ? i__1 : 
+					    s_rnge("itexp", i__1, "ckbsr_", (
+					    ftnlen)3987)] = __state->itexp[(
+					    i__2 = __state->iindex - 1) < 100 
+					    && 0 <= i__2 ? i__2 : s_rnge(
+					    "itexp", i__2, "ckbsr_", (ftnlen)
+					    3987)] + __state->itruex[(i__3 = 
+					    __state->iindex - 1) < 100 && 0 <=
+					     i__3 ? i__3 : s_rnge("itruex", 
+					    i__3, "ckbsr_", (ftnlen)3987)];
 				}
 
 /*                          The re-use interval is set. */
@@ -4054,12 +4156,12 @@ L_cksns:
 /*                          the search: you want to pick up exactly where */
 /*                          you  left off. */
 
-				daffpa_(&fnd);
+				daffpa_(&__state->fnd);
 
 /*                          Indicate the first pass of this search has */
 /*                          been completed. */
 
-				newsch = FALSE_;
+				__state->newsch = FALSE_;
 				chkout_("CKSNS", (ftnlen)5);
 				return 0;
 			    }
@@ -4079,41 +4181,44 @@ L_cksns:
 
 /*                 Look at the next segment in the current file. */
 
-		    daffpa_(&fnd);
+		    daffpa_(&__state->fnd);
 		}
 
 /*              Try the next oldest file. */
 
-		--findex;
-		if (findex > 0) {
-		    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-			    i__1 : s_rnge("fthan", i__1, "ckbsr_", (ftnlen)
-			    4036)]);
-		    daffpa_(&fnd);
+		--__state->findex;
+		if (__state->findex > 0) {
+		    dafbbs_(&__state->fthan[(i__1 = __state->findex - 1) < 
+			    5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
+			    "ckbsr_", (ftnlen)4036)]);
+		    daffpa_(&__state->fnd);
 		}
 	    }
 
 /*           There's nothing nowhere if you get to here. */
 
-	    itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itruex", i__1, "ckbsr_", (ftnlen)4046)] = 0;
-	    s_copy(status, "HOPELESS", (ftnlen)40, (ftnlen)8);
-	} else if (s_cmp(status, "SUSPEND", (ftnlen)40, (ftnlen)7) == 0) {
+	    __state->itruex[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itruex", i__1, "ckbsr_", (ftnlen)4046)] = 
+		    0;
+	    s_copy(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8);
+	} else if (s_cmp(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7) ==
+		 0) {
 
 /*           When a task is suspended, the current activity is placed on */
 /*           a stack, to be restored later. Two levels are provided, */
 /*           since some interrupts can be interrupted by others. */
 
-	    ++top;
-	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "ckbsr_", (ftnlen)4057)) * 40, doing, (
-		    ftnlen)40, (ftnlen)40);
-	    s_copy(status, urgent, (ftnlen)40, (ftnlen)40);
-	} else if (s_cmp(status, "RESUME", (ftnlen)40, (ftnlen)6) == 0) {
-	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "ckbsr_", (ftnlen)4062)) * 40, (
-		    ftnlen)40, (ftnlen)40);
-	    --top;
+	    ++__state->top;
+	    s_copy(stack + ((i__1 = __state->top - 1) < 2 && 0 <= i__1 ? i__1 
+		    : s_rnge("stack", i__1, "ckbsr_", (ftnlen)4057)) * 40, 
+		    doing, (ftnlen)40, (ftnlen)40);
+	    s_copy(__state->status, urgent, (ftnlen)40, (ftnlen)40);
+	} else if (s_cmp(__state->status, "RESUME", (ftnlen)40, (ftnlen)6) == 
+		0) {
+	    s_copy(__state->status, stack + ((i__1 = __state->top - 1) < 2 && 
+		    0 <= i__1 ? i__1 : s_rnge("stack", i__1, "ckbsr_", (
+		    ftnlen)4062)) * 40, (ftnlen)40, (ftnlen)40);
+	    --__state->top;
 	}
     }
 
@@ -4127,18 +4232,19 @@ L_cksns:
 /*     at this point.  Also, make sure the expense of the re-use */
 /*     interval is zeroed out. */
 
-    if (iindex > 0) {
-	itchkp[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itchkp"
-		, i__1, "ckbsr_", (ftnlen)4083)] = FALSE_;
-	itruex[(i__1 = iindex - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("itruex"
-		, i__1, "ckbsr_", (ftnlen)4084)] = 0;
+    if (__state->iindex > 0) {
+	__state->itchkp[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 ? 
+		i__1 : s_rnge("itchkp", i__1, "ckbsr_", (ftnlen)4083)] = 
+		FALSE_;
+	__state->itruex[(i__1 = __state->iindex - 1) < 100 && 0 <= i__1 ? 
+		i__1 : s_rnge("itruex", i__1, "ckbsr_", (ftnlen)4084)] = 0;
     }
 
 /*     For safety, indicate the first pass of this search has been */
 /*     completed.  Normally, we won't return here before CKBSS is */
 /*     called again, but it's possible. */
 
-    newsch = FALSE_;
+    __state->newsch = FALSE_;
     chkout_("CKSNS", (ftnlen)5);
     return 0;
 /* $Procedure      CKHAVE ( C-kernels --- Have some ) */
@@ -4280,7 +4386,7 @@ L_ckhave:
 /*     Determine whether any C-kernels are loaded */
 
 /* -& */
-    *found = nft > 0;
+    *found = __state->nft > 0;
     return 0;
 } /* ckbsr_ */
 

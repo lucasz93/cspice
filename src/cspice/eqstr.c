@@ -1,9 +1,17 @@
-/* eqstr.f -- translated by f2c (version 19980913).
+/* eqstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int eqstr_state_t;
+static eqstr_state_t* get_eqstr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure EQSTR ( Equivalent strings ) */
 logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
@@ -15,10 +23,20 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
 
     /* Local variables */
-    integer lena, lenb;
+    integer lena;
+    integer lenb;
     logical done;
-    integer delta, ca, cb, pa, pb, lbound, ubound;
+    integer delta;
+    integer ca;
+    integer cb;
+    integer pa;
+    integer pb;
+    integer lbound;
+    integer ubound;
 
+
+    /* Module state */
+    eqstr_state_t* __state = get_eqstr_state();
 /* $ Abstract */
 
 /*     Determine whether two strings are equivalent. */

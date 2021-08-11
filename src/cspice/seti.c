@@ -1,9 +1,17 @@
-/* seti.f -- translated by f2c (version 19980913).
+/* seti.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int seti_state_t;
+static seti_state_t* get_seti_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SETI ( Compare integer sets ) */
 logical seti_(integer *a, char *op, integer *b, ftnlen op_len)
@@ -15,15 +23,28 @@ logical seti_(integer *a, char *op, integer *b, ftnlen op_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer cond, carda, cardb;
+    integer cond;
+    integer carda;
+    integer cardb;
     extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer condab, condoa, condob, indexa, condeq, indexb, condgt, condlt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer condab;
+    integer condoa;
+    integer condob;
+    integer indexa;
+    integer condeq;
+    integer indexb;
+    integer condgt;
+    integer condlt;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    seti_state_t* __state = get_seti_state();
 /* $ Abstract */
 
 /*     Given a relational operator, compare two integer sets. */

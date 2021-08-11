@@ -1,9 +1,17 @@
-/* zzmsxf.f -- translated by f2c (version 19980913).
+/* zzmsxf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzmsxf_state_t;
+static zzmsxf_state_t* get_zzmsxf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZMSXF ( Multiply sequence of state transformations ) */
 /* Subroutine */ int zzmsxf_(doublereal *matrix, integer *n, doublereal *
@@ -18,8 +26,17 @@
     /* Local variables */
     integer incr;
     doublereal temp[72]	/* was [6][6][2] */;
-    integer i__, j, k, l, m, get, put;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer m;
+    integer get;
+    integer put;
 
+
+    /* Module state */
+    zzmsxf_state_t* __state = get_zzmsxf_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

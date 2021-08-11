@@ -1,14 +1,21 @@
-/* zzeksca.f -- translated by f2c (version 19980913).
+/* zzeksca.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c_b65 = 2500000;
+extern zzeksca_init_t __zzeksca_init;
+static zzeksca_state_t* get_zzeksca_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeksca)
+		state->zzeksca = __cspice_allocate_module(sizeof(
+	zzeksca_state_t), &__zzeksca_init, sizeof(__zzeksca_init));
+	return state->zzeksca;
+
+}
 
 /* $Procedure      ZZEKSCA ( EK, scratch area ) */
 /* Subroutine */ int zzeksca_0_(int n__, integer *n, integer *beg, integer *
@@ -16,8 +23,6 @@ static integer c_b65 = 2500000;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer t = 0;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -26,28 +31,28 @@ static integer c_b65 = 2500000;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer base, b, e, i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer lastc, lastd, lasti, numrd, start;
     extern logical failed_(void);
-    static integer rb;
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
-	    cleari_(integer *, integer *), daslla_(integer *, integer *, 
-	    integer *, integer *), dasllc_(integer *);
-    static integer rt;
+    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasllc_(integer *);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer numadd;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
 	    integer *);
-    static integer remain, scrhan;
     extern /* Subroutine */ int daswbr_(integer *);
-    static integer scrtch[2500000];
-    extern /* Subroutine */ int dasops_(integer *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int dasops_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzeksca_state_t* __state = get_zzeksca_state();
 /* $ Abstract */
 
 /*     Manage the EK scratch area. */
@@ -450,7 +455,7 @@ L_zzekstop:
 /*     read from EK scratch area */
 
 /* -& */
-    *top = t;
+    *top = __state->t;
     return 0;
 /* $Procedure    ZZEKSPSH  ( EK scratch area, push data ) */
 
@@ -586,9 +591,9 @@ L_zzekspsh:
 
 /*     First time through, open a scratch DAS file. */
 
-    if (first) {
-	first = FALSE_;
-	dasops_(&scrhan);
+    if (__state->first) {
+	__state->first = FALSE_;
+	dasops_(&__state->scrhan);
 	if (failed_()) {
 	    return 0;
 	}
@@ -602,28 +607,28 @@ L_zzekspsh:
 
 /*     Add as much data as possible to our big array. */
 
-    if (t < 2500000) {
+    if (__state->t < 2500000) {
 /* Computing MIN */
-	i__1 = *n, i__2 = 2500000 - t;
-	numadd = min(i__1,i__2);
-	i__1 = numadd;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    scrtch[(i__2 = t + i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)624)] = idata[
-		    i__ - 1];
+	i__1 = *n, i__2 = 2500000 - __state->t;
+	__state->numadd = min(i__1,i__2);
+	i__1 = __state->numadd;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    __state->scrtch[(i__2 = __state->t + __state->i__ - 1) < 2500000 
+		    && 0 <= i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (
+		    ftnlen)624)] = idata[__state->i__ - 1];
 	}
-	t += numadd;
-	if (numadd == *n) {
+	__state->t += __state->numadd;
+	if (__state->numadd == *n) {
 	    return 0;
 	}
-	remain = *n - numadd;
-	start = numadd + 1;
-	if (remain == 0) {
+	__state->remain = *n - __state->numadd;
+	__state->start = __state->numadd + 1;
+	if (__state->remain == 0) {
 	    return 0;
 	}
     } else {
-	remain = *n;
-	start = 1;
+	__state->remain = *n;
+	__state->start = 1;
     }
 
 /*     At this point, REMAIN and START are set, and T reflects the */
@@ -637,30 +642,32 @@ L_zzekspsh:
 /*     be written to addresses previously written to, and which */
 /*     part will be appended. */
 
-    daslla_(&scrhan, &lastc, &lastd, &lasti);
+    daslla_(&__state->scrhan, &__state->lastc, &__state->lastd, &
+	    __state->lasti);
 
 /*     To simplify our arithmetic, we'll work with a variable RT */
 /*     that represents the stack top measured relative to the base */
 /*     of the DAS integer array.  At this point, RT is greater than */
 /*     or equal to zero. */
 
-    rt = t - 2500000;
-    if (rt < lasti) {
+    __state->rt = __state->t - 2500000;
+    if (__state->rt < __state->lasti) {
 
 /*        Some data can be added by updating DAS addresses.  The */
 /*        available range for updating is B:E, where B and E are */
 /*        calculated below.  This case can occur only when LASTI > 0. */
 
-	b = rt + 1;
+	__state->b = __state->rt + 1;
 /* Computing MIN */
-	i__1 = lasti, i__2 = rt + remain;
-	e = min(i__1,i__2);
-	dasudi_(&scrhan, &b, &e, &idata[start - 1]);
-	numadd = e - b + 1;
-	start += numadd;
-	remain -= numadd;
-	t += numadd;
-	if (remain == 0) {
+	i__1 = __state->lasti, i__2 = __state->rt + __state->remain;
+	__state->e = min(i__1,i__2);
+	dasudi_(&__state->scrhan, &__state->b, &__state->e, &idata[
+		__state->start - 1]);
+	__state->numadd = __state->e - __state->b + 1;
+	__state->start += __state->numadd;
+	__state->remain -= __state->numadd;
+	__state->t += __state->numadd;
+	if (__state->remain == 0) {
 	    return 0;
 	}
     }
@@ -669,8 +676,8 @@ L_zzekspsh:
 /*     amount of data we've pushed so far..  The remaining data */
 /*     must be appended to the scratch DAS file. */
 
-    dasadi_(&scrhan, &remain, &idata[start - 1]);
-    t += remain;
+    dasadi_(&__state->scrhan, &__state->remain, &idata[__state->start - 1]);
+    __state->t += __state->remain;
     return 0;
 /* $Procedure    ZZEKSPOP  ( EK scratch area, pop data ) */
 
@@ -804,9 +811,9 @@ L_zzekspop:
 
 /*     First time through, open a scratch DAS file. */
 
-    if (first) {
-	first = FALSE_;
-	dasops_(&scrhan);
+    if (__state->first) {
+	__state->first = FALSE_;
+	dasops_(&__state->scrhan);
 	if (failed_()) {
 	    return 0;
 	}
@@ -826,11 +833,11 @@ L_zzekspop:
 /*     It's an error to try to pop more data than we have on the */
 /*     stack. */
 
-    } else if (*n > t) {
+    } else if (*n > __state->t) {
 	chkin_("ZZEKSPOP", (ftnlen)8);
 	setmsg_("EK stack pointer = #; call requests popping # items.", (
 		ftnlen)52);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	errint_("#", n, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKSPOP", (ftnlen)8);
@@ -839,27 +846,27 @@ L_zzekspop:
 
 /*     Read as much data as possible from our big array. */
 
-    base = t - *n;
-    if (base < 2500000) {
+    __state->base = __state->t - *n;
+    if (__state->base < 2500000) {
 /* Computing MIN */
-	i__1 = *n, i__2 = 2500000 - base;
-	numrd = min(i__1,i__2);
-	i__1 = numrd;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    idata[i__ - 1] = scrtch[(i__2 = base + i__ - 1) < 2500000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)
-		    895)];
+	i__1 = *n, i__2 = 2500000 - __state->base;
+	__state->numrd = min(i__1,i__2);
+	i__1 = __state->numrd;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    idata[__state->i__ - 1] = __state->scrtch[(i__2 = __state->base + 
+		    __state->i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(
+		    "scrtch", i__2, "zzeksca_", (ftnlen)895)];
 	}
-	if (numrd == *n) {
-	    t -= numrd;
+	if (__state->numrd == *n) {
+	    __state->t -= __state->numrd;
 	    return 0;
 	}
-	remain = *n - numrd;
-	base = 2500000;
-	start = numrd + 1;
+	__state->remain = *n - __state->numrd;
+	__state->base = 2500000;
+	__state->start = __state->numrd + 1;
     } else {
-	remain = *n;
-	start = 1;
+	__state->remain = *n;
+	__state->start = 1;
     }
 
 /*     At this point, REMAIN, START and BASE are set.  If we got this */
@@ -867,11 +874,12 @@ L_zzekspop:
 /*     Compute the base address to read from relative to the start of */
 /*     the DAS array. */
 
-    rb = base - 2500000;
-    b = rb + 1;
-    e = rb + remain;
-    dasrdi_(&scrhan, &b, &e, &idata[start - 1]);
-    t -= *n;
+    __state->rb = __state->base - 2500000;
+    __state->b = __state->rb + 1;
+    __state->e = __state->rb + __state->remain;
+    dasrdi_(&__state->scrhan, &__state->b, &__state->e, &idata[__state->start 
+	    - 1]);
+    __state->t -= *n;
     return 0;
 /* $Procedure    ZZEKSDEC  ( EK scratch area, decrement stack pointer ) */
 
@@ -991,9 +999,9 @@ L_zzeksdec:
 
 /*     First time through, open a scratch DAS file. */
 
-    if (first) {
-	first = FALSE_;
-	dasops_(&scrhan);
+    if (__state->first) {
+	__state->first = FALSE_;
+	dasops_(&__state->scrhan);
 	if (failed_()) {
 	    return 0;
 	}
@@ -1013,17 +1021,17 @@ L_zzeksdec:
 /*     It's an error to try to decrement the pointer by more than */
 /*     the current stack depth. */
 
-    } else if (*n > t) {
+    } else if (*n > __state->t) {
 	chkin_("ZZEKSDEC", (ftnlen)8);
 	setmsg_("EK stack pointer = #; call requests  decrement by #.", (
 		ftnlen)52);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	errint_("#", n, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKSDEC", (ftnlen)8);
 	return 0;
     }
-    t -= *n;
+    __state->t -= *n;
     return 0;
 /* $Procedure    ZZEKSUPD  ( EK scratch area, update ) */
 
@@ -1172,19 +1180,19 @@ L_zzeksupd:
 
 /*     Validate the addresses. */
 
-    if (*beg < 1 || *beg > t) {
+    if (*beg < 1 || *beg > __state->t) {
 	chkin_("ZZEKSUPD", (ftnlen)8);
 	setmsg_("Start address BEG was #; valid range is 1:#", (ftnlen)43);
 	errint_("#", beg, (ftnlen)1);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
 	chkout_("ZZEKSUPD", (ftnlen)8);
 	return 0;
-    } else if (*end < 1 || *end > t) {
+    } else if (*end < 1 || *end > __state->t) {
 	chkin_("ZZEKSUPD", (ftnlen)8);
 	setmsg_("End address END was #; valid range is 1:#", (ftnlen)41);
 	errint_("#", end, (ftnlen)1);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
 	chkout_("ZZEKSUPD", (ftnlen)8);
 	return 0;
@@ -1197,33 +1205,34 @@ L_zzeksupd:
 /*        now. */
 
 	i__1 = *end;
-	for (i__ = *beg; i__ <= i__1; ++i__) {
-	    scrtch[(i__2 = i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "scrtch", i__2, "zzeksca_", (ftnlen)1296)] = idata[i__ - *
-		    beg];
+	for (__state->i__ = *beg; __state->i__ <= i__1; ++__state->i__) {
+	    __state->scrtch[(i__2 = __state->i__ - 1) < 2500000 && 0 <= i__2 ?
+		     i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)1296)] 
+		    = idata[__state->i__ - *beg];
 	}
     } else if (*beg <= 2500000) {
 
 /*        Update the portion of the address range that's in memory. */
 
-	for (i__ = *beg; i__ <= 2500000; ++i__) {
-	    scrtch[(i__1 = i__ - 1) < 2500000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "scrtch", i__1, "zzeksca_", (ftnlen)1305)] = idata[i__ - *
-		    beg];
+	for (__state->i__ = *beg; __state->i__ <= 2500000; ++__state->i__) {
+	    __state->scrtch[(i__1 = __state->i__ - 1) < 2500000 && 0 <= i__1 ?
+		     i__1 : s_rnge("scrtch", i__1, "zzeksca_", (ftnlen)1305)] 
+		    = idata[__state->i__ - *beg];
 	}
 
 /*        Now update the rest of the range, which is in the scratch */
 /*        DAS file. */
 
 	i__1 = *end - 2500000;
-	dasudi_(&scrhan, &c__1, &i__1, &idata[2500000 - *beg + 1]);
+	dasudi_(&__state->scrhan, &__state->c__1, &i__1, &idata[2500000 - *
+		beg + 1]);
     } else {
 
 /*        The whole range is in the DAS file. */
 
 	i__1 = *beg - 2500000;
 	i__2 = *end - 2500000;
-	dasudi_(&scrhan, &i__1, &i__2, idata);
+	dasudi_(&__state->scrhan, &i__1, &i__2, idata);
     }
     return 0;
 /* $Procedure    ZZEKSRD  ( EK scratch area, read ) */
@@ -1370,19 +1379,19 @@ L_zzeksrd:
 
 /*     Validate the addresses. */
 
-    if (*beg < 1 || *beg > t) {
+    if (*beg < 1 || *beg > __state->t) {
 	chkin_("ZZEKSRD", (ftnlen)7);
 	setmsg_("Start address BEG was #; valid range is 1:#", (ftnlen)43);
 	errint_("#", beg, (ftnlen)1);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
 	chkout_("ZZEKSRD", (ftnlen)7);
 	return 0;
-    } else if (*end < 1 || *end > t) {
+    } else if (*end < 1 || *end > __state->t) {
 	chkin_("ZZEKSRD", (ftnlen)7);
 	setmsg_("End address END was #; valid range is 1:#", (ftnlen)41);
 	errint_("#", end, (ftnlen)1);
-	errint_("#", &t, (ftnlen)1);
+	errint_("#", &__state->t, (ftnlen)1);
 	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
 	chkout_("ZZEKSRD", (ftnlen)7);
 	return 0;
@@ -1395,33 +1404,34 @@ L_zzeksrd:
 /*        now. */
 
 	i__1 = *end;
-	for (i__ = *beg; i__ <= i__1; ++i__) {
-	    idata[i__ - *beg] = scrtch[(i__2 = i__ - 1) < 2500000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)
-		    1512)];
+	for (__state->i__ = *beg; __state->i__ <= i__1; ++__state->i__) {
+	    idata[__state->i__ - *beg] = __state->scrtch[(i__2 = __state->i__ 
+		    - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge("scrtch", 
+		    i__2, "zzeksca_", (ftnlen)1512)];
 	}
     } else if (*beg <= 2500000) {
 
 /*        Read from the portion of the address range that's in memory. */
 
-	for (i__ = *beg; i__ <= 2500000; ++i__) {
-	    idata[i__ - *beg] = scrtch[(i__1 = i__ - 1) < 2500000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("scrtch", i__1, "zzeksca_", (ftnlen)
-		    1521)];
+	for (__state->i__ = *beg; __state->i__ <= 2500000; ++__state->i__) {
+	    idata[__state->i__ - *beg] = __state->scrtch[(i__1 = __state->i__ 
+		    - 1) < 2500000 && 0 <= i__1 ? i__1 : s_rnge("scrtch", 
+		    i__1, "zzeksca_", (ftnlen)1521)];
 	}
 
 /*        Now read the rest of the range, which is in the scratch */
 /*        DAS file. */
 
 	i__1 = *end - 2500000;
-	dasrdi_(&scrhan, &c__1, &i__1, &idata[2500000 - *beg + 1]);
+	dasrdi_(&__state->scrhan, &__state->c__1, &i__1, &idata[2500000 - *
+		beg + 1]);
     } else {
 
 /*        The whole range is in the DAS file. */
 
 	i__1 = *beg - 2500000;
 	i__2 = *end - 2500000;
-	dasrdi_(&scrhan, &i__1, &i__2, idata);
+	dasrdi_(&__state->scrhan, &i__1, &i__2, idata);
     }
     return 0;
 /* $Procedure    ZZEKSCLN  ( EK scratch area, clean up ) */
@@ -1537,27 +1547,27 @@ L_zzekscln:
 
 /*     Clean out the stack buffer. */
 
-    cleari_(&c_b65, scrtch);
-    t = 0;
+    cleari_(&__state->c_b65, __state->scrtch);
+    __state->t = 0;
 
 /*     If FIRST has been set to .FALSE., we've an open scratch DAS */
 /*     to dispose of. */
 
-    if (! first) {
+    if (! __state->first) {
 
 /*        Write out the buffered records belonging to the scratch file; */
 /*        this will cause them to be returned to the free list. */
 
-	daswbr_(&scrhan);
+	daswbr_(&__state->scrhan);
 
 /*        Dump the scratch DAS. */
 
-	dasllc_(&scrhan);
+	dasllc_(&__state->scrhan);
     }
 
 /*     Tell the system to re-initialize on the next pass. */
 
-    first = TRUE_;
+    __state->first = TRUE_;
     return 0;
 } /* zzeksca_ */
 

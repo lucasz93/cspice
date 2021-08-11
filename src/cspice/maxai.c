@@ -1,9 +1,17 @@
-/* maxai.f -- translated by f2c (version 19980913).
+/* maxai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int maxai_state_t;
+static maxai_state_t* get_maxai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MAXAI  ( Maximum element of array, integer ) */
 /* Subroutine */ int maxai_(integer *array, integer *ndim, integer *maxval, 
@@ -15,6 +23,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    maxai_state_t* __state = get_maxai_state();
 /* $ Abstract */
 
 /*     Locate the maximum element of an integer array. */

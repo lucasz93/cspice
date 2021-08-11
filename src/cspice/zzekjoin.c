@@ -1,17 +1,21 @@
-/* zzekjoin.f -- translated by f2c (version 19980913).
+/* zzekjoin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__9 = 9;
-static integer c__10 = 10;
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern zzekjoin_init_t __zzekjoin_init;
+static zzekjoin_state_t* get_zzekjoin_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekjoin)
+		state->zzekjoin = __cspice_allocate_module(sizeof(
+	zzekjoin_state_t), &__zzekjoin_init, sizeof(__zzekjoin_init));
+	return state->zzekjoin;
+
+}
 
 /* $Procedure  ZZEKJOIN  ( Perform join on two join row sets ) */
 /* Subroutine */ int zzekjoin_(integer *jbase1, integer *jbase2, integer *
@@ -27,25 +31,48 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *), 
-	    zzekjprp_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *, 
+    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekjprp_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     zzekspsh_(integer *, integer *), zzekjnxt_(logical *, integer *),
-	     zzekstop_(integer *);
+	    integer *, logical *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
+    extern /* Subroutine */ int zzekjnxt_(logical *, integer *);
+    extern /* Subroutine */ int zzekstop_(integer *);
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
-    integer nresv, s1, s2, s3, segvec[10], offset, nr1, nr2, nr3, nt1, nt2, 
-	    nt3, rb1, rb2, rb3, rowvec[11], sgvbas;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer nresv;
+    integer s1;
+    integer s2;
+    integer s3;
+    integer segvec[10];
+    integer offset;
+    integer nr1;
+    integer nr2;
+    integer nr3;
+    integer nt1;
+    integer nt2;
+    integer nt3;
+    integer rb1;
+    integer rb2;
+    integer rb3;
+    integer rowvec[11];
+    integer sgvbas;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer top;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
-    integer nsv1, nsv2, nsv3;
+    integer nsv1;
+    integer nsv2;
+    integer nsv3;
 
+
+    /* Module state */
+    zzekjoin_state_t* __state = get_zzekjoin_state();
 /* $ Abstract */
 
 /*     Perform join of two EK join row sets, subject to a specified set */
@@ -751,7 +778,7 @@ static integer c__0 = 0;
 	setmsg_("Number of join constraints was #; valid range is 0:#", (
 		ftnlen)52);
 	errint_("#", njcnst, (ftnlen)1);
-	errint_("#", &c__100, (ftnlen)1);
+	errint_("#", &__state->c__100, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKJOIN", (ftnlen)8);
 	return 0;
@@ -783,7 +810,7 @@ static integer c__0 = 0;
 	setmsg_("Number tables in first join row set was #; valid range is 1"
 		":#", (ftnlen)61);
 	errint_("#", &nt1, (ftnlen)1);
-	errint_("#", &c__9, (ftnlen)1);
+	errint_("#", &__state->c__9, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKJOIN", (ftnlen)8);
 	return 0;
@@ -792,7 +819,7 @@ static integer c__0 = 0;
 	setmsg_("Number tables in second join row set was #; valid range is "
 		"1:#", (ftnlen)62);
 	errint_("#", &nt2, (ftnlen)1);
-	errint_("#", &c__9, (ftnlen)1);
+	errint_("#", &__state->c__9, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKJOIN", (ftnlen)8);
 	return 0;
@@ -801,7 +828,7 @@ static integer c__0 = 0;
 	setmsg_("Number of crossed tables was #; valid range is 0:#", (ftnlen)
 		50);
 	errint_("#", &nt3, (ftnlen)1);
-	errint_("#", &c__10, (ftnlen)1);
+	errint_("#", &__state->c__10, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKJOIN", (ftnlen)8);
 	return 0;
@@ -848,13 +875,13 @@ static integer c__0 = 0;
 /*     Save room for the size and row vector count */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	zzekspsh_(&c__1, &c__0);
+	zzekspsh_(&__state->c__1, &__state->c__0);
     }
 
 /*     The table count and segment vector count come next. */
 
-    zzekspsh_(&c__1, &nt3);
-    zzekspsh_(&c__1, &nsv3);
+    zzekspsh_(&__state->c__1, &nt3);
+    zzekspsh_(&__state->c__1, &nsv3);
 
 /*     Just reserve room for the segment vectors and the segment vector */
 /*     row set base addresses and counts. */
@@ -862,7 +889,7 @@ static integer c__0 = 0;
     nresv = nsv3 * (nt3 + 2);
     i__1 = nresv;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzekspsh_(&c__1, &c__0);
+	zzekspsh_(&__state->c__1, &__state->c__0);
     }
 
 /*     Initialize the output segment vector count and the total row */

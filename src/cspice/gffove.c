@@ -1,15 +1,21 @@
-/* gffove.f -- translated by f2c (version 19980913).
+/* gffove.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static logical c_false = FALSE_;
-static doublereal c_b16 = 1.;
+extern gffove_init_t __gffove_init;
+static gffove_state_t* get_gffove_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gffove)
+		state->gffove = __cspice_allocate_module(sizeof(
+	gffove_state_t), &__gffove_init, sizeof(__gffove_init));
+	return state->gffove;
+
+}
 
 /* $Procedure      GFFOVE ( GF, is target in FOV? ) */
 /* Subroutine */ int gffove_(char *inst, char *tshape, doublereal *raydir, 
@@ -31,8 +37,8 @@ static doublereal c_b16 = 1.;
 	    logical *, doublereal *, doublereal *, doublereal *, doublereal *,
 	     logical *, U_fp, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern integer sized_(doublereal *);
     integer count;
     doublereal start;
@@ -40,13 +46,17 @@ static doublereal c_b16 = 1.;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern integer wncard_(doublereal *);
     doublereal finish;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), wnfetd_(doublereal *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
+	     doublereal *);
 
+
+    /* Module state */
+    gffove_state_t* __state = get_gffove_state();
 /* $ Abstract */
 
 /*     Determine time intervals when a specified target body or ray */
@@ -1652,7 +1662,7 @@ static doublereal c_b16 = 1.;
 
 /*     Empty the RESULT window. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Check the convergence tolerance. */
 
@@ -1700,8 +1710,8 @@ static doublereal c_b16 = 1.;
 
 	wnfetd_(cnfine, &i__, &start, &finish);
 	zzgfsolv_((U_fp)zzgffvst_, (U_fp)udstep, (U_fp)udrefn, bail, (L_fp)
-		udbail, &c_false, &c_b16, &start, &finish, tol, rpt, (U_fp)
-		udrepu, result);
+		udbail, &__state->c_false, &__state->c_b16, &start, &finish, 
+		tol, rpt, (U_fp)udrepu, result);
 	if (failed_()) {
 	    chkout_("GFFOVE", (ftnlen)6);
 	    return 0;

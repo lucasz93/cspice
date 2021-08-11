@@ -1,16 +1,21 @@
-/* dasbt.f -- translated by f2c (version 19980913).
+/* dasbt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__4 = 4;
+extern dasbt_init_t __dasbt_init;
+static dasbt_state_t* get_dasbt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasbt)
+		state->dasbt = __cspice_allocate_module(sizeof(dasbt_state_t),
+	 &__dasbt_init, sizeof(__dasbt_init));
+	return state->dasbt;
+
+}
 
 /* $Procedure DASBT ( DAS, convert binary file to transfer file ) */
 /* Subroutine */ int dasbt_(char *binfil, integer *xfrlun, ftnlen binfil_len)
@@ -29,47 +34,60 @@ static integer c__4 = 4;
     /* Local variables */
     char line[80];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen);
-    integer ncomc, recno;
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer ncomc;
+    integer recno;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     integer ncomr;
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
-    integer dtabeg, ncdata, handle, nddata;
+    integer dtabeg;
+    integer ncdata;
+    integer handle;
+    integer nddata;
     char ifname[60];
     integer nidata;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
 	    integer *);
     char crecrd[1024];
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen), dasrdc_(integer *, integer *, integer *, integer 
-	    *, integer *, char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
     char cbuffr[4*1024];
     doublereal dbuffr[1024];
     extern /* Subroutine */ int dascls_(integer *);
     integer ibuffr[1024];
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), dasrdi_(integer *, integer *, integer *, integer *)
-	    ;
+	    doublereal *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     integer daslun;
     extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
-    integer numblk, numdta;
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen), chkout_(
-	    char *, ftnlen), errfnm_(char *, integer *, ftnlen);
+    integer numblk;
+    integer numdta;
+    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     integer nresvc;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer numlft;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), wrenci_(
-	    integer *, integer *, integer *), wrencc_(integer *, integer *, 
-	    char *, ftnlen), wrencd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int wrenci_(integer *, integer *, integer *);
+    extern /* Subroutine */ int wrencc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int wrencd_(integer *, integer *, doublereal *);
     extern logical return_(void);
     integer nresvr;
 
+
+    /* Module state */
+    dasbt_state_t* __state = get_dasbt_state();
 /* $ Abstract */
 
 /*     Convert the contents of a binary DAS file to an equivalent DAS */
@@ -484,7 +502,7 @@ static integer c__4 = 4;
 /*     unit. We need the logical unit so that we can read the reserved */
 /*     records and the comment records. */
 
-    zzddhhlu_(&handle, "DAS", &c_false, &daslun, (ftnlen)3);
+    zzddhhlu_(&handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
     if (failed_()) {
 
 /*        If an error occurred while converting the DAS file handle to */
@@ -546,8 +564,8 @@ static integer c__4 = 4;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, "DASETF NAIF DAS ENCODED TRANSFER FILE", (ftnlen)
-	    37);
+    iostat = do_fio(&__state->c__1, "DASETF NAIF DAS ENCODED TRANSFER FILE", (
+	    ftnlen)37);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -581,8 +599,8 @@ L100001:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 8, a__1[1] = idword;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__1, a__1, i__1, &c__3, (ftnlen)10);
-    iostat = do_fio(&c__1, ch__1, (ftnlen)10);
+    s_cat(ch__1, a__1, i__1, &__state->c__3, (ftnlen)10);
+    iostat = do_fio(&__state->c__1, ch__1, (ftnlen)10);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -617,8 +635,8 @@ L100002:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 60, a__1[1] = ifname;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__2, a__1, i__1, &c__3, (ftnlen)62);
-    iostat = do_fio(&c__1, ch__2, (ftnlen)62);
+    s_cat(ch__2, a__1, i__1, &__state->c__3, (ftnlen)62);
+    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)62);
     if (iostat != 0) {
 	goto L100003;
     }
@@ -642,8 +660,8 @@ L100003:
 /*     Write the number of reserved records and reserved characters to */
 /*     the DAS transfer file. */
 
-    wrenci_(xfrlun, &c__1, &nresvr);
-    wrenci_(xfrlun, &c__1, &nresvc);
+    wrenci_(xfrlun, &__state->c__1, &nresvr);
+    wrenci_(xfrlun, &__state->c__1, &nresvc);
     if (failed_()) {
 
 /*        If an error occurred while writing the number of reserved */
@@ -658,8 +676,8 @@ L100003:
 /*     Write the number of comment records and comment characters to */
 /*     the DAS transfer file. */
 
-    wrenci_(xfrlun, &c__1, &ncomr);
-    wrenci_(xfrlun, &c__1, &ncomc);
+    wrenci_(xfrlun, &__state->c__1, &ncomr);
+    wrenci_(xfrlun, &__state->c__1, &ncomc);
     if (failed_()) {
 
 /*        If an error occurred while writing the number of comment */
@@ -715,7 +733,7 @@ L100003:
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100004;
 	    }
@@ -768,7 +786,7 @@ L100004:
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
@@ -808,7 +826,7 @@ L100005:
 	if (iostat != 0) {
 	    goto L100006;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100006;
 	}
@@ -839,9 +857,9 @@ L100006:
 /*     useful in determining which data types to expect in the DAS */
 /*     transfer file when converting it back to binary. */
 
-    wrenci_(xfrlun, &c__1, &ncdata);
-    wrenci_(xfrlun, &c__1, &nddata);
-    wrenci_(xfrlun, &c__1, &nidata);
+    wrenci_(xfrlun, &__state->c__1, &ncdata);
+    wrenci_(xfrlun, &__state->c__1, &nddata);
+    wrenci_(xfrlun, &__state->c__1, &nidata);
     if (failed_()) {
 
 /*        If an error occurred while writing any of the data counts to */
@@ -883,7 +901,7 @@ L100006:
 	    if (iostat != 0) {
 		goto L100007;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100007;
 	    }
@@ -909,7 +927,8 @@ L100007:
 /*           the subtraction of 1 in the call. */
 
 	    i__2 = dtabeg + numdta - 1;
-	    dasrdc_(&handle, &dtabeg, &i__2, &c__1, &c__4, cbuffr, (ftnlen)4);
+	    dasrdc_(&handle, &dtabeg, &i__2, &__state->c__1, &__state->c__4, 
+		    cbuffr, (ftnlen)4);
 
 /*           Encode and write out a buffer of characters. */
 
@@ -942,7 +961,7 @@ L100007:
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100008;
 	    }
@@ -983,7 +1002,7 @@ L100008:
 	if (iostat != 0) {
 	    goto L100009;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100009;
 	}
@@ -1035,7 +1054,7 @@ L100009:
 	    if (iostat != 0) {
 		goto L100010;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100010;
 	    }
@@ -1094,7 +1113,7 @@ L100010:
 	    if (iostat != 0) {
 		goto L100011;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100011;
 	    }
@@ -1135,7 +1154,7 @@ L100011:
 	if (iostat != 0) {
 	    goto L100012;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100012;
 	}
@@ -1187,7 +1206,7 @@ L100012:
 	    if (iostat != 0) {
 		goto L100013;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100013;
 	    }
@@ -1246,7 +1265,7 @@ L100013:
 	    if (iostat != 0) {
 		goto L100014;
 	    }
-	    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100014;
 	    }
@@ -1287,7 +1306,7 @@ L100014:
 	if (iostat != 0) {
 	    goto L100015;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100015;
 	}

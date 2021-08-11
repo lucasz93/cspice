@@ -1,9 +1,17 @@
-/* zzellbds.f -- translated by f2c (version 19980913).
+/* zzellbds.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzellbds_state_t;
+static zzellbds_state_t* get_zzellbds_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZELLBDS ( Create bounding ellipsoids ) */
 /* Subroutine */ int zzellbds_(doublereal *a, doublereal *b, doublereal *hmax,
@@ -14,10 +22,15 @@
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    zzellbds_state_t* __state = get_zzellbds_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

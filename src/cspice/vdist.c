@@ -1,9 +1,17 @@
-/* vdist.f -- translated by f2c (version 19980913).
+/* vdist.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vdist_state_t;
+static vdist_state_t* get_vdist_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VDIST ( Vector distance ) */
 doublereal vdist_(doublereal *v1, doublereal *v2)
@@ -17,6 +25,9 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 	    );
     extern doublereal vnorm_(doublereal *);
 
+
+    /* Module state */
+    vdist_state_t* __state = get_vdist_state();
 /* $ Abstract */
 
 /*     Return the distance between two three-dimensional vectors. */

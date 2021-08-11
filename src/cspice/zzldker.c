@@ -1,9 +1,21 @@
-/* zzldker.f -- translated by f2c (version 19980913).
+/* zzldker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzldker_init_t __zzldker_init;
+static zzldker_state_t* get_zzldker_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzldker)
+		state->zzldker = __cspice_allocate_module(sizeof(
+	zzldker_state_t), &__zzldker_init, sizeof(__zzldker_init));
+	return state->zzldker;
+
+}
 
 /* $Procedure ZZLDKER ( Load a kernel ) */
 /* Subroutine */ int zzldker_(char *file, char *nofile, char *filtyp, integer 
@@ -15,20 +27,34 @@
 
     /* Local variables */
     char arch[32];
-    extern /* Subroutine */ int zzbodkik_(void), zzdsklsf_(char *, integer *, 
-	    ftnlen), eklef_(char *, integer *, ftnlen), chkin_(char *, ftnlen)
-	    , cklpf_(char *, integer *, ftnlen), errch_(char *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodkik_(void);
+    extern /* Subroutine */ int zzdsklsf_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int eklef_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cklpf_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     char versn[32];
     extern logical failed_(void);
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), pcklof_(char *, integer *, ftnlen), spklef_(char 
-	    *, integer *, ftnlen), ldpool_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
-    extern logical exists_(char *, ftnlen), return_(void);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int pcklof_(char *, integer *, ftnlen);
+    char kerlin[132];
+    extern /* Subroutine */ int spklef_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ldpool_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    char termin[5];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern logical exists_(char *, ftnlen);
+    extern logical return_(void);
     char mytype[32];
     extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzascii_(char *, char *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzldker_state_t* __state = get_zzldker_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -363,6 +389,14 @@
 	}
 	s_copy(filtyp, mytype, filtyp_len, (ftnlen)32);
     } else {
+
+/*        Check for line terminator compatibility with this platform. */
+/*        .TRUE. means that ZZASCII will compare terminator */
+/*        detected with the one native to this platform and will */
+/*        stop if they don't match. */
+
+	zzascii_(file, kerlin, &__state->c_true, termin, file_len, (ftnlen)
+		132, (ftnlen)5);
 
 /*        Load the file using the text file loader. */
 

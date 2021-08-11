@@ -1,34 +1,48 @@
-/* spkpds.f -- translated by f2c (version 19980913).
+/* spkpds.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spkpds_init_t __spkpds_init;
+static spkpds_state_t* get_spkpds_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkpds)
+		state->spkpds = __cspice_allocate_module(sizeof(
+	spkpds_state_t), &__spkpds_init, sizeof(__spkpds_init));
+	return state->spkpds;
+
+}
 
 /* $Procedure      SPKPDS ( SPK pack descriptor ) */
 /* Subroutine */ int spkpds_(integer *body, integer *center, char *frame, 
 	integer *type__, doublereal *first, doublereal *last, doublereal *
 	descr, ftnlen frame_len)
 {
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen), dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *), errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen);
-    integer ipart[6], refcod;
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    integer ipart[6];
+    integer refcod;
     char calfst[40];
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     char callst[40];
     doublereal dppart[2];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkpds_state_t* __state = get_spkpds_state();
 /* $ Abstract */
 
 /*     Perform routine error checks and if all check pass, pack the */
@@ -280,7 +294,7 @@ static integer c__6 = 6;
     ipart[5] = 0;
     dppart[0] = *first;
     dppart[1] = *last;
-    dafps_(&c__2, &c__6, dppart, ipart, descr);
+    dafps_(&__state->c__2, &__state->c__6, dppart, ipart, descr);
     chkout_("SPKPDS", (ftnlen)6);
     return 0;
 } /* spkpds_ */

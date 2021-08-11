@@ -1,15 +1,21 @@
-/* spkw17.f -- translated by f2c (version 19980913).
+/* spkw17.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__17 = 17;
-static integer c__12 = 12;
+extern spkw17_init_t __spkw17_init;
+static spkw17_state_t* get_spkw17_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw17)
+		state->spkw17 = __cspice_allocate_module(sizeof(
+	spkw17_state_t), &__spkw17_init, sizeof(__spkw17_init));
+	return state->spkw17;
+
+}
 
 /* $Procedure      SPKW17 ( SPK, write a type 17 segment ) */
 /* Subroutine */ int spkw17_(integer *handle, integer *body, integer *center, 
@@ -24,26 +30,34 @@ static integer c__12 = 12;
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal a, h__;
+    doublereal a;
+    doublereal h__;
     integer i__;
     doublereal k;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), dafada_(
-	    doublereal *, integer *), dafbna_(integer *, doublereal *, char *,
-	     ftnlen), dafena_(void);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     doublereal record[12];
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), spkpds_(integer *, integer *, char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
     doublereal ecc;
 
+
+    /* Module state */
+    spkw17_state_t* __state = get_spkw17_state();
 /* $ Abstract */
 
 /*     Write an SPK segment of type 17 given a type 17 data record. */
@@ -334,7 +348,7 @@ static integer c__12 = 12;
 
 /*     The trajectory pole vector. */
 
-    moved_(eqel, &c__9, &record[1]);
+    moved_(eqel, &__state->c__9, &record[1]);
     record[10] = *rapol;
     record[11] = *decpol;
     a = record[1];
@@ -393,7 +407,8 @@ static integer c__12 = 12;
 /*     record.  Create the segment descriptor. (FIRST and LAST are */
 /*     checked by SPKPDS as well as consistency between BODY and CENTER). */
 
-    spkpds_(body, center, frame, &c__17, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__17, first, last, descr, 
+	    frame_len);
     if (failed_()) {
 	chkout_("SPKW17", (ftnlen)6);
 	return 0;
@@ -406,7 +421,7 @@ static integer c__12 = 12;
 	chkout_("SPKW17", (ftnlen)6);
 	return 0;
     }
-    dafada_(record, &c__12);
+    dafada_(record, &__state->c__12);
     if (! failed_()) {
 	dafena_();
     }

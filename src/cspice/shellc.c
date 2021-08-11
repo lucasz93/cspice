@@ -1,9 +1,17 @@
-/* shellc.f -- translated by f2c (version 19980913).
+/* shellc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int shellc_state_t;
+static shellc_state_t* get_shellc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SHELLC ( Shell sort a character array ) */
 /* Subroutine */ int shellc_(integer *ndim, char *array, ftnlen array_len)
@@ -15,10 +23,15 @@
     logical l_le(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapc_(char *, char *, ftnlen, ftnlen);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    shellc_state_t* __state = get_shellc_state();
 /* $ Abstract */
 
 /*      Sort an array of character strings according to the ASCII */

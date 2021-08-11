@@ -1,13 +1,21 @@
-/* zzlexmet.f -- translated by f2c (version 19980913).
+/* zzlexmet.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzlexmet_init_t __zzlexmet_init;
+static zzlexmet_state_t* get_zzlexmet_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzlexmet)
+		state->zzlexmet = __cspice_allocate_module(sizeof(
+	zzlexmet_state_t), &__zzlexmet_init, sizeof(__zzlexmet_init));
+	return state->zzlexmet;
+
+}
 
 /* $Procedure ZZLEXMET ( Scan method string ) */
 /* Subroutine */ int zzlexmet_(char *method, integer *maxn, integer *n, 
@@ -18,19 +26,31 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    integer room, qpos, b, e, i__, r__, nchar;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
+    integer room;
+    integer qpos;
+    integer b;
+    integer e;
+    integer i__;
+    integer r__;
+    integer nchar;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer ltrim_(char *, ftnlen);
+    extern integer rtrim_(char *, ftnlen);
     integer eq;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int lxqstr_(char *, char *, integer *, integer *, 
 	    integer *, ftnlen, ftnlen);
-    integer loc, tke;
+    integer loc;
+    integer tke;
 
+
+    /* Module state */
+    zzlexmet_state_t* __state = get_zzlexmet_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -246,8 +266,8 @@ static integer c__1 = 1;
 /*        Look ahead in the input string for the start of a */
 /*        quoted string. */
 
-	qpos = cpos_(method + (i__ - 1), "\"", &c__1, method_len - (i__ - 1), 
-		(ftnlen)1);
+	qpos = cpos_(method + (i__ - 1), "\"", &__state->c__1, method_len - (
+		i__ - 1), (ftnlen)1);
 	b = i__;
 	if (qpos == 0) {
 
@@ -268,8 +288,8 @@ static integer c__1 = 1;
 /*              Find the next delimiter in the substring */
 /*              from indices I : E. */
 
-		loc = cpos_(method + (i__ - 1), " /,=:", &c__1, e - (i__ - 1),
-			 (ftnlen)5);
+		loc = cpos_(method + (i__ - 1), " /,=:", &__state->c__1, e - (
+			i__ - 1), (ftnlen)5);
 		if (loc == 1) {
 
 /*                 There is a delimiter character at index I in METHOD. */
@@ -337,8 +357,8 @@ static integer c__1 = 1;
 /*           at index E + 1. */
 
 	    i__ = e + 1;
-	    lxqstr_(method + (i__ - 1), "\"", &c__1, &eq, &nchar, method_len 
-		    - (i__ - 1), (ftnlen)1);
+	    lxqstr_(method + (i__ - 1), "\"", &__state->c__1, &eq, &nchar, 
+		    method_len - (i__ - 1), (ftnlen)1);
 	    if (nchar > 0) {
 		if (room > 0) {
 		    ++(*n);

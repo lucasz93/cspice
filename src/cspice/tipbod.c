@@ -1,9 +1,17 @@
-/* tipbod.f -- translated by f2c (version 19980913).
+/* tipbod.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int tipbod_state_t;
+static tipbod_state_t* get_tipbod_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  TIPBOD ( Transformation, inertial position to bodyfixed ) */
 /* Subroutine */ int tipbod_(char *ref, integer *body, doublereal *et, 
@@ -16,14 +24,19 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
     extern logical failed_(void);
     extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), chkout_(char *, ftnlen);
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    tipbod_state_t* __state = get_tipbod_state();
 /* $ Abstract */
 
 /*      Return a 3x3 matrix that transforms positions in inertial */

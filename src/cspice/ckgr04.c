@@ -1,16 +1,21 @@
-/* ckgr04.f -- translated by f2c (version 19980913).
+/* ckgr04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__7 = 7;
-static doublereal c_b15 = 128.;
+extern ckgr04_init_t __ckgr04_init;
+static ckgr04_state_t* get_ckgr04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgr04)
+		state->ckgr04 = __cspice_allocate_module(sizeof(
+	ckgr04_state_t), &__ckgr04_init, sizeof(__ckgr04_init));
+	return state->ckgr04;
+
+}
 
 /* $Procedure      CKGR04 ( C-kernel, get record, type 04 ) */
 /* Subroutine */ int ckgr04_(integer *handle, doublereal *descr, integer *
@@ -23,22 +28,30 @@ static doublereal c_b15 = 128.;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer nrec, ends[1], k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cknr04_(integer *, 
-	    doublereal *, integer *), dafus_(doublereal *, integer *, integer 
-	    *, doublereal *, integer *);
+    integer nrec;
+    integer ends[1];
+    integer k;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer numall;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), sgfpkt_(integer *, 
-	    doublereal *, integer *, integer *, doublereal *, integer *), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
     extern /* Subroutine */ int zzck4d2i_(doublereal *, integer *, doublereal 
 	    *, integer *);
 
+
+    /* Module state */
+    ckgr04_state_t* __state = get_ckgr04_state();
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 4 segment in */
@@ -518,7 +531,7 @@ static doublereal c_b15 = 128.;
 /*     Unpack descriptor and check segment data type. Signal an error */
 /*     if it's not 4. */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 4) {
 	setmsg_("Data type of the segment should be 4: Passed  descriptor sh"
 		"ows type = #.", (ftnlen)72);
@@ -548,7 +561,7 @@ static doublereal c_b15 = 128.;
 
 /*     Decode 7 numbers of coefficients from double precision value. */
 
-    zzck4d2i_(&record[2], &c__7, &c_b15, numcft);
+    zzck4d2i_(&record[2], &__state->c__7, &__state->c_b15, numcft);
 
 /*     Compute total number of coefficients in the fetched packet. */
 

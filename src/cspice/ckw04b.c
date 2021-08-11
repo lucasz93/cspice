@@ -1,16 +1,21 @@
-/* ckw04b.f -- translated by f2c (version 19980913).
+/* ckw04b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__0 = 0;
-static integer c__3 = 3;
+extern ckw04b_init_t __ckw04b_init;
+static ckw04b_state_t* get_ckw04b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw04b)
+		state->ckw04b = __cspice_allocate_module(sizeof(
+	ckw04b_state_t), &__ckw04b_init, sizeof(__ckw04b_init));
+	return state->ckw04b;
+
+}
 
 /* $Procedure      CKW04B ( CK type 04: Begin a segment ) */
 /* Subroutine */ int ckw04b_(integer *handle, doublereal *begtim, integer *
@@ -22,8 +27,9 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer value;
@@ -31,13 +37,18 @@ static integer c__3 = 3;
     integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), sgbwvs_(integer *, doublereal *,
-	     char *, integer *, doublereal *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sgbwvs_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    ckw04b_state_t* __state = get_ckw04b_state();
 /* $ Abstract */
 
 /*     Begin a type CK04 segment in the DAF file associated with */
@@ -946,7 +957,7 @@ static integer c__3 = 3;
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Check that all characters in the SEGID are printable. */
 
@@ -981,7 +992,8 @@ static integer c__3 = 3;
 /*     characteristics are prescribed by the mnemonic EXPLE. See the */
 /*     include file 'sgparam.inc' for more details. */
 
-    sgbwvs_(handle, descr, segid, &c__0, &dcoeff, &c__3, segid_len);
+    sgbwvs_(handle, descr, segid, &__state->c__0, &dcoeff, &__state->c__3, 
+	    segid_len);
 
 /*     No need to check FAILED() here, since all we do after this */
 /*     point is checking out. */

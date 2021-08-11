@@ -1,14 +1,21 @@
-/* spcac.f -- translated by f2c (version 19980913).
+/* spcac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern spcac_init_t __spcac_init;
+static spcac_state_t* get_spcac_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spcac)
+		state->spcac = __cspice_allocate_module(sizeof(spcac_state_t),
+	 &__spcac_init, sizeof(__spcac_init));
+	return state->spcac;
+
+}
 
 /* $Procedure SPCAC ( SPK and CK, add comments ) */
 /* Subroutine */ int spcac_(integer *handle, integer *unit, char *bmark, char 
@@ -29,46 +36,61 @@ static integer c__1 = 1;
 
     /* Local variables */
     char data[1002];
-    integer dafu, free;
-    char line[1000], null[1];
+    integer dafu;
+    integer free;
+    char line[1000];
+    char null[1];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
-    integer c__, i__, l, bline, space, eline;
+    integer c__;
+    integer i__;
+    integer l;
+    integer bline;
+    integer space;
+    integer eline;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer bward, chars, fward;
+    integer bward;
+    integer chars;
+    integer fward;
     extern /* Subroutine */ int locln_(integer *, char *, char *, char *, 
 	    integer *, integer *, logical *, ftnlen, ftnlen, ftnlen);
     integer lines;
     logical found;
-    integer total, start, nd;
+    integer total;
+    integer start;
+    integer nd;
     extern logical failed_(void);
     integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char ifname[60];
     integer nr;
-    extern /* Subroutine */ int dafarr_(integer *, integer *), dafrfr_(
-	    integer *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int dafarr_(integer *, integer *);
+    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
+	    *, integer *, integer *, integer *, ftnlen);
     char record[1000];
     extern integer lastnb_(char *, ftnlen);
     extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
     extern integer countc_(integer *, integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    integer lastrr, poseot;
+    integer lastrr;
+    integer poseot;
     extern logical return_(void);
-    integer rec, eol;
+    integer rec;
+    integer eol;
     char eot[1];
-    integer nrr, pos;
+    integer nrr;
+    integer pos;
 
     /* Fortran I/O blocks */
-    static cilist io___24 = { 1, 0, 1, 0, 0 };
-    static cilist io___33 = { 1, 0, 0, 0, 0 };
-    static cilist io___34 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    spcac_state_t* __state = get_spcac_state();
 /* $ Abstract */
 
 /*     Store text from a text file in the comment area of a binary SPK */
@@ -480,7 +502,7 @@ static integer c__1 = 1;
 
 /*     Get the logical unit for reading from and writing to the DAF. */
 
-    zzddhhlu_(handle, "DAF", &c_false, &dafu, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &dafu, (ftnlen)3);
     if (failed_()) {
 	chkout_("SPCAC", (ftnlen)5);
 	return 0;
@@ -513,13 +535,13 @@ static integer c__1 = 1;
 /*           sync with the exit conditions. */
 
 	    --i__;
-	    io___24.ciunit = dafu;
-	    io___24.cirec = i__;
-	    iostat = s_rdue(&io___24);
+	    __state->io___24.ciunit = dafu;
+	    __state->io___24.cirec = i__;
+	    iostat = s_rdue(&__state->io___24);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_uio(&c__1, record, (ftnlen)1000);
+	    iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -637,7 +659,7 @@ L100001:
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_fio(&c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -668,7 +690,7 @@ L100002:
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100003;
 	}
@@ -710,13 +732,13 @@ L100003:
 
 	    if (pos == 1000) {
 		++rec;
-		io___33.ciunit = dafu;
-		io___33.cirec = rec;
-		iostat = s_wdue(&io___33);
+		__state->io___33.ciunit = dafu;
+		__state->io___33.cirec = rec;
+		iostat = s_wdue(&__state->io___33);
 		if (iostat != 0) {
 		    goto L100004;
 		}
-		iostat = do_uio(&c__1, record, (ftnlen)1000);
+		iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100004;
 		}
@@ -748,13 +770,13 @@ L100004:
 /*     Write the final record to the DAF. */
 
     ++rec;
-    io___34.ciunit = dafu;
-    io___34.cirec = rec;
-    iostat = s_wdue(&io___34);
+    __state->io___34.ciunit = dafu;
+    __state->io___34.cirec = rec;
+    iostat = s_wdue(&__state->io___34);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = do_uio(&c__1, record, (ftnlen)1000);
+    iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
     if (iostat != 0) {
 	goto L100005;
     }

@@ -1,14 +1,21 @@
-/* errint.f -- translated by f2c (version 19980913).
+/* errint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern errint_init_t __errint_init;
+static errint_state_t* get_errint_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->errint)
+		state->errint = __cspice_allocate_module(sizeof(
+	errint_state_t), &__errint_init, sizeof(__errint_init));
+	return state->errint;
+
+}
 
 /* $Procedure      ERRINT ( Insert Integer into Error Message Text ) */
 /* Subroutine */ int errint_(char *marker, integer *integr, ftnlen marker_len)
@@ -28,11 +35,15 @@ static integer c__2 = 2;
     char lngmsg[1840];
     extern /* Subroutine */ int getlms_(char *, ftnlen);
     extern integer frstnb_(char *, ftnlen);
-    char istrng[11], tmpmsg[1840];
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), putlms_(
-	    char *, ftnlen);
+    char istrng[11];
+    char tmpmsg[1840];
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int putlms_(char *, ftnlen);
     integer strpos;
 
+
+    /* Module state */
+    errint_state_t* __state = get_errint_state();
 /* $ Abstract */
 
 /*      Substitute an integer for the first occurrence of a marker found */
@@ -315,12 +326,12 @@ static integer c__2 = 2;
 		i__2[0] = strpos - 1, a__1[0] = lngmsg;
 		i__2[1] = lastnb_(istrng, (ftnlen)11), a__1[1] = istrng;
 		i__2[2] = 1840 - i__1, a__1[2] = lngmsg + i__1;
-		s_cat(tmpmsg, a__1, i__2, &c__3, (ftnlen)1840);
+		s_cat(tmpmsg, a__1, i__2, &__state->c__3, (ftnlen)1840);
 	    } else {
 /* Writing concatenation */
 		i__3[0] = strpos - 1, a__2[0] = lngmsg;
 		i__3[1] = lastnb_(istrng, (ftnlen)11), a__2[1] = istrng;
-		s_cat(tmpmsg, a__2, i__3, &c__2, (ftnlen)1840);
+		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
 	    }
 	} else {
 
@@ -336,7 +347,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 		i__3[0] = lastnb_(istrng, (ftnlen)11), a__2[0] = istrng;
 		i__3[1] = 1840 - i__1, a__2[1] = lngmsg + i__1;
-		s_cat(tmpmsg, a__2, i__3, &c__2, (ftnlen)1840);
+		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
 	    } else {
 
 /*              The marker's the whole string: */

@@ -1,20 +1,34 @@
-/* putsms.f -- translated by f2c (version 19980913).
+/* putsms.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern putsms_init_t __putsms_init;
+static putsms_state_t* get_putsms_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->putsms)
+		state->putsms = __cspice_allocate_module(sizeof(
+	putsms_state_t), &__putsms_init, sizeof(__putsms_init));
+	return state->putsms;
+
+}
 
 /* $Procedure      PUTSMS ( Store Short Error Message ) */
 /* Subroutine */ int putsms_0_(int n__, char *msg, ftnlen msg_len)
 {
     /* Initialized data */
 
-    static char savmsg[25] = "                         ";
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    putsms_state_t* __state = get_putsms_state();
 /* $ Abstract */
 
 /*     PUTSMS is a low-level data structure access routine which stores */
@@ -210,7 +224,7 @@
 
 /*     Executable Code: */
 
-    s_copy(savmsg, msg, (ftnlen)25, msg_len);
+    s_copy(__state->savmsg, msg, (ftnlen)25, msg_len);
     return 0;
 /* $Procedure      GETSMS ( Get Short Error Message ) */
 
@@ -345,7 +359,7 @@ L_getsms:
 
 /*     Grab saved short message: */
 
-    s_copy(msg, savmsg, msg_len, (ftnlen)25);
+    s_copy(msg, __state->savmsg, msg_len, (ftnlen)25);
     return 0;
 } /* putsms_ */
 

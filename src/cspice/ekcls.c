@@ -1,17 +1,29 @@
-/* ekcls.f -- translated by f2c (version 19980913).
+/* ekcls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekcls_state_t;
+static ekcls_state_t* get_ekcls_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   EKCLS ( EK, close file ) */
 /* Subroutine */ int ekcls_(integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dascls_(integer *), 
-	    chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dascls_(integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ekcls_state_t* __state = get_ekcls_state();
 /* $ Abstract */
 
 /*     Close an E-kernel. */

@@ -1,13 +1,21 @@
-/* zzcnquad.f -- translated by f2c (version 19980913).
+/* zzcnquad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b8 = 1.;
+extern zzcnquad_init_t __zzcnquad_init;
+static zzcnquad_state_t* get_zzcnquad_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzcnquad)
+		state->zzcnquad = __cspice_allocate_module(sizeof(
+	zzcnquad_state_t), &__zzcnquad_init, sizeof(__zzcnquad_init));
+	return state->zzcnquad;
+
+}
 
 /* $Procedure  ZZCNQUAD ( Solve quadratic equation for cone intercept ) */
 /* Subroutine */ int zzcnquad_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -15,8 +23,6 @@ static doublereal c_b8 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal invub = -1.;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -41,8 +47,12 @@ static doublereal c_b8 = 1.;
     extern /* Subroutine */ int zzbquad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
 	    doublereal *);
-    doublereal inv1, inv2;
+    doublereal inv1;
+    doublereal inv2;
 
+
+    /* Module state */
+    zzcnquad_state_t* __state = get_zzcnquad_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -223,9 +233,9 @@ static doublereal c_b8 = 1.;
 /*     On the first pass, set the upper bound for the reciprocal */
 /*     solution. */
 
-    if (first) {
-	invub = sqrt(dpmax_()) / 200.;
-	first = FALSE_;
+    if (__state->first) {
+	__state->invub = sqrt(dpmax_()) / 200.;
+	__state->first = FALSE_;
     }
 
 /*     Handle the degenerate cases first. */
@@ -273,9 +283,9 @@ static doublereal c_b8 = 1.;
 /*     Make sure the value of maximum magnitude is +/- 1. */
 
     coeffs[(i__1 = maxix - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1,
-	     "zzcnquad_", (ftnlen)285)] = d_sign(&c_b8, &coeffs[(i__2 = maxix 
-	    - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("coeffs", i__2, "zzcnquad_",
-	     (ftnlen)285)]);
+	     "zzcnquad_", (ftnlen)285)] = d_sign(&__state->c_b8, &coeffs[(
+	    i__2 = maxix - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("coeffs", i__2,
+	     "zzcnquad_", (ftnlen)285)]);
 
 /*     Find roots in a manner suited to the coefficients we have. */
 
@@ -320,8 +330,8 @@ static doublereal c_b8 = 1.;
 /*        magnitude restriction imposed by UB. We set the upper bound */
 /*        to a value that ZZBQUAD will allow. */
 
-	zzbquad_(&coeffs[2], &coeffs[1], coeffs, &invub, n, &nx, &inv1, &inv2)
-		;
+	zzbquad_(&coeffs[2], &coeffs[1], coeffs, &__state->invub, n, &nx, &
+		inv1, &inv2);
 	if (*n == 1) {
 
 /*           We have one real root. Make sure we can invert it. */

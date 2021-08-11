@@ -1,9 +1,17 @@
-/* zzekrp2n.f -- translated by f2c (version 19980913).
+/* zzekrp2n.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekrp2n_state_t;
+static zzekrp2n_state_t* get_zzekrp2n_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKRP2N ( EK, record pointer to number ) */
 integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
@@ -18,10 +26,15 @@ integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
     integer stype;
     extern logical failed_(void);
     integer segdsc[24];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), setmsg_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekrp2n_state_t* __state = get_zzekrp2n_state();
 /* $ Abstract */
 
 /*     Find the EK record number corresponding to a specified record */

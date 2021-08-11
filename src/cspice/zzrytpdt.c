@@ -1,19 +1,21 @@
-/* zzrytpdt.f -- translated by f2c (version 19980913).
+/* zzrytpdt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static doublereal c_b13 = 1e-12;
-static integer c__3 = 3;
-static doublereal c_b21 = 1.;
-static integer c__2 = 2;
-static doublereal c_b37 = 0.;
-static integer c__1 = 1;
+extern zzrytpdt_init_t __zzrytpdt_init;
+static zzrytpdt_state_t* get_zzrytpdt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrytpdt)
+		state->zzrytpdt = __cspice_allocate_module(sizeof(
+	zzrytpdt_state_t), &__zzrytpdt_init, sizeof(__zzrytpdt_init));
+	return state->zzrytpdt;
+
+}
 
 /* $Procedure ZZRYTPDT ( DSK, ray touches planetodetic element ) */
 /* Subroutine */ int zzrytpdt_(doublereal *vertex, doublereal *raydir, 
@@ -22,7 +24,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2, d__3;
@@ -31,37 +32,49 @@ static integer c__1 = 1;
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal emin, emax, apex[3];
+    doublereal emin;
+    doublereal emax;
+    doublereal apex[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    doublereal dist, pmin, pmax, udir[3], maxr;
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    doublereal dist;
+    doublereal pmin;
+    doublereal pmax;
+    doublereal udir[3];
+    doublereal maxr;
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal srfx[3];
     extern /* Subroutine */ int zzellbds_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern logical zzpdpltc_(doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    logical xval1, xval2;
+    logical xval1;
+    logical xval2;
     extern /* Subroutine */ int zzelnaxx_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    doublereal eback[3], f;
+    doublereal eback[3];
+    doublereal f;
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), zzinrypl_(doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, integer *
-	    , doublereal *);
-    doublereal s, angle, wback[3];
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzinrypl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, integer *, doublereal *)
+	    ;
+    doublereal s;
+    doublereal angle;
+    doublereal wback[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal eastb[3];
     extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
     extern doublereal dpmax_(void);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), vlcom_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
     doublereal westb[3];
     extern doublereal vdist_(doublereal *, doublereal *);
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
@@ -70,28 +83,46 @@ static integer c__1 = 1;
     extern logical vzero_(doublereal *);
     doublereal endpt2[3];
     extern logical failed_(void);
-    doublereal re, rp;
+    doublereal re;
+    doublereal rp;
     extern doublereal halfpi_(void);
     integer nx;
-    doublereal negdir[3], amnalt;
+    doublereal negdir[3];
+    doublereal amnalt;
     logical inside;
     extern /* Subroutine */ int incnsg_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
 	     doublereal *);
-    doublereal minalt, amxalt, maxalt, maxlat, loncov, maxlon, minlat, minlon,
-	     mndist, xincpt, vtxang, yincpt, vtxoff[3];
+    doublereal minalt;
+    doublereal amxalt;
+    doublereal maxalt;
+    doublereal maxlat;
+    doublereal loncov;
+    doublereal maxlon;
+    doublereal minlat;
+    doublereal minlon;
+    doublereal mndist;
+    doublereal xincpt;
+    doublereal vtxang;
+    doublereal yincpt;
+    doublereal vtxoff[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), vminus_(doublereal *, doublereal *), surfpt_(doublereal *
-	    , doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    ;
     doublereal vtxlvl;
     logical xin;
     extern /* Subroutine */ int zzinpdt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, logical *);
     doublereal xpt2[3];
 
+
+    /* Module state */
+    zzrytpdt_state_t* __state = get_zzrytpdt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -497,7 +528,7 @@ static integer c__1 = 1;
 
 /*     Determine whether the vertex is inside the element. */
 
-    zzinpdt_(vertex, bounds, corpar, margin, &c__0, &inside);
+    zzinpdt_(vertex, bounds, corpar, margin, &__state->c__0, &inside);
     if (failed_()) {
 	chkout_("ZZRYTPDT", (ftnlen)8);
 	return 0;
@@ -527,7 +558,7 @@ static integer c__1 = 1;
 /*     Normalize the longitude bounds. After this step, the bounds will */
 /*     be in order and differ by no more than 2*pi. */
 
-    zznrmlon_(bounds, &bounds[1], &c_b13, &minlon, &maxlon);
+    zznrmlon_(bounds, &bounds[1], &__state->c_b13, &minlon, &maxlon);
     if (failed_()) {
 	chkout_("ZZRYTPDT", (ftnlen)8);
 	return 0;
@@ -599,7 +630,7 @@ static integer c__1 = 1;
 /*     the margin into account. Exclude the altitude coordinate */
 /*     from testing. */
 
-    zzinpdt_(srfx, bounds, corpar, margin, &c__3, &xin);
+    zzinpdt_(srfx, bounds, corpar, margin, &__state->c__3, &xin);
     if (failed_()) {
 	chkout_("ZZRYTPDT", (ftnlen)8);
 	return 0;
@@ -648,7 +679,7 @@ static integer c__1 = 1;
 
     maxr = max(emax,pmax);
     s = vnorm_(vertex) + maxr * 1.1;
-    vlcom_(&c_b21, vertex, &s, udir, endpt2);
+    vlcom_(&__state->c_b21, vertex, &s, udir, endpt2);
 
 /*     Now try the upper latitude bound. We can skip this test */
 /*     if the upper bound is pi/2 radians. */
@@ -683,11 +714,11 @@ static integer c__1 = 1;
 /*        (The comparison will be done later.) */
 
 	vsub_(vertex, apex, vtxoff);
-	vtxang = vsep_(vtxoff, z__);
+	vtxang = vsep_(vtxoff, __state->z__);
 
 /*        Check for intersection of the ray with the latitude cone. */
 
-	incnsg_(apex, z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
+	incnsg_(apex, __state->z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
 	if (failed_()) {
 	    chkout_("ZZRYTPDT", (ftnlen)8);
 	    return 0;
@@ -748,7 +779,7 @@ static integer c__1 = 1;
 /*           See whether SRFX meets the longitude and proxy altitude */
 /*           constraints. */
 
-	    zzinpdt_(srfx, bounds, corpar, margin, &c__2, &xin);
+	    zzinpdt_(srfx, bounds, corpar, margin, &__state->c__2, &xin);
 	    if (failed_()) {
 		chkout_("ZZRYTPDT", (ftnlen)8);
 		return 0;
@@ -797,7 +828,7 @@ static integer c__1 = 1;
 
 /*              Check the second solution as well. */
 
-		zzinpdt_(xpt2, bounds, corpar, margin, &c__2, &xin);
+		zzinpdt_(xpt2, bounds, corpar, margin, &__state->c__2, &xin);
 		if (failed_()) {
 		    chkout_("ZZRYTPDT", (ftnlen)8);
 		    return 0;
@@ -848,7 +879,7 @@ static integer c__1 = 1;
 	apex[0] = 0.;
 	apex[1] = 0.;
 	apex[2] = yincpt;
-	incnsg_(apex, z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
+	incnsg_(apex, __state->z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
 	if (failed_()) {
 	    chkout_("ZZRYTPDT", (ftnlen)8);
 	    return 0;
@@ -863,7 +894,7 @@ static integer c__1 = 1;
 /*        (The comparison will be done later.) */
 
 	vsub_(vertex, apex, vtxoff);
-	vtxang = vsep_(vtxoff, z__);
+	vtxang = vsep_(vtxoff, __state->z__);
 
 /*        Check whether the latitude of the intercept can be */
 /*        considered to match that of the cone. */
@@ -903,7 +934,7 @@ static integer c__1 = 1;
 /*           See whether SRFX meets the longitude and proxy altitude */
 /*           constraints. */
 
-	    zzinpdt_(srfx, bounds, corpar, margin, &c__2, &xin);
+	    zzinpdt_(srfx, bounds, corpar, margin, &__state->c__2, &xin);
 	    if (failed_()) {
 		chkout_("ZZRYTPDT", (ftnlen)8);
 		return 0;
@@ -951,7 +982,7 @@ static integer c__1 = 1;
 
 /*              Check the second solution as well. */
 
-		zzinpdt_(xpt2, bounds, corpar, margin, &c__2, &xin);
+		zzinpdt_(xpt2, bounds, corpar, margin, &__state->c__2, &xin);
 		if (failed_()) {
 		    chkout_("ZZRYTPDT", (ftnlen)8);
 		    return 0;
@@ -995,9 +1026,9 @@ static integer c__1 = 1;
 
 	d__1 = sin(minlon);
 	d__2 = -cos(minlon);
-	vpack_(&d__1, &d__2, &c_b37, westb);
+	vpack_(&d__1, &d__2, &__state->c_b37, westb);
 	s = (vnorm_(vertex) + maxr) * 1.1;
-	zzinrypl_(vertex, udir, westb, &c_b37, &s, &nx, srfx);
+	zzinrypl_(vertex, udir, westb, &__state->c_b37, &s, &nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
@@ -1005,7 +1036,7 @@ static integer c__1 = 1;
 /*           inclusion test. Note that we'll perform a separate check */
 /*           later in place of the longitude check. */
 
-	    zzinpdt_(srfx, bounds, corpar, margin, &c__1, &xin);
+	    zzinpdt_(srfx, bounds, corpar, margin, &__state->c__1, &xin);
 	    if (failed_()) {
 		chkout_("ZZRYTPDT", (ftnlen)8);
 		return 0;
@@ -1015,7 +1046,7 @@ static integer c__1 = 1;
 /*              Make sure the intercept is not too far on the */
 /*              "wrong" side of the Z axis. */
 
-		ucrss_(westb, z__, wback);
+		ucrss_(westb, __state->z__, wback);
 		if (vdot_(srfx, wback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
@@ -1042,14 +1073,14 @@ static integer c__1 = 1;
 
 	d__1 = -sin(maxlon);
 	d__2 = cos(maxlon);
-	vpack_(&d__1, &d__2, &c_b37, eastb);
-	zzinrypl_(vertex, udir, eastb, &c_b37, &s, &nx, srfx);
+	vpack_(&d__1, &d__2, &__state->c_b37, eastb);
+	zzinrypl_(vertex, udir, eastb, &__state->c_b37, &s, &nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
 /*           candidate solution. */
 
-	    zzinpdt_(srfx, bounds, corpar, margin, &c__1, &xin);
+	    zzinpdt_(srfx, bounds, corpar, margin, &__state->c__1, &xin);
 	    if (failed_()) {
 		chkout_("ZZRYTPDT", (ftnlen)8);
 		return 0;
@@ -1059,7 +1090,7 @@ static integer c__1 = 1;
 /*              Make sure the intercept is not too far on the "wrong" */
 /*              side of the Z axis. */
 
-		ucrss_(z__, eastb, eback);
+		ucrss_(__state->z__, eastb, eback);
 		if (vdot_(srfx, eback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
@@ -1095,7 +1126,7 @@ static integer c__1 = 1;
 
 /*        See whether this solution is in the element. */
 
-	zzinpdt_(srfx, bounds, corpar, margin, &c__3, &xin);
+	zzinpdt_(srfx, bounds, corpar, margin, &__state->c__3, &xin);
 	if (failed_()) {
 	    chkout_("ZZRYTPDT", (ftnlen)8);
 	    return 0;
@@ -1125,7 +1156,7 @@ static integer c__1 = 1;
 	return 0;
     }
     if (found) {
-	zzinpdt_(srfx, bounds, corpar, margin, &c__3, &xin);
+	zzinpdt_(srfx, bounds, corpar, margin, &__state->c__3, &xin);
 	if (failed_()) {
 	    chkout_("ZZRYTPDT", (ftnlen)8);
 	    return 0;

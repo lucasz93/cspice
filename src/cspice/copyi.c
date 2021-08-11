@@ -1,9 +1,17 @@
-/* copyi.f -- translated by f2c (version 19980913).
+/* copyi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int copyi_state_t;
+static copyi_state_t* get_copyi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      COPYI ( Copy an integer cell ) */
 /* Subroutine */ int copyi_(integer *cell, integer *copy)
@@ -12,16 +20,22 @@
     integer i__1;
 
     /* Local variables */
-    integer card, size, i__;
+    integer card;
+    integer size;
+    integer i__;
     extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer moved;
     extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *), excess_(
-	    integer *, char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char 
-	    *, ftnlen);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    copyi_state_t* __state = get_copyi_state();
 /* $ Abstract */
 
 /*      Copy the contents of an integer cell to another cell. */

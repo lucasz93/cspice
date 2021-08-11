@@ -1,13 +1,21 @@
-/* rquad.f -- translated by f2c (version 19980913).
+/* rquad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern rquad_init_t __rquad_init;
+static rquad_state_t* get_rquad_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rquad)
+		state->rquad = __cspice_allocate_module(sizeof(rquad_state_t),
+	 &__rquad_init, sizeof(__rquad_init));
+	return state->rquad;
+
+}
 
 /* $Procedure      RQUAD ( Roots of a quadratic equation ) */
 /* Subroutine */ int rquad_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -21,15 +29,21 @@ static integer c__2 = 2;
 
     /* Local variables */
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal discrm;
     logical zeroed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    doublereal con, lin, sqr;
+    doublereal con;
+    doublereal lin;
+    doublereal sqr;
 
+
+    /* Module state */
+    rquad_state_t* __state = get_rquad_state();
 /* $ Abstract */
 
 /*     Find the roots of a quadratic equation. */
@@ -342,7 +356,7 @@ static integer c__2 = 2;
 /*        We set the second root equal to the first, rather than */
 /*        leaving it undefined. */
 
-	moved_(root1, &c__2, root2);
+	moved_(root1, &__state->c__2, root2);
     }
     chkout_("RQUAD", (ftnlen)5);
     return 0;

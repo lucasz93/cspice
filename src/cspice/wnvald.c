@@ -1,13 +1,21 @@
-/* wnvald.f -- translated by f2c (version 19980913).
+/* wnvald.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern wnvald_init_t __wnvald_init;
+static wnvald_state_t* get_wnvald_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wnvald)
+		state->wnvald = __cspice_allocate_module(sizeof(
+	wnvald_state_t), &__wnvald_init, sizeof(__wnvald_init));
+	return state->wnvald;
+
+}
 
 /* $Procedure      WNVALD ( Validate a DP window ) */
 /* Subroutine */ int wnvald_(integer *size, integer *n, doublereal *a)
@@ -16,12 +24,19 @@ static integer c__0 = 0;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal right;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), ssized_(integer *, 
-	    doublereal *), setmsg_(char *, ftnlen), wninsd_(doublereal *, 
-	    doublereal *, doublereal *);
-    extern logical return_(void), odd_(integer *);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssized_(integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical return_(void);
+    extern logical odd_(integer *);
 
+
+    /* Module state */
+    wnvald_state_t* __state = get_wnvald_state();
 /* $ Abstract */
 
 /*     Form a valid double precision window from the contents */
@@ -262,7 +277,7 @@ static integer c__0 = 0;
 /*     reported. */
 
     ssized_(size, a);
-    scardd_(&c__0, a);
+    scardd_(&__state->c__0, a);
     i__ = 1;
     while(i__ < *n) {
 	left = a[i__ + 5];

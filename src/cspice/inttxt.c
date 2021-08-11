@@ -1,26 +1,27 @@
-/* inttxt.f -- translated by f2c (version 19980913).
+/* inttxt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern inttxt_init_t __inttxt_init;
+static inttxt_state_t* get_inttxt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->inttxt)
+		state->inttxt = __cspice_allocate_module(sizeof(
+	inttxt_state_t), &__inttxt_init, sizeof(__inttxt_init));
+	return state->inttxt;
+
+}
 
 /* $Procedure INTTXT ( Convert an integer to text ) */
 /* Subroutine */ int inttxt_(integer *n, char *string, ftnlen string_len)
 {
     /* Initialized data */
 
-    static char tens[9*9] = "TEN      " "TWENTY   " "THIRTY   " "FORTY    " 
-	    "FIFTY    " "SIXTY    " "SEVENTY  " "EIGHTY   " "NINETY   ";
-    static char number[9*19] = "ONE      " "TWO      " "THREE    " "FOUR     "
-	     "FIVE     " "SIX      " "SEVEN    " "EIGHT    " "NINE     " 
-	    "TEN      " "ELEVEN   " "TWELVE   " "THIRTEEN " "FOURTEEN " "FIF"
-	    "TEEN  " "SIXTEEN  " "SEVENTEEN" "EIGHTEEN " "NINETEEN ";
 
     /* System generated locals */
     integer i__1;
@@ -32,11 +33,17 @@ static integer c__0 = 0;
 
     /* Local variables */
     char suff[9];
-    integer x, y, space;
+    integer x;
+    integer y;
+    integer space;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    integer pad, num;
+    integer pad;
+    integer num;
 
+
+    /* Module state */
+    inttxt_state_t* __state = get_inttxt_state();
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent written phrase. */
@@ -256,18 +263,20 @@ static integer c__0 = 0;
 	    if (x >= 100) {
 		y = x / 100;
 		x -= y * 100;
-		suffix_(number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? i__1 : 
-			s_rnge("number", i__1, "inttxt_", (ftnlen)290)) * 9, &
-			pad, string, (ftnlen)9, string_len);
-		suffix_("HUNDRED", &c__1, string, (ftnlen)7, string_len);
+		suffix_(__state->number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? 
+			i__1 : s_rnge("number", i__1, "inttxt_", (ftnlen)290))
+			 * 9, &pad, string, (ftnlen)9, string_len);
+		suffix_("HUNDRED", &__state->c__1, string, (ftnlen)7, 
+			string_len);
 	    } else if (x >= 20) {
 		y = x / 10;
 		x -= y * 10;
-		suffix_(tens + ((i__1 = y - 1) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("tens", i__1, "inttxt_", (ftnlen)298)) * 9, &
-			pad, string, (ftnlen)9, string_len);
+		suffix_(__state->tens + ((i__1 = y - 1) < 9 && 0 <= i__1 ? 
+			i__1 : s_rnge("tens", i__1, "inttxt_", (ftnlen)298)) *
+			 9, &pad, string, (ftnlen)9, string_len);
 		if (x != 0) {
-		    suffix_("-", &c__0, string, (ftnlen)1, string_len);
+		    suffix_("-", &__state->c__0, string, (ftnlen)1, 
+			    string_len);
 		    space = 0;
 		}
 	    } else {
@@ -276,15 +285,15 @@ static integer c__0 = 0;
 		if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
 		    space = 0;
 		}
-		suffix_(number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? i__1 : 
-			s_rnge("number", i__1, "inttxt_", (ftnlen)314)) * 9, &
-			space, string, (ftnlen)9, string_len);
+		suffix_(__state->number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? 
+			i__1 : s_rnge("number", i__1, "inttxt_", (ftnlen)314))
+			 * 9, &space, string, (ftnlen)9, string_len);
 	    }
 	}
 
 /*        ... then add the units. Repeat as necessary. */
 
-	suffix_(suff, &c__1, string, (ftnlen)9, string_len);
+	suffix_(suff, &__state->c__1, string, (ftnlen)9, string_len);
     }
     return 0;
 } /* inttxt_ */

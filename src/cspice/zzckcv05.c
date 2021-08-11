@@ -1,9 +1,17 @@
-/* zzckcv05.f -- translated by f2c (version 19980913).
+/* zzckcv05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzckcv05_state_t;
+static zzckcv05_state_t* get_zzckcv05_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCKCV05 ( Private --- C-kernel segment coverage, type 05 ) */
 /* Subroutine */ int zzckcv05_(integer *handle, integer *arrbeg, integer *
@@ -24,11 +32,13 @@
     integer ndir;
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
     doublereal begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical istdb;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    integer intat, invls, rsize;
+    integer intat;
+    integer invls;
+    integer rsize;
     doublereal start;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
@@ -38,13 +48,20 @@
     doublereal buffer[4];
     integer tickat;
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, doublereal *, 
-	    ftnlen), wninsd_(doublereal *, doublereal *, doublereal *);
-    integer lsttik, lstint;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
+    integer lsttik;
+    integer lstint;
     extern logical return_(void);
     integer subtyp;
 
+
+    /* Module state */
+    zzckcv05_state_t* __state = get_zzckcv05_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

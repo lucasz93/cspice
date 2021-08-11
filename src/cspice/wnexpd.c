@@ -1,13 +1,21 @@
-/* wnexpd.f -- translated by f2c (version 19980913).
+/* wnexpd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern wnexpd_init_t __wnexpd_init;
+static wnexpd_state_t* get_wnexpd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wnexpd)
+		state->wnexpd = __cspice_allocate_module(sizeof(
+	wnexpd_state_t), &__wnexpd_init, sizeof(__wnexpd_init));
+	return state->wnexpd;
+
+}
 
 /* $Procedure      WNEXPD ( Expand the intervals of a DP window ) */
 /* Subroutine */ int wnexpd_(doublereal *left, doublereal *right, doublereal *
@@ -17,12 +25,19 @@ static integer c__0 = 0;
     integer i__1;
 
     /* Local variables */
-    integer card, gone, i__, j;
+    integer card;
+    integer gone;
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scardd_(integer *, 
-	    doublereal *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wnexpd_state_t* __state = get_wnexpd_state();
 /* $ Abstract */
 
 /*     Expand each of the intervals of a double precision window. */
@@ -212,7 +227,7 @@ static integer c__0 = 0;
 
     card -= gone;
     if (card == 0) {
-	scardd_(&c__0, window);
+	scardd_(&__state->c__0, window);
 	chkout_("WNEXPD", (ftnlen)6);
 	return 0;
     }

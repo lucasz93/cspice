@@ -1,9 +1,10 @@
-/* dskd04.f -- translated by f2c (version 19980913).
+/* dskd04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure DSKD04 ( DSK, fetch d.p. type 4 data ) */
 /* Subroutine */ int dskd04_(integer *handle, integer *dladsc, integer *item, 

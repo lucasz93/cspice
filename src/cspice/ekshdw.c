@@ -1,15 +1,26 @@
-/* ekshdw.f -- translated by f2c (version 19980913).
+/* ekshdw.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekshdw_state_t;
+static ekshdw_state_t* get_ekshdw_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     EKSHDW ( EK, return shadowing status <STUB> ) */
 /* Subroutine */ int ekshdw_(integer *handle, logical *isshad)
 {
     integer i__;
 
+
+    /* Module state */
+    ekshdw_state_t* __state = get_ekshdw_state();
 /* $ Abstract */
 
 /*     Return shadowing status of a specified EK file.  THIS IS A */

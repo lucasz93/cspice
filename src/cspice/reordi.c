@@ -1,9 +1,17 @@
-/* reordi.f -- translated by f2c (version 19980913).
+/* reordi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reordi_state_t;
+static reordi_state_t* get_reordi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REORDI ( Reorder an integer array ) */
 /* Subroutine */ int reordi_(integer *iorder, integer *ndim, integer *array)
@@ -12,8 +20,14 @@
     integer i__1, i__2;
 
     /* Local variables */
-    integer hold, temp, index, start;
+    integer hold;
+    integer temp;
+    integer index;
+    integer start;
 
+
+    /* Module state */
+    reordi_state_t* __state = get_reordi_state();
 /* $ Abstract */
 
 /*      Re-order the elements of an integer array according to */

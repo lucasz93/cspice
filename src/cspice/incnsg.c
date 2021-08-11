@@ -1,9 +1,21 @@
-/* incnsg.f -- translated by f2c (version 19980913).
+/* incnsg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern incnsg_init_t __incnsg_init;
+static incnsg_state_t* get_incnsg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->incnsg)
+		state->incnsg = __cspice_allocate_module(sizeof(
+	incnsg_state_t), &__incnsg_init, sizeof(__incnsg_init));
+	return state->incnsg;
+
+}
 
 /* $Procedure      INCNSG ( Intersection of cone and line segment ) */
 /* Subroutine */ int incnsg_(doublereal *apex, doublereal *axis, doublereal *
@@ -12,9 +24,6 @@
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
-    static doublereal y[3] = { 0.,1.,0. };
-    static doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -28,19 +37,31 @@
     doublereal dmag;
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal minp[3], maxp[3], udir[3];
+    doublereal minp[3];
+    doublereal maxp[3];
+    doublereal udir[3];
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     extern doublereal vdot_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal plnx[3], uuax, wuax;
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal plnx[3];
+    doublereal uuax;
+    doublereal wuax;
     extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal v1mag, v2mag;
+    doublereal v1mag;
+    doublereal v2mag;
     extern /* Subroutine */ int zzcnquad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
 	    ;
-    doublereal uoff1[3], uoff2[3], xoff1[3], xoff2[3], a, b, c__;
+    doublereal uoff1[3];
+    doublereal uoff2[3];
+    doublereal xoff1[3];
+    doublereal xoff2[3];
+    doublereal a;
+    doublereal b;
+    doublereal c__;
     extern /* Subroutine */ int zzsglatx_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     integer i__;
@@ -50,38 +71,61 @@
     integer n;
     doublereal x[3];
     extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *), chkin_(char *, ftnlen);
-    doublereal axmag, colat;
+	    *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    doublereal axmag;
+    doublereal colat;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal uaxis[3], vtemp[3], xform[9]	/* was [3][3] */;
+    doublereal uaxis[3];
+    doublereal vtemp[3];
+    doublereal xform[9]	/* was [3][3] */;
     integer nplnx;
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
 	    *);
-    doublereal s1, s2, v1[3], v2[3], w2, vtemp2[3];
+    doublereal s1;
+    doublereal s2;
+    doublereal v1[3];
+    doublereal v2[3];
+    doublereal w2;
+    doublereal vtemp2[3];
     extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
 	    doublereal *);
     extern logical failed_(void);
-    extern doublereal pi_(void), halfpi_(void);
-    doublereal locang, cosang, wu;
+    extern doublereal pi_(void);
+    extern doublereal halfpi_(void);
+    doublereal locang;
+    doublereal cosang;
+    doublereal wu;
     logical isbrck;
-    doublereal minlat, ca2, maxlat;
+    doublereal minlat;
+    doublereal ca2;
+    doublereal maxlat;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal coserr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
-    doublereal dp1, dp2, nrmpln[4];
-    logical in1, in2;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    doublereal dp1;
+    doublereal dp2;
+    doublereal nrmpln[4];
+    logical in1;
+    logical in2;
     extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
 	    doublereal *, integer *, doublereal *);
     extern logical return_(void);
-    doublereal uv1[3], uv2[3], dir[3];
+    doublereal uv1[3];
+    doublereal uv2[3];
+    doublereal dir[3];
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
     logical neg1;
-    doublereal off1[3], off2[3];
+    doublereal off1[3];
+    doublereal off2[3];
     logical neg2;
 
+
+    /* Module state */
+    incnsg_state_t* __state = get_incnsg_state();
 /* $ Abstract */
 
 /*     Compute the points of intersection of a specified nappe of a cone */
@@ -736,16 +780,16 @@
 /*           We'll count the roots we find, so we'll start at zero. */
 
 	    *nxpts = 0;
-	    frame_(uaxis, x, y);
+	    frame_(uaxis, x, __state->y);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		xform[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
 			"xform", i__1, "incnsg_", (ftnlen)831)] = x[(i__2 = 
 			i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("x", i__2, 
 			"incnsg_", (ftnlen)831)];
 		xform[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)832)] = y[(i__2 = 
-			i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("y", i__2, 
-			"incnsg_", (ftnlen)832)];
+			"xform", i__1, "incnsg_", (ftnlen)832)] = __state->y[(
+			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+			"y", i__2, "incnsg_", (ftnlen)832)];
 		xform[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(
 			"xform", i__1, "incnsg_", (ftnlen)833)] = uaxis[(i__2 
 			= i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("uaxis", 
@@ -768,7 +812,8 @@
 /*              on the segment between XOFF1 and MAXP and another */
 /*              between MAXP and XOFF2. */
 
-		zzcxbrut_(origin, z__, &locang, xoff1, maxp, vtemp, &isbrck);
+		zzcxbrut_(__state->origin, __state->z__, &locang, xoff1, maxp,
+			 vtemp, &isbrck);
 		if (isbrck) {
 
 /*                 Convert VTEMP to the original frame, then translate */
@@ -779,7 +824,8 @@
 		    vadd_(vtemp2, apex, xpt1);
 		    *nxpts = 1;
 		}
-		zzcxbrut_(origin, z__, &locang, maxp, xoff2, vtemp, &isbrck);
+		zzcxbrut_(__state->origin, __state->z__, &locang, maxp, xoff2,
+			 vtemp, &isbrck);
 		if (isbrck) {
 
 /*                 Convert VTEMP to the original frame, then translate */

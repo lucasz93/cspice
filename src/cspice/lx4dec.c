@@ -1,9 +1,17 @@
-/* lx4dec.f -- translated by f2c (version 19980913).
+/* lx4dec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lx4dec_state_t;
+static lx4dec_state_t* get_lx4dec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LX4DEC (Scan for signed integer) */
 /* Subroutine */ int lx4dec_(char *string, integer *first, integer *last, 
@@ -13,11 +21,20 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer next, f, i__, j, l, n;
+    integer next;
+    integer f;
+    integer i__;
+    integer j;
+    integer l;
+    integer n;
     extern /* Subroutine */ int lx4sgn_(char *, integer *, integer *, integer 
-	    *, ftnlen), lx4uns_(char *, integer *, integer *, integer *, 
-	    ftnlen);
+	    *, ftnlen);
+    extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
+	    *, ftnlen);
 
+
+    /* Module state */
+    lx4dec_state_t* __state = get_lx4dec_state();
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */

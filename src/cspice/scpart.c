@@ -1,15 +1,21 @@
-/* scpart.f -- translated by f2c (version 19980913).
+/* scpart.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__2 = 2;
-static integer c__9999 = 9999;
+extern scpart_init_t __scpart_init;
+static scpart_state_t* get_scpart_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->scpart)
+		state->scpart = __cspice_allocate_module(sizeof(
+	scpart_state_t), &__scpart_init, sizeof(__scpart_init));
+	return state->scpart;
+
+}
 
 /* $Procedure      SCPART ( Spacecraft Clock Partition Information ) */
 /* Subroutine */ int scpart_(integer *sc, integer *nparts, doublereal *pstart,
@@ -17,9 +23,6 @@ static integer c__9999 = 9999;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -31,26 +34,31 @@ static integer c__9999 = 9999;
 
     /* Local variables */
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
-	    *, doublereal *, ftnlen), chkin_(char *, ftnlen), repmi_(char *, 
-	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    static doublereal prtsa[9999], prtso[9999];
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern logical failed_(void);
     char kvname[60*2];
     logical update;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer nprtsa;
     extern logical return_(void);
-    static integer usrctr[2];
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     integer nprtso;
-    static integer lstprt;
 
+    /* Module state */
+    scpart_state_t* __state = get_scpart_state();
 /* $ Abstract */
 
 /*     Get spacecraft clock partition information from a spacecraft */
@@ -412,16 +420,16 @@ static integer c__9999 = 9999;
 /*     spacecraft code changes, set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
+    if (__state->first || *sc != __state->oldsc) {
 
 /*        Make up a list of names of kernel variables that we'll use. */
 
 	s_copy(kvname, "SCLK_PARTITION_START", (ftnlen)60, (ftnlen)20);
 	s_copy(kvname + 60, "SCLK_PARTITION_END", (ftnlen)60, (ftnlen)18);
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "scpart_", (ftnlen)284)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	    suffix_("_#", &__state->c__0, kvname + ((i__1 = i__ - 1) < 2 && 0 
+		    <= i__1 ? i__1 : s_rnge("kvname", i__1, "scpart_", (
+		    ftnlen)284)) * 60, (ftnlen)2, (ftnlen)60);
 	    i__3 = -(*sc);
 	    repmi_(kvname + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 		    s_rnge("kvname", i__1, "scpart_", (ftnlen)285)) * 60, 
@@ -432,33 +440,33 @@ static integer c__9999 = 9999;
 
 /*        Set a watch on all of the kernel variables used. */
 
-	swpool_("SCPART", &c__2, kvname, (ftnlen)6, (ftnlen)60);
+	swpool_("SCPART", &__state->c__2, kvname, (ftnlen)6, (ftnlen)60);
 
 /*        Keep track of the last spacecraft ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
-	first = FALSE_;
+	zzctruin_(__state->usrctr);
+	__state->first = FALSE_;
     }
 
 /*     If any of the kernel pool variables that this routine uses */
 /*     have been updated, or if the spacecraft ID changes, look up */
 /*     the new values from the kernel pool. */
 
-    zzcvpool_("SCPART", usrctr, &update, (ftnlen)6);
-    if (update || nodata) {
+    zzcvpool_("SCPART", __state->usrctr, &update, (ftnlen)6);
+    if (update || __state->nodata) {
 
 /*        Read the values from the kernel pool. */
 
-	scld01_("SCLK_PARTITION_START", sc, &c__9999, &nprtsa, prtsa, (ftnlen)
-		20);
-	scld01_("SCLK_PARTITION_END", sc, &c__9999, &nprtso, prtso, (ftnlen)
-		18);
+	scld01_("SCLK_PARTITION_START", sc, &__state->c__9999, &nprtsa, 
+		__state->prtsa, (ftnlen)20);
+	scld01_("SCLK_PARTITION_END", sc, &__state->c__9999, &nprtso, 
+		__state->prtso, (ftnlen)18);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCPART", (ftnlen)6);
 	    return 0;
 	}
@@ -466,7 +474,7 @@ static integer c__9999 = 9999;
 /*        Error checking. */
 
 	if (nprtsa != nprtso) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    setmsg_("The number of partition start and stop times are unequa"
 		    "l for spacecraft #.    ", (ftnlen)78);
 	    errint_("#", sc, (ftnlen)1);
@@ -479,37 +487,37 @@ static integer c__9999 = 9999;
 /*        perform another kernel pool look-up unless there's */
 /*        a kernel pool update or change in the SCLK ID. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Buffer the number of partitions and the partition start */
 /*        and stop times. */
 
-	lstprt = nprtsa;
+	__state->lstprt = nprtsa;
 
 /*        The partition start and stop times must be whole numbers. */
 
-	i__1 = lstprt;
+	i__1 = __state->lstprt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("prtsa"
-		    , i__2, "scpart_", (ftnlen)360)] = d_nint(&prtsa[(i__3 = 
-		    i__ - 1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("prtsa", 
-		    i__3, "scpart_", (ftnlen)360)]);
-	    prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("prtso"
-		    , i__2, "scpart_", (ftnlen)361)] = d_nint(&prtso[(i__3 = 
-		    i__ - 1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("prtso", 
-		    i__3, "scpart_", (ftnlen)361)]);
+	    __state->prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
+		    s_rnge("prtsa", i__2, "scpart_", (ftnlen)360)] = d_nint(&
+		    __state->prtsa[(i__3 = i__ - 1) < 9999 && 0 <= i__3 ? 
+		    i__3 : s_rnge("prtsa", i__3, "scpart_", (ftnlen)360)]);
+	    __state->prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
+		    s_rnge("prtso", i__2, "scpart_", (ftnlen)361)] = d_nint(&
+		    __state->prtso[(i__3 = i__ - 1) < 9999 && 0 <= i__3 ? 
+		    i__3 : s_rnge("prtso", i__3, "scpart_", (ftnlen)361)]);
 	}
     }
 
 /*     Copy the values in local buffers to the output arguments. */
 
-    *nparts = lstprt;
+    *nparts = __state->lstprt;
     i__1 = *nparts;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	pstart[i__ - 1] = prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		s_rnge("prtsa", i__2, "scpart_", (ftnlen)372)];
-	pstop[i__ - 1] = prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		s_rnge("prtso", i__2, "scpart_", (ftnlen)373)];
+	pstart[i__ - 1] = __state->prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 
+		? i__2 : s_rnge("prtsa", i__2, "scpart_", (ftnlen)372)];
+	pstop[i__ - 1] = __state->prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ?
+		 i__2 : s_rnge("prtso", i__2, "scpart_", (ftnlen)373)];
     }
     chkout_("SCPART", (ftnlen)6);
     return 0;

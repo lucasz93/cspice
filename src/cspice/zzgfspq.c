@@ -1,13 +1,21 @@
-/* zzgfspq.f -- translated by f2c (version 19980913).
+/* zzgfspq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b12 = 1e-12;
+extern zzgfspq_init_t __zzgfspq_init;
+static zzgfspq_state_t* get_zzgfspq_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfspq)
+		state->zzgfspq = __cspice_allocate_module(sizeof(
+	zzgfspq_state_t), &__zzgfspq_init, sizeof(__zzgfspq_init));
+	return state->zzgfspq;
+
+}
 
 /* $Procedure ZZGFSPQ ( GF, separation quantity ) */
 /* Subroutine */ int zzgfspq_(doublereal *et, integer *targ1, integer *targ2, 
@@ -23,17 +31,27 @@ static doublereal c_b12 = 1e-12;
     doublereal theta;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal vnorm_(doublereal *);
-    doublereal range1, range2;
+    doublereal range1;
+    doublereal range2;
     extern logical failed_(void);
     doublereal lt;
-    extern doublereal dasine_(doublereal *, doublereal *), halfpi_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), spkezp_(integer *, doublereal *, char *, char *, integer 
-	    *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal halfpi_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
-    doublereal pv1[3], pv2[3], ang1, ang2;
+    doublereal pv1[3];
+    doublereal pv2[3];
+    doublereal ang1;
+    doublereal ang2;
 
+
+    /* Module state */
+    zzgfspq_state_t* __state = get_zzgfspq_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -286,7 +304,7 @@ static doublereal c_b12 = 1e-12;
 
     if (range1 > *r1) {
 	d__1 = *r1 / range1;
-	ang1 = dasine_(&d__1, &c_b12);
+	ang1 = dasine_(&d__1, &__state->c_b12);
 	if (failed_()) {
 	    chkout_("ZZGFSPQ", (ftnlen)7);
 	    return 0;
@@ -296,7 +314,7 @@ static doublereal c_b12 = 1e-12;
     }
     if (range2 > *r2) {
 	d__1 = *r2 / range2;
-	ang2 = dasine_(&d__1, &c_b12);
+	ang2 = dasine_(&d__1, &__state->c_b12);
 	if (failed_()) {
 	    chkout_("ZZGFSPQ", (ftnlen)7);
 	    return 0;

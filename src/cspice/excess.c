@@ -1,14 +1,21 @@
-/* excess.f -- translated by f2c (version 19980913).
+/* excess.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern excess_init_t __excess_init;
+static excess_state_t* get_excess_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->excess)
+		state->excess = __cspice_allocate_module(sizeof(
+	excess_state_t), &__excess_init, sizeof(__excess_init));
+	return state->excess;
+
+}
 
 /* $Procedure      EXCESS ( Report an excess of elements in a cell ) */
 /* Subroutine */ int excess_(integer *number, char *struct__, ftnlen 
@@ -21,11 +28,17 @@ static integer c__0 = 0;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     char error[320];
     extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    suffix_(char *, integer *, char *, ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    excess_state_t* __state = get_excess_state();
 /* $ Abstract */
 
 /*     Set the long error message so as to indicate the number of excess */
@@ -207,28 +220,30 @@ static integer c__0 = 0;
 
 /*        A short blurb goes in front of the number. */
 
-	prefix_("An excess of", &c__1, error, (ftnlen)12, (ftnlen)320);
+	prefix_("An excess of", &__state->c__1, error, (ftnlen)12, (ftnlen)
+		320);
 
 /*        Singular or plural? */
 
 	if (*number == 1) {
-	    suffix_("element", &c__1, error, (ftnlen)7, (ftnlen)320);
+	    suffix_("element", &__state->c__1, error, (ftnlen)7, (ftnlen)320);
 	} else {
-	    suffix_("elements", &c__1, error, (ftnlen)8, (ftnlen)320);
+	    suffix_("elements", &__state->c__1, error, (ftnlen)8, (ftnlen)320)
+		    ;
 	}
 
 /*        Another short blurb. */
 
-	suffix_("could not be accommodated in the output", &c__1, error, (
-		ftnlen)39, (ftnlen)320);
+	suffix_("could not be accommodated in the output", &__state->c__1, 
+		error, (ftnlen)39, (ftnlen)320);
 
 /*        And the name of the structure. */
 
-	suffix_(struct__, &c__1, error, struct_len, (ftnlen)320);
+	suffix_(struct__, &__state->c__1, error, struct_len, (ftnlen)320);
 
 /*        And a period at the end, to complete the sentence. */
 
-	suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)320);
+	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
 
 /*        Set the long error message: */
 

@@ -1,13 +1,21 @@
-/* zzgfsolv.f -- translated by f2c (version 19980913).
+/* zzgfsolv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1000 = 1000;
+extern zzgfsolv_init_t __zzgfsolv_init;
+static zzgfsolv_state_t* get_zzgfsolv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfsolv)
+		state->zzgfsolv = __cspice_allocate_module(sizeof(
+	zzgfsolv_state_t), &__zzgfsolv_init, sizeof(__zzgfsolv_init));
+	return state->zzgfsolv;
+
+}
 
 /* $Procedure ZZGFSOLV ( Private --- GF, event finding routine ) */
 /* Subroutine */ int zzgfsolv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical 
@@ -26,29 +34,38 @@ static integer c__1000 = 1000;
     extern /* Subroutine */ int zzwninsd_(doublereal *, doublereal *, char *, 
 	    doublereal *, ftnlen);
     logical s;
-    doublereal begin, t;
+    doublereal begin;
+    doublereal t;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer nloop;
-    logical l1, l2, savst;
-    doublereal t1, t2;
+    logical l1;
+    logical l2;
+    logical savst;
+    doublereal t1;
+    doublereal t2;
     logical state1;
     extern logical failed_(void);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *), 
-	    touchd_(doublereal *);
+    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal touchd_(doublereal *);
     doublereal prvdif;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     logical instat;
-    doublereal curtim, svdtim, timest;
+    doublereal curtim;
+    doublereal svdtim;
+    doublereal timest;
     logical curste;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char contxt[256];
     doublereal trnstn;
 
+
+    /* Module state */
+    zzgfsolv_state_t* __state = get_zzgfsolv_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -668,7 +685,7 @@ static integer c__1000 = 1000;
 			    "converge to TOL value #1 within MXLOOP value #2 "
 			    "iterations.", (ftnlen)106);
 		    errdp_("#1", tol, (ftnlen)2);
-		    errint_("#2", &c__1000, (ftnlen)2);
+		    errint_("#2", &__state->c__1000, (ftnlen)2);
 		    sigerr_("SPICE(NOCONVERG)", (ftnlen)16);
 		    chkout_("ZZGFSOLV", (ftnlen)8);
 		    return 0;

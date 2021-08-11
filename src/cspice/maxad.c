@@ -1,9 +1,17 @@
-/* maxad.f -- translated by f2c (version 19980913).
+/* maxad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int maxad_state_t;
+static maxad_state_t* get_maxad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MAXAD  ( Maximum element of array, DP ) */
 /* Subroutine */ int maxad_(doublereal *array, integer *ndim, doublereal *
@@ -15,6 +23,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    maxad_state_t* __state = get_maxad_state();
 /* $ Abstract */
 
 /*     Locate the maximum element of a DP array. */

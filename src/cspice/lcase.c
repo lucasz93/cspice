@@ -1,9 +1,21 @@
-/* lcase.f -- translated by f2c (version 19980913).
+/* lcase.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern lcase_init_t __lcase_init;
+static lcase_state_t* get_lcase_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lcase)
+		state->lcase = __cspice_allocate_module(sizeof(lcase_state_t),
+	 &__lcase_init, sizeof(__lcase_init));
+	return state->lcase;
+
+}
 
 /* $Procedure      LCASE ( Convert to lowercase ) */
 /* Subroutine */ int lcase_(char *in, char *out, ftnlen in_len, ftnlen 
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -22,9 +33,11 @@
 
     /* Local variables */
     integer i__;
-    static integer shift, uppera, upperz;
     integer ich;
 
+
+    /* Module state */
+    lcase_state_t* __state = get_lcase_state();
 /* $ Abstract */
 
 /*      Convert the characters in a string to lowercase. */
@@ -161,11 +174,11 @@
 /*     need to reinitialize the boundary values used for comparisons */
 /*     and the shift on each call. */
 
-    if (first) {
-	first = FALSE_;
-	uppera = 'A';
-	upperz = 'Z';
-	shift = 'a' - uppera;
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->uppera = 'A';
+	__state->upperz = 'Z';
+	__state->shift = 'a' - __state->uppera;
     }
 
 /*     Move the string from IN to OUT. Step through OUT one character */
@@ -175,8 +188,8 @@
     i__1 = i_len(out, out_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ich = *(unsigned char *)&out[i__ - 1];
-	if (ich >= uppera && ich <= upperz) {
-	    *(unsigned char *)&out[i__ - 1] = (char) (ich + shift);
+	if (ich >= __state->uppera && ich <= __state->upperz) {
+	    *(unsigned char *)&out[i__ - 1] = (char) (ich + __state->shift);
 	}
     }
     return 0;

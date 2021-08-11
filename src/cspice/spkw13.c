@@ -1,15 +1,21 @@
-/* spkw13.f -- translated by f2c (version 19980913).
+/* spkw13.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__27 = 27;
-static integer c__13 = 13;
-static integer c__1 = 1;
+extern spkw13_init_t __spkw13_init;
+static spkw13_state_t* get_spkw13_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw13)
+		state->spkw13 = __cspice_allocate_module(sizeof(
+	spkw13_state_t), &__spkw13_init, sizeof(__spkw13_init));
+	return state->spkw13;
+
+}
 
 /* $Procedure      SPKW13 ( Write SPK segment, type 13 ) */
 /* Subroutine */ int spkw13_(integer *handle, integer *body, integer *center, 
@@ -26,23 +32,30 @@ static integer c__1 = 1;
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafbna_(integer *, doublereal *, char *, ftnlen), 
-	    dafena_(void);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod;
+    integer chrcod;
+    integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal maxtim;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), spkpds_(integer *, integer *, char *, integer 
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
 	    *, doublereal *, doublereal *, doublereal *, ftnlen);
     extern logical return_(void);
     integer winsiz;
 
+
+    /* Module state */
+    spkw13_state_t* __state = get_spkw13_state();
 /* $ Abstract */
 
 /*     Write a type 13 segment to an SPK file. */
@@ -326,7 +339,7 @@ static integer c__1 = 1;
 	setmsg_("The interpolating polynomials have degree #; the valid degr"
 		"ee range is [1, #]", (ftnlen)77);
 	errint_("#", degree, (ftnlen)1);
-	errint_("#", &c__27, (ftnlen)1);
+	errint_("#", &__state->c__27, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	chkout_("SPKW13", (ftnlen)6);
 	return 0;
@@ -412,7 +425,8 @@ static integer c__1 = 1;
 
 /*     Create the segment descriptor. */
 
-    spkpds_(body, center, frame, &c__13, first, last, descr, frame_len);
+    spkpds_(body, center, frame, &__state->c__13, first, last, descr, 
+	    frame_len);
 
 /*     Begin a new segment. */
 
@@ -465,12 +479,12 @@ static integer c__1 = 1;
     dafada_(epochs, n);
     i__1 = (*n - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &c__1);
+	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) (winsiz - 1);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

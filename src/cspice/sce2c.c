@@ -1,9 +1,17 @@
-/* sce2c.f -- translated by f2c (version 19980913).
+/* sce2c.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sce2c_state_t;
+static sce2c_state_t* get_sce2c_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCE2C ( ET to continuous SCLK ticks ) */
 /* Subroutine */ int sce2c_(integer *sc, doublereal *et, doublereal *sclkdp)
@@ -13,12 +21,18 @@
 
     /* Local variables */
     extern /* Subroutine */ int scec01_(integer *, doublereal *, doublereal *)
-	    , chkin_(char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *,
-	     ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+	    ;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer sctype_(integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    sce2c_state_t* __state = get_sce2c_state();
 /* $ Abstract */
 
 /*     Convert ephemeris seconds past J2000 (ET) to continuous encoded */

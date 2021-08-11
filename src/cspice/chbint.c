@@ -1,17 +1,31 @@
-/* chbint.f -- translated by f2c (version 19980913).
+/* chbint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int chbint_state_t;
+static chbint_state_t* get_chbint_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CHBINT ( Interpolate a Chebyshev expansion ) */
 /* Subroutine */ int chbint_(doublereal *cp, integer *degp, doublereal *x2s, 
 	doublereal *x, doublereal *p, doublereal *dpdx)
 {
     integer j;
-    doublereal s, w[3], s2, dw[3];
+    doublereal s;
+    doublereal w[3];
+    doublereal s2;
+    doublereal dw[3];
 
+
+    /* Module state */
+    chbint_state_t* __state = get_chbint_state();
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

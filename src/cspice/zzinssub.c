@@ -1,9 +1,17 @@
-/* zzinssub.f -- translated by f2c (version 19980913).
+/* zzinssub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzinssub_state_t;
+static zzinssub_state_t* get_zzinssub_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZINSSUB ( Insert a substring ) */
 /* Subroutine */ int zzinssub_(char *in, char *sub, integer *loc, char *out, 
@@ -18,9 +26,20 @@
 
     /* Local variables */
     logical same;
-    integer from, i__, inlen, myloc, nmove, to, subend, sublen, outlen;
+    integer from;
+    integer i__;
+    integer inlen;
+    integer myloc;
+    integer nmove;
+    integer to;
+    integer subend;
+    integer sublen;
+    integer outlen;
     char chr[1];
 
+
+    /* Module state */
+    zzinssub_state_t* __state = get_zzinssub_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

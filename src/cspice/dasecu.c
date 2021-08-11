@@ -1,30 +1,42 @@
-/* dasecu.f -- translated by f2c (version 19980913).
+/* dasecu.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__22 = 22;
+extern dasecu_init_t __dasecu_init;
+static dasecu_state_t* get_dasecu_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasecu)
+		state->dasecu = __cspice_allocate_module(sizeof(
+	dasecu_state_t), &__dasecu_init, sizeof(__dasecu_init));
+	return state->dasecu;
+
+}
 
 /* $Procedure      DASECU ( DAS extract comments to a logical unit ) */
 /* Subroutine */ int dasecu_(integer *handle, integer *comlun, logical *
 	comnts)
 {
     extern /* Subroutine */ int dasec_(integer *, integer *, integer *, char *
-	    , logical *, ftnlen), chkin_(char *, ftnlen);
+	    , logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     char combuf[255*22];
     extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     integer numcom;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), writla_(integer *, 
-	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int writla_(integer *, char *, integer *, ftnlen);
     logical gotsom;
     extern logical return_(void);
     logical eoc;
 
+
+    /* Module state */
+    dasecu_state_t* __state = get_dasecu_state();
 /* $ Abstract */
 
 /*     Extract comments from a previously opened binary DAS file to a */
@@ -204,7 +216,7 @@ static integer c__22 = 22;
 /*        While we have not reached the end of the comments, get some */
 /*        more. */
 
-	dasec_(handle, &c__22, &numcom, combuf, &eoc, (ftnlen)255);
+	dasec_(handle, &__state->c__22, &numcom, combuf, &eoc, (ftnlen)255);
 	if (failed_()) {
 	    chkout_("DASECU", (ftnlen)6);
 	    return 0;

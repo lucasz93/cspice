@@ -1,9 +1,21 @@
-/* hx2dp.f -- translated by f2c (version 19980913).
+/* hx2dp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern hx2dp_init_t __hx2dp_init;
+static hx2dp_state_t* get_hx2dp_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->hx2dp)
+		state->hx2dp = __cspice_allocate_module(sizeof(hx2dp_state_t),
+	 &__hx2dp_init, sizeof(__hx2dp_init));
+	return state->hx2dp;
+
+}
 
 /* $Procedure  HX2DP  ( Hexadecimal string to d.p. number ) */
 /* Subroutine */ int hx2dp_(char *string, doublereal *number, logical *error, 
@@ -11,9 +23,6 @@
 {
     /* Initialized data */
 
-    static doublereal dpval[16] = { 0.,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.,
-	    13.,14.,15. };
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -30,26 +39,24 @@
     logical more;
     integer i__;
     extern doublereal dpmin_(void);
-    static doublereal mindp;
     extern doublereal dpmax_(void);
-    static doublereal maxdp;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer iplus;
     extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
 	    ftnlen, ftnlen);
-    static integer lccbeg, digbeg, lccend, uccbeg, digend, uccend, ispace;
-    static doublereal scales[31];
     integer ndigit;
-    static integer iexpch;
     logical fndexp;
     integer strbeg;
     logical negtiv;
-    integer letter, strend, iexpon;
-    static integer iminus;
+    integer letter;
+    integer strend;
+    integer iexpon;
     integer positn;
     doublereal tmpnum;
 
+
+    /* Module state */
+    hx2dp_state_t* __state = get_hx2dp_state();
 /* $ Abstract */
 
 /*     Convert a string representing a double precision number in a */
@@ -419,7 +426,7 @@
 /*        6) The double precision number is then scaled by the exponent */
 /*           obtained in step 3. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        If this is the first call, set up the array that is used to */
 /*        properly scale each of the hexadecimal digits when summing */
@@ -431,13 +438,13 @@
 /*        may be changed when a greater precision is known to exist on */
 /*        any of the supported platforms. */
 
-	first = FALSE_;
-	scales[0] = .0625;
+	__state->first = FALSE_;
+	__state->scales[0] = .0625;
 	for (i__ = 2; i__ <= 31; ++i__) {
-	    scales[(i__1 = i__ - 1) < 31 && 0 <= i__1 ? i__1 : s_rnge("scales"
-		    , i__1, "hx2dp_", (ftnlen)473)] = scales[(i__2 = i__ - 2) 
-		    < 31 && 0 <= i__2 ? i__2 : s_rnge("scales", i__2, "hx2dp_"
-		    , (ftnlen)473)] * .0625;
+	    __state->scales[(i__1 = i__ - 1) < 31 && 0 <= i__1 ? i__1 : 
+		    s_rnge("scales", i__1, "hx2dp_", (ftnlen)473)] = 
+		    __state->scales[(i__2 = i__ - 2) < 31 && 0 <= i__2 ? i__2 
+		    : s_rnge("scales", i__2, "hx2dp_", (ftnlen)473)] * .0625;
 	}
 
 /*        Initialize the upper and lower bounds for the decimal digits, */
@@ -446,19 +453,19 @@
 /*        hexadecimal digits, the space, the plus sign, and the minus */
 /*        sign in the character sequence. */
 
-	digbeg = '0';
-	digend = '9';
-	uccbeg = 'A';
-	uccend = 'F';
-	lccbeg = 'a';
-	lccend = 'f';
-	iminus = '-';
-	iplus = '+';
-	ispace = ' ';
+	__state->digbeg = '0';
+	__state->digend = '9';
+	__state->uccbeg = 'A';
+	__state->uccend = 'F';
+	__state->lccbeg = 'a';
+	__state->lccend = 'f';
+	__state->iminus = '-';
+	__state->iplus = '+';
+	__state->ispace = ' ';
 
 /*        Also get the integer value for the exponent character. */
 
-	iexpch = '^';
+	__state->iexpch = '^';
 
 /*        Initialize some boundary values for error checking while */
 /*        constructing the desired double precision number. These */
@@ -466,8 +473,8 @@
 /*        is imminent due to the overly large magnitude of a positive */
 /*        or negative number. */
 
-	mindp = dpmin_() * .0625;
-	maxdp = dpmax_() * .0625;
+	__state->mindp = dpmin_() * .0625;
+	__state->maxdp = dpmax_() * .0625;
     }
 
 /*     There are no errors initially, so set the error flag to */
@@ -498,7 +505,7 @@
 /*     off the end of the string. */
 
     strbeg = 1;
-    while(*(unsigned char *)&string[strbeg - 1] == ispace) {
+    while(*(unsigned char *)&string[strbeg - 1] == __state->ispace) {
 	++strbeg;
     }
 
@@ -545,10 +552,10 @@
 /*     If the character is a plus sign, we want to increment the */
 /*     position. */
 
-    if (*(unsigned char *)&string[positn - 1] == iminus) {
+    if (*(unsigned char *)&string[positn - 1] == __state->iminus) {
 	negtiv = TRUE_;
 	++positn;
-    } else if (*(unsigned char *)&string[positn - 1] == iplus) {
+    } else if (*(unsigned char *)&string[positn - 1] == __state->iplus) {
 	++positn;
     }
 
@@ -568,22 +575,24 @@
     fndexp = FALSE_;
     while(positn <= strend && ! fndexp) {
 	letter = *(unsigned char *)&string[positn - 1];
-	if (letter >= digbeg && letter <= digend) {
+	if (letter >= __state->digbeg && letter <= __state->digend) {
 	    ++positn;
 	    ++ndigit;
 	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)631)] = letter - digbeg;
-	} else if (letter >= uccbeg && letter <= uccend) {
+		     i__1, "hx2dp_", (ftnlen)631)] = letter - __state->digbeg;
+	} else if (letter >= __state->uccbeg && letter <= __state->uccend) {
 	    ++positn;
 	    ++ndigit;
 	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)638)] = letter + 10 - uccbeg;
-	} else if (letter >= lccbeg && letter <= lccend) {
+		     i__1, "hx2dp_", (ftnlen)638)] = letter + 10 - 
+		    __state->uccbeg;
+	} else if (letter >= __state->lccbeg && letter <= __state->lccend) {
 	    ++positn;
 	    ++ndigit;
 	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)645)] = letter + 10 - lccbeg;
-	} else if (letter == iexpch) {
+		     i__1, "hx2dp_", (ftnlen)645)] = letter + 10 - 
+		    __state->lccbeg;
+	} else if (letter == __state->iexpch) {
 
 /*           We have found the exponent character, so set the */
 /*           indicator and increment the position. */
@@ -650,22 +659,22 @@
 
     if (negtiv) {
 	while(ndigit > 0) {
-	    tmpnum -= dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)722)]
-		    ) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, "hx2d"
-		    "p_", (ftnlen)722)] * scales[(i__3 = ndigit - 1) < 31 && 0 
-		    <= i__3 ? i__3 : s_rnge("scales", i__3, "hx2dp_", (ftnlen)
-		    722)];
+	    tmpnum -= __state->dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 
+		    0 <= i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)
+		    722)]) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, 
+		    "hx2dp_", (ftnlen)722)] * __state->scales[(i__3 = ndigit 
+		    - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("scales", i__3, 
+		    "hx2dp_", (ftnlen)722)];
 	    --ndigit;
 	}
     } else {
 	while(ndigit > 0) {
-	    tmpnum += dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)731)]
-		    ) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, "hx2d"
-		    "p_", (ftnlen)731)] * scales[(i__3 = ndigit - 1) < 31 && 0 
-		    <= i__3 ? i__3 : s_rnge("scales", i__3, "hx2dp_", (ftnlen)
-		    731)];
+	    tmpnum += __state->dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 
+		    0 <= i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)
+		    731)]) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, 
+		    "hx2dp_", (ftnlen)731)] * __state->scales[(i__3 = ndigit 
+		    - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("scales", i__3, 
+		    "hx2dp_", (ftnlen)731)];
 	    --ndigit;
 	}
     }
@@ -696,7 +705,7 @@
 	if (negtiv) {
 	    i__1 = iexpon;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		if (tmpnum >= mindp) {
+		if (tmpnum >= __state->mindp) {
 		    tmpnum *= 16.;
 		} else {
 		    *error = TRUE_;
@@ -708,7 +717,7 @@
 	} else {
 	    i__1 = iexpon;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		if (tmpnum <= maxdp) {
+		if (tmpnum <= __state->maxdp) {
 		    tmpnum *= 16.;
 		} else {
 		    *error = TRUE_;

@@ -1,9 +1,10 @@
-/* cbinit_1.f -- translated by f2c (version 19980913).
+/* cbinit_1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure CBINIT ( Character buffer, initialize  ) */
 /* Subroutine */ int cbinit_1__(integer *dim, char *buffer, ftnlen buffer_len)
@@ -147,20 +148,20 @@
 /*     Standard error handling. */
 
     /* Parameter adjustments */
-    buffer_dim1 = *dim + 1;
+    buffer_dim1 = *dim - 0 + 1;
 
     /* Function Body */
     if (return_()) {
 	return 0;
     } else {
 	chkin_("CBINIT_1", (ftnlen)8);
-	if (i_len(buffer + ((i__1 = 0) < buffer_dim1 ? i__1 : s_rnge("buffer",
-		 i__1, "cbinit_1__", (ftnlen)149)) * buffer_len, buffer_len) <
-		 8) {
+	if (i_len(buffer + ((i__1 = 0) < 1 * buffer_dim1 ? i__1 : s_rnge(
+		"buffer", i__1, "cbinit_1__", (ftnlen)149)) * buffer_len, 
+		buffer_len) < 8) {
 	    setmsg_("Length is #.", (ftnlen)12);
-	    i__2 = i_len(buffer + ((i__1 = 0) < buffer_dim1 ? i__1 : s_rnge(
-		    "buffer", i__1, "cbinit_1__", (ftnlen)151)) * buffer_len, 
-		    buffer_len);
+	    i__2 = i_len(buffer + ((i__1 = 0) < 1 * buffer_dim1 ? i__1 : 
+		    s_rnge("buffer", i__1, "cbinit_1__", (ftnlen)151)) * 
+		    buffer_len, buffer_len);
 	    errint_("#", &i__2, (ftnlen)1);
 	    sigerr_("SPICE(NOTLEGALCB)", (ftnlen)17);
 	    chkout_("CBINIT_1", (ftnlen)8);
@@ -176,8 +177,8 @@
 
 /*     Store only the dimension. */
 
-    enchar_(dim, buffer + ((i__1 = 0) < buffer_dim1 ? i__1 : s_rnge("buffer", 
-	    i__1, "cbinit_1__", (ftnlen)170)) * buffer_len, (ftnlen)8);
+    enchar_(dim, buffer + ((i__1 = 0) < 1 * buffer_dim1 ? i__1 : s_rnge("buf"
+	    "fer", i__1, "cbinit_1__", (ftnlen)170)) * buffer_len, (ftnlen)8);
     chkout_("CBINIT_1", (ftnlen)8);
     return 0;
 } /* cbinit_1__ */

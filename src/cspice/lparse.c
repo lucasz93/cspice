@@ -1,9 +1,17 @@
-/* lparse.f -- translated by f2c (version 19980913).
+/* lparse.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lparse_state_t;
+static lparse_state_t* get_lparse_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LPARSE ( Parse items from a list ) */
 /* Subroutine */ int lparse_(char *list, char *delim, integer *nmax, integer *
@@ -15,9 +23,15 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    char bchr[1], echr[1];
-    integer b, e, eol;
+    char bchr[1];
+    char echr[1];
+    integer b;
+    integer e;
+    integer eol;
 
+
+    /* Module state */
+    lparse_state_t* __state = get_lparse_state();
 /* $ Abstract */
 
 /*     Parse a list of items delimited by a single character. */

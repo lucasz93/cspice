@@ -1,14 +1,21 @@
-/* dskobj.f -- translated by f2c (version 19980913).
+/* dskobj.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__8 = 8;
-static logical c_false = FALSE_;
+extern dskobj_init_t __dskobj_init;
+static dskobj_state_t* get_dskobj_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskobj)
+		state->dskobj = __cspice_allocate_module(sizeof(
+	dskobj_state_t), &__dskobj_init, sizeof(__dskobj_init));
+	return state->dskobj;
+
+}
 
 /* $Procedure      DSKOBJ ( DSK, get object IDs ) */
 /* Subroutine */ int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len)
@@ -22,29 +29,38 @@ static logical c_false = FALSE_;
     /* Local variables */
     char arch[4];
     extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dskgd_(integer *, 
-	    integer *, doublereal *), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern integer sizei_(integer *);
     extern logical failed_(void);
-    integer dladsc[8], handle;
-    extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *), 
-	    dlafns_(integer *, integer *, integer *, logical *), validi_(
-	    integer *, integer *, integer *), dascls_(integer *), getfat_(
-	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    integer dladsc[8];
+    integer handle;
+    extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
+    extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int validi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dascls_(integer *);
+    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     doublereal dskdsc[24];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nxtdsc[8];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), dasopr_(char *, 
-	    integer *, ftnlen), dskcls_(integer *, logical *), errint_(char *,
-	     integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dskcls_(integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char kertyp[4];
     extern logical return_(void);
     extern /* Subroutine */ int appndi_(integer *, integer *);
     integer bid;
 
+
+    /* Module state */
+    dskobj_state_t* __state = get_dskobj_state();
 /* $ Abstract */
 
 /*     Find the set of body ID codes of all objects for which */
@@ -628,7 +644,7 @@ static logical c_false = FALSE_;
 /*        Get the DSK descriptor of the current segment. */
 /*        This is where we'll find the body ID code. */
 
-	movei_(nxtdsc, &c__8, dladsc);
+	movei_(nxtdsc, &__state->c__8, dladsc);
 	dskgd_(&handle, dladsc, dskdsc);
 
 /*        The body ID is at location CTRIDX ("center index") */
@@ -648,7 +664,7 @@ static logical c_false = FALSE_;
 /*           We're going to signal an error. Close the DSK */
 /*           first. */
 
-	    dskcls_(&handle, &c_false);
+	    dskcls_(&handle, &__state->c_false);
 	    setmsg_("Cannot append body ID # to cell while reading DSK file "
 		    "#. Cell size is #.", (ftnlen)73);
 	    errint_("#", &bid, (ftnlen)1);

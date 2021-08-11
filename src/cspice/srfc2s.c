@@ -1,21 +1,33 @@
-/* srfc2s.f -- translated by f2c (version 19980913).
+/* srfc2s.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int srfc2s_state_t;
+static srfc2s_state_t* get_srfc2s_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SRFC2S ( Surface and body ID codes to surface string ) */
 /* Subroutine */ int srfc2s_(integer *code, integer *bodyid, char *srfstr, 
 	logical *isname, ftnlen srfstr_len)
 {
     extern /* Subroutine */ int zzsrfc2n_(integer *, integer *, char *, 
-	    logical *, ftnlen), chkin_(char *, ftnlen);
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    srfc2s_state_t* __state = get_srfc2s_state();
 /* $ Abstract */
 
 /*     Translate a surface ID code, together with a body ID code, to the */

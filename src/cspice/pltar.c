@@ -1,9 +1,17 @@
-/* pltar.f -- translated by f2c (version 19980913).
+/* pltar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pltar_state_t;
+static pltar_state_t* get_pltar_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure PLTAR ( Compute area of plate set ) */
 doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
@@ -19,17 +27,24 @@ doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
     /* Local variables */
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal edge1[3], edge2[3];
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vcrss_(doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal edge1[3];
+    doublereal edge2[3];
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
     doublereal cp[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pltar_state_t* __state = get_pltar_state();
 /* $ Abstract */
 
 /*     Compute the total area of a collection of triangular plates. */
@@ -343,11 +358,11 @@ doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
     i__1 = *np;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    if (plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
+	    if (plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "pltar_", (ftnlen)
-		    348)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 
-		    plates_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge("plates", 
-		    i__3, "pltar_", (ftnlen)348)] > *nv) {
+		    348)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 3 * 
+		    plates_dim2 && 0 <= i__3 ? i__3 : s_rnge("plates", i__3, 
+		    "pltar_", (ftnlen)348)] > *nv) {
 		chkin_("PLTAR", (ftnlen)5);
 		setmsg_("Vertex indices must be in the range [1, NV] for all"
 			" SPICE language versions. The input value of NV was "
@@ -357,9 +372,9 @@ doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
 		errint_("#", nv, (ftnlen)1);
 		errint_("#", &j, (ftnlen)1);
 		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 
-			3 && 0 <= i__2 ? i__2 : s_rnge("plates", i__2, "plta"
-			"r_", (ftnlen)361)], (ftnlen)1);
+		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < 3 * 
+			plates_dim2 && 0 <= i__2 ? i__2 : s_rnge("plates", 
+			i__2, "pltar_", (ftnlen)361)], (ftnlen)1);
 		sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
 		chkout_("PLTAR", (ftnlen)5);
 		return ret_val;
@@ -371,21 +386,21 @@ doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /*        Take the cross product of two edges of the Ith plate. */
 
-	vsub_(&vrtces[(i__3 = plates[(i__2 = i__ * 3 - 2) < plates_dim2 * 3 &&
+	vsub_(&vrtces[(i__3 = plates[(i__2 = i__ * 3 - 2) < 3 * plates_dim2 &&
 		 0 <= i__2 ? i__2 : s_rnge("plates", i__2, "pltar_", (ftnlen)
-		377)] * 3 - 3) < vrtces_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge(
+		377)] * 3 - 3) < 3 * vrtces_dim2 && 0 <= i__3 ? i__3 : s_rnge(
 		"vrtces", i__3, "pltar_", (ftnlen)377)], &vrtces[(i__5 = 
-		plates[(i__4 = i__ * 3 - 3) < plates_dim2 * 3 && 0 <= i__4 ? 
+		plates[(i__4 = i__ * 3 - 3) < 3 * plates_dim2 && 0 <= i__4 ? 
 		i__4 : s_rnge("plates", i__4, "pltar_", (ftnlen)377)] * 3 - 3)
-		 < vrtces_dim2 * 3 && 0 <= i__5 ? i__5 : s_rnge("vrtces", 
+		 < 3 * vrtces_dim2 && 0 <= i__5 ? i__5 : s_rnge("vrtces", 
 		i__5, "pltar_", (ftnlen)377)], edge1);
-	vsub_(&vrtces[(i__3 = plates[(i__2 = i__ * 3 - 1) < plates_dim2 * 3 &&
+	vsub_(&vrtces[(i__3 = plates[(i__2 = i__ * 3 - 1) < 3 * plates_dim2 &&
 		 0 <= i__2 ? i__2 : s_rnge("plates", i__2, "pltar_", (ftnlen)
-		380)] * 3 - 3) < vrtces_dim2 * 3 && 0 <= i__3 ? i__3 : s_rnge(
+		380)] * 3 - 3) < 3 * vrtces_dim2 && 0 <= i__3 ? i__3 : s_rnge(
 		"vrtces", i__3, "pltar_", (ftnlen)380)], &vrtces[(i__5 = 
-		plates[(i__4 = i__ * 3 - 2) < plates_dim2 * 3 && 0 <= i__4 ? 
+		plates[(i__4 = i__ * 3 - 2) < 3 * plates_dim2 && 0 <= i__4 ? 
 		i__4 : s_rnge("plates", i__4, "pltar_", (ftnlen)380)] * 3 - 3)
-		 < vrtces_dim2 * 3 && 0 <= i__5 ? i__5 : s_rnge("vrtces", 
+		 < 3 * vrtces_dim2 && 0 <= i__5 ? i__5 : s_rnge("vrtces", 
 		i__5, "pltar_", (ftnlen)380)], edge2);
 	vcrss_(edge1, edge2, cp);
 

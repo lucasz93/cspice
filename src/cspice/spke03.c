@@ -1,9 +1,17 @@
-/* spke03.f -- translated by f2c (version 19980913).
+/* spke03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke03_state_t;
+static spke03_state_t* get_spke03_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE03 ( S/P Kernel, evaluate, type 3 ) */
 /* Subroutine */ int spke03_(doublereal *et, doublereal *record, doublereal *
@@ -16,16 +24,23 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer degp, ncof, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), chbval_(doublereal *, integer *, 
-	    doublereal *, doublereal *, doublereal *);
+    integer degp;
+    integer ncof;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
+	     doublereal *, doublereal *);
     integer cofloc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spke03_state_t* __state = get_spke03_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 3 */

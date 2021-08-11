@@ -1,18 +1,21 @@
-/* tcheck.f -- translated by f2c (version 19980913).
+/* tcheck.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__100 = 100;
-static integer c__400 = 400;
-static integer c__8 = 8;
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern tcheck_init_t __tcheck_init;
+static tcheck_state_t* get_tcheck_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->tcheck)
+		state->tcheck = __cspice_allocate_module(sizeof(
+	tcheck_state_t), &__tcheck_init, sizeof(__tcheck_init));
+	return state->tcheck;
+
+}
 
 /* $Procedure      TCHECK ( Time Check ) */
 /* Subroutine */ int tcheck_0_(int n__, doublereal *tvec, char *type__, 
@@ -21,13 +24,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static logical dochck = FALSE_;
-    static doublereal dinmon[12] = { 31.,28.,31.,30.,31.,30.,31.,31.,30.,31.,
-	    30.,31. };
-    static char mnames[10*12] = "January   " "February  " "March     " "Apri"
-	    "l     " "May       " "June      " "July      " "August    " "Sep"
-	    "tember " "October   " "November  " "December  ";
-    static char cname[7*4] = "days   " "hours  " "minutes" "seconds";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -39,23 +35,16 @@ static integer c__2 = 2;
 	    s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer comp;
-    static doublereal jun30;
-    static integer year, hour, i__, j, k;
-    static doublereal hlbnd, hubnd;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen), repmd_(char *, char *, doublereal *, 
-	    integer *, char *, ftnlen, ftnlen, ftnlen), repmi_(char *, char *,
-	     integer *, char *, ftnlen, ftnlen, ftnlen);
-    static integer myear;
-    static doublereal dinyr;
-    static integer month;
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static integer second, leapdy;
-    static char messge[200];
-    static integer minute, day;
-    static doublereal doy;
 
+    /* Module state */
+    tcheck_state_t* __state = get_tcheck_state();
 /* $ Abstract */
 
 /*     If component checking is enabled, this routine */
@@ -342,7 +331,7 @@ static integer c__2 = 2;
 
 /*     If checking isn't enabled, there is nothing to do. */
 
-    if (! dochck) {
+    if (! __state->dochck) {
 	*ok = TRUE_;
 	s_copy(error, " ", error_len, (ftnlen)1);
 	return 0;
@@ -351,22 +340,25 @@ static integer c__2 = 2;
 /*     Ok.  Checking has been enabled.  Proceed with the various */
 /*     checks. */
 
-    year = i_dnnt(tvec);
+    __state->year = i_dnnt(tvec);
     if (s_cmp(modify, "B.C.", modify_len, (ftnlen)4) == 0) {
-	myear = 1 - year;
+	__state->myear = 1 - __state->year;
     } else {
-	myear = year;
+	__state->myear = __state->year;
     }
 /* Computing MAX */
-    i__1 = 0, i__2 = abs(myear) / c__4 * c__4 + 1 - abs(myear);
+    i__1 = 0, i__2 = 1 + abs(__state->myear) / __state->c__4 * __state->c__4 
+	    - abs(__state->myear);
 /* Computing MAX */
-    i__3 = 0, i__4 = abs(myear) / c__100 * c__100 + 1 - abs(myear);
+    i__3 = 0, i__4 = 1 + abs(__state->myear) / __state->c__100 * 
+	    __state->c__100 - abs(__state->myear);
 /* Computing MAX */
-    i__5 = 0, i__6 = abs(myear) / c__400 * c__400 + 1 - abs(myear);
-    leapdy = max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6);
-    dinmon[1] = (doublereal) leapdy + 28.;
-    dinyr = (doublereal) leapdy + 365.;
-    jun30 = (doublereal) leapdy + 181.;
+    i__5 = 0, i__6 = 1 + abs(__state->myear) / __state->c__400 * 
+	    __state->c__400 - abs(__state->myear);
+    __state->leapdy = max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6);
+    __state->dinmon[1] = (doublereal) __state->leapdy + 28.;
+    __state->dinyr = (doublereal) __state->leapdy + 365.;
+    __state->jun30 = (doublereal) __state->leapdy + 181.;
 
 /*     The error message that will be attached to an out of range */
 /*     problem for hours depends upon whether the AMPM modifier */
@@ -375,18 +367,18 @@ static integer c__2 = 2;
 
     if (*mods && s_cmp(modify + modify_len * 3, " ", modify_len, (ftnlen)1) !=
 	     0) {
-	hubnd = 13.;
-	hlbnd = 1.;
-	s_copy(messge, "The hours component of the time specified was #. Whe"
-		"n either A.M. or P.M. is specified with the time the hours c"
-		"omponent must be at least 1.0D0 and less than 13.0D0. ", (
-		ftnlen)200, (ftnlen)166);
+	__state->hubnd = 13.;
+	__state->hlbnd = 1.;
+	s_copy(__state->messge, "The hours component of the time specified w"
+		"as #. When either A.M. or P.M. is specified with the time th"
+		"e hours component must be at least 1.0D0 and less than 13.0D"
+		"0. ", (ftnlen)200, (ftnlen)166);
     } else {
-	hubnd = 24.;
-	hlbnd = 0.;
-	s_copy(messge, "The hours component of the time specified was #.  Th"
-		"e hours component must be greater than or equal to 0.0D0 and"
-		" less than 24.0D0. ", (ftnlen)200, (ftnlen)131);
+	__state->hubnd = 24.;
+	__state->hlbnd = 0.;
+	s_copy(__state->messge, "The hours component of the time specified w"
+		"as #.  The hours component must be greater than or equal to "
+		"0.0D0 and less than 24.0D0. ", (ftnlen)200, (ftnlen)131);
     }
 
 /*     We only check YD and YMD anything else is out of the */
@@ -404,115 +396,125 @@ static integer c__2 = 2;
 
 /*     First check.  The year must be an integer. */
 
-    if (tvec[0] != (doublereal) year) {
+    if (tvec[0] != (doublereal) __state->year) {
 	*ok = FALSE_;
 	s_copy(error, "The year value was #.  This must be an integral value"
 		". ", error_len, (ftnlen)55);
-	repmd_(error, "#", tvec, &c__8, error, error_len, (ftnlen)1, 
+	repmd_(error, "#", tvec, &__state->c__8, error, error_len, (ftnlen)1, 
 		error_len);
 	return 0;
     }
     if (s_cmp(type__, "YD", type_len, (ftnlen)2) == 0) {
-	day = 2;
-	hour = 3;
-	minute = 4;
-	second = 5;
-	doy = tvec[1];
-	if (tvec[1] >= dinyr + 1. || tvec[1] < 1.) {
+	__state->day = 2;
+	__state->hour = 3;
+	__state->minute = 4;
+	__state->second = 5;
+	__state->doy = tvec[1];
+	if (tvec[1] >= __state->dinyr + 1. || tvec[1] < 1.) {
 	    *ok = FALSE_;
 	    s_copy(error, "Day # has been specified for the year #. The corr"
 		    "ect range for the day of year for this year is from 1 to"
 		    " #. ", error_len, (ftnlen)109);
-	    repmd_(error, "#", &tvec[1], &c__8, error, error_len, (ftnlen)1, 
+	    repmd_(error, "#", &tvec[1], &__state->c__8, error, error_len, (
+		    ftnlen)1, error_len);
+	    repmi_(error, "#", &__state->year, error, error_len, (ftnlen)1, 
 		    error_len);
-	    repmi_(error, "#", &year, error, error_len, (ftnlen)1, error_len);
-	    i__1 = leapdy + 365;
+	    i__1 = __state->leapdy + 365;
 	    repmi_(error, "#", &i__1, error, error_len, (ftnlen)1, error_len);
 	    return 0;
 	}
     } else if (s_cmp(type__, "YMD", type_len, (ftnlen)3) == 0) {
-	month = i_dnnt(&tvec[1]);
-	day = 3;
-	hour = 4;
-	minute = 5;
-	second = 6;
-	doy = 0.;
-	if (tvec[1] != (doublereal) month) {
+	__state->month = i_dnnt(&tvec[1]);
+	__state->day = 3;
+	__state->hour = 4;
+	__state->minute = 5;
+	__state->second = 6;
+	__state->doy = 0.;
+	if (tvec[1] != (doublereal) __state->month) {
 	    *ok = FALSE_;
 	    s_copy(error, "The month specified, #, was not an integer. The m"
 		    "onth must be an integer in the range from 1 to 12. ", 
 		    error_len, (ftnlen)100);
-	    repmd_(error, "#", &tvec[1], &c__3, error, error_len, (ftnlen)1, 
-		    error_len);
+	    repmd_(error, "#", &tvec[1], &__state->c__3, error, error_len, (
+		    ftnlen)1, error_len);
 	    return 0;
 	} else if (tvec[1] < 1. || tvec[1] > 12.) {
 	    *ok = FALSE_;
 	    s_copy(error, "The month specified was #.  The month must be an "
 		    "integer in the range from 1 to 12 (inclusive). ", 
 		    error_len, (ftnlen)96);
-	    repmi_(error, "#", &month, error, error_len, (ftnlen)1, error_len)
-		    ;
+	    repmi_(error, "#", &__state->month, error, error_len, (ftnlen)1, 
+		    error_len);
 	    return 0;
-	} else if (tvec[2] < 1. || tvec[2] >= dinmon[(i__1 = month - 1) < 12 
-		&& 0 <= i__1 ? i__1 : s_rnge("dinmon", i__1, "tcheck_", (
-		ftnlen)496)] + 1.) {
+	} else if (tvec[2] < 1. || tvec[2] >= __state->dinmon[(i__1 = 
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dinmon"
+		, i__1, "tcheck_", (ftnlen)496)] + 1.) {
 	    *ok = FALSE_;
 	    s_copy(error, "The day of the month specified for the month of #"
 		    " was #.  For # the day must be at least 1.0D0 and less t"
 		    "han #. ", error_len, (ftnlen)112);
-	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)503)) *
-		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
-	    repmd_(error, "#", &tvec[2], &c__3, error, error_len, (ftnlen)1, 
-		    error_len);
-	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)505)) *
-		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
-	    d__1 = dinmon[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dinmon", i__1, "tcheck_", (ftnlen)506)] + 1.;
-	    repmd_(error, "#", &d__1, &c__2, error, error_len, (ftnlen)1, 
-		    error_len);
+	    repmc_(error, "#", __state->mnames + ((i__1 = __state->month - 1) 
+		    < 12 && 0 <= i__1 ? i__1 : s_rnge("mnames", i__1, "tchec"
+		    "k_", (ftnlen)503)) * 10, error, error_len, (ftnlen)1, (
+		    ftnlen)10, error_len);
+	    repmd_(error, "#", &tvec[2], &__state->c__3, error, error_len, (
+		    ftnlen)1, error_len);
+	    repmc_(error, "#", __state->mnames + ((i__1 = __state->month - 1) 
+		    < 12 && 0 <= i__1 ? i__1 : s_rnge("mnames", i__1, "tchec"
+		    "k_", (ftnlen)505)) * 10, error, error_len, (ftnlen)1, (
+		    ftnlen)10, error_len);
+	    d__1 = __state->dinmon[(i__1 = __state->month - 1) < 12 && 0 <= 
+		    i__1 ? i__1 : s_rnge("dinmon", i__1, "tcheck_", (ftnlen)
+		    506)] + 1.;
+	    repmd_(error, "#", &d__1, &__state->c__2, error, error_len, (
+		    ftnlen)1, error_len);
 	    return 0;
 	}
-	i__1 = month - 1;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    doy += dinmon[(i__2 = i__ - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		    "dinmon", i__2, "tcheck_", (ftnlen)512)];
+	i__1 = __state->month - 1;
+	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	    __state->doy += __state->dinmon[(i__2 = __state->i__ - 1) < 12 && 
+		    0 <= i__2 ? i__2 : s_rnge("dinmon", i__2, "tcheck_", (
+		    ftnlen)512)];
 	}
-	doy += tvec[2];
+	__state->doy += tvec[2];
     }
 
 /*     Make sure the hours, minutes and seconds are all in range. */
 
-    if (tvec[hour - 1] >= hubnd || tvec[hour - 1] < hlbnd) {
+    if (tvec[__state->hour - 1] >= __state->hubnd || tvec[__state->hour - 1] <
+	     __state->hlbnd) {
 	*ok = FALSE_;
-	s_copy(error, messge, error_len, (ftnlen)200);
-	repmd_(error, "#", &tvec[hour - 1], &c__2, error, error_len, (ftnlen)
-		1, error_len);
+	s_copy(error, __state->messge, error_len, (ftnlen)200);
+	repmd_(error, "#", &tvec[__state->hour - 1], &__state->c__2, error, 
+		error_len, (ftnlen)1, error_len);
 	return 0;
-    } else if (tvec[minute - 1] >= 60. || tvec[minute - 1] < 0.) {
+    } else if (tvec[__state->minute - 1] >= 60. || tvec[__state->minute - 1] <
+	     0.) {
 	*ok = FALSE_;
 	s_copy(error, "The minutes component of the time specified was #. Th"
 		"is value must be greater than or equal to 0.0 and less than "
 		"60.0. ", error_len, (ftnlen)119);
-	repmd_(error, "#", &tvec[minute - 1], &c__2, error, error_len, (
-		ftnlen)1, error_len);
+	repmd_(error, "#", &tvec[__state->minute - 1], &__state->c__2, error, 
+		error_len, (ftnlen)1, error_len);
 	return 0;
     }
-    if (tvec[second - 1] >= 60. || tvec[second - 1] < 0.) {
+    if (tvec[__state->second - 1] >= 60. || tvec[__state->second - 1] < 0.) {
 
 /*        We allow for the possibility that we might have a leapsecond. */
 
-	if (tvec[second - 1] < 61. && tvec[second - 1] > 0. && tvec[minute - 
-		1] == 59. && tvec[hour - 1] == 23. && (doy == dinyr || doy == 
-		jun30)) {
+	if (tvec[__state->second - 1] < 61. && tvec[__state->second - 1] > 0. 
+		&& tvec[__state->minute - 1] == 59. && tvec[__state->hour - 1]
+		 == 23. && (__state->doy == __state->dinyr || __state->doy == 
+		__state->jun30)) {
 
 /*           Don't do anything. */
 
-	} else if (tvec[second - 1] < 61. && tvec[second - 1] > 0. && tvec[
-		minute - 1] == 59. && tvec[hour - 1] == 11. && *mods && s_cmp(
-		modify + modify_len * 3, "P.M.", modify_len, (ftnlen)4) == 0 
-		&& (doy == dinyr || doy == jun30)) {
+	} else if (tvec[__state->second - 1] < 61. && tvec[__state->second - 
+		1] > 0. && tvec[__state->minute - 1] == 59. && tvec[
+		__state->hour - 1] == 11. && *mods && s_cmp(modify + 
+		modify_len * 3, "P.M.", modify_len, (ftnlen)4) == 0 && (
+		__state->doy == __state->dinyr || __state->doy == 
+		__state->jun30)) {
 
 /*           Don't do anything. */
 
@@ -522,8 +524,8 @@ static integer c__2 = 2;
 		    "0D0 and less than 60.0D0 (61.0D0 during the last minute "
 		    "of June 30 and December 31). The value supplied was #. ", 
 		    error_len, (ftnlen)160);
-	    repmd_(error, "#", &tvec[second - 1], &c__8, error, error_len, (
-		    ftnlen)1, error_len);
+	    repmd_(error, "#", &tvec[__state->second - 1], &__state->c__8, 
+		    error, error_len, (ftnlen)1, error_len);
 	    return 0;
 	}
     }
@@ -531,32 +533,35 @@ static integer c__2 = 2;
 /*     One final check.  If some component is not an integer */
 /*     the remaining components must be zero. */
 
-    comp = 0;
-    i__1 = minute;
-    for (i__ = day; i__ <= i__1; ++i__) {
-	++comp;
-	k = comp;
-	if (tvec[i__ - 1] != (doublereal) i_dnnt(&tvec[i__ - 1])) {
-	    i__2 = second;
-	    for (j = i__ + 1; j <= i__2; ++j) {
-		++k;
-		if (tvec[j - 1] != 0.) {
+    __state->comp = 0;
+    i__1 = __state->minute;
+    for (__state->i__ = __state->day; __state->i__ <= i__1; ++__state->i__) {
+	++__state->comp;
+	__state->k = __state->comp;
+	if (tvec[__state->i__ - 1] != (doublereal) i_dnnt(&tvec[__state->i__ 
+		- 1])) {
+	    i__2 = __state->second;
+	    for (__state->j = __state->i__ + 1; __state->j <= i__2; 
+		    ++__state->j) {
+		++__state->k;
+		if (tvec[__state->j - 1] != 0.) {
 		    *ok = FALSE_;
 		    s_copy(error, "The '#' component of the date has a fract"
 			    "ional component.  This is allowed only if all co"
 			    "mponents of lesser significance have value 0.0D0"
 			    ". However the '#' component has value #. ", 
 			    error_len, (ftnlen)178);
-		    repmc_(error, "#", cname + ((i__3 = comp - 1) < 4 && 0 <= 
-			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)608)) * 7, error, error_len, (ftnlen)1, (
-			    ftnlen)7, error_len);
-		    repmc_(error, "#", cname + ((i__3 = k - 1) < 4 && 0 <= 
-			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)609)) * 7, error, error_len, (ftnlen)1, (
-			    ftnlen)7, error_len);
-		    repmd_(error, "#", &tvec[j - 1], &c__2, error, error_len, 
-			    (ftnlen)1, error_len);
+		    repmc_(error, "#", __state->cname + ((i__3 = 
+			    __state->comp - 1) < 4 && 0 <= i__3 ? i__3 : 
+			    s_rnge("cname", i__3, "tcheck_", (ftnlen)608)) * 
+			    7, error, error_len, (ftnlen)1, (ftnlen)7, 
+			    error_len);
+		    repmc_(error, "#", __state->cname + ((i__3 = __state->k - 
+			    1) < 4 && 0 <= i__3 ? i__3 : s_rnge("cname", i__3,
+			     "tcheck_", (ftnlen)609)) * 7, error, error_len, (
+			    ftnlen)1, (ftnlen)7, error_len);
+		    repmd_(error, "#", &tvec[__state->j - 1], &__state->c__2, 
+			    error, error_len, (ftnlen)1, error_len);
 		    return 0;
 		}
 	    }
@@ -765,7 +770,7 @@ L_tparch:
 /*     Restrict time strings to proper form */
 
 /* -& */
-    dochck = eqstr_(type__, "YES", type_len, (ftnlen)3);
+    __state->dochck = eqstr_(type__, "YES", type_len, (ftnlen)3);
     return 0;
 /* $Procedure TCHCKD ( Time components are checked ) */
 
@@ -898,7 +903,7 @@ L_tchckd:
 /*     Get the current time component checking status */
 
 /* -& */
-    if (dochck) {
+    if (__state->dochck) {
 	s_copy(type__, "YES", type_len, (ftnlen)3);
     } else {
 	s_copy(type__, "NO", type_len, (ftnlen)2);

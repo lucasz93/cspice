@@ -1,18 +1,30 @@
-/* latsph.f -- translated by f2c (version 19980913).
+/* latsph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int latsph_state_t;
+static latsph_state_t* get_latsph_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LATSPH ( Latitudinal to spherical coordinates ) */
 /* Subroutine */ int latsph_(doublereal *radius, doublereal *long__, 
 	doublereal *lat, doublereal *rho, doublereal *colat, doublereal *
 	longs)
 {
-    doublereal ph, th;
+    doublereal ph;
+    doublereal th;
     extern doublereal halfpi_(void);
 
+
+    /* Module state */
+    latsph_state_t* __state = get_latsph_state();
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to spherical coordinates. */

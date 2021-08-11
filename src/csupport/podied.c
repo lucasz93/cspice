@@ -1,9 +1,10 @@
-/* podied.f -- translated by f2c (version 19980913).
+/* podied.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      PODIED ( Pod, insert elements, double precision ) */
 /* Subroutine */ int podied_(doublereal *elems, integer *n, integer *loc, 

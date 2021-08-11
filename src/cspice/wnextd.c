@@ -1,9 +1,17 @@
-/* wnextd.f -- translated by f2c (version 19980913).
+/* wnextd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnextd_state_t;
+static wnextd_state_t* get_wnextd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNEXTD ( Extract the endpoints from a DP window ) */
 /* Subroutine */ int wnextd_(char *side, doublereal *window, ftnlen side_len)
@@ -12,13 +20,19 @@
     integer i__1;
 
     /* Local variables */
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen)
-	    , setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wnextd_state_t* __state = get_wnextd_state();
 /* $ Abstract */
 
 /*     Extract the left or right endpoints from a double precision */

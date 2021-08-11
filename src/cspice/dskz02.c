@@ -1,25 +1,36 @@
-/* dskz02.f -- translated by f2c (version 19980913).
+/* dskz02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
+extern dskz02_init_t __dskz02_init;
+static dskz02_state_t* get_dskz02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskz02)
+		state->dskz02 = __cspice_allocate_module(sizeof(
+	dskz02_state_t), &__dskz02_init, sizeof(__dskz02_init));
+	return state->dskz02;
+
+}
 
 /* $Procedure DSKZ02 ( DSK, fetch type 2 model size parameters ) */
 /* Subroutine */ int dskz02_(integer *handle, integer *dladsc, integer *nv, 
 	integer *np)
 {
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dski02_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskz02_state_t* __state = get_dskz02_state();
 /* $ Abstract */
 
 /*     Return plate model size parameters---plate count and */
@@ -860,8 +871,10 @@ static integer c__2 = 2;
 	return 0;
     }
     chkin_("DSKZ02", (ftnlen)6);
-    dski02_(handle, dladsc, &c__1, &c__1, &c__1, &n, nv);
-    dski02_(handle, dladsc, &c__2, &c__1, &c__1, &n, np);
+    dski02_(handle, dladsc, &__state->c__1, &__state->c__1, &__state->c__1, &
+	    n, nv);
+    dski02_(handle, dladsc, &__state->c__2, &__state->c__1, &__state->c__1, &
+	    n, np);
     chkout_("DSKZ02", (ftnlen)6);
     return 0;
 } /* dskz02_ */

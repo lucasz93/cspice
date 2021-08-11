@@ -1,17 +1,21 @@
-/* npelpt.f -- translated by f2c (version 19980913).
+/* npelpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static doublereal c_b10 = 0.;
-static doublereal c_b11 = 1.;
-static doublereal c_b12 = 2.;
+extern npelpt_init_t __npelpt_init;
+static npelpt_state_t* get_npelpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->npelpt)
+		state->npelpt = __cspice_allocate_module(sizeof(
+	npelpt_state_t), &__npelpt_init, sizeof(__npelpt_init));
+	return state->npelpt;
+
+}
 
 /* $Procedure   NPELPT  ( Nearest point on ellipse to point ) */
 /* Subroutine */ int npelpt_(doublereal *point, doublereal *ellips, 
@@ -22,27 +26,33 @@ static doublereal c_b12 = 2.;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), vsub_(doublereal *, doublereal *, doublereal *), vequ_(
-	    doublereal *, doublereal *), mtxv_(doublereal *, doublereal *, 
-	    doublereal *);
+	    );
+    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
+	    );
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vpack_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     extern doublereal vdist_(doublereal *, doublereal *);
     doublereal tempv[3];
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal majlen, center[3], minlen;
+    doublereal majlen;
+    doublereal center[3];
+    doublereal minlen;
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal rotate[9]	/* was [3][3] */;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *), setmsg_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal sminor[3];
     extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
 	     integer *, doublereal *);
@@ -52,6 +62,9 @@ static doublereal c_b12 = 2.;
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    npelpt_state_t* __state = get_npelpt_state();
 /* $ Abstract */
 
 /*     Find the nearest point on an ellipse to a specified point, both */
@@ -319,7 +332,7 @@ static doublereal c_b12 = 2.;
 /*     z-axis is picked to give us a right-handed system.  We find the */
 /*     matrix that transforms coordinates to our new system using TWOVEC. */
 
-    twovec_(smajor, &c__1, sminor, &c__2, rotate);
+    twovec_(smajor, &__state->c__1, sminor, &__state->c__2, rotate);
 
 /*     Apply the coordinate transformation to our scaled input point. */
 
@@ -335,7 +348,7 @@ static doublereal c_b12 = 2.;
 /*     we'll call this projection PRJPNT. */
 
 
-    vpack_(tmppnt, &tmppnt[1], &c_b10, prjpnt);
+    vpack_(tmppnt, &tmppnt[1], &__state->c_b10, prjpnt);
 
 /*     Now we're ready to find the distance between and a triaxial */
 /*     ellipsoid whose intersection with the x-y plane is the ellipse */
@@ -349,7 +362,7 @@ static doublereal c_b12 = 2.;
 /*     Find the nearest point to PRJPNT on the ellipoid, PNEAR. */
 
     d__1 = minlen / majlen;
-    nearpt_(prjpnt, &c_b11, &d__1, &c_b12, pnear, dist);
+    nearpt_(prjpnt, &__state->c_b11, &d__1, &__state->c_b12, pnear, dist);
 
 /*     Scale the near point coordinates back to the original scale. */
 

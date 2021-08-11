@@ -1,9 +1,17 @@
-/* zzekrd01.f -- translated by f2c (version 19980913).
+/* zzekrd01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekrd01_state_t;
+static zzekrd01_state_t* get_zzekrd01_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   ZZEKRD01 ( EK, read class 1 column entry ) */
 /* Subroutine */ int zzekrd01_(integer *handle, integer *segdsc, integer *
@@ -11,14 +19,22 @@
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols;
+    integer recno;
+    integer ncols;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
-    integer colidx, datptr, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer colidx;
+    integer datptr;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekrd01_state_t* __state = get_zzekrd01_state();
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 1 column. */

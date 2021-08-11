@@ -1,9 +1,17 @@
-/* touchl.f -- translated by f2c (version 19980913).
+/* touchl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int touchl_state_t;
+static touchl_state_t* get_touchl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TOUCHL ( Touch a variable ) */
 logical touchl_(logical *log__)
@@ -11,6 +19,9 @@ logical touchl_(logical *log__)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    touchl_state_t* __state = get_touchl_state();
 /* $ Abstract */
 
 /*     Return the value of the input logical */

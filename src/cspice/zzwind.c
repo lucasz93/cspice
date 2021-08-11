@@ -1,9 +1,17 @@
-/* zzwind.f -- translated by f2c (version 19980913).
+/* zzwind.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzwind_state_t;
+static zzwind_state_t* get_zzwind_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZWIND ( Find winding number of polygon about point ) */
 integer zzwind_(doublereal *plane, integer *n, doublereal *vertcs, doublereal 
@@ -17,29 +25,40 @@ integer zzwind_(doublereal *plane, integer *n, doublereal *vertcs, doublereal
     integer i_dnnt(doublereal *);
 
     /* Local variables */
-    doublereal rvec[3], cons;
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    doublereal rvec[3];
+    doublereal cons;
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    integer i__, j;
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal rperp[3], vtemp[3];
+    doublereal rperp[3];
+    doublereal vtemp[3];
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *), ucrss_(doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
+	    *);
     doublereal rnext[3];
     extern doublereal twopi_(void);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
 	    doublereal *);
-    doublereal atotal, normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal atotal;
+    doublereal normal[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     doublereal sep;
 
+
+    /* Module state */
+    zzwind_state_t* __state = get_zzwind_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

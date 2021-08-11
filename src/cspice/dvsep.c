@@ -1,9 +1,17 @@
-/* dvsep.f -- translated by f2c (version 19980913).
+/* dvsep.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dvsep_state_t;
+static dvsep_state_t* get_dvsep_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DVSEP ( Derivative of separation angle ) */
 doublereal dvsep_(doublereal *s1, doublereal *s2)
@@ -16,16 +24,21 @@ doublereal dvsep_(doublereal *s1, doublereal *s2)
     doublereal numr;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *), vcrss_(
-	    doublereal *, doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *), zzdiv_(doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern doublereal vnorm_(doublereal *);
+    extern doublereal zzdiv_(doublereal *, doublereal *);
     extern logical vzero_(doublereal *);
-    doublereal u1[6], u2[6];
+    doublereal u1[6];
+    doublereal u2[6];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal pcross[3];
     extern logical return_(void);
 
+
+    /* Module state */
+    dvsep_state_t* __state = get_dvsep_state();
 /* $ Abstract */
 
 /*     Calculate the time derivative of the separation angle between */

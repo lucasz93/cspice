@@ -1,14 +1,21 @@
-/* zztwovxf.f -- translated by f2c (version 19980913).
+/* zztwovxf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__3 = 3;
+extern zztwovxf_init_t __zztwovxf_init;
+static zztwovxf_state_t* get_zztwovxf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zztwovxf)
+		state->zztwovxf = __cspice_allocate_module(sizeof(
+	zztwovxf_state_t), &__zztwovxf_init, sizeof(__zztwovxf_init));
+	return state->zztwovxf;
+
+}
 
 /* $Procedure ZZTWOVXF ( Two states defining a frame transformation ) */
 /* Subroutine */ int zztwovxf_(doublereal *axdef, integer *indexa, doublereal 
@@ -16,7 +23,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer seqnce[5] = { 1,2,3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -25,18 +31,28 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dvhat_(doublereal *, 
-	    doublereal *), moved_(doublereal *, integer *, doublereal *);
-    integer i1, i2, i3;
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    integer i1;
+    integer i2;
+    integer i3;
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen),
-	     errint_(char *, integer *, ftnlen), ducrss_(doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ducrss_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal tmpsta[6];
     extern logical return_(void);
 
+
+    /* Module state */
+    zztwovxf_state_t* __state = get_zztwovxf_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -382,10 +398,10 @@ static integer c__3 = 3;
 
 /*     ... then the other two. */
 
-    i2 = seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce", 
-	    i__1, "zztwovxf_", (ftnlen)387)];
-    i3 = seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("seqnce"
-	    , i__1, "zztwovxf_", (ftnlen)388)];
+    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "seqnce", i__1, "zztwovxf_", (ftnlen)387)];
+    i3 = __state->seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : 
+	    s_rnge("seqnce", i__1, "zztwovxf_", (ftnlen)388)];
 
 /*     Column I1 of XFORM contains a unit vector parallel to AXDEF and */
 /*     the derivative of the unit vector. */
@@ -408,15 +424,17 @@ static integer c__3 = 3;
 		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)408)]);
 	ducrss_(&xform[(i__1 = i3 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : s_rnge(
 		"xform", i__1, "zztwovxf_", (ftnlen)409)], axdef, tmpsta);
-	moved_(tmpsta, &c__6, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? 
-		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)410)]);
+	moved_(tmpsta, &__state->c__6, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <=
+		 i__1 ? i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)410)
+		]);
     } else {
 	ducrss_(plndef, axdef, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? 
 		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)412)]);
 	ducrss_(axdef, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : 
 		s_rnge("xform", i__1, "zztwovxf_", (ftnlen)413)], tmpsta);
-	moved_(tmpsta, &c__6, &xform[(i__1 = i3 * 6 - 6) < 36 && 0 <= i__1 ? 
-		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)414)]);
+	moved_(tmpsta, &__state->c__6, &xform[(i__1 = i3 * 6 - 6) < 36 && 0 <=
+		 i__1 ? i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)414)
+		]);
     }
 
 /*     ...and compute the output frame's non-principal unit basis */
@@ -428,9 +446,9 @@ static integer c__3 = 3;
 /*     The upper right block is the 3x3 zero matrix. */
 /*     The lower right block matches the upper left block. */
 
-    cleard_(&c__3, &xform[18]);
-    cleard_(&c__3, &xform[24]);
-    cleard_(&c__3, &xform[30]);
+    cleard_(&__state->c__3, &xform[18]);
+    cleard_(&__state->c__3, &xform[24]);
+    cleard_(&__state->c__3, &xform[30]);
     for (j = 1; j <= 3; ++j) {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 

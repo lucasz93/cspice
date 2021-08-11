@@ -1,13 +1,21 @@
-/* zzfrmgt0.f -- translated by f2c (version 19980913).
+/* zzfrmgt0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzfrmgt0_init_t __zzfrmgt0_init;
+static zzfrmgt0_state_t* get_zzfrmgt0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzfrmgt0)
+		state->zzfrmgt0 = __cspice_allocate_module(sizeof(
+	zzfrmgt0_state_t), &__zzfrmgt0_init, sizeof(__zzfrmgt0_init));
+	return state->zzfrmgt0;
+
+}
 
 /* $Procedure      ZZFRMGT0 (Frame get transformation) */
 /* Subroutine */ int zzfrmgt0_(integer *infrm, doublereal *et, doublereal *
@@ -24,26 +32,36 @@ static integer c__1 = 1;
     integer cent;
     extern /* Subroutine */ int zzdynfr0_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *);
-    integer type__, i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer type__;
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
     char versn[6];
     extern logical failed_(void);
     extern /* Subroutine */ int ckfxfm_(integer *, doublereal *, doublereal *,
-	     integer *, logical *), namfrm_(char *, integer *, ftnlen), 
-	    frinfo_(integer *, integer *, integer *, integer *, logical *), 
-	    tisbod_(char *, integer *, doublereal *, doublereal *, ftnlen), 
-	    tkfram_(integer *, doublereal *, integer *, logical *), sigerr_(
-	    char *, ftnlen);
+	     integer *, logical *);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), irfrot_(integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    zzfrmgt0_state_t* __state = get_zzfrmgt0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -295,7 +313,7 @@ static integer c__1 = 1;
 	invstm_(tsipm, xform);
 	namfrm_("J2000", outfrm, (ftnlen)5);
     } else if (type__ == 1) {
-	irfrot_(infrm, &c__1, rot);
+	irfrot_(infrm, &__state->c__1, rot);
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
 		xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 

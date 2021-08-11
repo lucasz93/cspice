@@ -1,13 +1,21 @@
-/* dasudd.f -- translated by f2c (version 19980913).
+/* dasudd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern dasudd_init_t __dasudd_init;
+static dasudd_state_t* get_dasudd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasudd)
+		state->dasudd = __cspice_allocate_module(sizeof(
+	dasudd_state_t), &__dasudd_init, sizeof(__dasudd_init));
+	return state->dasudd;
+
+}
 
 /* $Procedure      DASUDD ( DAS, update data, double precision ) */
 /* Subroutine */ int dasudd_(integer *handle, integer *first, integer *last, 
@@ -19,22 +27,31 @@ static integer c__2 = 2;
     /* Local variables */
     integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer lastc, lastd, recno, lasti, numdp;
+    integer lastc;
+    integer lastd;
+    integer recno;
+    integer lasti;
+    integer numdp;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *), dasurd_(integer *, integer *, integer *, integer *, 
-	    doublereal *);
+	    integer *);
+    extern /* Subroutine */ int dasurd_(integer *, integer *, integer *, 
+	    integer *, doublereal *);
     integer clsize;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer wordno;
     extern logical return_(void);
     integer nwritn;
 
+
+    /* Module state */
+    dasudd_state_t* __state = get_dasudd_state();
 /* $ Abstract */
 
 /*     Update data in a specified range of double precision addresses */
@@ -345,7 +362,7 @@ static integer c__2 = 2;
 /*     base record number and size of the cluster of d.p. records that */
 /*     the address FIRST lies within. */
 
-    dasa2l_(handle, &c__2, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(handle, &__state->c__2, first, &clbase, &clsize, &recno, &wordno);
 
 /*     Set the number of double precision words already written.  Keep */
 /*     writing to the file until this number equals the number of */
@@ -389,8 +406,8 @@ static integer c__2 = 2;
 		wordno = 1;
 	    } else {
 		i__1 = *first + nwritn;
-		dasa2l_(handle, &c__2, &i__1, &clbase, &clsize, &recno, &
-			wordno);
+		dasa2l_(handle, &__state->c__2, &i__1, &clbase, &clsize, &
+			recno, &wordno);
 	    }
 	}
     }

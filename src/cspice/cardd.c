@@ -1,9 +1,17 @@
-/* cardd.f -- translated by f2c (version 19980913).
+/* cardd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cardd_state_t;
+static cardd_state_t* get_cardd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            CARDD ( Cardinality of a double precision cell ) */
 integer cardd_(doublereal *cell)
@@ -12,11 +20,16 @@ integer cardd_(doublereal *cell)
     integer ret_val, i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    cardd_state_t* __state = get_cardd_state();
 /* $ Abstract */
 
 /*     Return the cardinality (number of elements) of a double */

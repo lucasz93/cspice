@@ -1,9 +1,17 @@
-/* zzpini.f -- translated by f2c (version 19980913).
+/* zzpini.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzpini_state_t;
+static zzpini_state_t* get_zzpini_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZPINI ( Private --- kernel pool initialization ) */
 /* Subroutine */ int zzpini_(logical *first, integer *maxvar, integer *maxval,
@@ -28,13 +36,17 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer dummy;
     extern logical failed_(void);
-    extern /* Subroutine */ int clearc_(integer *, char *, ftnlen), cleari_(
-	    integer *, integer *), lnkini_(integer *, integer *);
+    extern /* Subroutine */ int clearc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int lnkini_(integer *, integer *);
     extern integer touchi_(integer *);
-    extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen), chkout_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern integer zzshsh_(integer *);
 
+
+    /* Module state */
+    zzpini_state_t* __state = get_zzpini_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -328,9 +340,9 @@
 	chkin_("ZZPINI", (ftnlen)6);
 	i__1 = *maxvar;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    namlst[(i__2 = i__ - 1) < namlst_dim1 && 0 <= i__2 ? i__2 : 
+	    namlst[(i__2 = i__ - 1) < 1 * namlst_dim1 && 0 <= i__2 ? i__2 : 
 		    s_rnge("namlst", i__2, "zzpini_", (ftnlen)305)] = 0;
-	    datlst[(i__2 = i__ - 1) < datlst_dim1 && 0 <= i__2 ? i__2 : 
+	    datlst[(i__2 = i__ - 1) < 1 * datlst_dim1 && 0 <= i__2 ? i__2 : 
 		    s_rnge("datlst", i__2, "zzpini_", (ftnlen)306)] = 0;
 	}
 

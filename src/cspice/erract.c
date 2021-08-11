@@ -1,14 +1,21 @@
-/* erract.f -- translated by f2c (version 19980913).
+/* erract.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5 = 5;
-static integer c__2 = 2;
+extern erract_init_t __erract_init;
+static erract_state_t* get_erract_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->erract)
+		state->erract = __cspice_allocate_module(sizeof(
+	erract_state_t), &__erract_init, sizeof(__erract_init));
+	return state->erract;
+
+}
 
 /* $Procedure     ERRACT  ( Get/Set Default Error Action ) */
 /* Subroutine */ int erract_(char *op, char *action, ftnlen op_len, ftnlen 
@@ -16,8 +23,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char actns[7*5] = "ABORT  " "REPORT " "RETURN " "IGNORE " "DEFAULT"
-	    ;
 
     /* System generated locals */
     address a__1[2];
@@ -32,16 +37,21 @@ static integer c__2 = 2;
 
     /* Local variables */
     integer iact;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     char locop[3];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char locact[7];
     extern /* Subroutine */ int getact_(integer *);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), putact_(integer *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int putact_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    erract_state_t* __state = get_erract_state();
 /* $ Abstract */
 
 /*     Retrieve or set the default error action. */
@@ -447,13 +457,14 @@ static integer c__2 = 2;
     ucase_(locop, locop, (ftnlen)3, (ftnlen)3);
     if (s_cmp(locop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
 	getact_(&iact);
-	s_copy(action, actns + ((i__1 = iact - 1) < 5 && 0 <= i__1 ? i__1 : 
-		s_rnge("actns", i__1, "erract_", (ftnlen)442)) * 7, 
+	s_copy(action, __state->actns + ((i__1 = iact - 1) < 5 && 0 <= i__1 ? 
+		i__1 : s_rnge("actns", i__1, "erract_", (ftnlen)442)) * 7, 
 		action_len, (ftnlen)7);
     } else if (s_cmp(locop, "SET", (ftnlen)3, (ftnlen)3) == 0) {
 	ljust_(action, locact, action_len, (ftnlen)7);
 	ucase_(locact, locact, (ftnlen)7, (ftnlen)7);
-	iact = isrchc_(locact, &c__5, actns, (ftnlen)7, (ftnlen)7);
+	iact = isrchc_(locact, &__state->c__5, __state->actns, (ftnlen)7, (
+		ftnlen)7);
 	if (iact > 0) {
 	    putact_(&iact);
 	} else {
@@ -465,7 +476,7 @@ static integer c__2 = 2;
 	    i__2[0] = 66, a__1[0] = "ERRACT: An invalid value of ACTION was "
 		    "supplied.  The value was:  ";
 	    i__2[1] = 7, a__1[1] = locact;
-	    s_cat(ch__1, a__1, i__2, &c__2, (ftnlen)73);
+	    s_cat(ch__1, a__1, i__2, &__state->c__2, (ftnlen)73);
 	    setmsg_(ch__1, (ftnlen)73);
 	    sigerr_("SPICE(INVALIDACTION)", (ftnlen)20);
 	}
@@ -481,7 +492,7 @@ static integer c__2 = 2;
 	i__2[0] = 62, a__1[0] = "ERRACT: An invalid value of OP was supplied"
 		".  The value was:  ";
 	i__2[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__2, &c__2, (ftnlen)65);
+	s_cat(ch__2, a__1, i__2, &__state->c__2, (ftnlen)65);
 	setmsg_(ch__2, (ftnlen)65);
 	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
     }

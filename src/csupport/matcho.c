@@ -1,9 +1,10 @@
-/* matcho.f -- translated by f2c (version 19980913).
+/* matcho.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure MATCHO ( Match the characters in two words ) */
 integer matcho_(char *word, char *guess, ftnlen word_len, ftnlen guess_len)

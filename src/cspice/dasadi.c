@@ -1,13 +1,21 @@
-/* dasadi.f -- translated by f2c (version 19980913).
+/* dasadi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern dasadi_init_t __dasadi_init;
+static dasadi_state_t* get_dasadi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasadi)
+		state->dasadi = __cspice_allocate_module(sizeof(
+	dasadi_state_t), &__dasadi_init, sizeof(__dasadi_init));
+	return state->dasadi;
+
+}
 
 /* $Procedure      DASADI ( DAS, add data, integer ) */
 /* Subroutine */ int dasadi_(integer *handle, integer *n, integer *data)
@@ -18,25 +26,37 @@ static integer c__3 = 3;
     /* Local variables */
     integer free;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, recno, lasti, ncomr;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *), 
-	    dasa2l_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *);
+    integer ncomc;
+    integer recno;
+    integer lasti;
+    integer ncomr;
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *), 
-	    dashfs_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    integer record[256], lastla[3];
+    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    integer record[256];
+    integer lastla[3];
     extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
 	    integer *, integer *);
-    integer lastrc[3], clsize;
-    extern /* Subroutine */ int daswri_(integer *, integer *, integer *), 
-	    chkout_(char *, ftnlen);
-    integer lastwd[3], nresvc, wordno, numint;
+    integer lastrc[3];
+    integer clsize;
+    extern /* Subroutine */ int daswri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lastwd[3];
+    integer nresvc;
+    integer wordno;
+    integer numint;
     extern logical return_(void);
-    integer nresvr, nwritn;
+    integer nresvr;
+    integer nwritn;
 
+
+    /* Module state */
+    dasadi_state_t* __state = get_dasadi_state();
 /* $ Abstract */
 
 /*     Add an array of integers to a DAS file. */
@@ -323,7 +343,8 @@ static integer c__3 = 3;
 /*     available for integer data. */
 
     if (lasti >= 1) {
-	dasa2l_(handle, &c__3, &lasti, &clbase, &clsize, &recno, &wordno);
+	dasa2l_(handle, &__state->c__3, &lasti, &clbase, &clsize, &recno, &
+		wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -391,7 +412,7 @@ static integer c__3 = 3;
 /*     integer words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &c__3, n);
+    dascud_(handle, &__state->c__3, n);
     chkout_("DASADI", (ftnlen)6);
     return 0;
 } /* dasadi_ */

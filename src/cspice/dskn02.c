@@ -1,16 +1,21 @@
-/* dskn02.f -- translated by f2c (version 19980913).
+/* dskn02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__9 = 9;
-static integer c__3 = 3;
-static integer c__19 = 19;
+extern dskn02_init_t __dskn02_init;
+static dskn02_state_t* get_dskn02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskn02)
+		state->dskn02 = __cspice_allocate_module(sizeof(
+	dskn02_state_t), &__dskn02_init, sizeof(__dskn02_init));
+	return state->dskn02;
+
+}
 
 /* $Procedure DSKN02 ( DSK, type 2, compute normal vector for plate ) */
 /* Subroutine */ int dskn02_(integer *handle, integer *dladsc, integer *plid, 
@@ -26,15 +31,18 @@ static integer c__19 = 19;
     integer unit;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal edge1[3], edge2[3];
+    doublereal edge1[3];
+    doublereal edge2[3];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
-    integer i__, n;
+    integer i__;
+    integer n;
     extern /* Subroutine */ int dskd02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *), chkin_(char *, 
-	    ftnlen), dskgd_(integer *, integer *, doublereal *), dski02_(
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *);
+	    integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
     integer plate[3];
     extern /* Subroutine */ int dskz02_(integer *, integer *, integer *, 
 	    integer *);
@@ -43,13 +51,19 @@ static integer c__19 = 19;
 	    *);
     doublereal verts[9]	/* was [3][3] */;
     extern logical failed_(void);
-    integer np, nv;
+    integer np;
+    integer nv;
     extern logical return_(void);
     doublereal dskdsc[24];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskn02_state_t* __state = get_dskn02_state();
 /* $ Abstract */
 
 /*     Compute the unit normal vector for a specified plate from a type */
@@ -927,7 +941,7 @@ static integer c__19 = 19;
 /*     Check START. */
 
     if (*plid < 1 || *plid > np) {
-	zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 	setmsg_("Segment in DSK file # with DAS base addresses INT = #, DP ="
 		" #, CHR = # contains # plates, so PLID must be in the range "
 		"1:#; actual value was #.", (ftnlen)143);
@@ -946,13 +960,14 @@ static integer c__19 = 19;
 /*     Look up the plate and its vertices. */
 
     start = (*plid - 1) * 3 + 1;
-    dski02_(handle, dladsc, &c__9, &start, &c__3, &n, plate);
+    dski02_(handle, dladsc, &__state->c__9, &start, &__state->c__3, &n, plate)
+	    ;
     for (i__ = 1; i__ <= 3; ++i__) {
 	start = (plate[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
 		"plate", i__1, "dskn02_", (ftnlen)406)] - 1) * 3 + 1;
-	dskd02_(handle, dladsc, &c__19, &start, &c__3, &n, &verts[(i__1 = i__ 
-		* 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("verts", i__1, 
-		"dskn02_", (ftnlen)408)]);
+	dskd02_(handle, dladsc, &__state->c__19, &start, &__state->c__3, &n, &
+		verts[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
+		"verts", i__1, "dskn02_", (ftnlen)408)]);
     }
     if (failed_()) {
 	chkout_("DSKN02", (ftnlen)6);

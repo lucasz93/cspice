@@ -1,9 +1,17 @@
-/* elltof.f -- translated by f2c (version 19980913).
+/* elltof.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int elltof_state_t;
+static elltof_state_t* get_elltof_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ELLTOF ( Elliptic time of flight ) */
 /* Subroutine */ int elltof_(doublereal *ma, doublereal *ecc, doublereal *e)
@@ -15,20 +23,32 @@
     double sin(doublereal), sqrt(doublereal), cos(doublereal);
 
     /* Local variables */
-    doublereal a, b, m;
+    doublereal a;
+    doublereal b;
+    doublereal m;
     integer n;
-    doublereal q, r__, y;
+    doublereal q;
+    doublereal r__;
+    doublereal y;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dcbrt_(doublereal *);
-    doublereal deriv, m0;
+    doublereal deriv;
+    doublereal m0;
     extern doublereal twopi_(void);
-    doublereal deriv2, fn, change;
-    extern doublereal pi_(void), halfpi_(void);
-    doublereal qr, mprime;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    doublereal deriv2;
+    doublereal fn;
+    doublereal change;
+    extern doublereal pi_(void);
+    extern doublereal halfpi_(void);
+    doublereal qr;
+    doublereal mprime;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    elltof_state_t* __state = get_elltof_state();
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = E - e sin(E) for the */

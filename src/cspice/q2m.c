@@ -1,15 +1,36 @@
-/* q2m.f -- translated by f2c (version 19980913).
+/* q2m.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int q2m_state_t;
+static q2m_state_t* get_q2m_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      Q2M ( Quaternion to matrix ) */
 /* Subroutine */ int q2m_(doublereal *q, doublereal *r__)
 {
-    doublereal l2, q01, q02, q03, q12, q13, q23, sharpn, q1s, q2s, q3s;
+    doublereal l2;
+    doublereal q01;
+    doublereal q02;
+    doublereal q03;
+    doublereal q12;
+    doublereal q13;
+    doublereal q23;
+    doublereal sharpn;
+    doublereal q1s;
+    doublereal q2s;
+    doublereal q3s;
 
+
+    /* Module state */
+    q2m_state_t* __state = get_q2m_state();
 /* $ Abstract */
 
 /*     Find the rotation matrix corresponding to a specified unit */

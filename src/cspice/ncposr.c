@@ -1,9 +1,17 @@
-/* ncposr.f -- translated by f2c (version 19980913).
+/* ncposr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ncposr_state_t;
+static ncposr_state_t* get_ncposr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            NCPOSR (NOT character position, reverse) */
 integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len, 
@@ -20,6 +28,9 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
     logical found;
     integer lenstr;
 
+
+    /* Module state */
+    ncposr_state_t* __state = get_ncposr_state();
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a character NOT */

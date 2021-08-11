@@ -1,9 +1,17 @@
-/* lparsm.f -- translated by f2c (version 19980913).
+/* lparsm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lparsm_state_t;
+static lparsm_state_t* get_lparsm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LPARSM ( Parse a list of items ) */
 /* Subroutine */ int lparsm_(char *list, char *delims, integer *nmax, integer 
@@ -15,9 +23,15 @@
     integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char bchr[1], echr[1];
-    integer b, e, eol;
+    char bchr[1];
+    char echr[1];
+    integer b;
+    integer e;
+    integer eol;
 
+
+    /* Module state */
+    lparsm_state_t* __state = get_lparsm_state();
 /* $ Abstract */
 
 /*     Parse a list of items separated by multiple delimiters. */

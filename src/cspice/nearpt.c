@@ -1,16 +1,21 @@
-/* nearpt.f -- translated by f2c (version 19980913).
+/* nearpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static doublereal c_b36 = 2.;
-static integer c__2048 = 2048;
-static doublereal c_b108 = 1e-16;
+extern nearpt_init_t __nearpt_init;
+static nearpt_state_t* get_nearpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->nearpt)
+		state->nearpt = __cspice_allocate_module(sizeof(
+	nearpt_state_t), &__nearpt_init, sizeof(__nearpt_init));
+	return state->nearpt;
+
+}
 
 /* $Procedure      NEARPT ( Nearest point on an ellipsoid ) */
 /* Subroutine */ int nearpt_(doublereal *positn, doublereal *a, doublereal *b,
@@ -18,16 +23,6 @@ static doublereal c_b108 = 1e-16;
 {
     /* Initialized data */
 
-    static char mssg[80*7] = "Axis A was nonpositive. ?                     "
-	    "                                  " "Axis B was nonpositive. ?  "
-	    "                                                     " "Axes A a"
-	    "nd B were nonpositive. ?                                        "
-	    "        " "Axis C was nonpositive. ?                            "
-	    "                           " "Axes A and C were nonpositive. ?  "
-	    "                                              " "Axes B and C we"
-	    "re nonpositive. ?                                                "
-	     "All three axes were nonpositive. ?                            "
-	    "                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -40,11 +35,17 @@ static doublereal c_b108 = 1e-16;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal sign, axis[3], temp, term[3], errp[3], copy[3];
+    doublereal sign;
+    doublereal axis[3];
+    doublereal temp;
+    doublereal term[3];
+    doublereal errp[3];
+    doublereal copy[3];
     logical trim;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer i__;
-    doublereal q, scale;
+    doublereal q;
+    doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
@@ -53,40 +54,56 @@ static doublereal c_b108 = 1e-16;
     logical extra;
     doublereal lower;
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal point[3], pnorm, upper;
+    doublereal point[3];
+    doublereal pnorm;
+    doublereal upper;
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
 	    *);
     extern doublereal vnorm_(doublereal *);
-    doublereal denom2, denom3, lambda, tlambd[3], height;
+    doublereal denom2;
+    doublereal denom3;
+    doublereal lambda;
+    doublereal tlambd[3];
+    doublereal height;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     logical inside;
     doublereal factor;
-    extern /* Subroutine */ int orderd_(doublereal *, integer *, integer *), 
-	    reordd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int orderd_(doublereal *, integer *, integer *);
+    extern /* Subroutine */ int reordd_(integer *, integer *, doublereal *);
     doublereal toobig;
     integer iorder[3];
     extern doublereal touchd_(doublereal *);
-    doublereal olderr, normal[3], bestht, orignl[3], prodct;
+    doublereal olderr;
+    doublereal normal[3];
+    doublereal bestht;
+    doublereal orignl[3];
+    doublereal prodct;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal epoint[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), vsclip_(doublereal *,
-	     doublereal *);
-    doublereal bestpt[3], newerr;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    doublereal bestpt[3];
+    doublereal newerr;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal axisqr[3];
     extern logical approx_(doublereal *, doublereal *, doublereal *);
     doublereal qlower;
     integer snglpt;
-    doublereal qupper, spoint[3];
+    doublereal qupper;
+    doublereal spoint[3];
     extern logical return_(void);
     logical solvng;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), surfnm_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    integer solutn, bad;
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    integer solutn;
+    integer bad;
     doublereal err[3];
     integer itr;
 
+
+    /* Module state */
+    nearpt_state_t* __state = get_nearpt_state();
 /* $ Abstract */
 
 /*     This routine locates the point on the surface of an ellipsoid */
@@ -568,8 +585,9 @@ static doublereal c_b108 = 1e-16;
 	bad += 4;
     }
     if (bad > 0) {
-	setmsg_(mssg + ((i__1 = bad - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"mssg", i__1, "nearpt_", (ftnlen)591)) * 80, (ftnlen)80);
+	setmsg_(__state->mssg + ((i__1 = bad - 1) < 7 && 0 <= i__1 ? i__1 : 
+		s_rnge("mssg", i__1, "nearpt_", (ftnlen)591)) * 80, (ftnlen)
+		80);
 	errch_("?", "The A,B, and C axes were #, #, and # respectively.", (
 		ftnlen)1, (ftnlen)50);
 	errdp_("#", a, (ftnlen)1);
@@ -755,9 +773,9 @@ static doublereal c_b108 = 1e-16;
     axis[1] = *b;
     axis[2] = *c__;
     vequ_(positn, point);
-    orderd_(axis, &c__3, iorder);
-    reordd_(iorder, &c__3, axis);
-    reordd_(iorder, &c__3, point);
+    orderd_(axis, &__state->c__3, iorder);
+    reordd_(iorder, &__state->c__3, axis);
+    reordd_(iorder, &__state->c__3, point);
 
 /*     Rescale everything so as to avoid underflows when squaring */
 /*     quantities and copy the original starting point. */
@@ -816,7 +834,7 @@ static doublereal c_b108 = 1e-16;
 	    errint_("*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
 		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)852)], (ftnlen)
 		    1);
-	    d__1 = pow_dd(&toobig, &c_b36);
+	    d__1 = pow_dd(&toobig, &__state->c_b36);
 	    errdp_("*", &d__1, (ftnlen)1);
 	    sigerr_("SPICE(INPUTSTOOLARGE)", (ftnlen)21);
 	    chkout_("NEARPT", (ftnlen)6);
@@ -970,10 +988,10 @@ static doublereal c_b108 = 1e-16;
 /*           term of the expression for Q isn't bigger than 4. */
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"tlambd", i__1, "nearpt_", (ftnlen)1011)] = ((d__1 = 
-			point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-			s_rnge("point", i__2, "nearpt_", (ftnlen)1011)], abs(
+		tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+			"tlambd", i__2, "nearpt_", (ftnlen)1011)] = ((d__1 = 
+			point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+			s_rnge("point", i__1, "nearpt_", (ftnlen)1011)], abs(
 			d__1)) * .5 - axis[(i__3 = i__ - 1) < 3 && 0 <= i__3 ?
 			 i__3 : s_rnge("axis", i__3, "nearpt_", (ftnlen)1011)]
 			) * axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
@@ -1045,13 +1063,13 @@ static doublereal c_b108 = 1e-16;
 				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
 				1080)] = -axisqr[2];
 		    } else {
-			tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
-				1082)] = axis[(i__2 = i__ - 1) < 3 && 0 <= 
-				i__2 ? i__2 : s_rnge("axis", i__2, "nearpt_", 
-				(ftnlen)1082)] * ((d__1 = point[(i__3 = i__ - 
-				1) < 3 && 0 <= i__3 ? i__3 : s_rnge("point", 
-				i__3, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
+			tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+				s_rnge("tlambd", i__2, "nearpt_", (ftnlen)
+				1082)] = axis[(i__3 = i__ - 1) < 3 && 0 <= 
+				i__3 ? i__3 : s_rnge("axis", i__3, "nearpt_", 
+				(ftnlen)1082)] * ((d__1 = point[(i__1 = i__ - 
+				1) < 3 && 0 <= i__1 ? i__1 : s_rnge("point", 
+				i__1, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
 				.5 - axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
 				i__4 : s_rnge("axis", i__4, "nearpt_", (
 				ftnlen)1082)]);
@@ -1182,7 +1200,7 @@ static doublereal c_b108 = 1e-16;
 			" #; POSITN = ( #, #, # ). LOWER = #; UPPER = #; UPPE"
 			"R-LOWER = #. Solution pass number = #.  This event s"
 			"hould never occur. Contact NAIF.", (ftnlen)187);
-		errint_("#", &c__2048, (ftnlen)1);
+		errint_("#", &__state->c__2048, (ftnlen)1);
 		errdp_("#", a, (ftnlen)1);
 		errdp_("#", b, (ftnlen)1);
 		errdp_("#", c__, (ftnlen)1);
@@ -1254,8 +1272,8 @@ static doublereal c_b108 = 1e-16;
 /*           endpoints.  Set LOWER and UPPER equal so that the loop will */
 /*           finally terminate. */
 
-	    if (approx_(&lambda, &lower, &c_b108) || approx_(&lambda, &upper, 
-		    &c_b108)) {
+	    if (approx_(&lambda, &lower, &__state->c_b108) || approx_(&lambda,
+		     &upper, &__state->c_b108)) {
 
 /*              Make the decision as to which way to push */
 /*              the boundaries, by selecting that endpoint */

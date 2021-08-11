@@ -1,9 +1,17 @@
-/* vhat.f -- translated by f2c (version 19980913).
+/* vhat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vhat_state_t;
+static vhat_state_t* get_vhat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VHAT ( "V-Hat", unit vector along V, 3 dimensions ) */
 /* Subroutine */ int vhat_(doublereal *v1, doublereal *vout)
@@ -11,6 +19,9 @@
     doublereal vmag;
     extern doublereal vnorm_(doublereal *);
 
+
+    /* Module state */
+    vhat_state_t* __state = get_vhat_state();
 /* $ Abstract */
 
 /*      Find the unit vector along a double precision 3-dimensional */

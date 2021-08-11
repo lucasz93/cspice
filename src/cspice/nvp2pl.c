@@ -1,9 +1,17 @@
-/* nvp2pl.f -- translated by f2c (version 19980913).
+/* nvp2pl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nvp2pl_state_t;
+static nvp2pl_state_t* get_nvp2pl_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NVP2PL ( Normal vector and point to plane ) */
 /* Subroutine */ int nvp2pl_(doublereal *normal, doublereal *point, 
@@ -11,16 +19,19 @@
 {
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), chkin_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpvec[3];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    nvp2pl_state_t* __state = get_nvp2pl_state();
 /* $ Abstract */
 
 /*     Make a SPICELIB plane from a normal vector and a point. */

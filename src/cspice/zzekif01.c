@@ -1,15 +1,21 @@
-/* zzekif01.f -- translated by f2c (version 19980913).
+/* zzekif01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
+extern zzekif01_init_t __zzekif01_init;
+static zzekif01_state_t* get_zzekif01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekif01)
+		state->zzekif01 = __cspice_allocate_module(sizeof(
+	zzekif01_state_t), &__zzekif01_init, sizeof(__zzekif01_init));
+	return state->zzekif01;
+
+}
 
 /* $Procedure ZZEKIF01 ( EK, initialize type 1 segment for fast load ) */
 /* Subroutine */ int zzekif01_(integer *handle, integer *segno, integer *
@@ -20,19 +26,33 @@ static logical c_false = FALSE_;
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzeksdec_(integer *), zzeksdsc_(integer *, 
-	    integer *, integer *), zzekspsh_(integer *, integer *), zzekstop_(
-	    integer *);
-    integer i__, j, p, npage, pbase;
+    extern /* Subroutine */ int zzeksdec_(integer *);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(integer *);
+    integer i__;
+    integer j;
+    integer p;
+    integer npage;
+    integer pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, nrows, nr, segdsc[24], remain;
+    integer recno;
+    integer ncols;
+    integer nrows;
+    integer nr;
+    integer segdsc[24];
+    integer remain;
     extern logical return_(void);
     integer rpsize;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    integer nrp, top;
+    integer nrp;
+    integer top;
     extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
 	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekif01_state_t* __state = get_zzekif01_state();
 /* $ Abstract */
 
 /*     Initialize a new type 1 EK segment to allow fast loading. */
@@ -579,8 +599,8 @@ static logical c_false = FALSE_;
 
 /*     Push the handle and segment number onto the stack. */
 
-    zzekspsh_(&c__1, handle);
-    zzekspsh_(&c__1, segno);
+    zzekspsh_(&__state->c__1, handle);
+    zzekspsh_(&__state->c__1, segno);
 
 /*     The segment will require a record pointer structure for each row */
 /*     in the segment.  Right now, all we're going to do is allocate */
@@ -606,7 +626,8 @@ static logical c_false = FALSE_;
 /*        the free list is acceptable, hence the argument .FALSE. */
 /*        passed to ZZEKAPS. */
 
-	zzekaps_(handle, segdsc, &c__3, &c_false, &p, &pbase);
+	zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
+		pbase);
 
 /*        NR is the number of record pointers we'll eventually write to */
 /*        this page. */

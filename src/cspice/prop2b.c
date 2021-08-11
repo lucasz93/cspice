@@ -1,15 +1,21 @@
-/* prop2b.f -- translated by f2c (version 19980913).
+/* prop2b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__6 = 6;
+extern prop2b_init_t __prop2b_init;
+static prop2b_state_t* get_prop2b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->prop2b)
+		state->prop2b = __cspice_allocate_module(sizeof(
+	prop2b_state_t), &__prop2b_init, sizeof(__prop2b_init));
+	return state->prop2b;
+
+}
 
 /* $Procedure      PROP2B ( Propagate a two-body solution ) */
 /* Subroutine */ int prop2b_(doublereal *gm, doublereal *pvinit, doublereal *
@@ -17,8 +23,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer nsaved = 0;
-    static integer newest[3] = { 1,2,3 };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -29,45 +33,28 @@ static integer c__6 = 6;
     double sqrt(doublereal), log(doublereal), exp(doublereal);
 
     /* Local variables */
-    static doublereal hvec[3], logf, maxc, kfun, oldx;
     extern doublereal vdot_(doublereal *, doublereal *);
-    static doublereal sb2rv[3], b, e, f, qovr0;
-    static integer i__, k;
-    static doublereal q, x;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal fixed, eqvec[3], bound;
     extern doublereal dpmax_(void);
-    static doublereal pcdot;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal kfunl, vcdot;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
-    static doublereal c0, c1, c2, c3;
-    static integer mostc;
-    static doublereal kfunu, lower, h2, upper, rootf;
     extern /* Subroutine */ int stmp03_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), vequg_(doublereal *, 
-	    integer *, doublereal *), vcrss_(doublereal *, doublereal *, 
-	    doublereal *);
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
-    static doublereal r0;
     extern logical vzero_(doublereal *);
-    static doublereal x2, x3, bq, br, pc, vc, sf[3], sqovr0[3], logbnd, rv;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    static integer bumped;
     extern integer brckti_(integer *, integer *, integer *);
-    static doublereal savegm[3], logdpm, logmxc, sbound[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static doublereal tmpvec[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static doublereal br0, savepv[18]	/* was [6][3] */;
-    static integer lcount;
     extern logical return_(void);
-    static doublereal fx2, sbq[3], vel[3];
-    static logical new__;
-    static doublereal pos[3], sbr0[3], b2rv;
 
+    /* Module state */
+    prop2b_state_t* __state = get_prop2b_state();
 /* $ Abstract */
 
 /*     Given a central mass and the state of massless body at time t_0, */
@@ -303,12 +290,12 @@ static integer c__6 = 6;
 
 /*     Life will be easier if we use POS and VEL to hold the state. */
 
-    pos[0] = pvinit[0];
-    pos[1] = pvinit[1];
-    pos[2] = pvinit[2];
-    vel[0] = pvinit[3];
-    vel[1] = pvinit[4];
-    vel[2] = pvinit[5];
+    __state->pos[0] = pvinit[0];
+    __state->pos[1] = pvinit[1];
+    __state->pos[2] = pvinit[2];
+    __state->vel[0] = pvinit[3];
+    __state->vel[1] = pvinit[4];
+    __state->vel[2] = pvinit[5];
 
 /*     If we propagate many states from the same initial state, */
 /*     most of the variables used to propagate the state will */
@@ -334,58 +321,61 @@ static integer c__6 = 6;
 /*     BUFSIZ states buffered.  From that point on, when a new state is */
 /*     encountered we will overwrite the oldest buffered state. */
 
-    i__ = 0;
-    new__ = TRUE_;
-    while(i__ < nsaved && new__) {
-	++i__;
-	k = newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		 i__1, "prop2b_", (ftnlen)375)];
-	new__ = pvinit[0] != savepv[(i__1 = k * 6 - 6) < 18 && 0 <= i__1 ? 
-		i__1 : s_rnge("savepv", i__1, "prop2b_", (ftnlen)377)] || 
-		pvinit[1] != savepv[(i__2 = k * 6 - 5) < 18 && 0 <= i__2 ? 
-		i__2 : s_rnge("savepv", i__2, "prop2b_", (ftnlen)377)] || 
-		pvinit[2] != savepv[(i__3 = k * 6 - 4) < 18 && 0 <= i__3 ? 
-		i__3 : s_rnge("savepv", i__3, "prop2b_", (ftnlen)377)] || 
-		pvinit[3] != savepv[(i__4 = k * 6 - 3) < 18 && 0 <= i__4 ? 
-		i__4 : s_rnge("savepv", i__4, "prop2b_", (ftnlen)377)] || 
-		pvinit[4] != savepv[(i__5 = k * 6 - 2) < 18 && 0 <= i__5 ? 
-		i__5 : s_rnge("savepv", i__5, "prop2b_", (ftnlen)377)] || 
-		pvinit[5] != savepv[(i__6 = k * 6 - 1) < 18 && 0 <= i__6 ? 
-		i__6 : s_rnge("savepv", i__6, "prop2b_", (ftnlen)377)] || *gm 
-		!= savegm[(i__7 = k - 1) < 3 && 0 <= i__7 ? i__7 : s_rnge(
-		"savegm", i__7, "prop2b_", (ftnlen)377)];
+    __state->i__ = 0;
+    __state->new__ = TRUE_;
+    while(__state->i__ < __state->nsaved && __state->new__) {
+	++__state->i__;
+	__state->k = __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)375)];
+	__state->new__ = pvinit[0] != __state->savepv[(i__1 = __state->k * 6 
+		- 6) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", i__1, "prop"
+		"2b_", (ftnlen)377)] || pvinit[1] != __state->savepv[(i__2 = 
+		__state->k * 6 - 5) < 18 && 0 <= i__2 ? i__2 : s_rnge("savepv"
+		, i__2, "prop2b_", (ftnlen)377)] || pvinit[2] != 
+		__state->savepv[(i__3 = __state->k * 6 - 4) < 18 && 0 <= i__3 
+		? i__3 : s_rnge("savepv", i__3, "prop2b_", (ftnlen)377)] || 
+		pvinit[3] != __state->savepv[(i__4 = __state->k * 6 - 3) < 18 
+		&& 0 <= i__4 ? i__4 : s_rnge("savepv", i__4, "prop2b_", (
+		ftnlen)377)] || pvinit[4] != __state->savepv[(i__5 = 
+		__state->k * 6 - 2) < 18 && 0 <= i__5 ? i__5 : s_rnge("savepv"
+		, i__5, "prop2b_", (ftnlen)377)] || pvinit[5] != 
+		__state->savepv[(i__6 = __state->k * 6 - 1) < 18 && 0 <= i__6 
+		? i__6 : s_rnge("savepv", i__6, "prop2b_", (ftnlen)377)] || *
+		gm != __state->savegm[(i__7 = __state->k - 1) < 3 && 0 <= 
+		i__7 ? i__7 : s_rnge("savegm", i__7, "prop2b_", (ftnlen)377)];
     }
-    if (! new__) {
+    if (! __state->new__) {
 
 /*        We update the order vector NEWEST so that the state being */
 /*        used this time becomes the "youngest" state. */
 
-	k = i__;
-	bumped = newest[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("new"
-		"est", i__1, "prop2b_", (ftnlen)394)];
-	for (i__ = k; i__ >= 2; --i__) {
-	    newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		     i__1, "prop2b_", (ftnlen)397)] = newest[(i__2 = i__ - 2) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_"
-		    , (ftnlen)397)];
+	__state->k = __state->i__;
+	__state->bumped = __state->newest[(i__1 = __state->k - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)394)];
+	for (__state->i__ = __state->k; __state->i__ >= 2; --__state->i__) {
+	    __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 
+		    : s_rnge("newest", i__1, "prop2b_", (ftnlen)397)] = 
+		    __state->newest[(i__2 = __state->i__ - 2) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_", (ftnlen)
+		    397)];
 	}
-	newest[0] = bumped;
-	k = bumped;
+	__state->newest[0] = __state->bumped;
+	__state->k = __state->bumped;
 
 /*        Now look up all of the other saved quantities. */
 
-	b2rv = sb2rv[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sb2rv", 
-		i__1, "prop2b_", (ftnlen)406)];
-	bound = sbound[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbou"
-		"nd", i__1, "prop2b_", (ftnlen)407)];
-	bq = sbq[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbq", i__1, 
-		"prop2b_", (ftnlen)408)];
-	br0 = sbr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbr0", 
-		i__1, "prop2b_", (ftnlen)409)];
-	f = sf[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sf", i__1, 
-		"prop2b_", (ftnlen)410)];
-	qovr0 = sqovr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sqov"
-		"r0", i__1, "prop2b_", (ftnlen)411)];
+	__state->b2rv = __state->sb2rv[(i__1 = __state->k - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("sb2rv", i__1, "prop2b_", (ftnlen)406)];
+	__state->bound = __state->sbound[(i__1 = __state->k - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("sbound", i__1, "prop2b_", (ftnlen)407)];
+	__state->bq = __state->sbq[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge("sbq", i__1, "prop2b_", (ftnlen)408)];
+	__state->br0 = __state->sbr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 
+		? i__1 : s_rnge("sbr0", i__1, "prop2b_", (ftnlen)409)];
+	__state->f = __state->sf[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge("sf", i__1, "prop2b_", (ftnlen)410)];
+	__state->qovr0 = __state->sqovr0[(i__1 = __state->k - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge("sqovr0", i__1, "prop2b_", (ftnlen)411)];
     } else {
 
 /*        We have a new state, new GM or both.  First let's make sure */
@@ -401,7 +391,7 @@ static integer c__6 = 6;
 
 /*        Next for a zero position vector */
 
-	if (vzero_(pos)) {
+	if (vzero_(__state->pos)) {
 	    sigerr_("SPICE(ZEROPOSITION)", (ftnlen)19);
 	    chkout_("PROP2B", (ftnlen)6);
 	    return 0;
@@ -409,7 +399,7 @@ static integer c__6 = 6;
 
 /*        Finally for a zero velocity vector */
 
-	if (vzero_(vel)) {
+	if (vzero_(__state->vel)) {
 	    sigerr_("SPICE(ZEROVELOCITY)", (ftnlen)19);
 	    chkout_("PROP2B", (ftnlen)6);
 	    return 0;
@@ -428,8 +418,8 @@ static integer c__6 = 6;
 
 /*           RV       be the value of the dot product  POS * VEL */
 
-	r0 = vnorm_(pos);
-	rv = vdot_(pos, vel);
+	__state->r0 = vnorm_(__state->pos);
+	__state->rv = vdot_(__state->pos, __state->vel);
 
 /*        Let HVEC be the specific angular momentum vector and let Q be */
 /*        the distance at periapse. */
@@ -440,13 +430,13 @@ static integer c__6 = 6;
 /*                   2)    H2    = |HVEC|  =  GM*(1+E)*Q */
 
 
-	vcrss_(pos, vel, hvec);
-	h2 = vdot_(hvec, hvec);
+	vcrss_(__state->pos, __state->vel, __state->hvec);
+	__state->h2 = vdot_(__state->hvec, __state->hvec);
 
 /*        Let's make sure we are not in the pathological case of */
 /*        rectilinear motion. */
 
-	if (h2 == 0.) {
+	if (__state->h2 == 0.) {
 	    sigerr_("SPICE(NONCONICMOTION)", (ftnlen)21);
 	    chkout_("PROP2B", (ftnlen)6);
 	    return 0;
@@ -467,15 +457,15 @@ static integer c__6 = 6;
 /*                                            GM            R0 */
 
 
-	vcrss_(vel, hvec, tmpvec);
+	vcrss_(__state->vel, __state->hvec, __state->tmpvec);
 	d__1 = 1. / *gm;
-	d__2 = -1. / r0;
-	vlcom_(&d__1, tmpvec, &d__2, pos, eqvec);
-	e = vnorm_(eqvec);
+	d__2 = -1. / __state->r0;
+	vlcom_(&d__1, __state->tmpvec, &d__2, __state->pos, __state->eqvec);
+	__state->e = vnorm_(__state->eqvec);
 
 /*        Solve the equation H2 = GM*Q*(1+E) for Q. */
 
-	q = h2 / (*gm * (e + 1));
+	__state->q = __state->h2 / (*gm * (__state->e + 1));
 
 /*        From the discussion of the universal variables formulation in */
 /*        Danby's book on pages 174 and 175 (see the reference listed */
@@ -519,11 +509,11 @@ static integer c__6 = 6;
 /*        at a time DT past the epoch of the state POS and VEL. */
 /*        Evidently we will need the constants: */
 
-	f = 1. - e;
-	b = sqrt(q / *gm);
-	br0 = b * r0;
-	b2rv = b * b * rv;
-	bq = b * q;
+	__state->f = 1. - __state->e;
+	__state->b = sqrt(__state->q / *gm);
+	__state->br0 = __state->b * __state->r0;
+	__state->b2rv = __state->b * __state->b * __state->rv;
+	__state->bq = __state->b * __state->q;
 
 /*        The state corresponding to the value of X that solves this */
 /*        equation is given by */
@@ -562,7 +552,7 @@ static integer c__6 = 6;
 
 /*        Therefore we will also need the constant */
 
-	qovr0 = q / r0;
+	__state->qovr0 = __state->q / __state->r0;
 
 /*        We will have to find the unique value of X such that */
 
@@ -746,19 +736,21 @@ static integer c__6 = 6;
 
 
 /* Computing MAX */
-	d__2 = 1., d__3 = abs(br0), d__2 = max(d__2,d__3), d__3 = abs(b2rv), 
-		d__2 = max(d__2,d__3), d__3 = abs(bq), d__2 = max(d__2,d__3), 
-		d__3 = (d__1 = qovr0 / bq, abs(d__1));
-	maxc = max(d__2,d__3);
-	if (f < 0.) {
-	    logmxc = log(maxc);
-	    logdpm = log(dpmax_() / 2.);
-	    fixed = logdpm - logmxc;
-	    rootf = sqrt(-f);
-	    logf = log(-f);
+	d__2 = 1., d__3 = abs(__state->br0), d__2 = max(d__2,d__3), d__3 = 
+		abs(__state->b2rv), d__2 = max(d__2,d__3), d__3 = abs(
+		__state->bq), d__2 = max(d__2,d__3), d__3 = (d__1 = 
+		__state->qovr0 / __state->bq, abs(d__1));
+	__state->maxc = max(d__2,d__3);
+	if (__state->f < 0.) {
+	    __state->logmxc = log(__state->maxc);
+	    __state->logdpm = log(dpmax_() / 2.);
+	    __state->fixed = __state->logdpm - __state->logmxc;
+	    __state->rootf = sqrt(-__state->f);
+	    __state->logf = log(-__state->f);
 /* Computing MIN */
-	    d__1 = fixed / rootf, d__2 = (fixed + logf * 1.5) / rootf;
-	    bound = min(d__1,d__2);
+	    d__1 = __state->fixed / __state->rootf, d__2 = (__state->fixed + 
+		    __state->logf * 1.5) / __state->rootf;
+	    __state->bound = min(d__1,d__2);
 
 /*           Note that in the above, we can always perform the division */
 /*           by ROOTF.  To see this we note that -F is at least the */
@@ -800,56 +792,63 @@ static integer c__6 = 6;
 
 /*           (We'll use logarithms to compute the upper bound for |X|.) */
 
-	    logbnd = (log(1.5) + log(dpmax_()) - log(maxc)) / 3.;
-	    bound = exp(logbnd);
+	    __state->logbnd = (log(1.5) + log(dpmax_()) - log(__state->maxc)) 
+		    / 3.;
+	    __state->bound = exp(__state->logbnd);
 	}
 
 /*        All the obvious problems have been checked, move everybody */
 /*        on the list down and put the new guy on top of the list. */
 
-	i__1 = nsaved + 1;
-	nsaved = brckti_(&i__1, &c__1, &c__3);
-	bumped = newest[(i__1 = nsaved - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"newest", i__1, "prop2b_", (ftnlen)855)];
-	for (i__ = nsaved; i__ >= 2; --i__) {
-	    newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		     i__1, "prop2b_", (ftnlen)858)] = newest[(i__2 = i__ - 2) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_"
-		    , (ftnlen)858)];
+	i__1 = __state->nsaved + 1;
+	__state->nsaved = brckti_(&i__1, &__state->c__1, &__state->c__3);
+	__state->bumped = __state->newest[(i__1 = __state->nsaved - 1) < 3 && 
+		0 <= i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)
+		855)];
+	for (__state->i__ = __state->nsaved; __state->i__ >= 2; 
+		--__state->i__) {
+	    __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 
+		    : s_rnge("newest", i__1, "prop2b_", (ftnlen)858)] = 
+		    __state->newest[(i__2 = __state->i__ - 2) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_", (ftnlen)
+		    858)];
 	}
-	newest[0] = bumped;
-	k = bumped;
-	savepv[(i__1 = k * 6 - 6) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)864)] = pvinit[0];
-	savepv[(i__1 = k * 6 - 5) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)865)] = pvinit[1];
-	savepv[(i__1 = k * 6 - 4) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)866)] = pvinit[2];
-	savepv[(i__1 = k * 6 - 3) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)867)] = pvinit[3];
-	savepv[(i__1 = k * 6 - 2) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)868)] = pvinit[4];
-	savepv[(i__1 = k * 6 - 1) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)869)] = pvinit[5];
-	savegm[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("savegm", i__1,
-		 "prop2b_", (ftnlen)870)] = *gm;
+	__state->newest[0] = __state->bumped;
+	__state->k = __state->bumped;
+	__state->savepv[(i__1 = __state->k * 6 - 6) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)864)] = pvinit[0];
+	__state->savepv[(i__1 = __state->k * 6 - 5) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)865)] = pvinit[1];
+	__state->savepv[(i__1 = __state->k * 6 - 4) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)866)] = pvinit[2];
+	__state->savepv[(i__1 = __state->k * 6 - 3) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)867)] = pvinit[3];
+	__state->savepv[(i__1 = __state->k * 6 - 2) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)868)] = pvinit[4];
+	__state->savepv[(i__1 = __state->k * 6 - 1) < 18 && 0 <= i__1 ? i__1 :
+		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)869)] = pvinit[5];
+	__state->savegm[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("savegm", i__1, "prop2b_", (ftnlen)870)] = *gm;
 
 /*        Finally we save the results of all of the above */
 /*        computations so that we won't have to do them again, */
 /*        if this initial state and GM are entered again. */
 
-	sb2rv[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sb2rv", i__1, 
-		"prop2b_", (ftnlen)877)] = b2rv;
-	sbound[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbound", i__1,
-		 "prop2b_", (ftnlen)878)] = bound;
-	sbq[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbq", i__1, 
-		"prop2b_", (ftnlen)879)] = bq;
-	sbr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbr0", i__1, 
-		"prop2b_", (ftnlen)880)] = br0;
-	sf[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sf", i__1, "prop"
-		"2b_", (ftnlen)881)] = f;
-	sqovr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sqovr0", i__1,
-		 "prop2b_", (ftnlen)882)] = qovr0;
+	__state->sb2rv[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("sb2rv", i__1, "prop2b_", (ftnlen)877)] = 
+		__state->b2rv;
+	__state->sbound[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("sbound", i__1, "prop2b_", (ftnlen)878)] = 
+		__state->bound;
+	__state->sbq[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+		"sbq", i__1, "prop2b_", (ftnlen)879)] = __state->bq;
+	__state->sbr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("sbr0", i__1, "prop2b_", (ftnlen)880)] = __state->br0;
+	__state->sf[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
+		"sf", i__1, "prop2b_", (ftnlen)881)] = __state->f;
+	__state->sqovr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
+		s_rnge("sqovr0", i__1, "prop2b_", (ftnlen)882)] = 
+		__state->qovr0;
     }
 
 
@@ -917,21 +916,24 @@ static integer c__6 = 6;
 /*        the endpoints of these shifted intervals always stay safely */
 /*        inside the domain for which KFUN can be computed. */
 
-    x = *dt / bq;
-    d__1 = -bound;
-    x = brcktd_(&x, &d__1, &bound);
-    fx2 = f * x * x;
-    stmp03_(&fx2, &c0, &c1, &c2, &c3);
-    kfun = x * (br0 * c1 + x * (b2rv * c2 + x * (bq * c3)));
+    __state->x = *dt / __state->bq;
+    d__1 = -__state->bound;
+    __state->x = brcktd_(&__state->x, &d__1, &__state->bound);
+    __state->fx2 = __state->f * __state->x * __state->x;
+    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
+	    __state->c3);
+    __state->kfun = __state->x * (__state->br0 * __state->c1 + __state->x * (
+	    __state->b2rv * __state->c2 + __state->x * (__state->bq * 
+	    __state->c3)));
     if (*dt < 0.) {
-	upper = 0.;
-	lower = x;
-	while(kfun > *dt) {
-	    upper = lower;
-	    lower *= 2.;
-	    oldx = x;
-	    d__1 = -bound;
-	    x = brcktd_(&lower, &d__1, &bound);
+	__state->upper = 0.;
+	__state->lower = __state->x;
+	while(__state->kfun > *dt) {
+	    __state->upper = __state->lower;
+	    __state->lower *= 2.;
+	    __state->oldx = __state->x;
+	    d__1 = -__state->bound;
+	    __state->x = brcktd_(&__state->lower, &d__1, &__state->bound);
 
 /*           Make sure we are making progress. (In other words make sure */
 /*           we don't run into the boundary of values that X can assume. */
@@ -939,64 +941,78 @@ static integer c__6 = 6;
 /*           there's nothing further we can do.  We'll have to call it */
 /*           quits and tell the user what happened.) */
 
-	    if (x == oldx) {
-		fx2 = f * bound * bound;
-		stmp03_(&fx2, &c0, &c1, &c2, &c3);
-		kfunl = -bound * (br0 * c1 - bound * (b2rv * c2 - bound * bq *
-			 c3));
-		kfunu = bound * (br0 * c1 + bound * (b2rv * c2 + bound * bq * 
-			c3));
+	    if (__state->x == __state->oldx) {
+		__state->fx2 = __state->f * __state->bound * __state->bound;
+		stmp03_(&__state->fx2, &__state->c0, &__state->c1, &
+			__state->c2, &__state->c3);
+		__state->kfunl = -__state->bound * (__state->br0 * 
+			__state->c1 - __state->bound * (__state->b2rv * 
+			__state->c2 - __state->bound * __state->bq * 
+			__state->c3));
+		__state->kfunu = __state->bound * (__state->br0 * __state->c1 
+			+ __state->bound * (__state->b2rv * __state->c2 + 
+			__state->bound * __state->bq * __state->c3));
 		setmsg_("The input delta time (DT) has a value of #.  This i"
 			"s beyond the range of DT for which we can reliably p"
 			"ropagate states. The limits for this GM and initial "
 			"state are from # to #. ", (ftnlen)178);
 		errdp_("#", dt, (ftnlen)1);
-		errdp_("#", &kfunl, (ftnlen)1);
-		errdp_("#", &kfunu, (ftnlen)1);
+		errdp_("#", &__state->kfunl, (ftnlen)1);
+		errdp_("#", &__state->kfunu, (ftnlen)1);
 		sigerr_("SPICE(DTOUTOFRANGE)", (ftnlen)19);
 		chkout_("PROP2B", (ftnlen)6);
 		return 0;
 	    }
-	    fx2 = f * x * x;
-	    stmp03_(&fx2, &c0, &c1, &c2, &c3);
-	    kfun = x * (br0 * c1 + x * (b2rv * c2 + x * (bq * c3)));
+	    __state->fx2 = __state->f * __state->x * __state->x;
+	    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
+		    __state->c3);
+	    __state->kfun = __state->x * (__state->br0 * __state->c1 + 
+		    __state->x * (__state->b2rv * __state->c2 + __state->x * (
+		    __state->bq * __state->c3)));
 	}
     } else if (*dt > 0.) {
-	lower = 0.;
-	upper = x;
-	while(kfun < *dt) {
-	    lower = upper;
-	    upper *= 2.;
-	    oldx = x;
-	    d__1 = -bound;
-	    x = brcktd_(&upper, &d__1, &bound);
+	__state->lower = 0.;
+	__state->upper = __state->x;
+	while(__state->kfun < *dt) {
+	    __state->lower = __state->upper;
+	    __state->upper *= 2.;
+	    __state->oldx = __state->x;
+	    d__1 = -__state->bound;
+	    __state->x = brcktd_(&__state->upper, &d__1, &__state->bound);
 
 /*           Make sure we are making progress. */
 
-	    if (x == oldx) {
-		fx2 = f * bound * bound;
-		stmp03_(&fx2, &c0, &c1, &c2, &c3);
-		kfunl = -bound * (br0 * c1 - bound * (b2rv * c2 - bound * bq *
-			 c3));
-		kfunu = bound * (br0 * c1 + bound * (b2rv * c2 + bound * bq * 
-			c3));
+	    if (__state->x == __state->oldx) {
+		__state->fx2 = __state->f * __state->bound * __state->bound;
+		stmp03_(&__state->fx2, &__state->c0, &__state->c1, &
+			__state->c2, &__state->c3);
+		__state->kfunl = -__state->bound * (__state->br0 * 
+			__state->c1 - __state->bound * (__state->b2rv * 
+			__state->c2 - __state->bound * __state->bq * 
+			__state->c3));
+		__state->kfunu = __state->bound * (__state->br0 * __state->c1 
+			+ __state->bound * (__state->b2rv * __state->c2 + 
+			__state->bound * __state->bq * __state->c3));
 		setmsg_("The input delta time (DT) has a value of #.  This i"
 			"s beyond the range of DT for which we can reliably p"
 			"ropagate states. The limits for this GM and initial "
 			"state are from # to #. ", (ftnlen)178);
 		errdp_("#", dt, (ftnlen)1);
-		errdp_("#", &kfunl, (ftnlen)1);
-		errdp_("#", &kfunu, (ftnlen)1);
+		errdp_("#", &__state->kfunl, (ftnlen)1);
+		errdp_("#", &__state->kfunu, (ftnlen)1);
 		sigerr_("SPICE(DTOUTOFRANGE)", (ftnlen)19);
 		chkout_("PROP2B", (ftnlen)6);
 		return 0;
 	    }
-	    fx2 = f * x * x;
-	    stmp03_(&fx2, &c0, &c1, &c2, &c3);
-	    kfun = x * (br0 * c1 + x * (b2rv * c2 + x * bq * c3));
+	    __state->fx2 = __state->f * __state->x * __state->x;
+	    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
+		    __state->c3);
+	    __state->kfun = __state->x * (__state->br0 * __state->c1 + 
+		    __state->x * (__state->b2rv * __state->c2 + __state->x * 
+		    __state->bq * __state->c3));
 	}
     } else {
-	vequg_(pvinit, &c__6, pvprop);
+	vequg_(pvinit, &__state->c__6, pvprop);
 	chkout_("PROP2B", (ftnlen)6);
 	return 0;
     }
@@ -1016,41 +1032,46 @@ static integer c__6 = 6;
 
 /* Computing MIN */
 /* Computing MAX */
-    d__3 = lower, d__4 = (lower + upper) / 2.;
-    d__1 = upper, d__2 = max(d__3,d__4);
-    x = min(d__1,d__2);
-    fx2 = f * x * x;
-    stmp03_(&fx2, &c0, &c1, &c2, &c3);
-    lcount = 0;
-    mostc = 1000;
-    while(x > lower && x < upper && lcount < mostc) {
-	kfun = x * (br0 * c1 + x * (b2rv * c2 + x * bq * c3));
-	if (kfun > *dt) {
-	    upper = x;
-	} else if (kfun < *dt) {
-	    lower = x;
+    d__3 = __state->lower, d__4 = (__state->lower + __state->upper) / 2.;
+    d__1 = __state->upper, d__2 = max(d__3,d__4);
+    __state->x = min(d__1,d__2);
+    __state->fx2 = __state->f * __state->x * __state->x;
+    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
+	    __state->c3);
+    __state->lcount = 0;
+    __state->mostc = 1000;
+    while(__state->x > __state->lower && __state->x < __state->upper && 
+	    __state->lcount < __state->mostc) {
+	__state->kfun = __state->x * (__state->br0 * __state->c1 + __state->x 
+		* (__state->b2rv * __state->c2 + __state->x * __state->bq * 
+		__state->c3));
+	if (__state->kfun > *dt) {
+	    __state->upper = __state->x;
+	} else if (__state->kfun < *dt) {
+	    __state->lower = __state->x;
 	} else {
-	    upper = x;
-	    lower = x;
+	    __state->upper = __state->x;
+	    __state->lower = __state->x;
 	}
 
 /*        As soon as the bracketting values move away from */
 /*        zero we can modify the count limit. */
 
-	if (mostc > 64) {
-	    if (upper != 0. && lower != 0.) {
-		mostc = 64;
-		lcount = 0;
+	if (__state->mostc > 64) {
+	    if (__state->upper != 0. && __state->lower != 0.) {
+		__state->mostc = 64;
+		__state->lcount = 0;
 	    }
 	}
 /* Computing MIN */
 /* Computing MAX */
-	d__3 = lower, d__4 = (lower + upper) / 2.;
-	d__1 = upper, d__2 = max(d__3,d__4);
-	x = min(d__1,d__2);
-	fx2 = f * x * x;
-	stmp03_(&fx2, &c0, &c1, &c2, &c3);
-	++lcount;
+	d__3 = __state->lower, d__4 = (__state->lower + __state->upper) / 2.;
+	d__1 = __state->upper, d__2 = max(d__3,d__4);
+	__state->x = min(d__1,d__2);
+	__state->fx2 = __state->f * __state->x * __state->x;
+	stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
+		__state->c3);
+	++__state->lcount;
     }
 
 /*     With X in hand we simply compute BR, PC, VC, PCDOT and VCDOT */
@@ -1058,18 +1079,22 @@ static integer c__6 = 6;
 /*     of BOUND above, one can show that none of the computations */
 /*     below can cause an overflow). */
 
-    x2 = x * x;
-    x3 = x2 * x;
-    br = br0 * c0 + x * (b2rv * c1 + x * (bq * c2));
-    pc = 1. - qovr0 * x2 * c2;
-    vc = *dt - bq * x3 * c3;
-    pcdot = -(qovr0 / br) * x * c1;
-    vcdot = 1. - bq / br * x2 * c2;
+    __state->x2 = __state->x * __state->x;
+    __state->x3 = __state->x2 * __state->x;
+    __state->br = __state->br0 * __state->c0 + __state->x * (__state->b2rv * 
+	    __state->c1 + __state->x * (__state->bq * __state->c2));
+    __state->pc = 1. - __state->qovr0 * __state->x2 * __state->c2;
+    __state->vc = *dt - __state->bq * __state->x3 * __state->c3;
+    __state->pcdot = -(__state->qovr0 / __state->br) * __state->x * 
+	    __state->c1;
+    __state->vcdot = 1. - __state->bq / __state->br * __state->x2 * 
+	    __state->c2;
 
 /*     ... and compute the linear combinations needed to get PVPROP */
 
-    vlcom_(&pc, pos, &vc, vel, pvprop);
-    vlcom_(&pcdot, pos, &vcdot, vel, &pvprop[3]);
+    vlcom_(&__state->pc, __state->pos, &__state->vc, __state->vel, pvprop);
+    vlcom_(&__state->pcdot, __state->pos, &__state->vcdot, __state->vel, &
+	    pvprop[3]);
     chkout_("PROP2B", (ftnlen)6);
     return 0;
 } /* prop2b_ */

@@ -1,14 +1,21 @@
-/* zzbodker.f -- translated by f2c (version 19980913).
+/* zzbodker.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__14983 = 14983;
+extern zzbodker_init_t __zzbodker_init;
+static zzbodker_state_t* get_zzbodker_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzbodker)
+		state->zzbodker = __cspice_allocate_module(sizeof(
+	zzbodker_state_t), &__zzbodker_init, sizeof(__zzbodker_init));
+	return state->zzbodker;
+
+}
 
 /* $Procedure ZZBODKER ( Private --- Process Body-Name Kernel Pool Maps ) */
 /* Subroutine */ int zzbodker_(char *names, char *nornam, integer *codes, 
@@ -19,8 +26,6 @@ static integer c__14983 = 14983;
 {
     /* Initialized data */
 
-    static char nbc[32] = "NAIF_BODY_CODE                  ";
-    static char nbn[32] = "NAIF_BODY_NAME                  ";
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -36,21 +41,29 @@ static integer c__14983 = 14983;
 	    , integer *, integer *, integer *, char *, integer *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern logical failed_(void);
     logical plfind[2];
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen), gipool_(char *, integer *, 
-	    integer *, integer *, integer *, logical *, ftnlen), chkout_(char 
-	    *, ftnlen), sigerr_(char *, ftnlen), dtpool_(char *, logical *, 
-	    integer *, char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen), ljucrs_(integer *, char *, 
-	    char *, ftnlen, ftnlen);
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
+	    *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     integer num[2];
 
+
+    /* Module state */
+    zzbodker_state_t* __state = get_zzbodker_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -400,9 +413,10 @@ static integer c__14983 = 14983;
 
 /*     Check for the external body ID variables in the kernel pool. */
 
-    gcpool_(nbn, &c__1, &c__14983, num, names, plfind, (ftnlen)32, (ftnlen)36)
-	    ;
-    gipool_(nbc, &c__1, &c__14983, &num[1], codes, &plfind[1], (ftnlen)32);
+    gcpool_(__state->nbn, &__state->c__1, &__state->c__14983, num, names, 
+	    plfind, (ftnlen)32, (ftnlen)36);
+    gipool_(__state->nbc, &__state->c__1, &__state->c__14983, &num[1], codes, 
+	    &plfind[1], (ftnlen)32);
     if (failed_()) {
 	chkout_("ZZBODKER", (ftnlen)8);
 	return 0;
@@ -419,11 +433,11 @@ static integer c__14983 = 14983;
 		"an improperly constructed text kernel.  Check loaded kernels"
 		" for these keywords.", (ftnlen)199);
 	if (plfind[0]) {
-	    errch_("#", nbc, (ftnlen)1, (ftnlen)32);
-	    errch_("#", nbn, (ftnlen)1, (ftnlen)32);
+	    errch_("#", __state->nbc, (ftnlen)1, (ftnlen)32);
+	    errch_("#", __state->nbn, (ftnlen)1, (ftnlen)32);
 	} else {
-	    errch_("#", nbn, (ftnlen)1, (ftnlen)32);
-	    errch_("#", nbc, (ftnlen)1, (ftnlen)32);
+	    errch_("#", __state->nbn, (ftnlen)1, (ftnlen)32);
+	    errch_("#", __state->nbc, (ftnlen)1, (ftnlen)32);
 	}
 	sigerr_("SPICE(MISSINGKPV)", (ftnlen)17);
 	chkout_("ZZBODKER", (ftnlen)8);
@@ -439,8 +453,9 @@ static integer c__14983 = 14983;
 /*     If we reach here, then both kernel pool variables are present. */
 /*     Perform some simple sanity checks on their lengths. */
 
-    dtpool_(nbn, &found, nsiz, type__, (ftnlen)32, (ftnlen)1);
-    dtpool_(nbc, &found, &nsiz[1], type__ + 1, (ftnlen)32, (ftnlen)1);
+    dtpool_(__state->nbn, &found, nsiz, type__, (ftnlen)32, (ftnlen)1);
+    dtpool_(__state->nbc, &found, &nsiz[1], type__ + 1, (ftnlen)32, (ftnlen)1)
+	    ;
     if (failed_()) {
 	chkout_("ZZBODKER", (ftnlen)8);
 	return 0;
@@ -452,7 +467,7 @@ static integer c__14983 = 14983;
 		" of elements is #3.", (ftnlen)198);
 	errint_("#1", nsiz, (ftnlen)2);
 	errint_("#2", &nsiz[1], (ftnlen)2);
-	errint_("#3", &c__14983, (ftnlen)2);
+	errint_("#3", &__state->c__14983, (ftnlen)2);
 	sigerr_("SPICE(KERVARTOOBIG)", (ftnlen)19);
 	chkout_("ZZBODKER", (ftnlen)8);
 	return 0;
@@ -495,18 +510,18 @@ static integer c__14983 = 14983;
 
 /*        Compute the canonical member of the equivalence class. */
 
-	ljucrs_(&c__1, names + ((i__2 = i__ - 1) < 14983 && 0 <= i__2 ? i__2 :
-		 s_rnge("names", i__2, "zzbodker_", (ftnlen)419)) * 36, 
-		nornam + ((i__3 = i__ - 1) < 14983 && 0 <= i__3 ? i__3 : 
-		s_rnge("nornam", i__3, "zzbodker_", (ftnlen)419)) * 36, (
+	ljucrs_(&__state->c__1, names + ((i__2 = i__ - 1) < 14983 && 0 <= 
+		i__2 ? i__2 : s_rnge("names", i__2, "zzbodker_", (ftnlen)419))
+		 * 36, nornam + ((i__3 = i__ - 1) < 14983 && 0 <= i__3 ? i__3 
+		: s_rnge("nornam", i__3, "zzbodker_", (ftnlen)419)) * 36, (
 		ftnlen)36, (ftnlen)36);
     }
 
 /*     Populate hashes required by ZZBODTRN. */
 
-    zzbodini_(names, nornam, codes, nvals, &c__14983, bnmlst, bnmpol, bnmnms, 
-	    bnmidx, bidlst, bidpol, bidids, bididx, (ftnlen)36, (ftnlen)36, (
-	    ftnlen)36);
+    zzbodini_(names, nornam, codes, nvals, &__state->c__14983, bnmlst, bnmpol,
+	     bnmnms, bnmidx, bidlst, bidpol, bidids, bididx, (ftnlen)36, (
+	    ftnlen)36, (ftnlen)36);
     if (failed_()) {
 	chkout_("ZZBODKER", (ftnlen)8);
 	return 0;

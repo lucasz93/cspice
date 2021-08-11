@@ -1,9 +1,17 @@
-/* prsint.f -- translated by f2c (version 19980913).
+/* prsint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prsint_state_t;
+static prsint_state_t* get_prsint_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   PRSINT   ( Parse integer with error checking ) */
 /* Subroutine */ int prsint_(char *string, integer *intval, ftnlen string_len)
@@ -12,13 +20,18 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), nparsi_(char *, integer *, char *, integer *, ftnlen, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[320];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer ptr;
 
+
+    /* Module state */
+    prsint_state_t* __state = get_prsint_state();
 /* $ Abstract */
 
 /*     Parse a string as an integer, encapsulating error handling. */

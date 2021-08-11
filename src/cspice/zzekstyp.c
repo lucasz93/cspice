@@ -1,9 +1,17 @@
-/* zzekstyp.f -- translated by f2c (version 19980913).
+/* zzekstyp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekstyp_state_t;
+static zzekstyp_state_t* get_zzekstyp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSTYP ( EK, determine segment type ) */
 integer zzekstyp_(integer *ncols, integer *cdscrs)
@@ -15,11 +23,15 @@ integer zzekstyp_(integer *ncols, integer *cdscrs)
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical fixed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     logical var;
 
+
+    /* Module state */
+    zzekstyp_state_t* __state = get_zzekstyp_state();
 /* $ Abstract */
 
 /*     Determine the type of segment required to support a specified */

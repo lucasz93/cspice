@@ -1,9 +1,17 @@
-/* swapad.f -- translated by f2c (version 19980913).
+/* swapad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int swapad_state_t;
+static swapad_state_t* get_swapad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SWAPAD ( Swap elements within a DP array ) */
 /* Subroutine */ int swapad_(integer *n, integer *locn, integer *m, integer *
@@ -13,19 +21,29 @@
     integer i__1;
 
     /* Local variables */
-    integer nsub, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), swapd_(doublereal *, 
-	    doublereal *);
-    integer extra, lm, ln, nm, nn, begsub;
+    integer nsub;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int swapd_(doublereal *, doublereal *);
+    integer extra;
+    integer lm;
+    integer ln;
+    integer nm;
+    integer nn;
+    integer begsub;
     extern /* Subroutine */ int cyadip_(integer *, char *, integer *, 
 	    doublereal *, ftnlen);
     integer direct;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char dir[1];
 
+
+    /* Module state */
+    swapad_state_t* __state = get_swapad_state();
 /* $ Abstract */
 
 /*     Swap (exchange) two non-intersecting groups of contiguous */

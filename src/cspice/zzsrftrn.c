@@ -1,14 +1,21 @@
-/* zzsrftrn.f -- translated by f2c (version 19980913).
+/* zzsrftrn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern zzsrftrn_init_t __zzsrftrn_init;
+static zzsrftrn_state_t* get_zzsrftrn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsrftrn)
+		state->zzsrftrn = __cspice_allocate_module(sizeof(
+	zzsrftrn_state_t), &__zzsrftrn_init, sizeof(__zzsrftrn_init));
+	return state->zzsrftrn;
+
+}
 
 /* $Procedure ZZSRFTRN ( Surface name/ID mapping umbrella ) */
 /* Subroutine */ int zzsrftrn_0_(int n__, integer *bodyid, char *srfnam, 
@@ -17,10 +24,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical extker = FALSE_;
-    static integer polctr[2] = { 0,0 };
-    static integer srfctr[2] = { 0,0 };
-    static logical pass1 = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -31,35 +34,31 @@ static integer c__0 = 0;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer node;
-    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *), 
-	    zzctrinc_(integer *), zzsrfker_(char *, char *, integer *, 
-	    integer *, logical *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen), zzctrsin_(
-	    integer *), zzcvpool_(char *, integer *, logical *, ftnlen), 
-	    zzctruin_(integer *), chkin_(char *, ftnlen);
-    static integer nkvar;
-    extern logical failed_(void);
-    static integer kerbid[2000];
-    static char kernam[36*2000];
-    static integer kersid[2000], sididx[2003], sidhls[2003], itemat, lookat;
-    static char nornam[36*2000];
-    static integer sidpol[2009];
-    static logical lupdte;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
+    extern /* Subroutine */ int zzctrinc_(integer *);
+    extern /* Subroutine */ int zzsrfker_(char *, char *, integer *, integer *
+	    , logical *, integer *, integer *, integer *, integer *, integer *
+	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctrsin_(integer *);
+    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
 	    ftnlen);
-    static integer snmidx[2003];
-    static char nsrfnm[36];
-    static integer snmhls[2003], snmpol[2009];
-    static char sqshnm[36];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), ljucrs_(integer *, 
-	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical failed_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    extern integer zzhash2_(char *, integer *, ftnlen), zzhashi_(integer *, 
-	    integer *);
+    extern integer zzhash2_(char *, integer *, ftnlen);
+    extern integer zzhashi_(integer *, integer *);
 
+
+    /* Module state */
+    zzsrftrn_state_t* __state = get_zzsrftrn_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -832,7 +831,7 @@ L_zzsrfn2c:
 /*     No result has been found. */
 
     *found = FALSE_;
-    if (pass1) {
+    if (__state->pass1) {
 
 /*        Initialize the surface kernel variable update counter */
 /*        and the local pool counter. Note that this routine */
@@ -840,43 +839,47 @@ L_zzsrfn2c:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(srfctr);
-	zzctruin_(polctr);
+	zzctrsin_(__state->srfctr);
+	zzctruin_(__state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 
 /*        Sync POLCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
+	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
 	if (failed_()) {
 	    chkout_("ZZSRFN2C", (ftnlen)8);
 	    return 0;
 	}
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     Determine whether the data structures need to be updated */
 /*     due to a change in the kernel pool contents. */
 
-    zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
-    if (lupdte) {
+    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte) {
 
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(srfctr);
+	zzctrinc_(__state->srfctr);
 
 /*        Initialize local data structures. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZSRFN2C", (ftnlen)8);
 	    return 0;
@@ -886,7 +889,7 @@ L_zzsrfn2c:
 /*     No translation can be done if the surface mapping variables */
 /*     are not in the pool. */
 
-    if (! extker) {
+    if (! __state->extker) {
 	chkout_("ZZSRFN2C", (ftnlen)8);
 	return 0;
     }
@@ -894,38 +897,43 @@ L_zzsrfn2c:
 /*     Get a "normalized" copy of the input name: left-justified, */
 /*     compressed, upper case. */
 
-    ljucrs_(&c__1, srfnam, nsrfnm, srfnam_len, (ftnlen)36);
+    ljucrs_(&__state->c__1, srfnam, __state->nsrfnm, srfnam_len, (ftnlen)36);
 
 /*     Get a "squished" version of the above name: a version */
 /*     containing no blanks. */
 
-    cmprss_(" ", &c__0, nsrfnm, sqshnm, (ftnlen)1, (ftnlen)36, (ftnlen)36);
+    cmprss_(" ", &__state->c__0, __state->nsrfnm, __state->sqshnm, (ftnlen)1, 
+	    (ftnlen)36, (ftnlen)36);
 
 /*     Find the hash value of the squished input name. */
 
-    lookat = zzhash2_(sqshnm, &snmpol[5], (ftnlen)36);
-    node = snmhls[(i__1 = lookat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "snmhls", i__1, "zzsrftrn_", (ftnlen)738)];
+    __state->lookat = zzhash2_(__state->sqshnm, &__state->snmpol[5], (ftnlen)
+	    36);
+    __state->node = __state->snmhls[(i__1 = __state->lookat - 1) < 2003 && 0 
+	    <= i__1 ? i__1 : s_rnge("snmhls", i__1, "zzsrftrn_", (ftnlen)738)]
+	    ;
     *found = FALSE_;
-    if (node > 0) {
+    if (__state->node > 0) {
 
 /*        Start at the head node and check each normalized name saved */
 /*           for this hash value until we find a name and body ID that */
 /*           match or run out of items in the collision list. */
 
-	while(node > 0 && ! (*found)) {
-	    *found = s_cmp(nsrfnm, nornam + ((i__2 = snmidx[(i__1 = node - 1) 
-		    < 2003 && 0 <= i__1 ? i__1 : s_rnge("snmidx", i__1, "zzs"
-		    "rftrn_", (ftnlen)750)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("nornam", i__2, "zzsrftrn_", (ftnlen)750)) * 36, (
-		    ftnlen)36, (ftnlen)36) == 0 && *bodyid == kerbid[(i__4 = 
-		    snmidx[(i__3 = node - 1) < 2003 && 0 <= i__3 ? i__3 : 
-		    s_rnge("snmidx", i__3, "zzsrftrn_", (ftnlen)750)] - 1) < 
-		    2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", i__4, "zzsrf"
-		    "trn_", (ftnlen)750)];
-	    itemat = node;
-	    node = snmpol[(i__1 = node + 5) < 2009 && 0 <= i__1 ? i__1 : 
-		    s_rnge("snmpol", i__1, "zzsrftrn_", (ftnlen)754)];
+	while(__state->node > 0 && ! (*found)) {
+	    *found = s_cmp(__state->nsrfnm, __state->nornam + ((i__2 = 
+		    __state->snmidx[(i__1 = __state->node - 1) < 2003 && 0 <= 
+		    i__1 ? i__1 : s_rnge("snmidx", i__1, "zzsrftrn_", (ftnlen)
+		    750)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("nornam", 
+		    i__2, "zzsrftrn_", (ftnlen)750)) * 36, (ftnlen)36, (
+		    ftnlen)36) == 0 && *bodyid == __state->kerbid[(i__4 = 
+		    __state->snmidx[(i__3 = __state->node - 1) < 2003 && 0 <= 
+		    i__3 ? i__3 : s_rnge("snmidx", i__3, "zzsrftrn_", (ftnlen)
+		    750)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", 
+		    i__4, "zzsrftrn_", (ftnlen)750)];
+	    __state->itemat = __state->node;
+	    __state->node = __state->snmpol[(i__1 = __state->node + 5) < 2009 
+		    && 0 <= i__1 ? i__1 : s_rnge("snmpol", i__1, "zzsrftrn_", 
+		    (ftnlen)754)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -933,10 +941,11 @@ L_zzsrfn2c:
 
     }
     if (*found) {
-	*surfid = kersid[(i__2 = snmidx[(i__1 = itemat - 1) < 2003 && 0 <= 
-		i__1 ? i__1 : s_rnge("snmidx", i__1, "zzsrftrn_", (ftnlen)765)
-		] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("kersid", i__2, 
-		"zzsrftrn_", (ftnlen)765)];
+	*surfid = __state->kersid[(i__2 = __state->snmidx[(i__1 = 
+		__state->itemat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
+		"snmidx", i__1, "zzsrftrn_", (ftnlen)765)] - 1) < 2000 && 0 <=
+		 i__2 ? i__2 : s_rnge("kersid", i__2, "zzsrftrn_", (ftnlen)
+		765)];
     }
     chkout_("ZZSRFN2C", (ftnlen)8);
     return 0;
@@ -1116,7 +1125,7 @@ L_zzsrfc2n:
 /*     No result has been found. */
 
     *found = FALSE_;
-    if (pass1) {
+    if (__state->pass1) {
 
 /*        Initialize the surface kernel variable update counter */
 /*        and the local pool counter. Note that this routine */
@@ -1124,43 +1133,47 @@ L_zzsrfc2n:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(srfctr);
-	zzctruin_(polctr);
+	zzctrsin_(__state->srfctr);
+	zzctruin_(__state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 
 /*        Sync SRFCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
+	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
 	if (failed_()) {
 	    chkout_("ZZSRFC2N", (ftnlen)8);
 	    return 0;
 	}
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     Determine whether the data structures need to be updated */
 /*     due to a change in the kernel pool contents. */
 
-    zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
-    if (lupdte) {
+    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte) {
 
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(srfctr);
+	zzctrinc_(__state->srfctr);
 
 /*        Initialize local data structures. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 	if (failed_()) {
 	    chkout_("ZZSRFC2N", (ftnlen)8);
 	    return 0;
@@ -1170,35 +1183,38 @@ L_zzsrfc2n:
 /*     No translation can be done if the surface mapping variables */
 /*     are not in the pool. */
 
-    if (! extker) {
+    if (! __state->extker) {
 	chkout_("ZZSRFC2N", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the hash value of the squished input name. */
 
-    lookat = zzhashi_(surfid, &sidpol[5]);
-    node = sidhls[(i__1 = lookat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-	    "sidhls", i__1, "zzsrftrn_", (ftnlen)1034)];
+    __state->lookat = zzhashi_(surfid, &__state->sidpol[5]);
+    __state->node = __state->sidhls[(i__1 = __state->lookat - 1) < 2003 && 0 
+	    <= i__1 ? i__1 : s_rnge("sidhls", i__1, "zzsrftrn_", (ftnlen)1034)
+	    ];
     *found = FALSE_;
-    if (node > 0) {
+    if (__state->node > 0) {
 
 /*        Start at the head node and check each normalized name saved */
 /*           for this hash value until we find a name and body ID that */
 /*           match or run out of items in the collision list. */
 
-	while(node > 0 && ! (*found)) {
-	    *found = *surfid == kersid[(i__2 = sididx[(i__1 = node - 1) < 
-		    2003 && 0 <= i__1 ? i__1 : s_rnge("sididx", i__1, "zzsrf"
-		    "trn_", (ftnlen)1046)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kersid", i__2, "zzsrftrn_", (ftnlen)1046)] && *
-		    bodyid == kerbid[(i__4 = sididx[(i__3 = node - 1) < 2003 
-		    && 0 <= i__3 ? i__3 : s_rnge("sididx", i__3, "zzsrftrn_", 
-		    (ftnlen)1046)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge(
-		    "kerbid", i__4, "zzsrftrn_", (ftnlen)1046)];
-	    itemat = node;
-	    node = sidpol[(i__1 = node + 5) < 2009 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sidpol", i__1, "zzsrftrn_", (ftnlen)1050)];
+	while(__state->node > 0 && ! (*found)) {
+	    *found = *surfid == __state->kersid[(i__2 = __state->sididx[(i__1 
+		    = __state->node - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
+		    "sididx", i__1, "zzsrftrn_", (ftnlen)1046)] - 1) < 2000 &&
+		     0 <= i__2 ? i__2 : s_rnge("kersid", i__2, "zzsrftrn_", (
+		    ftnlen)1046)] && *bodyid == __state->kerbid[(i__4 = 
+		    __state->sididx[(i__3 = __state->node - 1) < 2003 && 0 <= 
+		    i__3 ? i__3 : s_rnge("sididx", i__3, "zzsrftrn_", (ftnlen)
+		    1046)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", 
+		    i__4, "zzsrftrn_", (ftnlen)1046)];
+	    __state->itemat = __state->node;
+	    __state->node = __state->sidpol[(i__1 = __state->node + 5) < 2009 
+		    && 0 <= i__1 ? i__1 : s_rnge("sidpol", i__1, "zzsrftrn_", 
+		    (ftnlen)1050)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -1206,11 +1222,11 @@ L_zzsrfc2n:
 
     }
     if (*found) {
-	s_copy(srfnam, kernam + ((i__2 = sididx[(i__1 = itemat - 1) < 2003 && 
-		0 <= i__1 ? i__1 : s_rnge("sididx", i__1, "zzsrftrn_", (
-		ftnlen)1061)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("kern"
-		"am", i__2, "zzsrftrn_", (ftnlen)1061)) * 36, srfnam_len, (
-		ftnlen)36);
+	s_copy(srfnam, __state->kernam + ((i__2 = __state->sididx[(i__1 = 
+		__state->itemat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
+		"sididx", i__1, "zzsrftrn_", (ftnlen)1061)] - 1) < 2000 && 0 
+		<= i__2 ? i__2 : s_rnge("kernam", i__2, "zzsrftrn_", (ftnlen)
+		1061)) * 36, srfnam_len, (ftnlen)36);
     }
     chkout_("ZZSRFC2N", (ftnlen)8);
     return 0;
@@ -1385,7 +1401,7 @@ L_zzsrftrk:
     if (return_()) {
 	return 0;
     }
-    if (pass1) {
+    if (__state->pass1) {
 
 /*        Check in because ZZSRFKER can fail. */
 
@@ -1397,20 +1413,22 @@ L_zzsrftrk:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(srfctr);
-	zzctruin_(polctr);
+	zzctrsin_(__state->srfctr);
+	zzctruin_(__state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 
 /*        Sync SRFCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
+	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
 
 /*        Check out here since this routine doesn't check out */
 /*        before its normal exit. */
@@ -1419,13 +1437,13 @@ L_zzsrftrk:
 	if (failed_()) {
 	    return 0;
 	}
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     Check for updates to the kernel pool variables. */
 
-    zzcvpool_("ZZSRFTRN", polctr, &lupdte, (ftnlen)8);
-    if (lupdte) {
+    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    if (__state->lupdte) {
 
 /*        Check in because ZZSRFKER can fail. */
 
@@ -1434,13 +1452,15 @@ L_zzsrftrk:
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(srfctr);
+	zzctrinc_(__state->srfctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzsrfker_(kernam, nornam, kersid, kerbid, &extker, &nkvar, snmhls, 
-		snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36, (ftnlen)
-		36);
+	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
+		__state->kerbid, &__state->extker, &__state->nkvar, 
+		__state->snmhls, __state->snmpol, __state->snmidx, 
+		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
+		 (ftnlen)36);
 	chkout_("ZZSRFTRK", (ftnlen)8);
 	if (failed_()) {
 	    return 0;
@@ -1450,7 +1470,7 @@ L_zzsrftrk:
 /*     Check the input counter against the ZZSRFTRN counter; */
 /*     sync the user counter. */
 
-    zzctrchk_(srfctr, usrctr, update);
+    zzctrchk_(__state->srfctr, usrctr, update);
     return 0;
 } /* zzsrftrn_ */
 

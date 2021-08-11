@@ -1,13 +1,21 @@
-/* sydeli.f -- translated by f2c (version 19980913).
+/* sydeli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sydeli_init_t __sydeli_init;
+static sydeli_state_t* get_sydeli_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sydeli)
+		state->sydeli = __cspice_allocate_module(sizeof(
+	sydeli_state_t), &__sydeli_init, sizeof(__sydeli_init));
+	return state->sydeli;
+
+}
 
 /* $Procedure      SYDELI ( Delete a symbol from a symbol table ) */
 /* Subroutine */ int sydeli_(char *name__, char *tabsym, integer *tabptr, 
@@ -17,20 +25,29 @@ static integer c__1 = 1;
     integer i__1;
 
     /* Local variables */
-    integer nval, nptr, nsym;
-    extern integer cardc_(char *, ftnlen), cardi_(integer *);
+    integer nval;
+    integer nptr;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardi_(integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), remlac_(
-	    integer *, integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
+	    *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int scardi_(integer *, integer *), remlai_(
-	    integer *, integer *, integer *, integer *);
-    integer dimval, locval;
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
+	    integer *);
+    integer dimval;
+    integer locval;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sydeli_state_t* __state = get_sydeli_state();
 /* $ Abstract */
 
 /*     Delete a symbol from an integer symbol table. The symbol */
@@ -204,9 +221,10 @@ static integer c__1 = 1;
 	i__1 = locsym - 1;
 	locval = sumai_(&tabptr[6], &i__1) + 1;
 	dimval = tabptr[locsym + 5];
-	remlac_(&c__1, &locsym, tabsym + tabsym_len * 6, &nsym, tabsym_len);
+	remlac_(&__state->c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
+		tabsym_len);
 	scardc_(&nsym, tabsym, tabsym_len);
-	remlai_(&c__1, &locsym, &tabptr[6], &nptr);
+	remlai_(&__state->c__1, &locsym, &tabptr[6], &nptr);
 	scardi_(&nptr, tabptr);
 	remlai_(&dimval, &locval, &tabval[6], &nval);
 	scardi_(&nval, tabval);

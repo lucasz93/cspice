@@ -1,13 +1,21 @@
-/* spks03.f -- translated by f2c (version 19980913).
+/* spks03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern spks03_init_t __spks03_init;
+static spks03_state_t* get_spks03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks03)
+		state->spks03 = __cspice_allocate_module(sizeof(
+	spks03_state_t), &__spks03_init, sizeof(__spks03_init));
+	return state->spks03;
+
+}
 
 /* $Procedure      SPKS03 ( S/P Kernel, subset, type 3 ) */
 /* Subroutine */ int spks03_(integer *handle, integer *baddr, integer *eaddr, 
@@ -18,19 +26,25 @@ static integer c__4 = 4;
 
     /* Local variables */
     doublereal data[50];
-    integer addr__, nrec;
+    integer addr__;
+    integer nrec;
     doublereal init;
-    integer last, move;
+    integer last;
+    integer move;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     integer remain;
     doublereal intlen;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern logical return_(void);
 
+
+    /* Module state */
+    spks03_state_t* __state = get_spks03_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 3 (Chebyshev */
@@ -247,7 +261,7 @@ static integer c__4 = 4;
     data[1] = intlen;
     data[2] = (doublereal) recsiz;
     data[3] = (doublereal) nrec;
-    dafada_(data, &c__4);
+    dafada_(data, &__state->c__4);
     chkout_("SPKS03", (ftnlen)6);
     return 0;
 } /* spks03_ */

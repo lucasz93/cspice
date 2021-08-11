@@ -1,9 +1,17 @@
-/* sytrnc.f -- translated by f2c (version 19980913).
+/* sytrnc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sytrnc_state_t;
+static sytrnc_state_t* get_sytrnc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYTRNC (Transpose two values associated with a symbol) */
 /* Subroutine */ int sytrnc_(char *name__, integer *i__, integer *j, char *
@@ -17,17 +25,21 @@
     integer nsym;
     extern integer cardc_(char *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), swapc_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), bsrchc_(char *, integer *, 
-	    char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int swapc_(char *, char *, ftnlen, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer locval;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sytrnc_state_t* __state = get_sytrnc_state();
 /* $ Abstract */
 
 /*     Transpose two values associated with a particular symbol in a */

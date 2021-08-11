@@ -1,9 +1,17 @@
-/* sct2e.f -- translated by f2c (version 19980913).
+/* sct2e.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sct2e_state_t;
+static sct2e_state_t* get_sct2e_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCT2E ( SCLK ticks to ET ) */
 /* Subroutine */ int sct2e_(integer *sc, doublereal *sclkdp, doublereal *et)
@@ -12,13 +20,19 @@
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scte01_(integer *, 
-	    doublereal *, doublereal *), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scte01_(integer *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer sctype_(integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    sct2e_state_t* __state = get_sct2e_state();
 /* $ Abstract */
 
 /*     Convert encoded spacecraft clock (`ticks') to ephemeris */

@@ -1,14 +1,21 @@
-/* spcb2t.f -- translated by f2c (version 19980913).
+/* spcb2t.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
+extern spcb2t_init_t __spcb2t_init;
+static spcb2t_state_t* get_spcb2t_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spcb2t)
+		state->spcb2t = __cspice_allocate_module(sizeof(
+	spcb2t_state_t), &__spcb2t_init, sizeof(__spcb2t_init));
+	return state->spcb2t;
+
+}
 
 /* $Procedure SPCB2T ( SPK and CK, binary to text ) */
 /* Subroutine */ int spcb2t_(char *binary, integer *unit, ftnlen binary_len)
@@ -18,21 +25,26 @@ static integer c__1 = 1;
 	    e_wsle(void);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spcec_(integer *, 
-	    integer *), dafb2t_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int spcec_(integer *, integer *);
+    extern /* Subroutine */ int dafb2t_(char *, integer *, ftnlen);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *), dafopr_(char *, integer *,
-	     ftnlen), errfnm_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___2 = { 1, 0, 0, 0, 0 };
-    static cilist io___4 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    spcb2t_state_t* __state = get_spcb2t_state();
 /* $ Abstract */
 
 /*     Convert the contents of a binary SPK or CK file to text, */
@@ -238,12 +250,13 @@ static integer c__1 = 1;
 
 /*     Next, write the begin comments marker. */
 
-    io___2.ciunit = *unit;
-    iostat = s_wsle(&io___2);
+    __state->io___2.ciunit = *unit;
+    iostat = s_wsle(&__state->io___2);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&c__9, &c__1, "~NAIF/SPC BEGIN COMMENTS~", (ftnlen)25);
+    iostat = do_lio(&__state->c__9, &__state->c__1, "~NAIF/SPC BEGIN COMMENT"
+	    "S~", (ftnlen)25);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -271,12 +284,13 @@ L100001:
 
 /*     Finally, write the end comments marker. */
 
-    io___4.ciunit = *unit;
-    iostat = s_wsle(&io___4);
+    __state->io___4.ciunit = *unit;
+    iostat = s_wsle(&__state->io___4);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&c__9, &c__1, "~NAIF/SPC END COMMENTS~", (ftnlen)23);
+    iostat = do_lio(&__state->c__9, &__state->c__1, "~NAIF/SPC END COMMENTS~",
+	     (ftnlen)23);
     if (iostat != 0) {
 	goto L100002;
     }

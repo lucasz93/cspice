@@ -1,9 +1,17 @@
-/* zzpltchk.f -- translated by f2c (version 19980913).
+/* zzpltchk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzpltchk_state_t;
+static zzpltchk_state_t* get_zzpltchk_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZPLTCHK ( Private --- Platform Check ) */
 /* Subroutine */ int zzpltchk_(logical *ok)
@@ -12,16 +20,24 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzgetbff_(integer *), zzddhgsd_(char *, 
-	    integer *, char *, ftnlen, ftnlen), zzplatfm_(char *, char *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen), errch_(char *, char *, 
-	    ftnlen, ftnlen);
-    char value[32], rtebff[32], strbff[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int zzgetbff_(integer *);
+    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    char value[32];
+    char rtebff[32];
+    char strbff[32];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     integer bff;
 
+
+    /* Module state */
+    zzpltchk_state_t* __state = get_zzpltchk_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

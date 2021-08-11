@@ -1,9 +1,17 @@
-/* sameai.f -- translated by f2c (version 19980913).
+/* sameai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sameai_state_t;
+static sameai_state_t* get_sameai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SAMEAI ( Are two integer arrays the same? ) */
 logical sameai_(integer *a1, integer *a2, integer *ndim)
@@ -15,6 +23,9 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    sameai_state_t* __state = get_sameai_state();
 /* $ Abstract */
 
 /*     Indicate whether two integer arrays are equal. */

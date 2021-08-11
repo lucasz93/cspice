@@ -1,9 +1,21 @@
-/* hx2int.f -- translated by f2c (version 19980913).
+/* hx2int.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern hx2int_init_t __hx2int_init;
+static hx2int_state_t* get_hx2int_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->hx2int)
+		state->hx2int = __cspice_allocate_module(sizeof(
+	hx2int_state_t), &__hx2int_init, sizeof(__hx2int_init));
+	return state->hx2int;
+
+}
 
 /* $Procedure  HX2INT  ( Signed hexadecimal string to integer ) */
 /* Subroutine */ int hx2int_(char *string, integer *number, logical *error, 
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     char ch__1[1];
@@ -22,21 +33,22 @@
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer mini, maxi;
     logical more;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
-    static integer iplus, lccbeg, digbeg, lccend, uccbeg, digend, uccend, 
-	    ispace;
     integer idigit;
-    static integer minmod, maxmod;
     integer strbeg;
     logical negtiv;
-    extern integer intmin_(void), intmax_(void);
-    integer letter, strend;
-    static integer iminus;
-    integer tmpnum, pos;
+    extern integer intmin_(void);
+    extern integer intmax_(void);
+    integer letter;
+    integer strend;
+    integer tmpnum;
+    integer pos;
 
+
+    /* Module state */
+    hx2int_state_t* __state = get_hx2int_state();
 /* $ Abstract */
 
 /*     Convert a signed hexadecimal string representation of an integer */
@@ -357,8 +369,8 @@
 /*     If this is the first time that this routine has been called, */
 /*     we need to do some setup stuff. */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 
 /*        Initialize the upper and lower bounds for the decimal digits, */
 /*        the upper and lower bounds for the uppercase hexadecimal */
@@ -366,24 +378,24 @@
 /*        hexadecimal digits, the space, the plus sign, and the minus */
 /*        sign in the character sequence. */
 
-	digbeg = '0';
-	digend = '9';
-	uccbeg = 'A';
-	uccend = 'F';
-	lccbeg = 'a';
-	lccend = 'f';
-	iminus = '-';
-	iplus = '+';
-	ispace = ' ';
+	__state->digbeg = '0';
+	__state->digend = '9';
+	__state->uccbeg = 'A';
+	__state->uccend = 'F';
+	__state->lccbeg = 'a';
+	__state->lccend = 'f';
+	__state->iminus = '-';
+	__state->iplus = '+';
+	__state->ispace = ' ';
 
 /*        Initialize some boundary values for error checking while */
 /*        constructing the desired integer. These are used to help */
 /*        determine integer overflow or integer underflow errors. */
 
-	mini = intmin_() / 16;
-	minmod = (mini << 4) - intmin_();
-	maxi = intmax_() / 16;
-	maxmod = intmax_() - (maxi << 4);
+	__state->mini = intmin_() / 16;
+	__state->minmod = (__state->mini << 4) - intmin_();
+	__state->maxi = intmax_() / 16;
+	__state->maxmod = intmax_() - (__state->maxi << 4);
     }
 
 /*     There are no errors initially, so set the error flag to */
@@ -414,7 +426,7 @@
 /*     off the end of the string. */
 
     strbeg = 1;
-    while(*(unsigned char *)&string[strbeg - 1] == ispace) {
+    while(*(unsigned char *)&string[strbeg - 1] == __state->ispace) {
 	++strbeg;
     }
 
@@ -460,10 +472,10 @@
 /*     If the character is a plus sign, we want to increment the */
 /*     position. */
 
-    if (*(unsigned char *)&string[pos - 1] == iminus) {
+    if (*(unsigned char *)&string[pos - 1] == __state->iminus) {
 	negtiv = TRUE_;
 	++pos;
-    } else if (*(unsigned char *)&string[pos - 1] == iplus) {
+    } else if (*(unsigned char *)&string[pos - 1] == __state->iplus) {
 	++pos;
     }
 
@@ -482,12 +494,14 @@
     if (negtiv) {
 	while(pos <= strend) {
 	    letter = *(unsigned char *)&string[pos - 1];
-	    if (letter >= digbeg && letter <= digend) {
-		idigit = letter - digbeg;
-	    } else if (letter >= uccbeg && letter <= uccend) {
-		idigit = letter + 10 - uccbeg;
-	    } else if (letter >= lccbeg && letter <= lccend) {
-		idigit = letter + 10 - lccbeg;
+	    if (letter >= __state->digbeg && letter <= __state->digend) {
+		idigit = letter - __state->digbeg;
+	    } else if (letter >= __state->uccbeg && letter <= __state->uccend)
+		     {
+		idigit = letter + 10 - __state->uccbeg;
+	    } else if (letter >= __state->lccbeg && letter <= __state->lccend)
+		     {
+		idigit = letter + 10 - __state->lccbeg;
 	    } else {
 		*error = TRUE_;
 		s_copy(errmsg, "ERROR: Illegal character '#' encountered.", 
@@ -497,10 +511,10 @@
 			ftnlen)1, errmsg_len);
 		return 0;
 	    }
-	    if (tmpnum > mini) {
+	    if (tmpnum > __state->mini) {
 		tmpnum = (tmpnum << 4) - idigit;
 		++pos;
-	    } else if (tmpnum == mini && idigit <= minmod) {
+	    } else if (tmpnum == __state->mini && idigit <= __state->minmod) {
 		tmpnum = (tmpnum << 4) - idigit;
 		++pos;
 	    } else {
@@ -513,12 +527,14 @@
     } else {
 	while(pos <= strend) {
 	    letter = *(unsigned char *)&string[pos - 1];
-	    if (letter >= digbeg && letter <= digend) {
-		idigit = letter - digbeg;
-	    } else if (letter >= uccbeg && letter <= uccend) {
-		idigit = letter + 10 - uccbeg;
-	    } else if (letter >= lccbeg && letter <= lccend) {
-		idigit = letter + 10 - lccbeg;
+	    if (letter >= __state->digbeg && letter <= __state->digend) {
+		idigit = letter - __state->digbeg;
+	    } else if (letter >= __state->uccbeg && letter <= __state->uccend)
+		     {
+		idigit = letter + 10 - __state->uccbeg;
+	    } else if (letter >= __state->lccbeg && letter <= __state->lccend)
+		     {
+		idigit = letter + 10 - __state->lccbeg;
 	    } else {
 		*error = TRUE_;
 		s_copy(errmsg, "ERROR: Illegal character '#' encountered.", 
@@ -528,10 +544,10 @@
 			ftnlen)1, errmsg_len);
 		return 0;
 	    }
-	    if (tmpnum < maxi) {
+	    if (tmpnum < __state->maxi) {
 		tmpnum = (tmpnum << 4) + idigit;
 		++pos;
-	    } else if (tmpnum == maxi && idigit <= maxmod) {
+	    } else if (tmpnum == __state->maxi && idigit <= __state->maxmod) {
 		tmpnum = (tmpnum << 4) + idigit;
 		++pos;
 	    } else {

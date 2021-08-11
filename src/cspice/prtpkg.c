@@ -1,13 +1,21 @@
-/* prtpkg.f -- translated by f2c (version 19980913).
+/* prtpkg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern prtpkg_init_t __prtpkg_init;
+static prtpkg_state_t* get_prtpkg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->prtpkg)
+		state->prtpkg = __cspice_allocate_module(sizeof(
+	prtpkg_state_t), &__prtpkg_init, sizeof(__prtpkg_init));
+	return state->prtpkg;
+
+}
 
 /* $Procedure      PRTPKG ( Declare Arguments for Error Message Routines ) */
 logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl, 
@@ -15,11 +23,6 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 {
     /* Initialized data */
 
-    static logical svshrt = TRUE_;
-    static logical svexpl = TRUE_;
-    static logical svlong = TRUE_;
-    static logical svtrac = TRUE_;
-    static logical svdflt = TRUE_;
 
     /* System generated locals */
     address a__1[2];
@@ -37,10 +40,13 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
     char ltype[10];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char device[255];
-    extern /* Subroutine */ int getdev_(char *, ftnlen), wrline_(char *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int getdev_(char *, ftnlen);
+    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
     char loctyp[10];
 
+
+    /* Module state */
+    prtpkg_state_t* __state = get_prtpkg_state();
 /* $ Abstract */
 
 /*      Declare the arguments for the error message selection entry */
@@ -564,29 +570,29 @@ L_setprt:
 /*     Executable Code: */
 
     if (*short__) {
-	svshrt = TRUE_;
+	__state->svshrt = TRUE_;
     } else {
-	svshrt = FALSE_;
+	__state->svshrt = FALSE_;
     }
     if (*expl) {
-	svexpl = TRUE_;
+	__state->svexpl = TRUE_;
     } else {
-	svexpl = FALSE_;
+	__state->svexpl = FALSE_;
     }
     if (*long__) {
-	svlong = TRUE_;
+	__state->svlong = TRUE_;
     } else {
-	svlong = FALSE_;
+	__state->svlong = FALSE_;
     }
     if (*trace) {
-	svtrac = TRUE_;
+	__state->svtrac = TRUE_;
     } else {
-	svtrac = FALSE_;
+	__state->svtrac = FALSE_;
     }
     if (*dfault) {
-	svdflt = TRUE_;
+	__state->svdflt = TRUE_;
     } else {
-	svdflt = FALSE_;
+	__state->svdflt = FALSE_;
     }
 
 /*     We assign a value to SETPRT, but this value is */
@@ -772,15 +778,15 @@ L_msgsel:
     ljust_(type__, ltype, type_len, (ftnlen)10);
     ucase_(ltype, ltype, (ftnlen)10, (ftnlen)10);
     if (s_cmp(ltype, "SHORT", (ftnlen)10, (ftnlen)5) == 0) {
-	ret_val = svshrt;
+	ret_val = __state->svshrt;
     } else if (s_cmp(ltype, "EXPLAIN", (ftnlen)10, (ftnlen)7) == 0) {
-	ret_val = svexpl;
+	ret_val = __state->svexpl;
     } else if (s_cmp(ltype, "LONG", (ftnlen)10, (ftnlen)4) == 0) {
-	ret_val = svlong;
+	ret_val = __state->svlong;
     } else if (s_cmp(ltype, "TRACEBACK", (ftnlen)10, (ftnlen)9) == 0) {
-	ret_val = svtrac;
+	ret_val = __state->svtrac;
     } else if (s_cmp(ltype, "DEFAULT", (ftnlen)10, (ftnlen)7) == 0) {
-	ret_val = svdflt;
+	ret_val = __state->svdflt;
     } else {
 
 /*        Bad value of type!  We have a special case here; to */
@@ -800,7 +806,7 @@ L_msgsel:
 	i__1[0] = 86, a__1[0] = "MSGSEL:  An invalid error message type was "
 		"supplied as input; the type specifiedwas:  ";
 	i__1[1] = 10, a__1[1] = loctyp;
-	s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)96);
+	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)96);
 	wrline_(device, ch__1, (ftnlen)255, (ftnlen)96);
     }
     return ret_val;

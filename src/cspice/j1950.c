@@ -1,9 +1,17 @@
-/* j1950.f -- translated by f2c (version 19980913).
+/* j1950.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int j1950_state_t;
+static j1950_state_t* get_j1950_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure                     J1950 ( Julian Date of 1950.0 JAN 1.0 ) */
 doublereal j1950_(void)
@@ -11,6 +19,9 @@ doublereal j1950_(void)
     /* System generated locals */
     doublereal ret_val;
 
+
+    /* Module state */
+    j1950_state_t* __state = get_j1950_state();
 /* $ Abstract */
 
 /*     Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0). */

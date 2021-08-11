@@ -1,9 +1,10 @@
-/* ncodec.f -- translated by f2c (version 19980913).
+/* ncodec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure NCODEC ( Encode integer value into character item ) */
 /* Subroutine */ int ncodec_0_(int n__, integer *value, char *item, ftnlen 

@@ -1,9 +1,17 @@
-/* samsbi.f -- translated by f2c (version 19980913).
+/* samsbi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int samsbi_state_t;
+static samsbi_state_t* get_samsbi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SAMSBI (Same substrings, case insensitive) */
 logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
@@ -17,9 +25,13 @@ logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern logical nechr_(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    samsbi_state_t* __state = get_samsbi_state();
 /* $ Abstract */
 
 /*     Determine whether or not two substrings are the same up to */

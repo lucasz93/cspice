@@ -1,13 +1,21 @@
-/* spke15.f -- translated by f2c (version 19980913).
+/* spke15.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern spke15_init_t __spke15_init;
+static spke15_state_t* get_spke15_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke15)
+		state->spke15 = __cspice_allocate_module(sizeof(
+	spke15_state_t), &__spke15_init, sizeof(__spke15_init));
+	return state->spke15;
+
+}
 
 /* $Procedure      SPKE15 ( Evaluate a type 15 SPK data record) */
 /* Subroutine */ int spke15_(doublereal *et, doublereal *recin, doublereal *
@@ -21,38 +29,61 @@ static integer c__6 = 6;
 	    doublereal *, doublereal *);
 
     /* Local variables */
-    doublereal near__, dmdt;
+    doublereal near__;
+    doublereal dmdt;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
-    extern doublereal vdot_(doublereal *, doublereal *), vsep_(doublereal *, 
-	    doublereal *);
+    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer j2flg;
-    doublereal p, angle, dnode, z__;
+    doublereal p;
+    doublereal angle;
+    doublereal dnode;
+    doublereal z__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal epoch, speed, dperi, theta, manom;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     errdp_(char *, doublereal *, ftnlen), vcrss_(doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal epoch;
+    doublereal speed;
+    doublereal dperi;
+    doublereal theta;
+    doublereal manom;
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal twopi_(void);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
-    doublereal oneme2, state0[6];
+    doublereal oneme2;
+    doublereal state0[6];
     extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal pa[3], gm, ta, dt;
+    doublereal pa[3];
+    doublereal gm;
+    doublereal ta;
+    doublereal dt;
     extern doublereal pi_(void);
-    doublereal tp[3], pv[3], cosinc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
-	    , chkout_(char *, ftnlen), vsclip_(doublereal *, doublereal *), 
-	    setmsg_(char *, ftnlen);
-    doublereal tmpsta[6], oj2;
+    doublereal tp[3];
+    doublereal pv[3];
+    doublereal cosinc;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    doublereal tmpsta[6];
+    doublereal oj2;
     extern logical return_(void);
     doublereal ecc;
     extern doublereal dpr_(void);
-    doublereal dot, rpl, k2pi;
+    doublereal dot;
+    doublereal rpl;
+    doublereal k2pi;
 
+
+    /* Module state */
+    spke15_state_t* __state = get_spke15_state();
 /* $ Abstract */
 
 /*     Evaluates a single SPK data record from a segment of type 15 */
@@ -563,7 +594,7 @@ static integer c__6 = 6;
 	if (j2flg != 1) {
 	    vrotv_(state, tp, &dperi, tmpsta);
 	    vrotv_(&state[3], tp, &dperi, &tmpsta[3]);
-	    moved_(tmpsta, &c__6, state);
+	    moved_(tmpsta, &__state->c__6, state);
 	}
 
 /*        Regress the line of nodes by rotating the state */
@@ -572,7 +603,7 @@ static integer c__6 = 6;
 	if (j2flg != 2) {
 	    vrotv_(state, pv, &dnode, tmpsta);
 	    vrotv_(&state[3], pv, &dnode, &tmpsta[3]);
-	    moved_(tmpsta, &c__6, state);
+	    moved_(tmpsta, &__state->c__6, state);
 	}
 
 /*        We could perform the rotations above in the other order, */

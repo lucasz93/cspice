@@ -1,15 +1,21 @@
-/* zzspkfao.f -- translated by f2c (version 19980913).
+/* zzspkfao.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__3 = 3;
-static doublereal c_b15 = 1.;
+extern zzspkfao_init_t __zzspkfao_init;
+static zzspkfao_state_t* get_zzspkfao_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkfao)
+		state->zzspkfao = __cspice_allocate_module(sizeof(
+	zzspkfao_state_t), &__zzspkfao_init, sizeof(__zzspkfao_init));
+	return state->zzspkfao;
+
+}
 
 /* $Procedure ZZSPKFAO (SPK func., aberration corrected state, observer) */
 /* Subroutine */ int zzspkfao_(integer *targ, doublereal *et, char *ref, char 
@@ -18,8 +24,6 @@ static doublereal c_b15 = 1.;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;
@@ -36,9 +40,10 @@ static doublereal c_b15 = 1.;
     extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    doublereal stobs[12]	/* was [6][2] */, stctr[6];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    doublereal stobs[12]	/* was [6][2] */;
+    doublereal stctr[6];
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     logical attblk[15];
@@ -46,17 +51,22 @@ static doublereal c_b15 = 1.;
 	     doublereal *, doublereal *);
     doublereal ssbobs[6];
     integer obsctr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), irfnum_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), spkaps_(integer *, doublereal *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen), spkssb_(integer *, doublereal *, 
-	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int spkaps_(integer *, doublereal *, char *, char 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
     doublereal stctro[6];
     extern logical return_(void);
-    static logical usestl;
     doublereal acc[3];
 
+
+    /* Module state */
+    zzspkfao_state_t* __state = get_zzspkfao_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -537,7 +547,8 @@ static doublereal c_b15 = 1.;
 	return 0;
     }
     chkin_("ZZSPKFAO", (ftnlen)8);
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -550,7 +561,7 @@ static doublereal c_b15 = 1.;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -561,8 +572,8 @@ static doublereal c_b15 = 1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	usestl = attblk[2];
-	pass1 = FALSE_;
+	__state->usestl = attblk[2];
+	__state->pass1 = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -598,8 +609,8 @@ static doublereal c_b15 = 1.;
 	chkout_("ZZSPKFAO", (ftnlen)8);
 	return 0;
     }
-    vaddg_(stctro, stctr, &c__6, ssbobs);
-    if (usestl) {
+    vaddg_(stctro, stctr, &__state->c__6, ssbobs);
+    if (__state->usestl) {
 
 /*        Numerically differentiate the observer velocity relative to */
 /*        the SSB to obtain acceleration. We first evaluate the */
@@ -613,13 +624,13 @@ static doublereal c_b15 = 1.;
 		chkout_("ZZSPKFAO", (ftnlen)8);
 		return 0;
 	    }
-	    vaddg_(stctro, stctr, &c__6, &stobs[(i__1 = i__ * 6 - 6) < 12 && 
-		    0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkfao_", (
-		    ftnlen)526)]);
+	    vaddg_(stctro, stctr, &__state->c__6, &stobs[(i__1 = i__ * 6 - 6) 
+		    < 12 && 0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkf"
+		    "ao_", (ftnlen)526)]);
 	}
-	qderiv_(&c__3, &stobs[3], &stobs[9], &c_b15, acc);
+	qderiv_(&__state->c__3, &stobs[3], &stobs[9], &__state->c_b15, acc);
     } else {
-	cleard_(&c__3, acc);
+	cleard_(&__state->c__3, acc);
     }
 
 /*     Look up the apparent state. The light time and light */

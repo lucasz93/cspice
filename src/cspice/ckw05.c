@@ -1,17 +1,21 @@
-/* ckw05.f -- translated by f2c (version 19980913).
+/* ckw05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__23 = 23;
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern ckw05_init_t __ckw05_init;
+static ckw05_state_t* get_ckw05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw05)
+		state->ckw05 = __cspice_allocate_module(sizeof(ckw05_state_t),
+	 &__ckw05_init, sizeof(__ckw05_init));
+	return state->ckw05;
+
+}
 
 /* $Procedure      CKW05 ( Write CK segment, type 5 ) */
 /* Subroutine */ int ckw05_(integer *handle, integer *subtyp, integer *degree,
@@ -25,32 +29,40 @@ static integer c__1 = 1;
     doublereal d__1;
 
     /* Local variables */
-    integer addr__, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    integer addr__;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), dafada_(doublereal *, 
-	    integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
     doublereal dc[2];
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
 	    ftnlen);
     integer ic[6];
     extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
-    integer chrcod, refcod;
+    integer chrcod;
+    integer refcod;
     extern integer bsrchd_(doublereal *, integer *, doublereal *);
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer lstltd_(doublereal *, integer *, doublereal *);
-    extern logical vzerog_(doublereal *, integer *), return_(void);
+    extern logical vzerog_(doublereal *, integer *);
+    extern logical return_(void);
     integer winsiz;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    ckw05_state_t* __state = get_ckw05_state();
 /* $ Abstract */
 
 /*     Write a type 5 segment to a CK file. */
@@ -902,7 +914,7 @@ static integer c__1 = 1;
 /*        of the packet array is not known at compile time. */
 
 	addr__ = packsz * (i__ - 1) + 1;
-	if (vzerog_(&packts[addr__ - 1], &c__4)) {
+	if (vzerog_(&packts[addr__ - 1], &__state->c__4)) {
 	    setmsg_("The quaternion at index # has magnitude zero.", (ftnlen)
 		    45);
 	    errint_("#", &i__, (ftnlen)1);
@@ -919,7 +931,7 @@ static integer c__1 = 1;
 	setmsg_("The interpolating polynomials have degree #; the valid degr"
 		"ee range is [1, #]", (ftnlen)77);
 	errint_("#", degree, (ftnlen)1);
-	errint_("#", &c__23, (ftnlen)1);
+	errint_("#", &__state->c__23, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
 	chkout_("CKW05", (ftnlen)5);
 	return 0;
@@ -1000,7 +1012,7 @@ static integer c__1 = 1;
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dc, ic, descr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
@@ -1077,7 +1089,7 @@ static integer c__1 = 1;
     dafada_(sclkdp, n);
     i__1 = (*n - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&sclkdp[i__ * 100 - 1], &c__1);
+	dafada_(&sclkdp[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now add the interval start times. */
@@ -1089,21 +1101,21 @@ static integer c__1 = 1;
 
     i__1 = (*nints - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&starts[i__ * 100 - 1], &c__1);
+	dafada_(&starts[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Add the SCLK rate, segment subtype, window size, interval */
 /*     count, and packet count. */
 
-    dafada_(rate, &c__1);
+    dafada_(rate, &__state->c__1);
     d__1 = (doublereal) (*subtyp);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) winsiz;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*nints);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 

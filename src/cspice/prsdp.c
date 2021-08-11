@@ -1,9 +1,17 @@
-/* prsdp.f -- translated by f2c (version 19980913).
+/* prsdp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prsdp_state_t;
+static prsdp_state_t* get_prsdp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   PRSDP   ( Parse d.p. number with error checking ) */
 /* Subroutine */ int prsdp_(char *string, doublereal *dpval, ftnlen 
@@ -13,13 +21,18 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), nparsd_(char *, 
-	    doublereal *, char *, integer *, ftnlen, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[320];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer ptr;
 
+
+    /* Module state */
+    prsdp_state_t* __state = get_prsdp_state();
 /* $ Abstract */
 
 /*     Parse a string as a double precision number, encapsulating error */

@@ -1,9 +1,17 @@
-/* dskgd.f -- translated by f2c (version 19980913).
+/* dskgd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dskgd_state_t;
+static dskgd_state_t* get_dskgd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DSKGD ( DSK, return DSK segment descriptor  ) */
 /* Subroutine */ int dskgd_(integer *handle, integer *dladsc, doublereal *
@@ -16,12 +24,17 @@
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer dpbase;
     extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *), sigerr_(char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer dpsize;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dskgd_state_t* __state = get_dskgd_state();
 /* $ Abstract */
 
 /*     Return the DSK descriptor from a DSK segment identified */

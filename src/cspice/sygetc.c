@@ -1,9 +1,17 @@
-/* sygetc.f -- translated by f2c (version 19980913).
+/* sygetc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sygetc_state_t;
+static sygetc_state_t* get_sygetc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYGETC ( Return all components for a symbol ) */
 /* Subroutine */ int sygetc_(char *name__, char *tabsym, integer *tabptr, 
@@ -16,15 +24,19 @@
     /* Local variables */
     integer nsym;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movec_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), bsrchc_(char *, integer *, 
-	    char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer locval;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sygetc_state_t* __state = get_sygetc_state();
 /* $ Abstract */
 
 /*     Return the dimension and associated values for a particular */

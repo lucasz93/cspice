@@ -1,15 +1,21 @@
-/* lspcn.f -- translated by f2c (version 19980913).
+/* lspcn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__10 = 10;
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern lspcn_init_t __lspcn_init;
+static lspcn_state_t* get_lspcn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lspcn)
+		state->lspcn = __cspice_allocate_module(sizeof(lspcn_state_t),
+	 &__lspcn_init, sizeof(__lspcn_init));
+	return state->lspcn;
+
+}
 
 /* $Procedure    LSPCN  ( Longitude of the sun, planetocentric ) */
 doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len, 
@@ -17,7 +23,6 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -32,38 +37,43 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
     doublereal tipm[9]	/* was [3][3] */;
     extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    doublereal uavel[3], npole[3], trans[9]	/* was [3][3] */;
+    doublereal uavel[3];
+    doublereal npole[3];
+    doublereal trans[9]	/* was [3][3] */;
     extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    static logical svfnd1;
-    static integer svctr1[2];
     extern logical failed_(void);
     integer idcode;
     doublereal lt;
     extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static integer svidcd;
     extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
 	    doublereal *, ftnlen);
-    doublereal bstate[6], radius;
+    doublereal bstate[6];
+    doublereal radius;
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal sstate[6];
-    static char svbody[36];
     extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
 	     integer *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int spkezr_(char *, doublereal *, char *, char *, 
 	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-    doublereal lat, pos[3];
+    doublereal lat;
+    doublereal pos[3];
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    lspcn_state_t* __state = get_lspcn_state();
 /* $ Abstract */
 
 /*     Compute L_s, the planetocentric longitude of the sun, as seen */
@@ -412,18 +422,18 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Map the body name to an ID code. */
 
-    zzbods2c_(svctr1, svbody, &svidcd, &svfnd1, body, &idcode, &found, (
-	    ftnlen)36, body_len);
+    zzbods2c_(__state->svctr1, __state->svbody, &__state->svidcd, &
+	    __state->svfnd1, body, &idcode, &found, (ftnlen)36, body_len);
     if (! found) {
 	setmsg_("The body name # could not be translated to a NAIF ID code. "
 		" The cause of this problem may be that you need an updated v"
@@ -446,7 +456,7 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /*     Get the geometric state of the body relative to the sun. */
 
-    spkgeo_(&idcode, et, "J2000", &c__10, bstate, &lt, (ftnlen)5);
+    spkgeo_(&idcode, et, "J2000", &__state->c__10, bstate, &lt, (ftnlen)5);
 
 /*     Get the unit direction vector parallel to the angular velocity */
 /*     vector of the orbit.  This is just the unitized cross product of */
@@ -468,7 +478,7 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 /*     vector is associated with the +Z axis; the secondary vector */
 /*     is associated with the +Y axis. */
 
-    twovec_(uavel, &c__3, npole, &c__2, trans);
+    twovec_(uavel, &__state->c__3, npole, &__state->c__2, trans);
     if (failed_()) {
 	chkout_("LSPCN", (ftnlen)5);
 	return ret_val;

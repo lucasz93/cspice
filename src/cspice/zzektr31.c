@@ -1,14 +1,21 @@
-/* zzektr31.f -- translated by f2c (version 19980913).
+/* zzektr31.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__81 = 81;
-static integer c__3 = 3;
+extern zzektr31_init_t __zzektr31_init;
+static zzektr31_state_t* get_zzektr31_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektr31)
+		state->zzektr31 = __cspice_allocate_module(sizeof(
+	zzektr31_state_t), &__zzektr31_init, sizeof(__zzektr31_init));
+	return state->zzektr31;
+
+}
 
 /* $Procedure      ZZEKTR31 ( EK tree, 3-1 merge ) */
 /* Subroutine */ int zzektr31_(integer *handle, integer *tree)
@@ -21,21 +28,29 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer root;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *), 
-	    zzekpgri_(integer *, integer *, integer *), zzekpgwi_(integer *, 
-	    integer *, integer *);
-    integer i__, child[2], delta;
+    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    integer i__;
+    integer child[2];
+    integer delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer rpage[256];
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    integer c1page[256], c2page[256], middle;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    integer nlkeys, nrkeys;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    integer c1page[256];
+    integer c2page[256];
+    integer middle;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer nlkeys;
+    integer nrkeys;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer sum;
 
+
+    /* Module state */
+    zzektr31_state_t* __state = get_zzektr31_state();
 /* $ Abstract */
 
 /*     Execute a 3-1 merge:  move the contents of two children into */
@@ -644,7 +659,7 @@ static integer c__3 = 3;
 		"ing to # were expected.", (ftnlen)82);
 	errint_("#", &nlkeys, (ftnlen)1);
 	errint_("#", &nrkeys, (ftnlen)1);
-	errint_("#", &c__81, (ftnlen)1);
+	errint_("#", &__state->c__81, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTR31", (ftnlen)8);
 	return 0;
@@ -704,8 +719,9 @@ static integer c__3 = 3;
 /*     Free the pages occupied by the deleted children. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	zzekpgfr_(handle, &c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("child", i__1, "zzektr31_", (ftnlen)325)]);
+	zzekpgfr_(handle, &__state->c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= 
+		i__1 ? i__1 : s_rnge("child", i__1, "zzektr31_", (ftnlen)325)]
+		);
     }
     return 0;
 } /* zzektr31_ */

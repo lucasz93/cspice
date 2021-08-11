@@ -1,17 +1,21 @@
-/* wrline.f -- translated by f2c (version 19980913).
+/* wrline.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__9 = 9;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static integer c__2 = 2;
+extern wrline_init_t __wrline_init;
+static wrline_state_t* get_wrline_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wrline)
+		state->wrline = __cspice_allocate_module(sizeof(
+	wrline_state_t), &__wrline_init, sizeof(__wrline_init));
+	return state->wrline;
+
+}
 
 /* $Procedure      WRLINE ( Write Output Line to a Device ) */
 /* Subroutine */ int wrline_0_(int n__, char *device, char *line, ftnlen 
@@ -50,19 +54,11 @@ static integer c__2 = 2;
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___6 = { 0, 6, 0, 0, 0 };
-    static cilist io___7 = { 0, 6, 0, 0, 0 };
-    static cilist io___8 = { 0, 6, 0, 0, 0 };
-    static cilist io___9 = { 0, 6, 0, 0, 0 };
-    static cilist io___10 = { 0, 6, 0, 0, 0 };
-    static cilist io___11 = { 0, 6, 0, 0, 0 };
-    static cilist io___12 = { 0, 6, 0, 0, 0 };
-    static cilist io___15 = { 0, 6, 0, 0, 0 };
-    static cilist io___16 = { 0, 6, 0, 0, 0 };
-    static cilist io___17 = { 0, 6, 0, 0, 0 };
-    static cilist io___18 = { 0, 6, 0, 0, 0 };
 
 
+
+    /* Module state */
+    wrline_state_t* __state = get_wrline_state();
 /* $ Abstract */
 
 /*     Write a character string to an output device. */
@@ -604,7 +600,7 @@ static integer c__2 = 2;
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, line_len));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
 	if (iostat != 0) {
 	    goto L100001;
 	}
@@ -643,14 +639,16 @@ L100001:
 /*        This is weird.  How can an INQUIRE statement fail, */
 /*        if the syntax is correct?  But just in case... */
 
-	s_wsle(&io___6);
-	do_lio(&c__9, &c__1, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	s_wsle(&__state->io___6);
+	do_lio(&__state->c__9, &__state->c__1, "SPICE(INQUIREFAILED)", (
+		ftnlen)20);
 	e_wsle();
-	s_wsle(&io___7);
-	do_lio(&c__9, &c__1, "WRLINE: File = ", (ftnlen)15);
-	do_lio(&c__9, &c__1, device, device_len);
-	do_lio(&c__9, &c__1, "IOSTAT = ", (ftnlen)9);
-	do_lio(&c__3, &c__1, (char *)&iostat, (ftnlen)sizeof(integer));
+	s_wsle(&__state->io___7);
+	do_lio(&__state->c__9, &__state->c__1, "WRLINE: File = ", (ftnlen)15);
+	do_lio(&__state->c__9, &__state->c__1, device, device_len);
+	do_lio(&__state->c__9, &__state->c__1, "IOSTAT = ", (ftnlen)9);
+	do_lio(&__state->c__3, &__state->c__1, (char *)&iostat, (ftnlen)
+		sizeof(integer));
 	e_wsle();
 	return 0;
     }
@@ -661,16 +659,17 @@ L100001:
 
 	fndlun_(&unit);
 	if (unit < 1) {
-	    s_wsle(&io___8);
-	    do_lio(&c__9, &c__1, "SPICE(NOFREELOGICALUNIT)", (ftnlen)24);
+	    s_wsle(&__state->io___8);
+	    do_lio(&__state->c__9, &__state->c__1, "SPICE(NOFREELOGICALUNIT)",
+		     (ftnlen)24);
 	    e_wsle();
-	    s_wsle(&io___9);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    s_wsle(&__state->io___9);
+	    do_lio(&__state->c__9, &__state->c__1, " ", (ftnlen)1);
 	    e_wsle();
-	    s_wsle(&io___10);
-	    do_lio(&c__9, &c__1, "WRLINE: Maximum number of logical units th"
-		    "at can be allocated by SPICELIB has already been reached",
-		     (ftnlen)98);
+	    s_wsle(&__state->io___10);
+	    do_lio(&__state->c__9, &__state->c__1, "WRLINE: Maximum number o"
+		    "f logical units that can be allocated by SPICELIB has al"
+		    "ready been reached", (ftnlen)98);
 	    e_wsle();
 	    return 0;
 	}
@@ -694,24 +693,25 @@ L100001:
 	o__1.oblnk = 0;
 	iostat = f_open(&o__1);
 	if (iostat != 0) {
-	    s_wsle(&io___11);
-	    do_lio(&c__9, &c__1, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	    s_wsle(&__state->io___11);
+	    do_lio(&__state->c__9, &__state->c__1, "SPICE(FILEOPENFAILED)", (
+		    ftnlen)21);
 	    e_wsle();
-	    s_wsle(&io___12);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    s_wsle(&__state->io___12);
+	    do_lio(&__state->c__9, &__state->c__1, " ", (ftnlen)1);
 	    e_wsle();
 	    s_copy(error, "WRLINE: An error occurred while attempting to open"
 		    , (ftnlen)240, (ftnlen)50);
-	    suffix_(device, &c__1, error, device_len, (ftnlen)240);
-	    suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)240);
-	    suffix_("The value of IOSTAT returned was", &c__2, error, (ftnlen)
-		    32, (ftnlen)240);
-	    suffix_(":", &c__0, error, (ftnlen)1, (ftnlen)240);
+	    suffix_(device, &__state->c__1, error, device_len, (ftnlen)240);
+	    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
+	    suffix_("The value of IOSTAT returned was", &__state->c__2, error,
+		     (ftnlen)32, (ftnlen)240);
+	    suffix_(":", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
 	    intstr_(&iostat, errstr, (ftnlen)11);
-	    suffix_(errstr, &c__1, error, (ftnlen)11, (ftnlen)240);
-	    suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)240);
-	    s_wsle(&io___15);
-	    do_lio(&c__9, &c__1, error, (ftnlen)240);
+	    suffix_(errstr, &__state->c__1, error, (ftnlen)11, (ftnlen)240);
+	    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
+	    s_wsle(&__state->io___15);
+	    do_lio(&__state->c__9, &__state->c__1, error, (ftnlen)240);
 	    e_wsle();
 	    return 0;
 	}
@@ -732,7 +732,7 @@ L100001:
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&c__1, line, rtrim_(line, line_len));
+    iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
     if (iostat != 0) {
 	goto L100002;
     }
@@ -745,16 +745,16 @@ L100002:
     if (iostat != 0) {
 	s_copy(error, "WRLINE: An error occurred while attempting to WRITE t"
 		"o ", (ftnlen)240, (ftnlen)55);
-	suffix_(device, &c__1, error, device_len, (ftnlen)240);
-	suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)240);
-	suffix_("The value of IOSTAT returned was", &c__2, error, (ftnlen)32, 
-		(ftnlen)240);
-	suffix_(":", &c__0, error, (ftnlen)1, (ftnlen)240);
+	suffix_(device, &__state->c__1, error, device_len, (ftnlen)240);
+	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
+	suffix_("The value of IOSTAT returned was", &__state->c__2, error, (
+		ftnlen)32, (ftnlen)240);
+	suffix_(":", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
 	intstr_(&iostat, errstr, (ftnlen)11);
-	suffix_(errstr, &c__1, error, (ftnlen)11, (ftnlen)240);
-	suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)240);
-	s_wsle(&io___16);
-	do_lio(&c__9, &c__1, error, (ftnlen)240);
+	suffix_(errstr, &__state->c__1, error, (ftnlen)11, (ftnlen)240);
+	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
+	s_wsle(&__state->io___16);
+	do_lio(&__state->c__9, &__state->c__1, error, (ftnlen)240);
 	e_wsle();
 	return 0;
     }
@@ -954,14 +954,17 @@ L_clline:
 /*        This is weird.  How can an INQUIRE statement fail, */
 /*        if the syntax is correct?  But just in case... */
 
-	s_wsle(&io___17);
-	do_lio(&c__9, &c__1, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	s_wsle(&__state->io___17);
+	do_lio(&__state->c__9, &__state->c__1, "SPICE(INQUIREFAILED)", (
+		ftnlen)20);
 	e_wsle();
-	s_wsle(&io___18);
-	do_lio(&c__9, &c__1, "CLLINE:  File = ", (ftnlen)16);
-	do_lio(&c__9, &c__1, device, device_len);
-	do_lio(&c__9, &c__1, "IOSTAT = ", (ftnlen)9);
-	do_lio(&c__3, &c__1, (char *)&iostat, (ftnlen)sizeof(integer));
+	s_wsle(&__state->io___18);
+	do_lio(&__state->c__9, &__state->c__1, "CLLINE:  File = ", (ftnlen)16)
+		;
+	do_lio(&__state->c__9, &__state->c__1, device, device_len);
+	do_lio(&__state->c__9, &__state->c__1, "IOSTAT = ", (ftnlen)9);
+	do_lio(&__state->c__3, &__state->c__1, (char *)&iostat, (ftnlen)
+		sizeof(integer));
 	e_wsle();
 	return 0;
     }

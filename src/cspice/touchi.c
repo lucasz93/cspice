@@ -1,9 +1,17 @@
-/* touchi.f -- translated by f2c (version 19980913).
+/* touchi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int touchi_state_t;
+static touchi_state_t* get_touchi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TOUCHI ( Touch a variable ) */
 integer touchi_(integer *int__)
@@ -11,6 +19,9 @@ integer touchi_(integer *int__)
     /* System generated locals */
     integer ret_val;
 
+
+    /* Module state */
+    touchi_state_t* __state = get_touchi_state();
 /* $ Abstract */
 
 /*     Return the value of the input integer */

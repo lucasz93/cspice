@@ -1,9 +1,17 @@
-/* ekappr.f -- translated by f2c (version 19980913).
+/* ekappr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekappr_state_t;
+static ekappr_state_t* get_ekappr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      EKAPPR ( EK, append record onto segment ) */
 /* Subroutine */ int ekappr_(integer *handle, integer *segno, integer *recno)
@@ -13,17 +21,23 @@
 
     /* Local variables */
     integer nrec;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekmloc_(integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+	    integer *);
     integer mbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    integer mp, segdsc[24];
+    integer mp;
+    integer segdsc[24];
     extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), dasrdi_(integer *, 
-	    integer *, integer *, integer *), ekinsr_(integer *, integer *, 
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int ekinsr_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    ekappr_state_t* __state = get_ekappr_state();
 /* $ Abstract */
 
 /*     Append a new, empty record at the end of a specified E-kernel */

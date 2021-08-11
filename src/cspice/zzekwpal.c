@@ -1,13 +1,21 @@
-/* zzekwpal.f -- translated by f2c (version 19980913).
+/* zzekwpal.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekwpal_init_t __zzekwpal_init;
+static zzekwpal_state_t* get_zzekwpal_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekwpal)
+		state->zzekwpal = __cspice_allocate_module(sizeof(
+	zzekwpal_state_t), &__zzekwpal_init, sizeof(__zzekwpal_init));
+	return state->zzekwpal;
+
+}
 
 /* $Procedure     ZZEKWPAL ( EK, write paged array, logical ) */
 /* Subroutine */ int zzekwpal_(integer *handle, integer *segdsc, integer *
@@ -23,8 +31,10 @@ static integer c__1 = 1;
     char page[1024];
     integer from;
     extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekpgwc_(integer *, integer *, 
-	    char *, ftnlen), zzekslnk_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
 	    integer *);
     integer npage;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
@@ -32,6 +42,9 @@ static integer c__1 = 1;
     extern logical return_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekwpal_state_t* __state = get_zzekwpal_state();
 /* $ Abstract */
 
 /*     Write a logical array out to a contiguous set of EK pages. */
@@ -620,7 +633,7 @@ static integer c__1 = 1;
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + 1013) / 1014;
-    zzekacps_(handle, segdsc, &c__1, &npage, p, base);
+    zzekacps_(handle, segdsc, &__state->c__1, &npage, p, base);
 
 /*     Write the input data out to the target file a page at a time. */
 
@@ -654,7 +667,7 @@ static integer c__1 = 1;
 /*           Set the link count. */
 
 	    i__2 = to - 1;
-	    zzekslnk_(handle, &c__1, p, &i__2);
+	    zzekslnk_(handle, &__state->c__1, p, &i__2);
 
 /*           Next page. */
 

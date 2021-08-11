@@ -1,9 +1,17 @@
-/* vsepg.f -- translated by f2c (version 19980913).
+/* vsepg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vsepg_state_t;
+static vsepg_state_t* get_vsepg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  VSEPG ( Angular separation of vectors, general dimension ) */
 doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
@@ -16,12 +24,19 @@ doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
     double sqrt(doublereal), asin(doublereal);
 
     /* Local variables */
-    doublereal dmag1, dmag2;
+    doublereal dmag1;
+    doublereal dmag2;
     integer i__;
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    doublereal r1, r2, magdif;
-    extern doublereal pi_(void), vnormg_(doublereal *, integer *);
+    doublereal r1;
+    doublereal r2;
+    doublereal magdif;
+    extern doublereal pi_(void);
+    extern doublereal vnormg_(doublereal *, integer *);
 
+
+    /* Module state */
+    vsepg_state_t* __state = get_vsepg_state();
 /* $ Abstract */
 
 /*      VSEPG finds the separation angle in radians between two double */

@@ -1,9 +1,17 @@
-/* shelli.f -- translated by f2c (version 19980913).
+/* shelli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int shelli_state_t;
+static shelli_state_t* get_shelli_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SHELLI ( Shell sort an integer array ) */
 /* Subroutine */ int shelli_(integer *ndim, integer *array)
@@ -12,10 +20,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    shelli_state_t* __state = get_shelli_state();
 /* $ Abstract */
 
 /*      Sort an integer array using the Shell Sort algorithm. */

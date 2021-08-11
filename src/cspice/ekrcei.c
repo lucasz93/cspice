@@ -1,13 +1,21 @@
-/* ekrcei.f -- translated by f2c (version 19980913).
+/* ekrcei.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern ekrcei_init_t __ekrcei_init;
+static ekrcei_state_t* get_ekrcei_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekrcei)
+		state->ekrcei = __cspice_allocate_module(sizeof(
+	ekrcei_state_t), &__ekrcei_init, sizeof(__ekrcei_init));
+	return state->ekrcei;
+
+}
 
 /* $Procedure   EKRCEI ( EK, read column entry element, integer ) */
 /* Subroutine */ int ekrcei_(integer *handle, integer *segno, integer *recno, 
@@ -15,26 +23,35 @@ static integer c__1 = 1;
 	column_len)
 {
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen), zzeksdsc_(integer *, integer *, integer *), 
-	    zzektrdp_(integer *, integer *, integer *, integer *);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+	    integer *);
     extern integer zzekesiz_(integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer class__;
     logical found;
     integer dtype;
     extern logical failed_(void);
-    integer coldsc[11], segdsc[24];
+    integer coldsc[11];
+    integer segdsc[24];
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekrd01_(integer *, integer *, integer *, integer *, 
-	    integer *, logical *), zzekrd04_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, logical *, logical *),
-	     zzekrd07_(integer *, integer *, integer *, integer *, integer *, 
-	    logical *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekrd01_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekrd04_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int zzekrd07_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
 
+
+    /* Module state */
+    ekrcei_state_t* __state = get_ekrcei_state();
 /* $ Abstract */
 
 /*     Read data from an integer column in a specified EK record. */
@@ -548,8 +565,8 @@ static integer c__1 = 1;
     } else if (class__ == 4) {
 	zzektrdp_(handle, &segdsc[6], recno, &recptr);
 	*nvals = zzekesiz_(handle, segdsc, coldsc, &recptr);
-	zzekrd04_(handle, segdsc, coldsc, &recptr, &c__1, nvals, ivals, 
-		isnull, &found);
+	zzekrd04_(handle, segdsc, coldsc, &recptr, &__state->c__1, nvals, 
+		ivals, isnull, &found);
     } else if (class__ == 7) {
 
 /*        Records in class 7 columns are identified by a record number */

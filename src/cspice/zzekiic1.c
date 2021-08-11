@@ -1,9 +1,17 @@
-/* zzekiic1.f -- translated by f2c (version 19980913).
+/* zzekiic1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekiic1_state_t;
+static zzekiic1_state_t* get_zzekiic1_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZEKIIC1 ( EK, insert into index, character, type 1 ) */
 /* Subroutine */ int zzekiic1_(integer *handle, integer *segdsc, integer *
@@ -15,20 +23,28 @@
     /* Local variables */
     integer tree;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzeklerc_(integer *, integer *, integer *, char *, 
-	    integer *, logical *, integer *, integer *, ftnlen), zzektrin_(
-	    integer *, integer *, integer *, integer *), chkin_(char *, 
-	    ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer dtype, itype;
+	    ftnlen);
+    extern /* Subroutine */ int zzeklerc_(integer *, integer *, integer *, 
+	    char *, integer *, logical *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzektrin_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer dtype;
+    integer itype;
     extern logical failed_(void);
     logical indexd;
     char column[32];
     integer prvidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer prvptr;
 
+
+    /* Module state */
+    zzekiic1_state_t* __state = get_zzekiic1_state();
 /* $ Abstract */
 
 /*     Insert into a type 1 EK index a record pointer associated with a */

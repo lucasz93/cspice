@@ -1,9 +1,21 @@
-/* spkezr.f -- translated by f2c (version 19980913).
+/* spkezr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern spkezr_init_t __spkezr_init;
+static spkezr_state_t* get_spkezr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkezr)
+		state->spkezr = __cspice_allocate_module(sizeof(
+	spkezr_state_t), &__spkezr_init, sizeof(__spkezr_init));
+	return state->spkezr;
+
+}
 
 /* $Procedure SPKEZR ( S/P Kernel, easier reader ) */
 /* Subroutine */ int spkezr_(char *targ, doublereal *et, char *ref, char *
@@ -12,27 +24,25 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzctruin_(integer *), chkin_(char *, ftnlen);
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer obsid;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
 	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
     integer targid;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static integer svtgid;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer svobsi;
-    static char svtarg[36], svobsn[36];
     extern logical return_(void);
 
+
+    /* Module state */
+    spkezr_state_t* __state = get_spkezr_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -682,19 +692,19 @@
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	__state->first = FALSE_;
     }
 
 /*     Starting from translation of target name to its code */
 
-    zzbods2c_(svctr1, svtarg, &svtgid, &svfnd1, targ, &targid, &found, (
-	    ftnlen)36, targ_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
+	    __state->svfnd1, targ, &targid, &found, (ftnlen)36, targ_len);
     if (! found) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -711,8 +721,8 @@
 
 /*     Now do the same for observer */
 
-    zzbods2c_(svctr2, svobsn, &svobsi, &svfnd2, obs, &obsid, &found, (ftnlen)
-	    36, obs_len);
+    zzbods2c_(__state->svctr2, __state->svobsn, &__state->svobsi, &
+	    __state->svfnd2, obs, &obsid, &found, (ftnlen)36, obs_len);
     if (! found) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "

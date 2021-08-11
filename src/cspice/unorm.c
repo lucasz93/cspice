@@ -1,9 +1,17 @@
-/* unorm.f -- translated by f2c (version 19980913).
+/* unorm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int unorm_state_t;
+static unorm_state_t* get_unorm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      UNORM ( Unit vector and norm, 3 dimensional ) */
 /* Subroutine */ int unorm_(doublereal *v1, doublereal *vout, doublereal *
@@ -11,6 +19,9 @@
 {
     extern doublereal vnorm_(doublereal *);
 
+
+    /* Module state */
+    unorm_state_t* __state = get_unorm_state();
 /* $ Abstract */
 
 /*     Normalize a double precision 3-vector and return its magnitude. */

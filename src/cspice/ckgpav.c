@@ -1,15 +1,21 @@
-/* ckgpav.f -- translated by f2c (version 19980913).
+/* ckgpav.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__9 = 9;
+extern ckgpav_init_t __ckgpav_init;
+static ckgpav_state_t* get_ckgpav_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckgpav)
+		state->ckgpav = __cspice_allocate_module(sizeof(
+	ckgpav_state_t), &__ckgpav_init, sizeof(__ckgpav_init));
+	return state->ckgpav;
+
+}
 
 /* $Procedure      CKGPAV ( C-kernel, get pointing and angular velocity ) */
 /* Subroutine */ int ckgpav_(integer *inst, doublereal *sclkdp, doublereal *
@@ -18,48 +24,54 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    logical pfnd, sfnd;
+    logical pfnd;
+    logical sfnd;
     integer sclk;
     doublereal tmpv[3];
     extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    ), sct2e_(integer *, doublereal *, doublereal *), zznamfrm_(
-	    integer *, char *, integer *, char *, integer *, ftnlen, ftnlen);
-    integer type1, type2;
+	    );
+    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    integer type1;
+    integer type2;
     extern /* Subroutine */ int zzctruin_(integer *);
     doublereal omega[3];
     char segid[40];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), ckbss_(integer *, doublereal *, 
-	    doublereal *, logical *), ckpfs_(integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
-	     doublereal *, logical *), moved_(doublereal *, integer *, 
-	    doublereal *), cksns_(integer *, doublereal *, char *, logical *, 
-	    ftnlen);
-    static char svref[32];
+	    doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
+	    logical *);
+    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
+	     logical *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
+	    logical *, ftnlen);
     logical gotit;
     doublereal xform[36]	/* was [6][6] */;
     extern /* Subroutine */ int xf2rav_(doublereal *, doublereal *, 
 	    doublereal *);
-    static integer svctr1[2];
     extern logical failed_(void);
     doublereal et;
     integer handle;
     logical needav;
-    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen),
-	     frmchg_(integer *, integer *, doublereal *, doublereal *);
-    integer refseg, center;
+    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
+	    doublereal *);
+    integer refseg;
+    integer center;
     extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
 	    integer *, logical *);
-    integer refreq, typeid;
+    integer refreq;
+    integer typeid;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal tmpmat[9]	/* was [3][3] */;
-    static integer svrefr;
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
@@ -67,6 +79,9 @@ static integer c__9 = 9;
 	    ;
     doublereal rot[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    ckgpav_state_t* __state = get_ckgpav_state();
 /* $ Abstract */
 
 /*     Get pointing (attitude) and angular velocity for a specified */
@@ -1083,12 +1098,12 @@ static integer c__9 = 9;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     Need angular velocity data. */
@@ -1124,13 +1139,13 @@ static integer c__9 = 9;
 /*           Found one. If the data aren't already referenced to the */
 /*           requested frame, rotate them. */
 
-	    dafus_(descr, &c__2, &c__6, dcd, icd);
+	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 	    refseg = icd[1];
 
 /*           Look up the id code for the requested reference frame. */
 
-	    zznamfrm_(svctr1, svref, &svrefr, ref, &refreq, (ftnlen)32, 
-		    ref_len);
+	    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefr, ref, 
+		    &refreq, (ftnlen)32, ref_len);
 	    if (refreq != refseg) {
 
 /*              We may need to convert the output ticks CLKOUT to ET */
@@ -1176,7 +1191,7 @@ static integer c__9 = 9;
 
 		xf2rav_(xform, rot, omega);
 		mxm_(cmat, rot, tmpmat);
-		moved_(tmpmat, &c__9, cmat);
+		moved_(tmpmat, &__state->c__9, cmat);
 
 /*              Now transform the angular velocity information. */
 /*              Currently we have OMEGA (the angular velocity of */

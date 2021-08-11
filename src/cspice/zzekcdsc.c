@@ -1,14 +1,21 @@
-/* zzekcdsc.f -- translated by f2c (version 19980913).
+/* zzekcdsc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__32 = 32;
+extern zzekcdsc_init_t __zzekcdsc_init;
+static zzekcdsc_state_t* get_zzekcdsc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekcdsc)
+		state->zzekcdsc = __cspice_allocate_module(sizeof(
+	zzekcdsc_state_t), &__zzekcdsc_init, sizeof(__zzekcdsc_init));
+	return state->zzekcdsc;
+
+}
 
 /* $Procedure  ZZEKCDSC ( Private: EK, return column descriptor ) */
 /* Subroutine */ int zzekcdsc_(integer *handle, integer *segdsc, char *column,
@@ -21,8 +28,8 @@ static integer c__32 = 32;
     integer i__;
     char cname[32];
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     integer ncols;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
@@ -31,10 +38,16 @@ static integer c__32 = 32;
 	    integer *, integer *, char *, ftnlen);
     integer nambas;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), errhan_(char *, integer *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekcdsc_state_t* __state = get_zzekcdsc_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -438,7 +451,8 @@ static integer c__32 = 32;
 
 	i__1 = nambas + 1;
 	i__2 = nambas + 32;
-	dasrdc_(handle, &i__1, &i__2, &c__1, &c__32, cname, (ftnlen)32);
+	dasrdc_(handle, &i__1, &i__2, &__state->c__1, &__state->c__32, cname, 
+		(ftnlen)32);
 	if (eqstr_(cname, column, (ftnlen)32, column_len)) {
 	    found = TRUE_;
 	} else {

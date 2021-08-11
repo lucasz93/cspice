@@ -1,9 +1,17 @@
-/* repmf.f -- translated by f2c (version 19980913).
+/* repmf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int repmf_state_t;
+static repmf_state_t* get_repmf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  REPMF  ( Replace marker with formatted d.p. value ) */
 /* Subroutine */ int repmf_(char *in, char *marker, doublereal *value, 
@@ -17,19 +25,25 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen), ucase_(char *, char *, ftnlen, 
-	    ftnlen);
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
     char gdfmt[1];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    integer mrknbf, subnbf;
+    integer mrknbf;
+    integer subnbf;
     extern integer lastnb_(char *, ftnlen);
-    integer mrknbl, subnbl;
+    integer mrknbl;
+    integer subnbl;
     extern integer frstnb_(char *, ftnlen);
-    integer mrkpsb, mrkpse;
+    integer mrkpsb;
+    integer mrkpse;
     extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
 	    *, ftnlen, ftnlen);
     char substr[56];
 
+
+    /* Module state */
+    repmf_state_t* __state = get_repmf_state();
 /* $ Abstract */
 
 /*     Replace a marker in a string with a formatted double precision */

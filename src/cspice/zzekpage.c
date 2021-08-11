@@ -1,33 +1,21 @@
-/* zzekpage.f -- translated by f2c (version 19980913).
+/* zzekpage.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b15 = 0.;
-static integer c__128 = 128;
-static integer c__0 = 0;
-static integer c__256 = 256;
-static integer c__8 = 8;
-static integer c__2 = 2;
-static integer c__1024 = 1024;
-static integer c__7 = 7;
-static integer c__12 = 12;
-static integer c__3 = 3;
-static integer c__13 = 13;
-static integer c__4 = 4;
-static integer c__9 = 9;
-static integer c__14 = 14;
-static integer c__6 = 6;
-static integer c__5 = 5;
-static integer c__11 = 11;
-static integer c__10 = 10;
-static integer c__16 = 16;
-static integer c__15 = 15;
+extern zzekpage_init_t __zzekpage_init;
+static zzekpage_state_t* get_zzekpage_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekpage)
+		state->zzekpage = __cspice_allocate_module(sizeof(
+	zzekpage_state_t), &__zzekpage_init, sizeof(__zzekpage_init));
+	return state->zzekpage;
+
+}
 
 /* $Procedure  ZZEKPAGE ( Private: Manage EK DAS paging system ) */
 /* Subroutine */ int zzekpage_0_(int n__, integer *handle, integer *type__, 
@@ -44,46 +32,44 @@ static integer c__15 = 15;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer addr__;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    static integer e, l, freec, freed;
-    static char cfill[1024];
-    static doublereal dfill[128];
-    static integer freei;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ifill[256];
     extern /* Subroutine */ int fillc_(char *, integer *, char *, ftnlen, 
-	    ftnlen), filld_(doublereal *, integer *, doublereal *), filli_(
-	    integer *, integer *, integer *), errch_(char *, char *, ftnlen, 
 	    ftnlen);
-    static integer lastc, lastd, lasti;
-    static doublereal dpptr;
+    extern /* Subroutine */ int filld_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dasadc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen), dasadd_(integer *, integer *, 
-	    doublereal *);
+	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    static char encpag[5];
-    static integer nfreec, nfreed;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
 	    integer *);
-    static integer nfreei;
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *), dasrdi_(integer *, integer *, integer *, integer *), 
-	    dassih_(integer *, char *, ftnlen), dasrdc_(integer *, integer *, 
-	    integer *, integer *, integer *, char *, ftnlen), errhan_(char *, 
-	    integer *, ftnlen), prtdec_(char *, integer *, ftnlen), dasrdd_(
-	    integer *, integer *, integer *, doublereal *), dasudc_(integer *,
-	     integer *, integer *, integer *, integer *, char *, ftnlen), 
-	    dasudd_(integer *, integer *, integer *, doublereal *), sigerr_(
-	    char *, ftnlen), prtenc_(integer *, char *, ftnlen), chkout_(char 
-	    *, ftnlen);
-    static integer forwrd;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    static integer npc, npd, npi;
+	    integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int prtdec_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int prtenc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+    /* Module state */
+    zzekpage_state_t* __state = get_zzekpage_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -600,14 +586,14 @@ L_zzekpgin:
 /*     Find out which addresses are already in use.  A file containing */
 /*     data cannot be initialized. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
-    if (lastc > 0 || lastd > 0 || lasti > 0) {
+    daslla_(handle, &__state->lastc, &__state->lastd, &__state->lasti);
+    if (__state->lastc > 0 || __state->lastd > 0 || __state->lasti > 0) {
 	setmsg_("File # contains data; LASTC = #; LASTD = #; LASTI = #.", (
 		ftnlen)54);
 	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &lastc, (ftnlen)1);
-	errint_("#", &lastd, (ftnlen)1);
-	errint_("#", &lasti, (ftnlen)1);
+	errint_("#", &__state->lastc, (ftnlen)1);
+	errint_("#", &__state->lastd, (ftnlen)1);
+	errint_("#", &__state->lasti, (ftnlen)1);
 	sigerr_("SPICE(DASNOTEMPTY)", (ftnlen)18);
 	chkout_("ZZEKPGIN", (ftnlen)8);
 	return 0;
@@ -615,26 +601,26 @@ L_zzekpgin:
 
 /*     Initialize our fill buffers. */
 
-    fillc_(" ", &c__1, cfill, (ftnlen)1, (ftnlen)1024);
-    filld_(&c_b15, &c__128, dfill);
-    filli_(&c__0, &c__256, ifill);
+    fillc_(" ", &__state->c__1, __state->cfill, (ftnlen)1, (ftnlen)1024);
+    filld_(&__state->c_b15, &__state->c__128, __state->dfill);
+    filli_(&__state->c__0, &__state->c__256, __state->ifill);
 
 /*     Initialize enough integer addresses to hold the metadata area. */
 
-    dasadi_(handle, &c__256, ifill);
+    dasadi_(handle, &__state->c__256, __state->ifill);
 
 /*     Set the architecture code. */
 
-    dasudi_(handle, &c__1, &c__1, &c__8);
+    dasudi_(handle, &__state->c__1, &__state->c__1, &__state->c__8);
 
 /*     Set the page sizes and base addresses. */
 
-    dasudi_(handle, &c__2, &c__2, &c__1024);
-    dasudi_(handle, &c__7, &c__7, &c__128);
-    dasudi_(handle, &c__12, &c__12, &c__256);
-    dasudi_(handle, &c__3, &c__3, &c__0);
-    dasudi_(handle, &c__8, &c__8, &c__0);
-    dasudi_(handle, &c__13, &c__13, &c__256);
+    dasudi_(handle, &__state->c__2, &__state->c__2, &__state->c__1024);
+    dasudi_(handle, &__state->c__7, &__state->c__7, &__state->c__128);
+    dasudi_(handle, &__state->c__12, &__state->c__12, &__state->c__256);
+    dasudi_(handle, &__state->c__3, &__state->c__3, &__state->c__0);
+    dasudi_(handle, &__state->c__8, &__state->c__8, &__state->c__0);
+    dasudi_(handle, &__state->c__13, &__state->c__13, &__state->c__256);
 
 /*     Since the integer fill value is zero, and since zero is */
 /*     interpreted as null pointer, all pointers are initialized. */
@@ -789,32 +775,33 @@ L_zzekpgan:
 
 /*        The new page follows the last character address. */
 
-	dasadc_(handle, &c__1024, &c__1, &c__1024, cfill, (ftnlen)1024);
+	dasadc_(handle, &__state->c__1024, &__state->c__1, &__state->c__1024, 
+		__state->cfill, (ftnlen)1024);
 
 /*        Update the character page count. */
 
-	dasrdi_(handle, &c__4, &c__4, &npc);
-	i__1 = npc + 1;
-	dasudi_(handle, &c__4, &c__4, &i__1);
+	dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	i__1 = __state->npc + 1;
+	dasudi_(handle, &__state->c__4, &__state->c__4, &i__1);
 
 /*        Set the page number and base address. */
 
-	*p = npc + 1;
-	*base = npc << 10;
+	*p = __state->npc + 1;
+	*base = __state->npc << 10;
     } else if (*type__ == 2) {
-	dasadd_(handle, &c__128, dfill);
-	dasrdi_(handle, &c__9, &c__9, &npd);
-	i__1 = npd + 1;
-	dasudi_(handle, &c__9, &c__9, &i__1);
-	*p = npd + 1;
-	*base = npd << 7;
+	dasadd_(handle, &__state->c__128, __state->dfill);
+	dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	i__1 = __state->npd + 1;
+	dasudi_(handle, &__state->c__9, &__state->c__9, &i__1);
+	*p = __state->npd + 1;
+	*base = __state->npd << 7;
     } else if (*type__ == 3) {
-	dasadi_(handle, &c__256, ifill);
-	dasrdi_(handle, &c__14, &c__14, &npi);
-	i__1 = npi + 1;
-	dasudi_(handle, &c__14, &c__14, &i__1);
-	*p = npi + 1;
-	*base = (npi << 8) + 256;
+	dasadi_(handle, &__state->c__256, __state->ifill);
+	dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	i__1 = __state->npi + 1;
+	dasudi_(handle, &__state->c__14, &__state->c__14, &i__1);
+	*p = __state->npi + 1;
+	*base = (__state->npi << 8) + 256;
     } else {
 	setmsg_("The data type code # was not recognized.", (ftnlen)40);
 	errint_("#", type__, (ftnlen)1);
@@ -969,29 +956,30 @@ L_zzekpgal:
 /*        If the character free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &c__6, &c__6, &freec);
-	if (freec > 0) {
+	dasrdi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
+	if (__state->freec > 0) {
 
 /*           We'll return the first free page. */
 
-	    *p = freec;
+	    *p = __state->freec;
 
 /*           The new head of the list is the successor of FREEC, if */
 /*           any.  Obtain the forward pointer from the page. */
 
-	    addr__ = (freec - 1 << 10) + 1;
-	    i__1 = addr__ + 4;
-	    dasrdc_(handle, &addr__, &i__1, &c__1, &c__5, encpag, (ftnlen)5);
-	    prtdec_(encpag, &forwrd, (ftnlen)5);
-	    freec = forwrd;
+	    __state->addr__ = (__state->freec - 1 << 10) + 1;
+	    i__1 = __state->addr__ + 4;
+	    dasrdc_(handle, &__state->addr__, &i__1, &__state->c__1, &
+		    __state->c__5, __state->encpag, (ftnlen)5);
+	    prtdec_(__state->encpag, &__state->forwrd, (ftnlen)5);
+	    __state->freec = __state->forwrd;
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &c__5, &c__5, &nfreec);
-	    i__1 = nfreec - 1;
-	    dasudi_(handle, &c__5, &c__5, &i__1);
-	    dasudi_(handle, &c__6, &c__6, &freec);
+	    dasrdi_(handle, &__state->c__5, &__state->c__5, &__state->nfreec);
+	    i__1 = __state->nfreec - 1;
+	    dasudi_(handle, &__state->c__5, &__state->c__5, &i__1);
+	    dasudi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
 
 /*           Set base address. */
 
@@ -1000,45 +988,49 @@ L_zzekpgal:
 
 /*           The new page follows the last character address. */
 
-	    dasadc_(handle, &c__1024, &c__1, &c__1024, cfill, (ftnlen)1024);
+	    dasadc_(handle, &__state->c__1024, &__state->c__1, &
+		    __state->c__1024, __state->cfill, (ftnlen)1024);
 
 /*           Update the character page count. */
 
-	    dasrdi_(handle, &c__4, &c__4, &npc);
-	    i__1 = npc + 1;
-	    dasudi_(handle, &c__4, &c__4, &i__1);
+	    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	    i__1 = __state->npc + 1;
+	    dasudi_(handle, &__state->c__4, &__state->c__4, &i__1);
 
 /*           Set the page number and base address. */
 
-	    *p = npc + 1;
-	    *base = npc << 10;
+	    *p = __state->npc + 1;
+	    *base = __state->npc << 10;
 	}
     } else if (*type__ == 2) {
 
 /*        If the d.p. free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &c__11, &c__11, &freed);
-	if (freed > 0) {
+	dasrdi_(handle, &__state->c__11, &__state->c__11, &__state->freed);
+	if (__state->freed > 0) {
 
 /*           We'll return the first free page. */
 
-	    *p = freed;
+	    *p = __state->freed;
 
 /*           The new head of the list is the successor of FREED, if */
 /*           any.  Obtain the forward pointer from the page. */
 
-	    addr__ = (freed - 1 << 7) + 1;
-	    dasrdd_(handle, &addr__, &addr__, &dpptr);
-	    freed = i_dnnt(&dpptr);
+	    __state->addr__ = (__state->freed - 1 << 7) + 1;
+	    dasrdd_(handle, &__state->addr__, &__state->addr__, &
+		    __state->dpptr);
+	    __state->freed = i_dnnt(&__state->dpptr);
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &c__10, &c__10, &nfreed);
-	    i__1 = nfreed - 1;
-	    dasudi_(handle, &c__10, &c__10, &i__1);
-	    dasudi_(handle, &c__11, &c__11, &freed);
+	    dasrdi_(handle, &__state->c__10, &__state->c__10, &
+		    __state->nfreed);
+	    i__1 = __state->nfreed - 1;
+	    dasudi_(handle, &__state->c__10, &__state->c__10, &i__1);
+	    dasudi_(handle, &__state->c__11, &__state->c__11, &__state->freed)
+		    ;
 
 /*           Set base address. */
 
@@ -1047,55 +1039,58 @@ L_zzekpgal:
 
 /*           The new page follows the last d.p. address. */
 
-	    dasadd_(handle, &c__128, dfill);
+	    dasadd_(handle, &__state->c__128, __state->dfill);
 
 /*           Update the d.p. page count. */
 
-	    dasrdi_(handle, &c__9, &c__9, &npd);
-	    i__1 = npd + 1;
-	    dasudi_(handle, &c__9, &c__9, &i__1);
+	    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	    i__1 = __state->npd + 1;
+	    dasudi_(handle, &__state->c__9, &__state->c__9, &i__1);
 
 /*           Set the page number and base address. */
 
-	    *p = npd + 1;
-	    *base = npd << 7;
+	    *p = __state->npd + 1;
+	    *base = __state->npd << 7;
 	}
     } else if (*type__ == 3) {
 
 /*        If the integer free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &c__16, &c__16, &freei);
-	if (freei > 0) {
+	dasrdi_(handle, &__state->c__16, &__state->c__16, &__state->freei);
+	if (__state->freei > 0) {
 
 /*           We'll return the first free page. */
 
-	    *p = freei;
+	    *p = __state->freei;
 
 /*           The new head of the list is the successor of FREEI, if */
 /*           any.  Obtain the forward pointer from the page. */
 
-	    addr__ = (freei - 1 << 8) + 257;
-	    dasrdi_(handle, &addr__, &addr__, &freei);
+	    __state->addr__ = (__state->freei - 1 << 8) + 257;
+	    dasrdi_(handle, &__state->addr__, &__state->addr__, &
+		    __state->freei);
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &c__15, &c__15, &nfreei);
-	    i__1 = nfreei - 1;
-	    dasudi_(handle, &c__15, &c__15, &i__1);
-	    dasudi_(handle, &c__16, &c__16, &freei);
+	    dasrdi_(handle, &__state->c__15, &__state->c__15, &
+		    __state->nfreei);
+	    i__1 = __state->nfreei - 1;
+	    dasudi_(handle, &__state->c__15, &__state->c__15, &i__1);
+	    dasudi_(handle, &__state->c__16, &__state->c__16, &__state->freei)
+		    ;
 
 /*           Set base address. */
 
 	    *base = (*p - 1 << 8) + 256;
 	} else {
-	    dasadi_(handle, &c__256, ifill);
-	    dasrdi_(handle, &c__14, &c__14, &npi);
-	    i__1 = npi + 1;
-	    dasudi_(handle, &c__14, &c__14, &i__1);
-	    *p = npi + 1;
-	    *base = (npi << 8) + 256;
+	    dasadi_(handle, &__state->c__256, __state->ifill);
+	    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	    i__1 = __state->npi + 1;
+	    dasudi_(handle, &__state->c__14, &__state->c__14, &i__1);
+	    *p = __state->npi + 1;
+	    *base = (__state->npi << 8) + 256;
 	}
     } else {
 	setmsg_("The data type code # was not recognized.", (ftnlen)40);
@@ -1249,12 +1244,12 @@ L_zzekpgfr:
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &c__4, &c__4, &npc);
-	if (*p < 1 || *p > npc) {
+	dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	if (*p < 1 || *p > __state->npc) {
 	    setmsg_("Attempt to free non-existent CHR page. Page number = #;"
 		    " valid range is 1:#", (ftnlen)74);
 	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &npc, (ftnlen)1);
+	    errint_("#", &__state->npc, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	    chkout_("ZZEKPGFR", (ftnlen)8);
 	    return 0;
@@ -1262,33 +1257,34 @@ L_zzekpgfr:
 
 /*        Get the current character free pointer and free page count. */
 
-	dasrdi_(handle, &c__6, &c__6, &freec);
-	dasrdi_(handle, &c__5, &c__5, &nfreec);
+	dasrdi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
+	dasrdi_(handle, &__state->c__5, &__state->c__5, &__state->nfreec);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
-	prtenc_(&freec, encpag, (ftnlen)5);
-	addr__ = (*p - 1 << 10) + 1;
-	i__1 = addr__ + 4;
-	dasudc_(handle, &addr__, &i__1, &c__1, &c__5, encpag, (ftnlen)5);
+	prtenc_(&__state->freec, __state->encpag, (ftnlen)5);
+	__state->addr__ = (*p - 1 << 10) + 1;
+	i__1 = __state->addr__ + 4;
+	dasudc_(handle, &__state->addr__, &i__1, &__state->c__1, &
+		__state->c__5, __state->encpag, (ftnlen)5);
 
 /*        Update the current character free pointer and free page count. */
 
-	dasudi_(handle, &c__6, &c__6, p);
-	i__1 = nfreec + 1;
-	dasudi_(handle, &c__5, &c__5, &i__1);
+	dasudi_(handle, &__state->c__6, &__state->c__6, p);
+	i__1 = __state->nfreec + 1;
+	dasudi_(handle, &__state->c__5, &__state->c__5, &i__1);
     } else if (*type__ == 2) {
 
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &c__9, &c__9, &npd);
-	if (*p < 1 || *p > npd) {
+	dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	if (*p < 1 || *p > __state->npd) {
 	    setmsg_("Attempt to free non-existent DP page. Page number = #; "
 		    "valid range is 1:#", (ftnlen)73);
 	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &npd, (ftnlen)1);
+	    errint_("#", &__state->npd, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	    chkout_("ZZEKPGFR", (ftnlen)8);
 	    return 0;
@@ -1296,32 +1292,32 @@ L_zzekpgfr:
 
 /*        Get the current d.p. free pointer and free page count. */
 
-	dasrdi_(handle, &c__11, &c__11, &freed);
-	dasrdi_(handle, &c__10, &c__10, &nfreed);
+	dasrdi_(handle, &__state->c__11, &__state->c__11, &__state->freed);
+	dasrdi_(handle, &__state->c__10, &__state->c__10, &__state->nfreed);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
-	addr__ = (*p - 1 << 7) + 1;
-	d__1 = (doublereal) freed;
-	dasudd_(handle, &addr__, &addr__, &d__1);
+	__state->addr__ = (*p - 1 << 7) + 1;
+	d__1 = (doublereal) __state->freed;
+	dasudd_(handle, &__state->addr__, &__state->addr__, &d__1);
 
 /*        Update the current d.p. free pointer and free page count. */
 
-	dasudi_(handle, &c__11, &c__11, p);
-	i__1 = nfreed + 1;
-	dasudi_(handle, &c__10, &c__10, &i__1);
+	dasudi_(handle, &__state->c__11, &__state->c__11, p);
+	i__1 = __state->nfreed + 1;
+	dasudi_(handle, &__state->c__10, &__state->c__10, &i__1);
     } else if (*type__ == 3) {
 
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &c__14, &c__14, &npi);
-	if (*p < 1 || *p > npi) {
+	dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	if (*p < 1 || *p > __state->npi) {
 	    setmsg_("Attempt to free non-existent INT page. Page number = #;"
 		    " valid range is 1:#", (ftnlen)74);
 	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &npi, (ftnlen)1);
+	    errint_("#", &__state->npi, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	    chkout_("ZZEKPGFR", (ftnlen)8);
 	    return 0;
@@ -1329,20 +1325,20 @@ L_zzekpgfr:
 
 /*        Get the current integer free pointer and free page count. */
 
-	dasrdi_(handle, &c__16, &c__16, &freei);
-	dasrdi_(handle, &c__15, &c__15, &nfreei);
+	dasrdi_(handle, &__state->c__16, &__state->c__16, &__state->freei);
+	dasrdi_(handle, &__state->c__15, &__state->c__15, &__state->nfreei);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
-	addr__ = (*p - 1 << 8) + 257;
-	dasudi_(handle, &addr__, &addr__, &freei);
+	__state->addr__ = (*p - 1 << 8) + 257;
+	dasudi_(handle, &__state->addr__, &__state->addr__, &__state->freei);
 
 /*        Update the current integer free pointer and free page count. */
 
-	dasudi_(handle, &c__16, &c__16, p);
-	i__1 = nfreei + 1;
-	dasudi_(handle, &c__15, &c__15, &i__1);
+	dasudi_(handle, &__state->c__16, &__state->c__16, p);
+	i__1 = __state->nfreei + 1;
+	dasudi_(handle, &__state->c__15, &__state->c__15, &i__1);
     } else {
 	setmsg_("The data type code # was not recognized.", (ftnlen)40);
 	errint_("#", type__, (ftnlen)1);
@@ -1480,23 +1476,24 @@ L_zzekpgrc:
 
 /*     Find out how many character pages are in use. */
 
-    dasrdi_(handle, &c__4, &c__4, &npc);
-    if (*p < 1 || *p > npc) {
+    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+    if (*p < 1 || *p > __state->npc) {
 	chkin_("ZZEKPGRC", (ftnlen)8);
 	setmsg_("CHR page = #; valid range is [1:#]", (ftnlen)34);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npc, (ftnlen)1);
+	errint_("#", &__state->npc, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGRC", (ftnlen)8);
 	return 0;
     }
-    l = i_len(pagec, pagec_len);
-    e = min(l,1024);
-    addr__ = (*p - 1 << 10) + 1;
-    i__1 = addr__ + 1023;
-    dasrdc_(handle, &addr__, &i__1, &c__1, &e, pagec, pagec_len);
-    if (l > e) {
-	i__1 = e;
+    __state->l = i_len(pagec, pagec_len);
+    __state->e = min(__state->l,1024);
+    __state->addr__ = (*p - 1 << 10) + 1;
+    i__1 = __state->addr__ + 1023;
+    dasrdc_(handle, &__state->addr__, &i__1, &__state->c__1, &__state->e, 
+	    pagec, pagec_len);
+    if (__state->l > __state->e) {
+	i__1 = __state->e;
 	s_copy(pagec + i__1, " ", pagec_len - i__1, (ftnlen)1);
     }
     return 0;
@@ -1623,19 +1620,19 @@ L_zzekpgrd:
 
 /*     Find out how many d.p. pages are in use. */
 
-    dasrdi_(handle, &c__9, &c__9, &npd);
-    if (*p < 1 || *p > npd) {
+    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+    if (*p < 1 || *p > __state->npd) {
 	chkin_("ZZEKPGRD", (ftnlen)8);
 	setmsg_("DP page = #; valid range is [1:#]", (ftnlen)33);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npd, (ftnlen)1);
+	errint_("#", &__state->npd, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGRD", (ftnlen)8);
 	return 0;
     }
-    addr__ = (*p - 1 << 7) + 1;
-    i__1 = addr__ + 127;
-    dasrdd_(handle, &addr__, &i__1, paged);
+    __state->addr__ = (*p - 1 << 7) + 1;
+    i__1 = __state->addr__ + 127;
+    dasrdd_(handle, &__state->addr__, &i__1, paged);
     return 0;
 /* $Procedure  ZZEKPGRI ( Private: EK, read integer page ) */
 
@@ -1760,19 +1757,19 @@ L_zzekpgri:
 
 /*     Find out how many integer pages are in use. */
 
-    dasrdi_(handle, &c__14, &c__14, &npi);
-    if (*p < 1 || *p > npi) {
+    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+    if (*p < 1 || *p > __state->npi) {
 	chkin_("ZZEKPGRI", (ftnlen)8);
 	setmsg_("INT page = #; valid range is [1:#]", (ftnlen)34);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npi, (ftnlen)1);
+	errint_("#", &__state->npi, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGRI", (ftnlen)8);
 	return 0;
     }
-    addr__ = (*p - 1 << 8) + 257;
-    i__1 = addr__ + 255;
-    dasrdi_(handle, &addr__, &i__1, pagei);
+    __state->addr__ = (*p - 1 << 8) + 257;
+    i__1 = __state->addr__ + 255;
+    dasrdi_(handle, &__state->addr__, &i__1, pagei);
     return 0;
 /* $Procedure  ZZEKPGWC ( Private: EK, write character page ) */
 
@@ -1912,29 +1909,30 @@ L_zzekpgwc:
 
 /*     Find out how many character pages are in use. */
 
-    dasrdi_(handle, &c__4, &c__4, &npc);
-    if (*p < 1 || *p > npc) {
+    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+    if (*p < 1 || *p > __state->npc) {
 	chkin_("ZZEKPGWC", (ftnlen)8);
 	setmsg_("CHR page = #; valid range is [1:#]", (ftnlen)34);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npc, (ftnlen)1);
+	errint_("#", &__state->npc, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGWC", (ftnlen)8);
 	return 0;
     }
-    l = i_len(pagec, pagec_len);
-    if (l < 1024) {
+    __state->l = i_len(pagec, pagec_len);
+    if (__state->l < 1024) {
 	chkin_("ZZEKPGWC", (ftnlen)8);
 	setmsg_("Input CHR page size = #; valid size is [#:]", (ftnlen)43);
-	errint_("#", &l, (ftnlen)1);
-	errint_("#", &c__1024, (ftnlen)1);
+	errint_("#", &__state->l, (ftnlen)1);
+	errint_("#", &__state->c__1024, (ftnlen)1);
 	sigerr_("SPICE(STRINGTOOSHORT)", (ftnlen)21);
 	chkout_("ZZEKPGWC", (ftnlen)8);
 	return 0;
     }
-    addr__ = (*p - 1 << 10) + 1;
-    i__1 = addr__ + 1023;
-    dasudc_(handle, &addr__, &i__1, &c__1, &c__1024, pagec, pagec_len);
+    __state->addr__ = (*p - 1 << 10) + 1;
+    i__1 = __state->addr__ + 1023;
+    dasudc_(handle, &__state->addr__, &i__1, &__state->c__1, &
+	    __state->c__1024, pagec, pagec_len);
     return 0;
 /* $Procedure  ZZEKPGWD ( Private: EK, write d.p. page ) */
 
@@ -2072,19 +2070,19 @@ L_zzekpgwd:
 
 /*     Find out how many d.p. pages are in use. */
 
-    dasrdi_(handle, &c__9, &c__9, &npd);
-    if (*p < 1 || *p > npd) {
+    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+    if (*p < 1 || *p > __state->npd) {
 	chkin_("ZZEKPGWD", (ftnlen)8);
 	setmsg_("DP page = #; valid range is [1:#]", (ftnlen)33);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npd, (ftnlen)1);
+	errint_("#", &__state->npd, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGWD", (ftnlen)8);
 	return 0;
     }
-    addr__ = (*p - 1 << 7) + 1;
-    i__1 = addr__ + 127;
-    dasudd_(handle, &addr__, &i__1, paged);
+    __state->addr__ = (*p - 1 << 7) + 1;
+    i__1 = __state->addr__ + 127;
+    dasudd_(handle, &__state->addr__, &i__1, paged);
     return 0;
 /* $Procedure  ZZEKPGWI ( Private: EK, write integer page ) */
 
@@ -2221,19 +2219,19 @@ L_zzekpgwi:
 
 /*     Find out how many integer pages are in use. */
 
-    dasrdi_(handle, &c__14, &c__14, &npi);
-    if (*p < 1 || *p > npi) {
+    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+    if (*p < 1 || *p > __state->npi) {
 	chkin_("ZZEKPGWI", (ftnlen)8);
 	setmsg_("INT page = #; valid range is [1:#]", (ftnlen)34);
 	errint_("#", p, (ftnlen)1);
-	errint_("#", &npi, (ftnlen)1);
+	errint_("#", &__state->npi, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("ZZEKPGWI", (ftnlen)8);
 	return 0;
     }
-    addr__ = (*p - 1 << 8) + 257;
-    i__1 = addr__ + 255;
-    dasudi_(handle, &addr__, &i__1, pagei);
+    __state->addr__ = (*p - 1 << 8) + 257;
+    i__1 = __state->addr__ + 255;
+    dasudi_(handle, &__state->addr__, &i__1, pagei);
     return 0;
 /* $Procedure  ZZEKPGBS ( Private: EK, map page to base address ) */
 
@@ -2643,17 +2641,17 @@ L_zzekpgst:
 /* -& */
     chkin_("ZZEKPGST", (ftnlen)8);
     if (eqstr_(stat, "N_C_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &c__4, &c__4, value);
+	dasrdi_(handle, &__state->c__4, &__state->c__4, value);
     } else if (eqstr_(stat, "N_D_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &c__9, &c__9, value);
+	dasrdi_(handle, &__state->c__9, &__state->c__9, value);
     } else if (eqstr_(stat, "N_I_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &c__14, &c__14, value);
+	dasrdi_(handle, &__state->c__14, &__state->c__14, value);
     } else if (eqstr_(stat, "N_C_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &c__5, &c__5, value);
+	dasrdi_(handle, &__state->c__5, &__state->c__5, value);
     } else if (eqstr_(stat, "N_D_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &c__10, &c__10, value);
+	dasrdi_(handle, &__state->c__10, &__state->c__10, value);
     } else if (eqstr_(stat, "N_I_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &c__15, &c__15, value);
+	dasrdi_(handle, &__state->c__15, &__state->c__15, value);
     } else {
 	setmsg_("Statistic # is not supported.", (ftnlen)29);
 	errch_("#", stat, (ftnlen)1, stat_len);

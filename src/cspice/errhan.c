@@ -1,14 +1,21 @@
-/* errhan.f -- translated by f2c (version 19980913).
+/* errhan.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern errhan_init_t __errhan_init;
+static errhan_state_t* get_errhan_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->errhan)
+		state->errhan = __cspice_allocate_module(sizeof(
+	errhan_state_t), &__errhan_init, sizeof(__errhan_init));
+	return state->errhan;
+
+}
 
 /* $Procedure ERRHAN ( Insert DAF/DAS file name into long error message ) */
 /* Subroutine */ int errhan_(char *marker, integer *handle, ftnlen marker_len)
@@ -22,11 +29,17 @@ static integer c__0 = 0;
     char fname[255];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
-    integer intbff, intarc, intamh;
+    integer intbff;
+    integer intarc;
+    integer intamh;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen), intstr_(integer *, char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
     char numstr[32];
 
+
+    /* Module state */
+    errhan_state_t* __state = get_errhan_state();
 /* $ Abstract */
 
 /*     Substitute the first occurrence of a marker in the current long */
@@ -451,8 +464,8 @@ static integer c__0 = 0;
     if (! found) {
 	intstr_(handle, numstr, (ftnlen)32);
 	s_copy(fname, "<No name found for handle ", (ftnlen)255, (ftnlen)26);
-	suffix_(numstr, &c__1, fname, (ftnlen)32, (ftnlen)255);
-	suffix_(">", &c__0, fname, (ftnlen)1, (ftnlen)255);
+	suffix_(numstr, &__state->c__1, fname, (ftnlen)32, (ftnlen)255);
+	suffix_(">", &__state->c__0, fname, (ftnlen)1, (ftnlen)255);
     }
 
 /*     Insert the file name string into the long error message. */

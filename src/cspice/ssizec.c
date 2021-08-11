@@ -1,23 +1,37 @@
-/* ssizec.f -- translated by f2c (version 19980913).
+/* ssizec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern ssizec_init_t __ssizec_init;
+static ssizec_state_t* get_ssizec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ssizec)
+		state->ssizec = __cspice_allocate_module(sizeof(
+	ssizec_state_t), &__ssizec_init, sizeof(__ssizec_init));
+	return state->ssizec;
+
+}
 
 /* $Procedure      SSIZEC ( Set the size of a character cell ) */
 /* Subroutine */ int ssizec_(integer *size, char *cell, ftnlen cell_len)
 {
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), enchar_(integer *, 
-	    char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen),
-	     setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int enchar_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ssizec_state_t* __state = get_ssizec_state();
 /* $ Abstract */
 
 /*      Set the size (maximum cardinality) of a character cell. */
@@ -212,9 +226,9 @@ static integer c__0 = 0;
 /*     Not much to this. */
 
     enchar_(size, cell + (cell_len << 2), cell_len);
-    enchar_(&c__0, cell + cell_len * 5, cell_len);
+    enchar_(&__state->c__0, cell + cell_len * 5, cell_len);
     for (i__ = -5; i__ <= -2; ++i__) {
-	enchar_(&c__0, cell + (i__ + 5) * cell_len, cell_len);
+	enchar_(&__state->c__0, cell + (i__ + 5) * cell_len, cell_len);
     }
     chkout_("SSIZEC", (ftnlen)6);
     return 0;

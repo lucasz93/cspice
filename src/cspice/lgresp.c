@@ -1,9 +1,17 @@
-/* lgresp.f -- translated by f2c (version 19980913).
+/* lgresp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lgresp_state_t;
+static lgresp_state_t* get_lgresp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure LGRESP ( Lagrange interpolation on equally spaced points ) */
 doublereal lgresp_(integer *n, doublereal *first, doublereal *step, 
@@ -15,14 +23,20 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
     /* Local variables */
     doublereal newx;
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal c1, c2;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal c1;
+    doublereal c2;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    lgresp_state_t* __state = get_lgresp_state();
 /* $ Abstract */
 
 /*     Evaluate a Lagrange interpolating polynomial for a specified */

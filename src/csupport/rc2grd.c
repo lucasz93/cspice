@@ -1,9 +1,10 @@
-/* rc2grd.f -- translated by f2c (version 19980913).
+/* rc2grd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure RC2GRD ( DSKBRIEF, rectangles to pixel grid ) */
 /* Subroutine */ int rc2grd_(integer *nrec, doublereal *bnds1, doublereal *
@@ -284,36 +285,36 @@
 
     i__1 = *nrec;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (bnds1[(i__2 = (i__ << 1) - 1) < bnds1_dim2 << 1 && 0 <= i__2 ? 
+	if (bnds1[(i__2 = (i__ << 1) - 1) < 2 * bnds1_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bnds1", i__2, "rc2grd_", (ftnlen)304)] <= 
-		bnds1[(i__3 = (i__ << 1) - 2) < bnds1_dim2 << 1 && 0 <= i__3 ?
-		 i__3 : s_rnge("bnds1", i__3, "rc2grd_", (ftnlen)304)]) {
+		bnds1[(i__3 = (i__ << 1) - 2) < 2 * bnds1_dim2 && 0 <= i__3 ? 
+		i__3 : s_rnge("bnds1", i__3, "rc2grd_", (ftnlen)304)]) {
 	    setmsg_("BNDS1(2,#) = #; BNDS1(1,#) = #. Rectangle widths (and h"
 		    "eights) must be positive.", (ftnlen)80);
 	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &bnds1[(i__2 = (i__ << 1) - 1) < bnds1_dim2 << 1 && 0 
+	    errdp_("#", &bnds1[(i__2 = (i__ << 1) - 1) < 2 * bnds1_dim2 && 0 
 		    <= i__2 ? i__2 : s_rnge("bnds1", i__2, "rc2grd_", (ftnlen)
 		    309)], (ftnlen)1);
 	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &bnds1[(i__2 = (i__ << 1) - 2) < bnds1_dim2 << 1 && 0 
+	    errdp_("#", &bnds1[(i__2 = (i__ << 1) - 2) < 2 * bnds1_dim2 && 0 
 		    <= i__2 ? i__2 : s_rnge("bnds1", i__2, "rc2grd_", (ftnlen)
 		    311)], (ftnlen)1);
 	    sigerr_("SPICE(INVALIDBOUNDS)", (ftnlen)20);
 	    chkout_("RC2GRD", (ftnlen)6);
 	    return 0;
 	}
-	if (bnds2[(i__2 = (i__ << 1) - 1) < bnds2_dim2 << 1 && 0 <= i__2 ? 
+	if (bnds2[(i__2 = (i__ << 1) - 1) < 2 * bnds2_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bnds2", i__2, "rc2grd_", (ftnlen)318)] <= 
-		bnds2[(i__3 = (i__ << 1) - 2) < bnds2_dim2 << 1 && 0 <= i__3 ?
-		 i__3 : s_rnge("bnds2", i__3, "rc2grd_", (ftnlen)318)]) {
+		bnds2[(i__3 = (i__ << 1) - 2) < 2 * bnds2_dim2 && 0 <= i__3 ? 
+		i__3 : s_rnge("bnds2", i__3, "rc2grd_", (ftnlen)318)]) {
 	    setmsg_("BNDS2(2,#) = #; BNDS2(1,#) = #. Rectangle heights (and "
 		    "widths) must be positive.", (ftnlen)80);
 	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &bnds2[(i__2 = (i__ << 1) - 1) < bnds2_dim2 << 1 && 0 
+	    errdp_("#", &bnds2[(i__2 = (i__ << 1) - 1) < 2 * bnds2_dim2 && 0 
 		    <= i__2 ? i__2 : s_rnge("bnds2", i__2, "rc2grd_", (ftnlen)
 		    323)], (ftnlen)1);
 	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &bnds2[(i__2 = (i__ << 1) - 2) < bnds2_dim2 << 1 && 0 
+	    errdp_("#", &bnds2[(i__2 = (i__ << 1) - 2) < 2 * bnds2_dim2 && 0 
 		    <= i__2 ? i__2 : s_rnge("bnds2", i__2, "rc2grd_", (ftnlen)
 		    325)], (ftnlen)1);
 	    sigerr_("SPICE(INVALIDBOUNDS)", (ftnlen)20);

@@ -1,9 +1,17 @@
-/* zzpdpltc.f -- translated by f2c (version 19980913).
+/* zzpdpltc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzpdpltc_state_t;
+static zzpdpltc_state_t* get_zzpdpltc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZPDPLTC (Planetodetic coordinates, point latitude check) */
 logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
@@ -16,18 +24,25 @@ logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal xxpt, yxpt, a, b;
+    doublereal xxpt;
+    doublereal yxpt;
+    doublereal a;
+    doublereal b;
     extern /* Subroutine */ int zzelnaxx_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal r2;
     extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzpdpltc_state_t* __state = get_zzpdpltc_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

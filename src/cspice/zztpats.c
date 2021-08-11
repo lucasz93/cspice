@@ -1,9 +1,17 @@
-/* zztpats.f -- translated by f2c (version 19980913).
+/* zztpats.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zztpats_state_t;
+static zztpats_state_t* get_zztpats_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZTPATS (Private, Time --- Time Patterns) */
 logical zztpats_(integer *room, integer *nknown, char *known, char *meanng, 
@@ -19,11 +27,15 @@ logical zztpats_(integer *room, integer *nknown, char *known, char *meanng,
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen),
-	     reordc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen);
     integer ordvec[203];
-    char mymnng[32*203], myknwn[32*203];
+    char mymnng[32*203];
+    char myknwn[32*203];
 
+
+    /* Module state */
+    zztpats_state_t* __state = get_zztpats_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

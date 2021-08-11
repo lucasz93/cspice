@@ -1,9 +1,17 @@
-/* zzekordd.f -- translated by f2c (version 19980913).
+/* zzekordd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekordd_state_t;
+static zzekordd_state_t* get_zzekordd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKORDD ( Order of a double precision EK column ) */
 /* Subroutine */ int zzekordd_(doublereal *dvals, logical *nullok, logical *
@@ -13,10 +21,15 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
-    integer jg, gap;
+    integer jg;
+    integer gap;
 
+
+    /* Module state */
+    zzekordd_state_t* __state = get_zzekordd_state();
 /* $ Abstract */
 
 /*     Determine the order of elements in a double precision EK column, */

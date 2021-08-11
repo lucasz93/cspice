@@ -1,15 +1,21 @@
-/* spkr17.f -- translated by f2c (version 19980913).
+/* spkr17.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__12 = 12;
+extern spkr17_init_t __spkr17_init;
+static spkr17_state_t* get_spkr17_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr17)
+		state->spkr17 = __cspice_allocate_module(sizeof(
+	spkr17_state_t), &__spkr17_init, sizeof(__spkr17_init));
+	return state->spkr17;
+
+}
 
 /* $Procedure      SPKR17 ( Read SPK record from segment, type 17 ) */
 /* Subroutine */ int spkr17_(integer *handle, doublereal *descr, doublereal *
@@ -19,18 +25,25 @@ static integer c__12 = 12;
     integer i__1;
 
     /* Local variables */
-    integer type__, begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
-	     integer *, integer *, doublereal *);
+    integer type__;
+    integer begin;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer end;
 
+
+    /* Module state */
+    spkr17_state_t* __state = get_spkr17_state();
 /* $ Abstract */
 
 /*     This routine reads a single spk data record from a segment of */
@@ -239,7 +252,7 @@ static integer c__12 = 12;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -264,7 +277,7 @@ static integer c__12 = 12;
 		"formed. ", (ftnlen)127);
 	i__1 = end - begin + 1;
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__12, (ftnlen)1);
+	errint_("#", &__state->c__12, (ftnlen)1);
 	sigerr_("SPICE(MALFORMEDSEGMENT)", (ftnlen)23);
 	chkout_("SPKR17", (ftnlen)6);
 	return 0;

@@ -1,14 +1,21 @@
-/* rdencc.f -- translated by f2c (version 19980913).
+/* rdencc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
+extern rdencc_init_t __rdencc_init;
+static rdencc_state_t* get_rdencc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdencc)
+		state->rdencc = __cspice_allocate_module(sizeof(
+	rdencc_state_t), &__rdencc_init, sizeof(__rdencc_init));
+	return state->rdencc;
+
+}
 
 /* $Procedure  RDENCC  ( Read encoded characters from a text file ) */
 /* Subroutine */ int rdencc_(integer *unit, integer *n, char *data, ftnlen 
@@ -24,8 +31,8 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer nescd;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer intch;
     logical error;
     char ch[1];
@@ -33,9 +40,13 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen);
     logical escape;
     char encchr[64];
-    integer dtalen, dtalin, nchars, encpos, dtapos;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer dtalen;
+    integer dtalin;
+    integer nchars;
+    integer encpos;
+    integer dtapos;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[80];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
@@ -44,9 +55,11 @@ static integer c__1 = 1;
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___11 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    rdencc_state_t* __state = get_rdencc_state();
 /* $ Abstract */
 
 /*     Read and decode encoded characters from a text file. */
@@ -401,12 +414,13 @@ static integer c__1 = 1;
 /*        the task of reading in the first encoded character string. */
 
 	if (encpos > 64) {
-	    io___11.ciunit = *unit;
-	    iostat = s_rsle(&io___11);
+	    __state->io___11.ciunit = *unit;
+	    iostat = s_rsle(&__state->io___11);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_lio(&c__9, &c__1, encchr, (ftnlen)64);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, encchr, (ftnlen)
+		    64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }

@@ -1,13 +1,21 @@
-/* sigdgt.f -- translated by f2c (version 19980913).
+/* sigdgt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sigdgt_init_t __sigdgt_init;
+static sigdgt_state_t* get_sigdgt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sigdgt)
+		state->sigdgt = __cspice_allocate_module(sizeof(
+	sigdgt_state_t), &__sigdgt_init, sizeof(__sigdgt_init));
+	return state->sigdgt;
+
+}
 
 /* $Procedure      SIGDGT ( Retain significant digits ) */
 /* Subroutine */ int sigdgt_(char *in, char *out, ftnlen in_len, ftnlen 
@@ -24,11 +32,20 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    integer zero, i__, j, k, l, begin;
+    integer zero;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer begin;
     char lchar[1];
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
     integer end;
 
+
+    /* Module state */
+    sigdgt_state_t* __state = get_sigdgt_state();
 /* $ Abstract */
 
 /*      Retain only the significant digits in a numeric string. */
@@ -302,7 +319,7 @@ static integer c__1 = 1;
 /*        after the last character that is neither a blank nor a zero. */
 
 	} else if (*(unsigned char *)&in[end - 1] == '0' && cpos_(in, "EeDd", 
-		&c__1, in_len, (ftnlen)4) == 0) {
+		&__state->c__1, in_len, (ftnlen)4) == 0) {
 	    i__ = end;
 	    while(*(unsigned char *)&in[i__ - 1] == '0' || *(unsigned char *)&
 		    in[i__ - 1] == ' ') {

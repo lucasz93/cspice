@@ -1,9 +1,17 @@
-/* hrmint.f -- translated by f2c (version 19980913).
+/* hrmint.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int hrmint_state_t;
+static hrmint_state_t* get_hrmint_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure HRMINT ( Hermite polynomial interpolation  ) */
 /* Subroutine */ int hrmint_(integer *n, doublereal *xvals, doublereal *yvals,
@@ -18,18 +26,27 @@
 
     /* Local variables */
     doublereal temp;
-    integer this__, prev, next, i__, j;
+    integer this__;
+    integer prev;
+    integer next;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal denom;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal c1, c2;
+    doublereal c1;
+    doublereal c2;
     integer xi;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer xij;
 
+
+    /* Module state */
+    hrmint_state_t* __state = get_hrmint_state();
 /* $ Abstract */
 
 /*     Evaluate a Hermite interpolating polynomial at a specified */
@@ -265,9 +282,9 @@
 /*     Check in only if an error is detected. */
 
     /* Parameter adjustments */
-    work_dim1 = *n << 1;
-    work_offset = work_dim1 + 1;
-    yvals_dim1 = *n << 1;
+    work_dim1 = 2 * *n;
+    work_offset = 1 + work_dim1 * 1;
+    yvals_dim1 = 2 * *n;
     xvals_dim1 = *n;
 
     /* Function Body */
@@ -292,10 +309,10 @@
 
     i__1 = *n << 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)293)] = 
-		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmint_", (ftnlen)293)];
+	work[(i__2 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 
+		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)293)]
+		 = yvals[(i__3 = i__ - 1) < 1 * yvals_dim1 && 0 <= i__3 ? 
+		i__3 : s_rnge("yvals", i__3, "hrmint_", (ftnlen)293)];
     }
 
 /*     Compute the second column of the interpolation table: this */
@@ -310,22 +327,22 @@
 
     i__1 = *n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	c1 = xvals[(i__2 = i__) < xvals_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+	c1 = xvals[(i__2 = i__) < 1 * xvals_dim1 && 0 <= i__2 ? i__2 : s_rnge(
 		"xvals", i__2, "hrmint_", (ftnlen)310)] - *x;
-	c2 = *x - xvals[(i__2 = i__ - 1) < xvals_dim1 && 0 <= i__2 ? i__2 : 
-		s_rnge("xvals", i__2, "hrmint_", (ftnlen)311)];
-	denom = xvals[(i__2 = i__) < xvals_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"xvals", i__2, "hrmint_", (ftnlen)312)] - xvals[(i__3 = i__ - 
-		1) < xvals_dim1 && 0 <= i__3 ? i__3 : s_rnge("xvals", i__3, 
-		"hrmint_", (ftnlen)312)];
+	c2 = *x - xvals[(i__2 = i__ - 1) < 1 * xvals_dim1 && 0 <= i__2 ? i__2 
+		: s_rnge("xvals", i__2, "hrmint_", (ftnlen)311)];
+	denom = xvals[(i__2 = i__) < 1 * xvals_dim1 && 0 <= i__2 ? i__2 : 
+		s_rnge("xvals", i__2, "hrmint_", (ftnlen)312)] - xvals[(i__3 =
+		 i__ - 1) < 1 * xvals_dim1 && 0 <= i__3 ? i__3 : s_rnge("xva"
+		"ls", i__3, "hrmint_", (ftnlen)312)];
 	if (denom == 0.) {
 	    chkin_("HRMINT", (ftnlen)6);
 	    setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
 	    errint_("#", &i__, (ftnlen)1);
 	    i__2 = i__ + 1;
 	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &xvals[(i__2 = i__ - 1) < xvals_dim1 && 0 <= i__2 ? 
-		    i__2 : s_rnge("xvals", i__2, "hrmint_", (ftnlen)321)], (
+	    errdp_("#", &xvals[(i__2 = i__ - 1) < 1 * xvals_dim1 && 0 <= i__2 
+		    ? i__2 : s_rnge("xvals", i__2, "hrmint_", (ftnlen)321)], (
 		    ftnlen)1);
 	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
 	    chkout_("HRMINT", (ftnlen)6);
@@ -341,64 +358,64 @@
 	prev = (i__ << 1) - 1;
 	this__ = prev + 1;
 	next = this__ + 1;
-	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < work_dim1 << 1 
-		&& 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
-		339)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
-		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmint_", (ftnlen)339)];
+	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < 1 * work_dim1 <<
+		 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
+		ftnlen)339)] = work[(i__3 = this__ + work_dim1 - work_offset) 
+		< 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", 
+		i__3, "hrmint_", (ftnlen)339)];
 
 /*        The even-indexed interpolated derivatives are the slopes of */
 /*        the linear interpolating polynomials for adjacent input */
 /*        abscissa/ordinate pairs. */
 
-	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
-		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
+	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < 1 * work_dim1 
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
 		ftnlen)346)] = (work[(i__3 = next + work_dim1 - work_offset) <
-		 work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmint_", (ftnlen)346)] - work[(i__4 = prev + work_dim1 - 
-		work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmint_", (ftnlen)346)]) / denom;
+		 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3,
+		 "hrmint_", (ftnlen)346)] - work[(i__4 = prev + work_dim1 - 
+		work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		s_rnge("work", i__4, "hrmint_", (ftnlen)346)]) / denom;
 
 /*        The first column of WORK contains interpolated function values. */
 /*        The odd-indexed entries are the linear Taylor polynomials, */
 /*        for each input abscissa value, evaluated at X. */
 
-	temp = work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 
-		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
-		ftnlen)353)] * (*x - xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 
-		<= i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)353)
-		]) + work[(i__4 = prev + work_dim1 - work_offset) < work_dim1 
-		<< 1 && 0 <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (
-		ftnlen)353)];
-	work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)356)]
-		 = (c1 * work[(i__3 = prev + work_dim1 - work_offset) < 
-		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
+	temp = work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (
+		ftnlen)353)] * (*x - xvals[(i__3 = i__ - 1) < 1 * xvals_dim1 
+		&& 0 <= i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (
+		ftnlen)353)]) + work[(i__4 = prev + work_dim1 - work_offset) <
+		 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", i__4,
+		 "hrmint_", (ftnlen)353)];
+	work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 &&
+		 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
+		356)] = (c1 * work[(i__3 = prev + work_dim1 - work_offset) < 
+		1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
 		"hrmint_", (ftnlen)356)] + c2 * work[(i__4 = next + work_dim1 
-		- work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmint_", (ftnlen)356)]) / denom;
-	work[(i__2 = prev + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)359)] = 
-		temp;
+		- work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		s_rnge("work", i__4, "hrmint_", (ftnlen)356)]) / denom;
+	work[(i__2 = prev + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 
+		0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
+		359)] = temp;
     }
 
 /*     The last column entries were not computed by the preceding loop; */
 /*     compute them now. */
 
-    work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < work_dim1 
-	    << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (
-	    ftnlen)367)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
-	     work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmi"
-	    "nt_", (ftnlen)367)];
-    work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 && 
-	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)368)] =
-	     work[(i__2 = (*n << 1) + work_dim1 - work_offset) < work_dim1 << 
-	    1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmint_", (ftnlen)
-	    368)] * (*x - xvals[(i__3 = *n - 1) < xvals_dim1 && 0 <= i__3 ? 
-	    i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)368)]) + work[(
-	    i__4 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 
-	    && 0 <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (ftnlen)368)
-	    ];
+    work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < 1 * 
+	    work_dim1 << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmin"
+	    "t_", (ftnlen)367)] = work[(i__2 = (*n << 1) + work_dim1 - 
+	    work_offset) < 1 * work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge(
+	    "work", i__2, "hrmint_", (ftnlen)367)];
+    work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < 1 * work_dim1 << 
+	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)
+	    368)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) < 1 * 
+	    work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmin"
+	    "t_", (ftnlen)368)] * (*x - xvals[(i__3 = *n - 1) < 1 * xvals_dim1 
+	    && 0 <= i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)
+	    368)]) + work[(i__4 = (*n << 1) - 1 + work_dim1 - work_offset) < 
+	    1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", i__4, 
+	    "hrmint_", (ftnlen)368)];
 
 /*     Compute columns 3 through 2*N of the table. */
 
@@ -419,22 +436,22 @@
 
 	    xi = (i__ + 1) / 2;
 	    xij = (i__ + j + 1) / 2;
-	    c1 = xvals[(i__3 = xij - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)391)] - *x;
-	    c2 = *x - xvals[(i__3 = xi - 1) < xvals_dim1 && 0 <= i__3 ? i__3 :
-		     s_rnge("xvals", i__3, "hrmint_", (ftnlen)392)];
-	    denom = xvals[(i__3 = xij - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "hrmint_", (ftnlen)394)] - xvals[(
-		    i__4 = xi - 1) < xvals_dim1 && 0 <= i__4 ? i__4 : s_rnge(
-		    "xvals", i__4, "hrmint_", (ftnlen)394)];
+	    c1 = xvals[(i__3 = xij - 1) < 1 * xvals_dim1 && 0 <= i__3 ? i__3 :
+		     s_rnge("xvals", i__3, "hrmint_", (ftnlen)391)] - *x;
+	    c2 = *x - xvals[(i__3 = xi - 1) < 1 * xvals_dim1 && 0 <= i__3 ? 
+		    i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)392)];
+	    denom = xvals[(i__3 = xij - 1) < 1 * xvals_dim1 && 0 <= i__3 ? 
+		    i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)394)] - 
+		    xvals[(i__4 = xi - 1) < 1 * xvals_dim1 && 0 <= i__4 ? 
+		    i__4 : s_rnge("xvals", i__4, "hrmint_", (ftnlen)394)];
 	    if (denom == 0.) {
 		chkin_("HRMINT", (ftnlen)6);
 		setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
 		errint_("#", &xi, (ftnlen)1);
 		errint_("#", &xij, (ftnlen)1);
-		errdp_("#", &xvals[(i__3 = xi - 1) < xvals_dim1 && 0 <= i__3 ?
-			 i__3 : s_rnge("xvals", i__3, "hrmint_", (ftnlen)402)]
-			, (ftnlen)1);
+		errdp_("#", &xvals[(i__3 = xi - 1) < 1 * xvals_dim1 && 0 <= 
+			i__3 ? i__3 : s_rnge("xvals", i__3, "hrmint_", (
+			ftnlen)402)], (ftnlen)1);
 		sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
 		chkout_("HRMINT", (ftnlen)6);
 		return 0;
@@ -451,41 +468,42 @@
 /*           The derivative expression here corresponds to equation */
 /*           2.35 on page 64 in reference [2]. */
 
-	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
-		    1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmint_", (
-		    ftnlen)421)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
-		    - work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "hrmint_", (ftnlen)421)] + c2 * work[
-		    (i__5 = i__ + 1 + (work_dim1 << 1) - work_offset) < 
-		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
-		    "hrmint_", (ftnlen)421)] + (work[(i__6 = i__ + 1 + 
-		    work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__6 ? 
-		    i__6 : s_rnge("work", i__6, "hrmint_", (ftnlen)421)] - 
-		    work[(i__7 = i__ + work_dim1 - work_offset) < work_dim1 <<
-		     1 && 0 <= i__7 ? i__7 : s_rnge("work", i__7, "hrmint_", (
-		    ftnlen)421)])) / denom;
+	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < 1 * 
+		    work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
+		    "hrmint_", (ftnlen)421)] = (c1 * work[(i__4 = i__ + (
+		    work_dim1 << 1) - work_offset) < 1 * work_dim1 << 1 && 0 
+		    <= i__4 ? i__4 : s_rnge("work", i__4, "hrmint_", (ftnlen)
+		    421)] + c2 * work[(i__5 = i__ + 1 + (work_dim1 << 1) - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__5 ? i__5 : 
+		    s_rnge("work", i__5, "hrmint_", (ftnlen)421)] + (work[(
+		    i__6 = i__ + 1 + work_dim1 - work_offset) < 1 * work_dim1 
+		    << 1 && 0 <= i__6 ? i__6 : s_rnge("work", i__6, "hrmint_",
+		     (ftnlen)421)] - work[(i__7 = i__ + work_dim1 - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__7 ? i__7 : 
+		    s_rnge("work", i__7, "hrmint_", (ftnlen)421)])) / denom;
 
 /*           Compute the interpolated function value at X for the Ith */
 /*           interpolant. */
 
-	    work[(i__3 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		    <= i__3 ? i__3 : s_rnge("work", i__3, "hrmint_", (ftnlen)
-		    428)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
-		    < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", 
-		    i__4, "hrmint_", (ftnlen)428)] + c2 * work[(i__5 = i__ + 
-		    1 + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		    i__5 ? i__5 : s_rnge("work", i__5, "hrmint_", (ftnlen)428)
-		    ]) / denom;
+	    work[(i__3 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 
+		    && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmint_", (
+		    ftnlen)428)] = (c1 * work[(i__4 = i__ + work_dim1 - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		    s_rnge("work", i__4, "hrmint_", (ftnlen)428)] + c2 * work[
+		    (i__5 = i__ + 1 + work_dim1 - work_offset) < 1 * 
+		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
+		    "hrmint_", (ftnlen)428)]) / denom;
 	}
     }
 
 /*     Our interpolated function value is sitting in WORK(1,1) at this */
 /*     point.  The interpolated derivative is located in WORK(1,2). */
 
-    *f = work[(i__1 = work_dim1 + 1 - work_offset) < work_dim1 << 1 && 0 <= 
-	    i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)438)];
-    *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < work_dim1 << 1 &&
-	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)439)];
+    *f = work[(i__1 = work_dim1 + 1 - work_offset) < 1 * work_dim1 << 1 && 0 
+	    <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)438)];
+    *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < 1 * work_dim1 << 
+	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmint_", (ftnlen)
+	    439)];
     return 0;
 } /* hrmint_ */
 

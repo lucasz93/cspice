@@ -1,9 +1,17 @@
-/* zzrbrkst.f -- translated by f2c (version 19980913).
+/* zzrbrkst.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzrbrkst_state_t;
+static zzrbrkst_state_t* get_zzrbrkst_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZRBRKST ( Private --- Reverse Bracketed String Extractor ) */
 /* Subroutine */ int zzrbrkst_(char *string, char *lftend, char *rgtend, char 
@@ -19,8 +27,15 @@
 
     /* Local variables */
     extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
-    integer bsize, lsize, rsize, lindex, rindex;
+    integer bsize;
+    integer lsize;
+    integer rsize;
+    integer lindex;
+    integer rindex;
 
+
+    /* Module state */
+    zzrbrkst_state_t* __state = get_zzrbrkst_state();
 /* $ Abstract */
 
 /*    Extract from a string the last instance of a substring bracketed */

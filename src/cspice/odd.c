@@ -1,9 +1,17 @@
-/* odd.f -- translated by f2c (version 19980913).
+/* odd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int odd_state_t;
+static odd_state_t* get_odd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             ODD ( Is a number odd? ) */
 logical odd_(integer *i__)
@@ -11,6 +19,9 @@ logical odd_(integer *i__)
     /* System generated locals */
     logical ret_val;
 
+
+    /* Module state */
+    odd_state_t* __state = get_odd_state();
 /* $ Abstract */
 
 /*     Determine whether an integer is odd. */

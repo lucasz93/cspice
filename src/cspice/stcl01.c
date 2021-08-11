@@ -1,13 +1,21 @@
-/* stcl01.f -- translated by f2c (version 19980913).
+/* stcl01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern stcl01_init_t __stcl01_init;
+static stcl01_state_t* get_stcl01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stcl01)
+		state->stcl01 = __cspice_allocate_module(sizeof(
+	stcl01_state_t), &__stcl01_init, sizeof(__stcl01_init));
+	return state->stcl01;
+
+}
 
 /* $Procedure   STCL01 ( STAR catalog type 1, load catalog file ) */
 /* Subroutine */ int stcl01_(char *catfnm, char *tabnam, integer *handle, 
@@ -22,16 +30,21 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int eklef_(char *, integer *, ftnlen), chkin_(
-	    char *, ftnlen), stcc01_(char *, char *, logical *, char *, 
-	    ftnlen, ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int eklef_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int stcc01_(char *, char *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical istyp1;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[256];
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    stcl01_state_t* __state = get_stcl01_state();
 /* $ Abstract */
 
 /*     Load SPICE type 1 star catalog and return the catalog's */
@@ -228,7 +241,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 	i__1[0] = 39, a__1[0] = "File # is not type 1 star catalog file.";
 	i__1[1] = 256, a__1[1] = errmsg;
-	s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)295);
+	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)295);
 	setmsg_(ch__1, (ftnlen)295);
 	errch_("#", catfnm, (ftnlen)1, catfnm_len);
 	sigerr_("SPICE(BADCATALOGFILE)", (ftnlen)21);

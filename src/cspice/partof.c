@@ -1,9 +1,17 @@
-/* partof.f -- translated by f2c (version 19980913).
+/* partof.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int partof_state_t;
+static partof_state_t* get_partof_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PARTOF ( Parabolic time of flight ) */
 /* Subroutine */ int partof_(doublereal *ma, doublereal *d__)
@@ -15,10 +23,16 @@
     doublereal m;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dcbrt_(doublereal *);
-    doublereal deriv, deriv2, fn, change;
+    doublereal deriv;
+    doublereal deriv2;
+    doublereal fn;
+    doublereal change;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    partof_state_t* __state = get_partof_state();
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = D + (D**3) / 3 */

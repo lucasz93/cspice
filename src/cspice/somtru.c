@@ -1,9 +1,17 @@
-/* somtru.f -- translated by f2c (version 19980913).
+/* somtru.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int somtru_state_t;
+static somtru_state_t* get_somtru_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SOMTRU ( Some entries true? ) */
 logical somtru_(logical *logcls, integer *n)
@@ -15,6 +23,9 @@ logical somtru_(logical *logcls, integer *n)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    somtru_state_t* __state = get_somtru_state();
 /* $ Abstract */
 
 /*     Determine if some of the entries in an array of logicals are */

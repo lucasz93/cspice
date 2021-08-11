@@ -1,13 +1,21 @@
-/* sypshd.f -- translated by f2c (version 19980913).
+/* sypshd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sypshd_init_t __sypshd_init;
+static sypshd_state_t* get_sypshd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sypshd)
+		state->sypshd = __cspice_allocate_module(sizeof(
+	sypshd_state_t), &__sypshd_init, sizeof(__sypshd_init));
+	return state->sypshd;
+
+}
 
 /* $Procedure      SYPSHD ( Push a value onto a particular symbol ) */
 /* Subroutine */ int sypshd_(char *name__, doublereal *value, char *tabsym, 
@@ -21,23 +29,32 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nsym;
-    extern integer cardc_(char *, ftnlen), cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *), sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), inslad_(
-	    doublereal *, integer *, integer *, doublereal *, integer *);
+    integer nval;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardd_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern integer sized_(doublereal *);
+    extern integer sumai_(integer *, integer *);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int inslad_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym;
     logical oldsym;
     extern /* Subroutine */ int sysetd_(char *, doublereal *, char *, integer 
 	    *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sypshd_state_t* __state = get_sypshd_state();
 /* $ Abstract */
 
 /*     Push a value onto a particular symbol in a double precision */
@@ -253,7 +270,7 @@ static integer c__1 = 1;
     } else {
 	i__1 = locsym - 1;
 	locval = sumai_(&tabptr[6], &i__1) + 1;
-	inslad_(value, &c__1, &locval, &tabval[6], &nval);
+	inslad_(value, &__state->c__1, &locval, &tabval[6], &nval);
 	scardd_(&nval, tabval);
 	++tabptr[locsym + 5];
     }

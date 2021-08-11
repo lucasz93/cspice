@@ -1,13 +1,21 @@
-/* zzrefch0.f -- translated by f2c (version 19980913).
+/* zzrefch0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern zzrefch0_init_t __zzrefch0_init;
+static zzrefch0_state_t* get_zzrefch0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrefch0)
+		state->zzrefch0 = __cspice_allocate_module(sizeof(
+	zzrefch0_state_t), &__zzrefch0_init, sizeof(__zzrefch0_init));
+	return state->zzrefch0;
+
+}
 
 /* $Procedure      ZZREFCH0 (Reference frame Change) */
 /* Subroutine */ int zzrefch0_(integer *frame1, integer *frame2, doublereal *
@@ -22,17 +30,22 @@ static integer c__2 = 2;
     /* Local variables */
     integer node;
     logical done;
-    integer cent, this__;
+    integer cent;
+    integer this__;
     extern /* Subroutine */ int zzrotgt0_(integer *, doublereal *, doublereal 
-	    *, integer *, logical *), zznofcon_(doublereal *, integer *, 
-	    integer *, integer *, integer *, char *, ftnlen);
-    integer i__, j, frame[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ident_(doublereal *);
+	    *, integer *, logical *);
+    extern /* Subroutine */ int zznofcon_(doublereal *, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    integer i__;
+    integer j;
+    integer frame[10];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ident_(doublereal *);
     integer class__;
     logical found;
     integer relto;
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *), zzrxr_(
-	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzrxr_(doublereal *, integer *, doublereal *);
     extern logical failed_(void);
     integer cmnode;
     extern integer isrchi_(integer *, integer *, integer *);
@@ -41,16 +54,21 @@ static integer c__2 = 2;
 	    integer *, logical *);
     logical gotone;
     char errmsg[1840];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern logical return_(void);
     doublereal tmprot[9]	/* was [3][3] */;
-    integer inc, get;
+    integer inc;
+    integer get;
     doublereal rot[126]	/* was [3][3][14] */;
     integer put;
     doublereal rot2[18]	/* was [3][3][2] */;
 
+
+    /* Module state */
+    zzrefch0_state_t* __state = get_zzrefch0_state();
 /* $ Abstract */
 
 /*     Return the transformation matrix from one */
@@ -464,7 +482,7 @@ static integer c__2 = 2;
 		     i__1, "zzrefch0_", (ftnlen)342)] = relto;
 	    zzrxr_(&rot[(i__1 = ((node - 1) * 3 + 1) * 3 - 12) < 126 && 0 <= 
 		    i__1 ? i__1 : s_rnge("rot", i__1, "zzrefch0_", (ftnlen)
-		    343)], &c__2, tmprot);
+		    343)], &__state->c__2, tmprot);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    rot[(i__1 = i__ + (j + (node - 1) * 3) * 3 - 13) < 126 && 

@@ -1,9 +1,17 @@
-/* zzinil.f -- translated by f2c (version 19980913).
+/* zzinil.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzinil_state_t;
+static zzinil_state_t* get_zzinil_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZINIL ( SGP4 initializer ) */
 /* Subroutine */ int zzinil_(doublereal *geophs, integer *opmode, doublereal *
@@ -22,19 +30,35 @@
 	    doublereal *);
 
     /* Local variables */
-    doublereal adel, c1p2p;
+    doublereal adel;
+    doublereal c1p2p;
     integer ids70;
     doublereal temp;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal tfrac, thgr70, c1, d1, j2;
+    doublereal tfrac;
+    doublereal thgr70;
+    doublereal c1;
+    doublereal d1;
+    doublereal j2;
     extern doublereal twopi_(void);
-    doublereal ak, po, radday;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal ak;
+    doublereal po;
+    doublereal radday;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    doublereal del, xke, x2o3, ts70, fk5r, tut1;
+    doublereal del;
+    doublereal xke;
+    doublereal x2o3;
+    doublereal ts70;
+    doublereal fk5r;
+    doublereal tut1;
 
+
+    /* Module state */
+    zzinil_state_t* __state = get_zzinil_state();
 /* $ Abstract */
 
 /*     This subroutine initializes the SGP4 propagator. All the */

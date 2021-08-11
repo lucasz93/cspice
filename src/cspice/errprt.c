@@ -1,15 +1,21 @@
-/* errprt.f -- translated by f2c (version 19980913).
+/* errprt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__10 = 10;
-static integer c__2 = 2;
+extern errprt_init_t __errprt_init;
+static errprt_state_t* get_errprt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->errprt)
+		state->errprt = __cspice_allocate_module(sizeof(
+	errprt_state_t), &__errprt_init, sizeof(__errprt_init));
+	return state->errprt;
+
+}
 
 /* $Procedure      ERRPRT ( Get/Set Error Output Items ) */
 /* Subroutine */ int errprt_(char *op, char *list, ftnlen op_len, ftnlen 
@@ -27,28 +33,35 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    logical long__, expl;
+    logical long__;
+    logical expl;
     char upop[3];
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical trace;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    char locop[3], words[9*10];
+    char locop[3];
+    char words[9*10];
     logical short__;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     logical dfault;
     extern /* Subroutine */ int lparse_(char *, char *, integer *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen);
     extern logical msgsel_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), suffix_(char *, integer *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer numwrd;
     char upword[9];
     extern logical setprt_(logical *, logical *, logical *, logical *, 
 	    logical *);
     logical status;
 
+
+    /* Module state */
+    errprt_state_t* __state = get_errprt_state();
 /* $ Abstract */
 
 /*      Retrieve or set the list of error message items */
@@ -360,28 +373,31 @@ static integer c__2 = 2;
 	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
 		s_copy(list, "LONG", list_len, (ftnlen)4);
 	    } else {
-		suffix_(", LONG", &c__0, list, (ftnlen)6, list_len);
+		suffix_(", LONG", &__state->c__0, list, (ftnlen)6, list_len);
 	    }
 	}
 	if (expl) {
 	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
 		s_copy(list, "EXPLAIN", list_len, (ftnlen)7);
 	    } else {
-		suffix_(", EXPLAIN", &c__0, list, (ftnlen)9, list_len);
+		suffix_(", EXPLAIN", &__state->c__0, list, (ftnlen)9, 
+			list_len);
 	    }
 	}
 	if (trace) {
 	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
 		s_copy(list, "TRACEBACK", list_len, (ftnlen)9);
 	    } else {
-		suffix_(", TRACEBACK", &c__0, list, (ftnlen)11, list_len);
+		suffix_(", TRACEBACK", &__state->c__0, list, (ftnlen)11, 
+			list_len);
 	    }
 	}
 	if (dfault) {
 	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
 		s_copy(list, "DEFAULT", list_len, (ftnlen)7);
 	    } else {
-		suffix_(", DEFAULT", &c__0, list, (ftnlen)9, list_len);
+		suffix_(", DEFAULT", &__state->c__0, list, (ftnlen)9, 
+			list_len);
 	    }
 	}
     } else if (s_cmp(upop, "SET", (ftnlen)3, (ftnlen)3) == 0) {
@@ -399,8 +415,8 @@ static integer c__2 = 2;
 /*        error, and continue parsing the list. */
 
 
-	lparse_(list, ",", &c__10, &numwrd, words, list_len, (ftnlen)1, (
-		ftnlen)9);
+	lparse_(list, ",", &__state->c__10, &numwrd, words, list_len, (ftnlen)
+		1, (ftnlen)9);
 	i__1 = numwrd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ucase_(words + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
@@ -442,7 +458,7 @@ static integer c__2 = 2;
 		i__3[1] = 9, a__1[1] = words + ((i__2 = i__ - 1) < 10 && 0 <= 
 			i__2 ? i__2 : s_rnge("words", i__2, "errprt_", (
 			ftnlen)480)) * 9;
-		s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)89);
+		s_cat(ch__1, a__1, i__3, &__state->c__2, (ftnlen)89);
 		setmsg_(ch__1, (ftnlen)89);
 		sigerr_("SPICE(INVALIDLISTITEM)", (ftnlen)22);
 	    }
@@ -469,7 +485,7 @@ static integer c__2 = 2;
 	i__3[0] = 62, a__1[0] = "ERRPRT:  An invalid value of OP was supplie"
 		"d.  The value was: ";
 	i__3[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__3, &c__2, (ftnlen)65);
+	s_cat(ch__2, a__1, i__3, &__state->c__2, (ftnlen)65);
 	setmsg_(ch__2, (ftnlen)65);
 	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
     }

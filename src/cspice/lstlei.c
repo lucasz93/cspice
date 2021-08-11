@@ -1,9 +1,17 @@
-/* lstlei.f -- translated by f2c (version 19980913).
+/* lstlei.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstlei_state_t;
+static lstlei_state_t* get_lstlei_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTLEI ( Last integer element less than or equal to ) */
 integer lstlei_(integer *x, integer *n, integer *array)
@@ -12,8 +20,15 @@ integer lstlei_(integer *x, integer *n, integer *array)
     integer ret_val;
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstlei_state_t* __state = get_lstlei_state();
 /* $ Abstract */
 
 /*      Given a number X and an array of non-decreasing numbers, */

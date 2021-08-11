@@ -1,14 +1,21 @@
-/* syreni.f -- translated by f2c (version 19980913).
+/* syreni.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern syreni_init_t __syreni_init;
+static syreni_state_t* get_syreni_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->syreni)
+		state->syreni = __cspice_allocate_module(sizeof(
+	syreni_state_t), &__syreni_init, sizeof(__syreni_init));
+	return state->syreni;
+
+}
 
 /* $Procedure      SYRENI ( Rename an existing symbol ) */
 /* Subroutine */ int syreni_(char *old, char *new__, char *tabsym, integer *
@@ -25,11 +32,12 @@ static integer c__1 = 1;
     /* Local variables */
     integer nsym;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), bsrchc_(char *, integer *, 
-	    char *, ftnlen, ftnlen);
-    integer olddim, oldloc;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    integer olddim;
+    integer oldloc;
     extern /* Subroutine */ int swapac_(integer *, integer *, integer *, 
 	    integer *, char *, ftnlen);
     integer oldval;
@@ -38,12 +46,16 @@ static integer c__1 = 1;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
     integer newloc;
     extern /* Subroutine */ int sydeli_(char *, char *, integer *, integer *, 
-	    ftnlen, ftnlen), sigerr_(char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    syreni_state_t* __state = get_syreni_state();
 /* $ Abstract */
 
 /*     Rename an existing symbol in an integer symbol table. */
@@ -280,13 +292,13 @@ static integer c__1 = 1;
 	i__1 = newloc - 1;
 	newval = sumai_(&tabptr[6], &i__1) + 1;
 	olddim = tabptr[oldloc + 5];
-	swapai_(&olddim, &oldval, &c__0, &newval, &tabval[6]);
+	swapai_(&olddim, &oldval, &__state->c__0, &newval, &tabval[6]);
 
 /*        Move the name and dimension the same way. */
 
-	swapac_(&c__1, &oldloc, &c__0, &newloc, tabsym + tabsym_len * 6, 
-		tabsym_len);
-	swapai_(&c__1, &oldloc, &c__0, &newloc, &tabptr[6]);
+	swapac_(&__state->c__1, &oldloc, &__state->c__0, &newloc, tabsym + 
+		tabsym_len * 6, tabsym_len);
+	swapai_(&__state->c__1, &oldloc, &__state->c__0, &newloc, &tabptr[6]);
 	if (oldloc < newloc) {
 	    --newloc;
 	}

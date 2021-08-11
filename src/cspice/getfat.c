@@ -1,14 +1,21 @@
-/* getfat.f -- translated by f2c (version 19980913).
+/* getfat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern getfat_init_t __getfat_init;
+static getfat_state_t* get_getfat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->getfat)
+		state->getfat = __cspice_allocate_module(sizeof(
+	getfat_state_t), &__getfat_init, sizeof(__getfat_init));
+	return state->getfat;
+
+}
 
 /* $Procedure GETFAT ( Get file architecture and type ) */
 /* Subroutine */ int getfat_(char *file, char *arch, char *kertyp, ftnlen 
@@ -29,17 +36,23 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
-	    ftnlen), zzddhgsd_(char *, integer *, char *, ftnlen, ftnlen), 
-	    zzddhnfo_(integer *, char *, integer *, integer *, integer *, 
-	    logical *, ftnlen), zzddhhlu_(integer *, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
+	    integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
     integer i__;
     char fname[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    logical found, exist;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    idw2at_(char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    logical found;
+    logical exist;
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     integer handle;
     extern /* Subroutine */ int dafcls_(integer *);
     char filarc[32];
@@ -48,21 +61,27 @@ static integer c__1 = 1;
     extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
     integer intarc;
     char idword[12];
-    integer intamn, number;
+    integer intamn;
+    integer number;
     logical diropn;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), getlun_(integer *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), nextwd_(
-	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     char tmpwrd[12];
     extern logical return_(void);
     extern /* Subroutine */ int zzckspk_(integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___14 = { 1, 0, 1, 0, 1 };
 
 
+
+    /* Module state */
+    getfat_state_t* __state = get_getfat_state();
 /* $ Abstract */
 
 /*     Determine the architecture and type of SPICE kernels. */
@@ -832,7 +851,7 @@ static integer c__1 = 1;
 /*        logical unit to use with this file. */
 
 	zzddhgsd_("ARCH", &intarc, filarc, (ftnlen)4, (ftnlen)32);
-	zzddhhlu_(&handle, filarc, &c_false, &number, (ftnlen)32);
+	zzddhhlu_(&handle, filarc, &__state->c_false, &number, (ftnlen)32);
 	opened = TRUE_;
     } else {
 
@@ -959,12 +978,12 @@ static integer c__1 = 1;
 /*     access or sequential access. */
 
     if (diropn) {
-	io___14.ciunit = number;
-	iostat = s_rdue(&io___14);
+	__state->io___14.ciunit = number;
+	iostat = s_rdue(&__state->io___14);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, tmpwrd, (ftnlen)12);
+	iostat = do_uio(&__state->c__1, tmpwrd, (ftnlen)12);
 	if (iostat != 0) {
 	    goto L100001;
 	}
@@ -1043,7 +1062,7 @@ L100001:
 	    if (iostat != 0) {
 		goto L100002;
 	    }
-	    iostat = do_fio(&c__1, tmpwrd, (ftnlen)12);
+	    iostat = do_fio(&__state->c__1, tmpwrd, (ftnlen)12);
 	    if (iostat != 0) {
 		goto L100002;
 	    }
@@ -1060,7 +1079,7 @@ L100002:
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&c__1, tmpwrd, (ftnlen)12);
+	iostat = do_fio(&__state->c__1, tmpwrd, (ftnlen)12);
 	if (iostat != 0) {
 	    goto L100003;
 	}

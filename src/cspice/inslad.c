@@ -1,9 +1,17 @@
-/* inslad.f -- translated by f2c (version 19980913).
+/* inslad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int inslad_state_t;
+static inslad_state_t* get_inslad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      INSLAD (Insert at location in double precision array) */
 /* Subroutine */ int inslad_(doublereal *elts, integer *ne, integer *loc, 
@@ -13,12 +21,18 @@
     integer i__1;
 
     /* Local variables */
-    integer size, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    integer size;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    inslad_state_t* __state = get_inslad_state();
 /* $ Abstract */
 
 /*      Insert one or more elements into a double precision array at */

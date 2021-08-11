@@ -1,9 +1,17 @@
-/* zzektrsz.f -- translated by f2c (version 19980913).
+/* zzektrsz.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrsz_state_t;
+static zzektrsz_state_t* get_zzektrsz_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRSZ ( EK, tree size ) */
 integer zzektrsz_(integer *handle, integer *tree)
@@ -17,6 +25,9 @@ integer zzektrsz_(integer *handle, integer *tree)
 	    integer *);
     integer addrss;
 
+
+    /* Module state */
+    zzektrsz_state_t* __state = get_zzektrsz_state();
 /* $ Abstract */
 
 /*     Return the number of keys in a tree. */

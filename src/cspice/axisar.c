@@ -1,9 +1,17 @@
-/* axisar.f -- translated by f2c (version 19980913).
+/* axisar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int axisar_state_t;
+static axisar_state_t* get_axisar_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      AXISAR ( Axis and angle to rotation ) */
 /* Subroutine */ int axisar_(doublereal *axis, doublereal *angle, doublereal *
@@ -23,6 +31,9 @@
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
 
+
+    /* Module state */
+    axisar_state_t* __state = get_axisar_state();
 /* $ Abstract */
 
 /*     Construct a rotation matrix that rotates vectors by a specified */

@@ -1,15 +1,21 @@
-/* spkw05.f -- translated by f2c (version 19980913).
+/* spkw05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern spkw05_init_t __spkw05_init;
+static spkw05_state_t* get_spkw05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkw05)
+		state->spkw05 = __cspice_allocate_module(sizeof(
+	spkw05_state_t), &__spkw05_init, sizeof(__spkw05_init));
+	return state->spkw05;
+
+}
 
 /* $Procedure  SPKW05 ( Write SPK segment, type 5 ) */
 /* Subroutine */ int spkw05_(integer *handle, integer *body, integer *center, 
@@ -23,25 +29,32 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), dafada_(
-	    doublereal *, integer *), dafbna_(integer *, doublereal *, char *,
-	     ftnlen), dafena_(void);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    spkw05_state_t* __state = get_spkw05_state();
 /* $ Abstract */
 
 /*     Write an SPK segment of type 5 given a time-ordered set of */
@@ -399,7 +412,7 @@ static integer c__1 = 1;
 
 /*     Pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Begin a new segment. */
 
@@ -421,15 +434,15 @@ static integer c__1 = 1;
 
     i__ = 100;
     while(i__ <= *n) {
-	dafada_(&epochs[i__ - 1], &c__1);
+	dafada_(&epochs[i__ - 1], &__state->c__1);
 	i__ += 100;
     }
 
 /*     Store the GM of the central body, and the number of states. */
 
-    dafada_(gm, &c__1);
+    dafada_(gm, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     If anything went wrong, don't end the segment. */
 

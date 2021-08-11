@@ -1,15 +1,21 @@
-/* timdef.f -- translated by f2c (version 19980913).
+/* timdef.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__8 = 8;
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern timdef_init_t __timdef_init;
+static timdef_state_t* get_timdef_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->timdef)
+		state->timdef = __cspice_allocate_module(sizeof(
+	timdef_state_t), &__timdef_init, sizeof(__timdef_init));
+	return state->timdef;
+
+}
 
 /* $Procedure      TIMDEF ( Time Software Defaults ) */
 /* Subroutine */ int timdef_(char *action, char *item, char *value, ftnlen 
@@ -17,15 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char defsys[16] = "UTC             ";
-    static char defzon[16] = "                ";
-    static char defcal[16] = "GREGORIAN       ";
-    static char zones[16*8] = "EST             " "EDT             " "CST    "
-	    "         " "CDT             " "MST             " "MDT           "
-	    "  " "PST             " "PDT             ";
-    static char trnslt[16*8] = "UTC-5           " "UTC-4           " "UTC-6 "
-	    "          " "UTC-5           " "UTC-7           " "UTC-6        "
-	    "   " "UTC-8           " "UTC-7           ";
 
     /* System generated locals */
     integer i__1;
@@ -36,23 +33,23 @@ static integer c__1 = 1;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal hoff, moff;
-    static integer last, zone;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    static char myval[16];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static logical succes;
-    static char myactn[16];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
-	    setmsg_(char *, ftnlen);
-    static char myitem[16];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
 	    doublereal *, integer *, logical *, ftnlen);
 
+
+    /* Module state */
+    timdef_state_t* __state = get_timdef_state();
 /* $ Abstract */
 
 /*     Set and retrieve the defaults associated with calendar */
@@ -328,25 +325,27 @@ static integer c__1 = 1;
 
 /*     Normalize the input. */
 
-    ljust_(action, myactn, action_len, (ftnlen)16);
-    ucase_(myactn, myactn, (ftnlen)16, (ftnlen)16);
-    ljust_(item, myitem, item_len, (ftnlen)16);
-    ucase_(myitem, myitem, (ftnlen)16, (ftnlen)16);
-    ljust_(value, myval, value_len, (ftnlen)16);
-    ucase_(myval, myval, (ftnlen)16, (ftnlen)16);
+    ljust_(action, __state->myactn, action_len, (ftnlen)16);
+    ucase_(__state->myactn, __state->myactn, (ftnlen)16, (ftnlen)16);
+    ljust_(item, __state->myitem, item_len, (ftnlen)16);
+    ucase_(__state->myitem, __state->myitem, (ftnlen)16, (ftnlen)16);
+    ljust_(value, __state->myval, value_len, (ftnlen)16);
+    ucase_(__state->myval, __state->myval, (ftnlen)16, (ftnlen)16);
 
 /*     Admittedly, the decision making below is not very elegant. */
 /*     However, this works and is simpler than anything that comes */
 /*     to mind at the moment and allows us to give quite specific */
 /*     diagnostic messages easily. */
 
-    if (s_cmp(myactn, "SET", (ftnlen)16, (ftnlen)3) == 0) {
-	if (s_cmp(myitem, "SYSTEM", (ftnlen)16, (ftnlen)6) == 0) {
-	    if (s_cmp(myval, "TDB", (ftnlen)16, (ftnlen)3) == 0 || s_cmp(
-		    myval, "TDT", (ftnlen)16, (ftnlen)3) == 0 || s_cmp(myval, 
-		    "UTC", (ftnlen)16, (ftnlen)3) == 0) {
-		s_copy(defzon, " ", (ftnlen)16, (ftnlen)1);
-		s_copy(defsys, myval, (ftnlen)16, (ftnlen)16);
+    if (s_cmp(__state->myactn, "SET", (ftnlen)16, (ftnlen)3) == 0) {
+	if (s_cmp(__state->myitem, "SYSTEM", (ftnlen)16, (ftnlen)6) == 0) {
+	    if (s_cmp(__state->myval, "TDB", (ftnlen)16, (ftnlen)3) == 0 || 
+		    s_cmp(__state->myval, "TDT", (ftnlen)16, (ftnlen)3) == 0 
+		    || s_cmp(__state->myval, "UTC", (ftnlen)16, (ftnlen)3) == 
+		    0) {
+		s_copy(__state->defzon, " ", (ftnlen)16, (ftnlen)1);
+		s_copy(__state->defsys, __state->myval, (ftnlen)16, (ftnlen)
+			16);
 	    } else {
 		setmsg_("The default value assigned to the time system must "
 			"be one of 'UTC', 'TDT', or 'TDB'. The value supplied"
@@ -356,20 +355,26 @@ static integer c__1 = 1;
 		chkout_("TIMDEF", (ftnlen)6);
 		return 0;
 	    }
-	} else if (s_cmp(myitem, "ZONE", (ftnlen)16, (ftnlen)4) == 0) {
-	    zone = isrchc_(myval, &c__8, zones, (ftnlen)16, (ftnlen)16);
+	} else if (s_cmp(__state->myitem, "ZONE", (ftnlen)16, (ftnlen)4) == 0)
+		 {
+	    __state->zone = isrchc_(__state->myval, &__state->c__8, 
+		    __state->zones, (ftnlen)16, (ftnlen)16);
 
 /*           If MYVAL was one of the recognized time zones, we */
 /*           translate it to the UTC offset form. */
 
-	    if (zone > 0) {
-		s_copy(myval, trnslt + (((i__1 = zone - 1) < 8 && 0 <= i__1 ? 
-			i__1 : s_rnge("trnslt", i__1, "timdef_", (ftnlen)387))
-			 << 4), (ftnlen)16, (ftnlen)16);
+	    if (__state->zone > 0) {
+		s_copy(__state->myval, __state->trnslt + (((i__1 = 
+			__state->zone - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(
+			"trnslt", i__1, "timdef_", (ftnlen)387)) << 4), (
+			ftnlen)16, (ftnlen)16);
 	    }
-	    prefix_("::", &c__0, myval, (ftnlen)2, (ftnlen)16);
-	    zzutcpm_(myval, &c__1, &hoff, &moff, &last, &succes, (ftnlen)16);
-	    if (! succes) {
+	    prefix_("::", &__state->c__0, __state->myval, (ftnlen)2, (ftnlen)
+		    16);
+	    zzutcpm_(__state->myval, &__state->c__1, &__state->hoff, &
+		    __state->moff, &__state->last, &__state->succes, (ftnlen)
+		    16);
+	    if (! __state->succes) {
 		setmsg_("The input value for a time zone \"#\" was not recog"
 			"nized as known time zone and could not be parsed acc"
 			"ording to the pattern UTC(+/-)HR[:MN]. Known time zo"
@@ -380,13 +385,17 @@ static integer c__1 = 1;
 		chkout_("TIMDEF", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(defzon, myval + 2, (ftnlen)16, (ftnlen)14);
-	    s_copy(defsys, " ", (ftnlen)16, (ftnlen)1);
-	} else if (s_cmp(myitem, "CALENDAR", (ftnlen)16, (ftnlen)8) == 0) {
-	    if (s_cmp(myval, "JULIAN", (ftnlen)16, (ftnlen)6) == 0 || s_cmp(
-		    myval, "GREGORIAN", (ftnlen)16, (ftnlen)9) == 0 || s_cmp(
-		    myval, "MIXED", (ftnlen)16, (ftnlen)5) == 0) {
-		s_copy(defcal, myval, (ftnlen)16, (ftnlen)16);
+	    s_copy(__state->defzon, __state->myval + 2, (ftnlen)16, (ftnlen)
+		    14);
+	    s_copy(__state->defsys, " ", (ftnlen)16, (ftnlen)1);
+	} else if (s_cmp(__state->myitem, "CALENDAR", (ftnlen)16, (ftnlen)8) 
+		== 0) {
+	    if (s_cmp(__state->myval, "JULIAN", (ftnlen)16, (ftnlen)6) == 0 ||
+		     s_cmp(__state->myval, "GREGORIAN", (ftnlen)16, (ftnlen)9)
+		     == 0 || s_cmp(__state->myval, "MIXED", (ftnlen)16, (
+		    ftnlen)5) == 0) {
+		s_copy(__state->defcal, __state->myval, (ftnlen)16, (ftnlen)
+			16);
 	    } else {
 		setmsg_("The input value for '#' is not a recognized calenda"
 			"r type.  The recognized calendars are 'GREGORIAN', '"
@@ -407,13 +416,15 @@ static integer c__1 = 1;
 	}
 	chkout_("TIMDEF", (ftnlen)6);
 	return 0;
-    } else if (s_cmp(myactn, "GET", (ftnlen)16, (ftnlen)3) == 0) {
-	if (s_cmp(myitem, "CALENDAR", (ftnlen)16, (ftnlen)8) == 0) {
-	    s_copy(value, defcal, value_len, (ftnlen)16);
-	} else if (s_cmp(myitem, "SYSTEM", (ftnlen)16, (ftnlen)6) == 0) {
-	    s_copy(value, defsys, value_len, (ftnlen)16);
-	} else if (s_cmp(myitem, "ZONE", (ftnlen)16, (ftnlen)4) == 0) {
-	    s_copy(value, defzon, value_len, (ftnlen)16);
+    } else if (s_cmp(__state->myactn, "GET", (ftnlen)16, (ftnlen)3) == 0) {
+	if (s_cmp(__state->myitem, "CALENDAR", (ftnlen)16, (ftnlen)8) == 0) {
+	    s_copy(value, __state->defcal, value_len, (ftnlen)16);
+	} else if (s_cmp(__state->myitem, "SYSTEM", (ftnlen)16, (ftnlen)6) == 
+		0) {
+	    s_copy(value, __state->defsys, value_len, (ftnlen)16);
+	} else if (s_cmp(__state->myitem, "ZONE", (ftnlen)16, (ftnlen)4) == 0)
+		 {
+	    s_copy(value, __state->defzon, value_len, (ftnlen)16);
 	} else {
 	    setmsg_("The specified item '#' is not a recognized time default"
 		    " item.  The items that you may \"SET\" via the routine T"

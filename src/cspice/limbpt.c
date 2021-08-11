@@ -1,20 +1,21 @@
-/* limbpt.f -- translated by f2c (version 19980913).
+/* limbpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__2000 = 2000;
-static doublereal c_b121 = -1.;
-static integer c__0 = 0;
-static doublereal c_b124 = 0.;
-static doublereal c_b129 = 1.;
+extern limbpt_init_t __limbpt_init;
+static limbpt_state_t* get_limbpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->limbpt)
+		state->limbpt = __cspice_allocate_module(sizeof(
+	limbpt_state_t), &__limbpt_init, sizeof(__limbpt_init));
+	return state->limbpt;
+
+}
 
 /* $Procedure LIMBPT ( Limb points on an extended object ) */
 /* Subroutine */ int limbpt_(char *method, char *target, doublereal *et, char 
@@ -27,23 +28,6 @@ static doublereal c_b129 = 1.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvloc[25] = "                         ";
-    static char prvmth[500] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "       ";
-    static integer prvtrg = 0;
-    static integer svnrad = 0;
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
-    static logical usestl = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -56,43 +40,58 @@ static doublereal c_b129 = 1.;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), zzbods2c_(integer *, char *, integer *, logical *, char *, 
-	    integer *, logical *, ftnlen, ftnlen);
-    doublereal edir[3], limb[9], axis[3], roll;
+	    );
+    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    doublereal edir[3];
+    doublereal limb[9];
+    doublereal axis[3];
+    doublereal roll;
     extern doublereal vdot_(doublereal *, doublereal *);
     integer room;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *), mtxv_(doublereal *, 
-	    doublereal *, doublereal *), zzbodvcd_(integer *, char *, integer 
-	    *, integer *, integer *, doublereal *, ftnlen), zzcorepc_(char *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen), zzmaxrad_(
-	    doublereal *), zznamfrm_(integer *, char *, integer *, char *, 
-	    integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen), 
-	    zztangnt_(integer *, doublereal *, integer *, integer *, integer *
-	    , integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), 
-	    zzsudski_(integer *, integer *, integer *, integer *), zzctruin_(
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
+	    integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zztangnt_(integer *, doublereal *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
 	    integer *);
-    integer i__, j;
+    extern /* Subroutine */ int zzctruin_(integer *);
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *), zzprsmet_(
-	    integer *, char *, integer *, char *, char *, logical *, integer *
-	    , integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen), zzraysfx_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
-    static integer shape;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal ptarg[3];
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     integer total;
-    doublereal ssblt, lterr, stobs[6];
+    doublereal ssblt;
+    doublereal lterr;
+    doublereal stobs[6];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
-    static integer nsurf;
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
     extern logical vzero_(doublereal *);
@@ -100,61 +99,86 @@ static doublereal c_b129 = 1.;
 	    *);
     doublereal prvlt;
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *), el2cgv_(doublereal *, doublereal *, doublereal *
-	    , doublereal *);
-    static logical svfnd1, svfnd2;
-    static integer svctr1[2];
+	    *, doublereal *);
+    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal cp[3];
     extern logical failed_(void);
-    static integer svctr2[2], svctr3[2], svctr4[2], svctr5[2], loccde;
     extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal lt;
-    integer fxfcde, obscde, to, trgcde;
+    integer fxfcde;
+    integer obscde;
+    integer to;
+    integer trgcde;
     extern doublereal clight_(void);
     doublereal maxrad;
     extern /* Subroutine */ int cleari_(integer *, integer *);
     extern doublereal touchd_(doublereal *);
     extern logical return_(void);
-    char lmbstr[20], nrmloc[25], shpstr[9];
-    static char subtyp[20];
-    char svlstr[20], trmstr[20];
-    doublereal center[3], cortrg[3], cutnml[3], enorml[3], epoint[3], ipoint[
-	    3], isrfvc[3], plnvec[3];
-    static doublereal pntbuf[6000]	/* was [3][2000] */;
-    doublereal raydir[3], rayvtx[3], result[2006], smajor[3], sminor[3], 
-	    stloff[3], stlpos[3], ssbtrg[3], tmpvec[3], trgepc;
-    integer fxcent, fxclss, fxtyid;
-    static integer lmbtyp;
+    char lmbstr[20];
+    char nrmloc[25];
+    char shpstr[9];
+    char svlstr[20];
+    char trmstr[20];
+    doublereal center[3];
+    doublereal cortrg[3];
+    doublereal cutnml[3];
+    doublereal enorml[3];
+    doublereal epoint[3];
+    doublereal ipoint[3];
+    doublereal isrfvc[3];
+    doublereal plnvec[3];
+    doublereal raydir[3];
+    doublereal rayvtx[3];
+    doublereal result[2006];
+    doublereal smajor[3];
+    doublereal sminor[3];
+    doublereal stloff[3];
+    doublereal stlpos[3];
+    doublereal ssbtrg[3];
+    doublereal tmpvec[3];
+    doublereal trgepc;
+    integer fxcent;
+    integer fxclss;
+    integer fxtyid;
     integer numitr;
     doublereal pos[3];
-    static integer srflst[100];
-    logical attblk[15], fnd;
-    static logical pri;
+    logical attblk[15];
+    logical fnd;
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svradi[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), ljucrs_(integer *, char *, char *, ftnlen, ftnlen), 
-	    ssized_(integer *, doublereal *), spkpos_(char *, doublereal *, 
-	    char *, char *, char *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen), vminus_(doublereal *, doublereal *), 
-	    vsclip_(doublereal *, doublereal *), scardd_(integer *, 
-	    doublereal *), surfpt_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *), spkssb_(
-	    integer *, doublereal *, char *, doublereal *, ftnlen), spkgps_(
-	    integer *, doublereal *, char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), stelab_(doublereal *, doublereal *, 
-	    doublereal *), pxform_(char *, char *, doublereal *, doublereal *,
-	     ftnlen, ftnlen), mxv_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ssized_(integer *, doublereal *);
+    extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
+	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+	    ;
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
 
+
+    /* Module state */
+    limbpt_state_t* __state = get_limbpt_state();
 /* $ Abstract */
 
 /*     Find limb points on a target body. The limb is the set of points */
@@ -2759,22 +2783,23 @@ static doublereal c_b129 = 1.;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	zzctruin_(svctr4);
-	zzctruin_(svctr5);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	zzctruin_(__state->svctr4);
+	zzctruin_(__state->svctr5);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -2811,19 +2836,19 @@ static doublereal c_b129 = 1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZPRSCOR. */
 
-	uselt = attblk[1];
-	usecn = attblk[3];
-	usestl = attblk[2];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
+	__state->usestl = attblk[2];
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -2835,8 +2860,8 @@ static doublereal c_b129 = 1.;
 	chkout_("LIMBPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -2863,8 +2888,8 @@ static doublereal c_b129 = 1.;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr3, svfref, &svfxfc, fixref, &fxfcde, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr3, __state->svfref, &__state->svfxfc, fixref, &
+	    fxfcde, (ftnlen)32, fixref_len);
     frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
     if (failed_()) {
 	chkout_("LIMBPT", (ftnlen)6);
@@ -2895,14 +2920,14 @@ static doublereal c_b129 = 1.;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(svctr4, &surfup);
+    zzsrftrk_(__state->svctr4, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
-	    0) {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2910,7 +2935,7 @@ static doublereal c_b129 = 1.;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2919,17 +2944,18 @@ static doublereal c_b129 = 1.;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, lmbstr, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, __state->subtyp, 
+		&__state->pri, &__state->nsurf, __state->srflst, lmbstr, 
+		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
+		ftnlen)20);
 	if (failed_()) {
 	    chkout_("LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -2942,9 +2968,9 @@ static doublereal c_b129 = 1.;
 	    return 0;
 	}
 	if (eqstr_(lmbstr, "TANGENT", (ftnlen)20, (ftnlen)7)) {
-	    lmbtyp = 1;
+	    __state->lmbtyp = 1;
 	} else if (eqstr_(lmbstr, "GUIDED", (ftnlen)20, (ftnlen)6)) {
-	    lmbtyp = 2;
+	    __state->lmbtyp = 2;
 	} else {
 	    setmsg_("Returned limb type from method string was <#>. Value mu"
 		    "st be TANGENT or GUIDED.", (ftnlen)79);
@@ -2957,12 +2983,12 @@ static doublereal c_b129 = 1.;
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
+	if (s_cmp(__state->subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
 	    setmsg_("Spurious sub-observer point type <#> was present in the"
 		    " method string #. The sub-observer type is valid in the "
 		    "method strings for SUBPNT and SUBSLR, but is not applica"
 		    "ble for LIMBPT.", (ftnlen)182);
-	    errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
+	    errch_("#", __state->subtyp, (ftnlen)1, (ftnlen)20);
 	    errch_("#", method, (ftnlen)1, method_len);
 	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
 	    chkout_("LIMBPT", (ftnlen)6);
@@ -2983,18 +3009,19 @@ static doublereal c_b129 = 1.;
 	    chkout_("LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(prvmth, method, (ftnlen)500, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
     }
 
 /*     Identify the aberration correction locus. */
 
-    if (first || s_cmp(corloc, prvloc, corloc_len, (ftnlen)25) != 0) {
-	ljucrs_(&c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
+    if (__state->first || s_cmp(corloc, __state->prvloc, corloc_len, (ftnlen)
+	    25) != 0) {
+	ljucrs_(&__state->c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
 	if (s_cmp(nrmloc, "CENTER", (ftnlen)25, (ftnlen)6) == 0) {
-	    loccde = 1;
+	    __state->loccde = 1;
 	} else if (s_cmp(nrmloc, "ELLIPSOID LIMB", (ftnlen)25, (ftnlen)14) == 
 		0) {
-	    loccde = 2;
+	    __state->loccde = 2;
 	} else {
 	    setmsg_("Aberration correction locus <#> was not recognized.", (
 		    ftnlen)51);
@@ -3008,7 +3035,7 @@ static doublereal c_b129 = 1.;
 /*        Save the input locus string so we can check for */
 /*        a change on the next call. */
 
-	s_copy(prvloc, corloc, (ftnlen)25, corloc_len);
+	s_copy(__state->prvloc, corloc, (ftnlen)25, corloc_len);
     }
 
 /*     Check the reference vector. */
@@ -3022,7 +3049,7 @@ static doublereal c_b129 = 1.;
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
+    __state->first = FALSE_;
 
 /*     Check MAXN. */
 
@@ -3050,7 +3077,7 @@ static doublereal c_b129 = 1.;
 /*     Check the angular search step size and convergence */
 /*     tolerance. These checks apply only to DSK shapes. */
 
-    if (shape == 2) {
+    if (__state->shape == 2) {
 	if (*schstp <= 0.) {
 	    setmsg_("The angular search step SCHSTP = #; SCHSTP is required "
 		    "to be positive.", (ftnlen)70);
@@ -3080,15 +3107,15 @@ static doublereal c_b129 = 1.;
 	chkout_("LIMBPT", (ftnlen)6);
 	return 0;
     }
-    if (shape == 2) {
+    if (__state->shape == 2) {
 
 /*        This is the DSK case. */
 
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &nsurf, srflst, &fxfcde);
-    } else if (shape != 1) {
+	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fxfcde);
+    } else if (__state->shape != 1) {
 	setmsg_("Computation method argument was <#>; this string must speci"
 		"fy a supported shape model and computation type. See the des"
 		"cription of METHOD in the header of SUBPNT for details.", (
@@ -3128,31 +3155,31 @@ static doublereal c_b129 = 1.;
 
 /*     Get target body radii if necessary. */
 
-    if (shape == 1 || loccde == 2 || lmbtyp == 2) {
-	if (trgcde != prvtrg) {
+    if (__state->shape == 1 || __state->loccde == 2 || __state->lmbtyp == 2) {
+	if (trgcde != __state->prvtrg) {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(svctr5);
+	    zzctruin_(__state->svctr5);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&trgcde, "RADII", &c__3, svctr5, &svnrad, svradi, (ftnlen)5)
-		;
+	zzbodvcd_(&trgcde, "RADII", &__state->c__3, __state->svctr5, &
+		__state->svnrad, __state->svradi, (ftnlen)5);
 	if (failed_()) {
 	    chkout_("LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	if (svnrad != 3) {
+	if (__state->svnrad != 3) {
 	    setmsg_("Number of target radii must be 3 but was #.", (ftnlen)43)
 		    ;
-	    errint_("#", &svnrad, (ftnlen)1);
+	    errint_("#", &__state->svnrad, (ftnlen)1);
 	    sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
 	    chkout_("LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	prvtrg = trgcde;
+	__state->prvtrg = trgcde;
     }
 
 /*     Set up activities are complete at this point. */
@@ -3161,7 +3188,7 @@ static doublereal c_b129 = 1.;
 /*     Find limb points on the target. */
 
     cleari_(ncuts, npts);
-    ssized_(&c__2000, result);
+    ssized_(&__state->c__2000, result);
 
 /*     Get initial observer-target vector, expressed in the target */
 /*     body-fixed frame, evaluated at the target epoch. This vector */
@@ -3186,7 +3213,7 @@ static doublereal c_b129 = 1.;
 /*     locus. Start with the 'CENTER' version, since this is the */
 /*     simpler case. */
 
-    if (loccde == 1) {
+    if (__state->loccde == 1) {
 
 /*        Aberration corrections are those applicable at the target */
 /*        center. */
@@ -3216,8 +3243,9 @@ static doublereal c_b129 = 1.;
 /*        we're using the "guided" limb option. find the */
 /*        limb parameters of the reference ellipsoid. */
 
-	if (shape == 1 || lmbtyp == 2) {
-	    edlimb_(svradi, &svradi[1], &svradi[2], axis, limb);
+	if (__state->shape == 1 || __state->lmbtyp == 2) {
+	    edlimb_(__state->svradi, &__state->svradi[1], &__state->svradi[2],
+		     axis, limb);
 	    el2cgv_(limb, center, smajor, sminor);
 	    if (failed_()) {
 		chkout_("LIMBPT", (ftnlen)6);
@@ -3229,9 +3257,9 @@ static doublereal c_b129 = 1.;
 /*           AXIS. */
 
 	    if (vdot_(enorml, axis) < 0.) {
-		vsclip_(&c_b121, enorml);
+		vsclip_(&__state->c_b121, enorml);
 	    }
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              Caution: this requires that ZZSUDSKI has been */
 /*              called first. */
@@ -3259,11 +3287,11 @@ static doublereal c_b129 = 1.;
 /*           half-plane. We'll use this vector later. */
 
 	    ucrss_(axis, plnvec, cutnml);
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              This is the DSK case. */
 
-		if (lmbtyp == 1) {
+		if (__state->lmbtyp == 1) {
 
 /*                 This type of solution finds actual tangent rays on */
 /*                 the target. */
@@ -3273,20 +3301,21 @@ static doublereal c_b129 = 1.;
 
 /*                 Note that RESULT is a cell, not a window. */
 
-		    scardd_(&c__0, result);
+		    scardd_(&__state->c__0, result);
 
 /*                 Note that the evaluation epoch for the surface is */
 /*                 optionally corrected for light time. */
 
-		    zztangnt_(&c__0, &c_b124, &shape, &trgcde, &nsurf, srflst,
-			     &fxfcde, &trgepc, plnvec, axis, schstp, soltol, 
-			    result, pntbuf);
+		    zztangnt_(&__state->c__0, &__state->c_b124, &
+			    __state->shape, &trgcde, &__state->nsurf, 
+			    __state->srflst, &fxfcde, &trgepc, plnvec, axis, 
+			    schstp, soltol, result, __state->pntbuf);
 		    if (failed_()) {
 			chkout_("LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 		    npts[i__ - 1] = cardd_(result);
-		} else if (lmbtyp == 2) {
+		} else if (__state->lmbtyp == 2) {
 
 /*                 This option uses the target's reference ellipsoid for */
 /*                 guidance. For DSK shapes, the limb points are */
@@ -3315,9 +3344,9 @@ static doublereal c_b129 = 1.;
 /*                 invisible from the interior of the target. */
 
 		    d__1 = maxrad * 3.;
-		    vlcom_(&c_b129, center, &d__1, edir, rayvtx);
+		    vlcom_(&__state->c_b129, center, &d__1, edir, rayvtx);
 		    vminus_(edir, raydir);
-		    zzraysfx_(rayvtx, raydir, &trgepc, pntbuf, &fnd);
+		    zzraysfx_(rayvtx, raydir, &trgepc, __state->pntbuf, &fnd);
 		    if (failed_()) {
 			chkout_("LIMBPT", (ftnlen)6);
 			return 0;
@@ -3332,12 +3361,12 @@ static doublereal c_b129 = 1.;
 /*                 This is a backstop case; it should never be reached. */
 
 		    setmsg_("Invalid limb type code: #", (ftnlen)25);
-		    errint_("#", &lmbtyp, (ftnlen)1);
+		    errint_("#", &__state->lmbtyp, (ftnlen)1);
 		    sigerr_("SPICE(BUG)", (ftnlen)10);
 		    chkout_("LIMBPT", (ftnlen)6);
 		    return 0;
 		}
-	    } else if (shape == 1) {
+	    } else if (__state->shape == 1) {
 
 /*              This is the ellipsoid case. */
 
@@ -3358,8 +3387,8 @@ static doublereal c_b129 = 1.;
 /*              Find the intercept on the target surface of the */
 /*              the ray emanating from CENTER in the direction EDIR. */
 
-		surfpt_(center, edir, svradi, &svradi[1], &svradi[2], pntbuf, 
-			&fnd);
+		surfpt_(center, edir, __state->svradi, &__state->svradi[1], &
+			__state->svradi[2], __state->pntbuf, &fnd);
 		if (failed_()) {
 		    chkout_("LIMBPT", (ftnlen)6);
 		    return 0;
@@ -3379,7 +3408,7 @@ static doublereal c_b129 = 1.;
 /*              This is a backstop case; it should never be reached. */
 
 		setmsg_("Invalid shape code: #", (ftnlen)21);
-		errint_("#", &shape, (ftnlen)1);
+		errint_("#", &__state->shape, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("LIMBPT", (ftnlen)6);
 		return 0;
@@ -3405,17 +3434,17 @@ static doublereal c_b129 = 1.;
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3186)], &
-			points[to * 3 - 3]);
-		vsub_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3187)], 
-			axis, &tangts[to * 3 - 3]);
+		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
+			3186)], &points[to * 3 - 3]);
+		vsub_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
+			3187)], axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
 	    }
 	}
-    } else if (loccde == 2) {
+    } else if (__state->loccde == 2) {
 
 /*        Aberration corrections are done for each cutting half plane. */
 /*        Corrections are performed for the intersections of the */
@@ -3424,7 +3453,7 @@ static doublereal c_b129 = 1.;
 /*        This locus is supported only for the "tangent" limb point */
 /*        method. */
 
-	if (lmbtyp != 1) {
+	if (__state->lmbtyp != 1) {
 	    setmsg_("Limb type <#> is not supported for the # aberration cor"
 		    "rection locus.", (ftnlen)69);
 	    errch_("#", svlstr, (ftnlen)1, (ftnlen)20);
@@ -3453,7 +3482,7 @@ static doublereal c_b129 = 1.;
 	i__1 = *ncuts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    roll = (i__ - 1) * *rolstp;
-	    if (uselt) {
+	    if (__state->uselt) {
 
 /*              We'll do an independent light time and stellar */
 /*              aberration correction for each half plane. */
@@ -3461,7 +3490,7 @@ static doublereal c_b129 = 1.;
 /*              Let NUMITR be the number of iterations we'll perform to */
 /*              compute the light time. */
 
-		if (usecn) {
+		if (__state->usecn) {
 		    numitr = 5;
 		} else {
 		    numitr = 2;
@@ -3475,8 +3504,8 @@ static doublereal c_b129 = 1.;
 
 		    d__1 = *et - lt;
 		    epoch = touchd_(&d__1);
-		    spkgps_(&trgcde, &epoch, "J2000", &c__0, ssbtrg, &ssblt, (
-			    ftnlen)5);
+		    spkgps_(&trgcde, &epoch, "J2000", &__state->c__0, ssbtrg, 
+			    &ssblt, (ftnlen)5);
 		    if (failed_()) {
 			chkout_("LIMBPT", (ftnlen)6);
 			return 0;
@@ -3486,7 +3515,7 @@ static doublereal c_b129 = 1.;
 /*                 the observer in the inertial frame. */
 
 		    vsub_(ssbtrg, stobs, ptarg);
-		    if (usestl) {
+		    if (__state->usestl) {
 
 /*                    Apply a stellar aberration correction to the */
 /*                    observer-target center vector. */
@@ -3541,7 +3570,8 @@ static doublereal c_b129 = 1.;
 /*                 limb plane's normal vector for the current viewing */
 /*                 geometry. */
 
-		    edlimb_(svradi, &svradi[1], &svradi[2], axis, limb);
+		    edlimb_(__state->svradi, &__state->svradi[1], &
+			    __state->svradi[2], axis, limb);
 		    el2cgv_(limb, center, smajor, sminor);
 		    if (failed_()) {
 			chkout_("LIMBPT", (ftnlen)6);
@@ -3553,7 +3583,7 @@ static doublereal c_b129 = 1.;
 /*                 AXIS. */
 
 		    if (vdot_(enorml, axis) < 0.) {
-			vsclip_(&c_b121, enorml);
+			vsclip_(&__state->c_b121, enorml);
 		    }
 
 /*                 Let CUTNML be a vector normal to the current cutting */
@@ -3579,8 +3609,8 @@ static doublereal c_b129 = 1.;
 
 /*                 Compute the ellipsoid limb point. */
 
-		    surfpt_(center, edir, svradi, &svradi[1], &svradi[2], 
-			    epoint, &fnd);
+		    surfpt_(center, edir, __state->svradi, &__state->svradi[1]
+			    , &__state->svradi[2], epoint, &fnd);
 		    if (failed_()) {
 			chkout_("LIMBPT", (ftnlen)6);
 			return 0;
@@ -3602,7 +3632,7 @@ static doublereal c_b129 = 1.;
 
 		    mtxv_(xform, epoint, ipoint);
 		    vadd_(ipoint, ptarg, isrfvc);
-		    if (usestl) {
+		    if (__state->usestl) {
 
 /*                    We're correcting for stellar aberration. Another */
 /*                    loop iteration may occur. Prepare the stellar */
@@ -3675,7 +3705,8 @@ static doublereal c_b129 = 1.;
 /*              limb plane's normal vector for the current viewing */
 /*              geometry. */
 
-		edlimb_(svradi, &svradi[1], &svradi[2], axis, limb);
+		edlimb_(__state->svradi, &__state->svradi[1], &
+			__state->svradi[2], axis, limb);
 		el2cgv_(limb, center, smajor, sminor);
 		if (failed_()) {
 		    chkout_("LIMBPT", (ftnlen)6);
@@ -3687,7 +3718,7 @@ static doublereal c_b129 = 1.;
 /*              AXIS. */
 
 		if (vdot_(enorml, axis) < 0.) {
-		    vsclip_(&c_b121, enorml);
+		    vsclip_(&__state->c_b121, enorml);
 		}
 
 /*              Let CUTNML be a vector normal to the current cutting */
@@ -3714,8 +3745,8 @@ static doublereal c_b129 = 1.;
 
 /*              Compute the ellipsoid limb point. */
 
-		surfpt_(center, edir, svradi, &svradi[1], &svradi[2], epoint, 
-			&fnd);
+		surfpt_(center, edir, __state->svradi, &__state->svradi[1], &
+			__state->svradi[2], epoint, &fnd);
 		if (failed_()) {
 		    chkout_("LIMBPT", (ftnlen)6);
 		    return 0;
@@ -3736,22 +3767,23 @@ static doublereal c_b129 = 1.;
 /*           case. In the DSK case, we'll update the values when we */
 /*           know them. */
 
-	    vequ_(epoint, pntbuf);
+	    vequ_(epoint, __state->pntbuf);
 	    npts[i__ - 1] = 1;
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              Find the limb points on the target surface as modeled */
 /*              by DSK data. We'll use the axis and epoch we've */
 /*              determined from the ellipsoid approximation. */
 
-		scardd_(&c__0, result);
+		scardd_(&__state->c__0, result);
 
 /*              Note that the evaluation epoch for the surface is */
 /*              corrected for light time. */
 
-		zztangnt_(&c__0, &c_b124, &shape, &trgcde, &nsurf, srflst, &
-			fxfcde, &epoch, plnvec, axis, schstp, soltol, result, 
-			pntbuf);
+		zztangnt_(&__state->c__0, &__state->c_b124, &__state->shape, &
+			trgcde, &__state->nsurf, __state->srflst, &fxfcde, &
+			epoch, plnvec, axis, schstp, soltol, result, 
+			__state->pntbuf);
 		if (failed_()) {
 		    chkout_("LIMBPT", (ftnlen)6);
 		    return 0;
@@ -3761,9 +3793,9 @@ static doublereal c_b129 = 1.;
 /*              half-plane. */
 
 		npts[i__ - 1] = cardd_(result);
-	    } else if (shape != 1) {
+	    } else if (__state->shape != 1) {
 		setmsg_("Backstop error: SHAPE = #.", (ftnlen)26);
-		errint_("#", &shape, (ftnlen)1);
+		errint_("#", &__state->shape, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("LIMBPT", (ftnlen)6);
 		return 0;
@@ -3789,12 +3821,12 @@ static doublereal c_b129 = 1.;
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3653)], &
-			points[to * 3 - 3]);
-		vsub_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)3654)], 
-			axis, &tangts[to * 3 - 3]);
+		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
+			3653)], &points[to * 3 - 3]);
+		vsub_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
+			3654)], axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = epoch;
 		++to;
 	    }

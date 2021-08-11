@@ -1,9 +1,17 @@
-/* zzeksrs.f -- translated by f2c (version 19980913).
+/* zzeksrs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeksrs_state_t;
+static zzeksrs_state_t* get_zzeksrs_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSRS ( EK, set record status ) */
 /* Subroutine */ int zzeksrs_(integer *handle, integer *recptr, integer *
@@ -15,6 +23,9 @@
 	    integer *);
     integer loc;
 
+
+    /* Module state */
+    zzeksrs_state_t* __state = get_zzeksrs_state();
 /* $ Abstract */
 
 /*     Set the status of a specified EK record. */

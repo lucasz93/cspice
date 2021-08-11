@@ -1,13 +1,21 @@
-/* lparss.f -- translated by f2c (version 19980913).
+/* lparss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lparss_init_t __lparss_init;
+static lparss_state_t* get_lparss_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lparss)
+		state->lparss = __cspice_allocate_module(sizeof(
+	lparss_state_t), &__lparss_init, sizeof(__lparss_init));
+	return state->lparss;
+
+}
 
 /* $Procedure      LPARSS ( Parse a list of items; return a set. ) */
 /* Subroutine */ int lparss_(char *list, char *delims, char *set, ftnlen 
@@ -19,20 +27,27 @@ static integer c__0 = 0;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char bchr[1], echr[1];
-    integer nmax, b, e, n;
+    char bchr[1];
+    char echr[1];
+    integer nmax;
+    integer b;
+    integer e;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical valid;
     extern integer sizec_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), validc_(
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), insrtc_(char *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
     extern logical return_(void);
     integer eol;
 
+
+    /* Module state */
+    lparss_state_t* __state = get_lparss_state();
 /* $ Abstract */
 
 /*     Parse a list of items delimited by multiple delimiters, */
@@ -324,7 +339,7 @@ static integer c__0 = 0;
 /*     Blank list contains a blank item.  No need to validate. */
 
     if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-	scardc_(&c__0, set, set_len);
+	scardc_(&__state->c__0, set, set_len);
 	insrtc_(" ", set, (ftnlen)1, set_len);
 	valid = TRUE_;
     } else {

@@ -1,14 +1,21 @@
-/* zzekkey.f -- translated by f2c (version 19980913).
+/* zzekkey.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1000 = 1000;
-static integer c__11 = 11;
+extern zzekkey_init_t __zzekkey_init;
+static zzekkey_state_t* get_zzekkey_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekkey)
+		state->zzekkey = __cspice_allocate_module(sizeof(
+	zzekkey_state_t), &__zzekkey_init, sizeof(__zzekkey_init));
+	return state->zzekkey;
+
+}
 
 /* $Procedure  ZZEKKEY  ( EK, determine key column ) */
 /* Subroutine */ int zzekkey_(integer *handle, integer *segdsc, integer *
@@ -29,26 +36,40 @@ static integer c__11 = 11;
     extern integer ordi_(integer *, integer *);
     integer best;
     extern integer zzekille_(integer *, integer *, integer *, integer *, 
-	    integer *, char *, doublereal *, integer *, ftnlen), zzekillt_(
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    doublereal *, integer *, ftnlen);
-    integer b, e, i__, j;
+	    integer *, char *, doublereal *, integer *, ftnlen);
+    extern integer zzekillt_(integer *, integer *, integer *, integer *, 
+	    integer *, char *, doublereal *, integer *, ftnlen);
+    integer b;
+    integer e;
+    integer i__;
+    integer j;
     extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer dtype;
     extern logical failed_(void);
-    integer nmatch, conmap[1000];
+    integer nmatch;
+    integer conmap[1000];
     extern logical return_(void);
-    integer eltidx, idxset[1006], lastle, lastlt, maxptr, minptr;
+    integer eltidx;
+    integer idxset[1006];
+    integer lastle;
+    integer lastlt;
+    integer maxptr;
+    integer minptr;
     logical indexd;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ssizei_(integer *, integer *), insrti_(integer *, 
-	    integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int insrti_(integer *, integer *);
     logical fnd;
     integer col;
 
+
+    /* Module state */
+    zzekkey_state_t* __state = get_zzekkey_state();
 /* $ Abstract */
 
 /*     Determine the key column to use when searching an EK segment */
@@ -869,7 +890,7 @@ static integer c__11 = 11;
 	setmsg_("The number of constraints was #; valid range is 0:#", (
 		ftnlen)51);
 	errint_("#", ncnstr, (ftnlen)1);
-	errint_("#", &c__1000, (ftnlen)1);
+	errint_("#", &__state->c__1000, (ftnlen)1);
 	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZEKKEY", (ftnlen)7);
 	return 0;
@@ -879,7 +900,7 @@ static integer c__11 = 11;
 /*     in active constraints.  Maintain a mapping from each column */
 /*     to the index of some constraint that references that column. */
 
-    ssizei_(&c__1000, idxset);
+    ssizei_(&__state->c__1000, idxset);
     i__1 = *ncnstr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (active[i__ - 1]) {
@@ -1117,7 +1138,7 @@ static integer c__11 = 11;
     }
     i__ = conmap[(i__1 = ordi_(key, idxset) - 1) < 1000 && 0 <= i__1 ? i__1 : 
 	    s_rnge("conmap", i__1, "zzekkey_", (ftnlen)694)];
-    movei_(&dsclst[i__ * 11 - 11], &c__11, keydsc);
+    movei_(&dsclst[i__ * 11 - 11], &__state->c__11, keydsc);
 
 /*     De-activate constraints on the key column that we've already */
 /*     applied. */

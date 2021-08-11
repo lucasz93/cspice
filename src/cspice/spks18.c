@@ -1,13 +1,21 @@
-/* spks18.f -- translated by f2c (version 19980913).
+/* spks18.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern spks18_init_t __spks18_init;
+static spks18_state_t* get_spks18_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks18)
+		state->spks18 = __cspice_allocate_module(sizeof(
+	spks18_state_t), &__spks18_init, sizeof(__spks18_init));
+	return state->spks18;
+
+}
 
 /* $Procedure SPKS18 ( S/P Kernel, subset, type 18 ) */
 /* Subroutine */ int spks18_(integer *handle, integer *baddr, integer *eaddr, 
@@ -22,17 +30,29 @@ static integer c__1 = 1;
 
     /* Local variables */
     doublereal data[12];
-    integer offe, nrec, ndir, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafada_(doublereal *, 
-	    integer *), dafgda_(integer *, integer *, integer *, doublereal *)
-	    ;
-    integer wnszm1, offset, packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer offe;
+    integer nrec;
+    integer ndir;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    integer wnszm1;
+    integer offset;
+    integer packsz;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    integer winsiz, subtyp, rec[2];
+    integer winsiz;
+    integer subtyp;
+    integer rec[2];
 
+
+    /* Module state */
+    spks18_state_t* __state = get_spks18_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 18 */
@@ -426,7 +446,7 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Put every 100'th epoch into the directory, except the last */
@@ -437,18 +457,18 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Store subtype, the window size, and the number of */
 /*     records to end the segment. */
 
     d__1 = (doublereal) subtyp;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) winsiz;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     d__1 = (doublereal) (rec[1] - rec[0] + 1);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     chkout_("SPKS18", (ftnlen)6);
     return 0;
 } /* spks18_ */

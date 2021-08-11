@@ -1,14 +1,21 @@
-/* zzekif02.f -- translated by f2c (version 19980913).
+/* zzekif02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static logical c_false = FALSE_;
+extern zzekif02_init_t __zzekif02_init;
+static zzekif02_state_t* get_zzekif02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekif02)
+		state->zzekif02 = __cspice_allocate_module(sizeof(
+	zzekif02_state_t), &__zzekif02_init, sizeof(__zzekif02_init));
+	return state->zzekif02;
+
+}
 
 /* $Procedure ZZEKIF02 ( EK, initialize type 2 segment for fast load ) */
 /* Subroutine */ int zzekif02_(integer *handle, integer *segno)
@@ -17,12 +24,18 @@ static logical c_false = FALSE_;
     integer i__1, i__2, i__3;
 
     /* Local variables */
-    integer base, page[256];
+    integer base;
+    integer page[256];
     extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
 	    integer *);
-    integer i__, p, mbase;
+    integer i__;
+    integer p;
+    integer mbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer class__, ncols, nrows, dscbas;
+    integer class__;
+    integer ncols;
+    integer nrows;
+    integer dscbas;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
     integer segdsc[24];
@@ -30,11 +43,16 @@ static logical c_false = FALSE_;
 	    integer *);
     extern logical return_(void);
     integer offset;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekaps_(integer *, integer *, integer *, logical *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekif02_state_t* __state = get_zzekif02_state();
 /* $ Abstract */
 
 /*     Initialize a new type 2 EK segment to allow fast loading. */
@@ -692,7 +710,7 @@ static logical c_false = FALSE_;
 /*     Allocate space for column metadata.  We assume that one page */
 /*     of IPSIZE integers is enough room. */
 
-    zzekaps_(handle, segdsc, &c__3, &c_false, &p, &base);
+    zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &base);
     offset = base;
     i__1 = ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {

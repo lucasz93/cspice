@@ -1,9 +1,17 @@
-/* suffix.f -- translated by f2c (version 19980913).
+/* suffix.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int suffix_state_t;
+static suffix_state_t* get_suffix_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SUFFIX (Suffix a character string) */
 /* Subroutine */ int suffix_(char *suff, integer *spaces, char *string, 
@@ -17,10 +25,14 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer slen, l;
+    integer slen;
+    integer l;
     extern integer lastnb_(char *, ftnlen);
     integer end;
 
+
+    /* Module state */
+    suffix_state_t* __state = get_suffix_state();
 /* $ Abstract */
 
 /*      Add a suffix to a character string. */

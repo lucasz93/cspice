@@ -1,9 +1,17 @@
-/* zzckcv02.f -- translated by f2c (version 19980913).
+/* zzckcv02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzckcv02_state_t;
+static zzckcv02_state_t* get_zzckcv02_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCKCV02 ( Private --- C-kernel segment coverage, type 02 ) */
 /* Subroutine */ int zzckcv02_(integer *handle, integer *arrbeg, integer *
@@ -21,25 +29,33 @@
     integer nrec;
     doublereal last[100];
     extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
-    integer i__, begat;
+    integer i__;
+    integer begat;
     doublereal begin;
     integer endat;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical istdb;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal first[100];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
-    doublereal et, finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), wninsd_(doublereal *, 
-	    doublereal *, doublereal *);
+    doublereal et;
+    doublereal finish;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
     integer arrsiz;
     extern logical return_(void);
-    integer get, got;
+    integer get;
+    integer got;
 
+
+    /* Module state */
+    zzckcv02_state_t* __state = get_zzckcv02_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

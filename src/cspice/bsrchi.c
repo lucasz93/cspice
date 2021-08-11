@@ -1,9 +1,17 @@
-/* bsrchi.f -- translated by f2c (version 19980913).
+/* bsrchi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bsrchi_state_t;
+static bsrchi_state_t* get_bsrchi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            BSRCHI ( Binary search for an integer value ) */
 integer bsrchi_(integer *value, integer *ndim, integer *array)
@@ -12,8 +20,13 @@ integer bsrchi_(integer *value, integer *ndim, integer *array)
     integer ret_val;
 
     /* Local variables */
-    integer left, i__, right;
+    integer left;
+    integer i__;
+    integer right;
 
+
+    /* Module state */
+    bsrchi_state_t* __state = get_bsrchi_state();
 /* $ Abstract */
 
 /*      Do a binary search for a given value within an INTEGER array, */

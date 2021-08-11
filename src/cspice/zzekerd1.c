@@ -1,24 +1,29 @@
-/* zzekerd1.f -- translated by f2c (version 19980913).
+/* zzekerd1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__0 = 0;
-static integer c__5 = 5;
+extern zzekerd1_init_t __zzekerd1_init;
+static zzekerd1_state_t* get_zzekerd1_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekerd1)
+		state->zzekerd1 = __cspice_allocate_module(sizeof(
+	zzekerd1_state_t), &__zzekerd1_init, sizeof(__zzekerd1_init));
+	return state->zzekerd1;
+
+}
 
 /* $Procedure ZZEKERD1 ( EK, LLE using record pointers, d.p., type 1 ) */
 /* Subroutine */ int zzekerd1_(integer *handle, integer *segdsc, integer *
 	coldsc, doublereal *dkey, integer *recptr, logical *null, integer *
 	prvidx, integer *prvptr)
 {
-    integer nrec, tree;
+    integer nrec;
+    integer tree;
     extern logical zzekscmp_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, char *, doublereal *, integer *, 
 	    logical *, ftnlen);
@@ -29,13 +34,20 @@ static integer c__5 = 5;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer tsize;
     extern logical failed_(void);
-    integer middle, begptr, endptr, midptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer middle;
+    integer begptr;
+    integer endptr;
+    integer midptr;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer end;
     logical leq;
 
+
+    /* Module state */
+    zzekerd1_state_t* __state = get_zzekerd1_state();
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */
@@ -597,8 +609,9 @@ static integer c__5 = 5;
 
 /*     Compare the input value to the smallest value in the column. */
 
-    if (zzekscmp_(&c__3, handle, segdsc, coldsc, &begptr, &c__1, &c__2, " ", 
-	    dkey, &c__0, null, (ftnlen)1)) {
+    if (zzekscmp_(&__state->c__3, handle, segdsc, coldsc, &begptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
+	    ftnlen)1)) {
 
 /*        The smallest entry of the column is greater than the input */
 /*        value, so none of the entries are less than or equal to the */
@@ -607,8 +620,9 @@ static integer c__5 = 5;
 	*prvidx = 0;
 	*prvptr = 0;
 	return 0;
-    } else if (zzekscmp_(&c__1, handle, segdsc, coldsc, &begptr, &c__1, &c__2,
-	     " ", dkey, &c__0, null, (ftnlen)1) && *recptr < begptr) {
+    } else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &begptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
+	    ftnlen)1) && *recptr < begptr) {
 
 /*        The smallest entry of the column is greater than the input */
 /*        value, based on a comparison of record pointers, so none of the */
@@ -624,8 +638,9 @@ static integer c__5 = 5;
 
 /*     Compare the input value to the greatest value in the column. */
 
-    if (zzekscmp_(&c__5, handle, segdsc, coldsc, &endptr, &c__1, &c__2, " ", 
-	    dkey, &c__0, null, (ftnlen)1)) {
+    if (zzekscmp_(&__state->c__5, handle, segdsc, coldsc, &endptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
+	    ftnlen)1)) {
 
 /*        The last element of the column is less than the */
 /*        input value. */
@@ -633,8 +648,9 @@ static integer c__5 = 5;
 	*prvidx = tsize;
 	zzektrdp_(handle, &tree, prvidx, prvptr);
 	return 0;
-    } else if (zzekscmp_(&c__1, handle, segdsc, coldsc, &endptr, &c__1, &c__2,
-	     " ", dkey, &c__0, null, (ftnlen)1) && endptr <= *recptr) {
+    } else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &endptr, &
+	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
+	    ftnlen)1) && endptr <= *recptr) {
 
 /*        The last element of the column is less than or equal to the */
 /*        input value, based on a comparison of record pointers. */
@@ -663,15 +679,17 @@ static integer c__5 = 5;
 /*        Determine the order relation between DKEY and the column */
 /*        entry at record MIDPTR. */
 
-	if (zzekscmp_(&c__5, handle, segdsc, coldsc, &midptr, &c__1, &c__2, 
-		" ", dkey, &c__0, null, (ftnlen)1)) {
+	if (zzekscmp_(&__state->c__5, handle, segdsc, coldsc, &midptr, &
+		__state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
+		null, (ftnlen)1)) {
 
 /*           The column element at record MIDPTR is strictly less than */
 /*           IKEY, based on data values. */
 
 	    leq = TRUE_;
-	} else if (zzekscmp_(&c__1, handle, segdsc, coldsc, &midptr, &c__1, &
-		c__2, " ", dkey, &c__0, null, (ftnlen)1)) {
+	} else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &midptr, 
+		&__state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
+		null, (ftnlen)1)) {
 
 /*           The column entry's value matches DKEY.  We must */
 /*           compare record pointers at this point. */

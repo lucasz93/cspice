@@ -1,13 +1,21 @@
-/* rdkvar.f -- translated by f2c (version 19980913).
+/* rdkvar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern rdkvar_init_t __rdkvar_init;
+static rdkvar_state_t* get_rdkvar_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rdkvar)
+		state->rdkvar = __cspice_allocate_module(sizeof(
+	rdkvar_state_t), &__rdkvar_init, sizeof(__rdkvar_init));
+	return state->rdkvar;
+
+}
 
 /* $Procedure      RDKVAR ( Read the next variable from a kernel file ) */
 /* Subroutine */ int rdkvar_(char *tabsym, integer *tabptr, doublereal *
@@ -29,23 +37,32 @@ static integer c__2 = 2;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     char error[80];
     extern logical failed_(void);
-    extern /* Subroutine */ int rdkdat_(char *, logical *, ftnlen), replch_(
-	    char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int rdkdat_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
     char cvalue[30];
     doublereal dvalue;
     char varnam[80];
     extern /* Subroutine */ int sydeld_(char *, char *, integer *, doublereal 
-	    *, ftnlen, ftnlen), nparsd_(char *, doublereal *, char *, integer 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
     char dirctv[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), tparse_(char *, 
-	    doublereal *, char *, ftnlen, ftnlen), sigerr_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), syenqd_(char *, doublereal *, char *, 
-	    integer *, doublereal *, ftnlen, ftnlen), nextwd_(char *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int tparse_(char *, doublereal *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int syenqd_(char *, doublereal *, char *, integer 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
     extern logical return_(void);
     char status[6];
 
+
+    /* Module state */
+    rdkvar_state_t* __state = get_rdkvar_state();
 /* $ Abstract */
 
 /*     Read the next variable from a SPICE ASCII kernel file into a */
@@ -352,7 +369,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 		    i__1[0] = 14, a__1[0] = "Encountered : ";
 		    i__1[1] = 29, a__1[1] = cvalue + 1;
-		    s_cat(error, a__1, i__1, &c__2, (ftnlen)80);
+		    s_cat(error, a__1, i__1, &__state->c__2, (ftnlen)80);
 		    setmsg_(error, (ftnlen)80);
 		    sigerr_("SPICE(DATEEXPECTED)", (ftnlen)19);
 		    chkout_("RDKVAR", (ftnlen)6);
@@ -364,7 +381,7 @@ static integer c__2 = 2;
 /* Writing concatenation */
 		    i__1[0] = 14, a__1[0] = "Encountered : ";
 		    i__1[1] = 30, a__1[1] = cvalue;
-		    s_cat(error, a__1, i__1, &c__2, (ftnlen)80);
+		    s_cat(error, a__1, i__1, &__state->c__2, (ftnlen)80);
 		    setmsg_(error, (ftnlen)80);
 		    sigerr_("SPICE(NUMBEREXPECTED)", (ftnlen)21);
 		    chkout_("RDKVAR", (ftnlen)6);

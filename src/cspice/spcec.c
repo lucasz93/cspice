@@ -1,14 +1,21 @@
-/* spcec.f -- translated by f2c (version 19980913).
+/* spcec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern spcec_init_t __spcec_init;
+static spcec_state_t* get_spcec_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spcec)
+		state->spcec = __cspice_allocate_module(sizeof(spcec_state_t),
+	 &__spcec_init, sizeof(__spcec_init));
+	return state->spcec;
+
+}
 
 /* $Procedure SPCEC ( SPK and CK, extract comments ) */
 /* Subroutine */ int spcec_(integer *handle, integer *unit)
@@ -24,13 +31,17 @@ static integer c__1 = 1;
 	    *, char *, ftnlen), e_wsfe(void);
 
     /* Local variables */
-    integer dafu, free;
-    char line[1000], null[1];
+    integer dafu;
+    integer free;
+    char line[1000];
+    char null[1];
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
     integer c__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer bward, fward, nd;
+    integer bward;
+    integer fward;
+    integer nd;
     extern logical failed_(void);
     integer ni;
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
@@ -38,20 +49,24 @@ static integer c__1 = 1;
     extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
 	    *, integer *, integer *, integer *, ftnlen);
     char record[1000];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer rec;
     char eot[1];
-    integer nrr, pos;
+    integer nrr;
+    integer pos;
 
     /* Fortran I/O blocks */
-    static cilist io___16 = { 1, 0, 1, 0, 0 };
-    static cilist io___18 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    spcec_state_t* __state = get_spcec_state();
 /* $ Abstract */
 
 /*     Extract the text from the comment area of a binary SPK or CK file */
@@ -286,7 +301,7 @@ static integer c__1 = 1;
 /*     We need to read directly from the SPK or CK file, using a logical */
 /*     unit instead of a handle. */
 
-    zzddhhlu_(handle, "DAF", &c_false, &dafu, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &dafu, (ftnlen)3);
     if (failed_()) {
 	chkout_("SPCEC", (ftnlen)5);
 	return 0;
@@ -307,13 +322,13 @@ static integer c__1 = 1;
     pos = 0;
     i__1 = nrr;
     for (rec = 1; rec <= i__1; ++rec) {
-	io___16.ciunit = dafu;
-	io___16.cirec = rec + 1;
-	iostat = s_rdue(&io___16);
+	__state->io___16.ciunit = dafu;
+	__state->io___16.cirec = rec + 1;
+	iostat = s_rdue(&__state->io___16);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__1, record, (ftnlen)1000);
+	iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100001;
 	}
@@ -344,8 +359,8 @@ L100001:
 	    } else if (*(unsigned char *)&record[c__ - 1] == *(unsigned char *
 		    )null) {
 		if (pos == 0) {
-		    io___18.ciunit = *unit;
-		    iostat = s_wsle(&io___18);
+		    __state->io___18.ciunit = *unit;
+		    iostat = s_wsle(&__state->io___18);
 		    if (iostat != 0) {
 			goto L100002;
 		    }
@@ -360,7 +375,7 @@ L100002:
 		    if (iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = do_fio(&c__1, line, pos);
+		    iostat = do_fio(&__state->c__1, line, pos);
 		    if (iostat != 0) {
 			goto L100003;
 		    }

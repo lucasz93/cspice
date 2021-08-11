@@ -1,30 +1,45 @@
-/* sgfcon.f -- translated by f2c (version 19980913).
+/* sgfcon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
+extern sgfcon_init_t __sgfcon_init;
+static sgfcon_state_t* get_sgfcon_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sgfcon)
+		state->sgfcon = __cspice_allocate_module(sizeof(
+	sgfcon_state_t), &__sgfcon_init, sizeof(__sgfcon_init));
+	return state->sgfcon;
+
+}
 
 /* $Procedure      SGFCON ( Generic Segments: Fetch constants ) */
 /* Subroutine */ int sgfcon_(integer *handle, doublereal *descr, integer *
 	first, integer *last, doublereal *values)
 {
-    integer base, b, e;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafgda_(integer *, 
-	    integer *, integer *, doublereal *);
+    integer base;
+    integer b;
+    integer e;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer myncon;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sgfcon_state_t* __state = get_sgfcon_state();
 /* $ Abstract */
 
 /*     Given the descriptor for a generic segment in a DAF file */
@@ -583,8 +598,8 @@ static integer c__2 = 2;
 /*     Get the value for the base of the constants and the number of */
 /*     constants in the generic segment. */
 
-    sgmeta_(handle, descr, &c__1, &base);
-    sgmeta_(handle, descr, &c__2, &myncon);
+    sgmeta_(handle, descr, &__state->c__1, &base);
+    sgmeta_(handle, descr, &__state->c__2, &myncon);
     if (failed_()) {
 	chkout_("SGFCON", (ftnlen)6);
 	return 0;

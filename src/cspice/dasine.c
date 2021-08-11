@@ -1,9 +1,17 @@
-/* dasine.f -- translated by f2c (version 19980913).
+/* dasine.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dasine_state_t;
+static dasine_state_t* get_dasine_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DASINE (arc sine of bracketed argument) */
 doublereal dasine_(doublereal *arg, doublereal *tol)
@@ -15,10 +23,15 @@ doublereal dasine_(doublereal *arg, doublereal *tol)
     double asin(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    dasine_state_t* __state = get_dasine_state();
 /* $ Abstract */
 
 /*     This routine produces a SPICE error if the |argument| exceeds */

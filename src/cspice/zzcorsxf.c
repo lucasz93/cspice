@@ -1,13 +1,21 @@
-/* zzcorsxf.f -- translated by f2c (version 19980913).
+/* zzcorsxf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__36 = 36;
+extern zzcorsxf_init_t __zzcorsxf_init;
+static zzcorsxf_state_t* get_zzcorsxf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzcorsxf)
+		state->zzcorsxf = __cspice_allocate_module(sizeof(
+	zzcorsxf_state_t), &__zzcorsxf_init, sizeof(__zzcorsxf_init));
+	return state->zzcorsxf;
+
+}
 
 /* $Procedure ZZCORSXF ( Correct state transformation matrix ) */
 /* Subroutine */ int zzcorsxf_(logical *xmit, doublereal *dlt, doublereal *
@@ -26,6 +34,9 @@ static integer c__36 = 36;
     extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
     integer col;
 
+
+    /* Module state */
+    zzcorsxf_state_t* __state = get_zzcorsxf_state();
 /* $ Abstract */
 
 /*     Correct a state transformation matrix for the rate of change of */
@@ -433,7 +444,7 @@ static integer c__36 = 36;
 /*     the lower left, first copy the input matrix */
 /*     to the output matrix. */
 
-    moved_(xform, &c__36, corxfm);
+    moved_(xform, &__state->c__36, corxfm);
 
 /*     Adjust the rotation derivative block for */
 /*     the rate of change of light time. All */

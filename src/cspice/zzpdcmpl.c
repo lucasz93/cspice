@@ -1,9 +1,21 @@
-/* zzpdcmpl.f -- translated by f2c (version 19980913).
+/* zzpdcmpl.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzpdcmpl_init_t __zzpdcmpl_init;
+static zzpdcmpl_state_t* get_zzpdcmpl_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzpdcmpl)
+		state->zzpdcmpl = __cspice_allocate_module(sizeof(
+	zzpdcmpl_state_t), &__zzpdcmpl_init, sizeof(__zzpdcmpl_init));
+	return state->zzpdcmpl;
+
+}
 
 /* $Procedure ZZPDCMPL (Planetodetic coordinates, compare latitudes ) */
 /* Subroutine */ int zzpdcmpl_(doublereal *re, doublereal *f, doublereal *p, 
@@ -11,11 +23,11 @@
 {
     /* Initialized data */
 
-    static doublereal apex[3] = { 0.,0.,0. };
 
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), zzelnaxx_(doublereal *, doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+	    );
+    extern /* Subroutine */ int zzelnaxx_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
@@ -26,10 +38,14 @@
 	    doublereal *, doublereal *);
     doublereal offset[3];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal xincpt, yincpt;
+    doublereal xincpt;
+    doublereal yincpt;
     extern logical return_(void);
     doublereal lon;
 
+
+    /* Module state */
+    zzpdcmpl_state_t* __state = get_zzpdcmpl_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -278,8 +294,8 @@
 /*     Find the offset of the point from the latitude cone's apex. */
 /*     Create a unit-length copy of the offset vector. */
 
-    apex[2] = yincpt;
-    vsub_(p, apex, offset);
+    __state->apex[2] = yincpt;
+    vsub_(p, __state->apex, offset);
 /*     We'll use the planetocentric [sic] latitude of the offset */
 /*     vector for comparison. */
 

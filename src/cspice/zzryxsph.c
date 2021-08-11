@@ -1,13 +1,21 @@
-/* zzryxsph.f -- translated by f2c (version 19980913).
+/* zzryxsph.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = 1.;
+extern zzryxsph_init_t __zzryxsph_init;
+static zzryxsph_state_t* get_zzryxsph_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzryxsph)
+		state->zzryxsph = __cspice_allocate_module(sizeof(
+	zzryxsph_state_t), &__zzryxsph_init, sizeof(__zzryxsph_init));
+	return state->zzryxsph;
+
+}
 
 /* $Procedure ZZRYXSPH ( Intersection of ray and sphere ) */
 /* Subroutine */ int zzryxsph_(doublereal *vertex, doublereal *udir, 
@@ -20,13 +28,19 @@ static doublereal c_b2 = 1.;
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal cpar, perp[3];
+    doublereal cpar;
+    doublereal perp[3];
     extern doublereal vdot_(doublereal *, doublereal *);
-    doublereal pmag2, vmag2, s;
+    doublereal pmag2;
+    doublereal vmag2;
+    doublereal s;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *, doublereal *);
     doublereal r2;
 
+
+    /* Module state */
+    zzryxsph_state_t* __state = get_zzryxsph_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -168,7 +182,7 @@ static doublereal c_b2 = 1.;
 
     cpar = vdot_(vertex, udir);
     d__1 = -cpar;
-    vlcom_(&c_b2, vertex, &d__1, udir, perp);
+    vlcom_(&__state->c_b2, vertex, &d__1, udir, perp);
     pmag2 = vdot_(perp, perp);
     r2 = *r__ * *r__;
 

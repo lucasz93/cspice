@@ -1,9 +1,17 @@
-/* zzeksrcp.f -- translated by f2c (version 19980913).
+/* zzeksrcp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeksrcp_state_t;
+static zzeksrcp_state_t* get_zzeksrcp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSRCP ( EK, set record companion pointer ) */
 /* Subroutine */ int zzeksrcp_(integer *handle, integer *recptr, integer *
@@ -15,6 +23,9 @@
 	    integer *);
     integer loc;
 
+
+    /* Module state */
+    zzeksrcp_state_t* __state = get_zzeksrcp_state();
 /* $ Abstract */
 
 /*     Set the companion pointer of a specified EK record. */

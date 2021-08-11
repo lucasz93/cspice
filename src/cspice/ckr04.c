@@ -1,16 +1,21 @@
-/* ckr04.f -- translated by f2c (version 19980913).
+/* ckr04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__7 = 7;
-static doublereal c_b18 = 128.;
+extern ckr04_init_t __ckr04_init;
+static ckr04_state_t* get_ckr04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckr04)
+		state->ckr04 = __cspice_allocate_module(sizeof(ckr04_state_t),
+	 &__ckr04_init, sizeof(__ckr04_init));
+	return state->ckr04;
+
+}
 
 /* $Procedure      CKR04 ( C-kernel, read pointing record, data type 4 ) */
 /* Subroutine */ int ckr04_(integer *handle, doublereal *descr, doublereal *
@@ -24,33 +29,44 @@ static doublereal c_b18 = 128.;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer nrec, ends, indx;
-    doublereal lbnd1, lbnd2, rbnd1;
+    integer nrec;
+    integer ends;
+    integer indx;
+    doublereal lbnd1;
+    doublereal lbnd2;
+    doublereal rbnd1;
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), cknr04_(integer *, 
-	    doublereal *, integer *), dafus_(doublereal *, integer *, integer 
-	    *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     doublereal value;
     logical exist;
-    doublereal midpt1, midpt2;
+    doublereal midpt1;
+    doublereal midpt2;
     extern logical failed_(void);
     integer numall;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), sgfpkt_(integer *, 
-	    doublereal *, integer *, integer *, doublereal *, integer *), 
-	    sgfrvi_(integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
+	     doublereal *, integer *, logical *);
     doublereal clkout;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
     extern /* Subroutine */ int zzck4d2i_(doublereal *, integer *, doublereal 
 	    *, integer *);
-    doublereal rad1, rad2;
+    doublereal rad1;
+    doublereal rad2;
 
+
+    /* Module state */
+    ckr04_state_t* __state = get_ckr04_state();
 /* $ Abstract */
 
 /*     Read a single data record from a type 4 CK segment. */
@@ -612,7 +628,7 @@ static doublereal c_b18 = 128.;
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check if the segment is type 4. Signal an error if it's not. */
 
@@ -790,7 +806,7 @@ static doublereal c_b18 = 128.;
 
 /*        Decode numbers of polynomial coefficients. */
 
-	zzck4d2i_(&record[2], &c__7, &c_b18, numcft);
+	zzck4d2i_(&record[2], &__state->c__7, &__state->c_b18, numcft);
 
 /*        Count total number of coefficients. */
 

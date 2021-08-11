@@ -1,15 +1,21 @@
-/* zzekue02.f -- translated by f2c (version 19980913).
+/* zzekue02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c_n2 = -2;
-static integer c_n1 = -1;
+extern zzekue02_init_t __zzekue02_init;
+static zzekue02_state_t* get_zzekue02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekue02)
+		state->zzekue02 = __cspice_allocate_module(sizeof(
+	zzekue02_state_t), &__zzekue02_init, sizeof(__zzekue02_init));
+	return state->zzekue02;
+
+}
 
 /* $Procedure      ZZEKUE02 ( EK, update column entry, class 2 ) */
 /* Subroutine */ int zzekue02_(integer *handle, integer *segdsc, integer *
@@ -22,25 +28,42 @@ static integer c_n1 = -1;
     extern /* Subroutine */ int zzekiid1_(integer *, integer *, integer *, 
 	    doublereal *, integer *, logical *);
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekglnk_(integer *, integer *, integer *, integer *), zzekpgpg_(
-	    integer *, integer *, integer *, integer *), zzekixdl_(integer *, 
-	    integer *, integer *, integer *), zzekslnk_(integer *, integer *, 
-	    integer *, integer *);
-    integer p, pbase;
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekixdl_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dasudi_(integer *, integer *, integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
     extern logical return_(void);
-    integer datptr, idxtyp, nlinks, ptrloc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), dasudd_(integer *, integer *, integer *, doublereal *), 
-	    errhan_(char *, integer *, ftnlen), zzekad02_(integer *, integer *
-	    , integer *, integer *, doublereal *, logical *);
+    integer datptr;
+    integer idxtyp;
+    integer nlinks;
+    integer ptrloc;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekad02_(integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *);
 
+
+    /* Module state */
+    zzekue02_state_t* __state = get_zzekue02_state();
 /* $ Abstract */
 
 /*     Update a specified class 2 column entry in an EK record. */
@@ -797,11 +820,11 @@ static integer c_n1 = -1;
 /*           The data location used by the previous value is no longer */
 /*           needed, so we have one less link to this page. */
 
-	    zzekpgpg_(&c__2, &datptr, &p, &pbase);
-	    zzekglnk_(handle, &c__2, &p, &nlinks);
+	    zzekpgpg_(&__state->c__2, &datptr, &p, &pbase);
+	    zzekglnk_(handle, &__state->c__2, &p, &nlinks);
 	    i__1 = nlinks - 1;
-	    zzekslnk_(handle, &c__2, &p, &i__1);
-	    dasudi_(handle, &ptrloc, &ptrloc, &c_n2);
+	    zzekslnk_(handle, &__state->c__2, &p, &i__1);
+	    dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n2);
 	} else {
 
 /*           No link counts change; we just have a new value. */
@@ -841,7 +864,7 @@ static integer c_n1 = -1;
 /*           data pointer to indicate an uninitialized value, so the */
 /*           data addition routine doesn't choke. */
 
-	    dasudi_(handle, &ptrloc, &ptrloc, &c_n1);
+	    dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n1);
 	    zzekad02_(handle, segdsc, coldsc, recptr, dval, isnull);
 	}
     } else if (datptr == -1 || datptr == -3) {

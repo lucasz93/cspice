@@ -1,9 +1,17 @@
-/* spke12.f -- translated by f2c (version 19980913).
+/* spke12.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spke12_state_t;
+static spke12_state_t* get_spke12_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPKE12 ( S/P Kernel, evaluate, type 12 ) */
 /* Subroutine */ int spke12_(doublereal *et, doublereal *record, doublereal *
@@ -18,16 +26,22 @@
     /* Local variables */
     integer from;
     doublereal work[516]	/* was [258][2] */;
-    integer i__, j, n;
+    integer i__;
+    integer j;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer to;
     doublereal locrec[129];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), hrmesp_(integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int hrmesp_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
     extern logical return_(void);
     integer xstart;
 
+
+    /* Module state */
+    spke12_state_t* __state = get_spke12_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 12 SPK segment. */

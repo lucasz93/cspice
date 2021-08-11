@@ -1,13 +1,21 @@
-/* eknseg.f -- translated by f2c (version 19980913).
+/* eknseg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern eknseg_init_t __eknseg_init;
+static eknseg_state_t* get_eknseg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->eknseg)
+		state->eknseg = __cspice_allocate_module(sizeof(
+	eknseg_state_t), &__eknseg_init, sizeof(__eknseg_init));
+	return state->eknseg;
+
+}
 
 /* $Procedure      EKNSEG ( EK, number of segments in file ) */
 integer eknseg_(integer *handle)
@@ -16,15 +24,21 @@ integer eknseg_(integer *handle)
     integer ret_val, i__1, i__2;
 
     /* Local variables */
-    integer base, tree;
+    integer base;
+    integer tree;
     extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern integer zzektrbs_(integer *), zzektrsz_(integer *, integer *);
+    extern integer zzektrbs_(integer *);
+    extern integer zzektrsz_(integer *, integer *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    eknseg_state_t* __state = get_eknseg_state();
 /* $ Abstract */
 
 /*     Return the number of segments in a specified EK. */
@@ -221,7 +235,7 @@ integer eknseg_(integer *handle)
 
 /*     Obtain the base address of the first integer page. */
 
-    base = zzektrbs_(&c__1);
+    base = zzektrbs_(&__state->c__1);
 
 /*     Look up the head node of the segment tree. */
 

@@ -1,9 +1,21 @@
-/* lx4uns.f -- translated by f2c (version 19980913).
+/* lx4uns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern lx4uns_init_t __lx4uns_init;
+static lx4uns_state_t* get_lx4uns_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lx4uns)
+		state->lx4uns = __cspice_allocate_module(sizeof(
+	lx4uns_state_t), &__lx4uns_init, sizeof(__lx4uns_init));
+	return state->lx4uns;
+
+}
 
 /* $Procedure      LX4UNS (Scan for unsigned integer) */
 /* Subroutine */ int lx4uns_(char *string, integer *first, integer *last, 
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical doinit = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -20,9 +31,9 @@
     integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
 
     /* Local variables */
-    static integer i__, l;
-    static logical digit[384];
 
+    /* Module state */
+    lx4uns_state_t* __state = get_lx4uns_state();
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */
@@ -195,39 +206,40 @@
 /*     First we perform some initializations that are needed on */
 /*     each pass through this routine. */
 
-    if (doinit) {
-	doinit = FALSE_;
-	for (i__ = -128; i__ <= 255; ++i__) {
-	    digit[(i__1 = i__ + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("dig"
-		    "it", i__1, "lx4uns_", (ftnlen)206)] = FALSE_;
+    if (__state->doinit) {
+	__state->doinit = FALSE_;
+	for (__state->i__ = -128; __state->i__ <= 255; ++__state->i__) {
+	    __state->digit[(i__1 = __state->i__ + 128) < 384 && 0 <= i__1 ? 
+		    i__1 : s_rnge("digit", i__1, "lx4uns_", (ftnlen)206)] = 
+		    FALSE_;
 	}
-	digit[(i__1 = '0' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)209)] = TRUE_;
-	digit[(i__1 = '1' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)210)] = TRUE_;
-	digit[(i__1 = '2' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)211)] = TRUE_;
-	digit[(i__1 = '3' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)212)] = TRUE_;
-	digit[(i__1 = '4' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)213)] = TRUE_;
-	digit[(i__1 = '5' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)214)] = TRUE_;
-	digit[(i__1 = '6' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)215)] = TRUE_;
-	digit[(i__1 = '7' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)216)] = TRUE_;
-	digit[(i__1 = '8' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)217)] = TRUE_;
-	digit[(i__1 = '9' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge("digit", 
-		i__1, "lx4uns_", (ftnlen)218)] = TRUE_;
+	__state->digit[(i__1 = '0' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)209)] = TRUE_;
+	__state->digit[(i__1 = '1' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)210)] = TRUE_;
+	__state->digit[(i__1 = '2' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)211)] = TRUE_;
+	__state->digit[(i__1 = '3' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)212)] = TRUE_;
+	__state->digit[(i__1 = '4' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)213)] = TRUE_;
+	__state->digit[(i__1 = '5' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)214)] = TRUE_;
+	__state->digit[(i__1 = '6' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)215)] = TRUE_;
+	__state->digit[(i__1 = '7' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)216)] = TRUE_;
+	__state->digit[(i__1 = '8' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)217)] = TRUE_;
+	__state->digit[(i__1 = '9' + 128) < 384 && 0 <= i__1 ? i__1 : s_rnge(
+		"digit", i__1, "lx4uns_", (ftnlen)218)] = TRUE_;
     }
     *last = *first - 1;
-    l = i_len(string, string_len);
+    __state->l = i_len(string, string_len);
 
 /*     If start is beyond the ends of the string, we  can quit now. */
 
-    if (*first < 1 || *first > l) {
+    if (*first < 1 || *first > __state->l) {
 	*nchar = 0;
 	return 0;
     }
@@ -235,15 +247,15 @@
 /*     Now for the real work of the routine. Examine characters one */
 /*     at a time... */
 
-    i__1 = l;
-    for (i__ = *first; i__ <= i__1; ++i__) {
+    i__1 = __state->l;
+    for (__state->i__ = *first; __state->i__ <= i__1; ++__state->i__) {
 
 /*        If this character is a digit, move the LAST pointe one */
 /*        further down on the string.  Otherwise set NCHAR and return. */
 
-	if (digit[(i__2 = *(unsigned char *)&string[i__ - 1] + 128) < 384 && 
-		0 <= i__2 ? i__2 : s_rnge("digit", i__2, "lx4uns_", (ftnlen)
-		241)]) {
+	if (__state->digit[(i__2 = *(unsigned char *)&string[__state->i__ - 1]
+		 + 128) < 384 && 0 <= i__2 ? i__2 : s_rnge("digit", i__2, 
+		"lx4uns_", (ftnlen)241)]) {
 	    ++(*last);
 	} else {
 	    *nchar = *last + 1 - *first;

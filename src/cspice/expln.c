@@ -1,9 +1,17 @@
-/* expln.f -- translated by f2c (version 19980913).
+/* expln.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int expln_state_t;
+static expln_state_t* get_expln_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      EXPLN ( Get Explanation for Short Error Message ) */
 /* Subroutine */ int expln_(char *msg, char *expl, ftnlen msg_len, ftnlen 
@@ -13,6 +21,9 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    expln_state_t* __state = get_expln_state();
 /* $ Abstract */
 
 /*      Return the explanation of a short error message. */

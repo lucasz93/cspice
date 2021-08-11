@@ -1,13 +1,21 @@
-/* zzekwpac.f -- translated by f2c (version 19980913).
+/* zzekwpac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzekwpac_init_t __zzekwpac_init;
+static zzekwpac_state_t* get_zzekwpac_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekwpac)
+		state->zzekwpac = __cspice_allocate_module(sizeof(
+	zzekwpac_state_t), &__zzekwpac_init, sizeof(__zzekwpac_init));
+	return state->zzekwpac;
+
+}
 
 /* $Procedure     ZZEKWPAC ( EK, write paged array, character ) */
 /* Subroutine */ int zzekwpac_(integer *handle, integer *segdsc, integer *
@@ -25,18 +33,24 @@ static integer c__1 = 1;
     char page[1024];
     integer from;
     extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *), zzekpgwc_(integer *, integer *, 
-	    char *, ftnlen), zzekslnk_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
 	    integer *);
     integer npage;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer to;
     extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer spp;
 
+
+    /* Module state */
+    zzekwpac_state_t* __state = get_zzekwpac_state();
 /* $ Abstract */
 
 /*     Write a character array out to a contiguous set of EK pages. */
@@ -608,7 +622,7 @@ static integer c__1 = 1;
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + spp - 1) / spp;
-    zzekacps_(handle, segdsc, &c__1, &npage, p, base);
+    zzekacps_(handle, segdsc, &__state->c__1, &npage, p, base);
 
 /*     We'll use FROM to indicate the element of CVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
@@ -635,7 +649,7 @@ static integer c__1 = 1;
 /*           Set the link count. */
 
 	    i__2 = (to - *l) / *l;
-	    zzekslnk_(handle, &c__1, p, &i__2);
+	    zzekslnk_(handle, &__state->c__1, p, &i__2);
 
 /*           Next page. */
 

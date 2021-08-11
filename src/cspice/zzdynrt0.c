@@ -1,22 +1,21 @@
-/* zzdynrt0.f -- translated by f2c (version 19980913).
+/* zzdynrt0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__9 = 9;
-static integer c__36 = 36;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__3 = 3;
-static doublereal c_b190 = 0.;
-static integer c__6 = 6;
-static doublereal c_b356 = 1.;
-static integer c__20 = 20;
+extern zzdynrt0_init_t __zzdynrt0_init;
+static zzdynrt0_state_t* get_zzdynrt0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdynrt0)
+		state->zzdynrt0 = __cspice_allocate_module(sizeof(
+	zzdynrt0_state_t), &__zzdynrt0_init, sizeof(__zzdynrt0_init));
+	return state->zzdynrt0;
+
+}
 
 /* $Procedure ZZDYNRT0 ( Dynamic position transformation evaluation ) */
 /* Subroutine */ int zzdynrt0_(integer *infram, integer *center, doublereal *
@@ -24,12 +23,6 @@ static integer c__20 = 20;
 {
     /* Initialized data */
 
-    static char axes[1*3] = "X" "Y" "Z";
-    static logical first = TRUE_;
-    static char itmcof[32*3] = "ANGLE_1_COEFFS                  " "ANGLE_2_C"
-	    "OEFFS                  " "ANGLE_3_COEFFS                  ";
-    static char itmsep[32] = "ANGLE_SEP_TOL                   ";
-    static char vname[4*2] = "PRI_" "SEC_";
 
     /* System generated locals */
     address a__1[2];
@@ -46,7 +39,8 @@ static integer c__20 = 20;
     extern /* Subroutine */ int zzrefch1_(integer *, integer *, doublereal *, 
 	    doublereal *);
     doublereal dmob;
-    integer degs[3], frid;
+    integer degs[3];
+    integer frid;
     char spec[80];
     integer targ;
     doublereal oblr[9]	/* was [3][3] */;
@@ -55,52 +49,67 @@ static integer c__20 = 20;
     integer axis[2];
     extern /* Subroutine */ int zzspksb1_(integer *, doublereal *, char *, 
 	    doublereal *, ftnlen);
-    doublereal tipm[9]	/* was [3][3] */, vflt;
+    doublereal tipm[9]	/* was [3][3] */;
+    doublereal vflt;
     extern doublereal vsep_(doublereal *, doublereal *);
     doublereal rinv[9]	/* was [3][3] */;
     extern /* Subroutine */ int zzspkez1_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
-	    vsub_(doublereal *, doublereal *, doublereal *), vequ_(doublereal 
-	    *, doublereal *);
-    doublereal poly[2], rnut[9]	/* was [3][3] */;
+	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal poly[2];
+    doublereal rnut[9]	/* was [3][3] */;
     extern /* Subroutine */ int zzspkzp1_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
-	    zzdynbid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzdynfid_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    zzdynoad_(char *, integer *, char *, integer *, integer *, 
-	    doublereal *, logical *, ftnlen, ftnlen), zzdynoac_(char *, 
-	    integer *, char *, integer *, integer *, char *, logical *, 
-	    ftnlen, ftnlen, ftnlen), eul2m_(doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *), 
-	    zzcorepc_(char *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen), zzmobliq_(doublereal *, doublereal *, doublereal *), 
-	    zzdynvac_(char *, integer *, char *, integer *, integer *, char *,
-	     ftnlen, ftnlen, ftnlen), zzdynvad_(char *, integer *, char *, 
-	    integer *, integer *, doublereal *, ftnlen, ftnlen), zzdynvai_(
-	    char *, integer *, char *, integer *, integer *, integer *, 
-	    ftnlen, ftnlen);
+	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynbid_(char *, integer *, char *, integer *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynfid_(char *, integer *, char *, integer *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynoad_(char *, integer *, char *, integer *
+	    , integer *, doublereal *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynoac_(char *, integer *, char *, integer *
+	    , integer *, char *, logical *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
+	    *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmobliq_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdynvac_(char *, integer *, char *, integer *
+	    , integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynvad_(char *, integer *, char *, integer *
+	    , integer *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynvai_(char *, integer *, char *, integer *
+	    , integer *, integer *, ftnlen, ftnlen);
     integer i__;
     extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
-    integer n, frcid;
-    doublereal radii[3], delta;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen);
+    integer n;
+    integer frcid;
+    doublereal radii[3];
+    doublereal delta;
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    static integer earth;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal pnear[3];
-    integer frcls, iaxes[3];
+    integer frcls;
+    integer iaxes[3];
     doublereal rprec[9]	/* was [3][3] */;
-    static char itmra[32*2];
-    integer cvobs, frctr;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     errdp_(char *, doublereal *, ftnlen);
-    doublereal ptemp[3], rtemp[9]	/* was [3][3] */, stemp[6], stobs[6];
+    integer cvobs;
+    integer frctr;
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal ptemp[3];
+    doublereal rtemp[9]	/* was [3][3] */;
+    doublereal stemp[6];
+    doublereal stobs[6];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
     char units[80];
-    doublereal nutxf[36]	/* was [6][6] */, t0;
+    doublereal nutxf[36]	/* was [6][6] */;
+    doublereal t0;
     extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen);
     doublereal v2[6]	/* was [3][2] */;
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
@@ -109,50 +118,90 @@ static integer c__20 = 20;
     logical meanec;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     char vecdef[80*2];
-    static char itmabc[32*2];
     char basnam[32];
     doublereal lt;
     logical negate;
-    static char itmdec[32*2];
     doublereal coeffs[60]	/* was [20][3] */;
-    char inname__[32], abcorr[5], axname[80];
+    char inname__[32];
+    char abcorr[5];
+    char axname[80];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
-    char cfrmnm[32], ctrnam[36], cvcorr[5], dynstl[80], dynfam[80];
-    static char itmaxe[32*2], itmfrm[32*2], itmlat[32*2], itmlon[32*2], 
-	    itmobs[32*2], itmspc[32*2], itmtrg[32*2], itmunt[32*2], itmvdf[32*
-	    2], itmvec[32*2];
-    char nutmod[80], oblmod[80], prcmod[80], rotsta[80], timstr[50], tmpfam[
-	    80], velfrm[32];
-    doublereal angles[2], ctrpos[3], dec, dirvec[3], eulang[3], alt, fet, lat,
-	     minsep, mob, precxf[36]	/* was [6][6] */, r2000[9]	/* 
-	    was [3][3] */, sep, lon;
+    char cfrmnm[32];
+    char ctrnam[36];
+    char cvcorr[5];
+    char dynstl[80];
+    char dynfam[80];
+    char nutmod[80];
+    char oblmod[80];
+    char prcmod[80];
+    char rotsta[80];
+    char timstr[50];
+    char tmpfam[80];
+    char velfrm[32];
+    doublereal angles[2];
+    doublereal ctrpos[3];
+    doublereal dec;
+    doublereal dirvec[3];
+    doublereal eulang[3];
+    doublereal alt;
+    doublereal fet;
+    doublereal lat;
+    doublereal minsep;
+    doublereal mob;
+    doublereal precxf[36]	/* was [6][6] */;
+    doublereal r2000[9]	/* was [3][3] */;
+    doublereal sep;
+    doublereal lon;
     integer cfrmid;
-    static integer j2000;
     integer obs;
     logical corblk[15];
     doublereal vet;
-    logical fnd, frozen, meaneq, ofdate, trueeq;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), frmnam_(
-	    integer *, char *, ftnlen), chkout_(char *, ftnlen), cmprss_(char 
-	    *, integer *, char *, char *, ftnlen, ftnlen, ftnlen), setmsg_(
-	    char *, ftnlen), sigerr_(char *, ftnlen), intstr_(integer *, char 
-	    *, ftnlen), mxm_(doublereal *, doublereal *, doublereal *), 
-	    errint_(char *, integer *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), mxv_(doublereal *, doublereal *,
-	     doublereal *), cidfrm_(integer *, integer *, char *, logical *, 
-	    ftnlen), bodvcd_(integer *, char *, integer *, integer *, 
-	    doublereal *, ftnlen), vminus_(doublereal *, doublereal *), 
-	    nearpt_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), convrt_(doublereal *, char *, char *,
-	     doublereal *, ftnlen, ftnlen), latrec_(doublereal *, doublereal *
-	    , doublereal *, doublereal *), stlabx_(doublereal *, doublereal *,
-	     doublereal *), stelab_(doublereal *, doublereal *, doublereal *),
-	     twovec_(doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *), polyds_(doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *), zzeprc76_(doublereal *, doublereal *)
-	    , zzenut80_(doublereal *, doublereal *);
+    logical fnd;
+    logical frozen;
+    logical meaneq;
+    logical ofdate;
+    logical trueeq;
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
+	     integer *, doublereal *);
+    extern /* Subroutine */ int polyds_(doublereal *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzeprc76_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzenut80_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    zzdynrt0_state_t* __state = get_zzdynrt0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1018,16 +1067,16 @@ static integer c__20 = 20;
 	return 0;
     }
     chkin_("ZZDYNRT0", (ftnlen)8);
-    if (first) {
+    if (__state->first) {
 
 /*        Get the ID code for the J2000 frame. */
 
-	irfnum_("J2000", &j2000, (ftnlen)5);
+	irfnum_("J2000", &__state->j2000, (ftnlen)5);
 
 /*        Get the ID code for the earth (we needn't check the found */
 /*        flag). */
 
-	bodn2c_("EARTH", &earth, &fnd, (ftnlen)5);
+	bodn2c_("EARTH", &__state->earth, &fnd, (ftnlen)5);
 
 /*        Initialize "item" strings used to create kernel variable */
 /*        names. */
@@ -1037,165 +1086,165 @@ static integer c__20 = 20;
 /*           Vector axis: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    502)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)502)) << 2);
 	    i__3[1] = 4, a__1[1] = "AXIS";
-	    s_cat(itmaxe + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmaxe", i__1, "zzdynrt0_", (ftnlen)502)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmaxe + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmaxe", i__1, "zzdynrt0_", (ftnlen)502)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector definition: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    506)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)506)) << 2);
 	    i__3[1] = 10, a__1[1] = "VECTOR_DEF";
-	    s_cat(itmvdf + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmvdf", i__1, "zzdynrt0_", (ftnlen)506)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmvdf + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmvdf", i__1, "zzdynrt0_", (ftnlen)506)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector aberration correction: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    510)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)510)) << 2);
 	    i__3[1] = 6, a__1[1] = "ABCORR";
-	    s_cat(itmabc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmabc", i__1, "zzdynrt0_", (ftnlen)510)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmabc", i__1, "zzdynrt0_", (ftnlen)510)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector frame: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    514)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)514)) << 2);
 	    i__3[1] = 5, a__1[1] = "FRAME";
-	    s_cat(itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmfrm", i__1, "zzdynrt0_", (ftnlen)514)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmfrm", i__1, "zzdynrt0_", (ftnlen)514)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector observer: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    518)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)518)) << 2);
 	    i__3[1] = 8, a__1[1] = "OBSERVER";
-	    s_cat(itmobs + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmobs", i__1, "zzdynrt0_", (ftnlen)518)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmobs + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmobs", i__1, "zzdynrt0_", (ftnlen)518)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector target: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    522)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)522)) << 2);
 	    i__3[1] = 6, a__1[1] = "TARGET";
-	    s_cat(itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmtrg", i__1, "zzdynrt0_", (ftnlen)522)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmtrg", i__1, "zzdynrt0_", (ftnlen)522)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector longitude: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    526)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)526)) << 2);
 	    i__3[1] = 9, a__1[1] = "LONGITUDE";
-	    s_cat(itmlon + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmlon", i__1, "zzdynrt0_", (ftnlen)526)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmlon + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmlon", i__1, "zzdynrt0_", (ftnlen)526)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector latitude: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    530)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)530)) << 2);
 	    i__3[1] = 8, a__1[1] = "LATITUDE";
-	    s_cat(itmlat + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmlat", i__1, "zzdynrt0_", (ftnlen)530)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmlat + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmlat", i__1, "zzdynrt0_", (ftnlen)530)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector right ascension: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    534)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)534)) << 2);
 	    i__3[1] = 2, a__1[1] = "RA";
-	    s_cat(itmra + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "itmra", i__1, "zzdynrt0_", (ftnlen)534)) << 5), a__1, 
-		    i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmra + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 
+		    : s_rnge("itmra", i__1, "zzdynrt0_", (ftnlen)534)) << 5), 
+		    a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector declination: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    538)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)538)) << 2);
 	    i__3[1] = 3, a__1[1] = "DEC";
-	    s_cat(itmdec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmdec", i__1, "zzdynrt0_", (ftnlen)538)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmdec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmdec", i__1, "zzdynrt0_", (ftnlen)538)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector units: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    542)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)542)) << 2);
 	    i__3[1] = 5, a__1[1] = "UNITS";
-	    s_cat(itmunt + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmunt", i__1, "zzdynrt0_", (ftnlen)542)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmunt + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmunt", i__1, "zzdynrt0_", (ftnlen)542)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Constant vector coordinate specification: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    546)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)546)) << 2);
 	    i__3[1] = 4, a__1[1] = "SPEC";
-	    s_cat(itmspc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmspc", i__1, "zzdynrt0_", (ftnlen)546)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmspc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmspc", i__1, "zzdynrt0_", (ftnlen)546)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 
 /*           Constant vector in cartesian coordinates, literal value: */
 
 /* Writing concatenation */
-	    i__3[0] = 4, a__1[0] = vname + (((i__2 = i__ - 1) < 2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (ftnlen)
-		    550)) << 2);
+	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
+		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrt0_", (
+		    ftnlen)550)) << 2);
 	    i__3[1] = 6, a__1[1] = "VECTOR";
-	    s_cat(itmvec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("itmvec", i__1, "zzdynrt0_", (ftnlen)550)) << 5), 
-		    a__1, i__3, &c__2, (ftnlen)32);
+	    s_cat(__state->itmvec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
+		    i__1 : s_rnge("itmvec", i__1, "zzdynrt0_", (ftnlen)550)) 
+		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
 	}
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Initialize the output arguments. */
 
-    cleard_(&c__9, rotate);
+    cleard_(&__state->c__9, rotate);
     *basfrm = 0;
 
 /*     Initialize certain variables to ensure that we don't do */
 /*     arithmetic operations using bogus, possibly large, */
 /*     undefined values. */
 
-    cleard_(&c__36, nutxf);
-    cleard_(&c__9, oblr);
-    cleard_(&c__36, precxf);
-    cleard_(&c__9, r2000);
-    cleard_(&c__9, rtemp);
-    cleard_(&c__9, rinv);
-    cleard_(&c__9, tipm);
+    cleard_(&__state->c__36, nutxf);
+    cleard_(&__state->c__9, oblr);
+    cleard_(&__state->c__36, precxf);
+    cleard_(&__state->c__9, r2000);
+    cleard_(&__state->c__9, rtemp);
+    cleard_(&__state->c__9, rinv);
+    cleard_(&__state->c__9, tipm);
     mob = 0.;
     dmob = 0.;
     t0 = 0.;
@@ -1215,8 +1264,8 @@ static integer c__20 = 20;
 /*     Look up the dynamic frame definition style from the kernel pool. */
 /*     The kernel variable's name might be specified by name or ID. */
 
-    zzdynvac_(inname__, infram, "DEF_STYLE", &c__1, &n, dynstl, (ftnlen)32, (
-	    ftnlen)9, (ftnlen)80);
+    zzdynvac_(inname__, infram, "DEF_STYLE", &__state->c__1, &n, dynstl, (
+	    ftnlen)32, (ftnlen)9, (ftnlen)80);
     if (failed_()) {
 	chkout_("ZZDYNRT0", (ftnlen)8);
 	return 0;
@@ -1230,10 +1279,10 @@ static integer c__20 = 20;
 /*        Parameterized dynamic frames belong to families.  Look up */
 /*        the family for this frame. */
 
-	zzdynvac_(inname__, infram, "FAMILY", &c__1, &n, dynfam, (ftnlen)32, (
-		ftnlen)6, (ftnlen)80);
-	cmprss_(" ", &c__0, dynfam, tmpfam, (ftnlen)1, (ftnlen)80, (ftnlen)80)
-		;
+	zzdynvac_(inname__, infram, "FAMILY", &__state->c__1, &n, dynfam, (
+		ftnlen)32, (ftnlen)6, (ftnlen)80);
+	cmprss_(" ", &__state->c__0, dynfam, tmpfam, (ftnlen)1, (ftnlen)80, (
+		ftnlen)80);
 	ucase_(tmpfam, dynfam, (ftnlen)80, (ftnlen)80);
 
 /*        Determine whether we have an "of-date" frame family. */
@@ -1259,8 +1308,8 @@ static integer c__20 = 20;
 /*        specified; let FROZEN receive the FOUND flag value */
 /*        returned by ZZDYNOAD. */
 
-	zzdynoad_(inname__, infram, "FREEZE_EPOCH", &c__1, &n, &t0, &frozen, (
-		ftnlen)32, (ftnlen)12);
+	zzdynoad_(inname__, infram, "FREEZE_EPOCH", &__state->c__1, &n, &t0, &
+		frozen, (ftnlen)32, (ftnlen)12);
 	if (! frozen) {
 
 /*           Normal case:  just use the input epoch. */
@@ -1273,8 +1322,8 @@ static integer c__20 = 20;
 /*        semantic checking:  there's no use made of the fact that */
 /*        the rotation state is 'ROTATING' or 'INERTIAL'. */
 
-	zzdynoac_(inname__, infram, "ROTATION_STATE", &c__1, &n, rotsta, &fnd,
-		 (ftnlen)32, (ftnlen)14, (ftnlen)80);
+	zzdynoac_(inname__, infram, "ROTATION_STATE", &__state->c__1, &n, 
+		rotsta, &fnd, (ftnlen)32, (ftnlen)14, (ftnlen)80);
 	if (fnd) {
 
 /*           Catch invalid rotation states here. */
@@ -1352,8 +1401,8 @@ static integer c__20 = 20;
 /*           Fetch the name of the true equator and equinox of date */
 /*           precession model. */
 
-	    zzdynvac_(inname__, infram, "PREC_MODEL", &c__1, &n, prcmod, (
-		    ftnlen)32, (ftnlen)10, (ftnlen)80);
+	    zzdynvac_(inname__, infram, "PREC_MODEL", &__state->c__1, &n, 
+		    prcmod, (ftnlen)32, (ftnlen)10, (ftnlen)80);
 	    if (failed_()) {
 		chkout_("ZZDYNRT0", (ftnlen)8);
 		return 0;
@@ -1367,7 +1416,7 @@ static integer c__20 = 20;
 
 /*              Make sure the center of the input frame is the earth. */
 
-		if (*center != earth) {
+		if (*center != __state->earth) {
 		    bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
 		    if (! fnd) {
 			intstr_(center, ctrnam, (ftnlen)36);
@@ -1390,9 +1439,9 @@ static integer c__20 = 20;
 /*              the precession rotation matrix. */
 
 		zzeprc76_(&t0, precxf);
-		moved_(precxf, &c__3, rprec);
-		moved_(&precxf[6], &c__3, &rprec[3]);
-		moved_(&precxf[12], &c__3, &rprec[6]);
+		moved_(precxf, &__state->c__3, rprec);
+		moved_(&precxf[6], &__state->c__3, &rprec[3]);
+		moved_(&precxf[12], &__state->c__3, &rprec[6]);
 
 /*              If we're in the mean-of-date case, invert this */
 /*              transformation to obtain the mapping from the */
@@ -1421,8 +1470,8 @@ static integer c__20 = 20;
 /*              We need a nutation transformation as well. Get the name */
 /*              of the nutation model. */
 
-		zzdynvac_(inname__, infram, "NUT_MODEL", &c__1, &n, nutmod, (
-			ftnlen)32, (ftnlen)9, (ftnlen)80);
+		zzdynvac_(inname__, infram, "NUT_MODEL", &__state->c__1, &n, 
+			nutmod, (ftnlen)32, (ftnlen)9, (ftnlen)80);
 		if (failed_()) {
 		    chkout_("ZZDYNRT0", (ftnlen)8);
 		    return 0;
@@ -1437,7 +1486,7 @@ static integer c__20 = 20;
 
 /*                 Make sure the center is the earth. */
 
-		    if (*center != earth) {
+		    if (*center != __state->earth) {
 			bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
 			if (! fnd) {
 			    intstr_(center, ctrnam, (ftnlen)36);
@@ -1461,9 +1510,9 @@ static integer c__20 = 20;
 /*                 the nutation rotation matrix. */
 
 		    zzenut80_(&t0, nutxf);
-		    moved_(nutxf, &c__3, rnut);
-		    moved_(&nutxf[6], &c__3, &rnut[3]);
-		    moved_(&nutxf[12], &c__3, &rnut[6]);
+		    moved_(nutxf, &__state->c__3, rnut);
+		    moved_(&nutxf[6], &__state->c__3, &rnut[3]);
+		    moved_(&nutxf[12], &__state->c__3, &rnut[6]);
 
 /*                 Find the rotation from the J2000 frame to the earth */
 /*                 true of date frame.  Invert. */
@@ -1486,8 +1535,8 @@ static integer c__20 = 20;
 /*              We need a mean obliquity transformation as well. */
 /*              Get the name of the obliquity model. */
 
-		zzdynvac_(inname__, infram, "OBLIQ_MODEL", &c__1, &n, oblmod, 
-			(ftnlen)32, (ftnlen)11, (ftnlen)80);
+		zzdynvac_(inname__, infram, "OBLIQ_MODEL", &__state->c__1, &n,
+			 oblmod, (ftnlen)32, (ftnlen)11, (ftnlen)80);
 		if (failed_()) {
 		    chkout_("ZZDYNRT0", (ftnlen)8);
 		    return 0;
@@ -1503,7 +1552,7 @@ static integer c__20 = 20;
 
 /*                 Make sure the center is the earth. */
 
-		    if (*center != earth) {
+		    if (*center != __state->earth) {
 			bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
 			if (! fnd) {
 			    intstr_(center, ctrnam, (ftnlen)36);
@@ -1533,7 +1582,9 @@ static integer c__20 = 20;
 /*                 zero; the axes are arbitrary, as long as the */
 /*                 middle axis is distinct from the other two. */
 
-		    eul2m_(&c_b190, &c_b190, &mob, &c__1, &c__3, &c__1, oblr);
+		    eul2m_(&__state->c_b190, &__state->c_b190, &mob, &
+			    __state->c__1, &__state->c__3, &__state->c__1, 
+			    oblr);
 
 /*                 Find the rotation from the J2000 to the */
 /*                 earth mean ecliptic of date frame.  Invert. */
@@ -1558,14 +1609,14 @@ static integer c__20 = 20;
 
 /*           If the base frame is not J2000, we must find the */
 /*           transformation from J2000 to the base frame. */
-	    if (*basfrm != j2000) {
-		zzrefch1_(&j2000, basfrm, &t0, r2000);
+	    if (*basfrm != __state->j2000) {
+		zzrefch1_(&__state->j2000, basfrm, &t0, r2000);
 		mxm_(r2000, rtemp, rotate);
 	    } else {
 
 /*              Otherwise, RTEMP is the matrix we want. */
 
-		moved_(rtemp, &c__9, rotate);
+		moved_(rtemp, &__state->c__9, rotate);
 	    }
 
 /*           Now ROTATE is the state transformation mapping from */
@@ -1585,30 +1636,30 @@ static integer c__20 = 20;
 /*           Fetch the specifications of the primary and secondary */
 /*           axes. */
 
-	    cleard_(&c__6, v2);
+	    cleard_(&__state->c__6, v2);
 	    for (i__ = 1; i__ <= 2; ++i__) {
 
 /*              Get the name of the axis associated with the Ith */
 /*              defining vector. */
 
-		zzdynvac_(inname__, infram, itmaxe + (((i__1 = i__ - 1) < 2 &&
-			 0 <= i__1 ? i__1 : s_rnge("itmaxe", i__1, "zzdynrt0_"
-			, (ftnlen)1054)) << 5), &c__1, &n, axname, (ftnlen)32,
-			 (ftnlen)32, (ftnlen)80);
-		cmprss_(" ", &c__0, axname, axname, (ftnlen)1, (ftnlen)80, (
-			ftnlen)80);
+		zzdynvac_(inname__, infram, __state->itmaxe + (((i__1 = i__ - 
+			1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmaxe", i__1, 
+			"zzdynrt0_", (ftnlen)1054)) << 5), &__state->c__1, &n,
+			 axname, (ftnlen)32, (ftnlen)32, (ftnlen)80);
+		cmprss_(" ", &__state->c__0, axname, axname, (ftnlen)1, (
+			ftnlen)80, (ftnlen)80);
 		ucase_(axname, axname, (ftnlen)80, (ftnlen)80);
 
 /*              Set the sign flag associated with the axis. */
 
 		negate = *(unsigned char *)axname == '-';
-		cmprss_("-", &c__0, axname, axname, (ftnlen)1, (ftnlen)80, (
-			ftnlen)80);
-		cmprss_("+", &c__0, axname, axname, (ftnlen)1, (ftnlen)80, (
-			ftnlen)80);
+		cmprss_("-", &__state->c__0, axname, axname, (ftnlen)1, (
+			ftnlen)80, (ftnlen)80);
+		cmprss_("+", &__state->c__0, axname, axname, (ftnlen)1, (
+			ftnlen)80, (ftnlen)80);
 		axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("axis",
 			 i__1, "zzdynrt0_", (ftnlen)1067)] = isrchc_(axname, &
-			c__3, axes, (ftnlen)80, (ftnlen)1);
+			__state->c__3, __state->axes, (ftnlen)80, (ftnlen)1);
 		if (axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
 			"axis", i__1, "zzdynrt0_", (ftnlen)1070)] == 0) {
 		    setmsg_("Definition of frame # associates vector # with "
@@ -1634,18 +1685,18 @@ static integer c__20 = 20;
 /*              VECDEF(I) indicates the vector definition method */
 /*              for the Ith vector. */
 
-		zzdynvac_(inname__, infram, itmvdf + (((i__1 = i__ - 1) < 2 &&
-			 0 <= i__1 ? i__1 : s_rnge("itmvdf", i__1, "zzdynrt0_"
-			, (ftnlen)1099)) << 5), &c__1, &n, vecdef + ((i__2 = 
-			i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("vecdef", 
-			i__2, "zzdynrt0_", (ftnlen)1099)) * 80, (ftnlen)32, (
-			ftnlen)32, (ftnlen)80);
-		cmprss_(" ", &c__0, vecdef + ((i__1 = i__ - 1) < 2 && 0 <= 
-			i__1 ? i__1 : s_rnge("vecdef", i__1, "zzdynrt0_", (
-			ftnlen)1102)) * 80, vecdef + ((i__2 = i__ - 1) < 2 && 
-			0 <= i__2 ? i__2 : s_rnge("vecdef", i__2, "zzdynrt0_",
-			 (ftnlen)1102)) * 80, (ftnlen)1, (ftnlen)80, (ftnlen)
-			80);
+		zzdynvac_(inname__, infram, __state->itmvdf + (((i__1 = i__ - 
+			1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmvdf", i__1, 
+			"zzdynrt0_", (ftnlen)1099)) << 5), &__state->c__1, &n,
+			 vecdef + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : 
+			s_rnge("vecdef", i__2, "zzdynrt0_", (ftnlen)1099)) * 
+			80, (ftnlen)32, (ftnlen)32, (ftnlen)80);
+		cmprss_(" ", &__state->c__0, vecdef + ((i__1 = i__ - 1) < 2 &&
+			 0 <= i__1 ? i__1 : s_rnge("vecdef", i__1, "zzdynrt0_"
+			, (ftnlen)1102)) * 80, vecdef + ((i__2 = i__ - 1) < 2 
+			&& 0 <= i__2 ? i__2 : s_rnge("vecdef", i__2, "zzdynr"
+			"t0_", (ftnlen)1102)) * 80, (ftnlen)1, (ftnlen)80, (
+			ftnlen)80);
 		ucase_(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
 			s_rnge("vecdef", i__1, "zzdynrt0_", (ftnlen)1103)) * 
 			80, vecdef + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
@@ -1661,18 +1712,19 @@ static integer c__20 = 20;
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrt0_", (ftnlen)1113)) << 5), &targ, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrt0_", (ftnlen)1115)) << 5), &obs, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrt0_", (ftnlen)1117)) << 5), &c__1, &n, 
-			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
+		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
+			    , i__1, "zzdynrt0_", (ftnlen)1113)) << 5), &targ, 
+			    (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
+			    , i__1, "zzdynrt0_", (ftnlen)1115)) << 5), &obs, (
+			    ftnlen)32, (ftnlen)32);
+		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
+			    , i__1, "zzdynrt0_", (ftnlen)1117)) << 5), &
+			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
+			     (ftnlen)5);
 
 /*                 Look up the Ith position vector in the J2000 frame. */
 
@@ -1694,26 +1746,27 @@ static integer c__20 = 20;
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrt0_", (ftnlen)1138)) << 5), &targ, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrt0_", (ftnlen)1140)) << 5), &obs, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrt0_", (ftnlen)1142)) << 5), &c__1, &n, 
-			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
+		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
+			    , i__1, "zzdynrt0_", (ftnlen)1138)) << 5), &targ, 
+			    (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
+			    , i__1, "zzdynrt0_", (ftnlen)1140)) << 5), &obs, (
+			    ftnlen)32, (ftnlen)32);
+		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
+			    , i__1, "zzdynrt0_", (ftnlen)1142)) << 5), &
+			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
+			     (ftnlen)5);
 
 /*                 We need to know the frame in which the velocity is */
 /*                 defined. */
 
-		    zzdynfid_(inname__, infram, itmfrm + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm", i__1, 
-			    "zzdynrt0_", (ftnlen)1149)) << 5), &frid, (ftnlen)
-			    32, (ftnlen)32);
+		    zzdynfid_(inname__, infram, __state->itmfrm + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm"
+			    , i__1, "zzdynrt0_", (ftnlen)1149)) << 5), &frid, 
+			    (ftnlen)32, (ftnlen)32);
 		    frmnam_(&frid, velfrm, (ftnlen)32);
 
 /*                 Look up the Ith velocity vector in the velocity frame. */
@@ -1782,13 +1835,13 @@ static integer c__20 = 20;
 /*                 We'll do this in two stages, first mapping velocity */
 /*                 into the J2000 frame. */
 
-		    zzrefch1_(&frid, &j2000, &vet, r2000);
+		    zzrefch1_(&frid, &__state->j2000, &vet, r2000);
 		    mxv_(r2000, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? 
 			    i__1 : s_rnge("v2", i__1, "zzdynrt0_", (ftnlen)
 			    1234)], ptemp);
-		    moved_(ptemp, &c__3, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrt0_", (
-			    ftnlen)1235)]);
+		    moved_(ptemp, &__state->c__3, &v2[(i__1 = i__ * 3 - 3) < 
+			    6 && 0 <= i__1 ? i__1 : s_rnge("v2", i__1, "zzdy"
+			    "nrt0_", (ftnlen)1235)]);
 
 /*                 At this point, V2(*,I) contains velocity */
 /*                 relative to frame J2000. */
@@ -1802,18 +1855,19 @@ static integer c__20 = 20;
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, itmtrg + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg", i__1, 
-			    "zzdynrt0_", (ftnlen)1249)) << 5), &targ, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, itmobs + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmobs", i__1, 
-			    "zzdynrt0_", (ftnlen)1251)) << 5), &obs, (ftnlen)
-			    32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrt0_", (ftnlen)1253)) << 5), &c__1, &n, 
-			    abcorr, (ftnlen)32, (ftnlen)32, (ftnlen)5);
+		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
+			    , i__1, "zzdynrt0_", (ftnlen)1249)) << 5), &targ, 
+			    (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
+			    , i__1, "zzdynrt0_", (ftnlen)1251)) << 5), &obs, (
+			    ftnlen)32, (ftnlen)32);
+		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
+			    , i__1, "zzdynrt0_", (ftnlen)1253)) << 5), &
+			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
+			     (ftnlen)5);
 
 /*                 The vector points from an observer to the */
 /*                 sub-observer point (nearest point to the observer) on */
@@ -1851,7 +1905,8 @@ static integer c__20 = 20;
 
 /*                 Get the radii of the target body. */
 
-		    bodvcd_(&targ, "RADII", &c__3, &n, radii, (ftnlen)5);
+		    bodvcd_(&targ, "RADII", &__state->c__3, &n, radii, (
+			    ftnlen)5);
 
 /*                 Look up the Ith position vector in the target-fixed */
 /*                 frame.  Negate the vector to obtain the target-to- */
@@ -1884,7 +1939,7 @@ static integer c__20 = 20;
 /*                 apply it to the observer-to-near point position */
 /*                 vector. */
 
-		    zzrefch1_(&cfrmid, &j2000, &fet, tipm);
+		    zzrefch1_(&cfrmid, &__state->j2000, &fet, tipm);
 		    mxv_(tipm, ptemp, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrt0_", (
 			    ftnlen)1345)]);
@@ -1905,10 +1960,10 @@ static integer c__20 = 20;
 
 /*                 Look up the ID of the frame first. */
 
-		    zzdynfid_(inname__, infram, itmfrm + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm", i__1, 
-			    "zzdynrt0_", (ftnlen)1362)) << 5), &frid, (ftnlen)
-			    32, (ftnlen)32);
+		    zzdynfid_(inname__, infram, __state->itmfrm + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm"
+			    , i__1, "zzdynrt0_", (ftnlen)1362)) << 5), &frid, 
+			    (ftnlen)32, (ftnlen)32);
 
 /*                 Let FET ("frame ET") be the evaluation epoch for */
 /*                 the constant vector's frame.  By default, this */
@@ -1926,10 +1981,11 @@ static integer c__20 = 20;
 /*                 If so, an observer must be associated with the */
 /*                 frame.  Look up the correction first. */
 
-		    zzdynoac_(inname__, infram, itmabc + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmabc", i__1, 
-			    "zzdynrt0_", (ftnlen)1382)) << 5), &c__1, &n, 
-			    cvcorr, &fnd, (ftnlen)32, (ftnlen)32, (ftnlen)5);
+		    zzdynoac_(inname__, infram, __state->itmabc + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
+			    , i__1, "zzdynrt0_", (ftnlen)1382)) << 5), &
+			    __state->c__1, &n, cvcorr, &fnd, (ftnlen)32, (
+			    ftnlen)32, (ftnlen)5);
 		    if (! fnd) {
 			s_copy(cvcorr, "NONE", (ftnlen)5, (ftnlen)4);
 		    }
@@ -1994,10 +2050,11 @@ static integer c__20 = 20;
 /*                       together with the frame's center, determines */
 /*                       the evaluation epoch for the frame. */
 
-			    zzdynbid_(inname__, infram, itmobs + (((i__1 = 
-				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmobs", i__1, "zzdynrt0_", (ftnlen)1468)
-				    ) << 5), &cvobs, (ftnlen)32, (ftnlen)32);
+			    zzdynbid_(inname__, infram, __state->itmobs + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmobs", i__1, "zzdynrt0_", (
+				    ftnlen)1468)) << 5), &cvobs, (ftnlen)32, (
+				    ftnlen)32);
 
 /*                       Obtain light time from the observer to the */
 /*                       frame's center. */
@@ -2020,26 +2077,28 @@ static integer c__20 = 20;
 /*                       later, when the constant vector has been */
 /*                       transformed to the J2000 frame. */
 
-			    zzdynbid_(inname__, infram, itmobs + (((i__1 = 
-				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmobs", i__1, "zzdynrt0_", (ftnlen)1496)
-				    ) << 5), &cvobs, (ftnlen)32, (ftnlen)32);
+			    zzdynbid_(inname__, infram, __state->itmobs + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmobs", i__1, "zzdynrt0_", (
+				    ftnlen)1496)) << 5), &cvobs, (ftnlen)32, (
+				    ftnlen)32);
 			    zzspksb1_(&cvobs, &t0, "J2000", stobs, (ftnlen)5);
 			}
 		    }
 
 /*                 Get the constant vector specification. */
 
-		    zzdynvac_(inname__, infram, itmspc + (((i__1 = i__ - 1) < 
-			    2 && 0 <= i__1 ? i__1 : s_rnge("itmspc", i__1, 
-			    "zzdynrt0_", (ftnlen)1508)) << 5), &c__1, &n, 
-			    spec, (ftnlen)32, (ftnlen)32, (ftnlen)80);
+		    zzdynvac_(inname__, infram, __state->itmspc + (((i__1 = 
+			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmspc"
+			    , i__1, "zzdynrt0_", (ftnlen)1508)) << 5), &
+			    __state->c__1, &n, spec, (ftnlen)32, (ftnlen)32, (
+			    ftnlen)80);
 		    if (failed_()) {
 			chkout_("ZZDYNRT0", (ftnlen)8);
 			return 0;
 		    }
-		    cmprss_(" ", &c__0, spec, spec, (ftnlen)1, (ftnlen)80, (
-			    ftnlen)80);
+		    cmprss_(" ", &__state->c__0, spec, spec, (ftnlen)1, (
+			    ftnlen)80, (ftnlen)80);
 		    ucase_(spec, spec, (ftnlen)80, (ftnlen)80);
 		    if (s_cmp(spec, "RECTANGULAR", (ftnlen)80, (ftnlen)11) == 
 			    0) {
@@ -2048,10 +2107,11 @@ static integer c__20 = 20;
 
 /*                    Look up the constant vector. */
 
-			zzdynvad_(inname__, infram, itmvec + (((i__1 = i__ - 
-				1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmvec", 
-				i__1, "zzdynrt0_", (ftnlen)1525)) << 5), &
-				c__3, &n, dirvec, (ftnlen)32, (ftnlen)32);
+			zzdynvad_(inname__, infram, __state->itmvec + (((i__1 
+				= i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
+				"itmvec", i__1, "zzdynrt0_", (ftnlen)1525)) <<
+				 5), &__state->c__3, &n, dirvec, (ftnlen)32, (
+				ftnlen)32);
 		    } else if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)
 			    11) == 0 || s_cmp(spec, "RA/DEC", (ftnlen)80, (
 			    ftnlen)6) == 0) {
@@ -2060,26 +2120,26 @@ static integer c__20 = 20;
 
 /*                    Look up the units associated with the angles. */
 
-			zzdynvac_(inname__, infram, itmunt + (((i__1 = i__ - 
-				1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmunt", 
-				i__1, "zzdynrt0_", (ftnlen)1536)) << 5), &
-				c__1, &n, units, (ftnlen)32, (ftnlen)32, (
-				ftnlen)80);
+			zzdynvac_(inname__, infram, __state->itmunt + (((i__1 
+				= i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
+				"itmunt", i__1, "zzdynrt0_", (ftnlen)1536)) <<
+				 5), &__state->c__1, &n, units, (ftnlen)32, (
+				ftnlen)32, (ftnlen)80);
 			if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)11)
 				 == 0) {
 
 /*                       Look up longitude and latitude. */
 
-			    zzdynvad_(inname__, infram, itmlon + (((i__1 = 
-				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmlon", i__1, "zzdynrt0_", (ftnlen)1544)
-				    ) << 5), &c__1, &n, &lon, (ftnlen)32, (
-				    ftnlen)32);
-			    zzdynvad_(inname__, infram, itmlat + (((i__1 = 
-				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmlat", i__1, "zzdynrt0_", (ftnlen)1547)
-				    ) << 5), &c__1, &n, &lat, (ftnlen)32, (
-				    ftnlen)32);
+			    zzdynvad_(inname__, infram, __state->itmlon + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmlon", i__1, "zzdynrt0_", (
+				    ftnlen)1544)) << 5), &__state->c__1, &n, &
+				    lon, (ftnlen)32, (ftnlen)32);
+			    zzdynvad_(inname__, infram, __state->itmlat + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmlat", i__1, "zzdynrt0_", (
+				    ftnlen)1547)) << 5), &__state->c__1, &n, &
+				    lat, (ftnlen)32, (ftnlen)32);
 
 /*                       Convert angles from input units to radians. */
 
@@ -2091,16 +2151,16 @@ static integer c__20 = 20;
 
 /*                       Look up RA and DEC. */
 
-			    zzdynvad_(inname__, infram, itmra + (((i__1 = i__ 
-				    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmra", i__1, "zzdynrt0_", (ftnlen)1560))
-				     << 5), &c__1, &n, &ra, (ftnlen)32, (
-				    ftnlen)32);
-			    zzdynvad_(inname__, infram, itmdec + (((i__1 = 
-				    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "itmdec", i__1, "zzdynrt0_", (ftnlen)1563)
-				    ) << 5), &c__1, &n, &dec, (ftnlen)32, (
-				    ftnlen)32);
+			    zzdynvad_(inname__, infram, __state->itmra + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmra", i__1, "zzdynrt0_", (
+				    ftnlen)1560)) << 5), &__state->c__1, &n, &
+				    ra, (ftnlen)32, (ftnlen)32);
+			    zzdynvad_(inname__, infram, __state->itmdec + (((
+				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
+				    s_rnge("itmdec", i__1, "zzdynrt0_", (
+				    ftnlen)1563)) << 5), &__state->c__1, &n, &
+				    dec, (ftnlen)32, (ftnlen)32);
 
 /*                       Convert angles from input units to radians. */
 
@@ -2112,7 +2172,7 @@ static integer c__20 = 20;
 
 /*                    Now  produce a direction vector. */
 
-			latrec_(&c_b356, angles, &angles[1], dirvec);
+			latrec_(&__state->c_b356, angles, &angles[1], dirvec);
 		    } else {
 			setmsg_("Definition of two-vector parameterized dyna"
 				"mic frame # includes constant vector specifi"
@@ -2129,7 +2189,7 @@ static integer c__20 = 20;
 
 /*                 Convert the direction vector to the J2000 frame. */
 
-		    zzrefch1_(&frid, &j2000, &fet, r2000);
+		    zzrefch1_(&frid, &__state->j2000, &fet, r2000);
 		    mxv_(r2000, dirvec, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
 			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrt0_", (
 			    ftnlen)1602)]);
@@ -2189,9 +2249,9 @@ static integer c__20 = 20;
 		    vminus_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 :
 			     s_rnge("v2", i__1, "zzdynrt0_", (ftnlen)1660)], 
 			    ptemp);
-		    moved_(ptemp, &c__3, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrt0_", (
-			    ftnlen)1661)]);
+		    moved_(ptemp, &__state->c__3, &v2[(i__1 = i__ * 3 - 3) < 
+			    6 && 0 <= i__1 ? i__1 : s_rnge("v2", i__1, "zzdy"
+			    "nrt0_", (ftnlen)1661)]);
 		}
 	    }
 
@@ -2199,8 +2259,8 @@ static integer c__20 = 20;
 /*           the defining vectors.  Use the default value if none */
 /*           was supplied. */
 
-	    zzdynoad_(inname__, infram, itmsep, &c__1, &n, &minsep, &fnd, (
-		    ftnlen)32, (ftnlen)32);
+	    zzdynoad_(inname__, infram, __state->itmsep, &__state->c__1, &n, &
+		    minsep, &fnd, (ftnlen)32, (ftnlen)32);
 	    if (! fnd) {
 		minsep = .001;
 	    }
@@ -2247,7 +2307,7 @@ static integer c__20 = 20;
 
 	    twovec_(v2, axis, &v2[3], &axis[1], rinv);
 	    xpose_(rinv, rtemp);
-	    zzrefch1_(&j2000, basfrm, &t0, r2000);
+	    zzrefch1_(&__state->j2000, basfrm, &t0, r2000);
 	    mxm_(r2000, rtemp, rotate);
 
 /*           This is the end of the work specific to two-vector frames. */
@@ -2272,14 +2332,14 @@ static integer c__20 = 20;
 /*           is invalid due to a lookup error. */
 
 	    epoch = 0.;
-	    zzdynvad_(inname__, infram, "EPOCH", &c__1, &n, &epoch, (ftnlen)
-		    32, (ftnlen)5);
+	    zzdynvad_(inname__, infram, "EPOCH", &__state->c__1, &n, &epoch, (
+		    ftnlen)32, (ftnlen)5);
 	    delta = t0 - epoch;
 
 /*           Now the axis sequence. */
 
-	    zzdynvai_(inname__, infram, "AXES", &c__3, &n, iaxes, (ftnlen)32, 
-		    (ftnlen)4);
+	    zzdynvai_(inname__, infram, "AXES", &__state->c__3, &n, iaxes, (
+		    ftnlen)32, (ftnlen)4);
 
 /*           Now the coefficients for the angles. */
 
@@ -2289,12 +2349,12 @@ static integer c__20 = 20;
 /*              is invalid due to a lookup error. */
 
 		n = 0;
-		zzdynvad_(inname__, infram, itmcof + (((i__1 = i__ - 1) < 3 &&
-			 0 <= i__1 ? i__1 : s_rnge("itmcof", i__1, "zzdynrt0_"
-			, (ftnlen)1778)) << 5), &c__20, &n, &coeffs[(i__2 = 
-			i__ * 20 - 20) < 60 && 0 <= i__2 ? i__2 : s_rnge(
-			"coeffs", i__2, "zzdynrt0_", (ftnlen)1778)], (ftnlen)
-			32, (ftnlen)32);
+		zzdynvad_(inname__, infram, __state->itmcof + (((i__1 = i__ - 
+			1) < 3 && 0 <= i__1 ? i__1 : s_rnge("itmcof", i__1, 
+			"zzdynrt0_", (ftnlen)1778)) << 5), &__state->c__20, &
+			n, &coeffs[(i__2 = i__ * 20 - 20) < 60 && 0 <= i__2 ? 
+			i__2 : s_rnge("coeffs", i__2, "zzdynrt0_", (ftnlen)
+			1778)], (ftnlen)32, (ftnlen)32);
 
 /*              Set the polynomial degree for the Ith angle. */
 
@@ -2304,8 +2364,8 @@ static integer c__20 = 20;
 
 /*           Look up the units associated with the angles. */
 
-	    zzdynvac_(inname__, infram, "UNITS", &c__1, &n, units, (ftnlen)32,
-		     (ftnlen)5, (ftnlen)80);
+	    zzdynvac_(inname__, infram, "UNITS", &__state->c__1, &n, units, (
+		    ftnlen)32, (ftnlen)5, (ftnlen)80);
 
 /*           Evaluate the angles at DELTA.  Convert angles from input */
 /*           units to radians. */
@@ -2315,7 +2375,7 @@ static integer c__20 = 20;
 			i__1 : s_rnge("coeffs", i__1, "zzdynrt0_", (ftnlen)
 			1799)], &degs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
 			i__2 : s_rnge("degs", i__2, "zzdynrt0_", (ftnlen)1799)
-			], &c__0, &delta, poly);
+			], &__state->c__0, &delta, poly);
 
 /*              Convert units.  Fill in the Euler angle vector. */
 

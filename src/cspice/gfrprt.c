@@ -1,18 +1,21 @@
-/* gfrprt.f -- translated by f2c (version 19980913).
+/* gfrprt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__55 = 55;
-static integer c__13 = 13;
-static doublereal c_b26 = 1.;
-static integer c__4 = 4;
-static doublereal c_b44 = 0.;
-static integer c__1 = 1;
+extern gfrprt_init_t __gfrprt_init;
+static gfrprt_state_t* get_gfrprt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfrprt)
+		state->gfrprt = __cspice_allocate_module(sizeof(
+	gfrprt_state_t), &__gfrprt_init, sizeof(__gfrprt_init));
+	return state->gfrprt;
+
+}
 
 /* $Procedure GFRPRT ( GF, progress reporting package ) */
 /* Subroutine */ int gfrprt_0_(int n__, doublereal *window, char *begmss, 
@@ -26,40 +29,47 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    doublereal incr, freq;
-    integer long__, unit;
+    doublereal incr;
+    doublereal freq;
+    integer long__;
+    integer unit;
     extern /* Subroutine */ int zzgfwkad_(doublereal *, integer *, char *, 
-	    char *, ftnlen, ftnlen), zzgfwkin_(doublereal *), zzgfdsps_(
-	    integer *, char *, char *, integer *, ftnlen, ftnlen), zzgfwkmo_(
-	    integer *, doublereal *, doublereal *, integer *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen), zzgftswk_(doublereal *, doublereal 
-	    *, integer *, char *, char *, ftnlen, ftnlen);
+	    char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfwkin_(doublereal *);
+    extern /* Subroutine */ int zzgfdsps_(integer *, char *, char *, integer *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfwkmo_(integer *, doublereal *, doublereal 
+	    *, integer *, char *, char *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgftswk_(doublereal *, doublereal *, integer 
+	    *, char *, char *, ftnlen, ftnlen);
     integer i__;
     extern integer cardd_(doublereal *);
     char begin[55];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char copyb[55];
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static char copye[13];
     extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
     doublereal total;
     integer short__;
-    static doublereal t0;
     extern logical failed_(void);
-    integer tcheck, chrcod;
-    static doublereal remain;
+    integer tcheck;
+    integer chrcod;
     extern integer lastnb_(char *, ftnlen);
     doublereal stddev;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     doublereal measur;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), wnsumd_(doublereal *,
-	     doublereal *, doublereal *, doublereal *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int wnsumd_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, integer *);
     extern logical return_(void);
     integer stdout;
     char end[13];
     doublereal ave;
 
+
+    /* Module state */
+    gfrprt_state_t* __state = get_gfrprt_state();
 /* $ Abstract */
 
 /*     The entry points contained under this routine provide users */
@@ -669,7 +679,7 @@ L_gfrepi:
 		" is #.", (ftnlen)65);
 	i__1 = lastnb_(begmss, begmss_len);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__55, (ftnlen)1);
+	errint_("#", &__state->c__55, (ftnlen)1);
 	sigerr_("SPICE(MESSAGETOOLONG)", (ftnlen)21);
 	chkout_("GFREPI", (ftnlen)6);
 	return 0;
@@ -679,7 +689,7 @@ L_gfrepi:
 		" is #.", (ftnlen)65);
 	i__1 = lastnb_(endmss, endmss_len);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &c__13, (ftnlen)1);
+	errint_("#", &__state->c__13, (ftnlen)1);
 	sigerr_("SPICE(MESSAGETOOLONG)", (ftnlen)21);
 	chkout_("GFREPI", (ftnlen)6);
 	return 0;
@@ -712,14 +722,15 @@ L_gfrepi:
 	    return 0;
 	}
     }
-    s_copy(copyb, begmss, (ftnlen)55, begmss_len);
-    s_copy(copye, endmss, (ftnlen)13, endmss_len);
+    s_copy(__state->copyb, begmss, (ftnlen)55, begmss_len);
+    s_copy(__state->copye, endmss, (ftnlen)13, endmss_len);
 
 /*     Find the length of the window. Use that to initialize the work */
 /*     reporter. */
 
     wnsumd_(window, &measur, &ave, &stddev, &short__, &long__);
-    zzgftswk_(&measur, &c_b26, &c__4, begmss, endmss, begmss_len, endmss_len);
+    zzgftswk_(&measur, &__state->c_b26, &__state->c__4, begmss, endmss, 
+	    begmss_len, endmss_len);
     if (failed_()) {
 	chkout_("GFREPI", (ftnlen)6);
 	return 0;
@@ -730,10 +741,10 @@ L_gfrepi:
 /*     the measure of the interval. */
 
     if (cardd_(window) >= 2) {
-	t0 = window[6];
-	remain = window[7] - t0;
+	__state->t0 = window[6];
+	__state->remain = window[7] - __state->t0;
     } else {
-	remain = 0.;
+	__state->remain = 0.;
     }
     chkout_("GFREPI", (ftnlen)6);
     return 0;
@@ -937,8 +948,8 @@ L_gfrepu:
 /*     time and the previous time T0, presuming both times are in */
 /*     the current interval.  Note this work amount may be negative. */
 
-    if (t0 >= *ivbeg && t0 <= *ivend) {
-	incr = *time - t0;
+    if (__state->t0 >= *ivbeg && __state->t0 <= *ivend) {
+	incr = *time - __state->t0;
     } else {
 
 /*        T0 is in the previous interval.  The amount of work */
@@ -947,17 +958,17 @@ L_gfrepu:
 /*        the difference of TIME and the left endpoint of the */
 /*        interval. */
 
-	incr = remain + *time - *ivbeg;
+	incr = __state->remain + *time - *ivbeg;
     }
 
 /*     The remaining work is the distance from TIME to the right */
 /*     endpoint of the current interval. */
 
-    remain = *ivend - *time;
+    __state->remain = *ivend - *time;
 
 /*     Record the current time as T0. */
 
-    t0 = *time;
+    __state->t0 = *time;
 
 /*     Report the work increment. */
 
@@ -1076,8 +1087,9 @@ L_gfrepf:
 	return 0;
     }
     chkin_("GFREPF", (ftnlen)6);
-    zzgfwkad_(&c_b44, &c__1, copyb, copye, (ftnlen)55, (ftnlen)13);
-    zzgfwkin_(&c_b44);
+    zzgfwkad_(&__state->c_b44, &__state->c__1, __state->copyb, __state->copye,
+	     (ftnlen)55, (ftnlen)13);
+    zzgfwkin_(&__state->c_b44);
 
 /*     Determine whether progress report output is currently */
 /*     being sent to standard output. Fetch the output unit. */
@@ -1114,7 +1126,7 @@ L_gfrepf:
 /*     interest of minimizing the number of places where I/O is */
 /*     performed, we rely on ZZGFDSPS to do that job. */
 
-    zzgfdsps_(&c__1, " ", "A", &c__1, (ftnlen)1, (ftnlen)1);
+    zzgfdsps_(&__state->c__1, " ", "A", &__state->c__1, (ftnlen)1, (ftnlen)1);
     chkout_("GFREPF", (ftnlen)6);
     return 0;
 } /* gfrprt_ */

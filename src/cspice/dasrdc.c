@@ -1,13 +1,21 @@
-/* dasrdc.f -- translated by f2c (version 19980913).
+/* dasrdc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern dasrdc_init_t __dasrdc_init;
+static dasrdc_state_t* get_dasrdc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasrdc)
+		state->dasrdc = __cspice_allocate_module(sizeof(
+	dasrdc_state_t), &__dasrdc_init, sizeof(__dasrdc_init));
+	return state->dasrdc;
+
+}
 
 /* $Procedure      DASRDC ( DAS, read data, character ) */
 /* Subroutine */ int dasrdc_(integer *handle, integer *first, integer *last, 
@@ -20,22 +28,33 @@ static integer c__1 = 1;
     integer i_len(char *, ftnlen);
 
     /* Local variables */
-    integer l, n, nread;
+    integer l;
+    integer n;
+    integer nread;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, nmove, rcpos;
+    integer recno;
+    integer nmove;
+    integer rcpos;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
     extern /* Subroutine */ int dasrrc_(integer *, integer *, integer *, 
 	    integer *, char *, ftnlen);
-    integer nmoved, clsize;
+    integer nmoved;
+    integer clsize;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numchr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
-    integer wordno, chr, elt;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer wordno;
+    integer chr;
+    integer elt;
 
+
+    /* Module state */
+    dasrdc_state_t* __state = get_dasrdc_state();
 /* $ Abstract */
 
 /*     Read character data from a range of DAS logical addresses. */
@@ -377,7 +396,7 @@ static integer c__1 = 1;
 /*     Find out the physical location of the first character to read.  If */
 /*     FIRST is out of range, DASA2L will cause an error to be signalled. */
 
-    dasa2l_(handle, &c__1, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(handle, &__state->c__1, first, &clbase, &clsize, &recno, &wordno);
 
 /*     Get the length of the elements of DATA.  Count the total number */
 /*     of characters to read. */
@@ -472,7 +491,8 @@ static integer c__1 = 1;
 /*           cluster has address FIRST + NREAD. */
 
 	    i__1 = *first + nread;
-	    dasa2l_(handle, &c__1, &i__1, &clbase, &clsize, &recno, &wordno);
+	    dasa2l_(handle, &__state->c__1, &i__1, &clbase, &clsize, &recno, &
+		    wordno);
 	}
     }
     return 0;

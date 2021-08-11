@@ -1,21 +1,33 @@
-/* scs2e.f -- translated by f2c (version 19980913).
+/* scs2e.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int scs2e_state_t;
+static scs2e_state_t* get_scs2e_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCS2E ( SCLK string to ET ) */
 /* Subroutine */ int scs2e_(integer *sc, char *sclkch, doublereal *et, ftnlen 
 	sclkch_len)
 {
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *),
-	     chkin_(char *, ftnlen), scencd_(integer *, char *, doublereal *, 
+    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scencd_(integer *, char *, doublereal *, 
 	    ftnlen);
     doublereal sclkdp;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    scs2e_state_t* __state = get_scs2e_state();
 /* $ Abstract */
 
 /*     Convert a spacecraft clock string to ephemeris seconds past */

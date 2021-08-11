@@ -1,9 +1,17 @@
-/* txtopn.f -- translated by f2c (version 19980913).
+/* txtopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int txtopn_state_t;
+static txtopn_state_t* get_txtopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TXTOPN ( Text file, open new ) */
 /* Subroutine */ int txtopn_(char *fname, integer *unit, ftnlen fname_len)
@@ -15,13 +23,19 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen), f_open(olist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen)
-	    , getlun_(integer *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    txtopn_state_t* __state = get_txtopn_state();
 /* $ Abstract */
 
 /*     Open a new text file for subsequent write access. */

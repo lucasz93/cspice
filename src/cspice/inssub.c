@@ -1,9 +1,17 @@
-/* inssub.f -- translated by f2c (version 19980913).
+/* inssub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int inssub_state_t;
+static inssub_state_t* get_inssub_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      INSSUB ( Insert a substring ) */
 /* Subroutine */ int inssub_(char *in, char *sub, integer *loc, char *out, 
@@ -18,15 +26,24 @@
 
     /* Local variables */
     logical same;
-    integer from, i__;
+    integer from;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer inlen, nmove, to, subend, sublen;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer inlen;
+    integer nmove;
+    integer to;
+    integer subend;
+    integer sublen;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer outlen;
     char chr[1];
 
+
+    /* Module state */
+    inssub_state_t* __state = get_inssub_state();
 /* $ Abstract */
 
 /*     Insert a substring into a character string at a specified */

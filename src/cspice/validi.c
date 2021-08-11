@@ -1,20 +1,35 @@
-/* validi.f -- translated by f2c (version 19980913).
+/* validi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int validi_state_t;
+static validi_state_t* get_validi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VALIDI ( Validate an integer set ) */
 /* Subroutine */ int validi_(integer *size, integer *n, integer *a)
 {
     integer card;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), scardi_(integer *, 
-	    integer *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    rmdupi_(integer *, integer *), setmsg_(char *, ftnlen), errint_(
-	    char *, integer *, ftnlen), ssizei_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int rmdupi_(integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(integer *, integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    validi_state_t* __state = get_validi_state();
 /* $ Abstract */
 
 /*      Create a valid set from an integer set array. */

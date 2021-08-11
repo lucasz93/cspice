@@ -1,14 +1,21 @@
-/* pckcov.f -- translated by f2c (version 19980913).
+/* pckcov.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern pckcov_init_t __pckcov_init;
+static pckcov_state_t* get_pckcov_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckcov)
+		state->pckcov = __cspice_allocate_module(sizeof(
+	pckcov_state_t), &__pckcov_init, sizeof(__pckcov_init));
+	return state->pckcov;
+
+}
 
 /* $Procedure PCKCOV ( PCK, coverage ) */
 /* Subroutine */ int pckcov_(char *pck, integer *idcode, doublereal *cover, 
@@ -19,10 +26,12 @@ static integer c__6 = 6;
 
     /* Local variables */
     char arch[80];
-    extern /* Subroutine */ int dafgs_(doublereal *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), errch_(char *, char *, ftnlen, ftnlen);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     doublereal dc[2];
     integer ic[6];
@@ -30,14 +39,21 @@ static integer c__6 = 6;
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *), getfat_(char *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen), dafopr_(char *, integer *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    setmsg_(char *, ftnlen), wninsd_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
 	    doublereal *);
     char kertyp[80];
     extern logical return_(void);
 
+
+    /* Module state */
+    pckcov_state_t* __state = get_pckcov_state();
 /* $ Abstract */
 
 /*     Find the coverage window for a specified reference frame in a */
@@ -563,7 +579,7 @@ static integer c__6 = 6;
 /*        Fetch and unpack the segment descriptor. */
 
 	dafgs_(descr);
-	dafus_(descr, &c__2, &c__6, dc, ic);
+	dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
 	if (ic[0] == *idcode) {
 
 /*           This segment is for the body of interest.  Insert the */

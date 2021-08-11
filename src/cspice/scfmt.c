@@ -1,9 +1,17 @@
-/* scfmt.f -- translated by f2c (version 19980913).
+/* scfmt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int scfmt_state_t;
+static scfmt_state_t* get_scfmt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCFMT ( Convert SCLK "ticks" to character clock format) */
 /* Subroutine */ int scfmt_(integer *sc, doublereal *ticks, char *clkstr, 
@@ -11,12 +19,18 @@
 {
     integer type__;
     extern /* Subroutine */ int scfm01_(integer *, doublereal *, char *, 
-	    ftnlen), chkin_(char *, ftnlen), sigerr_(char *, ftnlen), chkout_(
-	    char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer 
-	    *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer sctype_(integer *);
     extern logical return_(void);
 
+
+    /* Module state */
+    scfmt_state_t* __state = get_scfmt_state();
 /* $ Abstract */
 
 /*     Convert encoded spacecraft clock ticks to character clock format. */

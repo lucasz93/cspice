@@ -1,13 +1,21 @@
-/* spks21.f -- translated by f2c (version 19980913).
+/* spks21.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern spks21_init_t __spks21_init;
+static spks21_state_t* get_spks21_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spks21)
+		state->spks21 = __cspice_allocate_module(sizeof(
+	spks21_state_t), &__spks21_init, sizeof(__spks21_init));
+	return state->spks21;
+
+}
 
 /* $Procedure      SPKS21 ( S/P Kernel, subset, type 21 ) */
 /* Subroutine */ int spks21_(integer *handle, integer *baddr, integer *eaddr, 
@@ -22,15 +30,25 @@ static integer c__1 = 1;
 
     /* Local variables */
     doublereal data[111];
-    integer offe, nrec, ndir, last, i__;
+    integer offe;
+    integer nrec;
+    integer ndir;
+    integer last;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *), dafgda_(
-	    integer *, integer *, integer *, doublereal *);
-    integer maxdim, offset, dlsize;
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    integer maxdim;
+    integer offset;
+    integer dlsize;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spks21_state_t* __state = get_spks21_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 21 */
@@ -315,7 +333,7 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Get every DIRSIZ'th epoch for the directory. */
@@ -325,16 +343,16 @@ static integer c__1 = 1;
 	i__2 = offe + i__;
 	i__3 = offe + i__;
 	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &c__1);
+	dafada_(data, &__state->c__1);
     }
 
 /*     Add the maximum difference line dimension and the */
 /*     number of records, and we're done. */
 
     d__1 = (doublereal) maxdim;
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
     data[0] = (doublereal) (last - first + 1);
-    dafada_(data, &c__1);
+    dafada_(data, &__state->c__1);
     chkout_("SPKS01", (ftnlen)6);
     return 0;
 } /* spks21_ */

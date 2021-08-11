@@ -1,9 +1,17 @@
-/* zzinrec.f -- translated by f2c (version 19980913).
+/* zzinrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzinrec_state_t;
+static zzinrec_state_t* get_zzinrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZINREC ( DSK, in rectangular element? ) */
 /* Subroutine */ int zzinrec_(doublereal *p, doublereal *bounds, doublereal *
@@ -18,15 +26,23 @@
 
     /* Local variables */
     integer i__;
-    doublereal l[3], delta[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
-    doublereal amncor[3], mincor[3], amxcor[3], maxcor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal l[3];
+    doublereal delta[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    doublereal amncor[3];
+    doublereal mincor[3];
+    doublereal amxcor[3];
+    doublereal maxcor[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzinrec_state_t* __state = get_zzinrec_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -289,10 +305,10 @@
 
 /*           Create adjusted bounds for the Ith coordinate. */
 
-	    delta[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("delta", 
-		    i__1, "zzinrec_", (ftnlen)301)] = *margin * (d__1 = l[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("l", 
-		    i__2, "zzinrec_", (ftnlen)301)], abs(d__1));
+	    delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", 
+		    i__2, "zzinrec_", (ftnlen)301)] = *margin * (d__1 = l[(
+		    i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", 
+		    i__1, "zzinrec_", (ftnlen)301)], abs(d__1));
 	    amncor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("amncor",
 		     i__1, "zzinrec_", (ftnlen)303)] = mincor[(i__2 = i__ - 1)
 		     < 3 && 0 <= i__2 ? i__2 : s_rnge("mincor", i__2, "zzinr"

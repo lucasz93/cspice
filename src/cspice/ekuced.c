@@ -1,9 +1,17 @@
-/* ekuced.f -- translated by f2c (version 19980913).
+/* ekuced.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekuced_state_t;
+static ekuced_state_t* get_ekuced_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     EKUCED ( EK, update d.p. column entry ) */
 /* Subroutine */ int ekuced_(integer *handle, integer *segno, integer *recno, 
@@ -11,23 +19,35 @@
 	ftnlen column_len)
 {
     extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen), zzekrbck_(char *, integer *, integer *, 
-	    integer *, integer *, ftnlen), zzeksdsc_(integer *, integer *, 
-	    integer *), zzektrdp_(integer *, integer *, integer *, integer *),
-	     chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer class__, dtype;
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
+	    integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer dtype;
     extern logical failed_(void);
-    integer coldsc[11], segdsc[24];
+    integer coldsc[11];
+    integer segdsc[24];
     logical isshad;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     integer recptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), ekshdw_(integer *, logical *), zzekue02_(integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *), 
-	    zzekue05_(integer *, integer *, integer *, integer *, integer *, 
-	    doublereal *, logical *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ekshdw_(integer *, logical *);
+    extern /* Subroutine */ int zzekue02_(integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int zzekue05_(integer *, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
 
+
+    /* Module state */
+    ekuced_state_t* __state = get_ekuced_state();
 /* $ Abstract */
 
 /*     Update a double precision column entry in a specified EK record. */

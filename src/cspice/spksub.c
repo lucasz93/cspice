@@ -1,55 +1,85 @@
-/* spksub.f -- translated by f2c (version 19980913).
+/* spksub.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spksub_init_t __spksub_init;
+static spksub_state_t* get_spksub_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spksub)
+		state->spksub = __cspice_allocate_module(sizeof(
+	spksub_state_t), &__spksub_init, sizeof(__spksub_init));
+	return state->spksub;
+
+}
 
 /* $Procedure      SPKSUB ( S/P Kernel, subset ) */
 /* Subroutine */ int spksub_(integer *handle, doublereal *descr, char *ident, 
 	doublereal *begin, doublereal *end, integer *newh, ftnlen ident_len)
 {
     logical okay;
-    integer type__, baddr, eaddr;
-    doublereal alpha, omega;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *), dafus_(
-	    doublereal *, integer *, integer *, doublereal *, integer *);
+    integer type__;
+    integer baddr;
+    integer eaddr;
+    doublereal alpha;
+    doublereal omega;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     doublereal ndscr[5];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), spks01_(
-	    integer *, integer *, integer *, doublereal *, doublereal *), 
-	    spks02_(integer *, integer *, integer *, doublereal *, doublereal 
-	    *), spks03_(integer *, integer *, integer *, doublereal *, 
-	    doublereal *), spks10_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, ftnlen), spks05_(integer *, integer *, 
-	    integer *, doublereal *, doublereal *), spks12_(integer *, 
-	    integer *, integer *, doublereal *, doublereal *), spks13_(
-	    integer *, integer *, integer *, doublereal *, doublereal *), 
-	    spks08_(integer *, integer *, integer *, doublereal *, doublereal 
-	    *), spks09_(integer *, integer *, integer *, doublereal *, 
-	    doublereal *), spks14_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, ftnlen), spks15_(integer *, integer *, 
-	    integer *, doublereal *, doublereal *), spks17_(integer *, 
-	    integer *, integer *, doublereal *, doublereal *), spks18_(
-	    integer *, integer *, integer *, doublereal *, doublereal *), 
-	    spks19_(integer *, integer *, integer *, doublereal *, doublereal 
-	    *), spks20_(integer *, integer *, integer *, doublereal *, 
-	    doublereal *), spks21_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int spks01_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks02_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks03_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks10_(integer *, doublereal *, integer *, 
+	    doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int spks05_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks12_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks13_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks08_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks09_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks14_(integer *, doublereal *, integer *, 
+	    doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int spks15_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks17_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks18_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks19_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks20_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spks21_(integer *, integer *, integer *, 
 	    doublereal *, doublereal *);
     doublereal dc[2];
     extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
 	    ftnlen);
     integer ic[6];
-    extern /* Subroutine */ int dafena_(void), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int dafena_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spksub_state_t* __state = get_spksub_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment into a */
@@ -323,7 +353,7 @@ static integer c__6 = 6;
 
 /*     Unpack the descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     alpha = dc[0];
     omega = dc[1];
     type__ = ic[3];
@@ -350,7 +380,7 @@ static integer c__6 = 6;
 
     dc[0] = *begin;
     dc[1] = *end;
-    dafps_(&c__2, &c__6, dc, ic, ndscr);
+    dafps_(&__state->c__2, &__state->c__6, dc, ic, ndscr);
 
 /*     Let the type-specific (SPKSnn) routines decide what to move. */
 

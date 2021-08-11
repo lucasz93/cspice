@@ -1,13 +1,21 @@
-/* sydupi.f -- translated by f2c (version 19980913).
+/* sydupi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sydupi_init_t __sydupi_init;
+static sydupi_state_t* get_sydupi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sydupi)
+		state->sydupi = __cspice_allocate_module(sizeof(
+	sydupi_state_t), &__sydupi_init, sizeof(__sydupi_init));
+	return state->sydupi;
+
+}
 
 /* $Procedure      SYDUPI ( Create a duplicate of a symbol ) */
 /* Subroutine */ int sydupi_(char *name__, char *copy, char *tabsym, integer *
@@ -21,16 +29,23 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nptr, nsym, i__;
-    extern integer cardc_(char *, ftnlen), cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen), sumai_(integer *, integer *), 
-	    sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), scardi_(
-	    integer *, integer *), remlai_(integer *, integer *, integer *, 
-	    integer *), inslac_(char *, integer *, integer *, char *, integer 
-	    *, ftnlen, ftnlen);
+    integer nval;
+    integer nptr;
+    integer nsym;
+    integer i__;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardi_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sizec_(char *, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer sizei_(integer *);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     integer dimval[2];
     extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
 	    integer *, integer *);
@@ -38,13 +53,16 @@ static integer c__1 = 1;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym[2];
     logical oldsym[2];
     extern logical return_(void);
     integer newsym;
 
+
+    /* Module state */
+    sydupi_state_t* __state = get_sydupi_state();
 /* $ Abstract */
 
 /*     Create a duplicate of a symbol within an integer symbol table. */
@@ -306,11 +324,11 @@ static integer c__1 = 1;
 		}
 	    } else {
 		i__1 = locsym[1] + 1;
-		inslac_(copy, &c__1, &i__1, tabsym + tabsym_len * 6, &nsym, 
-			copy_len, tabsym_len);
+		inslac_(copy, &__state->c__1, &i__1, tabsym + tabsym_len * 6, 
+			&nsym, copy_len, tabsym_len);
 		scardc_(&nsym, tabsym, tabsym_len);
 		i__1 = locsym[1] + 1;
-		inslai_(dimval, &c__1, &i__1, &tabptr[6], &nptr);
+		inslai_(dimval, &__state->c__1, &i__1, &tabptr[6], &nptr);
 		scardi_(&nptr, tabptr);
 	    }
 

@@ -1,13 +1,21 @@
-/* zzfovaxi.f -- translated by f2c (version 19980913).
+/* zzfovaxi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzfovaxi_init_t __zzfovaxi_init;
+static zzfovaxi_state_t* get_zzfovaxi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzfovaxi)
+		state->zzfovaxi = __cspice_allocate_module(sizeof(
+	zzfovaxi_state_t), &__zzfovaxi_init, sizeof(__zzfovaxi_init));
+	return state->zzfovaxi;
+
+}
 
 /* $Procedure   ZZFOVAXI ( Generate an axis vector for polygonal FOV ) */
 /* Subroutine */ int zzfovaxi_(char *inst, integer *n, doublereal *bounds, 
@@ -27,12 +35,13 @@ static integer c__3 = 3;
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     extern doublereal vsep_(doublereal *, doublereal *);
     integer next;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), zzhullax_(
-	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzhullax_(char *, integer *, doublereal *, 
+	    doublereal *, ftnlen);
     integer i__;
     doublereal v[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal limit;
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
@@ -42,12 +51,18 @@ static integer c__3 = 3;
     logical ok;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     extern doublereal halfpi_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
-	    , chkout_(char *, ftnlen), vsclip_(doublereal *, doublereal *), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal sep;
 
+
+    /* Module state */
+    zzfovaxi_state_t* __state = get_zzfovaxi_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -320,9 +335,9 @@ static integer c__3 = 3;
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is is exterior. */
 
-	vcrss_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+	vcrss_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)313)], &
-		bounds[(i__3 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__3 ? 
+		bounds[(i__3 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__3 ? 
 		i__3 : s_rnge("bounds", i__3, "zzfovaxi_", (ftnlen)313)], cp);
 
 /*        We insist on consecutive boundary vectors being */
@@ -346,10 +361,10 @@ static integer c__3 = 3;
 /*     a candidate axis. In many cases, this simple approach */
 /*     does the trick. */
 
-    cleard_(&c__3, axis);
+    cleard_(&__state->c__3, axis);
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vhat_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
+	vhat_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
 		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)346)], 
 		uvec);
 	vadd_(uvec, axis, v);
@@ -365,7 +380,7 @@ static integer c__3 = 3;
     ok = TRUE_;
     i__ = 1;
     while(i__ <= *n && ok) {
-	sep = vsep_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
+	sep = vsep_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
 		i__1 ? i__1 : s_rnge("bounds", i__1, "zzfovaxi_", (ftnlen)365)
 		], axis);
 	if (sep > limit) {

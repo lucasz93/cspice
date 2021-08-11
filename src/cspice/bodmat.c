@@ -1,9 +1,17 @@
-/* bodmat.f -- translated by f2c (version 19980913).
+/* bodmat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bodmat_state_t;
+static bodmat_state_t* get_bodmat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      BODMAT ( Return transformation matrix for a body ) */
 /* Subroutine */ int bodmat_(integer *body, doublereal *et, doublereal *tipm)
@@ -15,14 +23,19 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
     extern logical failed_(void);
     extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), chkout_(char *, ftnlen);
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    bodmat_state_t* __state = get_bodmat_state();
 /* $ Abstract */
 
 /*     Return the J2000 to body Equator and Prime Meridian coordinate */

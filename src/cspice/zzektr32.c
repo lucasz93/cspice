@@ -1,14 +1,21 @@
-/* zzektr32.f -- translated by f2c (version 19980913).
+/* zzektr32.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__122 = 122;
-static integer c__3 = 3;
+extern zzektr32_init_t __zzektr32_init;
+static zzektr32_state_t* get_zzektr32_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektr32)
+		state->zzektr32 = __cspice_allocate_module(sizeof(
+	zzektr32_state_t), &__zzektr32_init, sizeof(__zzektr32_init));
+	return state->zzektr32;
+
+}
 
 /* $Procedure      ZZEKTR32 ( EK tree, 3-2 merge ) */
 /* Subroutine */ int zzektr32_(integer *handle, integer *tree, integer *left, 
@@ -22,27 +29,53 @@ static integer c__3 = 3;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer lsib, msib, rsib, root;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *), 
-	    zzekpgri_(integer *, integer *, integer *), zzekpgwi_(integer *, 
-	    integer *, integer *);
+    integer lsib;
+    integer msib;
+    integer rsib;
+    integer root;
+    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     extern integer zzektrbs_(integer *);
-    integer i__, n, ppage[256], rbase;
+    integer i__;
+    integer n;
+    integer ppage[256];
+    integer rbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nnode;
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    integer lpkey, psize, rpkey, c1page[256], c2page[256], c3page[256], 
-	    datbas, kidbas;
+    integer lpkey;
+    integer psize;
+    integer rpkey;
+    integer c1page[256];
+    integer c2page[256];
+    integer c3page[256];
+    integer datbas;
+    integer kidbas;
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dasudi_(integer *, integer *, integer *, integer *);
-    integer keybas, sizbas;
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer keybas;
+    integer sizbas;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer leftsz, lmidsz, midsiz, nlkeys, nmkeys, npkeys, nrkeys, rmidsz, 
-	    rshift;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
+    integer leftsz;
+    integer lmidsz;
+    integer midsiz;
+    integer nlkeys;
+    integer nmkeys;
+    integer npkeys;
+    integer nrkeys;
+    integer rmidsz;
+    integer rshift;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer sum;
 
+
+    /* Module state */
+    zzektr32_state_t* __state = get_zzektr32_state();
 /* $ Abstract */
 
 /*     Execute a 3-2 merge:  merge three neighboring sibling nodes, two */
@@ -868,7 +901,7 @@ static integer c__3 = 3;
 	errint_("#", &nlkeys, (ftnlen)1);
 	errint_("#", &nmkeys, (ftnlen)1);
 	errint_("#", &nrkeys, (ftnlen)1);
-	errint_("#", &c__122, (ftnlen)1);
+	errint_("#", &__state->c__122, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTR32", (ftnlen)8);
 	return 0;
@@ -1110,7 +1143,7 @@ static integer c__3 = 3;
 
 /*     Free the page used by the middle child. */
 
-    zzekpgfr_(handle, &c__3, middle);
+    zzekpgfr_(handle, &__state->c__3, middle);
     return 0;
 } /* zzektr32_ */
 

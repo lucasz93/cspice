@@ -1,30 +1,44 @@
-/* dgeodr.f -- translated by f2c (version 19980913).
+/* dgeodr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dgeodr_state_t;
+static dgeodr_state_t* get_dgeodr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DGEODR ( Derivative of geodetic w.r.t. rectangular ) */
 /* Subroutine */ int dgeodr_(doublereal *x, doublereal *y, doublereal *z__, 
 	doublereal *re, doublereal *f, doublereal *jacobi)
 {
     doublereal long__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), vpack_(doublereal *, 
-	    doublereal *, doublereal *, doublereal *), errdp_(char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal injacb[9]	/* was [3][3] */;
     extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), drdgeo_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int drdgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal rectan[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int invort_(doublereal *, doublereal *);
-    doublereal lat, alt;
+    doublereal lat;
+    doublereal alt;
 
+
+    /* Module state */
+    dgeodr_state_t* __state = get_dgeodr_state();
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */

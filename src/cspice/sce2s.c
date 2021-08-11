@@ -1,21 +1,33 @@
-/* sce2s.f -- translated by f2c (version 19980913).
+/* sce2s.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sce2s_state_t;
+static sce2s_state_t* get_sce2s_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCE2S ( ET to SCLK string ) */
 /* Subroutine */ int sce2s_(integer *sc, doublereal *et, char *sclkch, ftnlen 
 	sclkch_len)
 {
-    extern /* Subroutine */ int sce2t_(integer *, doublereal *, doublereal *),
-	     chkin_(char *, ftnlen), scdecd_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int sce2t_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int scdecd_(integer *, doublereal *, char *, 
 	    ftnlen);
     doublereal sclkdp;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sce2s_state_t* __state = get_sce2s_state();
 /* $ Abstract */
 
 /*   Convert an epoch specified as ephemeris seconds past J2000 (ET) to */

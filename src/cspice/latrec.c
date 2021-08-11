@@ -1,9 +1,17 @@
-/* latrec.f -- translated by f2c (version 19980913).
+/* latrec.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int latrec_state_t;
+static latrec_state_t* get_latrec_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      LATREC ( Latitudinal to rectangular coordinates ) */
 /* Subroutine */ int latrec_(doublereal *radius, doublereal *long__, 
@@ -13,8 +21,13 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    doublereal x, y, z__;
+    doublereal x;
+    doublereal y;
+    doublereal z__;
 
+
+    /* Module state */
+    latrec_state_t* __state = get_latrec_state();
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to rectangular coordinates. */

@@ -1,13 +1,21 @@
-/* dasudc.f -- translated by f2c (version 19980913).
+/* dasudc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern dasudc_init_t __dasudc_init;
+static dasudc_state_t* get_dasudc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasudc)
+		state->dasudc = __cspice_allocate_module(sizeof(
+	dasudc_state_t), &__dasudc_init, sizeof(__dasudc_init));
+	return state->dasudc;
+
+}
 
 /* $Procedure      DASUDC ( DAS, update data, character ) */
 /* Subroutine */ int dasudc_(integer *handle, integer *first, integer *last, 
@@ -17,25 +25,39 @@ static integer c__1 = 1;
     integer i__1, i__2;
 
     /* Local variables */
-    integer l, n;
+    integer l;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer lastc, lastd, recno, lasti, nmove, rcpos;
+    integer lastc;
+    integer lastd;
+    integer recno;
+    integer lasti;
+    integer nmove;
+    integer rcpos;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
     extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *), dasurc_(integer *, integer *, integer *, integer *, 
-	    char *, ftnlen);
-    integer nmoved, clsize;
+	    integer *);
+    extern /* Subroutine */ int dasurc_(integer *, integer *, integer *, 
+	    integer *, char *, ftnlen);
+    integer nmoved;
+    integer clsize;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer numchr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer wordno;
     extern logical return_(void);
-    integer nwritn, chr, elt;
+    integer nwritn;
+    integer chr;
+    integer elt;
 
+
+    /* Module state */
+    dasudc_state_t* __state = get_dasudc_state();
 /* $ Abstract */
 
 /*     Update character data in a specified range of DAS logical */
@@ -380,7 +402,7 @@ static integer c__1 = 1;
 
 /*     Find out the physical location of the first character to update. */
 
-    dasa2l_(handle, &c__1, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(handle, &__state->c__1, first, &clbase, &clsize, &recno, &wordno);
 
 /*     Write as much data into record RECNO as is necessary and possible. */
 
@@ -475,7 +497,8 @@ static integer c__1 = 1;
 /*           NWRITN. */
 
 	    i__1 = *first + nwritn;
-	    dasa2l_(handle, &c__1, &i__1, &clbase, &clsize, &recno, &wordno);
+	    dasa2l_(handle, &__state->c__1, &i__1, &clbase, &clsize, &recno, &
+		    wordno);
 	}
     }
     chkout_("DASUDC", (ftnlen)6);

@@ -1,13 +1,21 @@
-/* stpool.f -- translated by f2c (version 19980913).
+/* stpool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern stpool_init_t __stpool_init;
+static stpool_state_t* get_stpool_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stpool)
+		state->stpool = __cspice_allocate_module(sizeof(
+	stpool_state_t), &__stpool_init, sizeof(__stpool_init));
+	return state->stpool;
+
+}
 
 /* $Procedure      STPOOL ( String from pool ) */
 /* Subroutine */ int stpool_(char *item, integer *nth, char *contin, char *
@@ -22,18 +30,24 @@ static integer c__1 = 1;
     integer comp;
     logical more;
     char part[80];
-    integer room, n;
+    integer room;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer clast, csize;
+    integer clast;
+    integer csize;
     logical gotit;
     extern integer rtrim_(char *, ftnlen);
-    integer putat, strno;
+    integer putat;
+    integer strno;
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen);
     integer cfirst;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    stpool_state_t* __state = get_stpool_state();
 /* $ Abstract */
 
 /*     Retrieve the NTH string from the kernel pool variable, */
@@ -380,7 +394,8 @@ static integer c__1 = 1;
     comp = 1;
     *found = FALSE_;
     while(strno < *nth) {
-	gcpool_(item, &comp, &c__1, &n, part, &gotit, item_len, (ftnlen)80);
+	gcpool_(item, &comp, &__state->c__1, &n, part, &gotit, item_len, (
+		ftnlen)80);
 	gotit = n > 0;
 	if (! gotit) {
 	    s_copy(string, " ", string_len, (ftnlen)1);
@@ -409,7 +424,8 @@ static integer c__1 = 1;
     s_copy(string, " ", string_len, (ftnlen)1);
     n = 0;
     while(more) {
-	gcpool_(item, &comp, &c__1, &n, part, &more, item_len, (ftnlen)80);
+	gcpool_(item, &comp, &__state->c__1, &n, part, &more, item_len, (
+		ftnlen)80);
 	more = more && n > 0;
 	if (more) {
 	    *found = TRUE_;

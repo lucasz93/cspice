@@ -1,16 +1,27 @@
-/* hyptof.f -- translated by f2c (version 19980913).
+/* hyptof.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern hyptof_init_t __hyptof_init;
+static hyptof_state_t* get_hyptof_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->hyptof)
+		state->hyptof = __cspice_allocate_module(sizeof(
+	hyptof_state_t), &__hyptof_init, sizeof(__hyptof_init));
+	return state->hyptof;
+
+}
 
 /* $Procedure      HYPTOF ( Hyperbolic time of flight ) */
 /* Subroutine */ int hyptof_(doublereal *ma, doublereal *ecc, doublereal *f)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
@@ -19,17 +30,25 @@
     double log(doublereal), sqrt(doublereal), sinh(doublereal);
 
     /* Local variables */
-    doublereal diff, m;
+    doublereal diff;
+    doublereal m;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dcbrt_(doublereal *), dpmax_(void);
+    extern doublereal dcbrt_(doublereal *);
+    extern doublereal dpmax_(void);
     integer count;
-    doublereal lower, upper, middle, midval, lastdf;
-    static doublereal maxlog;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    doublereal lower;
+    doublereal upper;
+    doublereal middle;
+    doublereal midval;
+    doublereal lastdf;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer mcount;
     extern logical return_(void);
 
+
+    /* Module state */
+    hyptof_state_t* __state = get_hyptof_state();
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = e sinh(F) - F for the */
@@ -233,9 +252,9 @@
     } else {
 	chkin_("HYPTOF", (ftnlen)6);
     }
-    if (first) {
-	first = FALSE_;
-	maxlog = log(dpmax_());
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->maxlog = log(dpmax_());
     }
     if (*ecc < 1.) {
 	sigerr_("SPICE(WRONGCONIC)", (ftnlen)17);
@@ -353,7 +372,7 @@
     lower = log(m / *ecc + sqrt(d__1 * d__1 + 1.));
 /* Computing MIN */
     d__3 = m * 6. / *ecc;
-    d__1 = dcbrt_(&d__3), d__2 = maxlog - log(*ecc);
+    d__1 = dcbrt_(&d__3), d__2 = __state->maxlog - log(*ecc);
     upper = min(d__1,d__2);
     upper = max(lower,upper);
 

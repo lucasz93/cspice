@@ -1,14 +1,21 @@
-/* zzeprcss.f -- translated by f2c (version 19980913).
+/* zzeprcss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2 = 2;
+extern zzeprcss_init_t __zzeprcss_init;
+static zzeprcss_state_t* get_zzeprcss_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeprcss)
+		state->zzeprcss = __cspice_allocate_module(sizeof(
+	zzeprcss_state_t), &__zzeprcss_init, sizeof(__zzeprcss_init));
+	return state->zzeprcss;
+
+}
 
 /* $Procedure   ZZEPRCSS   ( Earth precession, 1976 IAU model ) */
 /* Subroutine */ int zzeprcss_(doublereal *et, doublereal *precm)
@@ -20,9 +27,16 @@ static integer c__2 = 2;
     doublereal zeta;
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
 	    *, integer *, integer *, integer *, doublereal *);
-    doublereal t, scale, z__, theta;
-    extern doublereal jyear_(void), rpd_(void);
+    doublereal t;
+    doublereal scale;
+    doublereal z__;
+    doublereal theta;
+    extern doublereal jyear_(void);
+    extern doublereal rpd_(void);
 
+
+    /* Module state */
+    zzeprcss_state_t* __state = get_zzeprcss_state();
 /* $ Abstract */
 
 /*     Return the 1976 IAU Earth precession matrix for a specified time. */
@@ -205,7 +219,8 @@ static integer c__2 = 2;
 
     d__1 = -z__;
     d__2 = -zeta;
-    eul2m_(&d__1, &theta, &d__2, &c__3, &c__2, &c__3, precm);
+    eul2m_(&d__1, &theta, &d__2, &__state->c__3, &__state->c__2, &
+	    __state->c__3, precm);
     return 0;
 } /* zzeprcss_ */
 

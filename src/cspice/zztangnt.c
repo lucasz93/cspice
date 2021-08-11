@@ -1,14 +1,21 @@
-/* zztangnt.f -- translated by f2c (version 19980913).
+/* zztangnt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static doublereal c_b9 = 1e-12;
+extern zztangnt_init_t __zztangnt_init;
+static zztangnt_state_t* get_zztangnt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zztangnt)
+		state->zztangnt = __cspice_allocate_module(sizeof(
+	zztangnt_state_t), &__zztangnt_init, sizeof(__zztangnt_init));
+	return state->zztangnt;
+
+}
 
 /* $Procedure ZZTANGNT ( DSK, find target tangent rays in half-plane ) */
 /* Subroutine */ int zztangnt_(integer *curve, doublereal *srcrad, integer *
@@ -22,8 +29,9 @@ static doublereal c_b9 = 1e-12;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), zzmaxrad_(
-	    doublereal *), zztanini_(integer *, doublereal *, integer *, 
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzmaxrad_(doublereal *);
+    extern /* Subroutine */ int zztanini_(integer *, doublereal *, integer *, 
 	    integer *, integer *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *);
     extern /* Subroutine */ int zztansta_();
@@ -33,9 +41,10 @@ static doublereal c_b9 = 1e-12;
 	    doublereal *, doublereal *, logical *);
     extern integer cardd_(doublereal *);
     integer n;
-    doublereal r__, alpha;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen);
+    doublereal r__;
+    doublereal alpha;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     logical cstep;
     doublereal start;
     extern doublereal vnorm_(doublereal *);
@@ -47,14 +56,20 @@ static doublereal c_b9 = 1e-12;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
     extern doublereal dasine_(doublereal *, doublereal *);
     extern /* Subroutine */ int gfrefn_();
-    doublereal refvec[3], maxrad, finish;
+    doublereal refvec[3];
+    doublereal maxrad;
+    doublereal finish;
     extern /* Subroutine */ int gfstep_();
     doublereal mindst;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zztangnt_state_t* __state = get_zztangnt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -444,7 +459,7 @@ static doublereal c_b9 = 1e-12;
 
 /*     Empty the result window. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Rotate the plane definition vector by pi about AXIS if */
 /*     we're generating penumbral terminator points. */
@@ -502,7 +517,7 @@ static doublereal c_b9 = 1e-12;
 	mindst = maxrad * 1.0000000000010001;
 	if (r__ > mindst) {
 	    d__1 = maxrad / r__;
-	    start = pi_() - dasine_(&d__1, &c_b9);
+	    start = pi_() - dasine_(&d__1, &__state->c_b9);
 	}
 	if (failed_()) {
 	    chkout_("ZZTANGNT", (ftnlen)8);
@@ -558,7 +573,7 @@ static doublereal c_b9 = 1e-12;
 /*           or not SRCRAD > MAXRAD. */
 
 	    d__1 = (*srcrad - maxrad) / r__;
-	    start = pi_() + dasine_(&d__1, &c_b9);
+	    start = pi_() + dasine_(&d__1, &__state->c_b9);
 	    if (failed_()) {
 		chkout_("ZZTANGNT", (ftnlen)8);
 		return 0;
@@ -567,7 +582,7 @@ static doublereal c_b9 = 1e-12;
 /*           Set the final ray-axis separation. */
 
 	    d__1 = *srcrad / r__;
-	    finish = pi_() + dasine_(&d__1, &c_b9);
+	    finish = pi_() + dasine_(&d__1, &__state->c_b9);
 	    if (failed_()) {
 		chkout_("ZZTANGNT", (ftnlen)8);
 		return 0;
@@ -595,7 +610,7 @@ static doublereal c_b9 = 1e-12;
 
 	    alpha = *srcrad / (*srcrad + maxrad);
 	    d__1 = *srcrad / (alpha * r__);
-	    start = pi_() - dasine_(&d__1, &c_b9);
+	    start = pi_() - dasine_(&d__1, &__state->c_b9);
 	    if (failed_()) {
 		chkout_("ZZTANGNT", (ftnlen)8);
 		return 0;
@@ -604,7 +619,7 @@ static doublereal c_b9 = 1e-12;
 /*           We stop looking when the ray intersects the target center. */
 
 	    d__1 = *srcrad / r__;
-	    finish = pi_() - dasine_(&d__1, &c_b9);
+	    finish = pi_() - dasine_(&d__1, &__state->c_b9);
 	    if (failed_()) {
 		chkout_("ZZTANGNT", (ftnlen)8);
 		return 0;

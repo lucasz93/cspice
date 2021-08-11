@@ -1,9 +1,17 @@
-/* zzekordc.f -- translated by f2c (version 19980913).
+/* zzekordc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekordc_state_t;
+static zzekordc_state_t* get_zzekordc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKORDC ( Order of a character EK column ) */
 /* Subroutine */ int zzekordc_(char *cvals, logical *nullok, logical *nlflgs, 
@@ -17,12 +25,17 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern /* Subroutine */ int swapi_(integer *, integer *);
     integer jg;
-    logical le1, eq1;
+    logical le1;
+    logical eq1;
     integer gap;
 
+
+    /* Module state */
+    zzekordc_state_t* __state = get_zzekordc_state();
 /* $ Abstract */
 
 /*     Determine the order of elements in a character EK column, */

@@ -1,13 +1,21 @@
-/* rotmat.f -- translated by f2c (version 19980913).
+/* rotmat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
+extern rotmat_init_t __rotmat_init;
+static rotmat_state_t* get_rotmat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->rotmat)
+		state->rotmat = __cspice_allocate_module(sizeof(
+	rotmat_state_t), &__rotmat_init, sizeof(__rotmat_init));
+	return state->rotmat;
+
+}
 
 /* $Procedure      ROTMAT ( Rotate a matrix ) */
 /* Subroutine */ int rotmat_(doublereal *m1, doublereal *angle, integer *
@@ -15,7 +23,6 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static integer indexs[5] = { 3,1,2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -31,8 +38,13 @@ static integer c__9 = 9;
     doublereal s;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal prodm[9]	/* was [3][3] */;
-    integer i1, i2, i3;
+    integer i1;
+    integer i2;
+    integer i3;
 
+
+    /* Module state */
+    rotmat_state_t* __state = get_rotmat_state();
 /* $ Abstract */
 
 /*     ROTMAT applies a rotation of ANGLE radians about axis IAXIS to a */
@@ -201,12 +213,12 @@ static integer c__9 = 9;
 /*  non-negative value of IAXIS mod 3 . */
 
     temp = (*iaxis % 3 + 3) % 3;
-    i1 = indexs[(i__1 = temp) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", i__1,
-	     "rotmat_", (ftnlen)201)];
-    i2 = indexs[(i__1 = temp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotmat_", (ftnlen)202)];
-    i3 = indexs[(i__1 = temp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "rotmat_", (ftnlen)203)];
+    i1 = __state->indexs[(i__1 = temp) < 5 && 0 <= i__1 ? i__1 : s_rnge("ind"
+	    "exs", i__1, "rotmat_", (ftnlen)201)];
+    i2 = __state->indexs[(i__1 = temp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "rotmat_", (ftnlen)202)];
+    i3 = __state->indexs[(i__1 = temp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "rotmat_", (ftnlen)203)];
 
 /*  Calculate the output matrix column by column */
 
@@ -231,7 +243,7 @@ static integer c__9 = 9;
 
 /*  Move the buffered matrix into MOUT. */
 
-    moved_(prodm, &c__9, mout);
+    moved_(prodm, &__state->c__9, mout);
 
     return 0;
 } /* rotmat_ */

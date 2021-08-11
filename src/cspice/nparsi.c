@@ -1,9 +1,21 @@
-/* nparsi.f -- translated by f2c (version 19980913).
+/* nparsi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern nparsi_init_t __nparsi_init;
+static nparsi_state_t* get_nparsi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->nparsi)
+		state->nparsi = __cspice_allocate_module(sizeof(
+	nparsi_state_t), &__nparsi_init, sizeof(__nparsi_init));
+	return state->nparsi;
+
+}
 
 /* $Procedure      NPARSI ( Integer parsing of a character string) */
 /* Subroutine */ int nparsi_(char *string, integer *n, char *error, integer *
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* Builtin functions */
     double d_int(doublereal *);
@@ -21,9 +32,11 @@
     doublereal x;
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
 	    *, ftnlen, ftnlen);
-    extern integer intmin_(void), intmax_(void);
-    static doublereal xmnint, xmxint;
+    extern integer intmin_(void);
+    extern integer intmax_(void);
 
+    /* Module state */
+    nparsi_state_t* __state = get_nparsi_state();
 /* $ Abstract */
 
 /*     Parse a character string that represents a number and return */
@@ -317,10 +330,10 @@
 /*     If this is the first time NPARSI has been called, initialize */
 /*     bounds for the range of integers. */
 
-    if (first) {
-	first = FALSE_;
-	xmxint = (doublereal) intmax_();
-	xmnint = (doublereal) intmin_();
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->xmxint = (doublereal) intmax_();
+	__state->xmnint = (doublereal) intmin_();
     }
 
 /*     NPARSD will define ERROR and PNTER if there is an error, */
@@ -328,7 +341,7 @@
 
     nparsd_(string, &x, error, pnter, string_len, error_len);
     if (*pnter == 0) {
-	if (d_int(&x) < xmnint || d_int(&x) > xmxint) {
+	if (d_int(&x) < __state->xmnint || d_int(&x) > __state->xmxint) {
 	    *pnter = 1;
 	    s_copy(error, "NPARSI: Value entered is beyond the bounds of rep"
 		    "resentable integers.", error_len, (ftnlen)69);

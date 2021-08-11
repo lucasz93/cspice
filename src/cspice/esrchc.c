@@ -1,9 +1,17 @@
-/* esrchc.f -- translated by f2c (version 19980913).
+/* esrchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int esrchc_state_t;
+static esrchc_state_t* get_esrchc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ESRCHC ( Equivalence search, character ) */
 integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
@@ -16,6 +24,9 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
     integer i__;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    esrchc_state_t* __state = get_esrchc_state();
 /* $ Abstract */
 
 /*     Search for a given value within a character string array. */

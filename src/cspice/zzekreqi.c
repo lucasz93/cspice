@@ -1,13 +1,21 @@
-/* zzekreqi.f -- translated by f2c (version 19980913).
+/* zzekreqi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__15 = 15;
+extern zzekreqi_init_t __zzekreqi_init;
+static zzekreqi_state_t* get_zzekreqi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekreqi)
+		state->zzekreqi = __cspice_allocate_module(sizeof(
+	zzekreqi_state_t), &__zzekreqi_init, sizeof(__zzekreqi_init));
+	return state->zzekreqi;
+
+}
 
 /* $Procedure   ZZEKREQI ( Private: EK, read from encoded query, integer ) */
 /* Subroutine */ int zzekreqi_(integer *eqryi, char *name__, integer *value, 
@@ -15,16 +23,6 @@ static integer c__15 = 15;
 {
     /* Initialized data */
 
-    static char namlst[32*15] = "ARCHITECTURE                    " "INITIALI"
-	    "ZED                     " "PARSED                          " 
-	    "NAMES_RESOLVED                  " "TIMES_RESOLVED              "
-	    "    " "SEM_CHECKED                     " "NUM_TABLES            "
-	    "          " "NUM_CONJUNCTIONS                " "NUM_CONSTRAINTS "
-	    "                " "NUM_SELECT_COLS                 " "NUM_ORDERB"
-	    "Y_COLS                " "NUM_BUF_SIZE                    " "FREE"
-	    "_NUM                        " "CHR_BUF_SIZE                    " 
-	    "FREE_CHR                        ";
-    static integer namidx[15] = { 2,3,4,5,6,7,8,10,9,12,11,13,14,15,16 };
 
     /* System generated locals */
     integer i__1;
@@ -33,15 +31,18 @@ static integer c__15 = 15;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen), ljust_(
-	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char tmpnam[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzekreqi_state_t* __state = get_zzekreqi_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -500,10 +501,11 @@ static integer c__15 = 15;
 
 /*     Find the location of the named item. */
 
-    ljust_(name__, tmpnam, name_len, (ftnlen)32);
-    ucase_(tmpnam, tmpnam, (ftnlen)32, (ftnlen)32);
-    i__ = isrchc_(tmpnam, &c__15, namlst, (ftnlen)32, (ftnlen)32);
-    if (i__ == 0) {
+    ljust_(name__, __state->tmpnam, name_len, (ftnlen)32);
+    ucase_(__state->tmpnam, __state->tmpnam, (ftnlen)32, (ftnlen)32);
+    __state->i__ = isrchc_(__state->tmpnam, &__state->c__15, __state->namlst, 
+	    (ftnlen)32, (ftnlen)32);
+    if (__state->i__ == 0) {
 	chkin_("ZZEKREQI", (ftnlen)8);
 	setmsg_("Item # not found.", (ftnlen)17);
 	errch_("#", name__, (ftnlen)1, name_len);
@@ -514,8 +516,9 @@ static integer c__15 = 15;
 
 /*     Do the deed. */
 
-    *value = eqryi[namidx[(i__1 = i__ - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge(
-	    "namidx", i__1, "zzekreqi_", (ftnlen)191)] + 5];
+    *value = eqryi[__state->namidx[(i__1 = __state->i__ - 1) < 15 && 0 <= 
+	    i__1 ? i__1 : s_rnge("namidx", i__1, "zzekreqi_", (ftnlen)191)] + 
+	    5];
     return 0;
 } /* zzekreqi_ */
 

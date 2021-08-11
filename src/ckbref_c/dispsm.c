@@ -1,9 +1,10 @@
-/* dispsm.f -- translated by f2c (version 19980913).
+/* dispsm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure  DISSM ( Write a summary to standard output ) */
 /* Subroutine */ int dispsm_(integer *nobj, integer *ids, doublereal *tstrts, 
@@ -358,17 +359,17 @@
     if (! (*gdsp)) {
 	i__1 = *nobj;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    prinst_(&ids[(i__2 = i__ - 1) < ids_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ids", i__2, "dispsm_", (ftnlen)254)], &tstrts[(
-		    i__3 = i__ - 1) < tstrts_dim1 && 0 <= i__3 ? i__3 : 
+	    prinst_(&ids[(i__2 = i__ - 1) < 1 * ids_dim1 && 0 <= i__2 ? i__2 :
+		     s_rnge("ids", i__2, "dispsm_", (ftnlen)254)], &tstrts[(
+		    i__3 = i__ - 1) < 1 * tstrts_dim1 && 0 <= i__3 ? i__3 : 
 		    s_rnge("tstrts", i__3, "dispsm_", (ftnlen)254)], &tends[(
-		    i__4 = i__ - 1) < tends_dim1 && 0 <= i__4 ? i__4 : s_rnge(
-		    "tends", i__4, "dispsm_", (ftnlen)254)], &avfs[(i__5 = 
-		    i__ - 1) < avfs_dim1 && 0 <= i__5 ? i__5 : s_rnge("avfs", 
-		    i__5, "dispsm_", (ftnlen)254)], &frames[(i__6 = i__ - 1) <
-		     frames_dim1 && 0 <= i__6 ? i__6 : s_rnge("frames", i__6, 
-		    "dispsm_", (ftnlen)254)], tout, fdsp, tdsp, gdsp, ndsp, 
-		    tout_len);
+		    i__4 = i__ - 1) < 1 * tends_dim1 && 0 <= i__4 ? i__4 : 
+		    s_rnge("tends", i__4, "dispsm_", (ftnlen)254)], &avfs[(
+		    i__5 = i__ - 1) < 1 * avfs_dim1 && 0 <= i__5 ? i__5 : 
+		    s_rnge("avfs", i__5, "dispsm_", (ftnlen)254)], &frames[(
+		    i__6 = i__ - 1) < 1 * frames_dim1 && 0 <= i__6 ? i__6 : 
+		    s_rnge("frames", i__6, "dispsm_", (ftnlen)254)], tout, 
+		    fdsp, tdsp, gdsp, ndsp, tout_len);
 	}
     } else {
 
@@ -380,15 +381,15 @@
 
 /*           No, we don't. Then we display this one (and only :) record. */
 
-	    prinst_(&ids[(i__1 = 0) < ids_dim1 ? i__1 : s_rnge("ids", i__1, 
-		    "dispsm_", (ftnlen)271)], &tstrts[(i__2 = 0) < 
+	    prinst_(&ids[(i__1 = 0) < 1 * ids_dim1 ? i__1 : s_rnge("ids", 
+		    i__1, "dispsm_", (ftnlen)271)], &tstrts[(i__2 = 0) < 1 * 
 		    tstrts_dim1 ? i__2 : s_rnge("tstrts", i__2, "dispsm_", (
-		    ftnlen)271)], &tends[(i__3 = 0) < tends_dim1 ? i__3 : 
+		    ftnlen)271)], &tends[(i__3 = 0) < 1 * tends_dim1 ? i__3 : 
 		    s_rnge("tends", i__3, "dispsm_", (ftnlen)271)], &avfs[(
-		    i__4 = 0) < avfs_dim1 ? i__4 : s_rnge("avfs", i__4, "dis"
-		    "psm_", (ftnlen)271)], &frames[(i__5 = 0) < frames_dim1 ? 
-		    i__5 : s_rnge("frames", i__5, "dispsm_", (ftnlen)271)], 
-		    tout, fdsp, tdsp, gdsp, ndsp, tout_len);
+		    i__4 = 0) < 1 * avfs_dim1 ? i__4 : s_rnge("avfs", i__4, 
+		    "dispsm_", (ftnlen)271)], &frames[(i__5 = 0) < 1 * 
+		    frames_dim1 ? i__5 : s_rnge("frames", i__5, "dispsm_", (
+		    ftnlen)271)], tout, fdsp, tdsp, gdsp, ndsp, tout_len);
 	} else {
 
 /*           We need to group together objects this the same coverage */
@@ -404,9 +405,9 @@
 
 /*              Look for the next ID that wasn't displayed yet. */
 
-		while(ids[(i__1 = i__ - 1) < ids_dim1 && 0 <= i__1 ? i__1 : 
-			s_rnge("ids", i__1, "dispsm_", (ftnlen)292)] == 0 && 
-			i__ < *nobj) {
+		while(ids[(i__1 = i__ - 1) < 1 * ids_dim1 && 0 <= i__1 ? i__1 
+			: s_rnge("ids", i__1, "dispsm_", (ftnlen)292)] == 0 &&
+			 i__ < *nobj) {
 		    ++i__;
 		}
 
@@ -417,23 +418,23 @@
 /*                 We did. Was the last record in the buffer processed */
 /*                 already? If not, print in out. */
 
-		    if (ids[(i__1 = i__ - 1) < ids_dim1 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ids", i__1, "dispsm_", (ftnlen)305)] != 0)
-			     {
-			prinst_(&ids[(i__1 = i__ - 1) < ids_dim1 && 0 <= i__1 
-				? i__1 : s_rnge("ids", i__1, "dispsm_", (
-				ftnlen)307)], &tstrts[(i__2 = i__ - 1) < 
+		    if (ids[(i__1 = i__ - 1) < 1 * ids_dim1 && 0 <= i__1 ? 
+			    i__1 : s_rnge("ids", i__1, "dispsm_", (ftnlen)305)
+			    ] != 0) {
+			prinst_(&ids[(i__1 = i__ - 1) < 1 * ids_dim1 && 0 <= 
+				i__1 ? i__1 : s_rnge("ids", i__1, "dispsm_", (
+				ftnlen)307)], &tstrts[(i__2 = i__ - 1) < 1 * 
 				tstrts_dim1 && 0 <= i__2 ? i__2 : s_rnge(
 				"tstrts", i__2, "dispsm_", (ftnlen)307)], &
-				tends[(i__3 = i__ - 1) < tends_dim1 && 0 <= 
-				i__3 ? i__3 : s_rnge("tends", i__3, "dispsm_",
-				 (ftnlen)307)], &avfs[(i__4 = i__ - 1) < 
-				avfs_dim1 && 0 <= i__4 ? i__4 : s_rnge("avfs",
-				 i__4, "dispsm_", (ftnlen)307)], &frames[(
-				i__5 = i__ - 1) < frames_dim1 && 0 <= i__5 ? 
-				i__5 : s_rnge("frames", i__5, "dispsm_", (
-				ftnlen)307)], tout, fdsp, tdsp, gdsp, ndsp, 
-				tout_len);
+				tends[(i__3 = i__ - 1) < 1 * tends_dim1 && 0 
+				<= i__3 ? i__3 : s_rnge("tends", i__3, "disp"
+				"sm_", (ftnlen)307)], &avfs[(i__4 = i__ - 1) < 
+				1 * avfs_dim1 && 0 <= i__4 ? i__4 : s_rnge(
+				"avfs", i__4, "dispsm_", (ftnlen)307)], &
+				frames[(i__5 = i__ - 1) < 1 * frames_dim1 && 
+				0 <= i__5 ? i__5 : s_rnge("frames", i__5, 
+				"dispsm_", (ftnlen)307)], tout, fdsp, tdsp, 
+				gdsp, ndsp, tout_len);
 		    }
 		} else {
 
@@ -442,53 +443,55 @@
 /*                 the buffer to see whether we have more records */
 /*                 with the same coverage. */
 
-		    prinst_(&ids[(i__1 = i__ - 1) < ids_dim1 && 0 <= i__1 ? 
-			    i__1 : s_rnge("ids", i__1, "dispsm_", (ftnlen)320)
-			    ], &tstrts[(i__2 = i__ - 1) < tstrts_dim1 && 0 <= 
-			    i__2 ? i__2 : s_rnge("tstrts", i__2, "dispsm_", (
-			    ftnlen)320)], &tends[(i__3 = i__ - 1) < 
-			    tends_dim1 && 0 <= i__3 ? i__3 : s_rnge("tends", 
-			    i__3, "dispsm_", (ftnlen)320)], &avfs[(i__4 = i__ 
-			    - 1) < avfs_dim1 && 0 <= i__4 ? i__4 : s_rnge(
-			    "avfs", i__4, "dispsm_", (ftnlen)320)], &frames[(
-			    i__5 = i__ - 1) < frames_dim1 && 0 <= i__5 ? i__5 
-			    : s_rnge("frames", i__5, "dispsm_", (ftnlen)320)],
-			     tout, fdsp, tdsp, gdsp, ndsp, tout_len);
-		    ids[(i__1 = i__ - 1) < ids_dim1 && 0 <= i__1 ? i__1 : 
+		    prinst_(&ids[(i__1 = i__ - 1) < 1 * ids_dim1 && 0 <= i__1 
+			    ? i__1 : s_rnge("ids", i__1, "dispsm_", (ftnlen)
+			    320)], &tstrts[(i__2 = i__ - 1) < 1 * tstrts_dim1 
+			    && 0 <= i__2 ? i__2 : s_rnge("tstrts", i__2, 
+			    "dispsm_", (ftnlen)320)], &tends[(i__3 = i__ - 1) 
+			    < 1 * tends_dim1 && 0 <= i__3 ? i__3 : s_rnge(
+			    "tends", i__3, "dispsm_", (ftnlen)320)], &avfs[(
+			    i__4 = i__ - 1) < 1 * avfs_dim1 && 0 <= i__4 ? 
+			    i__4 : s_rnge("avfs", i__4, "dispsm_", (ftnlen)
+			    320)], &frames[(i__5 = i__ - 1) < 1 * frames_dim1 
+			    && 0 <= i__5 ? i__5 : s_rnge("frames", i__5, 
+			    "dispsm_", (ftnlen)320)], tout, fdsp, tdsp, gdsp, 
+			    ndsp, tout_len);
+		    ids[(i__1 = i__ - 1) < 1 * ids_dim1 && 0 <= i__1 ? i__1 : 
 			    s_rnge("ids", i__1, "dispsm_", (ftnlen)322)] = 0;
 		    k = i__;
 		    while(k < *nobj) {
 			++k;
-			if (tstrts[(i__1 = i__ - 1) < tstrts_dim1 && 0 <= 
+			if (tstrts[(i__1 = i__ - 1) < 1 * tstrts_dim1 && 0 <= 
 				i__1 ? i__1 : s_rnge("tstrts", i__1, "dispsm_"
-				, (ftnlen)330)] == tstrts[(i__2 = k - 1) < 
-				tstrts_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+				, (ftnlen)330)] == tstrts[(i__2 = k - 1) < 1 *
+				 tstrts_dim1 && 0 <= i__2 ? i__2 : s_rnge(
 				"tstrts", i__2, "dispsm_", (ftnlen)330)] && 
-				tends[(i__3 = i__ - 1) < tends_dim1 && 0 <= 
-				i__3 ? i__3 : s_rnge("tends", i__3, "dispsm_",
-				 (ftnlen)330)] == tends[(i__4 = k - 1) < 
-				tends_dim1 && 0 <= i__4 ? i__4 : s_rnge("ten"
-				"ds", i__4, "dispsm_", (ftnlen)330)]) {
+				tends[(i__3 = i__ - 1) < 1 * tends_dim1 && 0 
+				<= i__3 ? i__3 : s_rnge("tends", i__3, "disp"
+				"sm_", (ftnlen)330)] == tends[(i__4 = k - 1) < 
+				1 * tends_dim1 && 0 <= i__4 ? i__4 : s_rnge(
+				"tends", i__4, "dispsm_", (ftnlen)330)]) {
 
 /*                       Print this records and set IDS(K) to 0. */
 
-			    prinst_(&ids[(i__1 = k - 1) < ids_dim1 && 0 <= 
-				    i__1 ? i__1 : s_rnge("ids", i__1, "disps"
-				    "m_", (ftnlen)336)], &tstrts[(i__2 = k - 1)
-				     < tstrts_dim1 && 0 <= i__2 ? i__2 : 
-				    s_rnge("tstrts", i__2, "dispsm_", (ftnlen)
-				    336)], &tends[(i__3 = k - 1) < tends_dim1 
-				    && 0 <= i__3 ? i__3 : s_rnge("tends", 
-				    i__3, "dispsm_", (ftnlen)336)], &avfs[(
-				    i__4 = k - 1) < avfs_dim1 && 0 <= i__4 ? 
-				    i__4 : s_rnge("avfs", i__4, "dispsm_", (
-				    ftnlen)336)], &frames[(i__5 = k - 1) < 
-				    frames_dim1 && 0 <= i__5 ? i__5 : s_rnge(
-				    "frames", i__5, "dispsm_", (ftnlen)336)], 
-				    tout, fdsp, tdsp, gdsp, ndsp, tout_len);
-			    ids[(i__1 = k - 1) < ids_dim1 && 0 <= i__1 ? i__1 
-				    : s_rnge("ids", i__1, "dispsm_", (ftnlen)
-				    338)] = 0;
+			    prinst_(&ids[(i__1 = k - 1) < 1 * ids_dim1 && 0 <=
+				     i__1 ? i__1 : s_rnge("ids", i__1, "disp"
+				    "sm_", (ftnlen)336)], &tstrts[(i__2 = k - 
+				    1) < 1 * tstrts_dim1 && 0 <= i__2 ? i__2 :
+				     s_rnge("tstrts", i__2, "dispsm_", (
+				    ftnlen)336)], &tends[(i__3 = k - 1) < 1 * 
+				    tends_dim1 && 0 <= i__3 ? i__3 : s_rnge(
+				    "tends", i__3, "dispsm_", (ftnlen)336)], &
+				    avfs[(i__4 = k - 1) < 1 * avfs_dim1 && 0 
+				    <= i__4 ? i__4 : s_rnge("avfs", i__4, 
+				    "dispsm_", (ftnlen)336)], &frames[(i__5 = 
+				    k - 1) < 1 * frames_dim1 && 0 <= i__5 ? 
+				    i__5 : s_rnge("frames", i__5, "dispsm_", (
+				    ftnlen)336)], tout, fdsp, tdsp, gdsp, 
+				    ndsp, tout_len);
+			    ids[(i__1 = k - 1) < 1 * ids_dim1 && 0 <= i__1 ? 
+				    i__1 : s_rnge("ids", i__1, "dispsm_", (
+				    ftnlen)338)] = 0;
 			}
 		    }
 		}

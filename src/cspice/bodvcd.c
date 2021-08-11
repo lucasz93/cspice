@@ -1,14 +1,21 @@
-/* bodvcd.f -- translated by f2c (version 19980913).
+/* bodvcd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern bodvcd_init_t __bodvcd_init;
+static bodvcd_state_t* get_bodvcd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->bodvcd)
+		state->bodvcd = __cspice_allocate_module(sizeof(
+	bodvcd_state_t), &__bodvcd_init, sizeof(__bodvcd_init));
+	return state->bodvcd;
+
+}
 
 /* $Procedure      BODVCD ( Return d.p. values from the kernel pool ) */
 /* Subroutine */ int bodvcd_(integer *bodyid, char *item, integer *maxn, 
@@ -18,20 +25,28 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char code[16], type__[1];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    char code[16];
+    char type__[1];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     char varnam[32];
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), dtpool_(char *, logical *, integer *, 
-	    char *, ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), suffix_(char *, integer *, char *, ftnlen, 
+	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    bodvcd_state_t* __state = get_bodvcd_state();
 /* $ Abstract */
 
 /*     Fetch from the kernel pool the double precision values */
@@ -262,9 +277,9 @@ static integer c__1 = 1;
 
     s_copy(varnam, "BODY", (ftnlen)32, (ftnlen)4);
     intstr_(bodyid, code, (ftnlen)16);
-    suffix_(code, &c__0, varnam, (ftnlen)16, (ftnlen)32);
-    suffix_("_", &c__0, varnam, (ftnlen)1, (ftnlen)32);
-    suffix_(item, &c__0, varnam, item_len, (ftnlen)32);
+    suffix_(code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)32);
+    suffix_("_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)32);
+    suffix_(item, &__state->c__0, varnam, item_len, (ftnlen)32);
 
 /*     Make sure the item is present in the kernel pool. */
 
@@ -307,7 +322,7 @@ static integer c__1 = 1;
 /*     Grab the values.  We know at this point they're present in */
 /*     the kernel pool, so we don't check the FOUND flag. */
 
-    gdpool_(varnam, &c__1, maxn, dim, values, &found, (ftnlen)32);
+    gdpool_(varnam, &__state->c__1, maxn, dim, values, &found, (ftnlen)32);
     chkout_("BODVCD", (ftnlen)6);
     return 0;
 } /* bodvcd_ */

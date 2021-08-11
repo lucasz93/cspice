@@ -1,9 +1,21 @@
-/* stmp03.f -- translated by f2c (version 19980913).
+/* stmp03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern stmp03_init_t __stmp03_init;
+static stmp03_state_t* get_stmp03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stmp03)
+		state->stmp03 = __cspice_allocate_module(sizeof(
+	stmp03_state_t), &__stmp03_init, sizeof(__stmp03_init));
+	return state->stmp03;
+
+}
 
 /* $Procedure      STMP03 ( Stumpff functions 0 through 3 ) */
 /* Subroutine */ int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, 
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -23,14 +34,18 @@
 
     /* Local variables */
     integer i__;
-    doublereal y, z__;
+    doublereal y;
+    doublereal z__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal dpmax_(void);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static doublereal pairs[20], lbound;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
 
+
+    /* Module state */
+    stmp03_state_t* __state = get_stmp03_state();
 /* $ Abstract */
 
 /*     Compute the values of the Stumpff functions C_0 through C_3 at */
@@ -561,26 +576,26 @@
 /*     compute LBOUND using the second form above with N equal to */
 /*     some large power of 2 (say 2**20). */
 
-    if (first) {
-	first = FALSE_;
+    if (__state->first) {
+	__state->first = FALSE_;
 	for (i__ = 1; i__ <= 20; ++i__) {
-	    pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("pairs", 
-		    i__1, "stmp03_", (ftnlen)589)] = 1. / ((doublereal) i__ * 
-		    (doublereal) (i__ + 1));
+	    __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
+		    "pairs", i__1, "stmp03_", (ftnlen)589)] = 1. / ((
+		    doublereal) i__ * (doublereal) (i__ + 1));
 	}
 	y = log(2.) + log(dpmax_());
-	lbound = -y * y;
+	__state->lbound = -y * y;
     }
 
 /*     First we make sure that the input value of X is within the */
 /*     range that we are confident we can use to compute the Stumpff */
 /*     functions. */
 
-    if (*x <= lbound) {
+    if (*x <= __state->lbound) {
 	chkin_("STMP03", (ftnlen)6);
 	setmsg_("The input value of X must be greater than #.  The input val"
 		"ue was #", (ftnlen)67);
-	errdp_("#", &lbound, (ftnlen)1);
+	errdp_("#", &__state->lbound, (ftnlen)1);
 	errdp_("#", x, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("STMP03", (ftnlen)6);
@@ -695,10 +710,10 @@
 
     *c3 = 1.;
     for (i__ = 20; i__ >= 4; i__ += -2) {
-	*c3 = 1. - *x * pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("pairs", i__1, "stmp03_", (ftnlen)733)] * *c3;
+	*c3 = 1. - *x * __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
+		i__1 : s_rnge("pairs", i__1, "stmp03_", (ftnlen)733)] * *c3;
     }
-    *c3 = pairs[1] * *c3;
+    *c3 = __state->pairs[1] * *c3;
 
 /*     Compute C_2 of x  : */
 
@@ -723,10 +738,10 @@
 
     *c2 = 1.;
     for (i__ = 19; i__ >= 3; i__ += -2) {
-	*c2 = 1. - *x * pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("pairs", i__1, "stmp03_", (ftnlen)764)] * *c2;
+	*c2 = 1. - *x * __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
+		i__1 : s_rnge("pairs", i__1, "stmp03_", (ftnlen)764)] * *c2;
     }
-    *c2 = pairs[0] * *c2;
+    *c2 = __state->pairs[0] * *c2;
 
 /*     Get C1 and C0 via the recursion formula: */
 

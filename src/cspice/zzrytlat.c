@@ -1,19 +1,21 @@
-/* zzrytlat.f -- translated by f2c (version 19980913).
+/* zzrytlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static doublereal c_b3 = 1e-12;
-static integer c__3 = 3;
-static doublereal c_b5 = 1.;
-static integer c__2 = 2;
-static doublereal c_b10 = 0.;
-static integer c__1 = 1;
+extern zzrytlat_init_t __zzrytlat_init;
+static zzrytlat_state_t* get_zzrytlat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrytlat)
+		state->zzrytlat = __cspice_allocate_module(sizeof(
+	zzrytlat_state_t), &__zzrytlat_init, sizeof(__zzrytlat_init));
+	return state->zzrytlat;
+
+}
 
 /* $Procedure ZZRYTLAT ( DSK, ray touches latitudinal element ) */
 /* Subroutine */ int zzrytlat_(doublereal *vertex, doublereal *raydir, 
@@ -22,8 +24,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal origin[3] = { 0.,0.,0. };
-    static doublereal z__[3] = { 0.,0.,1. };
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -33,19 +33,29 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    doublereal dist, udir[3], minr, vlat, maxr;
+    doublereal dist;
+    doublereal udir[3];
+    doublereal minr;
+    doublereal vlat;
+    doublereal maxr;
     extern doublereal vdot_(doublereal *, doublereal *);
     doublereal vlon;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal srfx[3], eback[3];
+    doublereal srfx[3];
+    doublereal eback[3];
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), zzinrypl_(doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, integer *
-	    , doublereal *);
-    doublereal s, angle, wback[3], eastb[3];
-    extern /* Subroutine */ int zzryxsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *), vpack_(doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzinrypl_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, integer *, doublereal *)
+	    ;
+    doublereal s;
+    doublereal angle;
+    doublereal wback[3];
+    doublereal eastb[3];
+    extern /* Subroutine */ int zzryxsph_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
     extern doublereal dpmax_(void);
     logical found;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
@@ -59,21 +69,29 @@ static integer c__1 = 1;
     extern logical failed_(void);
     extern doublereal halfpi_(void);
     integer nx;
-    doublereal negdir[3], vr;
+    doublereal negdir[3];
+    doublereal vr;
     logical inside;
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal minlat, maxlat;
+    doublereal minlat;
+    doublereal maxlat;
     extern /* Subroutine */ int incnsg_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
 	     doublereal *);
-    doublereal minlon, maxlon, loncov, mndist;
+    doublereal minlon;
+    doublereal maxlon;
+    doublereal loncov;
+    doublereal mndist;
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     logical xin;
     extern /* Subroutine */ int zzinlat_(doublereal *, doublereal *, 
 	    doublereal *, integer *, logical *);
     doublereal xpt2[3];
 
+
+    /* Module state */
+    zzrytlat_state_t* __state = get_zzrytlat_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -455,8 +473,8 @@ static integer c__1 = 1;
 /*     want to have false negative tests for rays having */
 /*     vertices lying on the expanded element boundary. */
 
-    d__1 = *margin * 2;
-    zzinlat_(vertex, bounds, &d__1, &c__0, &inside);
+    d__1 = 2 * *margin;
+    zzinlat_(vertex, bounds, &d__1, &__state->c__0, &inside);
     if (failed_()) {
 	return 0;
     }
@@ -478,7 +496,7 @@ static integer c__1 = 1;
 /*     Normalize the longitude bounds. After this step, the bounds will */
 /*     be in order and differ by no more than 2*pi. */
 
-    zznrmlon_(bounds, &bounds[1], &c_b3, &minlon, &maxlon);
+    zznrmlon_(bounds, &bounds[1], &__state->c_b3, &minlon, &maxlon);
     if (failed_()) {
 	return 0;
     }
@@ -523,7 +541,7 @@ static integer c__1 = 1;
 /*     the margin into account. Exclude the radius coordinate */
 /*     from testing. */
 
-    zzinlat_(srfx, bounds, margin, &c__3, &xin);
+    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
     if (failed_()) {
 	return 0;
     }
@@ -558,7 +576,7 @@ static integer c__1 = 1;
 /*     test. */
 
     s = vnorm_(vertex) + maxr * 1.1;
-    vlcom_(&c_b5, vertex, &s, udir, endpt2);
+    vlcom_(&__state->c_b5, vertex, &s, udir, endpt2);
 
 /*     Now try the upper latitude bound. We can skip this test */
 /*     if the upper bound is pi/2 radians. */
@@ -572,7 +590,8 @@ static integer c__1 = 1;
 /* Computing MAX */
 	d__1 = 0., d__2 = halfpi_() - maxlat;
 	angle = max(d__1,d__2);
-	incnsg_(origin, z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
+	incnsg_(__state->origin, __state->z__, &angle, vertex, endpt2, &nx, 
+		srfx, xpt2);
 	if (failed_()) {
 	    return 0;
 	}
@@ -580,7 +599,7 @@ static integer c__1 = 1;
 
 /*           See whether SRFX is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &c__2, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__2, &xin);
 	    if (failed_()) {
 		return 0;
 	    }
@@ -611,7 +630,7 @@ static integer c__1 = 1;
 
 /*              Check the second solution as well. */
 
-		zzinlat_(xpt2, bounds, margin, &c__2, &xin);
+		zzinlat_(xpt2, bounds, margin, &__state->c__2, &xin);
 		if (failed_()) {
 		    return 0;
 		}
@@ -651,7 +670,8 @@ static integer c__1 = 1;
 /*        surface might be the lower nappe of the cone. */
 
 	angle = halfpi_() - minlat;
-	incnsg_(origin, z__, &angle, vertex, endpt2, &nx, srfx, xpt2);
+	incnsg_(__state->origin, __state->z__, &angle, vertex, endpt2, &nx, 
+		srfx, xpt2);
 	if (failed_()) {
 	    return 0;
 	}
@@ -659,7 +679,7 @@ static integer c__1 = 1;
 
 /*           See whether SRFX is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &c__2, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__2, &xin);
 	    if (failed_()) {
 		return 0;
 	    }
@@ -690,7 +710,7 @@ static integer c__1 = 1;
 
 /*              Check the second solution as well. */
 
-		zzinlat_(xpt2, bounds, margin, &c__2, &xin);
+		zzinlat_(xpt2, bounds, margin, &__state->c__2, &xin);
 		if (failed_()) {
 		    return 0;
 		}
@@ -735,9 +755,9 @@ static integer c__1 = 1;
 
 	d__1 = sin(minlon);
 	d__2 = -cos(minlon);
-	vpack_(&d__1, &d__2, &c_b10, westb);
+	vpack_(&d__1, &d__2, &__state->c_b10, westb);
 	s = (vnorm_(vertex) + maxr) * 1.1;
-	zzinrypl_(vertex, udir, westb, &c_b10, &s, &nx, srfx);
+	zzinrypl_(vertex, udir, westb, &__state->c_b10, &s, &nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
@@ -745,7 +765,7 @@ static integer c__1 = 1;
 /*           inclusion test. Note that we'll perform a separate check */
 /*           later in place of the longitude check. */
 
-	    zzinlat_(srfx, bounds, margin, &c__1, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__1, &xin);
 	    if (failed_()) {
 		return 0;
 	    }
@@ -754,7 +774,7 @@ static integer c__1 = 1;
 /*              Make sure the intercept is not too far on the */
 /*              "wrong" side of the Z axis. */
 
-		ucrss_(westb, z__, wback);
+		ucrss_(westb, __state->z__, wback);
 		if (vdot_(srfx, wback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
@@ -783,14 +803,14 @@ static integer c__1 = 1;
 /*        the east boundary. */
 	d__1 = -sin(maxlon);
 	d__2 = cos(maxlon);
-	vpack_(&d__1, &d__2, &c_b10, eastb);
-	zzinrypl_(vertex, udir, eastb, &c_b10, &s, &nx, srfx);
+	vpack_(&d__1, &d__2, &__state->c_b10, eastb);
+	zzinrypl_(vertex, udir, eastb, &__state->c_b10, &s, &nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
 /*           candidate solution. */
 
-	    zzinlat_(srfx, bounds, margin, &c__1, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__1, &xin);
 	    if (failed_()) {
 		return 0;
 	    }
@@ -799,7 +819,7 @@ static integer c__1 = 1;
 /*              Make sure the intercept is not too far on the "wrong" */
 /*              side of the Z axis. */
 
-		ucrss_(z__, eastb, eback);
+		ucrss_(__state->z__, eastb, eback);
 		if (vdot_(srfx, eback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
@@ -832,7 +852,7 @@ static integer c__1 = 1;
 
 /*           See whether this solution is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &c__3, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
 	    if (failed_()) {
 		return 0;
 	    }
@@ -857,7 +877,7 @@ static integer c__1 = 1;
 	vminus_(udir, negdir);
 	zzryxsph_(endpt2, negdir, &minr, srfx, &found);
 	if (found) {
-	    zzinlat_(srfx, bounds, margin, &c__3, &xin);
+	    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
 	    if (failed_()) {
 		return 0;
 	    }

@@ -1,17 +1,21 @@
-/* pckmat.f -- translated by f2c (version 19980913).
+/* pckmat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__5 = 5;
-static integer c__3 = 3;
-static integer c__1 = 1;
-static integer c__130 = 130;
+extern pckmat_init_t __pckmat_init;
+static pckmat_state_t* get_pckmat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckmat)
+		state->pckmat = __cspice_allocate_module(sizeof(
+	pckmat_state_t), &__pckmat_init, sizeof(__pckmat_init));
+	return state->pckmat;
+
+}
 
 /* $Procedure PCKMAT ( PCK, get transformation matrix at time ) */
 /* Subroutine */ int pckmat_(integer *body, doublereal *et, integer *ref, 
@@ -19,34 +23,45 @@ static integer c__130 = 130;
 {
     integer type__;
     extern /* Subroutine */ int pcke02_(doublereal *, doublereal *, 
-	    doublereal *), pcke03_(doublereal *, doublereal *, doublereal *), 
-	    pcke20_(doublereal *, doublereal *, doublereal *), chkin_(char *, 
-	    ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int pcke03_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int pcke20_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int pckr02_(integer *, doublereal *, doublereal *,
-	     doublereal *), dafus_(doublereal *, integer *, integer *, 
+	     doublereal *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     char ident[40];
     extern /* Subroutine */ int pckr03_(integer *, doublereal *, doublereal *,
-	     doublereal *), pckr20_(integer *, doublereal *, doublereal *, 
-	    doublereal *), eul2xf_(doublereal *, integer *, integer *, 
+	     doublereal *);
+    extern /* Subroutine */ int pckr20_(integer *, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
 	    integer *, doublereal *);
     extern logical failed_(void);
     integer handle;
-    doublereal eulang[6], record[130];
+    doublereal eulang[6];
+    doublereal record[130];
     extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *);
     doublereal estate[6];
     extern /* Subroutine */ int pcksfs_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, logical *, ftnlen), sigerr_(char *, ftnlen),
-	     chkout_(char *, ftnlen);
+	    doublereal *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[5];
 
+
+    /* Module state */
+    pckmat_state_t* __state = get_pckmat_state();
 /* $ Abstract */
 
 /*      Given a body and epoch, return the name of an inertial */
@@ -314,7 +329,7 @@ static integer c__130 = 130;
 
 /*        Look at parts of the descriptor. */
 
-	dafus_(descr, &c__2, &c__5, dcd, icd);
+	dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
 	type__ = icd[2];
 	*ref = icd[1];
 	if (type__ == 2) {
@@ -349,7 +364,8 @@ static integer c__130 = 130;
 /*           Call routine which takes Euler angles to transformation */
 /*           matrix. */
 
-	    eul2xf_(estate, &c__3, &c__1, &c__3, tsipm);
+	    eul2xf_(estate, &__state->c__3, &__state->c__1, &__state->c__3, 
+		    tsipm);
 	    if (failed_()) {
 		*found = FALSE_;
 		chkout_("PCKMAT", (ftnlen)6);
@@ -362,7 +378,7 @@ static integer c__130 = 130;
 /*           enough storage in RECORD. The number of coefficients is the */
 /*           first constant value in the generic segment. */
 
-	    sgfcon_(&handle, descr, &c__1, &c__1, record);
+	    sgfcon_(&handle, descr, &__state->c__1, &__state->c__1, record);
 	    if (failed_()) {
 		*found = FALSE_;
 		chkout_("PCKMAT", (ftnlen)6);
@@ -375,7 +391,7 @@ static integer c__130 = 130;
 			"ble. Notify the NAIF group of this problem.", (ftnlen)
 			146);
 		errint_("#", &recsiz, (ftnlen)1);
-		errint_("#", &c__130, (ftnlen)1);
+		errint_("#", &__state->c__130, (ftnlen)1);
 		sigerr_("SPICE(PCKKRECTOOLARGE)", (ftnlen)22);
 		chkout_("PCKMAT", (ftnlen)6);
 		return 0;
@@ -419,7 +435,8 @@ static integer c__130 = 130;
 /*           Call routine which takes Euler angles to transformation */
 /*           matrix. */
 
-	    eul2xf_(estate, &c__3, &c__1, &c__3, tsipm);
+	    eul2xf_(estate, &__state->c__3, &__state->c__1, &__state->c__3, 
+		    tsipm);
 	    if (failed_()) {
 		*found = FALSE_;
 		chkout_("PCKMAT", (ftnlen)6);

@@ -1,9 +1,17 @@
-/* dafrfr.f -- translated by f2c (version 19980913).
+/* dafrfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dafrfr_state_t;
+static dafrfr_state_t* get_dafrfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DAFRFR ( DAF, read file record ) */
 /* Subroutine */ int dafrfr_(integer *handle, integer *nd, integer *ni, char *
@@ -16,16 +24,21 @@
     /* Local variables */
     extern /* Subroutine */ int zzdafgfr_(integer *, char *, integer *, 
 	    integer *, char *, integer *, integer *, integer *, logical *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern logical failed_(void);
     extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
     char idword[8];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dafrfr_state_t* __state = get_dafrfr_state();
 /* $ Abstract */
 
 /*     Read the contents of the file record of a DAF. */

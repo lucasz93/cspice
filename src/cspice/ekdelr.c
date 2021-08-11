@@ -1,13 +1,21 @@
-/* ekdelr.f -- translated by f2c (version 19980913).
+/* ekdelr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern ekdelr_init_t __ekdelr_init;
+static ekdelr_state_t* get_ekdelr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekdelr)
+		state->ekdelr = __cspice_allocate_module(sizeof(
+	ekdelr_state_t), &__ekdelr_init, sizeof(__ekdelr_init));
+	return state->ekdelr;
+
+}
 
 /* $Procedure      EKDELR ( EK, delete record from segment ) */
 /* Subroutine */ int ekdelr_(integer *handle, integer *segno, integer *recno)
@@ -16,39 +24,70 @@ static integer c__3 = 3;
     integer i__1, i__2, i__3;
 
     /* Local variables */
-    integer base, nrec;
+    integer base;
+    integer nrec;
     extern integer zzekrp2n_(integer *, integer *, integer *);
     integer unit;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzekpgch_(integer *, char *, ftnlen), zzekrbck_(char *, 
-	    integer *, integer *, integer *, integer *, ftnlen), zzekmloc_(
-	    integer *, integer *, integer *, integer *), zzekglnk_(integer *, 
-	    integer *, integer *, integer *), zzekpgpg_(integer *, integer *, 
-	    integer *, integer *), zzektrdl_(integer *, integer *, integer *),
-	     zzekslnk_(integer *, integer *, integer *, integer *), zzektrdp_(
-	    integer *, integer *, integer *, integer *);
-    integer i__, p, mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, ncols;
+	    ftnlen);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
+	    integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+	    integer *);
+    integer i__;
+    integer p;
+    integer mbase;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer ncols;
     extern logical failed_(void);
-    integer mp, dscbas, coldsc[11], segdsc[24];
+    integer mp;
+    integer dscbas;
+    integer coldsc[11];
+    integer segdsc[24];
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dasudi_(integer *, integer *, integer *, integer *), 
-	    dashlu_(integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dashlu_(integer *, integer *);
     char column[32];
     extern logical return_(void);
-    integer nlinks, recptr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen), errfnm_(char *, integer *, ftnlen), zzekde01_(integer *, 
-	    integer *, integer *, integer *), zzekde02_(integer *, integer *, 
-	    integer *, integer *), zzekde03_(integer *, integer *, integer *, 
-	    integer *), zzekde04_(integer *, integer *, integer *, integer *),
-	     zzekde05_(integer *, integer *, integer *, integer *), zzekde06_(
-	    integer *, integer *, integer *, integer *), zzekdps_(integer *, 
-	    integer *, integer *, integer *);
+    integer nlinks;
+    integer recptr;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekde01_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekde02_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekde03_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekde04_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekde05_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekde06_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekdps_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    ekdelr_state_t* __state = get_ekdelr_state();
 /* $ Abstract */
 
 /*     Delete a specified record from a specified E-kernel segment. */
@@ -696,24 +735,24 @@ static integer c__3 = 3;
 /*     Find the page containing the record pointer. */
 
     i__1 = recptr + 1;
-    zzekpgpg_(&c__3, &i__1, &p, &base);
+    zzekpgpg_(&__state->c__3, &i__1, &p, &base);
 
 /*     Get the link count for the page.  If we have more */
 /*     than one link to the page, decrement the link count.  If */
 /*     we're down to one link, this deletion will finish off the */
 /*     page:  we'll deallocate it. */
 
-    zzekglnk_(handle, &c__3, &p, &nlinks);
+    zzekglnk_(handle, &__state->c__3, &p, &nlinks);
     if (nlinks > 1) {
 	i__1 = nlinks - 1;
-	zzekslnk_(handle, &c__3, &p, &i__1);
+	zzekslnk_(handle, &__state->c__3, &p, &i__1);
     } else {
 
 /*        If we removed the last item from the page, we can delete */
 /*        the page.  ZZEKDPS adjusts the segment's metadata */
 /*        to reflect the deallocation. */
 
-	zzekdps_(handle, segdsc, &c__3, &p);
+	zzekdps_(handle, segdsc, &__state->c__3, &p);
     }
 
 /*     The entry corresponding to the record is deleted from */

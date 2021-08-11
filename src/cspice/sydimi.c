@@ -1,9 +1,17 @@
-/* sydimi.f -- translated by f2c (version 19980913).
+/* sydimi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sydimi_state_t;
+static sydimi_state_t* get_sydimi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            SYDIMI ( Return the dimension of a symbol ) */
 integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, 
@@ -21,6 +29,9 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sydimi_state_t* __state = get_sydimi_state();
 /* $ Abstract */
 
 /*     Return the dimension of a particular symbol in an integer symbol */

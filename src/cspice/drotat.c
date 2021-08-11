@@ -1,9 +1,21 @@
-/* drotat.f -- translated by f2c (version 19980913).
+/* drotat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern drotat_init_t __drotat_init;
+static drotat_state_t* get_drotat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->drotat)
+		state->drotat = __cspice_allocate_module(sizeof(
+	drotat_state_t), &__drotat_init, sizeof(__drotat_init));
+	return state->drotat;
+
+}
 
 /* $Procedure      DROTAT ( Derivative of a rotation matrix ) */
 /* Subroutine */ int drotat_(doublereal *angle, integer *iaxis, doublereal *
@@ -11,7 +23,6 @@
 {
     /* Initialized data */
 
-    static integer indexs[5] = { 1,2,3,1,2 };
 
     /* System generated locals */
     integer i__1;
@@ -21,13 +32,20 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal c__, s;
+    doublereal c__;
+    doublereal s;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer i1, i2, i3;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    integer i1;
+    integer i2;
+    integer i3;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    drotat_state_t* __state = get_drotat_state();
 /* $ Abstract */
 
 /*      Calculate the derivative with respect to the angle of rotation */
@@ -220,12 +238,12 @@
 /*     Get indices for axes. The first index is for the axis of rotation. */
 /*     The next two axes follow in right hand order (XYZ). */
 
-    i1 = indexs[(i__1 = *iaxis - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs",
-	     i__1, "drotat_", (ftnlen)223)];
-    i2 = indexs[(i__1 = *iaxis) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs", 
-	    i__1, "drotat_", (ftnlen)224)];
-    i3 = indexs[(i__1 = *iaxis + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("indexs",
-	     i__1, "drotat_", (ftnlen)225)];
+    i1 = __state->indexs[(i__1 = *iaxis - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "drotat_", (ftnlen)223)];
+    i2 = __state->indexs[(i__1 = *iaxis) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "drotat_", (ftnlen)224)];
+    i3 = __state->indexs[(i__1 = *iaxis + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
+	    "indexs", i__1, "drotat_", (ftnlen)225)];
 
 /*  Construct the rotation matrix */
 

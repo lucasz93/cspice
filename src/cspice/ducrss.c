@@ -1,13 +1,21 @@
-/* ducrss.f -- translated by f2c (version 19980913).
+/* ducrss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern ducrss_init_t __ducrss_init;
+static ducrss_state_t* get_ducrss_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ducrss)
+		state->ducrss = __cspice_allocate_module(sizeof(
+	ducrss_state_t), &__ducrss_init, sizeof(__ducrss_init));
+	return state->ducrss;
+
+}
 
 /* $Procedure      DUCRSS ( Unit Normalized Cross Product and Derivative ) */
 /* Subroutine */ int ducrss_(doublereal *s1, doublereal *s2, doublereal *sout)
@@ -16,15 +24,21 @@ static integer c__6 = 6;
     doublereal d__1, d__2;
 
     /* Local variables */
-    doublereal scls1[6], scls2[6];
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *), moved_(
-	    doublereal *, integer *, doublereal *), vsclg_(doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    doublereal f1, f2;
+    doublereal scls1[6];
+    doublereal scls2[6];
+    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
+    doublereal f1;
+    doublereal f2;
     extern /* Subroutine */ int dvcrss_(doublereal *, doublereal *, 
 	    doublereal *);
     doublereal tmpsta[6];
 
+
+    /* Module state */
+    ducrss_state_t* __state = get_ducrss_state();
 /* $ Abstract */
 
 /*     Compute the unit vector parallel to the cross product of */
@@ -209,15 +223,15 @@ static integer c__6 = 6;
     f2 = max(d__1,d__2);
     if (f1 > 0.) {
 	d__1 = 1. / f1;
-	vsclg_(&d__1, s1, &c__6, scls1);
+	vsclg_(&d__1, s1, &__state->c__6, scls1);
     } else {
-	moved_(s1, &c__6, scls1);
+	moved_(s1, &__state->c__6, scls1);
     }
     if (f2 > 0.) {
 	d__1 = 1. / f2;
-	vsclg_(&d__1, s2, &c__6, scls2);
+	vsclg_(&d__1, s2, &__state->c__6, scls2);
     } else {
-	moved_(s2, &c__6, scls2);
+	moved_(s2, &__state->c__6, scls2);
     }
 
 /*     Not much to this.  Just get the cross product and its derivative. */

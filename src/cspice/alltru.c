@@ -1,9 +1,17 @@
-/* alltru.f -- translated by f2c (version 19980913).
+/* alltru.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int alltru_state_t;
+static alltru_state_t* get_alltru_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ALLTRU ( All entries true? ) */
 logical alltru_(logical *logcls, integer *n)
@@ -15,6 +23,9 @@ logical alltru_(logical *logcls, integer *n)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    alltru_state_t* __state = get_alltru_state();
 /* $ Abstract */
 
 /*     Determine if all the entries in an array of logicals are .TRUE. */

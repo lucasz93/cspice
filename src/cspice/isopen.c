@@ -1,9 +1,17 @@
-/* isopen.f -- translated by f2c (version 19980913).
+/* isopen.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isopen_state_t;
+static isopen_state_t* get_isopen_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             ISOPEN ( Is a file currently open? ) */
 logical isopen_(char *file, ftnlen file_len)
@@ -16,14 +24,19 @@ logical isopen_(char *file, ftnlen file_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     logical myopen;
     extern logical return_(void);
     logical exists;
 
+
+    /* Module state */
+    isopen_state_t* __state = get_isopen_state();
 /* $ Abstract */
 
 /*     Determine whether a named file is currently open. */

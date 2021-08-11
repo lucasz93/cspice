@@ -1,9 +1,17 @@
-/* replwd.f -- translated by f2c (version 19980913).
+/* replwd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int replwd_state_t;
+static replwd_state_t* get_replwd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      REPLWD ( Replace a word ) */
 /* Subroutine */ int replwd_(char *instr, integer *nth, char *new__, char *
@@ -14,14 +22,25 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
 
     /* Local variables */
-    integer f, i__, j, k, l, n, begin, shift;
+    integer f;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer n;
+    integer begin;
+    integer shift;
     extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
     char short__[2];
     extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
 	    *, ftnlen);
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
 
+
+    /* Module state */
+    replwd_state_t* __state = get_replwd_state();
 /* $ Abstract */
 
 /*      Replace the Nth word in a string with a new word. */

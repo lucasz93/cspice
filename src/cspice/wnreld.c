@@ -1,9 +1,17 @@
-/* wnreld.f -- translated by f2c (version 19980913).
+/* wnreld.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnreld_state_t;
+static wnreld_state_t* get_wnreld_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WNRELD ( Compare two DP windows ) */
 logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
@@ -16,17 +24,23 @@ logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, acard, bcard;
+    integer i__;
+    integer acard;
+    integer bcard;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical equal;
     extern logical wnincd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     logical subset;
     extern logical return_(void);
 
+
+    /* Module state */
+    wnreld_state_t* __state = get_wnreld_state();
 /* $ Abstract */
 
 /*      Compare two double precision windows. */

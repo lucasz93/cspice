@@ -1,14 +1,21 @@
-/* zzeksei.f -- translated by f2c (version 19980913).
+/* zzeksei.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__5 = 5;
+extern zzeksei_init_t __zzeksei_init;
+static zzeksei_state_t* get_zzeksei_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeksei)
+		state->zzeksei = __cspice_allocate_module(sizeof(
+	zzeksei_state_t), &__zzeksei_init, sizeof(__zzeksei_init));
+	return state->zzeksei;
+
+}
 
 /* $Procedure  ZZEKSEI ( Private: EK, set encoded integer ) */
 /* Subroutine */ int zzeksei_(integer *handle, integer *addrss, integer *ival)
@@ -19,9 +26,12 @@ static integer c__5 = 5;
     /* Local variables */
     char cval[5];
     extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen), prtenc_(integer *, char *, 
-	    ftnlen);
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int prtenc_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    zzeksei_state_t* __state = get_zzeksei_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -268,7 +278,8 @@ static integer c__5 = 5;
 /*     Write the encoded value. */
 
     i__1 = *addrss + 4;
-    dasudc_(handle, addrss, &i__1, &c__1, &c__5, cval, (ftnlen)5);
+    dasudc_(handle, addrss, &i__1, &__state->c__1, &__state->c__5, cval, (
+	    ftnlen)5);
     return 0;
 } /* zzeksei_ */
 

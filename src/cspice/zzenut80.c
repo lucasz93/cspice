@@ -1,21 +1,29 @@
-/* zzenut80.f -- translated by f2c (version 19980913).
+/* zzenut80.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
+extern zzenut80_init_t __zzenut80_init;
+static zzenut80_state_t* get_zzenut80_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzenut80)
+		state->zzenut80 = __cspice_allocate_module(sizeof(
+	zzenut80_state_t), &__zzenut80_init, sizeof(__zzenut80_init));
+	return state->zzenut80;
+
+}
 
 /* $Procedure ZZENUT80 ( Earth nutation transformation, IAU 1980 model ) */
 /* Subroutine */ int zzenut80_(doublereal *et, doublereal *nutxf)
 {
     doublereal dmob;
     extern /* Subroutine */ int zzmobliq_(doublereal *, doublereal *, 
-	    doublereal *), chkin_(char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal dvnut[4];
     extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
 	    integer *, doublereal *);
@@ -25,6 +33,9 @@ static integer c__3 = 3;
     extern /* Subroutine */ int zzwahr_(doublereal *, doublereal *);
     doublereal mob;
 
+
+    /* Module state */
+    zzenut80_state_t* __state = get_zzenut80_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -203,7 +214,7 @@ static integer c__3 = 3;
     eulang[3] = -dmob - dvnut[3];
     eulang[4] = -dvnut[2];
     eulang[5] = dmob;
-    eul2xf_(eulang, &c__1, &c__3, &c__1, nutxf);
+    eul2xf_(eulang, &__state->c__1, &__state->c__3, &__state->c__1, nutxf);
     chkout_("ZZENUT80", (ftnlen)8);
     return 0;
 } /* zzenut80_ */

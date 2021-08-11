@@ -1,9 +1,17 @@
-/* zzekqord.f -- translated by f2c (version 19980913).
+/* zzekqord.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekqord_state_t;
+static zzekqord_state_t* get_zzekqord_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZEKQORD ( Private: EK, read order-by columns from query ) */
 /* Subroutine */ int zzekqord_(integer *eqryi, char *eqryc, integer *n, char *
@@ -14,16 +22,30 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, ntab, ncnj, ncns, nord;
+    integer base;
+    integer ntab;
+    integer ncnj;
+    integer ncns;
+    integer nord;
     extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen), chkin_(char *, ftnlen);
-    integer cb, ce;
-    extern logical failed_(void);
-    integer tb, te, buflen, iparse, resolv;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
 	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer cb;
+    integer ce;
+    extern logical failed_(void);
+    integer tb;
+    integer te;
+    integer buflen;
+    integer iparse;
+    integer resolv;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzekqord_state_t* __state = get_zzekqord_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

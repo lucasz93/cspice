@@ -1,14 +1,21 @@
-/* zzprscor.f -- translated by f2c (version 19980913).
+/* zzprscor.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__15 = 15;
-static integer c__0 = 0;
+extern zzprscor_init_t __zzprscor_init;
+static zzprscor_state_t* get_zzprscor_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzprscor)
+		state->zzprscor = __cspice_allocate_module(sizeof(
+	zzprscor_state_t), &__zzprscor_init, sizeof(__zzprscor_init));
+	return state->zzprscor;
+
+}
 
 /* $Procedure ZZPRSCOR ( Parse aberration correction ) */
 /* Subroutine */ int zzprscor_(char *abcorr, logical *attblk, ftnlen 
@@ -16,22 +23,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static char corlst[5*15] = "CN   " "CN+S " "LT   " "LT+S " "NONE " "RL   "
-	     "RL+S " "S    " "XCN  " "XCN+S" "XLT  " "XLT+S" "XRL  " "XRL+S" 
-	    "XS   ";
-    static logical geo[15] = { FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,FALSE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical lt[15] = { TRUE_,TRUE_,TRUE_,TRUE_,FALSE_,TRUE_,TRUE_,
-	    FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,FALSE_ };
-    static logical stl[15] = { FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,FALSE_,TRUE_,
-	    TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,FALSE_,TRUE_,TRUE_ };
-    static logical conv[15] = { TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_ };
-    static logical xmit[15] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,
-	    FALSE_,FALSE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_,TRUE_ };
-    static logical rel[15] = { FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,
-	    FALSE_,FALSE_,FALSE_,FALSE_,FALSE_,TRUE_,TRUE_,FALSE_ };
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1;
@@ -40,19 +31,25 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen),
-	     reordc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen);
     integer ordvec[15];
-    extern /* Subroutine */ int reordl_(integer *, integer *, logical *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), ljucrs_(integer 
-	    *, char *, char *, ftnlen, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int reordl_(integer *, integer *, logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     char tmpcor[5];
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    zzprscor_state_t* __state = get_zzprscor_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -360,7 +357,7 @@ static integer c__0 = 0;
     if (return_()) {
 	return 0;
     }
-    if (first) {
+    if (__state->first) {
 
 /*        The first time this routine is called, we sort the */
 /*        aberration correction strings and the associated flag */
@@ -369,29 +366,30 @@ static integer c__0 = 0;
 
 /*        Find the sorted order of the aberration correction strings. */
 
-	orderc_(corlst, &c__15, ordvec, (ftnlen)5);
+	orderc_(__state->corlst, &__state->c__15, ordvec, (ftnlen)5);
 
 /*        Put the aberration correction strings and the associated */
 /*        arrays into increasing order. */
 
-	reordc_(ordvec, &c__15, corlst, (ftnlen)5);
-	reordl_(ordvec, &c__15, geo);
-	reordl_(ordvec, &c__15, lt);
-	reordl_(ordvec, &c__15, stl);
-	reordl_(ordvec, &c__15, conv);
-	reordl_(ordvec, &c__15, xmit);
-	reordl_(ordvec, &c__15, rel);
-	first = FALSE_;
+	reordc_(ordvec, &__state->c__15, __state->corlst, (ftnlen)5);
+	reordl_(ordvec, &__state->c__15, __state->geo);
+	reordl_(ordvec, &__state->c__15, __state->lt);
+	reordl_(ordvec, &__state->c__15, __state->stl);
+	reordl_(ordvec, &__state->c__15, __state->conv);
+	reordl_(ordvec, &__state->c__15, __state->xmit);
+	reordl_(ordvec, &__state->c__15, __state->rel);
+	__state->first = FALSE_;
     }
 
 /*     Obtain a blank-free, upper-case copy of the aberration */
 /*     correction string. */
 
-    ljucrs_(&c__0, abcorr, tmpcor, abcorr_len, (ftnlen)5);
+    ljucrs_(&__state->c__0, abcorr, tmpcor, abcorr_len, (ftnlen)5);
 
 /*     Search the list for the aberration correction string. */
 
-    loc = bsrchc_(tmpcor, &c__15, corlst, (ftnlen)5, (ftnlen)5);
+    loc = bsrchc_(tmpcor, &__state->c__15, __state->corlst, (ftnlen)5, (
+	    ftnlen)5);
     if (loc == 0) {
 	chkin_("ZZPRSCOR", (ftnlen)8);
 	setmsg_("Aberration correction specification # is not recognized.", (
@@ -404,18 +402,18 @@ static integer c__0 = 0;
 
 /*     Set the output flags. */
 
-    attblk[0] = geo[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("geo", 
-	    i__1, "zzprscor_", (ftnlen)318)];
-    attblk[1] = lt[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("lt", 
-	    i__1, "zzprscor_", (ftnlen)319)];
-    attblk[2] = stl[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("stl", 
-	    i__1, "zzprscor_", (ftnlen)320)];
-    attblk[3] = conv[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("conv"
-	    , i__1, "zzprscor_", (ftnlen)321)];
-    attblk[4] = xmit[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("xmit"
-	    , i__1, "zzprscor_", (ftnlen)322)];
-    attblk[5] = rel[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("rel", 
-	    i__1, "zzprscor_", (ftnlen)323)];
+    attblk[0] = __state->geo[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("geo", i__1, "zzprscor_", (ftnlen)318)];
+    attblk[1] = __state->lt[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("lt", i__1, "zzprscor_", (ftnlen)319)];
+    attblk[2] = __state->stl[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("stl", i__1, "zzprscor_", (ftnlen)320)];
+    attblk[3] = __state->conv[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("conv", i__1, "zzprscor_", (ftnlen)321)];
+    attblk[4] = __state->xmit[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("xmit", i__1, "zzprscor_", (ftnlen)322)];
+    attblk[5] = __state->rel[(i__1 = loc - 1) < 15 && 0 <= i__1 ? i__1 : 
+	    s_rnge("rel", i__1, "zzprscor_", (ftnlen)323)];
     return 0;
 } /* zzprscor_ */
 

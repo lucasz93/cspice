@@ -1,14 +1,21 @@
-/* dskp02.f -- translated by f2c (version 19980913).
+/* dskp02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__9 = 9;
+extern dskp02_init_t __dskp02_init;
+static dskp02_state_t* get_dskp02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskp02)
+		state->dskp02 = __cspice_allocate_module(sizeof(
+	dskp02_state_t), &__dskp02_init, sizeof(__dskp02_init));
+	return state->dskp02;
+
+}
 
 /* $Procedure DSKP02 ( DSK, fetch type 2 plate data ) */
 /* Subroutine */ int dskp02_(integer *handle, integer *dladsc, integer *start,
@@ -16,18 +23,28 @@ static integer c__9 = 9;
 {
     integer unit;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen), dskgd_(integer *, 
-	    integer *, doublereal *), dski02_(integer *, integer *, integer *,
-	     integer *, integer *, integer *, integer *), dskz02_(integer *, 
-	    integer *, integer *, integer *);
-    integer np, nv;
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dskz02_(integer *, integer *, integer *, 
+	    integer *);
+    integer np;
+    integer nv;
     extern logical return_(void);
     doublereal dskdsc[24];
-    integer lcroom, lcstrt;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errfnm_(char *, 
-	    integer *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer lcroom;
+    integer lcstrt;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    dskp02_state_t* __state = get_dskp02_state();
 /* $ Abstract */
 
 /*     Fetch triangular plates from a type 2 DSK segment. */
@@ -932,7 +949,7 @@ static integer c__9 = 9;
 /*     Check START. */
 
     if (*start < 1 || *start > np) {
-	zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
 	setmsg_("Segment in DSK file # with DAS base addresses INT = #, DP ="
 		" #, CHR = # contains # plates, so START must be in the range"
 		" 1:#; actual value was #.", (ftnlen)144);
@@ -955,7 +972,7 @@ static integer c__9 = 9;
 
     lcstrt = (*start - 1) * 3 + 1;
     lcroom = *room * 3;
-    dski02_(handle, dladsc, &c__9, &lcstrt, &lcroom, n, plates);
+    dski02_(handle, dladsc, &__state->c__9, &lcstrt, &lcroom, n, plates);
 
 /*     Change the output count from one of integers to one of plates. */
 

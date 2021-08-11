@@ -1,9 +1,17 @@
-/* isrot.f -- translated by f2c (version 19980913).
+/* isrot.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isrot_state_t;
+static isrot_state_t* get_isrot_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure     ISROT ( Indicate whether a matrix is a rotation matrix ) */
 logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
@@ -13,20 +21,27 @@ logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
     logical ret_val;
 
     /* Local variables */
-    doublereal unit[9]	/* was [3][3] */, d__;
+    doublereal unit[9]	/* was [3][3] */;
+    doublereal d__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical detok;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal n1, n2, n3;
+    doublereal n1;
+    doublereal n2;
+    doublereal n3;
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
 	    *);
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     logical normok;
     extern logical return_(void);
     extern doublereal det_(doublereal *);
 
+
+    /* Module state */
+    isrot_state_t* __state = get_isrot_state();
 /* $ Abstract */
 
 /*     Indicate whether a 3x3 matrix is a rotation matrix. */

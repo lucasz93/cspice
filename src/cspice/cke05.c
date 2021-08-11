@@ -1,13 +1,21 @@
-/* cke05.f -- translated by f2c (version 19980913).
+/* cke05.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern cke05_init_t __cke05_init;
+static cke05_state_t* get_cke05_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cke05)
+		state->cke05 = __cspice_allocate_module(sizeof(cke05_state_t),
+	 &__cke05_init, sizeof(__cke05_init));
+	return state->cke05;
+
+}
 
 /* $Procedure      CKE05 ( C-Kernel, evaluate, type 5 ) */
 /* Subroutine */ int cke05_(logical *needav, doublereal *record, doublereal *
@@ -21,46 +29,65 @@ static integer c__4 = 4;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal mags, qneg[4], rate;
+    doublereal mags;
+    doublereal qneg[4];
+    doublereal rate;
     integer from;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal work[1360]	/* was [680][2] */;
-    integer i__, j, n;
+    integer i__;
+    integer j;
+    integer n;
     doublereal q[4];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal vbuff[6];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     vhatg_(doublereal *, integer *, doublereal *), errdp_(char *, 
-	    doublereal *, ftnlen), vsclg_(doublereal *, doublereal *, integer 
-	    *, doublereal *);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
     doublereal state[8];
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
-	    doublereal *), qdq2av_(doublereal *, doublereal *, doublereal *);
-    doublereal dq[4], ds[4];
-    integer ub, to;
-    doublereal locrec[340], sclddq[4];
+	    doublereal *);
+    extern /* Subroutine */ int qdq2av_(doublereal *, doublereal *, 
+	    doublereal *);
+    doublereal dq[4];
+    doublereal ds[4];
+    integer ub;
+    integer to;
+    doublereal locrec[340];
+    doublereal sclddq[4];
     extern /* Subroutine */ int lgrind_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *);
-    doublereal sclkdp, radtrm[4];
+    doublereal sclkdp;
+    doublereal radtrm[4];
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), vdistg_(doublereal *, doublereal *, 
-	    integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), vminug_(doublereal *, integer *, doublereal *)
-	    , vsclip_(doublereal *, doublereal *), hrmint_(integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
+    extern doublereal vdistg_(doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
+	    ;
+    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int hrmint_(integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     extern doublereal vnormg_(doublereal *, integer *);
     extern /* Subroutine */ int xpsgip_(integer *, integer *, doublereal *);
     extern logical return_(void);
     integer newptr;
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
-    integer xstart, subtyp, ystart, prvptr;
+    integer xstart;
+    integer subtyp;
+    integer ystart;
+    integer prvptr;
 
+
+    /* Module state */
+    cke05_state_t* __state = get_cke05_state();
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 5 CK segment. */
@@ -799,14 +826,15 @@ static integer c__4 = 4;
 /*           pointed to by PRVPTR. */
 
 	    newptr = packsz * (i__ - 1) + 5;
-	    vminug_(&record[newptr - 1], &c__4, qneg);
+	    vminug_(&record[newptr - 1], &__state->c__4, qneg);
 
 /*           Replace the Ith quaternion with QNEG if QNEG is closer */
 /*           than the current quaternion to the previous quaternion. */
 
-	    if (vdistg_(&record[prvptr - 1], qneg, &c__4) < vdistg_(&record[
-		    prvptr - 1], &record[newptr - 1], &c__4)) {
-		moved_(qneg, &c__4, &record[newptr - 1]);
+	    if (vdistg_(&record[prvptr - 1], qneg, &__state->c__4) < vdistg_(&
+		    record[prvptr - 1], &record[newptr - 1], &__state->c__4)) 
+		    {
+		moved_(qneg, &__state->c__4, &record[newptr - 1]);
 	    }
 	    prvptr = newptr;
 	}
@@ -826,13 +854,14 @@ static integer c__4 = 4;
 /*           pointed to by PRVPTR. */
 
 	    newptr = packsz * (i__ - 1) + 5;
-	    vminug_(&record[newptr - 1], &c__4, qneg);
+	    vminug_(&record[newptr - 1], &__state->c__4, qneg);
 
 /*           Replace the Ith quaternion with QNEG if QNEG is closer */
 /*           than the current quaternion to the previous quaternion. */
 
-	    if (vdistg_(&record[prvptr - 1], qneg, &c__4) < vdistg_(&record[
-		    prvptr - 1], &record[newptr - 1], &c__4)) {
+	    if (vdistg_(&record[prvptr - 1], qneg, &__state->c__4) < vdistg_(&
+		    record[prvptr - 1], &record[newptr - 1], &__state->c__4)) 
+		    {
 		setmsg_("Quaternion sign error: quaternion at index # in the"
 			" input record is farther than its negative from the "
 			"preceding quaternion in the record. Quaternion is (#"
@@ -890,7 +919,7 @@ static integer c__4 = 4;
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	mags = vnormg_(state, &c__4);
+	mags = vnormg_(state, &__state->c__4);
 	if (mags == 0.) {
 	    setmsg_("Quaternion magnitude at SCLK # was zero.", (ftnlen)40);
 	    errdp_("#", &sclkdp, (ftnlen)1);
@@ -899,7 +928,7 @@ static integer c__4 = 4;
 	    return 0;
 	}
 	d__1 = 1. / mags;
-	vsclg_(&d__1, state, &c__4, q);
+	vsclg_(&d__1, state, &__state->c__4, q);
 	if (*needav) {
 
 /*           Find the time derivative of the unit quaternion: */
@@ -918,12 +947,12 @@ static integer c__4 = 4;
 /*                          ||S||            ||S|| */
 
 
-	    moved_(&state[4], &c__4, ds);
+	    moved_(&state[4], &__state->c__4, ds);
 	    d__1 = 1. / mags;
-	    vsclg_(&d__1, ds, &c__4, sclddq);
-	    d__1 = vdotg_(q, ds, &c__4) / mags;
-	    vsclg_(&d__1, q, &c__4, radtrm);
-	    vsubg_(sclddq, radtrm, &c__4, dq);
+	    vsclg_(&d__1, ds, &__state->c__4, sclddq);
+	    d__1 = vdotg_(q, ds, &__state->c__4) / mags;
+	    vsclg_(&d__1, q, &__state->c__4, radtrm);
+	    vsubg_(sclddq, radtrm, &__state->c__4, dq);
 
 /*           Derive angular velocity from Q and dQ/dt: */
 
@@ -971,7 +1000,7 @@ static integer c__4 = 4;
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	vhatg_(state, &c__4, q);
+	vhatg_(state, &__state->c__4, q);
 	if (*needav) {
 
 /*           The angular velocity already is in units of radians/second. */
@@ -1026,7 +1055,7 @@ static integer c__4 = 4;
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	mags = vnormg_(state, &c__4);
+	mags = vnormg_(state, &__state->c__4);
 	if (mags == 0.) {
 	    setmsg_("Quaternion magnitude at SCLK # was zero.", (ftnlen)40);
 	    errdp_("#", &sclkdp, (ftnlen)1);
@@ -1035,7 +1064,7 @@ static integer c__4 = 4;
 	    return 0;
 	}
 	d__1 = 1. / mags;
-	vsclg_(&d__1, state, &c__4, q);
+	vsclg_(&d__1, state, &__state->c__4, q);
 	if (*needav) {
 	    if (subtyp == 0) {
 
@@ -1055,12 +1084,12 @@ static integer c__4 = 4;
 /*                             ||S||            ||S|| */
 
 
-		moved_(&state[4], &c__4, ds);
+		moved_(&state[4], &__state->c__4, ds);
 		d__1 = 1. / mags;
-		vsclg_(&d__1, ds, &c__4, sclddq);
-		d__1 = vdotg_(q, ds, &c__4) / mags;
-		vsclg_(&d__1, q, &c__4, radtrm);
-		vsubg_(sclddq, radtrm, &c__4, dq);
+		vsclg_(&d__1, ds, &__state->c__4, sclddq);
+		d__1 = vdotg_(q, ds, &__state->c__4) / mags;
+		vsclg_(&d__1, q, &__state->c__4, radtrm);
+		vsubg_(sclddq, radtrm, &__state->c__4, dq);
 
 /*              Derive angular velocity from Q and dQ/dt: */
 

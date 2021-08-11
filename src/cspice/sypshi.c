@@ -1,13 +1,21 @@
-/* sypshi.f -- translated by f2c (version 19980913).
+/* sypshi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sypshi_init_t __sypshi_init;
+static sypshi_state_t* get_sypshi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sypshi)
+		state->sypshi = __cspice_allocate_module(sizeof(
+	sypshi_state_t), &__sypshi_init, sizeof(__sypshi_init));
+	return state->sypshi;
+
+}
 
 /* $Procedure      SYPSHI ( Push a value onto a particular symbol ) */
 /* Subroutine */ int sypshi_(char *name__, integer *value, char *tabsym, 
@@ -20,24 +28,32 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nsym;
-    extern integer cardc_(char *, ftnlen), cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *), sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *), inslai_(
-	    integer *, integer *, integer *, integer *, integer *);
+    integer nval;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardi_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sumai_(integer *, integer *);
+    extern integer sizei_(integer *);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
+	    integer *, integer *);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     integer locsym;
     logical oldsym;
     extern logical return_(void);
     extern /* Subroutine */ int syseti_(char *, integer *, char *, integer *, 
 	    integer *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    sypshi_state_t* __state = get_sypshi_state();
 /* $ Abstract */
 
 /*     Push a value onto a particular symbol in an integer symbol table. */
@@ -250,7 +266,7 @@ static integer c__1 = 1;
     } else {
 	i__1 = locsym - 1;
 	locval = sumai_(&tabptr[6], &i__1) + 1;
-	inslai_(value, &c__1, &locval, &tabval[6], &nval);
+	inslai_(value, &__state->c__1, &locval, &tabval[6], &nval);
 	scardi_(&nval, tabval);
 	++tabptr[locsym + 5];
     }

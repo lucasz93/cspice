@@ -1,13 +1,21 @@
-/* phaseq.f -- translated by f2c (version 19980913).
+/* phaseq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern phaseq_init_t __phaseq_init;
+static phaseq_state_t* get_phaseq_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->phaseq)
+		state->phaseq = __cspice_allocate_module(sizeof(
+	phaseq_state_t), &__phaseq_init, sizeof(__phaseq_init));
+	return state->phaseq;
+
+}
 
 /* $Procedure PHASEQ ( Phase angle quantity between bodies centers ) */
 doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr, 
@@ -16,7 +24,6 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal ret_val;
@@ -25,30 +32,28 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
     integer targ;
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen), 
-	    zzctruin_(integer *), chkin_(char *, ftnlen), errch_(char *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer illum;
-    static logical svfnd1, svfnd2, svfnd3;
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svicde;
     logical attblk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char xbcorr[32];
-    static integer svtgid;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), ljucrs_(integer *, 
-	    char *, char *, ftnlen, ftnlen);
-    static char svtarg[36], svilmn[36];
-    static integer svobsn;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
-    static char svobsr[36];
     logical fnd;
     integer obs;
     extern /* Subroutine */ int zzgfpaq_(doublereal *, integer *, integer *, 
 	    integer *, char *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    phaseq_state_t* __state = get_phaseq_state();
 /* $ Abstract */
 
 /*     Compute the apparent phase angle for a target, observer, */
@@ -708,20 +713,20 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target, illuminator, and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtgid, &svfnd1, target, &targ, &fnd, (ftnlen)
-	    36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
+	    __state->svfnd1, target, &targ, &fnd, (ftnlen)36, target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -731,8 +736,8 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 	chkout_("PHASEQ", (ftnlen)6);
 	return ret_val;
     }
-    zzbods2c_(svctr2, svilmn, &svicde, &svfnd2, illmn, &illum, &fnd, (ftnlen)
-	    36, illmn_len);
+    zzbods2c_(__state->svctr2, __state->svilmn, &__state->svicde, &
+	    __state->svfnd2, illmn, &illum, &fnd, (ftnlen)36, illmn_len);
     if (! fnd) {
 	setmsg_("The illuminator, '#', is not a recognized name for an ephem"
 		"eris object. The cause of this problem may be that you need "
@@ -742,8 +747,8 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 	chkout_("PHASEQ", (ftnlen)6);
 	return ret_val;
     }
-    zzbods2c_(svctr3, svobsr, &svobsn, &svfnd3, obsrvr, &obs, &fnd, (ftnlen)
-	    36, obsrvr_len);
+    zzbods2c_(__state->svctr3, __state->svobsr, &__state->svobsn, &
+	    __state->svfnd3, obsrvr, &obs, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -757,7 +762,7 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    ljucrs_(&c__0, abcorr, xbcorr, abcorr_len, (ftnlen)32);
+    ljucrs_(&__state->c__0, abcorr, xbcorr, abcorr_len, (ftnlen)32);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */

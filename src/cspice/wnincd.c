@@ -1,9 +1,17 @@
-/* wnincd.f -- translated by f2c (version 19980913).
+/* wnincd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int wnincd_state_t;
+static wnincd_state_t* get_wnincd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            WNINCD ( Included in a double precision window ) */
 logical wnincd_(doublereal *left, doublereal *right, doublereal *window)
@@ -13,12 +21,16 @@ logical wnincd_(doublereal *left, doublereal *right, doublereal *window)
     logical ret_val;
 
     /* Local variables */
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wnincd_state_t* __state = get_wnincd_state();
 /* $ Abstract */
 
 /*     Determine whether an interval is included in a double precision */

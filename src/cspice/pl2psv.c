@@ -1,18 +1,31 @@
-/* pl2psv.f -- translated by f2c (version 19980913).
+/* pl2psv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pl2psv_state_t;
+static pl2psv_state_t* get_pl2psv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PL2PSV ( Plane to point and spanning vectors ) */
 /* Subroutine */ int pl2psv_(doublereal *plane, doublereal *point, doublereal 
 	*span1, doublereal *span2)
 {
     extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *), pl2nvp_(doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int pl2nvp_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal normal[3];
 
+
+    /* Module state */
+    pl2psv_state_t* __state = get_pl2psv_state();
 /* $ Abstract */
 
 /*     Return a point and two orthogonal spanning vectors that generate */

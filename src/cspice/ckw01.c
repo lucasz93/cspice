@@ -1,17 +1,21 @@
-/* ckw01.f -- translated by f2c (version 19980913).
+/* ckw01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__4 = 4;
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern ckw01_init_t __ckw01_init;
+static ckw01_state_t* get_ckw01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckw01)
+		state->ckw01 = __cspice_allocate_module(sizeof(ckw01_state_t),
+	 &__ckw01_init, sizeof(__ckw01_init));
+	return state->ckw01;
+
+}
 
 /* $Procedure  CKW01 ( C-Kernel, write segment to C-kernel, data type 1 ) */
 /* Subroutine */ int ckw01_(integer *handle, doublereal *begtim, doublereal *
@@ -24,27 +28,37 @@ static integer c__1 = 1;
     doublereal d__1;
 
     /* Local variables */
-    integer ndir, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafps_(integer *, 
-	    integer *, doublereal *, integer *, doublereal *);
+    integer ndir;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
+	    integer *, doublereal *);
     doublereal descr[5];
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer index, value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), dafada_(
-	    doublereal *, integer *), dafbna_(integer *, doublereal *, char *,
-	     ftnlen), dafena_(void);
+    integer index;
+    integer value;
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafena_(void);
     extern logical failed_(void);
     integer refcod;
     extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
     doublereal dirent;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
-    extern logical vzerog_(doublereal *, integer *), return_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical vzerog_(doublereal *, integer *);
+    extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    ckw01_state_t* __state = get_ckw01_state();
 /* $ Abstract */
 
 /*     Add a type 1 segment to a C-kernel. */
@@ -646,7 +660,7 @@ static integer c__1 = 1;
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&c__2, &c__6, dcd, icd, descr);
+    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Check that all the characters in the segid can be printed. */
 
@@ -708,7 +722,7 @@ static integer c__1 = 1;
 
     i__1 = *nrec;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (vzerog_(&quats[(i__ << 2) - 4], &c__4)) {
+	if (vzerog_(&quats[(i__ << 2) - 4], &__state->c__4)) {
 	    setmsg_("The quaternion at index # has magnitude zero.", (ftnlen)
 		    45);
 	    errint_("#", &i__, (ftnlen)1);
@@ -732,13 +746,13 @@ static integer c__1 = 1;
     if (*avflag) {
 	i__1 = *nrec;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    dafada_(&quats[(i__ << 2) - 4], &c__4);
-	    dafada_(&avvs[i__ * 3 - 3], &c__3);
+	    dafada_(&quats[(i__ << 2) - 4], &__state->c__4);
+	    dafada_(&avvs[i__ * 3 - 3], &__state->c__3);
 	}
     } else {
 	i__1 = *nrec;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    dafada_(&quats[(i__ << 2) - 4], &c__4);
+	    dafada_(&quats[(i__ << 2) - 4], &__state->c__4);
 	}
     }
 
@@ -754,14 +768,14 @@ static integer c__1 = 1;
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	dirent = (sclkdp[index - 1] + sclkdp[index]) / 2.;
-	dafada_(&dirent, &c__1);
+	dafada_(&dirent, &__state->c__1);
 	index += 100;
     }
 
 /*     Finally, the number of records. */
 
     d__1 = (doublereal) (*nrec);
-    dafada_(&d__1, &c__1);
+    dafada_(&d__1, &__state->c__1);
 
 /*     End the segment. */
 

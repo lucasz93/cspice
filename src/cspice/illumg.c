@@ -1,14 +1,21 @@
-/* illumg.f -- translated by f2c (version 19980913).
+/* illumg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__3 = 3;
+extern illumg_init_t __illumg_init;
+static illumg_state_t* get_illumg_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->illumg)
+		state->illumg = __cspice_allocate_module(sizeof(
+	illumg_state_t), &__illumg_init, sizeof(__illumg_init));
+	return state->illumg;
+
+}
 
 /* $Procedure ILLUMG ( Illumination angles, general source ) */
 /* Subroutine */ int illumg_(char *method, char *target, char *ilusrc, 
@@ -20,11 +27,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static integer shape = 0;
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
-    static char prvmth[80] = "                                              "
-	    "                                  ";
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -36,57 +38,60 @@ static integer c__3 = 3;
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer type__;
-    static logical xmit;
     extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen)
-	    , zzsbfnrm_(integer *, integer *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *), zzctruin_(integer *), 
-	    zzprsmet_(integer *, char *, integer *, char *, char *, logical *,
-	     integer *, integer *, char *, char *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzsbfnrm_(integer *, integer *, integer *, 
+	    doublereal *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
     integer n;
     extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    doublereal s, radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    static integer nsurf;
+    doublereal s;
+    doublereal radii[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static logical uselt, svfnd1, svfnd2;
-    static integer svctr1[2], svctr2[2];
     extern logical failed_(void);
-    static integer svctr3[2], svctr4[2];
     doublereal lt;
-    integer fxfcde, obscde;
+    integer fxfcde;
+    integer obscde;
     extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
 	    *, doublereal *, ftnlen);
-    static integer trgcde;
     extern logical return_(void);
-    char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
-    doublereal normal[3], obspos[3], opstat[6], tistat[6];
-    static integer center;
+    char pntdef[20];
+    char shpstr[9];
+    char subtyp[20];
+    char trmstr[20];
+    doublereal normal[3];
+    doublereal obspos[3];
+    doublereal opstat[6];
+    doublereal tistat[6];
     integer typeid;
-    static integer srflst[100];
-    logical attblk[15], surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
+    logical attblk[15];
+    logical surfup;
     logical fnd;
-    static char svfref[32];
-    static integer svrefc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), spkcpt_(doublereal *, char *, char *, doublereal *, char 
-	    *, char *, char *, char *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), spkcpo_(char *, 
-	    doublereal *, char *, char *, char *, doublereal *, char *, char *
-	    , doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen), surfnm_(doublereal *, doublereal *, doublereal *,
-	     doublereal *, doublereal *), vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkcpt_(doublereal *, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkcpo_(char *, doublereal *, char *, char *, 
+	    char *, doublereal *, char *, char *, doublereal *, doublereal *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
     doublereal lti;
-    static logical pri;
 
+    /* Module state */
+    illumg_state_t* __state = get_illumg_state();
 /* $ Abstract */
 
 /*     Find the illumination angles (phase, incidence, and */
@@ -1680,23 +1685,24 @@ static integer c__3 = 3;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
     }
 
 /*     If necessary, parse the aberration correction flag. */
 
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -1722,12 +1728,12 @@ static integer c__3 = 3;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        We do NOT set FIRST to .FALSE. here, since we're not */
 /*        yet done with it. */
@@ -1737,8 +1743,9 @@ static integer c__3 = 3;
 /*     Get the target ID code here, since it will be needed */
 /*     for the initialization calls below. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &__state->trgcde, &fnd, (ftnlen)36, 
+	    target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -1751,15 +1758,15 @@ static integer c__3 = 3;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(svctr4, &surfup);
+    zzsrftrk_(__state->svctr4, &surfup);
 
 /*     If necessary, parse the method specification. PRVMTH */
 /*     and the derived flags NEAR and ELIPSD start out with */
 /*     valid values. PRVMTH records the last valid value of */
 /*     METHOD; ELIPSD is the corresponding shape flag. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)80) != 0)
-	     {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)80) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -1767,7 +1774,7 @@ static integer c__3 = 3;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)80, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)80, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -1776,17 +1783,18 @@ static integer c__3 = 3;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&__state->trgcde, method, &__state->c__100, shpstr, subtyp, 
+		&__state->pri, &__state->nsurf, __state->srflst, pntdef, 
+		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
+		ftnlen)20);
 	if (failed_()) {
 	    chkout_("ILLUMG", (ftnlen)6);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -1813,18 +1821,18 @@ static integer c__3 = 3;
 	    chkout_("ILLUMG", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(prvmth, method, (ftnlen)80, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)80, method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
+    __state->first = FALSE_;
 
 /*     Obtain integer codes for the observer and */
 /*     illumination source. */
 
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -1838,7 +1846,7 @@ static integer c__3 = 3;
 /*     Check the observer and target body codes. If they are equal, */
 /*     signal an error. */
 
-    if (obscde == trgcde) {
+    if (obscde == __state->trgcde) {
 	setmsg_("In computing illumination angles, the observing body and ta"
 		"rget body are the same. Both are #.", (ftnlen)94);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -1849,9 +1857,9 @@ static integer c__3 = 3;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr3, svfref, &svrefc, fixref, &fxfcde, (ftnlen)32, 
-	    fixref_len);
-    frinfo_(&fxfcde, &center, &type__, &typeid, &fnd);
+    zznamfrm_(__state->svctr3, __state->svfref, &__state->svrefc, fixref, &
+	    fxfcde, (ftnlen)32, fixref_len);
+    frinfo_(&fxfcde, &__state->center, &type__, &typeid, &fnd);
     if (failed_()) {
 	chkout_("ILLUMG", (ftnlen)6);
 	return 0;
@@ -1868,12 +1876,12 @@ static integer c__3 = 3;
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
-    if (center != trgcde) {
+    if (__state->center != __state->trgcde) {
 	setmsg_("Reference frame # is not centered at the target body #. The"
 		" ID code of the frame center is #.", (ftnlen)93);
 	errch_("#", fixref, (ftnlen)1, fixref_len);
 	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &center, (ftnlen)1);
+	errint_("#", &__state->center, (ftnlen)1);
 	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
 	chkout_("ILLUMG", (ftnlen)6);
 	return 0;
@@ -1886,8 +1894,8 @@ static integer c__3 = 3;
 /*     We don't support transmission corrections, so S is never */
 /*     set to 1. */
 
-    if (uselt) {
-	if (xmit) {
+    if (__state->uselt) {
+	if (__state->xmit) {
 	    s = 1.;
 	} else {
 	    s = -1.;
@@ -1934,21 +1942,23 @@ static integer c__3 = 3;
 /*     Find the surface normal at SPOINT. This computation depends */
 /*     on target body shape model. */
 
-    if (shape == 1) {
+    if (__state->shape == 1) {
 
 /*        We'll need the radii of the target body. */
 
-	bodvcd_(&trgcde, "RADII", &c__3, &n, radii, (ftnlen)5);
+	bodvcd_(&__state->trgcde, "RADII", &__state->c__3, &n, radii, (ftnlen)
+		5);
 	surfnm_(radii, &radii[1], &radii[2], spoint, normal);
 
 /*        We check FAILED at the end of the IF block. */
 
-    } else if (shape == 2) {
+    } else if (__state->shape == 2) {
 
 /*        Compute the outward unit normal at SPOINT on the surface */
 /*        defined by the designated DSK data. */
 
-	zzsbfnrm_(&trgcde, &nsurf, srflst, et, &fxfcde, spoint, normal);
+	zzsbfnrm_(&__state->trgcde, &__state->nsurf, __state->srflst, et, &
+		fxfcde, spoint, normal);
 
 /*        We check FAILED at the end of the IF block. */
 

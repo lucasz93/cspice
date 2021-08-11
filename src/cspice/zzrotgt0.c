@@ -1,13 +1,21 @@
-/* zzrotgt0.f -- translated by f2c (version 19980913).
+/* zzrotgt0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern zzrotgt0_init_t __zzrotgt0_init;
+static zzrotgt0_state_t* get_zzrotgt0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrotgt0)
+		state->zzrotgt0 = __cspice_allocate_module(sizeof(
+	zzrotgt0_state_t), &__zzrotgt0_init, sizeof(__zzrotgt0_init));
+	return state->zzrotgt0;
+
+}
 
 /* $Procedure      ZZROTGT0 (Frame get transformation) */
 /* Subroutine */ int zzrotgt0_(integer *infrm, doublereal *et, doublereal *
@@ -25,25 +33,34 @@ static integer c__1 = 1;
     integer type__;
     extern /* Subroutine */ int zzdynrt0_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *);
-    integer i__, j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     char versn[6];
     extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
     extern logical failed_(void);
     integer center;
     extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), namfrm_(char *, integer *, ftnlen), 
-	    frinfo_(integer *, integer *, integer *, integer *, logical *), 
-	    tkfram_(integer *, doublereal *, integer *, logical *), ckfrot_(
-	    integer *, doublereal *, doublereal *, integer *, logical *), 
-	    sigerr_(char *, ftnlen);
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int ckfrot_(integer *, doublereal *, doublereal *,
+	     integer *, logical *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), irfrot_(integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzrotgt0_state_t* __state = get_zzrotgt0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -306,7 +323,7 @@ static integer c__1 = 1;
 	return 0;
     }
     if (type__ == 1) {
-	irfrot_(infrm, &c__1, rotate);
+	irfrot_(infrm, &__state->c__1, rotate);
 	*found = TRUE_;
 	*outfrm = 1;
     } else if (type__ == 2) {

@@ -1,9 +1,17 @@
-/* fillc.f -- translated by f2c (version 19980913).
+/* fillc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int fillc_state_t;
+static fillc_state_t* get_fillc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FILLC ( Fill a character array ) */
 /* Subroutine */ int fillc_(char *value, integer *ndim, char *array, ftnlen 
@@ -18,6 +26,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    fillc_state_t* __state = get_fillc_state();
 /* $ Abstract */
 
 /*      Fill a character string array with a specified string. */

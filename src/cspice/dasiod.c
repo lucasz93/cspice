@@ -1,13 +1,21 @@
-/* dasiod.f -- translated by f2c (version 19980913).
+/* dasiod.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__128 = 128;
+extern dasiod_init_t __dasiod_init;
+static dasiod_state_t* get_dasiod_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasiod)
+		state->dasiod = __cspice_allocate_module(sizeof(
+	dasiod_state_t), &__dasiod_init, sizeof(__dasiod_init));
+	return state->dasiod;
+
+}
 
 /* $Procedure      DASIOD ( DAS, Fortran I/O, double precision ) */
 /* Subroutine */ int dasiod_(char *action, integer *unit, integer *recno, 
@@ -18,20 +26,23 @@ static integer c__128 = 128;
 	     s_wdue(cilist *), e_wdue(void);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___2 = { 1, 0, 1, 0, 0 };
-    static cilist io___3 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    dasiod_state_t* __state = get_dasiod_state();
 /* $ Abstract */
 
 /*     Perform Fortran reads and writes of DAS double precision records. */
@@ -243,13 +254,13 @@ static integer c__128 = 128;
 
 /*        We're supposed to read the file. */
 
-	io___2.ciunit = *unit;
-	io___2.cirec = *recno;
-	iostat = s_rdue(&io___2);
+	__state->io___2.ciunit = *unit;
+	__state->io___2.cirec = *recno;
+	iostat = s_rdue(&__state->io___2);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&c__128, (char *)&record[0], (ftnlen)sizeof(
+	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
 		doublereal));
 	if (iostat != 0) {
 	    goto L100001;
@@ -271,13 +282,13 @@ L100001:
 
 /*        We're supposed to write to the file. */
 
-	io___3.ciunit = *unit;
-	io___3.cirec = *recno;
-	iostat = s_wdue(&io___3);
+	__state->io___3.ciunit = *unit;
+	__state->io___3.cirec = *recno;
+	iostat = s_wdue(&__state->io___3);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__128, (char *)&record[0], (ftnlen)sizeof(
+	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
 		doublereal));
 	if (iostat != 0) {
 	    goto L100002;

@@ -1,13 +1,21 @@
-/* spkcpo.f -- translated by f2c (version 19980913).
+/* spkcpo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern spkcpo_init_t __spkcpo_init;
+static spkcpo_state_t* get_spkcpo_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkcpo)
+		state->spkcpo = __cspice_allocate_module(sizeof(
+	spkcpo_state_t), &__spkcpo_init, sizeof(__spkcpo_init));
+	return state->spkcpo;
+
+}
 
 /* $Procedure SPKCPO ( SPK, constant position observer state ) */
 /* Subroutine */ int spkcpo_(char *target, doublereal *et, char *outref, char 
@@ -16,15 +24,20 @@ static integer c__3 = 3;
 	outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, 
 	ftnlen obsref_len)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), chkin_(
-	    char *, ftnlen), cleard_(integer *, doublereal *);
-    doublereal obsepc, obssta[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), spkcvo_(char *, 
-	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
-	    char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    doublereal obsepc;
+    doublereal obssta[6];
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int spkcvo_(char *, doublereal *, char *, char *, 
+	    char *, doublereal *, doublereal *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkcpo_state_t* __state = get_spkcpo_state();
 /* $ Abstract */
 
 /*     Return the state of a specified target relative to an "observer," */
@@ -1498,7 +1511,7 @@ static integer c__3 = 3;
 /*     portion of the state is zero. */
 
     vequ_(obspos, obssta);
-    cleard_(&c__3, &obssta[3]);
+    cleard_(&__state->c__3, &obssta[3]);
 
 /*     Set the observation epoch; the value is arbitrary, since */
 /*     the observer's velocity is zero. */

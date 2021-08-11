@@ -1,9 +1,17 @@
-/* syseli.f -- translated by f2c (version 19980913).
+/* syseli.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int syseli_state_t;
+static syseli_state_t* get_syseli_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYSELI ( Select a subset of the values of a symbol ) */
 /* Subroutine */ int syseli_(char *name__, integer *begin, integer *end, char 
@@ -26,6 +34,9 @@
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    syseli_state_t* __state = get_syseli_state();
 /* $ Abstract */
 
 /*     Select a subset of the values associated with a particular */

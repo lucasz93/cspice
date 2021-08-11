@@ -1,14 +1,21 @@
-/* spkopn.f -- translated by f2c (version 19980913).
+/* spkopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spkopn_init_t __spkopn_init;
+static spkopn_state_t* get_spkopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkopn)
+		state->spkopn = __cspice_allocate_module(sizeof(
+	spkopn_state_t), &__spkopn_init, sizeof(__spkopn_init));
+	return state->spkopn;
+
+}
 
 /* $Procedure      SPKOPN ( SPK, open new file. ) */
 /* Subroutine */ int spkopn_(char *name__, char *ifname, integer *ncomch, 
@@ -18,10 +25,13 @@ static integer c__6 = 6;
     integer ncomr;
     extern logical failed_(void);
     extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen), chkout_(
-	    char *, ftnlen);
+	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkopn_state_t* __state = get_spkopn_state();
 /* $ Abstract */
 
 /*     Create a new SPK file, returning the handle of the opened file. */
@@ -201,8 +211,8 @@ static integer c__6 = 6;
 
 /*     Just do it. All of the error handling is taken care of for us. */
 
-    dafonw_(name__, "SPK", &c__2, &c__6, ifname, &ncomr, handle, name_len, (
-	    ftnlen)3, ifname_len);
+    dafonw_(name__, "SPK", &__state->c__2, &__state->c__6, ifname, &ncomr, 
+	    handle, name_len, (ftnlen)3, ifname_len);
     if (failed_()) {
 
 /*        If we failed, make sure that HANDLE does not contain a value */

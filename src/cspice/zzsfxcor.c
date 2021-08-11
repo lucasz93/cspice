@@ -1,15 +1,21 @@
-/* zzsfxcor.f -- translated by f2c (version 19980913).
+/* zzsfxcor.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
-static doublereal c_b27 = 1e-14;
+extern zzsfxcor_init_t __zzsfxcor_init;
+static zzsfxcor_state_t* get_zzsfxcor_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzsfxcor)
+		state->zzsfxcor = __cspice_allocate_module(sizeof(
+	zzsfxcor_state_t), &__zzsfxcor_init, sizeof(__zzsfxcor_init));
+	return state->zzsfxcor;
+
+}
 
 /* $Procedure ZZSFXCOR ( Ray-surface intercept core algorithm ) */
 /* Subroutine */ int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer 
@@ -21,8 +27,6 @@ static doublereal c_b27 = 1e-14;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -34,49 +38,83 @@ static doublereal c_b27 = 1e-14;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal dist, udir[3];
+    doublereal dist;
+    doublereal udir[3];
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
     integer nitr;
     extern doublereal vsep_(doublereal *, doublereal *);
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
-    doublereal rpos[3], tpos[3], j2dir[3], j2est[3], j2pos[3];
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    doublereal rpos[3];
+    doublereal tpos[3];
+    doublereal j2dir[3];
+    doublereal j2est[3];
+    doublereal j2pos[3];
     integer i__;
-    doublereal s, range;
+    doublereal s;
+    doublereal range;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal pnear[3];
     extern doublereal vdist_(doublereal *, doublereal *);
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
     extern logical vzero_(doublereal *);
-    doublereal j2geom[3], r2jmat[9]	/* was [3][3] */, j2tmat[9]	/* 
-	    was [3][3] */;
+    doublereal j2geom[3];
+    doublereal r2jmat[9]	/* was [3][3] */;
+    doublereal j2tmat[9]	/* was [3][3] */;
     extern logical failed_(void);
     extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    doublereal etdiff, lt;
+    doublereal etdiff;
+    doublereal lt;
     extern doublereal dasine_(doublereal *, doublereal *);
     doublereal refepc;
     extern doublereal clight_(void);
     doublereal ltdiff;
-    static char loccor[5];
     extern doublereal touchd_(doublereal *);
-    doublereal ltcent, maxrad, negpos[3], rayalt, reject, relerr, obspos[3], 
-	    prevet, srflen, stldir[3], trgdir[3];
+    doublereal ltcent;
+    doublereal maxrad;
+    doublereal negpos[3];
+    doublereal rayalt;
+    doublereal reject;
+    doublereal relerr;
+    doublereal obspos[3];
+    doublereal prevet;
+    doublereal srflen;
+    doublereal stldir[3];
+    doublereal trgdir[3];
     extern logical return_(void);
-    doublereal prevlt, ssbost[6], ssbtst[6], stlerr[3], stltmp[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), suffix_(char *, integer *, char 
-	    *, ftnlen, ftnlen), spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
-	    vminus_(doublereal *, doublereal *), pxform_(char *, char *, 
-	    doublereal *, doublereal *, ftnlen, ftnlen), spkssb_(integer *, 
-	    doublereal *, char *, doublereal *, ftnlen), stelab_(doublereal *,
-	     doublereal *, doublereal *), stlabx_(doublereal *, doublereal *, 
-	    doublereal *), errint_(char *, integer *, ftnlen), vhatip_(
-	    doublereal *), mxv_(doublereal *, doublereal *, doublereal *);
+    doublereal prevlt;
+    doublereal ssbost[6];
+    doublereal ssbtst[6];
+    doublereal stlerr[3];
+    doublereal stltmp[3];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
 
+
+    /* Module state */
+    zzsfxcor_state_t* __state = get_zzsfxcor_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -804,27 +842,30 @@ static doublereal c_b27 = 1e-14;
     } else {
 	s = 0.;
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Construct aberration correction string without stellar */
 /*        aberration specification. */
 
 	if (*uselt) {
 	    if (*xmit) {
-		s_copy(loccor, "X", (ftnlen)5, (ftnlen)1);
+		s_copy(__state->loccor, "X", (ftnlen)5, (ftnlen)1);
 	    } else {
-		s_copy(loccor, " ", (ftnlen)5, (ftnlen)1);
+		s_copy(__state->loccor, " ", (ftnlen)5, (ftnlen)1);
 	    }
 	    if (*usecn) {
-		suffix_("CN", &c__0, loccor, (ftnlen)2, (ftnlen)5);
+		suffix_("CN", &__state->c__0, __state->loccor, (ftnlen)2, (
+			ftnlen)5);
 	    } else {
-		suffix_("LT", &c__0, loccor, (ftnlen)2, (ftnlen)5);
+		suffix_("LT", &__state->c__0, __state->loccor, (ftnlen)2, (
+			ftnlen)5);
 	    }
 	} else {
-	    s_copy(loccor, "NONE", (ftnlen)5, (ftnlen)4);
+	    s_copy(__state->loccor, "NONE", (ftnlen)5, (ftnlen)4);
 	}
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
-	first = FALSE_;
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	__state->first = FALSE_;
     }
 
 /*     Determine the position of the observer in target */
@@ -851,8 +892,8 @@ static doublereal c_b27 = 1e-14;
 /*            that corrected vector in order to compute the intercept */
 /*            point. */
 
-    spkezp_(trgcde, et, fixref, loccor, obscde, tpos, &lt, fixref_len, (
-	    ftnlen)5);
+    spkezp_(trgcde, et, fixref, __state->loccor, obscde, tpos, &lt, 
+	    fixref_len, (ftnlen)5);
     if (failed_()) {
 	chkout_("ZZSFXCOR", (ftnlen)8);
 	return 0;
@@ -931,7 +972,7 @@ static doublereal c_b27 = 1e-14;
 /*     other hand, so we don't have to recompute J2DIR. We need TRGDIR */
 /*     in all cases. */
 
-    refchg_(dfrcde, &c__1, &refepc, r2jmat);
+    refchg_(dfrcde, &__state->c__1, &refepc, r2jmat);
     if (failed_()) {
 	chkout_("ZZSFXCOR", (ftnlen)8);
 	return 0;
@@ -1105,7 +1146,7 @@ static doublereal c_b27 = 1e-14;
 /*        Compute the arc sine with SPICE error checking. */
 
 	d__1 = maxrad * 1.01 / range;
-	reject = dasine_(&d__1, &c_b27);
+	reject = dasine_(&d__1, &__state->c_b27);
 	vminus_(obspos, negpos);
 	if (vsep_(negpos, trgdir) > reject) {
 

@@ -1,15 +1,21 @@
-/* gfoclt.f -- translated by f2c (version 19980913).
+/* gfoclt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
+extern gfoclt_init_t __gfoclt_init;
+static gfoclt_state_t* get_gfoclt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfoclt)
+		state->gfoclt = __cspice_allocate_module(sizeof(
+	gfoclt_state_t), &__gfoclt_init, sizeof(__gfoclt_init));
+	return state->gfoclt;
+
+}
 
 /* $Procedure GFOCLT ( GF, find occultation ) */
 /* Subroutine */ int gfoclt_(char *occtyp, char *front, char *fshape, char *
@@ -32,17 +38,24 @@ static logical c_false = FALSE_;
 	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen);
     logical ok;
-    extern /* Subroutine */ int gfrefn_(), gfrepf_(), gfrepi_(), gfrepu_(), 
-	    gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfrepi_();
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int gfsstp_(doublereal *);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfoclt_state_t* __state = get_gfoclt_state();
 /* $ Abstract */
 
 /*     Determine time intervals when an observer sees one target body */
@@ -2045,7 +2058,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -2056,10 +2069,11 @@ static logical c_false = FALSE_;
 /*     Look for solutions. */
 
     gfocce_(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, 
-	    obsrvr, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &c_false, (U_fp)
-	    gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &c_false, (L_fp)gfbail_, 
-	    cnfine, result, occtyp_len, front_len, fshape_len, fframe_len, 
-	    back_len, bshape_len, bframe_len, abcorr_len, obsrvr_len);
+	    obsrvr, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &__state->c_false, (
+	    U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &__state->c_false, (
+	    L_fp)gfbail_, cnfine, result, occtyp_len, front_len, fshape_len, 
+	    fframe_len, back_len, bshape_len, bframe_len, abcorr_len, 
+	    obsrvr_len);
     chkout_("GFOCLT", (ftnlen)6);
     return 0;
 } /* gfoclt_ */

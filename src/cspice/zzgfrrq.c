@@ -1,9 +1,17 @@
-/* zzgfrrq.f -- translated by f2c (version 19980913).
+/* zzgfrrq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgfrrq_state_t;
+static zzgfrrq_state_t* get_zzgfrrq_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZGFRRQ ( Private - GF, range rate between objects ) */
 /* Subroutine */ int zzgfrrq_(doublereal *et, integer *targ, integer *obs, 
@@ -24,6 +32,9 @@
     extern logical return_(void);
     char ref[5];
 
+
+    /* Module state */
+    zzgfrrq_state_t* __state = get_zzgfrrq_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

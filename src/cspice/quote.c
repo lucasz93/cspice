@@ -1,14 +1,21 @@
-/* quote.f -- translated by f2c (version 19980913).
+/* quote.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
+extern quote_init_t __quote_init;
+static quote_state_t* get_quote_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->quote)
+		state->quote = __cspice_allocate_module(sizeof(quote_state_t),
+	 &__quote_init, sizeof(__quote_init));
+	return state->quote;
+
+}
 
 /* $Procedure      QUOTE ( Enclose in quotes ) */
 /* Subroutine */ int quote_(char *in, char *left, char *right, char *out, 
@@ -29,6 +36,9 @@ static integer c__0 = 0;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
 
+
+    /* Module state */
+    quote_state_t* __state = get_quote_state();
 /* $ Abstract */
 
 /*      Enclose (quote) the non-blank part of a character string */
@@ -171,12 +181,12 @@ static integer c__0 = 0;
 
     if (s_cmp(in, " ", in_len, (ftnlen)1) == 0) {
 	s_copy(out, left, out_len, (ftnlen)1);
-	suffix_(right, &c__1, out, (ftnlen)1, out_len);
+	suffix_(right, &__state->c__1, out, (ftnlen)1, out_len);
     } else {
 	i__1 = frstnb_(in, in_len) - 1;
 	s_copy(out, in + i__1, out_len, lastnb_(in, in_len) - i__1);
-	prefix_(left, &c__0, out, (ftnlen)1, out_len);
-	suffix_(right, &c__0, out, (ftnlen)1, out_len);
+	prefix_(left, &__state->c__0, out, (ftnlen)1, out_len);
+	suffix_(right, &__state->c__0, out, (ftnlen)1, out_len);
     }
     return 0;
 } /* quote_ */

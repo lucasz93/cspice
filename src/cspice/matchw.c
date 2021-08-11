@@ -1,13 +1,21 @@
-/* matchw.f -- translated by f2c (version 19980913).
+/* matchw.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern matchw_init_t __matchw_init;
+static matchw_state_t* get_matchw_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->matchw)
+		state->matchw = __cspice_allocate_module(sizeof(
+	matchw_state_t), &__matchw_init, sizeof(__matchw_init));
+	return state->matchw;
+
+}
 
 /* $Procedure            MATCHW ( Match string against wildcard template ) */
 logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen 
@@ -18,14 +26,27 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
     logical ret_val;
 
     /* Local variables */
-    integer left, slen, tlen, scur, tcur, i__, j;
+    integer left;
+    integer slen;
+    integer tlen;
+    integer scur;
+    integer tcur;
+    integer i__;
+    integer j;
     extern logical samch_(char *, integer *, char *, integer *, ftnlen, 
 	    ftnlen);
-    integer right, slast, tlast;
-    extern integer lastnb_(char *, ftnlen), frstnb_(char *, ftnlen);
+    integer right;
+    integer slast;
+    integer tlast;
+    extern integer lastnb_(char *, ftnlen);
+    extern integer frstnb_(char *, ftnlen);
     logical nosubm;
-    integer sfirst, tfirst;
+    integer sfirst;
+    integer tfirst;
 
+
+    /* Module state */
+    matchw_state_t* __state = get_matchw_state();
 /* $ Abstract */
 
 /*     Determine whether a string is matched by a template containing */
@@ -249,7 +270,7 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     up to the first occurrence of a wild string. */
 
     while(tcur <= tlast && scur <= slast && ! samch_(templ, &tcur, wstr, &
-	    c__1, templ_len, (ftnlen)1)) {
+	    __state->c__1, templ_len, (ftnlen)1)) {
 	if (*(unsigned char *)&templ[tcur - 1] != *(unsigned char *)&string[
 		scur - 1] && *(unsigned char *)&templ[tcur - 1] != *(unsigned 
 		char *)wchr) {
@@ -304,8 +325,8 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     character.  Find the first non-wild-string character in the */
 /*     template. (If there isn't one, we have a match.) */
 
-    while(tcur <= tlast && samch_(templ, &tcur, wstr, &c__1, templ_len, (
-	    ftnlen)1)) {
+    while(tcur <= tlast && samch_(templ, &tcur, wstr, &__state->c__1, 
+	    templ_len, (ftnlen)1)) {
 	++tcur;
     }
     if (tcur > tlast) {
@@ -319,8 +340,8 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     a wild string character. */
 
     left = tcur;
-    while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &c__1, templ_len, (
-	    ftnlen)1)) {
+    while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &__state->c__1, 
+	    templ_len, (ftnlen)1)) {
 	++tcur;
     }
     right = tcur - 1;
@@ -342,9 +363,9 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 	    i__ = slast;
 	    j = tlast;
 	    while(j >= left) {
-		if (samch_(templ, &j, wchr, &c__1, templ_len, (ftnlen)1) || 
-			samch_(templ, &j, string, &i__, templ_len, string_len)
-			) {
+		if (samch_(templ, &j, wchr, &__state->c__1, templ_len, (
+			ftnlen)1) || samch_(templ, &j, string, &i__, 
+			templ_len, string_len)) {
 		    --j;
 		    --i__;
 		} else {
@@ -368,8 +389,8 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 		i__ = scur;
 		j = left;
 		while(j <= right && (samch_(string, &i__, templ, &j, 
-			string_len, templ_len) || samch_(wchr, &c__1, templ, &
-			j, (ftnlen)1, templ_len))) {
+			string_len, templ_len) || samch_(wchr, &__state->c__1,
+			 templ, &j, (ftnlen)1, templ_len))) {
 		    ++i__;
 		    ++j;
 		}
@@ -401,8 +422,8 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*        string character.  Hunt for the next substring that doesn't */
 /*        contain a wild string character. */
 
-	while(tcur <= tlast && samch_(templ, &tcur, wstr, &c__1, templ_len, (
-		ftnlen)1)) {
+	while(tcur <= tlast && samch_(templ, &tcur, wstr, &__state->c__1, 
+		templ_len, (ftnlen)1)) {
 	    ++tcur;
 	}
 	if (tcur > tlast) {
@@ -420,8 +441,8 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*        does not have a wild string character. */
 
 	left = tcur;
-	while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &c__1, templ_len, 
-		(ftnlen)1)) {
+	while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &__state->c__1, 
+		templ_len, (ftnlen)1)) {
 	    ++tcur;
 	}
 	right = tcur - 1;

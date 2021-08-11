@@ -1,25 +1,38 @@
-/* qdq2av.f -- translated by f2c (version 19980913).
+/* qdq2av.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static doublereal c_b3 = -2.;
+extern qdq2av_init_t __qdq2av_init;
+static qdq2av_state_t* get_qdq2av_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->qdq2av)
+		state->qdq2av = __cspice_allocate_module(sizeof(
+	qdq2av_state_t), &__qdq2av_init, sizeof(__qdq2av_init));
+	return state->qdq2av;
+
+}
 
 /* $Procedure QDQ2AV (Quaternion and quaternion derivative to a.v.) */
 /* Subroutine */ int qdq2av_(doublereal *q, doublereal *dq, doublereal *av)
 {
     doublereal qhat[4];
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    ), vhatg_(doublereal *, integer *, doublereal *);
-    doublereal qtemp[4], qstar[4];
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *), qxq_(
-	    doublereal *, doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
+    doublereal qtemp[4];
+    doublereal qstar[4];
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int qxq_(doublereal *, doublereal *, doublereal *)
+	    ;
 
+
+    /* Module state */
+    qdq2av_state_t* __state = get_qdq2av_state();
 /* $ Abstract */
 
 /*     Derive angular velocity from a unit quaternion and its derivative */
@@ -703,7 +716,7 @@ static doublereal c_b3 = -2.;
 
 /*     Get a unitized copy of the input quaternion. */
 
-    vhatg_(q, &c__4, qhat);
+    vhatg_(q, &__state->c__4, qhat);
 
 /*     Get the conjugate QSTAR of QHAT. */
 
@@ -716,7 +729,7 @@ static doublereal c_b3 = -2.;
 /*           AV  = -2 * Q  * DQ */
 
     qxq_(qstar, dq, qtemp);
-    vscl_(&c_b3, &qtemp[1], av);
+    vscl_(&__state->c_b3, &qtemp[1], av);
     return 0;
 } /* qdq2av_ */
 

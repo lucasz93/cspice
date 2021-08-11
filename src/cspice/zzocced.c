@@ -1,15 +1,21 @@
-/* zzocced.f -- translated by f2c (version 19980913).
+/* zzocced.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b50 = 1e-14;
-static doublereal c_b51 = 1e-12;
-static integer c__9 = 9;
+extern zzocced_init_t __zzocced_init;
+static zzocced_state_t* get_zzocced_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzocced)
+		state->zzocced = __cspice_allocate_module(sizeof(
+	zzocced_state_t), &__zzocced_init, sizeof(__zzocced_init));
+	return state->zzocced;
+
+}
 
 /* $Procedure      ZZOCCED ( Occultation of ellipsoidal bodies ) */
 integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1, 
@@ -26,12 +32,17 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal bigr, limb[9], dist[2], rmat[18]	/* was [3][3][2] */, view[3], 
-	    ctrs[6]	/* was [3][2] */;
+    doublereal bigr;
+    doublereal limb[9];
+    doublereal dist[2];
+    doublereal rmat[18]	/* was [3][3][2] */;
+    doublereal view[3];
+    doublereal ctrs[6]	/* was [3][2] */;
     extern doublereal vsep_(doublereal *, doublereal *);
     doublereal tilt;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal tpos[6]	/* was [3][2] */;
     extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
 	    );
@@ -42,59 +53,99 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
     doublereal r__[6]	/* was [3][2] */;
     integer s;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal level, xlimb[9];
+    doublereal level;
+    doublereal xlimb[9];
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal xasep, minpt[3], t12pos[3];
+    doublereal xasep;
+    doublereal minpt[3];
+    doublereal t12pos[3];
     extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal maxpt[3], xdist[2];
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *), ucrss_(
-	    doublereal *, doublereal *, doublereal *);
+    doublereal maxpt[3];
+    doublereal xdist[2];
+    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern logical isrot_(doublereal *, doublereal *, doublereal *);
     extern doublereal vnorm_(doublereal *);
     doublereal xview[3];
     extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *), vprjp_(doublereal *, doublereal *, doublereal *);
-    doublereal smlvu[3], xtpos[6]	/* was [3][2] */;
+	    *);
+    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
+	    *);
+    doublereal smlvu[3];
+    doublereal xtpos[6]	/* was [3][2] */;
     extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), cgv2el_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern logical failed_(void);
     doublereal t1opos[3];
     extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
     extern doublereal pi_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), edlimb_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal lmbmaj[3];
-    extern doublereal dasine_(doublereal *, doublereal *), halfpi_(void);
-    doublereal angcmp, majlen;
+    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal halfpi_(void);
+    doublereal angcmp;
+    doublereal majlen;
     integer bigidx;
-    doublereal minang[2], bigctr[3], lplane[4], maxang[2], maxrad[2], lmbmin[
-	    3], minrad[2], xr[9]	/* was [3][3] */, minvec[3], minlen, 
-	    lmbctr[3], sclmat[9]	/* was [3][3] */, smlmaj[3];
+    doublereal minang[2];
+    doublereal bigctr[3];
+    doublereal lplane[4];
+    doublereal maxang[2];
+    doublereal maxrad[2];
+    doublereal lmbmin[3];
+    doublereal minrad[2];
+    doublereal xr[9]	/* was [3][3] */;
+    doublereal minvec[3];
+    doublereal minlen;
+    doublereal lmbctr[3];
+    doublereal sclmat[9]	/* was [3][3] */;
+    doublereal smlmaj[3];
     extern /* Subroutine */ int saelgv_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal tmpmaj[3], raydir[3], minsep, smldir[3], maxsep, smlmat[9]	
-	    /* was [3][3] */, smlmin[3], uasize, ubdist;
+    doublereal tmpmaj[3];
+    doublereal raydir[3];
+    doublereal minsep;
+    doublereal smldir[3];
+    doublereal maxsep;
+    doublereal smlmat[9]	/* was [3][3] */;
+    doublereal smlmin[3];
+    doublereal uasize;
+    doublereal ubdist;
     integer frtidx;
-    doublereal lnorml[3], smlctr[3], tmpmin[3], sclrot[9]	/* was [3][3] 
-	    */, trgsep, invray[3], tmpctr[3];
+    doublereal lnorml[3];
+    doublereal smlctr[3];
+    doublereal tmpmin[3];
+    doublereal sclrot[9]	/* was [3][3] */;
+    doublereal trgsep;
+    doublereal invray[3];
+    doublereal tmpctr[3];
     integer smlidx;
     doublereal ttdist;
     logical sfront;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal vpproj[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), vminus_(doublereal *,
-	     doublereal *);
-    doublereal xsmlvu[3], xvwtrg[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    doublereal xsmlvu[3];
+    doublereal xvwtrg[3];
     extern doublereal det_(doublereal *);
     doublereal vph;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    , mxv_(doublereal *, doublereal *, doublereal *);
+	    ;
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
 
+
+    /* Module state */
+    zzocced_state_t* __state = get_zzocced_state();
 /* $ Abstract */
 
 /*     Indicate whether one triaxial ellipsoid is occulted by another as */
@@ -741,7 +792,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
     for (i__ = 1; i__ <= 2; ++i__) {
 	if (! isrot_(&rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ?
 		 i__1 : s_rnge("rmat", i__1, "zzocced_", (ftnlen)651)], &
-		c_b50, &c_b51)) {
+		__state->c_b50, &__state->c_b51)) {
 	    setmsg_("Matrix derived by unitizing columns of semi-axis matrix"
 		    " SEMAX# is not a rotation matrix.  The determinant of th"
 		    "is matrix is #.", (ftnlen)126);
@@ -827,7 +878,8 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 		< 2 && 0 <= i__3 ? i__3 : s_rnge("dist", i__3, "zzocced_", (
 		ftnlen)728)];
 	minang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("minang", 
-		i__1, "zzocced_", (ftnlen)728)] = dasine_(&d__1, &c_b51);
+		i__1, "zzocced_", (ftnlen)728)] = dasine_(&d__1, &
+		__state->c_b51);
 	if (failed_()) {
 	    chkout_("ZZOCCED", (ftnlen)7);
 	    return ret_val;
@@ -851,7 +903,8 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 		    i__ - 1) < 2 && 0 <= i__3 ? i__3 : s_rnge("dist", i__3, 
 		    "zzocced_", (ftnlen)746)];
 	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("maxang",
-		     i__1, "zzocced_", (ftnlen)746)] = dasine_(&d__1, &c_b51);
+		     i__1, "zzocced_", (ftnlen)746)] = dasine_(&d__1, &
+		    __state->c_b51);
 	    if (failed_()) {
 		chkout_("ZZOCCED", (ftnlen)7);
 		return ret_val;
@@ -1140,7 +1193,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     components by the reciprocals of the respective semi-axis */
 /*     lengths of the large ellipsoid. */
 
-    cleard_(&c__9, sclmat);
+    cleard_(&__state->c__9, sclmat);
     sclmat[0] = 1. / r__[(i__1 = bigidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
 	    s_rnge("r", i__1, "zzocced_", (ftnlen)1063)];
     sclmat[4] = 1. / r__[(i__1 = bigidx * 3 - 2) < 6 && 0 <= i__1 ? i__1 : 
@@ -1211,7 +1264,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     computation. */
 
     d__1 = 1. / bigr;
-    uasize = dasine_(&d__1, &c_b51);
+    uasize = dasine_(&d__1, &__state->c_b51);
     if (failed_()) {
 	chkout_("ZZOCCED", (ftnlen)7);
 	return ret_val;
@@ -1350,7 +1403,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 		    : s_rnge("xdist", i__2, "zzocced_", (ftnlen)1290)];
 	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("max"
 		    "ang", i__1, "zzocced_", (ftnlen)1290)] = dasine_(&d__1, &
-		    c_b51);
+		    __state->c_b51);
 	    if (failed_()) {
 		chkout_("ZZOCCED", (ftnlen)7);
 		return ret_val;

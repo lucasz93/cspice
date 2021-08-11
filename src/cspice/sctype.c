@@ -1,23 +1,27 @@
-/* sctype.f -- translated by f2c (version 19980913).
+/* sctype.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern sctype_init_t __sctype_init;
+static sctype_state_t* get_sctype_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sctype)
+		state->sctype = __cspice_allocate_module(sizeof(
+	sctype_state_t), &__sctype_init, sizeof(__sctype_init));
+	return state->sctype;
+
+}
 
 /* $Procedure      SCTYPE ( SCLK type ) */
 integer sctype_(integer *sc)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
 
     /* System generated locals */
     integer ret_val, i__1;
@@ -26,23 +30,28 @@ integer sctype_(integer *sc)
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer type__;
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer n;
     extern /* Subroutine */ int scli01_(char *, integer *, integer *, integer 
-	    *, integer *, ftnlen), chkin_(char *, ftnlen), repmi_(char *, 
-	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern logical failed_(void);
     char kvname[60];
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
-    static integer usrctr[2];
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
 
+
+    /* Module state */
+    sctype_state_t* __state = get_sctype_state();
 /* $ Abstract */
 
 /*     Return the spacecraft clock type for a specified spacecraft. */
@@ -297,49 +306,50 @@ integer sctype_(integer *sc)
 /*     ID code changes, set a watch on the SCLK kernel variable for */
 /*     the current clock type. */
 
-    if (first || *sc != oldsc) {
+    if (__state->first || *sc != __state->oldsc) {
 
 /*        Construct the name of the kernel variable that is needed. */
 
 	s_copy(kvname, "SCLK_DATA_TYPE", (ftnlen)60, (ftnlen)14);
-	suffix_("_#", &c__0, kvname, (ftnlen)2, (ftnlen)60);
+	suffix_("_#", &__state->c__0, kvname, (ftnlen)2, (ftnlen)60);
 	i__1 = -(*sc);
 	repmi_(kvname, "#", &i__1, kvname, (ftnlen)60, (ftnlen)1, (ftnlen)60);
 
 /*        Set a watch on the kernel variable needed. */
 
-	swpool_("SCTYPE", &c__1, kvname, (ftnlen)6, (ftnlen)60);
+	swpool_("SCTYPE", &__state->c__1, kvname, (ftnlen)6, (ftnlen)60);
 
 /*        Keep track of the last spacecraft ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
-	first = FALSE_;
+	zzctruin_(__state->usrctr);
+	__state->first = FALSE_;
     }
 
 /*     If the kernel pool variable that this routine uses has */
 /*     been updated, or if the spacecraft id code changes, look */
 /*     up the new value from the kernel pool. */
 
-    zzcvpool_("SCTYPE", usrctr, &update, (ftnlen)6);
-    if (update || nodata) {
+    zzcvpool_("SCTYPE", __state->usrctr, &update, (ftnlen)6);
+    if (update || __state->nodata) {
 
 /*        Find the clock type for the specified mission. */
 
-	type__ = 0;
-	scli01_("SCLK_DATA_TYPE", sc, &c__1, &n, &type__, (ftnlen)14);
+	__state->type__ = 0;
+	scli01_("SCLK_DATA_TYPE", sc, &__state->c__1, &n, &__state->type__, (
+		ftnlen)14);
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    ret_val = 0;
 	    chkout_("SCTYPE", (ftnlen)6);
 	    return ret_val;
 	}
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
     }
-    ret_val = type__;
+    ret_val = __state->type__;
     chkout_("SCTYPE", (ftnlen)6);
     return ret_val;
 } /* sctype_ */

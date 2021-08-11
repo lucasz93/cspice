@@ -1,9 +1,17 @@
-/* ltrim.f -- translated by f2c (version 19980913).
+/* ltrim.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ltrim_state_t;
+static ltrim_state_t* get_ltrim_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LTRIM ( Left trim ) */
 integer ltrim_(char *string, ftnlen string_len)
@@ -14,6 +22,9 @@ integer ltrim_(char *string, ftnlen string_len)
     /* Local variables */
     extern integer frstnb_(char *, ftnlen);
 
+
+    /* Module state */
+    ltrim_state_t* __state = get_ltrim_state();
 /* $ Abstract */
 
 /*     Return the maximum of 1 and the location of the first non-blank */

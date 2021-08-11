@@ -1,15 +1,21 @@
-/* spke01.f -- translated by f2c (version 19980913).
+/* spke01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__15 = 15;
-static integer c__45 = 45;
+extern spke01_init_t __spke01_init;
+static spke01_state_t* get_spke01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke01)
+		state->spke01 = __cspice_allocate_module(sizeof(
+	spke01_state_t), &__spke01_init, sizeof(__spke01_init));
+	return state->spke01;
+
+}
 
 /* $Procedure      SPKE01 ( S/P Kernel, evaluate, type 1 ) */
 /* Subroutine */ int spke01_(doublereal *et, doublereal *record, doublereal *
@@ -17,7 +23,6 @@ static integer c__45 = 45;
 {
     /* Initialized data */
 
-    static doublereal fc[14] = { 1. };
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -26,20 +31,11 @@ static integer c__45 = 45;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static doublereal g[15];
-    static integer i__, j;
-    static doublereal w[17], delta;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    static integer kqmax1;
-    static doublereal dt[45]	/* was [15][3] */, wc[13];
-    static integer kq[3], ks;
-    static doublereal tl;
-    static integer jx;
-    static doublereal tp, refvel[3], refpos[3];
     extern logical return_(void);
-    static integer mq2, ks1, kqq;
-    static doublereal sum;
 
+    /* Module state */
+    spke01_state_t* __state = get_spke01_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 1 */
@@ -219,29 +215,29 @@ static integer c__45 = 45;
 
 /*     For our purposes, NTE is always 3. */
 
-    moved_(record, &c__1, &tl);
-    moved_(&record[1], &c__15, g);
+    moved_(record, &__state->c__1, &__state->tl);
+    moved_(&record[1], &__state->c__15, __state->g);
 
 /*     Collect the reference position and velocity. */
 
-    refpos[0] = record[16];
-    refvel[0] = record[17];
-    refpos[1] = record[18];
-    refvel[1] = record[19];
-    refpos[2] = record[20];
-    refvel[2] = record[21];
-    moved_(&record[22], &c__45, dt);
-    kqmax1 = (integer) record[67];
-    kq[0] = (integer) record[68];
-    kq[1] = (integer) record[69];
-    kq[2] = (integer) record[70];
+    __state->refpos[0] = record[16];
+    __state->refvel[0] = record[17];
+    __state->refpos[1] = record[18];
+    __state->refvel[1] = record[19];
+    __state->refpos[2] = record[20];
+    __state->refvel[2] = record[21];
+    moved_(&record[22], &__state->c__45, __state->dt);
+    __state->kqmax1 = (integer) record[67];
+    __state->kq[0] = (integer) record[68];
+    __state->kq[1] = (integer) record[69];
+    __state->kq[2] = (integer) record[70];
 
 /*     Next we set up for the computation of the various differences */
 
-    delta = *et - tl;
-    tp = delta;
-    mq2 = kqmax1 - 2;
-    ks = kqmax1 - 1;
+    __state->delta = *et - __state->tl;
+    __state->tp = __state->delta;
+    __state->mq2 = __state->kqmax1 - 2;
+    __state->ks = __state->kqmax1 - 1;
 
 /*     This is clearly collecting some kind of coefficients. */
 /*     The problem is that we have no idea what they are... */
@@ -254,24 +250,28 @@ static integer c__45 = 45;
 /*     We then change it from DELTA  by the components of the stepsize */
 /*     vector G. */
 
-    i__1 = mq2;
-    for (j = 1; j <= i__1; ++j) {
-	fc[(i__2 = j) < 14 && 0 <= i__2 ? i__2 : s_rnge("fc", i__2, "spke01_",
-		 (ftnlen)267)] = tp / g[(i__3 = j - 1) < 15 && 0 <= i__3 ? 
-		i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)267)];
-	wc[(i__2 = j - 1) < 13 && 0 <= i__2 ? i__2 : s_rnge("wc", i__2, "spk"
-		"e01_", (ftnlen)268)] = delta / g[(i__3 = j - 1) < 15 && 0 <= 
-		i__3 ? i__3 : s_rnge("g", i__3, "spke01_", (ftnlen)268)];
-	tp = delta + g[(i__2 = j - 1) < 15 && 0 <= i__2 ? i__2 : s_rnge("g", 
-		i__2, "spke01_", (ftnlen)269)];
+    i__1 = __state->mq2;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	__state->fc[(i__2 = __state->j) < 14 && 0 <= i__2 ? i__2 : s_rnge(
+		"fc", i__2, "spke01_", (ftnlen)267)] = __state->tp / 
+		__state->g[(i__3 = __state->j - 1) < 15 && 0 <= i__3 ? i__3 : 
+		s_rnge("g", i__3, "spke01_", (ftnlen)267)];
+	__state->wc[(i__2 = __state->j - 1) < 13 && 0 <= i__2 ? i__2 : s_rnge(
+		"wc", i__2, "spke01_", (ftnlen)268)] = __state->delta / 
+		__state->g[(i__3 = __state->j - 1) < 15 && 0 <= i__3 ? i__3 : 
+		s_rnge("g", i__3, "spke01_", (ftnlen)268)];
+	__state->tp = __state->delta + __state->g[(i__2 = __state->j - 1) < 
+		15 && 0 <= i__2 ? i__2 : s_rnge("g", i__2, "spke01_", (ftnlen)
+		269)];
     }
 
 /*     Collect KQMAX1 reciprocals. */
 
-    i__1 = kqmax1;
-    for (j = 1; j <= i__1; ++j) {
-	w[(i__2 = j - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, "spke0"
-		"1_", (ftnlen)276)] = 1. / (doublereal) j;
+    i__1 = __state->kqmax1;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	__state->w[(i__2 = __state->j - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(
+		"w", i__2, "spke01_", (ftnlen)276)] = 1. / (doublereal) 
+		__state->j;
     }
 
 /*     Compute the W(K) terms needed for the position interpolation */
@@ -279,79 +279,88 @@ static integer c__45 = 45;
 /*     starts out as KQMAX1-1 (the ``maximum integration'') */
 /*     is at least 2. */
 
-    jx = 0;
-    ks1 = ks - 1;
-    while(ks >= 2) {
-	++jx;
-	i__1 = jx;
-	for (j = 1; j <= i__1; ++j) {
-	    w[(i__2 = j + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2,
-		     "spke01_", (ftnlen)293)] = fc[(i__3 = j) < 14 && 0 <= 
-		    i__3 ? i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)293)] 
-		    * w[(i__4 = j + ks1 - 1) < 17 && 0 <= i__4 ? i__4 : 
-		    s_rnge("w", i__4, "spke01_", (ftnlen)293)] - wc[(i__5 = j 
-		    - 1) < 13 && 0 <= i__5 ? i__5 : s_rnge("wc", i__5, "spke"
-		    "01_", (ftnlen)293)] * w[(i__6 = j + ks - 1) < 17 && 0 <= 
-		    i__6 ? i__6 : s_rnge("w", i__6, "spke01_", (ftnlen)293)];
+    __state->jx = 0;
+    __state->ks1 = __state->ks - 1;
+    while(__state->ks >= 2) {
+	++__state->jx;
+	i__1 = __state->jx;
+	for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	    __state->w[(i__2 = __state->j + __state->ks - 1) < 17 && 0 <= 
+		    i__2 ? i__2 : s_rnge("w", i__2, "spke01_", (ftnlen)293)] =
+		     __state->fc[(i__3 = __state->j) < 14 && 0 <= i__3 ? i__3 
+		    : s_rnge("fc", i__3, "spke01_", (ftnlen)293)] * 
+		    __state->w[(i__4 = __state->j + __state->ks1 - 1) < 17 && 
+		    0 <= i__4 ? i__4 : s_rnge("w", i__4, "spke01_", (ftnlen)
+		    293)] - __state->wc[(i__5 = __state->j - 1) < 13 && 0 <= 
+		    i__5 ? i__5 : s_rnge("wc", i__5, "spke01_", (ftnlen)293)] 
+		    * __state->w[(i__6 = __state->j + __state->ks - 1) < 17 &&
+		     0 <= i__6 ? i__6 : s_rnge("w", i__6, "spke01_", (ftnlen)
+		    293)];
 	}
-	ks = ks1;
-	--ks1;
+	__state->ks = __state->ks1;
+	--__state->ks1;
     }
 
 /*     Perform position interpolation: (Note that KS = 1 right now. */
 /*     We don't know much more than that.) */
 
-    for (i__ = 1; i__ <= 3; ++i__) {
-	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke01_", (ftnlen)307)];
-	sum = 0.;
-	for (j = kqq; j >= 1; --j) {
-	    sum += dt[(i__1 = j + i__ * 15 - 16) < 45 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke01_", (ftnlen)311)] * w[(i__2 = j 
-		    + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke01_", (ftnlen)311)];
+    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	__state->kqq = __state->kq[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 
+		? i__1 : s_rnge("kq", i__1, "spke01_", (ftnlen)307)];
+	__state->sum = 0.;
+	for (__state->j = __state->kqq; __state->j >= 1; --__state->j) {
+	    __state->sum += __state->dt[(i__1 = __state->j + __state->i__ * 
+		    15 - 16) < 45 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, 
+		    "spke01_", (ftnlen)311)] * __state->w[(i__2 = __state->j 
+		    + __state->ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(
+		    "w", i__2, "spke01_", (ftnlen)311)];
 	}
-	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke01_", (ftnlen)314)] = refpos[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("refpos", i__2, "spke01_", (ftnlen)
-		314)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+	state[(i__1 = __state->i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		"state", i__1, "spke01_", (ftnlen)314)] = __state->refpos[(
+		i__2 = __state->i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"refpos", i__2, "spke01_", (ftnlen)314)] + __state->delta * (
+		__state->refvel[(i__3 = __state->i__ - 1) < 3 && 0 <= i__3 ? 
 		i__3 : s_rnge("refvel", i__3, "spke01_", (ftnlen)314)] + 
-		delta * sum);
+		__state->delta * __state->sum);
     }
 
 /*     Again we need to compute the W(K) coefficients that are */
 /*     going to be used in the velocity interpolation. */
 /*     (Note, at this point, KS = 1, KS1 = 0.) */
 
-    i__1 = jx;
-    for (j = 1; j <= i__1; ++j) {
-	w[(i__2 = j + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		"spke01_", (ftnlen)324)] = fc[(i__3 = j) < 14 && 0 <= i__3 ? 
-		i__3 : s_rnge("fc", i__3, "spke01_", (ftnlen)324)] * w[(i__4 =
-		 j + ks1 - 1) < 17 && 0 <= i__4 ? i__4 : s_rnge("w", i__4, 
-		"spke01_", (ftnlen)324)] - wc[(i__5 = j - 1) < 13 && 0 <= 
-		i__5 ? i__5 : s_rnge("wc", i__5, "spke01_", (ftnlen)324)] * w[
-		(i__6 = j + ks - 1) < 17 && 0 <= i__6 ? i__6 : s_rnge("w", 
-		i__6, "spke01_", (ftnlen)324)];
+    i__1 = __state->jx;
+    for (__state->j = 1; __state->j <= i__1; ++__state->j) {
+	__state->w[(i__2 = __state->j + __state->ks - 1) < 17 && 0 <= i__2 ? 
+		i__2 : s_rnge("w", i__2, "spke01_", (ftnlen)324)] = 
+		__state->fc[(i__3 = __state->j) < 14 && 0 <= i__3 ? i__3 : 
+		s_rnge("fc", i__3, "spke01_", (ftnlen)324)] * __state->w[(
+		i__4 = __state->j + __state->ks1 - 1) < 17 && 0 <= i__4 ? 
+		i__4 : s_rnge("w", i__4, "spke01_", (ftnlen)324)] - 
+		__state->wc[(i__5 = __state->j - 1) < 13 && 0 <= i__5 ? i__5 :
+		 s_rnge("wc", i__5, "spke01_", (ftnlen)324)] * __state->w[(
+		i__6 = __state->j + __state->ks - 1) < 17 && 0 <= i__6 ? i__6 
+		: s_rnge("w", i__6, "spke01_", (ftnlen)324)];
     }
-    --ks;
+    --__state->ks;
 
 /*     Perform velocity interpolation: */
 
-    for (i__ = 1; i__ <= 3; ++i__) {
-	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke01_", (ftnlen)334)];
-	sum = 0.;
-	for (j = kqq; j >= 1; --j) {
-	    sum += dt[(i__1 = j + i__ * 15 - 16) < 45 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke01_", (ftnlen)338)] * w[(i__2 = j 
-		    + ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke01_", (ftnlen)338)];
+    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
+	__state->kqq = __state->kq[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 
+		? i__1 : s_rnge("kq", i__1, "spke01_", (ftnlen)334)];
+	__state->sum = 0.;
+	for (__state->j = __state->kqq; __state->j >= 1; --__state->j) {
+	    __state->sum += __state->dt[(i__1 = __state->j + __state->i__ * 
+		    15 - 16) < 45 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, 
+		    "spke01_", (ftnlen)338)] * __state->w[(i__2 = __state->j 
+		    + __state->ks - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(
+		    "w", i__2, "spke01_", (ftnlen)338)];
 	}
-	state[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke01_", (ftnlen)341)] = refvel[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("refvel", i__2, "spke01_", (ftnlen)
-		341)] + delta * sum;
+	state[(i__1 = __state->i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		"state", i__1, "spke01_", (ftnlen)341)] = __state->refvel[(
+		i__2 = __state->i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		"refvel", i__2, "spke01_", (ftnlen)341)] + __state->delta * 
+		__state->sum;
     }
 
 /*     That's all folks.  We don't know why we did anything, but */

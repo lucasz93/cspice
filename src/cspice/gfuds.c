@@ -1,17 +1,21 @@
-/* gfuds.f -- translated by f2c (version 19980913).
+/* gfuds.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__5 = 5;
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static logical c_false = FALSE_;
+extern gfuds_init_t __gfuds_init;
+static gfuds_state_t* get_gfuds_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfuds)
+		state->gfuds = __cspice_allocate_module(sizeof(gfuds_state_t),
+	 &__gfuds_init, sizeof(__gfuds_init));
+	return state->gfuds;
+
+}
 
 /* $Procedure GFUDS ( GF, user defined scalar ) */
 /* Subroutine */ int gfuds_(U_fp udfuns, U_fp udqdec, char *relate, 
@@ -27,24 +31,33 @@ static logical c_false = FALSE_;
     extern /* Subroutine */ int zzgfrelx_(U_fp, U_fp, U_fp, U_fp, U_fp, char *
 	    , doublereal *, doublereal *, doublereal *, doublereal *, integer 
 	    *, integer *, doublereal *, logical *, U_fp, U_fp, U_fp, char *, 
-	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen), 
-	    chkin_(char *, ftnlen);
+	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sized_(doublereal *);
     extern logical gfbail_();
     logical ok;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int gfrefn_(), gfrepf_();
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepf_();
     extern logical return_(void);
-    extern /* Subroutine */ int gfrepi_(), gfrepu_(), gfstep_();
-    char rptpre[1*2], rptsuf[1*2];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), gfsstp_(doublereal *);
+    extern /* Subroutine */ int gfrepi_();
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
+    char rptpre[1*2];
+    char rptsuf[1*2];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
     extern logical odd_(integer *);
     doublereal tol;
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfuds_state_t* __state = get_gfuds_state();
 /* $ Abstract */
 
 /*     Perform a GF search on a user defined scalar quantity. */
@@ -1413,8 +1426,8 @@ static logical c_false = FALSE_;
 /*     Standard SPICE error handling. */
 
     /* Parameter adjustments */
-    work_dim1 = *mw + 6;
-    work_offset = work_dim1 - 5;
+    work_dim1 = *mw + 5 + 1;
+    work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
     if (return_()) {
@@ -1428,7 +1441,7 @@ static logical c_false = FALSE_;
 	setmsg_("Workspace window count was #; count must be at least #.", (
 		ftnlen)55);
 	errint_("#", nw, (ftnlen)1);
-	errint_("#", &c__5, (ftnlen)1);
+	errint_("#", &__state->c__5, (ftnlen)1);
 	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
 	chkout_("GFUDS", (ftnlen)5);
 	return 0;
@@ -1464,7 +1477,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1474,15 +1487,15 @@ static logical c_false = FALSE_;
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Call ZZGFRELX to do the event detection work. */
 
     zzgfrelx_((U_fp)gfstep_, (U_fp)gfrefn_, (U_fp)udqdec, (U_fp)zzgfudlt_, (
 	    U_fp)udfuns, relate, refval, &tol, adjust, cnfine, mw, nw, work, &
-	    c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, rptpre, 
-	    rptsuf, &c_false, (L_fp)gfbail_, result, relate_len, (ftnlen)1, (
-	    ftnlen)1);
+	    __state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, 
+	    rptpre, rptsuf, &__state->c_false, (L_fp)gfbail_, result, 
+	    relate_len, (ftnlen)1, (ftnlen)1);
     chkout_("GFUDS", (ftnlen)5);
     return 0;
 } /* gfuds_ */

@@ -1,20 +1,34 @@
-/* zzekue03.f -- translated by f2c (version 19980913).
+/* zzekue03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekue03_state_t;
+static zzekue03_state_t* get_zzekue03_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKUE03 ( EK, update column entry, class 3 ) */
 /* Subroutine */ int zzekue03_(integer *handle, integer *segdsc, integer *
 	coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len)
 {
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void), return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), zzekad03_(integer *, 
-	    integer *, integer *, integer *, char *, logical *, ftnlen), 
-	    zzekde03_(integer *, integer *, integer *, integer *);
+    extern logical failed_(void);
+    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekad03_(integer *, integer *, integer *, 
+	    integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekde03_(integer *, integer *, integer *, 
+	    integer *);
 
+
+    /* Module state */
+    zzekue03_state_t* __state = get_zzekue03_state();
 /* $ Abstract */
 
 /*     Update a specified class 3 column entry in an EK record. */

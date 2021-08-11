@@ -1,13 +1,21 @@
-/* errdev.f -- translated by f2c (version 19980913).
+/* errdev.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern errdev_init_t __errdev_init;
+static errdev_state_t* get_errdev_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->errdev)
+		state->errdev = __cspice_allocate_module(sizeof(
+	errdev_state_t), &__errdev_init, sizeof(__errdev_init));
+	return state->errdev;
+
+}
 
 /* $Procedure      ERRDEV ( Get/Set Error Output Device Name ) */
 /* Subroutine */ int errdev_(char *op, char *device, ftnlen op_len, ftnlen 
@@ -25,16 +33,22 @@ static integer c__2 = 2;
 
     /* Local variables */
     char upop[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen);
-    char locop[3], upnam[255];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    char locop[3];
+    char upnam[255];
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char locnam[255];
     extern /* Subroutine */ int getdev_(char *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), putdev_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int putdev_(char *, ftnlen);
 
+
+    /* Module state */
+    errdev_state_t* __state = get_errdev_state();
 /* $ Abstract */
 
 /*     Retrieve or set the name of the current output */
@@ -402,7 +416,7 @@ static integer c__2 = 2;
 		    "racters; device selection not updated. The first FILEN c"
 		    "haracters of the name were:  ";
 	    i__1[1] = 255, a__1[1] = locnam;
-	    s_cat(ch__1, a__1, i__1, &c__2, (ftnlen)378);
+	    s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)378);
 	    setmsg_(ch__1, (ftnlen)378);
 	    sigerr_("SPICE(DEVICENAMETOOLONG)", (ftnlen)24);
 	    chkout_("ERRDEV", (ftnlen)6);
@@ -430,7 +444,7 @@ static integer c__2 = 2;
 	i__1[0] = 62, a__1[0] = "ERRDEV:  An invalid value of OP was supplie"
 		"d.  The value was: ";
 	i__1[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__1, &c__2, (ftnlen)65);
+	s_cat(ch__2, a__1, i__1, &__state->c__2, (ftnlen)65);
 	setmsg_(ch__2, (ftnlen)65);
 	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
     }

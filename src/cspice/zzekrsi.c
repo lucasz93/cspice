@@ -1,9 +1,17 @@
-/* zzekrsi.f -- translated by f2c (version 19980913).
+/* zzekrsi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekrsi_state_t;
+static zzekrsi_state_t* get_zzekrsi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   ZZEKRSI ( EK, read scalar, integer ) */
 /* Subroutine */ int zzekrsi_(integer *handle, integer *segdsc, integer *
@@ -12,19 +20,29 @@
 {
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
-    integer class__, recno, segno, dtype;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer recno;
+    integer segno;
+    integer dtype;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), zzekrd01_(integer *, integer *, integer *, integer *, 
-	    integer *, logical *), zzekrd04_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, logical *, logical *),
-	     zzekrd07_(integer *, integer *, integer *, integer *, integer *, 
-	    logical *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekrd01_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekrd04_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int zzekrd07_(integer *, integer *, integer *, 
+	    integer *, integer *, logical *);
 
+
+    /* Module state */
+    zzekrsi_state_t* __state = get_zzekrsi_state();
 /* $ Abstract */
 
 /*     Read scalar data from an integer column in a specified EK record. */

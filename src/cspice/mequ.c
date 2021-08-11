@@ -1,19 +1,30 @@
-/* mequ.f -- translated by f2c (version 19980913).
+/* mequ.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
+extern mequ_init_t __mequ_init;
+static mequ_state_t* get_mequ_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->mequ)
+		state->mequ = __cspice_allocate_module(sizeof(mequ_state_t), &
+	__mequ_init, sizeof(__mequ_init));
+	return state->mequ;
+
+}
 
 /* $Procedure      MEQU  ( Matrix equal to another, 3x3 ) */
 /* Subroutine */ int mequ_(doublereal *m1, doublereal *mout)
 {
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
 
+
+    /* Module state */
+    mequ_state_t* __state = get_mequ_state();
 /* $ Abstract */
 
 /*      Set one double precision 3x3 matrix equal to another. */
@@ -132,7 +143,7 @@ static integer c__9 = 9;
 /*     equal to another 3x3_matrix */
 
 /* -& */
-    moved_(m1, &c__9, mout);
+    moved_(m1, &__state->c__9, mout);
 
     return 0;
 } /* mequ_ */

@@ -1,9 +1,17 @@
-/* zzgfdiq.f -- translated by f2c (version 19980913).
+/* zzgfdiq.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgfdiq_state_t;
+static zzgfdiq_state_t* get_zzgfdiq_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZGFDIQ ( GF, return distance between objects ) */
 /* Subroutine */ int zzgfdiq_(integer *targid, doublereal *et, char *abcorr, 
@@ -13,12 +21,15 @@
     extern doublereal vnorm_(doublereal *);
     extern logical failed_(void);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), spkezp_(integer *, 
-	    doublereal *, char *, char *, integer *, doublereal *, doublereal 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
     doublereal pos[3];
 
+
+    /* Module state */
+    zzgfdiq_state_t* __state = get_zzgfdiq_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

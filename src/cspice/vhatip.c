@@ -1,9 +1,17 @@
-/* vhatip.f -- translated by f2c (version 19980913).
+/* vhatip.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vhatip_state_t;
+static vhatip_state_t* get_vhatip_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure VHATIP ( "V-Hat", 3-d unit vector along V, in place ) */
 /* Subroutine */ int vhatip_(doublereal *v)
@@ -11,6 +19,9 @@
     doublereal vmag;
     extern doublereal vnorm_(doublereal *);
 
+
+    /* Module state */
+    vhatip_state_t* __state = get_vhatip_state();
 /* $ Abstract */
 
 /*      Scale a three-dimensional vector to unit length. */

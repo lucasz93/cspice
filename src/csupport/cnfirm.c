@@ -1,9 +1,10 @@
-/* cnfirm.f -- translated by f2c (version 19980913).
+/* cnfirm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure CNFIRM ( Return status of a yes/no query ) */
 /* Subroutine */ int cnfirm_(char *prmpt, logical *torf, ftnlen prmpt_len)

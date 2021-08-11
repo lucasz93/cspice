@@ -1,17 +1,21 @@
-/* termpt.f -- translated by f2c (version 19980913).
+/* termpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__2000 = 2000;
-static integer c__0 = 0;
+extern termpt_init_t __termpt_init;
+static termpt_state_t* get_termpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->termpt)
+		state->termpt = __cspice_allocate_module(sizeof(
+	termpt_state_t), &__termpt_init, sizeof(__termpt_init));
+	return state->termpt;
+
+}
 
 /* $Procedure TERMPT ( Terminator points on an extended object ) */
 /* Subroutine */ int termpt_(char *method, char *ilusrc, char *target, 
@@ -24,24 +28,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical usestl = FALSE_;
-    static integer nrad = 0;
-    static char prvcor[5] = "     ";
-    static integer prvilu = 0;
-    static char prvloc[25] = "                         ";
-    static char prvmth[500] = "                                             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "       ";
-    static integer prvtrg = 0;
-    static logical usecn = FALSE_;
-    static logical uselt = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -54,104 +40,131 @@ static integer c__0 = 0;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), zzbods2c_(integer *, char *, integer *, logical *, char *, 
-	    integer *, logical *, ftnlen, ftnlen);
-    doublereal edir[3], axis[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *), vscl_(
-	    doublereal *, doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    doublereal edir[3];
+    doublereal axis[3];
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
+	    );
     doublereal roll;
     integer room;
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), vequ_(doublereal *, doublereal *), mtxv_(doublereal *, 
-	    doublereal *, doublereal *), zzbodvcd_(integer *, char *, integer 
-	    *, integer *, integer *, doublereal *, ftnlen), zzcorepc_(char *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen), zzmaxrad_(
-	    doublereal *), zznamfrm_(integer *, char *, integer *, char *, 
-	    integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen), 
-	    zztangnt_(integer *, doublereal *, integer *, integer *, integer *
-	    , integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), 
-	    zzedtmpt_(logical *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), 
-	    zzsudski_(integer *, integer *, integer *, integer *), zzctruin_(
+	    );
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
+	    integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zztangnt_(integer *, doublereal *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzedtmpt_(logical *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
 	    integer *);
-    integer i__, j;
+    extern /* Subroutine */ int zzctruin_(integer *);
+    integer i__;
+    integer j;
     extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *), zzprsmet_(
-	    integer *, char *, integer *, char *, char *, logical *, integer *
-	    , integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen), zzraysfx_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *), chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
+	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
-    static logical uflag;
-    static integer shape;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     doublereal ptarg[3];
     integer total;
-    doublereal ssblt, lterr, stobs[6];
+    doublereal ssblt;
+    doublereal lterr;
+    doublereal stobs[6];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
-    static integer nsurf;
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
     extern logical vzero_(doublereal *);
     doublereal prvlt;
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
-    static logical svfnd1, svfnd2, svfnd3;
-    static integer svctr1[2];
     doublereal cp[3];
     extern logical failed_(void);
-    static integer svctr2[2], svctr3[2], svctr4[2], svctr5[2], loccde, svctr6[
-	    2], svctr7[2];
     doublereal lt;
-    integer fxfcde, obscde;
-    static integer ilucde;
+    integer fxfcde;
+    integer obscde;
     integer to;
     extern doublereal clight_(void);
-    static doublereal maxrad;
-    static integer trgcde;
     extern doublereal touchd_(doublereal *);
     extern logical return_(void);
-    char pntdef[20], nrmloc[25], shpstr[9];
-    static char subtyp[20];
+    char pntdef[20];
+    char nrmloc[25];
+    char shpstr[9];
     char trmstr[20];
-    doublereal icorvc[3], ilumlt, ilurad, itrmvc[3], plnvec[3];
-    static doublereal pntbuf[6000]	/* was [3][2000] */;
-    doublereal raydir[3], rayvtx[3], result[2006], srfvec[3], ssbtrg[3], 
-	    stloff[3], tmpvec[3], trgepc, trgpos[3];
-    integer fxcent, fxclss, fxtyid, numitr;
-    static integer shadow, srflst[100], svlcod, trmtyp;
-    logical attblk[15], fnd;
-    static logical pri;
+    doublereal icorvc[3];
+    doublereal ilumlt;
+    doublereal ilurad;
+    doublereal itrmvc[3];
+    doublereal plnvec[3];
+    doublereal raydir[3];
+    doublereal rayvtx[3];
+    doublereal result[2006];
+    doublereal srfvec[3];
+    doublereal ssbtrg[3];
+    doublereal stloff[3];
+    doublereal tmpvec[3];
+    doublereal trgepc;
+    doublereal trgpos[3];
+    integer fxcent;
+    integer fxclss;
+    integer fxtyid;
+    integer numitr;
+    logical attblk[15];
+    logical fnd;
     logical surfup;
-    static char svtarg[36];
-    static integer svtcde;
-    static char svobsr[36];
-    static integer svobsc;
-    static char svilum[36];
-    static integer svicde;
-    static char svfref[32];
-    static integer svfxfc;
-    static doublereal svtrad[3], svsrad[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), frinfo_(integer *, integer *, 
-	    integer *, integer *, logical *), errint_(char *, integer *, 
-	    ftnlen), ljucrs_(integer *, char *, char *, ftnlen, ftnlen), 
-	    cleari_(integer *, integer *), ssized_(integer *, doublereal *), 
-	    spkpos_(char *, doublereal *, char *, char *, char *, doublereal *
-	    , doublereal *, ftnlen, ftnlen, ftnlen, ftnlen), scardd_(integer *
-	    , doublereal *), vminus_(doublereal *, doublereal *), spkssb_(
-	    integer *, doublereal *, char *, doublereal *, ftnlen), spkgps_(
-	    integer *, doublereal *, char *, integer *, doublereal *, 
-	    doublereal *, ftnlen), spkezp_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen), 
-	    pxform_(char *, char *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen), mxv_(doublereal *, doublereal *, doublereal *), stelab_(
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int ssized_(integer *, doublereal *);
+    extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
+	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
+	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+	    doublereal *);
 
+
+    /* Module state */
+    termpt_state_t* __state = get_termpt_state();
 /* $ Abstract */
 
 /*     Find terminator points on a target body. The caller specifies */
@@ -2599,23 +2612,24 @@ static integer c__0 = 0;
 
 /*     Counter initialization is done separately. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(svctr1);
-	zzctruin_(svctr2);
-	zzctruin_(svctr3);
-	zzctruin_(svctr4);
-	zzctruin_(svctr5);
-	zzctruin_(svctr6);
+	zzctruin_(__state->svctr1);
+	zzctruin_(__state->svctr2);
+	zzctruin_(__state->svctr3);
+	zzctruin_(__state->svctr4);
+	zzctruin_(__state->svctr5);
+	zzctruin_(__state->svctr6);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -2652,19 +2666,20 @@ static integer c__0 = 0;
 /*        The above definitions are consistent with those used by */
 /*        ZZPRSCOR. */
 
-	uselt = attblk[1];
-	usecn = attblk[3];
-	usestl = attblk[2];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
+	__state->usestl = attblk[2];
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(svctr1, svtarg, &svtcde, &svfnd1, target, &trgcde, &fnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
+	    __state->svfnd1, target, &__state->trgcde, &fnd, (ftnlen)36, 
+	    target_len);
     if (! fnd) {
 	setmsg_("The target, '#', is not a recognized name for an ephemeris "
 		"object. The cause of this problem may be that you need an up"
@@ -2676,8 +2691,8 @@ static integer c__0 = 0;
 	chkout_("TERMPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(svctr2, svobsr, &svobsc, &svfnd2, obsrvr, &obscde, &fnd, (
-	    ftnlen)36, obsrvr_len);
+    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
+	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
     if (! fnd) {
 	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
 		"s object. The cause of this problem may be that you need an "
@@ -2692,8 +2707,9 @@ static integer c__0 = 0;
 
 /*     Obtain an integer code for the illumination source. */
 
-    zzbods2c_(svctr3, svilum, &svicde, &svfnd3, ilusrc, &ilucde, &fnd, (
-	    ftnlen)36, ilusrc_len);
+    zzbods2c_(__state->svctr3, __state->svilum, &__state->svicde, &
+	    __state->svfnd3, ilusrc, &__state->ilucde, &fnd, (ftnlen)36, 
+	    ilusrc_len);
     if (! fnd) {
 	setmsg_("The illumination source, '#', is not a recognized name for "
 		"an ephemeris object. The cause of this problem may be that y"
@@ -2710,7 +2726,7 @@ static integer c__0 = 0;
 /*     signal an error. The illumination source must be distinct */
 /*     from the target as well. */
 
-    if (obscde == trgcde) {
+    if (obscde == __state->trgcde) {
 	setmsg_("In computing the terminator, the observing body and target "
 		"body are the same. Both are #.", (ftnlen)89);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -2718,7 +2734,7 @@ static integer c__0 = 0;
 	chkout_("TERMPT", (ftnlen)6);
 	return 0;
     }
-    if (ilucde == trgcde) {
+    if (__state->ilucde == __state->trgcde) {
 	setmsg_("In computing the terminator, the observing body and illumin"
 		"ation source are the same. Both are #.", (ftnlen)97);
 	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
@@ -2729,8 +2745,8 @@ static integer c__0 = 0;
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(svctr4, svfref, &svfxfc, fixref, &fxfcde, (ftnlen)32, 
-	    fixref_len);
+    zznamfrm_(__state->svctr4, __state->svfref, &__state->svfxfc, fixref, &
+	    fxfcde, (ftnlen)32, fixref_len);
     frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
     if (failed_()) {
 	chkout_("TERMPT", (ftnlen)6);
@@ -2748,7 +2764,7 @@ static integer c__0 = 0;
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
-    if (fxcent != trgcde) {
+    if (fxcent != __state->trgcde) {
 	setmsg_("Reference frame # is not centered at the target body #. The"
 		" ID code of the frame center is #.", (ftnlen)93);
 	errch_("#", fixref, (ftnlen)1, fixref_len);
@@ -2761,14 +2777,14 @@ static integer c__0 = 0;
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(svctr5, &surfup);
+    zzsrftrk_(__state->svctr5, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (first || surfup || s_cmp(method, prvmth, method_len, (ftnlen)500) != 
-	    0) {
+    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
+	     (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2776,7 +2792,7 @@ static integer c__0 = 0;
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2785,17 +2801,18 @@ static integer c__0 = 0;
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &c__100, shpstr, subtyp, &pri, &nsurf, 
-		srflst, pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
+	zzprsmet_(&__state->trgcde, method, &__state->c__100, shpstr, 
+		__state->subtyp, &__state->pri, &__state->nsurf, 
+		__state->srflst, pntdef, trmstr, method_len, (ftnlen)9, (
+		ftnlen)20, (ftnlen)20, (ftnlen)20);
 	if (failed_()) {
 	    chkout_("TERMPT", (ftnlen)6);
 	    return 0;
 	}
 	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
-	    shape = 1;
+	    __state->shape = 1;
 	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
-	    shape = 2;
+	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
@@ -2812,9 +2829,9 @@ static integer c__0 = 0;
 	    return 0;
 	}
 	if (eqstr_(pntdef, "TANGENT", (ftnlen)20, (ftnlen)7)) {
-	    trmtyp = 1;
+	    __state->trmtyp = 1;
 	} else if (eqstr_(pntdef, "GUIDED", (ftnlen)20, (ftnlen)6)) {
-	    trmtyp = 2;
+	    __state->trmtyp = 2;
 	} else {
 	    setmsg_("Returned point definition from method string was <#>. V"
 		    "alue must be TANGENT or GUIDED.", (ftnlen)86);
@@ -2824,11 +2841,11 @@ static integer c__0 = 0;
 	    return 0;
 	}
 	if (eqstr_(trmstr, "UMBRAL", (ftnlen)20, (ftnlen)6)) {
-	    shadow = 1;
-	    uflag = TRUE_;
+	    __state->shadow = 1;
+	    __state->uflag = TRUE_;
 	} else if (eqstr_(trmstr, "PENUMBRAL", (ftnlen)20, (ftnlen)9)) {
-	    shadow = 2;
-	    uflag = FALSE_;
+	    __state->shadow = 2;
+	    __state->uflag = FALSE_;
 	} else {
 	    setmsg_("Returned shadow type from method string was <#>. Value "
 		    "must be UMBRAL or PENUMBRAL.", (ftnlen)83);
@@ -2841,12 +2858,12 @@ static integer c__0 = 0;
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
+	if (s_cmp(__state->subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
 	    setmsg_("Spurious sub-observer point type <#> was present in the"
 		    " method string #. The sub-observer type is valid in the "
 		    "method strings for SUBPNT and SUBSLR, but is not applica"
 		    "ble for TERMPT.", (ftnlen)182);
-	    errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
+	    errch_("#", __state->subtyp, (ftnlen)1, (ftnlen)20);
 	    errch_("#", method, (ftnlen)1, method_len);
 	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
 	    chkout_("TERMPT", (ftnlen)6);
@@ -2856,18 +2873,19 @@ static integer c__0 = 0;
 /*        Save the current method as the previous method that we've */
 /*        successfully processed the input method. */
 
-	s_copy(prvmth, method, (ftnlen)500, method_len);
+	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
     }
 
 /*     Identify the aberration correction locus. */
 
-    if (first || s_cmp(corloc, prvloc, corloc_len, (ftnlen)25) != 0) {
-	ljucrs_(&c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
+    if (__state->first || s_cmp(corloc, __state->prvloc, corloc_len, (ftnlen)
+	    25) != 0) {
+	ljucrs_(&__state->c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
 	if (s_cmp(nrmloc, "CENTER", (ftnlen)25, (ftnlen)6) == 0) {
-	    loccde = 1;
+	    __state->loccde = 1;
 	} else if (s_cmp(nrmloc, "ELLIPSOID TERMINATOR", (ftnlen)25, (ftnlen)
 		20) == 0) {
-	    loccde = 2;
+	    __state->loccde = 2;
 	} else {
 	    setmsg_("Aberration correction locus <#> was not recognized.", (
 		    ftnlen)51);
@@ -2881,8 +2899,8 @@ static integer c__0 = 0;
 /*        Save the input locus string so we can check for */
 /*        a change on the next call. */
 
-	svlcod = loccde;
-	s_copy(prvloc, corloc, (ftnlen)25, corloc_len);
+	__state->svlcod = __state->loccde;
+	s_copy(__state->prvloc, corloc, (ftnlen)25, corloc_len);
     }
 
 /*     Check the reference vector. */
@@ -2896,7 +2914,7 @@ static integer c__0 = 0;
 
 /*     At this point, the first pass actions were successful. */
 
-    first = FALSE_;
+    __state->first = FALSE_;
 
 /*     Check MAXN. */
 
@@ -2934,20 +2952,21 @@ static integer c__0 = 0;
 	    return 0;
 	}
     }
-    if (shape == 2) {
+    if (__state->shape == 2) {
 
 /*        This is the DSK case. */
 
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &nsurf, srflst, &fxfcde);
+	zzsudski_(&__state->trgcde, &__state->nsurf, __state->srflst, &fxfcde)
+		;
 
 /*        Save the radius of the outer bounding sphere of */
 /*        the target. */
 
-	zzmaxrad_(&maxrad);
-    } else if (shape != 1) {
+	zzmaxrad_(&__state->maxrad);
+    } else if (__state->shape != 1) {
 	setmsg_("Computation method argument was <#>; this string must speci"
 		"fy a supported shape model and computation type. See the des"
 		"cription of METHOD in the header of TERMPT for details.", (
@@ -2964,28 +2983,29 @@ static integer c__0 = 0;
 
 /*     Get illumination source radii. */
 
-    if (ilucde != prvilu) {
+    if (__state->ilucde != __state->prvilu) {
 
 /*        Reset counter to force lookup. */
 
-	zzctruin_(svctr7);
+	zzctruin_(__state->svctr7);
     }
 
 /*     Look up illumination source radii using counter. */
 
-    zzbodvcd_(&ilucde, "RADII", &c__3, svctr7, &nrad, svsrad, (ftnlen)5);
+    zzbodvcd_(&__state->ilucde, "RADII", &__state->c__3, __state->svctr7, &
+	    __state->nrad, __state->svsrad, (ftnlen)5);
     if (failed_()) {
 
 /*        Make sure we don't reuse the outputs from ZZBODVCD. */
 
-	prvilu = 0;
+	__state->prvilu = 0;
 	chkout_("TERMPT", (ftnlen)6);
 	return 0;
     }
-    if (nrad != 3) {
+    if (__state->nrad != 3) {
 	setmsg_("Number of illumination source radii must be 3 but was #.", (
 		ftnlen)56);
-	errint_("#", &nrad, (ftnlen)1);
+	errint_("#", &__state->nrad, (ftnlen)1);
 	sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
 	chkout_("TERMPT", (ftnlen)6);
 	return 0;
@@ -2994,36 +3014,37 @@ static integer c__0 = 0;
 /*     Obtain the largest radius of the source. */
 
 /* Computing MAX */
-    d__1 = max(svsrad[0],svsrad[1]);
-    ilurad = max(d__1,svsrad[2]);
-    prvilu = ilucde;
+    d__1 = max(__state->svsrad[0],__state->svsrad[1]);
+    ilurad = max(d__1,__state->svsrad[2]);
+    __state->prvilu = __state->ilucde;
 
 /*     Get target body radii if necessary. */
 
-    if (shape == 1 || svlcod == 2 || trmtyp == 2) {
-	if (trgcde != prvtrg) {
+    if (__state->shape == 1 || __state->svlcod == 2 || __state->trmtyp == 2) {
+	if (__state->trgcde != __state->prvtrg) {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(svctr6);
+	    zzctruin_(__state->svctr6);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&trgcde, "RADII", &c__3, svctr6, &nrad, svtrad, (ftnlen)5);
+	zzbodvcd_(&__state->trgcde, "RADII", &__state->c__3, __state->svctr6, 
+		&__state->nrad, __state->svtrad, (ftnlen)5);
 	if (failed_()) {
 	    chkout_("TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	if (nrad != 3) {
+	if (__state->nrad != 3) {
 	    setmsg_("Number of target radii must be 3 but was #.", (ftnlen)43)
 		    ;
-	    errint_("#", &nrad, (ftnlen)1);
+	    errint_("#", &__state->nrad, (ftnlen)1);
 	    sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
 	    chkout_("TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	prvtrg = trgcde;
+	__state->prvtrg = __state->trgcde;
     }
 
 /*     Set up activities are complete at this point. */
@@ -3032,7 +3053,7 @@ static integer c__0 = 0;
 /*     Find terminator points on the target. */
 
     cleari_(ncuts, npts);
-    ssized_(&c__2000, result);
+    ssized_(&__state->c__2000, result);
 
 /*     Get initial observer-target vector, expressed in the target */
 /*     body-fixed frame, evaluated at the target epoch. This vector */
@@ -3057,7 +3078,7 @@ static integer c__0 = 0;
 /*     correction locus. Start with the 'CENTER' version, since this is */
 /*     the simpler case. */
 
-    if (svlcod == 1) {
+    if (__state->svlcod == 1) {
 
 /*        Aberration corrections are those applicable at the target */
 /*        center. */
@@ -3104,11 +3125,11 @@ static integer c__0 = 0;
 /*           sense about AXIS. */
 
 	    vrotv_(refvec, axis, &roll, plnvec);
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              This is the DSK case. */
 
-		if (trmtyp == 1) {
+		if (__state->trmtyp == 1) {
 
 /*                 This type of solution finds actual tangent rays on */
 /*                 the target. */
@@ -3118,7 +3139,7 @@ static integer c__0 = 0;
 
 /*                 Note that RESULT is a cell, not a window. */
 
-		    scardd_(&c__0, result);
+		    scardd_(&__state->c__0, result);
 
 /*                 Note that the evaluation epoch for the surface is */
 /*                 optionally corrected for light time. */
@@ -3128,15 +3149,16 @@ static integer c__0 = 0;
 /*                 The location of the center of the source is passed */
 /*                 to the tangent utilities instead. */
 
-		    zztangnt_(&shadow, &ilurad, &shape, &trgcde, &nsurf, 
-			    srflst, &fxfcde, &trgepc, plnvec, axis, schstp, 
-			    soltol, result, pntbuf);
+		    zztangnt_(&__state->shadow, &ilurad, &__state->shape, &
+			    __state->trgcde, &__state->nsurf, __state->srflst,
+			     &fxfcde, &trgepc, plnvec, axis, schstp, soltol, 
+			    result, __state->pntbuf);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
 		    }
 		    npts[i__ - 1] = cardd_(result);
-		} else if (trmtyp == 2) {
+		} else if (__state->trmtyp == 2) {
 
 /*                 This option uses the target's reference ellipsoid for */
 /*                 guidance. For DSK shapes, the DSK terminator points */
@@ -3151,14 +3173,15 @@ static integer c__0 = 0;
 /*                 Find the terminator point on the ellipsoid in the */
 /*                 current cutting half-plane. */
 
-		    zzedtmpt_(&uflag, svtrad, &svtrad[1], &svtrad[2], &ilurad,
-			     axis, plnvec, pntbuf);
+		    zzedtmpt_(&__state->uflag, __state->svtrad, &
+			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
+			    axis, plnvec, __state->pntbuf);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
 		    }
 		    npts[i__ - 1] = 1;
-		    vhat_(pntbuf, edir);
+		    vhat_(__state->pntbuf, edir);
 
 /*                 Find the intercept on the target surface of the ray */
 /*                 emanating from the target in the direction of EDIR. */
@@ -3166,11 +3189,12 @@ static integer c__0 = 0;
 /*                 to perform this computation, since the surface may be */
 /*                 invisible from the interior of the target. */
 
-		    d__1 = maxrad * 3.;
+		    d__1 = __state->maxrad * 3.;
 		    vscl_(&d__1, edir, rayvtx);
 		    vminus_(edir, raydir);
-		    zzsudski_(&trgcde, &nsurf, srflst, &fxfcde);
-		    zzraysfx_(rayvtx, raydir, &trgepc, pntbuf, &fnd);
+		    zzsudski_(&__state->trgcde, &__state->nsurf, 
+			    __state->srflst, &fxfcde);
+		    zzraysfx_(rayvtx, raydir, &trgepc, __state->pntbuf, &fnd);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
@@ -3185,32 +3209,33 @@ static integer c__0 = 0;
 /*                 This is a backstop case; it should never be reached. */
 
 		    setmsg_("Invalid terminator type code: #", (ftnlen)31);
-		    errint_("#", &trmtyp, (ftnlen)1);
+		    errint_("#", &__state->trmtyp, (ftnlen)1);
 		    sigerr_("SPICE(BUG)", (ftnlen)10);
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
 		}
-	    } else if (shape == 1) {
+	    } else if (__state->shape == 1) {
 
 /*              This is the ellipsoid case. */
 
 /*              Find the terminator point in the current cutting */
 /*              half-plane. */
 
-		zzedtmpt_(&uflag, svtrad, &svtrad[1], &svtrad[2], &ilurad, 
-			axis, plnvec, pntbuf);
+		zzedtmpt_(&__state->uflag, __state->svtrad, &__state->svtrad[
+			1], &__state->svtrad[2], &ilurad, axis, plnvec, 
+			__state->pntbuf);
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
 		}
-		scardd_(&c__0, result);
+		scardd_(&__state->c__0, result);
 		npts[i__ - 1] = 1;
 	    } else {
 
 /*              This is a backstop case; it should never be reached. */
 
 		setmsg_("Invalid shape code: #", (ftnlen)21);
-		errint_("#", &shape, (ftnlen)1);
+		errint_("#", &__state->shape, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("TERMPT", (ftnlen)6);
 		return 0;
@@ -3237,18 +3262,18 @@ static integer c__0 = 0;
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3029)], &
-			points[to * 3 - 3]);
-		vadd_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3030)], 
-			trgpos, &trmvcs[to * 3 - 3]);
+		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
+			3029)], &points[to * 3 - 3]);
+		vadd_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
+			3030)], trgpos, &trmvcs[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
 		room -= npts[i__ - 1];
 	    }
 	}
-    } else if (svlcod == 2) {
+    } else if (__state->svlcod == 2) {
 
 /*        Aberration corrections are done for each cutting half plane. */
 /*        Corrections are performed for the intersections of the */
@@ -3257,7 +3282,7 @@ static integer c__0 = 0;
 /*        This locus is supported only for the "tangent" terminator */
 /*        point method. */
 
-	if (trmtyp != 1) {
+	if (__state->trmtyp != 1) {
 	    setmsg_("Terminator point definition type <#> is not supported f"
 		    "or the # aberration correction locus.", (ftnlen)92);
 	    errch_("#", pntdef, (ftnlen)1, (ftnlen)20);
@@ -3286,7 +3311,7 @@ static integer c__0 = 0;
 	i__1 = *ncuts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    roll = (i__ - 1) * *rolstp;
-	    if (uselt) {
+	    if (__state->uselt) {
 
 /*              We'll do an independent light time and stellar */
 /*              aberration correction for each half plane. */
@@ -3294,7 +3319,7 @@ static integer c__0 = 0;
 /*              Let NUMITR be the number of iterations we'll perform to */
 /*              compute the light time. */
 
-		if (usecn) {
+		if (__state->usecn) {
 		    numitr = 5;
 		} else {
 		    numitr = 1;
@@ -3307,8 +3332,8 @@ static integer c__0 = 0;
 /*                 during the previous loop iteration. */
 
 		    epoch = *et - lt;
-		    spkgps_(&trgcde, &epoch, "J2000", &c__0, ssbtrg, &ssblt, (
-			    ftnlen)5);
+		    spkgps_(&__state->trgcde, &epoch, "J2000", &__state->c__0,
+			     ssbtrg, &ssblt, (ftnlen)5);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
@@ -3322,8 +3347,9 @@ static integer c__0 = 0;
 /*                 Find the position of the illumination source relative */
 /*                 to the target center at EPOCH. */
 
-		    spkezp_(&ilucde, &epoch, fixref, abcorr, &trgcde, axis, &
-			    ilumlt, fixref_len, abcorr_len);
+		    spkezp_(&__state->ilucde, &epoch, fixref, abcorr, &
+			    __state->trgcde, axis, &ilumlt, fixref_len, 
+			    abcorr_len);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
@@ -3341,8 +3367,9 @@ static integer c__0 = 0;
 /*                 Find the terminator point on the reference */
 /*                 ellipsoid, in the cutting half-plane. */
 
-		    zzedtmpt_(&uflag, svtrad, &svtrad[1], &svtrad[2], &ilurad,
-			     axis, plnvec, pntbuf);
+		    zzedtmpt_(&__state->uflag, __state->svtrad, &
+			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
+			    axis, plnvec, __state->pntbuf);
 		    if (failed_()) {
 			chkout_("TERMPT", (ftnlen)6);
 			return 0;
@@ -3360,7 +3387,7 @@ static integer c__0 = 0;
 			return 0;
 		    }
 		    mxv_(xform, ptarg, trgpos);
-		    vadd_(pntbuf, trgpos, srfvec);
+		    vadd_(__state->pntbuf, trgpos, srfvec);
 
 /*                 Compute the light time to the terminator point. */
 
@@ -3392,8 +3419,8 @@ static integer c__0 = 0;
 /*              to the observer at ET. This vector is computed in */
 /*              an inertial frame. */
 
-		spkgps_(&trgcde, &epoch, "J2000", &c__0, ssbtrg, &ssblt, (
-			ftnlen)5);
+		spkgps_(&__state->trgcde, &epoch, "J2000", &__state->c__0, 
+			ssbtrg, &ssblt, (ftnlen)5);
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
@@ -3417,12 +3444,12 @@ static integer c__0 = 0;
 /*              If we're using stellar aberration corrections, find the */
 /*              correction applicable to the ellipsoid terminator point. */
 
-		if (usestl) {
+		if (__state->usestl) {
 
 /*                 The vector ICORVC below is the inertially-referenced */
 /*                 stellar aberration correction. */
 
-		    mtxv_(xform, pntbuf, tmpvec);
+		    mtxv_(xform, __state->pntbuf, tmpvec);
 		    vadd_(tmpvec, ptarg, itrmvc);
 		    stelab_(itrmvc, &stobs[3], tmpvec);
 		    vsub_(tmpvec, itrmvc, icorvc);
@@ -3434,8 +3461,9 @@ static integer c__0 = 0;
 /*              Find the apparent position of the illumination source */
 /*              relative to the target at EPOCH. */
 
-		spkezp_(&ilucde, &epoch, fixref, abcorr, &trgcde, axis, &
-			ilumlt, fixref_len, abcorr_len);
+		spkezp_(&__state->ilucde, &epoch, fixref, abcorr, &
+			__state->trgcde, axis, &ilumlt, fixref_len, 
+			abcorr_len);
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
@@ -3447,8 +3475,9 @@ static integer c__0 = 0;
 /*              Get the position of the illumination source */
 /*              as seen from the target at ET. */
 
-		spkezp_(&ilucde, et, fixref, abcorr, &trgcde, axis, &ilumlt, 
-			fixref_len, abcorr_len);
+		spkezp_(&__state->ilucde, et, fixref, abcorr, &
+			__state->trgcde, axis, &ilumlt, fixref_len, 
+			abcorr_len);
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
@@ -3473,19 +3502,20 @@ static integer c__0 = 0;
 /*           We're ready to compute the terminator point in the current */
 /*           half-plane. */
 
-	    if (shape == 2) {
+	    if (__state->shape == 2) {
 
 /*              Find the terminator points on the target surface as */
 /*              modeled by DSK data. */
 
-		scardd_(&c__0, result);
+		scardd_(&__state->c__0, result);
 
 /*              Note that the evaluation epoch for the surface is */
 /*              corrected for light time. */
 
-		zztangnt_(&shadow, &ilurad, &shape, &trgcde, &nsurf, srflst, &
+		zztangnt_(&__state->shadow, &ilurad, &__state->shape, &
+			__state->trgcde, &__state->nsurf, __state->srflst, &
 			fxfcde, &epoch, plnvec, axis, schstp, soltol, result, 
-			pntbuf);
+			__state->pntbuf);
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
 		    return 0;
@@ -3501,9 +3531,10 @@ static integer c__0 = 0;
 /*              computation, we still need to compute the terminator */
 /*              point. */
 
-		if (! uselt) {
-		    zzedtmpt_(&uflag, svtrad, &svtrad[1], &svtrad[2], &ilurad,
-			     axis, plnvec, pntbuf);
+		if (! __state->uselt) {
+		    zzedtmpt_(&__state->uflag, __state->svtrad, &
+			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
+			    axis, plnvec, __state->pntbuf);
 		}
 		if (failed_()) {
 		    chkout_("TERMPT", (ftnlen)6);
@@ -3533,13 +3564,13 @@ static integer c__0 = 0;
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3373)], &
-			points[to * 3 - 3]);
-		vadd_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3374)], 
-			trgpos, &trmvcs[to * 3 - 3]);
-		if (usestl) {
+		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
+			3373)], &points[to * 3 - 3]);
+		vadd_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
+			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
+			3374)], trgpos, &trmvcs[to * 3 - 3]);
+		if (__state->usestl) {
 
 /*                 Apply the stellar aberration offset for the current */
 /*                 half-plane to each terminator vector in the output */

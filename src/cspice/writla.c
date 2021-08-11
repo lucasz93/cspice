@@ -1,9 +1,17 @@
-/* writla.f -- translated by f2c (version 19980913).
+/* writla.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int writla_state_t;
+static writla_state_t* get_writla_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      WRITLA ( Write array of lines to a logical unit ) */
 /* Subroutine */ int writla_(integer *numlin, char *array, integer *unit, 
@@ -16,12 +24,16 @@
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    writla_state_t* __state = get_writla_state();
 /* $ Abstract */
 
 /*     This routine will write an array of text lines to a Fortran */

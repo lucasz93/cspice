@@ -1,9 +1,17 @@
-/* dlassg.f -- translated by f2c (version 19980913).
+/* dlassg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dlassg_state_t;
+static dlassg_state_t* get_dlassg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DLASSG ( DLA, same segment? ) */
 logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
@@ -18,6 +26,9 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    dlassg_state_t* __state = get_dlassg_state();
 /* $ Abstract */
 
 /*     Return a logical value indicating whether a two DLA */

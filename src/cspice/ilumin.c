@@ -1,9 +1,17 @@
-/* ilumin.f -- translated by f2c (version 19980913).
+/* ilumin.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ilumin_state_t;
+static ilumin_state_t* get_ilumin_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ILUMIN ( Illumination angles ) */
 /* Subroutine */ int ilumin_(char *method, char *target, doublereal *et, char 
@@ -12,13 +20,17 @@
 	doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen 
 	fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), illumg_(char *, char *
-	    , char *, doublereal *, char *, char *, char *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int illumg_(char *, char *, char *, doublereal *, 
+	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ilumin_state_t* __state = get_ilumin_state();
 /* $ Abstract */
 
 /*     Find the illumination angles (phase, solar incidence, and */

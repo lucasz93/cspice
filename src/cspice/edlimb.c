@@ -1,14 +1,21 @@
-/* edlimb.f -- translated by f2c (version 19980913).
+/* edlimb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b18 = 1.;
-static integer c__9 = 9;
+extern edlimb_init_t __edlimb_init;
+static edlimb_state_t* get_edlimb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->edlimb)
+		state->edlimb = __cspice_allocate_module(sizeof(
+	edlimb_state_t), &__edlimb_init, sizeof(__edlimb_init));
+	return state->edlimb;
+
+}
 
 /* $Procedure  EDLIMB   ( Ellipsoid Limb ) */
 /* Subroutine */ int edlimb_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -18,16 +25,23 @@ static integer c__9 = 9;
     doublereal d__1, d__2, d__3;
 
     /* Local variables */
-    doublereal scla, sclb, sclc;
+    doublereal scla;
+    doublereal sclb;
+    doublereal sclc;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal scla2, sclb2, sclc2, v[3], scale;
+    doublereal scla2;
+    doublereal sclb2;
+    doublereal sclc2;
+    doublereal v[3];
+    doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal level;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), vsclg_(
-	    doublereal *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
     doublereal tmpel[9];
     extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
 	    doublereal *);
@@ -35,10 +49,14 @@ static integer c__9 = 9;
     extern /* Subroutine */ int inedpl_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *);
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    edlimb_state_t* __state = get_edlimb_state();
 /* $ Abstract */
 
 /*     Find the limb of a triaxial ellipsoid, viewed from a specified */
@@ -420,7 +438,7 @@ static integer c__9 = 9;
     normal[0] = v[0] / scla2;
     normal[1] = v[1] / sclb2;
     normal[2] = v[2] / sclc2;
-    nvc2pl_(normal, &c_b18, lplane);
+    nvc2pl_(normal, &__state->c_b18, lplane);
 
 /*     Find the limb by intersecting the limb plane with the ellipsoid. */
 
@@ -438,8 +456,8 @@ static integer c__9 = 9;
 
 /*     Undo the scaling before returning the limb. */
 
-    vsclg_(&scale, limb, &c__9, tmpel);
-    moved_(tmpel, &c__9, limb);
+    vsclg_(&scale, limb, &__state->c__9, tmpel);
+    moved_(tmpel, &__state->c__9, limb);
     chkout_("EDLIMB", (ftnlen)6);
     return 0;
 } /* edlimb_ */

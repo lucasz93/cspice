@@ -1,9 +1,17 @@
-/* lstltd.f -- translated by f2c (version 19980913).
+/* lstltd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstltd_state_t;
+static lstltd_state_t* get_lstltd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTLTD ( Last double precision element less than ) */
 integer lstltd_(doublereal *x, integer *n, doublereal *array)
@@ -12,8 +20,15 @@ integer lstltd_(doublereal *x, integer *n, doublereal *array)
     integer ret_val;
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstltd_state_t* __state = get_lstltd_state();
 /* $ Abstract */
 
 /*      Given a number X and an array of non-decreasing numbers, */

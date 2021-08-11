@@ -1,16 +1,21 @@
-/* zzekbs01.f -- translated by f2c (version 19980913).
+/* zzekbs01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__11 = 11;
+extern zzekbs01_init_t __zzekbs01_init;
+static zzekbs01_state_t* get_zzekbs01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekbs01)
+		state->zzekbs01 = __cspice_allocate_module(sizeof(
+	zzekbs01_state_t), &__zzekbs01_init, sizeof(__zzekbs01_init));
+	return state->zzekbs01;
+
+}
 
 /* $Procedure      ZZEKBS01 ( EK, begin segment, type 1 ) */
 /* Subroutine */ int zzekbs01_(integer *handle, char *tabnam, integer *ncols, 
@@ -28,30 +33,54 @@ static integer c__11 = 11;
     integer base;
     extern /* Subroutine */ int zzekcix1_(integer *, integer *);
     integer room;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekpgan_(integer *, integer *, integer *, integer *), zzekpgbs_(
-	    integer *, integer *, integer *), zzekpgwc_(integer *, integer *, 
-	    char *, ftnlen), zzekpgwi_(integer *, integer *, integer *), 
-	    zzektrap_(integer *, integer *, integer *, integer *), zzektrit_(
-	    integer *, integer *);
-    integer i__, cbase;
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    integer i__;
+    integer cbase;
     char cpage[1024];
-    integer p, ipage[256];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), movei_(integer *, integer *, integer *);
+    integer p;
+    integer ipage[256];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer p1;
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    integer p1base, cp;
+    integer p1base;
+    integer cp;
     extern logical failed_(void);
     extern integer eknseg_(integer *);
     extern logical return_(void);
-    char tmpcnm[32], tmptnm[64];
-    integer cp1, cpagno, dscbas, ipagno, metasz, nambas, ncpage, nipage, rec, 
-	    sgtree;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), cleari_(integer *, 
-	    integer *), dasrdi_(integer *, integer *, integer *, integer *);
-    integer cpt, dpt, ipt;
+    char tmpcnm[32];
+    char tmptnm[64];
+    integer cp1;
+    integer cpagno;
+    integer dscbas;
+    integer ipagno;
+    integer metasz;
+    integer nambas;
+    integer ncpage;
+    integer nipage;
+    integer rec;
+    integer sgtree;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    integer cpt;
+    integer dpt;
+    integer ipt;
 
+
+    /* Module state */
+    zzekbs01_state_t* __state = get_zzekbs01_state();
 /* $ Abstract */
 
 /*     Start a new type 1 segment in an E-kernel. */
@@ -1071,19 +1100,19 @@ static integer c__11 = 11;
 /*     enforces contiguity.  Also allocate one character page, which */
 /*     need not be new. */
 
-    zzekpgan_(handle, &c__3, &p1, &p1base);
+    zzekpgan_(handle, &__state->c__3, &p1, &p1base);
     i__1 = nipage;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	zzekpgan_(handle, &c__3, &p, &base);
+	zzekpgan_(handle, &__state->c__3, &p, &base);
     }
 
 /*     Calculate the number of contiguous character pages we'll need. */
 
     ncpage = ((*ncols << 5) + 1087) / 1024;
-    zzekpgan_(handle, &c__1, &cp1, &cbase);
+    zzekpgan_(handle, &__state->c__1, &cp1, &cbase);
     i__1 = ncpage;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	zzekpgan_(handle, &c__1, &p, &base);
+	zzekpgan_(handle, &__state->c__1, &p, &base);
     }
 
 /*     Initialize the record tree. */
@@ -1106,7 +1135,7 @@ static integer c__11 = 11;
 /*     `last word' counts of each type for both the data and modified */
 /*     record trees are initialized in this fashion. */
 
-    cleari_(&c__256, ipage);
+    cleari_(&__state->c__256, ipage);
 
 /*     The value at index EKTIDX is the segment type. */
 
@@ -1221,9 +1250,9 @@ static integer c__11 = 11;
 
 /*           The whole descriptor fits in the current page. */
 
-	    movei_(&cdscrs[i__ * 11 - 11], &c__11, &ipage[(i__2 = dscbas) < 
-		    256 && 0 <= i__2 ? i__2 : s_rnge("ipage", i__2, "zzekbs0"
-		    "1_", (ftnlen)442)]);
+	    movei_(&cdscrs[i__ * 11 - 11], &__state->c__11, &ipage[(i__2 = 
+		    dscbas) < 256 && 0 <= i__2 ? i__2 : s_rnge("ipage", i__2, 
+		    "zzekbs01_", (ftnlen)442)]);
 	} else {
 
 /*           Some or all of the descriptor will overflow onto the next */
@@ -1245,7 +1274,7 @@ static integer c__11 = 11;
 
 	    ++p;
 	    ++ipagno;
-	    cleari_(&c__256, ipage);
+	    cleari_(&__state->c__256, ipage);
 	    i__2 = 11 - room;
 	    movei_(&cdscrs[room + 1 + i__ * 11 - 12], &i__2, ipage);
 	}
@@ -1269,7 +1298,7 @@ static integer c__11 = 11;
 /*     segment.  All we need do is add a new entry to the file's */
 /*     segment pointer tree.  First, look up the tree. */
 
-    zzekpgbs_(&c__3, &c__1, &base);
+    zzekpgbs_(&__state->c__3, &__state->c__1, &base);
     i__1 = base + 1;
     i__2 = base + 1;
     dasrdi_(handle, &i__1, &i__2, &sgtree);

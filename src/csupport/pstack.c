@@ -1,9 +1,10 @@
-/* pstack.f -- translated by f2c (version 19980913).
+/* pstack.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      PSTACK (Save paragraphs of text in a paragraph stack) */
 /* Subroutine */ int pstack_0_(int n__, integer *depth, char *line, char *

@@ -1,9 +1,10 @@
-/* m2ntem.f -- translated by f2c (version 19980913).
+/* m2ntem.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2NTEM ( Parse the numeric template of a @number ) */
 /* Subroutine */ int m2ntem_(char *string, char *base, integer *beg, integer *

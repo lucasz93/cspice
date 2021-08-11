@@ -1,14 +1,21 @@
-/* dafwda.f -- translated by f2c (version 19980913).
+/* dafwda.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__128 = 128;
+extern dafwda_init_t __dafwda_init;
+static dafwda_state_t* get_dafwda_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafwda)
+		state->dafwda = __cspice_allocate_module(sizeof(
+	dafwda_state_t), &__dafwda_init, sizeof(__dafwda_init));
+	return state->dafwda;
+
+}
 
 /* $Procedure DAFWDA ( DAF, write data to address ) */
 /* Subroutine */ int dafwda_(integer *handle, integer *begin, integer *end, 
@@ -21,22 +28,32 @@ static integer c__128 = 128;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer begr, begw, endr, endw, next, n;
+    integer begr;
+    integer begw;
+    integer endr;
+    integer endw;
+    integer next;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer recno;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
     integer first;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), dafrdr_(
-	    integer *, integer *, integer *, integer *, doublereal *, logical 
-	    *), dafarw_(integer *, integer *, integer *), dafwdr_(integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
     doublereal buffer[128];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dafwda_state_t* __state = get_dafwda_state();
 /* $ Abstract */
 
 /*     Write or rewrite the double precision data bounded by two */
@@ -232,9 +249,10 @@ static integer c__128 = 128;
     i__1 = endr;
     for (recno = begr; recno <= i__1; ++recno) {
 	if (recno == begr || recno == endr) {
-	    dafrdr_(handle, &recno, &c__1, &c__128, buffer, &found);
+	    dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, buffer, 
+		    &found);
 	    if (! found) {
-		cleard_(&c__128, buffer);
+		cleard_(&__state->c__128, buffer);
 	    }
 	}
 	if (begr == endr) {

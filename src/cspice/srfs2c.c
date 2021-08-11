@@ -1,25 +1,38 @@
-/* srfs2c.f -- translated by f2c (version 19980913).
+/* srfs2c.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int srfs2c_state_t;
+static srfs2c_state_t* get_srfs2c_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SRFS2C ( Surface and body strings to surface ID code ) */
 /* Subroutine */ int srfs2c_(char *srfstr, char *bodstr, integer *code, 
 	logical *found, ftnlen srfstr_len, ftnlen bodstr_len)
 {
     extern /* Subroutine */ int zzsrfn2c_(char *, integer *, integer *, 
-	    logical *, ftnlen), chkin_(char *, ftnlen), bods2c_(char *, 
-	    integer *, logical *, ftnlen);
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     extern logical failed_(void);
     integer bodyid;
     extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen), chkout_(char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char errmsg[80];
     extern logical return_(void);
     integer ptr;
 
+
+    /* Module state */
+    srfs2c_state_t* __state = get_srfs2c_state();
 /* $ Abstract */
 
 /*     Translate a surface string, together with a body string, to the */

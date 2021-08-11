@@ -1,14 +1,21 @@
-/* zznofcon.f -- translated by f2c (version 19980913).
+/* zznofcon.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__14 = 14;
-static integer c__1 = 1;
+extern zznofcon_init_t __zznofcon_init;
+static zznofcon_state_t* get_zznofcon_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zznofcon)
+		state->zznofcon = __cspice_allocate_module(sizeof(
+	zznofcon_state_t), &__zznofcon_init, sizeof(__zznofcon_init));
+	return state->zznofcon;
+
+}
 
 /* $Procedure  ZZNOFCON ( Create frame connection long error message ) */
 /* Subroutine */ int zznofcon_(doublereal *et, integer *frame1, integer *
@@ -27,8 +34,8 @@ static integer c__1 = 1;
     char name__[32*2];
     integer i__;
     char bname[32*2];
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer class__;
     extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen);
@@ -42,18 +49,25 @@ static integer c__1 = 1;
     extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
     integer sclkid;
     logical havnam[2];
-    integer frames[2], center, clssid;
+    integer frames[2];
+    integer center;
+    integer clssid;
     char phrase[600];
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
     logical ckmiss;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     logical scmiss;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    extern logical return_(void), zzsclk_(integer *, integer *);
+    extern logical return_(void);
+    extern logical zzsclk_(integer *, integer *);
     char timstr[35];
 
+
+    /* Module state */
+    zznofcon_state_t* __state = get_zznofcon_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -490,8 +504,8 @@ static integer c__1 = 1;
     s_copy(errmsg, "At epoch # TDB (# TDB), there is insufficient informatio"
 	    "n available to transform from reference frame # (@) to reference"
 	    " frame # (@).", errmsg_len, (ftnlen)133);
-    repmf_(errmsg, "#", et, &c__14, "E", errmsg, errmsg_len, (ftnlen)1, (
-	    ftnlen)1, errmsg_len);
+    repmf_(errmsg, "#", et, &__state->c__14, "E", errmsg, errmsg_len, (ftnlen)
+	    1, (ftnlen)1, errmsg_len);
     repmc_(errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1, (ftnlen)35, 
 	    errmsg_len);
     for (i__ = 1; i__ <= 2; ++i__) {
@@ -532,7 +546,7 @@ static integer c__1 = 1;
 		    i__1 : s_rnge("bname", i__1, "zznofcon_", (ftnlen)431)) <<
 		     5), phrase, (ftnlen)600, (ftnlen)1, (ftnlen)32, (ftnlen)
 		    600);
-	    suffix_(phrase, &c__1, errmsg, (ftnlen)600, errmsg_len);
+	    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, errmsg_len);
 
 /*           The error messages below are appended only if they're not */
 /*           redundant. */
@@ -559,7 +573,7 @@ static integer c__1 = 1;
 				190);
 			repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, (
 				ftnlen)1, (ftnlen)600);
-			suffix_(phrase, &c__1, errmsg, (ftnlen)600, 
+			suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
 				errmsg_len);
 
 /*                    Find out whether we have SCLK data for this */
@@ -576,8 +590,8 @@ static integer c__1 = 1;
 				    (ftnlen)1, (ftnlen)600);
 			    repmi_(phrase, "#", &sclkid, phrase, (ftnlen)600, 
 				    (ftnlen)1, (ftnlen)600);
-			    suffix_(phrase, &c__1, errmsg, (ftnlen)600, 
-				    errmsg_len);
+			    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)
+				    600, errmsg_len);
 			} else {
 
 /*                       If we got here and have the SCLK data, then */
@@ -636,7 +650,8 @@ static integer c__1 = 1;
 		    }
 		    repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, (ftnlen)
 			    1, (ftnlen)600);
-		    suffix_(phrase, &c__1, errmsg, (ftnlen)600, errmsg_len);
+		    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
+			    errmsg_len);
 
 /*                 Find out whether we have SCLK data for this */
 /*                 CK ID. */
@@ -651,7 +666,7 @@ static integer c__1 = 1;
 				ftnlen)1, (ftnlen)600);
 			repmi_(phrase, "#", &sclkid, phrase, (ftnlen)600, (
 				ftnlen)1, (ftnlen)600);
-			suffix_(phrase, &c__1, errmsg, (ftnlen)600, 
+			suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
 				errmsg_len);
 		    } else {
 
@@ -711,7 +726,7 @@ static integer c__1 = 1;
 		    "ith the -dump option to display coverage intervals of a "
 		    "CK file.", (ftnlen)600, (ftnlen)448);
 	}
-	suffix_(phrase, &c__1, errmsg, (ftnlen)600, errmsg_len);
+	suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, errmsg_len);
     }
     chkout_("ZZNOFCON", (ftnlen)8);
     return 0;

@@ -1,14 +1,21 @@
-/* spct2b.f -- translated by f2c (version 19980913).
+/* spct2b.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
+extern spct2b_init_t __spct2b_init;
+static spct2b_state_t* get_spct2b_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spct2b)
+		state->spct2b = __cspice_allocate_module(sizeof(
+	spct2b_state_t), &__spct2b_init, sizeof(__spct2b_init));
+	return state->spct2b;
+
+}
 
 /* $Procedure SPCT2B ( SPK and CK, text to binary ) */
 /* Subroutine */ int spct2b_(integer *unit, char *binary, ftnlen binary_len)
@@ -27,20 +34,27 @@ static integer c__1 = 1;
     /* Local variables */
     char line[1000];
     extern /* Subroutine */ int spcac_(integer *, integer *, char *, char *, 
-	    ftnlen, ftnlen), chkin_(char *, ftnlen);
-    extern integer ltrim_(char *, ftnlen), rtrim_(char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer ltrim_(char *, ftnlen);
+    extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int daft2b_(integer *, char *, integer *, ftnlen);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *), dafopw_(char *, integer *,
-	     ftnlen);
+    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafopw_(char *, integer *, ftnlen);
     integer scrtch;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), getlun_(integer *), 
-	    setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spct2b_state_t* __state = get_spct2b_state();
 /* $ Abstract */
 
 /*     Reconstruct a binary SPK or CK file including comments */
@@ -289,7 +303,7 @@ static integer c__1 = 1;
 /*     it reads from the text file, it will signal an error. */
 /*     Initially, no records are reserved. */
 
-    daft2b_(unit, binary, &c__0, binary_len);
+    daft2b_(unit, binary, &__state->c__0, binary_len);
 
 /*     The comments follow the data and are surrounded by markers. */
 /*     BMARK should be the next line that we read.  If it isn't, */
@@ -308,7 +322,7 @@ static integer c__1 = 1;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, line, (ftnlen)1000);
+    iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -364,7 +378,7 @@ L100001:
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)1000));
+    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)1000));
     if (iostat != 0) {
 	goto L100002;
     }
@@ -396,7 +410,7 @@ L100002:
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100003;
 	}
@@ -418,7 +432,7 @@ L100003:
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_fio(&c__1, line, rtrim_(line, (ftnlen)1000));
+	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)1000));
 	if (iostat != 0) {
 	    goto L100004;
 	}

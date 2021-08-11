@@ -1,19 +1,30 @@
-/* cke01.f -- translated by f2c (version 19980913).
+/* cke01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cke01_state_t;
+static cke01_state_t* get_cke01_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CKE01 ( CK evaluate pointing record, data type 1 ) */
 /* Subroutine */ int cke01_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    cke01_state_t* __state = get_cke01_state();
 /* $ Abstract */
 
 /*     Evaluate a pointing record returned by CKR01 from a CK data type 1 */

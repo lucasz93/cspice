@@ -1,13 +1,21 @@
-/* zzgapool.f -- translated by f2c (version 19980913).
+/* zzgapool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzgapool_init_t __zzgapool_init;
+static zzgapool_state_t* get_zzgapool_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgapool)
+		state->zzgapool = __cspice_allocate_module(sizeof(
+	zzgapool_state_t), &__zzgapool_init, sizeof(__zzgapool_init));
+	return state->zzgapool;
+
+}
 
 /* $Procedure ZZGAPOOL ( Private: get agent set for watched variable ) */
 /* Subroutine */ int zzgapool_(char *varnam, char *wtvars, integer *wtptrs, 
@@ -25,8 +33,8 @@ static integer c__0 = 0;
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer sizec_(char *, ftnlen);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), validc_(
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer nfetch;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
@@ -34,6 +42,9 @@ static integer c__0 = 0;
     extern logical return_(void);
     integer loc;
 
+
+    /* Module state */
+    zzgapool_state_t* __state = get_zzgapool_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -184,7 +195,7 @@ static integer c__0 = 0;
 /*     The output agent set is empty until we find any */
 /*     agents. */
 
-    scardc_(&c__0, agtset, agtset_len);
+    scardc_(&__state->c__0, agtset, agtset_len);
 
 /*     Find the location of VARNAM in the set of watched */
 /*     variables. */

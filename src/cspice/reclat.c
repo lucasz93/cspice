@@ -1,9 +1,17 @@
-/* reclat.f -- translated by f2c (version 19980913).
+/* reclat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int reclat_state_t;
+static reclat_state_t* get_reclat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RECLAT ( Rectangular to latitudinal coordinates ) */
 /* Subroutine */ int reclat_(doublereal *rectan, doublereal *radius, 
@@ -16,8 +24,14 @@
     double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal x, y, z__, big;
+    doublereal x;
+    doublereal y;
+    doublereal z__;
+    doublereal big;
 
+
+    /* Module state */
+    reclat_state_t* __state = get_reclat_state();
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to latitudinal coordinates. */

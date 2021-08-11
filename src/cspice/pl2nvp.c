@@ -1,9 +1,17 @@
-/* pl2nvp.f -- translated by f2c (version 19980913).
+/* pl2nvp.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int pl2nvp_state_t;
+static pl2nvp_state_t* get_pl2nvp_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      PL2NVP ( Plane to normal vector and point ) */
 /* Subroutine */ int pl2nvp_(doublereal *plane, doublereal *normal, 
@@ -15,6 +23,9 @@
     extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
 	    doublereal *);
 
+
+    /* Module state */
+    pl2nvp_state_t* __state = get_pl2nvp_state();
 /* $ Abstract */
 
 /*     Return a unit normal vector and point that define a specified */

@@ -1,16 +1,21 @@
-/* zzdafgdr.f -- translated by f2c (version 19980913).
+/* zzdafgdr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static logical c_false = FALSE_;
-static integer c__1 = 1;
-static integer c__128 = 128;
+extern zzdafgdr_init_t __zzdafgdr_init;
+static zzdafgdr_state_t* get_zzdafgdr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdafgdr)
+		state->zzdafgdr = __cspice_allocate_module(sizeof(
+	zzdafgdr_state_t), &__zzdafgdr_init, sizeof(__zzdafgdr_init));
+	return state->zzdafgdr;
+
+}
 
 /* $Procedure ZZDAFGDR ( Private --- DAF Get Data Record ) */
 /* Subroutine */ int zzdafgdr_(integer *handle, integer *recno, doublereal *
@@ -18,8 +23,6 @@ static integer c__128 = 128;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer natbff = 0;
 
     /* System generated locals */
     integer i__1;
@@ -29,28 +32,32 @@ static integer c__128 = 128;
 	    do_uio(integer *, char *, ftnlen), e_rdue(void);
 
     /* Local variables */
-    integer ibff, iamh;
+    integer ibff;
+    integer iamh;
     extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
-	    ftnlen), zzddhnfo_(integer *, char *, integer *, integer *, 
-	    integer *, logical *, ftnlen), zzddhhlu_(integer *, char *, 
-	    logical *, integer *, ftnlen), zzxlated_(integer *, char *, 
-	    integer *, doublereal *, ftnlen), zzplatfm_(char *, char *, 
-	    ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
+	    integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzxlated_(integer *, char *, integer *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
     char fname[255];
     integer iarch;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal dpbuf[128];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     extern logical failed_(void);
     logical locfnd;
     char chrbuf[1024];
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static char strbff[8*4];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
@@ -58,10 +65,11 @@ static integer c__128 = 128;
     integer lun;
 
     /* Fortran I/O blocks */
-    static cilist io___13 = { 1, 0, 1, 0, 0 };
-    static cilist io___15 = { 1, 0, 1, 0, 0 };
 
 
+
+    /* Module state */
+    zzdafgdr_state_t* __state = get_zzdafgdr_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -480,15 +488,15 @@ static integer c__128 = 128;
 
 /*     Perform some initialization tasks. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Populate STRBFF, the buffer that contains the labels */
 /*        for each binary file format. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgdr_", (ftnlen)
-		    206)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 4 &&
+		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgdr_", (
+		    ftnlen)206)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */
@@ -496,8 +504,9 @@ static integer c__128 = 128;
 
 	zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
 	ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-	natbff = isrchc_(tmpstr, &c__4, strbff, (ftnlen)8, (ftnlen)8);
-	if (natbff == 0) {
+	__state->natbff = isrchc_(tmpstr, &__state->c__4, __state->strbff, (
+		ftnlen)8, (ftnlen)8);
+	if (__state->natbff == 0) {
 	    setmsg_("The binary file format, '#', is not supported by this v"
 		    "ersion of the toolkit. This is a serious problem, contac"
 		    "t NAIF.", (ftnlen)118);
@@ -509,7 +518,7 @@ static integer c__128 = 128;
 
 /*        Do not perform initialization tasks again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Assume the data record will not be found, until it has been read */
@@ -536,7 +545,7 @@ static integer c__128 = 128;
 /*     Now get a logical unit for the handle.  Check FAILED() in */
 /*     case an error occurs. */
 
-    zzddhhlu_(handle, "DAF", &c_false, &lun, (ftnlen)3);
+    zzddhhlu_(handle, "DAF", &__state->c_false, &lun, (ftnlen)3);
     if (failed_()) {
 	chkout_("ZZDAFGDR", (ftnlen)8);
 	return 0;
@@ -546,21 +555,21 @@ static integer c__128 = 128;
 /*     or not.  Only supported formats can be opened by ZZDDHOPN, */
 /*     so no check of IBFF is required. */
 
-    if (ibff == natbff) {
+    if (ibff == __state->natbff) {
 
 /*        In the native case, just read the double precision */
 /*        numbers from the file. */
 
-	io___13.ciunit = lun;
-	io___13.cirec = *recno;
-	iostat = s_rdue(&io___13);
+	__state->io___13.ciunit = lun;
+	__state->io___13.cirec = *recno;
+	iostat = s_rdue(&__state->io___13);
 	if (iostat != 0) {
 	    goto L100001;
 	}
 	for (i__ = 1; i__ <= 128; ++i__) {
-	    iostat = do_uio(&c__1, (char *)&dpbuf[(i__1 = i__ - 1) < 128 && 0 
-		    <= i__1 ? i__1 : s_rnge("dpbuf", i__1, "zzdafgdr_", (
-		    ftnlen)284)], (ftnlen)sizeof(doublereal));
+	    iostat = do_uio(&__state->c__1, (char *)&dpbuf[(i__1 = i__ - 1) < 
+		    128 && 0 <= i__1 ? i__1 : s_rnge("dpbuf", i__1, "zzdafgd"
+		    "r_", (ftnlen)284)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -582,13 +591,13 @@ L100001:
 
 /*        Read the data record as characters. */
 
-	io___15.ciunit = lun;
-	io___15.cirec = *recno;
-	iostat = s_rdue(&io___15);
+	__state->io___15.ciunit = lun;
+	__state->io___15.cirec = *recno;
+	iostat = s_rdue(&__state->io___15);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&c__1, chrbuf, (ftnlen)1024);
+	iostat = do_uio(&__state->c__1, chrbuf, (ftnlen)1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -611,7 +620,7 @@ L100002:
 /*        the future, updates may be necessary to prevent */
 /*        processing of garbage data. */
 
-	zzxlated_(&ibff, chrbuf, &c__128, dpbuf, (ftnlen)1024);
+	zzxlated_(&ibff, chrbuf, &__state->c__128, dpbuf, (ftnlen)1024);
 	if (failed_()) {
 	    chkout_("ZZDAFGDR", (ftnlen)8);
 	    return 0;
@@ -622,7 +631,7 @@ L100002:
 /*     to the caller. */
 
     *found = TRUE_;
-    moved_(dpbuf, &c__128, dprec);
+    moved_(dpbuf, &__state->c__128, dprec);
     chkout_("ZZDAFGDR", (ftnlen)8);
     return 0;
 } /* zzdafgdr_ */

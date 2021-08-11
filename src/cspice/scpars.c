@@ -1,14 +1,21 @@
-/* scpars.f -- translated by f2c (version 19980913).
+/* scpars.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__9999 = 9999;
+extern scpars_init_t __scpars_init;
+static scpars_state_t* get_scpars_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->scpars)
+		state->scpars = __cspice_allocate_module(sizeof(
+	scpars_state_t), &__scpars_init, sizeof(__scpars_init));
+	return state->scpars;
+
+}
 
 /* $Procedure      SCPARS ( Parse a spacecraft clock string ) */
 /* Subroutine */ int scpars_(integer *sc, char *sclkch, logical *error, char *
@@ -26,21 +33,30 @@ static integer c__9999 = 9999;
 
     /* Local variables */
     extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    integer part, i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen), scps01_(integer 
-	    *, char *, logical *, char *, doublereal *, ftnlen, ftnlen), 
-	    repmi_(char *, char *, integer *, char *, ftnlen, ftnlen, ftnlen);
+    integer part;
+    integer i__;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int scps01_(integer *, char *, logical *, char *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     doublereal ticks;
-    integer dtype, pnter;
+    integer dtype;
+    integer pnter;
     char psmsg[255];
     logical pserr;
     doublereal pstop[9999];
     extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), scpart_(integer *, integer *, doublereal *, doublereal *)
-	    , nparsi_(char *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern integer sctype_(integer *);
     integer nparts;
     doublereal pstart[9999];
@@ -49,6 +65,9 @@ static integer c__9999 = 9999;
     doublereal ptotls[9999];
     integer pos;
 
+
+    /* Module state */
+    scpars_state_t* __state = get_scpars_state();
 /* $ Abstract */
 
 /*     Parse a character representation of spacecraft clock time and */
@@ -602,7 +621,7 @@ static integer c__9999 = 9999;
 /*     Convert the non-partition clock string to a tick value. */
 /*     This conversion depends on the data type of the clock. */
 
-    pos = cpos_(sclkch, "/", &c__1, sclkch_len, (ftnlen)1);
+    pos = cpos_(sclkch, "/", &__state->c__1, sclkch_len, (ftnlen)1);
     dtype = sctype_(sc);
     if (failed_()) {
 	chkout_("SCPARS", (ftnlen)6);
@@ -645,7 +664,7 @@ static integer c__9999 = 9999;
 		"alue for parameter MXPART, #.", (ftnlen)88);
 	errint_("#", &nparts, (ftnlen)1);
 	errint_("#", sc, (ftnlen)1);
-	errint_("#", &c__9999, (ftnlen)1);
+	errint_("#", &__state->c__9999, (ftnlen)1);
 	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
 	chkout_("SCPARS", (ftnlen)6);
 	return 0;

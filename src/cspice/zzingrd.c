@@ -1,9 +1,17 @@
-/* zzingrd.f -- translated by f2c (version 19980913).
+/* zzingrd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzingrd_state_t;
+static zzingrd_state_t* get_zzingrd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  ZZINGRD  ( is a voxel inside the grid? ) */
 logical zzingrd_(integer *nvox, integer *voxel)
@@ -18,6 +26,9 @@ logical zzingrd_(integer *nvox, integer *voxel)
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    zzingrd_state_t* __state = get_zzingrd_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

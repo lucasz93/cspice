@@ -1,21 +1,33 @@
-/* stlabx.f -- translated by f2c (version 19980913).
+/* stlabx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int stlabx_state_t;
+static stlabx_state_t* get_stlabx_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      STLABX ( Stellar aberration, transmission case ) */
 /* Subroutine */ int stlabx_(doublereal *pobj, doublereal *vobs, doublereal *
 	corpos)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), stelab_(doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+	    doublereal *);
     doublereal negvel[3];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    stlabx_state_t* __state = get_stlabx_state();
 /* $ Abstract */
 
 /*     Correct the position of a target for the stellar aberration */

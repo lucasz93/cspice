@@ -1,14 +1,21 @@
-/* spke10.f -- translated by f2c (version 19980913).
+/* spke10.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__6 = 6;
+extern spke10_init_t __spke10_init;
+static spke10_state_t* get_spke10_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke10)
+		state->spke10 = __cspice_allocate_module(sizeof(
+	spke10_state_t), &__spke10_init, sizeof(__spke10_init));
+	return state->spke10;
+
+}
 
 /* $Procedure SPKE10 ( Evaluate SPK record, type 10 ) */
 /* Subroutine */ int spke10_(doublereal *et, doublereal *record, doublereal *
@@ -16,7 +23,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     doublereal d__1;
@@ -27,32 +33,29 @@ static integer c__6 = 6;
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
 	    );
-    static doublereal dwdt, mypi;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), mxvg_(
-	    doublereal *, doublereal *, integer *, integer *, doublereal *);
-    static doublereal my2pi, w;
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
+	    integer *, doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static doublereal denom, precm[36]	/* was [6][6] */;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    static doublereal vcomp[3], numer;
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
     extern doublereal twopi_(void);
-    static doublereal s1[6], s2[6], t1, t2;
     extern logical failed_(void);
     extern doublereal pi_(void);
-    static doublereal dargdt;
     extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *), chkout_(char *, 
-	    ftnlen);
-    static doublereal invprc[36]	/* was [6][6] */, tmpsta[6];
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int zzteme_(doublereal *, doublereal *);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
-    static doublereal arg;
-    extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *), 
-	    xxsgp4i_(doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *);
+    extern /* Subroutine */ int xxsgp4i_(doublereal *, doublereal *, integer *
+	    );
 
+
+    /* Module state */
+    spke10_state_t* __state = get_spke10_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 10 */
@@ -451,16 +454,16 @@ static integer c__6 = 6;
     } else {
 	chkin_("SPKE10", (ftnlen)6);
     }
-    if (first) {
-	first = FALSE_;
-	mypi = pi_();
-	my2pi = twopi_();
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->mypi = pi_();
+	__state->my2pi = twopi_();
     }
 
 /*     Fetch the two epochs stored in the record. */
 
-    t1 = record[17];
-    t2 = record[31];
+    __state->t1 = record[17];
+    __state->t2 = record[31];
 
 /*     Evaluate the two states. Call them s_1(t) and s_2(t). */
 /*     Let the position and velocity components be: p_1, v_1, p_2, v_2. */
@@ -488,7 +491,7 @@ static integer c__6 = 6;
 /*     The range of W is from 1 to 0. The derivative of W is */
 /*     symmetric and zero at both t1 and t2. */
 
-    if (t1 != t2) {
+    if (__state->t1 != __state->t2) {
 
 /*        Initialize then propagate. */
 
@@ -497,7 +500,7 @@ static integer c__6 = 6;
 
 /*        Evaluate first TLE. */
 
-	xxsgp4i_(record, &record[8], &c__1);
+	xxsgp4i_(record, &record[8], &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
 	    return 0;
@@ -505,8 +508,8 @@ static integer c__6 = 6;
 
 /*        Time from epoch of set 1 in minutes. */
 
-	d__1 = (*et - t1) / 60.;
-	xxsgp4e_(&d__1, s1);
+	d__1 = (*et - __state->t1) / 60.;
+	xxsgp4e_(&d__1, __state->s1);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
 	    return 0;
@@ -514,7 +517,7 @@ static integer c__6 = 6;
 
 /*        Evaluate second TLE. */
 
-	xxsgp4i_(record, &record[22], &c__1);
+	xxsgp4i_(record, &record[22], &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
 	    return 0;
@@ -522,8 +525,8 @@ static integer c__6 = 6;
 
 /*        Time from epoch of set 2 in minutes. */
 
-	d__1 = (*et - t2) / 60.;
-	xxsgp4e_(&d__1, s2);
+	d__1 = (*et - __state->t2) / 60.;
+	xxsgp4e_(&d__1, __state->s2);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
 	    return 0;
@@ -532,26 +535,28 @@ static integer c__6 = 6;
 /*        Compute the weighting function that we'll need later */
 /*        when we combine states 1 and 2. */
 
-	numer = *et - t1;
-	denom = t2 - t1;
-	arg = numer * mypi / denom;
-	dargdt = mypi / denom;
-	w = cos(arg) * .5 + .5;
-	dwdt = sin(arg) * -.5 * dargdt;
+	__state->numer = *et - __state->t1;
+	__state->denom = __state->t2 - __state->t1;
+	__state->arg = __state->numer * __state->mypi / __state->denom;
+	__state->dargdt = __state->mypi / __state->denom;
+	__state->w = cos(__state->arg) * .5 + .5;
+	__state->dwdt = sin(__state->arg) * -.5 * __state->dargdt;
 
 /*        Now compute the weighted average of the two states. */
 
-	d__1 = 1. - w;
-	vlcomg_(&c__6, &w, s1, &d__1, s2, state);
-	d__1 = -dwdt;
-	vlcom_(&dwdt, s1, &d__1, s2, vcomp);
-	vadd_(&state[3], vcomp, &tmpsta[3]);
-	vequ_(&tmpsta[3], &state[3]);
+	d__1 = 1. - __state->w;
+	vlcomg_(&__state->c__6, &__state->w, __state->s1, &d__1, __state->s2, 
+		state);
+	d__1 = -__state->dwdt;
+	vlcom_(&__state->dwdt, __state->s1, &d__1, __state->s2, 
+		__state->vcomp);
+	vadd_(&state[3], __state->vcomp, &__state->tmpsta[3]);
+	vequ_(&__state->tmpsta[3], &state[3]);
     } else {
 
 /*        Evaluate the TLE. */
 
-	xxsgp4i_(record, &record[8], &c__1);
+	xxsgp4i_(record, &record[8], &__state->c__1);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
 	    return 0;
@@ -559,7 +564,7 @@ static integer c__6 = 6;
 
 /*        Time from epoch of set 1 in minutes. */
 
-	d__1 = (*et - t1) / 60.;
+	d__1 = (*et - __state->t1) / 60.;
 	xxsgp4e_(&d__1, state);
 	if (failed_()) {
 	    chkout_("SPKE10", (ftnlen)6);
@@ -570,17 +575,18 @@ static integer c__6 = 6;
 /*     Finally, convert the TEME state to J2000.  First get */
 /*     the rotation from J2000 to TEME... */
 
-    zzteme_(et, precm);
+    zzteme_(et, __state->precm);
 
 /*     ...now convert STATE to J2000. Invert the state transformation */
 /*     operator (important to correctly do this). */
 
-    invstm_(precm, invprc);
+    invstm_(__state->precm, __state->invprc);
 
 /*     Map STATE to the corresponding expression in J2000. */
 
-    mxvg_(invprc, state, &c__6, &c__6, tmpsta);
-    moved_(tmpsta, &c__6, state);
+    mxvg_(__state->invprc, state, &__state->c__6, &__state->c__6, 
+	    __state->tmpsta);
+    moved_(__state->tmpsta, &__state->c__6, state);
     chkout_("SPKE10", (ftnlen)6);
     return 0;
 } /* spke10_ */

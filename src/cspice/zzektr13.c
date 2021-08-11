@@ -1,18 +1,21 @@
-/* zzektr13.f -- translated by f2c (version 19980913).
+/* zzektr13.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__83 = 83;
-static integer c__3 = 3;
-static integer c__256 = 256;
-static integer c__41 = 41;
-static integer c__42 = 42;
-static integer c__82 = 82;
+extern zzektr13_init_t __zzektr13_init;
+static zzektr13_state_t* get_zzektr13_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektr13)
+		state->zzektr13 = __cspice_allocate_module(sizeof(
+	zzektr13_state_t), &__zzektr13_init, sizeof(__zzektr13_init));
+	return state->zzektr13;
+
+}
 
 /* $Procedure      ZZEKTR13 ( EK tree, 1-3 split ) */
 /* Subroutine */ int zzektr13_(integer *handle, integer *tree)
@@ -24,21 +27,31 @@ static integer c__82 = 82;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, root;
+    integer base;
+    integer root;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *), zzekpgri_(integer *, integer *, integer *), zzekpgwi_(
-	    integer *, integer *, integer *);
-    integer i__, child[2], delta;
+	    integer *);
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    integer i__;
+    integer child[2];
+    integer delta;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer rpage[256];
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    integer c1page[256], c2page[256], middle;
-    extern /* Subroutine */ int cleari_(integer *, integer *), sigerr_(char *,
-	     ftnlen), chkout_(char *, ftnlen);
+    integer c1page[256];
+    integer c2page[256];
+    integer middle;
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer nrkeys;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzektr13_state_t* __state = get_zzektr13_state();
 /* $ Abstract */
 
 /*     Execute a 1-3 split:  split the root node to create two new */
@@ -596,7 +609,7 @@ static integer c__82 = 82;
 	chkin_("ZZEKTR13", (ftnlen)8);
 	setmsg_("Number of keys in root = #; should be #.", (ftnlen)40);
 	errint_("#", &nrkeys, (ftnlen)1);
-	errint_("#", &c__83, (ftnlen)1);
+	errint_("#", &__state->c__83, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZEKTR13", (ftnlen)8);
 	return 0;
@@ -606,27 +619,27 @@ static integer c__82 = 82;
 /*     Each one will be assigned MNKEYC keys. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	zzekpgal_(handle, &c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("child", i__1, "zzektr13_", (ftnlen)221)], &
-		base);
+	zzekpgal_(handle, &__state->c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= 
+		i__1 ? i__1 : s_rnge("child", i__1, "zzektr13_", (ftnlen)221)]
+		, &base);
     }
 
 /*     Set the key count in the first child. */
 
-    cleari_(&c__256, c1page);
+    cleari_(&__state->c__256, c1page);
     c1page[0] = 41;
 
 /*     Copy in the keys, data pointers, and child pointers from the */
 /*     first MNKEYC locations in the root.  Also take the left child */
 /*     pointer of the middle key. */
 
-    movei_(&rpage[5], &c__41, &c1page[1]);
-    movei_(&rpage[172], &c__41, &c1page[128]);
-    movei_(&rpage[88], &c__42, &c1page[64]);
+    movei_(&rpage[5], &__state->c__41, &c1page[1]);
+    movei_(&rpage[172], &__state->c__41, &c1page[128]);
+    movei_(&rpage[88], &__state->c__42, &c1page[64]);
 
 /*     Set up the key count in the second child. */
 
-    cleari_(&c__256, c2page);
+    cleari_(&__state->c__256, c2page);
     c2page[0] = 41;
 
 /*     Copy in the keys, data pointers, and child pointers from the */
@@ -635,11 +648,14 @@ static integer c__82 = 82;
 
     middle = 42;
     movei_(&rpage[(i__1 = middle + 5) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)254)], &c__41, &c2page[1]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)254)], &__state->c__41, &
+	    c2page[1]);
     movei_(&rpage[(i__1 = middle + 172) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)255)], &c__41, &c2page[128]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)255)], &__state->c__41, &
+	    c2page[128]);
     movei_(&rpage[(i__1 = middle + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)256)], &c__42, &c2page[64]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)256)], &__state->c__42, &
+	    c2page[64]);
 
 /*     The keys in this second node must be adjusted to account for the */
 /*     loss of the predecessors assigned to the subtree headed by the */
@@ -669,9 +685,9 @@ static integer c__82 = 82;
     rpage[4] = 1;
     ++rpage[3];
     rpage[1] += 2;
-    cleari_(&c__82, &rpage[6]);
-    cleari_(&c__82, &rpage[173]);
-    cleari_(&c__82, &rpage[90]);
+    cleari_(&__state->c__82, &rpage[6]);
+    cleari_(&__state->c__82, &rpage[173]);
+    cleari_(&__state->c__82, &rpage[90]);
 
 /*     Write out our updates. */
 

@@ -1,13 +1,21 @@
-/* stcc01.f -- translated by f2c (version 19980913).
+/* stcc01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
+extern stcc01_init_t __stcc01_init;
+static stcc01_state_t* get_stcc01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->stcc01)
+		state->stcc01 = __cspice_allocate_module(sizeof(
+	stcc01_state_t), &__stcc01_init, sizeof(__stcc01_init));
+	return state->stcc01;
+
+}
 
 /* $Procedure   STCC01 ( STAR catalog type 1, check whether type 1 ) */
 /* Subroutine */ int stcc01_(char *catfnm, char *tabnam, logical *istyp1, 
@@ -15,13 +23,6 @@ static integer c__4 = 4;
 {
     /* Initialized data */
 
-    static char cat1nm[32*7] = "CATALOG_NUMBER                  " "RA       "
-	    "                       " "DEC                             " "RA_"
-	    "SIGMA                        " "DEC_SIGMA                       " 
-	    "VISUAL_MAGNITUDE                " "SPECTRAL_TYPE               "
-	    "    ";
-    static char cat1dt[4*7] = "INT " "DP  " "DP  " "DP  " "DP  " "DP  " "CHR "
-	    ;
 
     /* System generated locals */
     address a__1[4];
@@ -34,30 +35,20 @@ static integer c__4 = 4;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static integer i__, j;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer nblen_(char *, ftnlen);
     extern /* Subroutine */ int ekcls_(integer *);
-    static logical found;
-    static integer ncols;
     extern /* Subroutine */ int ekopr_(char *, integer *, ftnlen);
-    static integer sizes[100], nrows;
-    static char cnames[32*100];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen), 
-	    eknseg_(integer *);
-    static logical indexd[100];
-    static integer tmphnd, numseg;
+    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer eknseg_(integer *);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    static logical nullok[100];
     extern /* Subroutine */ int ekssum_(integer *, integer *, char *, integer 
 	    *, integer *, char *, char *, integer *, integer *, logical *, 
 	    logical *, ftnlen, ftnlen, ftnlen);
-    static char dtypes[4*100];
     extern logical return_(void);
-    static char tmptnm[64];
-    static integer strlns[100];
-    static char tnmprv[64];
 
+    /* Module state */
+    stcc01_state_t* __state = get_stcc01_state();
 /* $ Abstract */
 
 /*     Check whether a file is a type 1 star catalog and return the */
@@ -358,14 +349,14 @@ static integer c__4 = 4;
 /*     Open star catalog file with low level "open for read access" */
 /*     EK routine. */
 
-    ekopr_(catfnm, &tmphnd, catfnm_len);
+    ekopr_(catfnm, &__state->tmphnd, catfnm_len);
 
 /*     Get the number of segments in the file and check whether it is */
 /*     greater than 0 (i.e. some data are is present in the file). If */
 /*     not then set an error message and return to the calling routine. */
 
-    numseg = eknseg_(&tmphnd);
-    if (numseg <= 0) {
+    __state->numseg = eknseg_(&__state->tmphnd);
+    if (__state->numseg <= 0) {
 	s_copy(errmsg, "File contains no data.", errmsg_len, (ftnlen)22);
 	*istyp1 = FALSE_;
 	chkout_("STCC01", (ftnlen)6);
@@ -376,12 +367,16 @@ static integer c__4 = 4;
 /*     contain pieces of the same table. If not then set */
 /*     an error message and return to the calling routine. */
 
-    i__1 = numseg;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	ekssum_(&tmphnd, &i__, tmptnm, &nrows, &ncols, cnames, dtypes, sizes, 
-		strlns, indexd, nullok, (ftnlen)64, (ftnlen)32, (ftnlen)4);
-	if (i__ > 1) {
-	    if (s_cmp(tmptnm, tnmprv, (ftnlen)64, (ftnlen)64) != 0) {
+    i__1 = __state->numseg;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	ekssum_(&__state->tmphnd, &__state->i__, __state->tmptnm, &
+		__state->nrows, &__state->ncols, __state->cnames, 
+		__state->dtypes, __state->sizes, __state->strlns, 
+		__state->indexd, __state->nullok, (ftnlen)64, (ftnlen)32, (
+		ftnlen)4);
+	if (__state->i__ > 1) {
+	    if (s_cmp(__state->tmptnm, __state->tnmprv, (ftnlen)64, (ftnlen)
+		    64) != 0) {
 		s_copy(errmsg, "File contains more than one data table.", 
 			errmsg_len, (ftnlen)39);
 		*istyp1 = FALSE_;
@@ -389,14 +384,14 @@ static integer c__4 = 4;
 		return 0;
 	    }
 	}
-	s_copy(tnmprv, tmptnm, (ftnlen)64, (ftnlen)64);
+	s_copy(__state->tnmprv, __state->tmptnm, (ftnlen)64, (ftnlen)64);
     }
 
 /*     Check whether the  number of columns is less than it */
 /*     is supposed to be in type 1 star catalogs. If so then set */
 /*     an error message and return to a calling routine. */
 
-    if (ncols < 7) {
+    if (__state->ncols < 7) {
 	s_copy(errmsg, "File contains too few data columns.", errmsg_len, (
 		ftnlen)35);
 	*istyp1 = FALSE_;
@@ -408,31 +403,34 @@ static integer c__4 = 4;
 /*     star data fetching are present in the data table. If not */
 /*     then set an error message and return to a calling routine. */
 
-    for (i__ = 1; i__ <= 7; ++i__) {
-	found = FALSE_;
-	j = isrchc_(cat1nm + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("cat1nm", i__1, "stcc01_", (ftnlen)319)) << 5), &ncols,
-		 cnames, (ftnlen)32, (ftnlen)32);
-	if (j > 0) {
-	    found = s_cmp(cat1dt + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 
-		    : s_rnge("cat1dt", i__1, "stcc01_", (ftnlen)322)) << 2), 
-		    dtypes + (((i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("dtypes", i__2, "stcc01_", (ftnlen)322)) << 2), (
-		    ftnlen)4, (ftnlen)4) == 0 && ! nullok[(i__3 = j - 1) < 
-		    100 && 0 <= i__3 ? i__3 : s_rnge("nullok", i__3, "stcc01_"
-		    , (ftnlen)322)];
+    for (__state->i__ = 1; __state->i__ <= 7; ++__state->i__) {
+	__state->found = FALSE_;
+	__state->j = isrchc_(__state->cat1nm + (((i__1 = __state->i__ - 1) < 
+		7 && 0 <= i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", (
+		ftnlen)319)) << 5), &__state->ncols, __state->cnames, (ftnlen)
+		32, (ftnlen)32);
+	if (__state->j > 0) {
+	    __state->found = s_cmp(__state->cat1dt + (((i__1 = __state->i__ - 
+		    1) < 7 && 0 <= i__1 ? i__1 : s_rnge("cat1dt", i__1, "stc"
+		    "c01_", (ftnlen)322)) << 2), __state->dtypes + (((i__2 = 
+		    __state->j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("dtyp"
+		    "es", i__2, "stcc01_", (ftnlen)322)) << 2), (ftnlen)4, (
+		    ftnlen)4) == 0 && ! __state->nullok[(i__3 = __state->j - 
+		    1) < 100 && 0 <= i__3 ? i__3 : s_rnge("nullok", i__3, 
+		    "stcc01_", (ftnlen)322)];
 	}
-	if (! found) {
+	if (! __state->found) {
 /* Writing concatenation */
 	    i__4[0] = 8, a__1[0] = " Column ";
-	    i__4[1] = nblen_(cat1nm + (((i__2 = i__ - 1) < 7 && 0 <= i__2 ? 
-		    i__2 : s_rnge("cat1nm", i__2, "stcc01_", (ftnlen)326)) << 
-		    5), (ftnlen)32), a__1[1] = cat1nm + (((i__1 = i__ - 1) < 
-		    7 && 0 <= i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", 
-		    (ftnlen)326)) << 5);
+	    i__4[1] = nblen_(__state->cat1nm + (((i__2 = __state->i__ - 1) < 
+		    7 && 0 <= i__2 ? i__2 : s_rnge("cat1nm", i__2, "stcc01_", 
+		    (ftnlen)326)) << 5), (ftnlen)32), a__1[1] = 
+		    __state->cat1nm + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
+		    i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", (ftnlen)
+		    326)) << 5);
 	    i__4[2] = 16, a__1[2] = " is not found or";
 	    i__4[3] = 33, a__1[3] = " improperly declared in the file.";
-	    s_cat(errmsg, a__1, i__4, &c__4, errmsg_len);
+	    s_cat(errmsg, a__1, i__4, &__state->c__4, errmsg_len);
 	    *istyp1 = FALSE_;
 	    chkout_("STCC01", (ftnlen)6);
 	    return 0;
@@ -444,8 +442,8 @@ static integer c__4 = 4;
 /*     "return" the table name and close the file with the EK close */
 /*     routine. */
 
-    s_copy(tabnam, tmptnm, tabnam_len, (ftnlen)64);
-    ekcls_(&tmphnd);
+    s_copy(tabnam, __state->tmptnm, tabnam_len, (ftnlen)64);
+    ekcls_(&__state->tmphnd);
     chkout_("STCC01", (ftnlen)6);
     return 0;
 } /* stcc01_ */

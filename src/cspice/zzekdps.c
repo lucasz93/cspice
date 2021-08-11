@@ -1,15 +1,21 @@
-/* zzekdps.f -- translated by f2c (version 19980913).
+/* zzekdps.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1014 = 1014;
-static integer c__126 = 126;
-static integer c__254 = 254;
+extern zzekdps_init_t __zzekdps_init;
+static zzekdps_state_t* get_zzekdps_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekdps)
+		state->zzekdps = __cspice_allocate_module(sizeof(
+	zzekdps_state_t), &__zzekdps_init, sizeof(__zzekdps_init));
+	return state->zzekdps;
+
+}
 
 /* $Procedure      ZZEKDPS ( EK, delete page from segment ) */
 /* Subroutine */ int zzekdps_(integer *handle, integer *segdsc, integer *
@@ -20,8 +26,8 @@ static integer c__254 = 254;
 
     /* Local variables */
     integer tree;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *), 
-	    zzektrdl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
     extern integer zzektrls_(integer *, integer *, integer *);
     integer mbase;
     extern logical failed_(void);
@@ -29,6 +35,9 @@ static integer c__254 = 254;
 	    integer *);
     integer loc;
 
+
+    /* Module state */
+    zzekdps_state_t* __state = get_zzekdps_state();
 /* $ Abstract */
 
 /*     Delete a specified data page for a specified EK segment. */
@@ -469,7 +478,7 @@ static integer c__254 = 254;
 	if (segdsc[15] == *p) {
 	    i__1 = mbase + 19;
 	    i__2 = mbase + 19;
-	    dasudi_(handle, &i__1, &i__2, &c__1014);
+	    dasudi_(handle, &i__1, &i__2, &__state->c__1014);
 	}
 	if (*p == segdsc[15]) {
 	    segdsc[18] = 1014;
@@ -479,7 +488,7 @@ static integer c__254 = 254;
 	if (segdsc[16] == *p) {
 	    i__1 = mbase + 20;
 	    i__2 = mbase + 20;
-	    dasudi_(handle, &i__1, &i__2, &c__126);
+	    dasudi_(handle, &i__1, &i__2, &__state->c__126);
 	}
 	if (*p == segdsc[16]) {
 	    segdsc[19] = 126;
@@ -494,7 +503,7 @@ static integer c__254 = 254;
 	if (segdsc[17] == *p) {
 	    i__1 = mbase + 21;
 	    i__2 = mbase + 21;
-	    dasudi_(handle, &i__1, &i__2, &c__254);
+	    dasudi_(handle, &i__1, &i__2, &__state->c__254);
 	}
 	if (*p == segdsc[17]) {
 	    segdsc[20] = 254;

@@ -1,15 +1,26 @@
-/* vcrss.f -- translated by f2c (version 19980913).
+/* vcrss.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vcrss_state_t;
+static vcrss_state_t* get_vcrss_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VCRSS ( Vector cross product, 3 dimensions ) */
 /* Subroutine */ int vcrss_(doublereal *v1, doublereal *v2, doublereal *vout)
 {
     doublereal vtemp[3];
 
+
+    /* Module state */
+    vcrss_state_t* __state = get_vcrss_state();
 /* $ Abstract */
 
 /*     Compute the cross product of two 3-dimensional vectors. */

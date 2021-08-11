@@ -1,13 +1,21 @@
-/* sepool.f -- translated by f2c (version 19980913).
+/* sepool.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sepool_init_t __sepool_init;
+static sepool_state_t* get_sepool_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sepool)
+		state->sepool = __cspice_allocate_module(sizeof(
+	sepool_state_t), &__sepool_init, sizeof(__sepool_init));
+	return state->sepool;
+
+}
 
 /* $Procedure      SEPOOL ( String from pool ) */
 /* Subroutine */ int sepool_(char *item, integer *fidx, char *contin, char *
@@ -22,9 +30,11 @@ static integer c__1 = 1;
     integer comp;
     logical more;
     char part[80];
-    integer room, n;
+    integer room;
+    integer n;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer clast, csize;
+    integer clast;
+    integer csize;
     logical gotit;
     extern integer rtrim_(char *, ftnlen);
     integer putat;
@@ -34,6 +44,9 @@ static integer c__1 = 1;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    sepool_state_t* __state = get_sepool_state();
 /* $ Abstract */
 
 /*     Retrieve the string starting at the FIDX element of the kernel */
@@ -385,7 +398,8 @@ static integer c__1 = 1;
 
 /*     Check if the first component exists. Return empty output if not. */
 
-    gcpool_(item, fidx, &c__1, &n, part, &gotit, item_len, (ftnlen)80);
+    gcpool_(item, fidx, &__state->c__1, &n, part, &gotit, item_len, (ftnlen)
+	    80);
     gotit = gotit && n > 0;
     if (! gotit) {
 	*found = FALSE_;
@@ -406,7 +420,8 @@ static integer c__1 = 1;
     s_copy(string, " ", string_len, (ftnlen)1);
     n = 0;
     while(more) {
-	gcpool_(item, &comp, &c__1, &n, part, &more, item_len, (ftnlen)80);
+	gcpool_(item, &comp, &__state->c__1, &n, part, &more, item_len, (
+		ftnlen)80);
 	more = more && n > 0;
 	if (more) {
 	    *found = TRUE_;

@@ -1,9 +1,17 @@
-/* utc2et.f -- translated by f2c (version 19980913).
+/* utc2et.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int utc2et_state_t;
+static utc2et_state_t* get_utc2et_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      UTC2ET ( UTC to Ephemeris Time ) */
 /* Subroutine */ int utc2et_(char *utcstr, doublereal *et, ftnlen utcstr_len)
@@ -17,26 +25,33 @@
     doublereal tvec[10];
     logical mods;
     char type__[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), repmc_(char *, char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     integer ntvec;
     char error[480];
     logical ok;
     extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
 	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
-    logical succes, yabbrv;
+    logical succes;
+    logical yabbrv;
     char modify[8*5];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     char pictur[80];
     extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
 	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
 	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), texpyr_(integer *);
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int texpyr_(integer *);
 
+
+    /* Module state */
+    utc2et_state_t* __state = get_utc2et_state();
 /* $ Abstract */
 
 /*      Convert an input time from Calendar or Julian Date format, UTC, */

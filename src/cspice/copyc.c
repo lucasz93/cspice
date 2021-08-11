@@ -1,9 +1,17 @@
-/* copyc.f -- translated by f2c (version 19980913).
+/* copyc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int copyc_state_t;
+static copyc_state_t* get_copyc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      COPYC ( Copy a character cell ) */
 /* Subroutine */ int copyc_(char *cell, char *copy, ftnlen cell_len, ftnlen 
@@ -17,7 +25,9 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
 
     /* Local variables */
-    integer card, size, i__;
+    integer card;
+    integer size;
+    integer i__;
     extern integer cardc_(char *, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer moved;
@@ -26,11 +36,16 @@
     extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
     extern integer lastpc_(char *, ftnlen);
     integer reqlen;
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen),
-	     errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    copyc_state_t* __state = get_copyc_state();
 /* $ Abstract */
 
 /*      Copy the contents of a character cell to another cell. */

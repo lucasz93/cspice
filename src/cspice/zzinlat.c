@@ -1,13 +1,21 @@
-/* zzinlat.f -- translated by f2c (version 19980913).
+/* zzinlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b12 = 1e-12;
+extern zzinlat_init_t __zzinlat_init;
+static zzinlat_state_t* get_zzinlat_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzinlat)
+		state->zzinlat = __cspice_allocate_module(sizeof(
+	zzinlat_state_t), &__zzinlat_init, sizeof(__zzinlat_init));
+	return state->zzinlat;
+
+}
 
 /* $Procedure ZZINLAT ( DSK, in latitudinal element? ) */
 /* Subroutine */ int zzinlat_(doublereal *p, doublereal *bounds, doublereal *
@@ -15,9 +23,6 @@ static doublereal c_b12 = 1e-12;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal pi2 = -1.;
-    static doublereal hpi = -1.;
 
     /* System generated locals */
     doublereal d__1, d__2;
@@ -28,24 +33,42 @@ static doublereal c_b12 = 1e-12;
     /* Local variables */
     extern /* Subroutine */ int zzinlat0_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, logical *);
-    doublereal dlon, minr, smin, maxr, smax;
+    doublereal dlon;
+    doublereal minr;
+    doublereal smin;
+    doublereal maxr;
+    doublereal smax;
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal aminr, amaxr;
+    doublereal aminr;
+    doublereal amaxr;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal twopi_(void), halfpi_(void);
+    extern doublereal twopi_(void);
+    extern doublereal halfpi_(void);
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal amaxlo, amaxlt, aminlt, aminlo, maxlat, lonmrg, maxlon, minlat,
-	     minlon;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    doublereal amaxlo;
+    doublereal amaxlt;
+    doublereal aminlt;
+    doublereal aminlo;
+    doublereal maxlat;
+    doublereal lonmrg;
+    doublereal maxlon;
+    doublereal minlat;
+    doublereal minlon;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    doublereal lat, lon;
+    doublereal lat;
+    doublereal lon;
 
+
+    /* Module state */
+    zzinlat_state_t* __state = get_zzinlat_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -480,10 +503,10 @@ static doublereal c_b12 = 1e-12;
     if (return_()) {
 	return 0;
     }
-    if (first) {
-	pi2 = twopi_();
-	hpi = halfpi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->hpi = halfpi_();
+	__state->first = FALSE_;
     }
 
 /*     Get the latitudinal coordinates of the input point. */
@@ -559,10 +582,10 @@ static doublereal c_b12 = 1e-12;
 /*        Create adjusted latitude bounds. */
 
 /* Computing MAX */
-	d__1 = -hpi, d__2 = minlat - *margin;
+	d__1 = -__state->hpi, d__2 = minlat - *margin;
 	aminlt = max(d__1,d__2);
 /* Computing MIN */
-	d__1 = hpi, d__2 = maxlat + *margin;
+	d__1 = __state->hpi, d__2 = maxlat + *margin;
 	amaxlt = min(d__1,d__2);
 	if (lat < aminlt || lat > amaxlt) {
 	    return 0;
@@ -577,7 +600,7 @@ static doublereal c_b12 = 1e-12;
 /*     caller. */
 
     if (*exclud != 1) {
-	zznrmlon_(bounds, &bounds[1], &c_b12, &minlon, &maxlon);
+	zznrmlon_(bounds, &bounds[1], &__state->c_b12, &minlon, &maxlon);
 
 /*        Set the margin to be used for longitude interval */
 /*        inclusion tests. */
@@ -592,7 +615,7 @@ static doublereal c_b12 = 1e-12;
 /*        regardless of the point's longitude. All other points get the */
 /*        normal longitude test. */
 
-	if (lat <= hpi - 1e-8 && lat >= -hpi + 1e-8) {
+	if (lat <= __state->hpi - 1e-8 && lat >= -__state->hpi + 1e-8) {
 
 /*           This is the usual case: the latitude of the input point */
 /*           is bounded away from the poles. */
@@ -621,7 +644,7 @@ static doublereal c_b12 = 1e-12;
 
 /*                 See whether an aliased version of LON is a match. */
 
-		    lon += pi2;
+		    lon += __state->pi2;
 		} else {
 
 /*                 Consider LON to be a match with the lower bound. */
@@ -633,7 +656,7 @@ static doublereal c_b12 = 1e-12;
 
 /*                 See whether an aliased version of LON is a match. */
 
-		    lon -= pi2;
+		    lon -= __state->pi2;
 		} else {
 
 /*                 Consider LON to be a match with the upper bound. */

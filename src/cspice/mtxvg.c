@@ -1,9 +1,17 @@
-/* mtxvg.f -- translated by f2c (version 19980913).
+/* mtxvg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int mtxvg_state_t;
+static mtxvg_state_t* get_mtxvg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MTXVG ( Matrix transpose times vector, general dimension ) */
 /* Subroutine */ int mtxvg_(doublereal *m1, doublereal *v2, integer *nc1, 
@@ -17,9 +25,13 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, k;
+    integer i__;
+    integer k;
     doublereal sum;
 
+
+    /* Module state */
+    mtxvg_state_t* __state = get_mtxvg_state();
 /* $ Abstract */
 
 /*      Multiply the transpose of a matrix and a vector of */
@@ -183,7 +195,7 @@
     v2_dim1 = *nr1r2;
     m1_dim1 = *nr1r2;
     m1_dim2 = *nc1;
-    m1_offset = m1_dim1 + 1;
+    m1_offset = 1 + m1_dim1 * 1;
 
     /* Function Body */
     i__1 = *nc1;
@@ -191,13 +203,13 @@
 	sum = 0.;
 	i__2 = *nr1r2;
 	for (k = 1; k <= i__2; ++k) {
-	    sum += m1[(i__3 = k + i__ * m1_dim1 - m1_offset) < m1_dim1 * 
+	    sum += m1[(i__3 = k + i__ * m1_dim1 - m1_offset) < 1 * m1_dim1 * 
 		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mtxvg_",
-		     (ftnlen)183)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 
-		    ? i__4 : s_rnge("v2", i__4, "mtxvg_", (ftnlen)183)];
+		     (ftnlen)183)] * v2[(i__4 = k - 1) < 1 * v2_dim1 && 0 <= 
+		    i__4 ? i__4 : s_rnge("v2", i__4, "mtxvg_", (ftnlen)183)];
 	}
-	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "mtxvg_", (ftnlen)186)] = sum;
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"vout", i__2, "mtxvg_", (ftnlen)186)] = sum;
     }
     return 0;
 } /* mtxvg_ */

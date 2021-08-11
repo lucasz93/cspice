@@ -1,9 +1,17 @@
-/* exact.f -- translated by f2c (version 19980913).
+/* exact.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int exact_state_t;
+static exact_state_t* get_exact_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure                     EXACT ( Round to exact value ) */
 doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
@@ -11,6 +19,9 @@ doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
     /* System generated locals */
     doublereal ret_val, d__1;
 
+
+    /* Module state */
+    exact_state_t* __state = get_exact_state();
 /* $ Abstract */
 
 /*     Round an input double precision number to a specified exact value */

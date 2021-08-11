@@ -1,9 +1,17 @@
-/* zzektrnk.f -- translated by f2c (version 19980913).
+/* zzektrnk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrnk_state_t;
+static zzektrnk_state_t* get_zzektrnk_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRNK ( EK, node size ) */
 integer zzektrnk_(integer *handle, integer *tree, integer *node)
@@ -17,6 +25,9 @@ integer zzektrnk_(integer *handle, integer *tree, integer *node)
 	    integer *);
     integer addrss;
 
+
+    /* Module state */
+    zzektrnk_state_t* __state = get_zzektrnk_state();
 /* $ Abstract */
 
 /*     Return the number of keys in a node. */

@@ -1,9 +1,17 @@
-/* dasrfr.f -- translated by f2c (version 19980913).
+/* dasrfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dasrfr_state_t;
+static dasrfr_state_t* get_dasrfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      DASRFR ( DAS, read file record ) */
 /* Subroutine */ int dasrfr_(integer *handle, char *idword, char *ifname, 
@@ -11,12 +19,15 @@
 	ftnlen idword_len, ftnlen ifname_len)
 {
     extern /* Subroutine */ int zzdasrfr_(integer *, char *, char *, integer *
-	    , integer *, integer *, integer *, ftnlen, ftnlen), chkin_(char *,
-	     ftnlen);
+	    , integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dasrfr_state_t* __state = get_dasrfr_state();
 /* $ Abstract */
 
 /*     Return the contents of the file record of a specified DAS */

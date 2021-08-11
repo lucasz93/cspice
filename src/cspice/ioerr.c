@@ -1,15 +1,21 @@
-/* ioerr.f -- translated by f2c (version 19980913).
+/* ioerr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__2 = 2;
+extern ioerr_init_t __ioerr_init;
+static ioerr_state_t* get_ioerr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ioerr)
+		state->ioerr = __cspice_allocate_module(sizeof(ioerr_state_t),
+	 &__ioerr_init, sizeof(__ioerr_init));
+	return state->ioerr;
+
+}
 
 /* $Procedure      IOERR ( I/O error message writer ) */
 /* Subroutine */ int ioerr_(char *action, char *file, integer *iostat, ftnlen 
@@ -19,11 +25,16 @@ static integer c__2 = 2;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char error[320], iochar[10];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen), intstr_(integer *, char *, 
+    char error[320];
+    char iochar[10];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    ioerr_state_t* __state = get_ioerr_state();
 /* $ Abstract */
 
 /*      Set the long error message equal to a standard I/O error message */
@@ -221,24 +232,24 @@ static integer c__2 = 2;
 /*     There should be at least one space between each of these pieces, */
 /*     but not more than one. */
 
-    suffix_(action, &c__1, error, action_len, (ftnlen)320);
-    suffix_(file, &c__1, error, file_len, (ftnlen)320);
-    suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)320);
+    suffix_(action, &__state->c__1, error, action_len, (ftnlen)320);
+    suffix_(file, &__state->c__1, error, file_len, (ftnlen)320);
+    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
 
 /*     More standard stuff. If IOSTAT is zero, there is no need for this */
 /*     part of the message. */
 
     if (*iostat != 0) {
-	suffix_("The value of IOSTAT returned was", &c__2, error, (ftnlen)32, 
-		(ftnlen)320);
+	suffix_("The value of IOSTAT returned was", &__state->c__2, error, (
+		ftnlen)32, (ftnlen)320);
 
 /*        IOSTAT must be written to a character variable first. */
 /*        Attempting to write it directly to ERROR could cause a */
 /*        boo-boo if we have already overrun the length of ERROR. */
 
 	intstr_(iostat, iochar, (ftnlen)10);
-	suffix_(iochar, &c__1, error, (ftnlen)10, (ftnlen)320);
-	suffix_(".", &c__0, error, (ftnlen)1, (ftnlen)320);
+	suffix_(iochar, &__state->c__1, error, (ftnlen)10, (ftnlen)320);
+	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
     }
 
 /*     The message has been constructed.  Set the long error message */

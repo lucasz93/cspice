@@ -1,15 +1,21 @@
-/* zzspklt0.f -- translated by f2c (version 19980913).
+/* zzspklt0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__6 = 6;
-static doublereal c_b19 = -1.;
+extern zzspklt0_init_t __zzspklt0_init;
+static zzspklt0_state_t* get_zzspklt0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspklt0)
+		state->zzspklt0 = __cspice_allocate_module(sizeof(
+	zzspklt0_state_t), &__zzspklt0_init, sizeof(__zzspklt0_init));
+	return state->zzspklt0;
+
+}
 
 /* $Procedure ZZSPKLT0 ( S/P Kernel, light time corrected state ) */
 /* Subroutine */ int zzspklt0_(integer *targ, doublereal *et, char *ref, char 
@@ -18,8 +24,6 @@ static doublereal c_b19 = -1.;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
@@ -33,35 +37,40 @@ static doublereal c_b19 = -1.;
     extern /* Subroutine */ int zzspkgo0_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);
     extern doublereal vdot_(doublereal *, doublereal *);
-    static logical xmit;
     extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    doublereal a, b, c__;
-    integer i__, refid;
+    doublereal a;
+    doublereal b;
+    doublereal c__;
+    integer i__;
+    integer refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal epoch;
     extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    static logical usecn;
     extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *), vsubg_(doublereal *, doublereal *,
-	     integer *, doublereal *);
-    doublereal ssblt, lterr;
-    static logical uselt;
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
+    doublereal ssblt;
+    doublereal lterr;
     extern doublereal vnorm_(doublereal *);
     doublereal prvlt;
     extern logical failed_(void);
     extern doublereal clight_(void);
     logical attblk[15];
     extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer ltsign;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), setmsg_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal ssbtrg[6];
     integer numitr;
     extern logical return_(void);
     logical usestl;
 
+
+    /* Module state */
+    zzspklt0_state_t* __state = get_zzspklt0_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -700,7 +709,8 @@ static doublereal c_b19 = -1.;
     } else {
 	chkin_("ZZSPKLT0", (ftnlen)8);
     }
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -713,7 +723,7 @@ static doublereal c_b19 = -1.;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -729,11 +739,11 @@ static doublereal c_b19 = -1.;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	xmit = attblk[4];
-	uselt = attblk[1];
-	usecn = attblk[3];
+	__state->xmit = attblk[4];
+	__state->uselt = attblk[1];
+	__state->usecn = attblk[3];
 	usestl = attblk[2];
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -753,12 +763,12 @@ static doublereal c_b19 = -1.;
 /*     observer to get the relative state. Use this to compute the */
 /*     one-way light time. */
 
-    zzspkgo0_(targ, et, ref, &c__0, ssbtrg, &ssblt, ref_len);
+    zzspkgo0_(targ, et, ref, &__state->c__0, ssbtrg, &ssblt, ref_len);
     if (failed_()) {
 	chkout_("ZZSPKLT0", (ftnlen)8);
 	return 0;
     }
-    vsubg_(ssbtrg, stobs, &c__6, starg);
+    vsubg_(ssbtrg, stobs, &__state->c__6, starg);
     dist = vnorm_(starg);
     *lt = dist / clight_();
     if (*lt == 0.) {
@@ -771,7 +781,7 @@ static doublereal c_b19 = -1.;
 	chkout_("ZZSPKLT0", (ftnlen)8);
 	return 0;
     }
-    if (! uselt) {
+    if (! __state->uselt) {
 
 /*        This is a special case: we're not using light time */
 /*        corrections, so the derivative */
@@ -793,7 +803,7 @@ static doublereal c_b19 = -1.;
 
 /*     Determine the sign of the light time offset. */
 
-    if (xmit) {
+    if (__state->xmit) {
 	ltsign = 1;
     } else {
 	ltsign = -1;
@@ -802,7 +812,7 @@ static doublereal c_b19 = -1.;
 /*     Let NUMITR be the number of iterations we'll perform to */
 /*     compute the light time. */
 
-    if (usecn) {
+    if (__state->usecn) {
 	numitr = 5;
     } else {
 	numitr = 1;
@@ -815,12 +825,12 @@ static doublereal c_b19 = -1.;
 /*        during the previous loop iteration. */
 
 	epoch = *et + ltsign * *lt;
-	zzspkgo0_(targ, &epoch, ref, &c__0, ssbtrg, &ssblt, ref_len);
+	zzspkgo0_(targ, &epoch, ref, &__state->c__0, ssbtrg, &ssblt, ref_len);
 	if (failed_()) {
 	    chkout_("ZZSPKLT0", (ftnlen)8);
 	    return 0;
 	}
-	vsubg_(ssbtrg, stobs, &c__6, starg);
+	vsubg_(ssbtrg, stobs, &__state->c__6, starg);
 	prvlt = *lt;
 	d__1 = vnorm_(starg) / clight_();
 	*lt = touchd_(&d__1);
@@ -941,7 +951,7 @@ static doublereal c_b19 = -1.;
 /*     with the light-time corrected velocity. */
 
     d__1 = ltsign * *dlt + 1.;
-    vlcom_(&d__1, &ssbtrg[3], &c_b19, &stobs[3], &starg[3]);
+    vlcom_(&d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &starg[3]);
     chkout_("ZZSPKLT0", (ftnlen)8);
     return 0;
 } /* zzspklt0_ */

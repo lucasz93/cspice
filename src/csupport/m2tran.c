@@ -1,9 +1,10 @@
-/* m2tran.f -- translated by f2c (version 19980913).
+/* m2tran.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* Table of constant values */
 
@@ -251,7 +252,8 @@ static integer c__19 = 19;
 /*     First do a binary search on the abreviations of the META-KEYS */
 /*     to see if this is a key word. */
 
-    s_copy(cword, string + (*beg - 1), (ftnlen)4, *end - (*beg - 1));
+    s_copy(cword, string + (0 + (0 + (*beg - 1))), (ftnlen)4, *end - (*beg - 
+	    1));
     i__ = bsrchc_(cword, &c__19, quick, (ftnlen)4, (ftnlen)4);
     if (i__ == 0) {
 

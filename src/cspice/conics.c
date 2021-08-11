@@ -1,9 +1,17 @@
-/* conics.f -- translated by f2c (version 19980913).
+/* conics.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int conics_state_t;
+static conics_state_t* get_conics_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CONICS ( Determine state from conic elements ) */
 /* Subroutine */ int conics_(doublereal *elts, doublereal *et, doublereal *
@@ -17,10 +25,19 @@
 	    doublereal *, doublereal *);
 
     /* Local variables */
-    doublereal cnci, argp, snci, cosi, sini, cosn, sinn;
+    doublereal cnci;
+    doublereal argp;
+    doublereal snci;
+    doublereal cosi;
+    doublereal sini;
+    doublereal cosn;
+    doublereal sinn;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
-    doublereal cosw, sinw, n, v;
+    doublereal cosw;
+    doublereal sinw;
+    doublereal n;
+    doublereal v;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal lnode;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
@@ -29,14 +46,24 @@
     doublereal t0;
     extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal dt, rp, mu, basisp[3], period, basisq[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    doublereal pstate[6], ainvrs;
+    doublereal dt;
+    doublereal rp;
+    doublereal mu;
+    doublereal basisp[3];
+    doublereal period;
+    doublereal basisq[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    doublereal pstate[6];
+    doublereal ainvrs;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    doublereal ecc, inc;
+    doublereal ecc;
+    doublereal inc;
 
+
+    /* Module state */
+    conics_state_t* __state = get_conics_state();
 /* $ Abstract */
 
 /*     Determine the state (position, velocity) of an orbiting body */

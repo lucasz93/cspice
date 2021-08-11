@@ -1,13 +1,21 @@
-/* dasadd.f -- translated by f2c (version 19980913).
+/* dasadd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern dasadd_init_t __dasadd_init;
+static dasadd_state_t* get_dasadd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasadd)
+		state->dasadd = __cspice_allocate_module(sizeof(
+	dasadd_state_t), &__dasadd_init, sizeof(__dasadd_init));
+	return state->dasadd;
+
+}
 
 /* $Procedure      DASADD ( DAS, add data, double precision ) */
 /* Subroutine */ int dasadd_(integer *handle, integer *n, doublereal *data)
@@ -18,27 +26,37 @@ static integer c__2 = 2;
     /* Local variables */
     integer free;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, recno, lastd;
+    integer ncomc;
+    integer recno;
+    integer lastd;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    integer ncomr, numdp;
+    integer ncomr;
+    integer numdp;
     extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
     extern logical failed_(void);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *), 
-	    dashfs_(integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
     doublereal record[128];
     integer lastla[3];
     extern /* Subroutine */ int dasurd_(integer *, integer *, integer *, 
-	    integer *, doublereal *), daswrd_(integer *, integer *, 
-	    doublereal *);
-    integer lastrc[3], clsize;
+	    integer *, doublereal *);
+    extern /* Subroutine */ int daswrd_(integer *, integer *, doublereal *);
+    integer lastrc[3];
+    integer clsize;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    integer lastwd[3], nresvc, wordno;
+    integer lastwd[3];
+    integer nresvc;
+    integer wordno;
     extern logical return_(void);
-    integer nresvr, nwritn;
+    integer nresvr;
+    integer nwritn;
 
+
+    /* Module state */
+    dasadd_state_t* __state = get_dasadd_state();
 /* $ Abstract */
 
 /*     Add an array of double precision numbers to a DAS file. */
@@ -344,7 +362,8 @@ static integer c__2 = 2;
 /*     first record available for double precision data. */
 
     if (lastd >= 1) {
-	dasa2l_(handle, &c__2, &lastd, &clbase, &clsize, &recno, &wordno);
+	dasa2l_(handle, &__state->c__2, &lastd, &clbase, &clsize, &recno, &
+		wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -412,7 +431,7 @@ static integer c__2 = 2;
 /*     double precision words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &c__2, n);
+    dascud_(handle, &__state->c__2, n);
     chkout_("DASADD", (ftnlen)6);
     return 0;
 } /* dasadd_ */

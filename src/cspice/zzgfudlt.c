@@ -1,14 +1,21 @@
-/* zzgfudlt.f -- translated by f2c (version 19980913).
+/* zzgfudlt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__2 = 2;
+extern zzgfudlt_init_t __zzgfudlt_init;
+static zzgfudlt_state_t* get_zzgfudlt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzgfudlt)
+		state->zzgfudlt = __cspice_allocate_module(sizeof(
+	zzgfudlt_state_t), &__zzgfudlt_init, sizeof(__zzgfudlt_init));
+	return state->zzgfudlt;
+
+}
 
 /* $Procedure ZZGFUDLT ( Private --- GF, scalar function < ref value ) */
 /* Subroutine */ int zzgfudlt_(S_fp udfunc, doublereal *et, logical *isless)
@@ -18,12 +25,16 @@ static integer c__2 = 2;
     extern logical failed_(void);
     logical ok;
     doublereal refval;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    zzgfudlt_state_t* __state = get_zzgfudlt_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -327,7 +338,7 @@ static integer c__2 = 2;
 /*     Retrieve the stored reference value. Signal an error if a */
 /*     get call fails. */
 
-    zzholdd_(&c_n1, &c__2, &ok, &refval);
+    zzholdd_(&__state->c_n1, &__state->c__2, &ok, &refval);
     if (! ok) {
 	setmsg_("ZZHOLDD GET failed. This indicates a logic error in the GF "
 		"code due either to a failure to store the GF reference value"

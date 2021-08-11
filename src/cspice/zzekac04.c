@@ -1,16 +1,21 @@
-/* zzekac04.f -- translated by f2c (version 19980913).
+/* zzekac04.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
-static logical c_false = FALSE_;
-static integer c__256 = 256;
+extern zzekac04_init_t __zzekac04_init;
+static zzekac04_state_t* get_zzekac04_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekac04)
+		state->zzekac04 = __cspice_allocate_module(sizeof(
+	zzekac04_state_t), &__zzekac04_init, sizeof(__zzekac04_init));
+	return state->zzekac04;
+
+}
 
 /* $Procedure     ZZEKAC04 ( EK, add class 4 column to segment ) */
 /* Subroutine */ int zzekac04_(integer *handle, integer *segdsc, integer *
@@ -23,26 +28,52 @@ static integer c__256 = 256;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], nelt, from, size;
+    integer page[256];
+    integer nelt;
+    integer from;
+    integer size;
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), zzeksfwd_(integer *, integer *, integer *, integer *), 
-	    zzekpgwi_(integer *, integer *, integer *), zzekspsh_(integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
 	    integer *);
-    integer i__, n, p, ndata, pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    integer class__, nlink, p2, nrows;
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
+    integer i__;
+    integer n;
+    integer p;
+    integer ndata;
+    integer pbase;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer nlink;
+    integer p2;
+    integer nrows;
     extern logical return_(void);
     char column[32];
-    integer adrbuf[254], bufptr, colidx, cursiz, nulptr, remain, to;
-    logical cntinu, fixsiz, newreq, nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), cleari_(integer *, integer *);
+    integer adrbuf[254];
+    integer bufptr;
+    integer colidx;
+    integer cursiz;
+    integer nulptr;
+    integer remain;
+    integer to;
+    logical cntinu;
+    logical fixsiz;
+    logical newreq;
+    logical nullok;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
     integer row;
     extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
 	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekac04_state_t* __state = get_zzekac04_state();
 /* $ Abstract */
 
 /*     Add an entire class 4 column to an EK segment. */
@@ -980,7 +1011,7 @@ static integer c__256 = 256;
 /*     Push the column's ordinal index on the stack.  This allows us */
 /*     to identify the column the addresses belong to. */
 
-    zzekspsh_(&c__1, &colidx);
+    zzekspsh_(&__state->c__1, &colidx);
 
 /*     Find the number of rows in the segment. */
 
@@ -1020,8 +1051,9 @@ static integer c__256 = 256;
 /*        There's some data to write, so allocate a page.  Also */
 /*        prepare a data buffer to be written out as a page. */
 
-	zzekaps_(handle, segdsc, &c__3, &c_false, &p, &pbase);
-	cleari_(&c__256, page);
+	zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
+		pbase);
+	cleari_(&__state->c__256, page);
     }
 
 /*     Write the input data out to the target file a page at a time. */
@@ -1148,8 +1180,9 @@ static integer c__256 = 256;
 /*           If there's more data to write, allocate another page. */
 
 	    if (remain > 0) {
-		zzekaps_(handle, segdsc, &c__3, &c_false, &p2, &pbase);
-		cleari_(&c__256, page);
+		zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &
+			p2, &pbase);
+		cleari_(&__state->c__256, page);
 		n = 0;
 		nlink = 0;
 		to = 1;
@@ -1158,7 +1191,7 @@ static integer c__256 = 256;
 /*              link the previous page to the current one. */
 
 		if (cntinu) {
-		    zzeksfwd_(handle, &c__3, &p, &p2);
+		    zzeksfwd_(handle, &__state->c__3, &p, &p2);
 		}
 		p = p2;
 	    }

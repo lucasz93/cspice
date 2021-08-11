@@ -1,22 +1,21 @@
-/* dskw02.f -- translated by f2c (version 19980913).
+/* dskw02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_b116 = 16000002;
-static integer c_b122 = 32000000;
-static integer c__6 = 6;
-static integer c__3 = 3;
-static integer c_b145 = 100000000;
-static doublereal c_b154 = .33333333333333331;
-static integer c_b168 = 100000;
-static integer c__24 = 24;
-static integer c__10 = 10;
-static integer c__1 = 1;
+extern dskw02_init_t __dskw02_init;
+static dskw02_state_t* get_dskw02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskw02)
+		state->dskw02 = __cspice_allocate_module(sizeof(
+	dskw02_state_t), &__dskw02_init, sizeof(__dskw02_init));
+	return state->dskw02;
+
+}
 
 /* $Procedure DSKW02 ( DSK, write type 2 segment ) */
 /* Subroutine */ int dskw02_(integer *handle, integer *center, integer *
@@ -38,33 +37,54 @@ static integer c__1 = 1;
     /* Local variables */
     integer ncgr;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal a, b;
-    integer i__, j, k, q;
+    doublereal a;
+    doublereal b;
+    integer i__;
+    integer j;
+    integer k;
+    integer q;
     doublereal r__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[24];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    errdp_(char *, doublereal *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern doublereal twopi_(void);
     extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *), 
-	    cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
     integer frmcde;
     extern doublereal halfpi_(void);
     extern /* Subroutine */ int dlabns_(integer *);
     doublereal segbds[4]	/* was [2][2] */;
     extern /* Subroutine */ int dlaens_(integer *);
     extern logical return_(void);
-    doublereal altlim, voxori[3], voxsiz, vtxbds[6]	/* was [2][3] */;
-    integer cgrscl, nvxtot;
+    doublereal altlim;
+    doublereal voxori[3];
+    doublereal voxsiz;
+    doublereal vtxbds[6]	/* was [2][3] */;
+    integer cgrscl;
+    integer nvxtot;
     extern doublereal dpr_(void);
-    integer pvoxpl, pvoxpt, pvtxpl, pvtxpt, vgrext[3], voxnpt, voxnpl, vtxnpl;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), setmsg_(
-	    char *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen),
-	     errint_(char *, integer *, ftnlen);
+    integer pvoxpl;
+    integer pvoxpt;
+    integer pvtxpl;
+    integer pvtxpt;
+    integer vgrext[3];
+    integer voxnpt;
+    integer voxnpl;
+    integer vtxnpl;
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    dskw02_state_t* __state = get_dskw02_state();
 /* $ Abstract */
 
 /*     Write a type 2 segment to a DSK file. */
@@ -1886,7 +1906,7 @@ static integer c__1 = 1;
 	setmsg_("Vertex count NV = #; count must be in the range 1:#.", (
 		ftnlen)52);
 	errint_("#", nv, (ftnlen)1);
-	errint_("#", &c_b116, (ftnlen)1);
+	errint_("#", &__state->c_b116, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKW02", (ftnlen)6);
 	return 0;
@@ -1895,7 +1915,7 @@ static integer c__1 = 1;
 	setmsg_("Plate count NP = #; count must be in the range 1:#.", (
 		ftnlen)51);
 	errint_("#", np, (ftnlen)1);
-	errint_("#", &c_b122, (ftnlen)1);
+	errint_("#", &__state->c_b122, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKW02", (ftnlen)6);
 	return 0;
@@ -1906,7 +1926,7 @@ static integer c__1 = 1;
     i__1 = *np;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    k = plates[(i__2 = j + i__ * 3 - 4) < plates_dim2 * 3 && 0 <= 
+	    k = plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
 		    i__2 ? i__2 : s_rnge("plates", i__2, "dskw02_", (ftnlen)
 		    1404)];
 	    if (k < 1 || k > *nv) {
@@ -1985,7 +2005,7 @@ static integer c__1 = 1;
 
 /*     Extract double precision elements of the spatial index. */
 
-    moved_(spaixd, &c__6, vtxbds);
+    moved_(spaixd, &__state->c__6, vtxbds);
     vequ_(&spaixd[6], voxori);
     voxsiz = spaixd[9];
 
@@ -1994,7 +2014,7 @@ static integer c__1 = 1;
 
 /*     Fetch grid extents (in units of whole voxels): */
 
-    movei_(spaixi, &c__3, vgrext);
+    movei_(spaixi, &__state->c__3, vgrext);
 
 /*     Fetch coarse grid scale, voxel pointer count, and voxel-plate */
 /*     list count. */
@@ -2039,7 +2059,7 @@ static integer c__1 = 1;
 	    errint_("#", vgrext, (ftnlen)1);
 	    errint_("#", &vgrext[1], (ftnlen)1);
 	    errint_("#", &vgrext[2], (ftnlen)1);
-	    errint_("#", &c_b145, (ftnlen)1);
+	    errint_("#", &__state->c_b145, (ftnlen)1);
 	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	    chkout_("DSKW02", (ftnlen)6);
 	    return 0;
@@ -2053,7 +2073,7 @@ static integer c__1 = 1;
 	setmsg_("Fine voxel count NVXTOT = #; count must be in the range 1:#."
 		, (ftnlen)60);
 	errint_("#", &nvxtot, (ftnlen)1);
-	errint_("#", &c_b145, (ftnlen)1);
+	errint_("#", &__state->c_b145, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKW02", (ftnlen)6);
 	return 0;
@@ -2063,7 +2083,7 @@ static integer c__1 = 1;
 /*     cube must not exceed the fine voxel count. */
 
     d__1 = (doublereal) nvxtot;
-    if (cgrscl < 1 || (doublereal) cgrscl > pow_dd(&d__1, &c_b154)) {
+    if (cgrscl < 1 || (doublereal) cgrscl > pow_dd(&d__1, &__state->c_b154)) {
 	setmsg_("Coarse voxel scale = #; scale must be in the range 1:NVXTOT"
 		"**3, where NVXTOT is the total fine voxel count. In this cas"
 		"e, NVXTOT = #.", (ftnlen)133);
@@ -2110,7 +2130,7 @@ static integer c__1 = 1;
 	setmsg_("Coarse voxel count = #; count must be in the range 1:#.", (
 		ftnlen)55);
 	errint_("#", &ncgr, (ftnlen)1);
-	errint_("#", &c_b168, (ftnlen)1);
+	errint_("#", &__state->c_b168, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("DSKW02", (ftnlen)6);
 	return 0;
@@ -2131,14 +2151,14 @@ static integer c__1 = 1;
 
 /*     First, fill in the DSK segment descriptor. */
 
-    cleard_(&c__24, descr);
+    cleard_(&__state->c__24, descr);
     descr[0] = (doublereal) (*surfid);
     descr[1] = (doublereal) (*center);
     descr[2] = (doublereal) (*dclass);
     descr[3] = 2.;
     descr[4] = (doublereal) frmcde;
     descr[5] = (doublereal) (*corsys);
-    moved_(corpar, &c__10, &descr[6]);
+    moved_(corpar, &__state->c__10, &descr[6]);
     descr[16] = segbds[0];
     descr[17] = segbds[1];
     descr[18] = segbds[2];
@@ -2150,14 +2170,14 @@ static integer c__1 = 1;
 
 /*     Now write the descriptor into the segment. */
 
-    dasadd_(handle, &c__24, descr);
+    dasadd_(handle, &__state->c__24, descr);
 
 /*     Add the voxel grid origin and voxel size. */
 /*     Finish with the vertex data. */
 
-    dasadd_(handle, &c__6, vtxbds);
-    dasadd_(handle, &c__3, voxori);
-    dasadd_(handle, &c__1, &voxsiz);
+    dasadd_(handle, &__state->c__6, vtxbds);
+    dasadd_(handle, &__state->c__3, voxori);
+    dasadd_(handle, &__state->c__1, &voxsiz);
     i__1 = *nv * 3;
     dasadd_(handle, &i__1, vrtces);
 
@@ -2167,14 +2187,14 @@ static integer c__1 = 1;
 /*     NP is the number of plates. */
 /*     NVXTOT is the number of voxels in the spatial index. */
 
-    dasadi_(handle, &c__1, nv);
-    dasadi_(handle, &c__1, np);
-    dasadi_(handle, &c__1, &nvxtot);
-    dasadi_(handle, &c__3, vgrext);
-    dasadi_(handle, &c__1, &cgrscl);
-    dasadi_(handle, &c__1, &voxnpt);
-    dasadi_(handle, &c__1, &voxnpl);
-    dasadi_(handle, &c__1, &vtxnpl);
+    dasadi_(handle, &__state->c__1, nv);
+    dasadi_(handle, &__state->c__1, np);
+    dasadi_(handle, &__state->c__1, &nvxtot);
+    dasadi_(handle, &__state->c__3, vgrext);
+    dasadi_(handle, &__state->c__1, &cgrscl);
+    dasadi_(handle, &__state->c__1, &voxnpt);
+    dasadi_(handle, &__state->c__1, &voxnpl);
+    dasadi_(handle, &__state->c__1, &vtxnpl);
     i__1 = *np * 3;
     dasadi_(handle, &i__1, plates);
     dasadi_(handle, &voxnpt, &spaixi[pvoxpt - 1]);

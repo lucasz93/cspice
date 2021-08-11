@@ -1,9 +1,10 @@
-/* m2diag.f -- translated by f2c (version 19980913).
+/* m2diag.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2DIAG ( META/2 diagnostics formatting utility. ) */
 /* Subroutine */ int m2diag_0_(int n__, char *filler, char *begmrk, char *

@@ -1,15 +1,21 @@
-/* dascud.f -- translated by f2c (version 19980913).
+/* dascud.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__256 = 256;
-static integer c__2 = 2;
+extern dascud_init_t __dascud_init;
+static dascud_state_t* get_dascud_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dascud)
+		state->dascud = __cspice_allocate_module(sizeof(
+	dascud_state_t), &__dascud_init, sizeof(__dascud_init));
+	return state->dascud;
+
+}
 
 /* $Procedure      DASCUD ( DAS, create or update directories ) */
 /* Subroutine */ int dascud_(integer *handle, integer *type__, integer *
@@ -17,7 +23,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -26,30 +31,52 @@ static integer c__2 = 2;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer free, lrec, last, room, i__;
+    integer free;
+    integer lrec;
+    integer last;
+    integer room;
+    integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, descr;
+    integer ncomc;
+    integer descr;
     extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
 	    integer *);
-    integer recno, ncomr, lword, ltype, needed;
+    integer recno;
+    integer ncomr;
+    integer lword;
+    integer ltype;
+    integer needed;
     extern /* Subroutine */ int cleari_(integer *, integer *);
-    integer dscrec, nw, dirrec[256];
+    integer dscrec;
+    integer nw;
+    integer dirrec[256];
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
-    integer minadr, maxadr, lastla[3], rngloc;
+    integer minadr;
+    integer maxadr;
+    integer lastla[3];
+    integer rngloc;
     extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     dasrri_(integer *, integer *, integer *, integer *, integer *), 
-	    dasuri_(integer *, integer *, integer *, integer *, integer *);
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
+	    integer *, integer *);
     integer lastrc[3];
-    extern /* Subroutine */ int daswri_(integer *, integer *, integer *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    integer lastwd[3], nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int daswri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lastwd[3];
+    integer nresvc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    integer nresvr, loc;
+    integer nresvr;
+    integer loc;
 
+
+    /* Module state */
+    dascud_state_t* __state = get_dascud_state();
 /* $ Abstract */
 
 /*     Create or update directories in a DAS file to reflect addition */
@@ -498,7 +525,7 @@ static integer c__2 = 2;
 /*     descriptor in the file, and also find the type of the descriptor */
 /*     LTYPE. */
 
-    maxai_(lastrc, &c__3, &lrec, &loc);
+    maxai_(lastrc, &__state->c__3, &lrec, &loc);
     lword = 0;
     ltype = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
@@ -615,7 +642,7 @@ static integer c__2 = 2;
 
 /*           Start with an empty directory record. */
 
-	    cleari_(&c__256, dirrec);
+	    cleari_(&__state->c__256, dirrec);
 
 /*           Add a new descriptor to the directory.  The record */
 /*           count is the number of new records required:  NEEDED. */
@@ -682,8 +709,8 @@ static integer c__2 = 2;
 /*           sign of the new descriptor is a function of the type of */
 /*           the current last descriptor. */
 
-	    if (*type__ == next[(i__1 = ltype - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "dascud_", (ftnlen)789)]) {
+	    if (*type__ == __state->next[(i__1 = ltype - 1) < 3 && 0 <= i__1 ?
+		     i__1 : s_rnge("next", i__1, "dascud_", (ftnlen)789)]) {
 
 /*              TYPE is the successor in the type sequence of the type */
 /*              of the previous descriptor; use a positive count. */
@@ -739,12 +766,12 @@ static integer c__2 = 2;
 /*              Update the previous directory to point forward to the */
 /*              next one. */
 
-		dasuri_(handle, &lrec, &c__2, &c__2, &free);
+		dasuri_(handle, &lrec, &__state->c__2, &__state->c__2, &free);
 
 /*              Prepare the new directory record: clear it, set the */
 /*              backward pointer, and write the record. */
 
-		cleari_(&c__256, dirrec);
+		cleari_(&__state->c__256, dirrec);
 		dirrec[0] = lrec;
 		daswri_(handle, &free, dirrec);
 
@@ -783,12 +810,12 @@ static integer c__2 = 2;
 
 /*           Obtain the record number for this directory. */
 
-	    dasrri_(handle, &lrec, &c__2, &c__2, &recno);
+	    dasrri_(handle, &lrec, &__state->c__2, &__state->c__2, &recno);
 
 /*           Now fill in the new directory record.  Start with a clean */
 /*           record. */
 
-	    cleari_(&c__256, dirrec);
+	    cleari_(&__state->c__256, dirrec);
 
 /*           Set the backward pointer, the address range for TYPE, */
 /*           initial data type, and record count. */

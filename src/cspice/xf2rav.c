@@ -1,9 +1,17 @@
-/* xf2rav.f -- translated by f2c (version 19980913).
+/* xf2rav.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int xf2rav_state_t;
+static xf2rav_state_t* get_xf2rav_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      XF2RAV ( Transform to rotation and angular velocity) */
 /* Subroutine */ int xf2rav_(doublereal *xform, doublereal *rot, doublereal *
@@ -19,9 +27,13 @@
     doublereal drdt[9]	/* was [3][3] */;
     extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
 	    );
-    integer i__, j;
+    integer i__;
+    integer j;
     doublereal omega[9]	/* was [3][3] */;
 
+
+    /* Module state */
+    xf2rav_state_t* __state = get_xf2rav_state();
 /* $ Abstract */
 
 /*     This routine determines from a state transformation matrix */

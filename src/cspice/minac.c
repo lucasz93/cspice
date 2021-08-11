@@ -1,9 +1,17 @@
-/* minac.f -- translated by f2c (version 19980913).
+/* minac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int minac_state_t;
+static minac_state_t* get_minac_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MINAC  ( Minimum element of array, character ) */
 /* Subroutine */ int minac_(char *array, integer *ndim, char *minval, integer 
@@ -19,6 +27,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    minac_state_t* __state = get_minac_state();
 /* $ Abstract */
 
 /*     Locate the minimum element of a character array. */

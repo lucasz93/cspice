@@ -1,13 +1,21 @@
-/* dasac.f -- translated by f2c (version 19980913).
+/* dasac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
+extern dasac_init_t __dasac_init;
+static dasac_state_t* get_dasac_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasac)
+		state->dasac = __cspice_allocate_module(sizeof(dasac_state_t),
+	 &__dasac_init, sizeof(__dasac_init));
+	return state->dasac;
+
+}
 
 /* $Procedure     DASAC ( DAS add comments ) */
 /* Subroutine */ int dasac_(integer *handle, integer *n, char *buffer, ftnlen 
@@ -15,7 +23,6 @@ static logical c_false = FALSE_;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -26,32 +33,44 @@ static logical c_false = FALSE_;
     /* Local variables */
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
-    integer i__, j, space;
+    integer i__;
+    integer j;
+    integer space;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer ncomc, recno, ncomr;
+    integer ncomc;
+    integer recno;
+    integer ncomr;
     extern logical failed_(void);
     extern /* Subroutine */ int dasacr_(integer *, integer *);
-    char ifname[60], crecrd[1024];
+    char ifname[60];
+    char crecrd[1024];
     extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen), dassih_(integer *, char *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     integer nchars;
     extern integer lastnb_(char *, ftnlen);
-    integer length, newrec, daslun;
+    integer length;
+    integer newrec;
+    integer daslun;
     extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
 	    integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
-    static char eolmrk[1];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), daswfr_(integer *, char 
-	    *, char *, integer *, integer *, integer *, integer *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen, ftnlen);
     integer nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    integer rinuse, curpos;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer rinuse;
+    integer curpos;
     extern logical return_(void);
     integer nresvr;
 
+
+    /* Module state */
+    dasac_state_t* __state = get_dasac_state();
 /* $ Abstract */
 
 /*     Add comments from a buffer of character strings to the comment */
@@ -281,9 +300,9 @@ static logical c_false = FALSE_;
 /*     we need to initialize the character value for the end-of-line */
 /*     marker. */
 
-    if (first) {
-	first = FALSE_;
-	*(unsigned char *)eolmrk = '\0';
+    if (__state->first) {
+	__state->first = FALSE_;
+	*(unsigned char *)__state->eolmrk = '\0';
     }
 
 /*     Verify that the DAS file attached to HANDLE is opened with write */
@@ -298,7 +317,7 @@ static logical c_false = FALSE_;
 /*     Convert the DAS file handle to its corresponding Fortran logical */
 /*     unit number for reading and writing comment records. */
 
-    zzddhhlu_(handle, "DAS", &c_false, &daslun, (ftnlen)3);
+    zzddhhlu_(handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASAC", (ftnlen)5);
 	return 0;
@@ -526,7 +545,8 @@ static logical c_false = FALSE_;
 /*        Append the end-of-line marker to the comment line that we just */
 /*        placed into the comment record. */
 
-	*(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)eolmrk;
+	*(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)
+		__state->eolmrk;
 	++curpos;
     }
 

@@ -1,9 +1,17 @@
-/* getlun.f -- translated by f2c (version 19980913).
+/* getlun.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int getlun_state_t;
+static getlun_state_t* get_getlun_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      GETLUN ( Get a free logical unit ) */
 /* Subroutine */ int getlun_(integer *unit)
@@ -12,11 +20,17 @@
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), fndlun_(integer *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int fndlun_(integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    getlun_state_t* __state = get_getlun_state();
 /* $ Abstract */
 
 /*     Return the number of a free logical unit. */

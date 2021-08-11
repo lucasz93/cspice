@@ -1,9 +1,17 @@
-/* scanrj.f -- translated by f2c (version 19980913).
+/* scanrj.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int scanrj_state_t;
+static scanrj_state_t* get_scanrj_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SCANRJ ( Scan --- reject tokens ) */
 /* Subroutine */ int scanrj_(integer *ids, integer *n, integer *ntokns, 
@@ -13,9 +21,13 @@
     integer i__1;
 
     /* Local variables */
-    integer i__, j;
+    integer i__;
+    integer j;
     extern integer isrchi_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    scanrj_state_t* __state = get_scanrj_state();
 /* $ Abstract */
 
 /*     Reject those tokens descriptors whose identities are among those */

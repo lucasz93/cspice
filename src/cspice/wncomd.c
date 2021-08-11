@@ -1,27 +1,42 @@
-/* wncomd.f -- translated by f2c (version 19980913).
+/* wncomd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern wncomd_init_t __wncomd_init;
+static wncomd_state_t* get_wncomd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wncomd)
+		state->wncomd = __cspice_allocate_module(sizeof(
+	wncomd_state_t), &__wncomd_init, sizeof(__wncomd_init));
+	return state->wncomd;
+
+}
 
 /* $Procedure      WNCOMD ( Complement a DP window ) */
 /* Subroutine */ int wncomd_(doublereal *left, doublereal *right, doublereal *
 	window, doublereal *result)
 {
-    integer card, i__;
+    integer card;
+    integer i__;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen),
-	     wninsd_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    wncomd_state_t* __state = get_wncomd_state();
 /* $ Abstract */
 
 /*      Determine the complement of a double precision window with */
@@ -213,7 +228,7 @@ static integer c__0 = 0;
 
 /*     Empty out the result window before proceeding. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
 
 /*     Check to see if the input interval is valid. If it is not, signal */
 /*     an error and return. */

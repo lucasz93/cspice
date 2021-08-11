@@ -1,16 +1,21 @@
-/* chgirf.f -- translated by f2c (version 19980913).
+/* chgirf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b6 = 0.;
-static integer c__1 = 1;
-static integer c__9 = 9;
-static integer c__21 = 21;
+extern chgirf_init_t __chgirf_init;
+static chgirf_state_t* get_chgirf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->chgirf)
+		state->chgirf = __cspice_allocate_module(sizeof(
+	chgirf_state_t), &__chgirf_init, sizeof(__chgirf_init));
+	return state->chgirf;
+
+}
 
 /* $Procedure CHGIRF ( Change inertial reference frames ) */
 /* Subroutine */ int chgirf_0_(int n__, integer *refa, integer *refb, 
@@ -18,50 +23,6 @@ static integer c__21 = 21;
 {
     /* Initialized data */
 
-    static logical ready = FALSE_;
-    static char frames[16*21] = "J2000           " "B1950           " "FK4  "
-	    "           " "DE-118          " "DE-96           " "DE-102      "
-	    "    " "DE-108          " "DE-111          " "DE-114          " 
-	    "DE-122          " "DE-125          " "DE-130          " "GALACT"
-	    "IC        " "DE-200          " "DE-202          " "MARSIAU      "
-	    "   " "ECLIPJ2000      " "ECLIPB1950      " "DE-140          " 
-	    "DE-142          " "DE-143          ";
-    static char bases[16*21] = "J2000           " "J2000           " "B1950 "
-	    "          " "B1950           " "B1950           " "B1950        "
-	    "   " "B1950           " "B1950           " "B1950           " 
-	    "B1950           " "B1950           " "B1950           " "FK4   "
-	    "          " "J2000           " "J2000           " "J2000        "
-	    "   " "J2000           " "B1950           " "J2000           " 
-	    "J2000           " "J2000           ";
-    static char defs[80*21] = "0.0  1                                       "
-	    "                                   " "1152.84248596724 3  -1002."
-	    "26108439117  2  1153.04066200330  3                   " "0.525  "
-	    "3                                                               "
-	    "         " "0.53155  3                                          "
-	    "                            " "0.4107  3                        "
-	    "                                               " "0.1359  3     "
-	    "                                                                "
-	    "  " "0.4775  3                                                  "
-	    "                     " "0.5880  3                               "
-	    "                                        " "0.5529  3            "
-	    "                                                           " 
-	    "0.5316  3                                                      "
-	    "                 " "0.5754  3                                   "
-	    "                                    " "0.5247  3                "
-	    "                                                       " "117720"
-	    "0.0  3  225360.0  1  1016100.0  3                               "
-	    "          " "0.0  3                                             "
-	    "                             " "0.0  3                          "
-	    "                                                " "324000.0D0 3 "
-	    "133610.4D0 2 -152348.4D0 3                                      "
-	    "   " "84381.448 1                                               "
-	    "                      " "84404.836 1                            "
-	    "                                         " "1152.71013777252 3  "
-	    "-1002.25042010533  2  1153.75719544491  3                   " 
-	    "1152.72061453864 3  -1002.25052830351  2  1153.74663857521  3  "
-	    "                 " "1153.03919093833, 3, -1002.24822382286, 2, 1"
-	    "153.42900222357, 3                  ";
-    static integer dframe = 0;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -72,37 +33,37 @@ static integer c__21 = 21;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer axis;
-    static char word[25];
     extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
 	    );
-    static integer b, i__, j, p;
-    static doublereal angle;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     extern integer wdcnt_(char *, ftnlen);
     extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    static doublereal trans[189]	/* was [9][21] */;
-    static char error[25];
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    static doublereal radang;
-    extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen), 
-	    isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen), sigerr_(char *, ftnlen), nparsi_(char *, 
-	    integer *, char *, integer *, ftnlen, ftnlen), chkout_(char *, 
-	    ftnlen), rotate_(doublereal *, integer *, doublereal *);
-    static doublereal tmpmat[9]	/* was [3][3] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), rotmat_(doublereal *, doublereal *, integer *,
-	     doublereal *), convrt_(doublereal *, char *, char *, doublereal *
-	    , ftnlen, ftnlen);
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int rotate_(doublereal *, integer *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int rotmat_(doublereal *, doublereal *, integer *,
+	     doublereal *);
+    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
+	    doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
-    static integer loc;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    chgirf_state_t* __state = get_chgirf_state();
 /* $ Abstract */
 
 /*     Support changes among a standard set of inertial coordinate */
@@ -905,46 +866,54 @@ L_irfrot:
 /*        R             = (R           ) (R          ) */
 /*         root->frame      base->frame    root->base */
 
-    if (! ready) {
+    if (! __state->ready) {
 	chkin_("IRFROT", (ftnlen)6);
-	for (i__ = 1; i__ <= 21; ++i__) {
-	    rotate_(&c_b6, &c__1, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= 
-		    i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)
-		    882)]);
-	    for (j = wdcnt_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 
-		    : s_rnge("defs", i__1, "chgirf_", (ftnlen)884)) * 80, (
-		    ftnlen)80); j >= 2; j += -2) {
-		nthwd_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-			s_rnge("defs", i__1, "chgirf_", (ftnlen)886)) * 80, &
-			j, word, &loc, (ftnlen)80, (ftnlen)25);
-		nparsi_(word, &axis, error, &p, (ftnlen)25, (ftnlen)25);
-		i__2 = j - 1;
-		nthwd_(defs + ((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-			s_rnge("defs", i__1, "chgirf_", (ftnlen)889)) * 80, &
-			i__2, word, &loc, (ftnlen)80, (ftnlen)25);
-		nparsd_(word, &angle, error, &p, (ftnlen)25, (ftnlen)25);
-		convrt_(&angle, "ARCSECONDS", "RADIANS", &radang, (ftnlen)10, 
-			(ftnlen)7);
-		rotmat_(&trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 
-			: s_rnge("trans", i__1, "chgirf_", (ftnlen)894)], &
-			radang, &axis, tmpmat);
-		moved_(tmpmat, &c__9, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 
-			<= i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (
-			ftnlen)895)]);
+	for (__state->i__ = 1; __state->i__ <= 21; ++__state->i__) {
+	    rotate_(&__state->c_b6, &__state->c__1, &__state->trans[(i__1 = 
+		    __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : s_rnge(
+		    "trans", i__1, "chgirf_", (ftnlen)882)]);
+	    for (__state->j = wdcnt_(__state->defs + ((i__1 = __state->i__ - 
+		    1) < 21 && 0 <= i__1 ? i__1 : s_rnge("defs", i__1, "chgi"
+		    "rf_", (ftnlen)884)) * 80, (ftnlen)80); __state->j >= 2; 
+		    __state->j += -2) {
+		nthwd_(__state->defs + ((i__1 = __state->i__ - 1) < 21 && 0 <=
+			 i__1 ? i__1 : s_rnge("defs", i__1, "chgirf_", (
+			ftnlen)886)) * 80, &__state->j, __state->word, &
+			__state->loc, (ftnlen)80, (ftnlen)25);
+		nparsi_(__state->word, &__state->axis, __state->error, &
+			__state->p, (ftnlen)25, (ftnlen)25);
+		i__2 = __state->j - 1;
+		nthwd_(__state->defs + ((i__1 = __state->i__ - 1) < 21 && 0 <=
+			 i__1 ? i__1 : s_rnge("defs", i__1, "chgirf_", (
+			ftnlen)889)) * 80, &i__2, __state->word, &
+			__state->loc, (ftnlen)80, (ftnlen)25);
+		nparsd_(__state->word, &__state->angle, __state->error, &
+			__state->p, (ftnlen)25, (ftnlen)25);
+		convrt_(&__state->angle, "ARCSECONDS", "RADIANS", &
+			__state->radang, (ftnlen)10, (ftnlen)7);
+		rotmat_(&__state->trans[(i__1 = __state->i__ * 9 - 9) < 189 &&
+			 0 <= i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (
+			ftnlen)894)], &__state->radang, &__state->axis, 
+			__state->tmpmat);
+		moved_(__state->tmpmat, &__state->c__9, &__state->trans[(i__1 
+			= __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
+			s_rnge("trans", i__1, "chgirf_", (ftnlen)895)]);
 	    }
-	    b = isrchc_(bases + (((i__1 = i__ - 1) < 21 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bases", i__1, "chgirf_", (ftnlen)899)) << 4), &
-		    i__, frames, (ftnlen)16, (ftnlen)16);
-	    mxm_(&trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
-		    s_rnge("trans", i__1, "chgirf_", (ftnlen)901)], &trans[(
-		    i__2 = b * 9 - 9) < 189 && 0 <= i__2 ? i__2 : s_rnge(
-		    "trans", i__2, "chgirf_", (ftnlen)901)], tmpmat);
-	    moved_(tmpmat, &c__9, &trans[(i__1 = i__ * 9 - 9) < 189 && 0 <= 
+	    __state->b = isrchc_(__state->bases + (((i__1 = __state->i__ - 1) 
+		    < 21 && 0 <= i__1 ? i__1 : s_rnge("bases", i__1, "chgirf_"
+		    , (ftnlen)899)) << 4), &__state->i__, __state->frames, (
+		    ftnlen)16, (ftnlen)16);
+	    mxm_(&__state->trans[(i__1 = __state->i__ * 9 - 9) < 189 && 0 <= 
 		    i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)
-		    902)]);
+		    901)], &__state->trans[(i__2 = __state->b * 9 - 9) < 189 
+		    && 0 <= i__2 ? i__2 : s_rnge("trans", i__2, "chgirf_", (
+		    ftnlen)901)], __state->tmpmat);
+	    moved_(__state->tmpmat, &__state->c__9, &__state->trans[(i__1 = 
+		    __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : s_rnge(
+		    "trans", i__1, "chgirf_", (ftnlen)902)]);
 	}
 	chkout_("IRFROT", (ftnlen)6);
-	ready = TRUE_;
+	__state->ready = TRUE_;
     }
 
 /*     If the transformations have been defined, we can proceed with */
@@ -987,12 +956,12 @@ L_irfrot:
 	sigerr_("SPICE(IRFNOTREC)", (ftnlen)16);
 	chkout_("IRFROT", (ftnlen)6);
     } else if (*refa == *refb) {
-	rotate_(&c_b6, &c__1, rotab);
+	rotate_(&__state->c_b6, &__state->c__1, rotab);
     } else {
-	mxmt_(&trans[(i__1 = *refb * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
-		s_rnge("trans", i__1, "chgirf_", (ftnlen)963)], &trans[(i__2 =
-		 *refa * 9 - 9) < 189 && 0 <= i__2 ? i__2 : s_rnge("trans", 
-		i__2, "chgirf_", (ftnlen)963)], rotab);
+	mxmt_(&__state->trans[(i__1 = *refb * 9 - 9) < 189 && 0 <= i__1 ? 
+		i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)963)], &
+		__state->trans[(i__2 = *refa * 9 - 9) < 189 && 0 <= i__2 ? 
+		i__2 : s_rnge("trans", i__2, "chgirf_", (ftnlen)963)], rotab);
     }
     return 0;
 /* $Procedure IRFNUM ( Inertial reference frame number ) */
@@ -1192,9 +1161,10 @@ L_irfnum:
 	return 0;
     }
     if (eqstr_(name__, "DEFAULT", name_len, (ftnlen)7)) {
-	*index = dframe;
+	*index = __state->dframe;
     } else {
-	*index = esrchc_(name__, &c__21, frames, name_len, (ftnlen)16);
+	*index = esrchc_(name__, &__state->c__21, __state->frames, name_len, (
+		ftnlen)16);
     }
     return 0;
 /* $Procedure IRFNAM ( Inertial reference frame name ) */
@@ -1384,9 +1354,9 @@ L_irfnam:
     if (*index < 1 || *index > 21) {
 	s_copy(name__, " ", name_len, (ftnlen)1);
     } else {
-	s_copy(name__, frames + (((i__1 = *index - 1) < 21 && 0 <= i__1 ? 
-		i__1 : s_rnge("frames", i__1, "chgirf_", (ftnlen)1376)) << 4),
-		 name_len, (ftnlen)16);
+	s_copy(name__, __state->frames + (((i__1 = *index - 1) < 21 && 0 <= 
+		i__1 ? i__1 : s_rnge("frames", i__1, "chgirf_", (ftnlen)1376))
+		 << 4), name_len, (ftnlen)16);
     }
     chkout_("IRFNAM", (ftnlen)6);
     return 0;
@@ -1592,7 +1562,7 @@ L_irfdef:
 	errint_("#", index, (ftnlen)1);
 	sigerr_("SPICE(IRFNOTREC)", (ftnlen)16);
     } else {
-	dframe = *index;
+	__state->dframe = *index;
     }
     chkout_("IRFDEF", (ftnlen)6);
     return 0;

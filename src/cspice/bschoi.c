@@ -1,9 +1,17 @@
-/* bschoi.f -- translated by f2c (version 19980913).
+/* bschoi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int bschoi_state_t;
+static bschoi_state_t* get_bschoi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure BSCHOI ( Binary search with order vector, integer ) */
 integer bschoi_(integer *value, integer *ndim, integer *array, integer *order)
@@ -12,8 +20,13 @@ integer bschoi_(integer *value, integer *ndim, integer *array, integer *order)
     integer ret_val;
 
     /* Local variables */
-    integer left, i__, right;
+    integer left;
+    integer i__;
+    integer right;
 
+
+    /* Module state */
+    bschoi_state_t* __state = get_bschoi_state();
 /* $ Abstract */
 
 /*      Do a binary search for a given value within an integer array, */

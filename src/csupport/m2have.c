@@ -1,9 +1,10 @@
-/* m2have.f -- translated by f2c (version 19980913).
+/* m2have.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      M2HAVE ( META/2 --- How many matches do we have ) */
 integer m2have_(char *name__, ftnlen name_len)

@@ -1,15 +1,21 @@
-/* zzeksinf.f -- translated by f2c (version 19980913).
+/* zzeksinf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__64 = 64;
-static integer c__32 = 32;
+extern zzeksinf_init_t __zzeksinf_init;
+static zzeksinf_state_t* get_zzeksinf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzeksinf)
+		state->zzeksinf = __cspice_allocate_module(sizeof(
+	zzeksinf_state_t), &__zzeksinf_init, sizeof(__zzeksinf_init));
+	return state->zzeksinf;
+
+}
 
 /* $Procedure      ZZEKSINF ( EK, return segment information ) */
 /* Subroutine */ int zzeksinf_(integer *handle, integer *segno, char *tabnam, 
@@ -24,22 +30,30 @@ static integer c__32 = 32;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, nseg;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), 
-	    zzekmloc_(integer *, integer *, integer *, integer *);
-    integer i__, p;
+    integer base;
+    integer nseg;
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+	    integer *);
+    integer i__;
+    integer p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer ncols;
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen), dasrdi_(integer *, integer 
-	    *, integer *, integer *);
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
     extern integer eknseg_(integer *);
     extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
 
+
+    /* Module state */
+    zzeksinf_state_t* __state = get_zzeksinf_state();
 /* $ Abstract */
 
 /*     Return general segment information for a specified segment in a */
@@ -616,7 +630,8 @@ static integer c__32 = 32;
 
     i__1 = segdsc[3] + 1;
     i__2 = segdsc[3] + 64;
-    dasrdc_(handle, &i__1, &i__2, &c__1, &c__64, tabnam, tabnam_len);
+    dasrdc_(handle, &i__1, &i__2, &__state->c__1, &__state->c__64, tabnam, 
+	    tabnam_len);
     if (i_len(tabnam, tabnam_len) > 64) {
 	s_copy(tabnam + 64, " ", tabnam_len - 64, (ftnlen)1);
     }
@@ -636,7 +651,8 @@ static integer c__32 = 32;
 
     i__1 = segdsc[21] + 1;
     i__2 = segdsc[21] + (ncols << 5);
-    dasrdc_(handle, &i__1, &i__2, &c__1, &c__32, cnames, cnames_len);
+    dasrdc_(handle, &i__1, &i__2, &__state->c__1, &__state->c__32, cnames, 
+	    cnames_len);
     if (i_len(cnames, cnames_len) > 32) {
 	i__1 = ncols;
 	for (i__ = 1; i__ <= i__1; ++i__) {

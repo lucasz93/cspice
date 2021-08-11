@@ -1,13 +1,21 @@
-/* zzekweed.f -- translated by f2c (version 19980913).
+/* zzekweed.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzekweed_init_t __zzekweed_init;
+static zzekweed_state_t* get_zzekweed_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekweed)
+		state->zzekweed = __cspice_allocate_module(sizeof(
+	zzekweed_state_t), &__zzekweed_init, sizeof(__zzekweed_init));
+	return state->zzekweed;
+
+}
 
 /* $Procedure  ZZEKWEED ( Private: EK, weed out redundant row vectors ) */
 /* Subroutine */ int zzekweed_(integer *njrs, integer *bases, integer *nrows)
@@ -16,25 +24,50 @@ static integer c__0 = 0;
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
 
     /* Local variables */
-    integer cand, base, ndel, ntab, pred;
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *), 
-	    zzekvset_(integer *, integer *);
-    integer i__, j;
-    extern /* Subroutine */ int zzekjsqz_(integer *), chkin_(char *, ftnlen);
+    integer cand;
+    integer base;
+    integer ndel;
+    integer ntab;
+    integer pred;
+    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekvset_(integer *, integer *);
+    integer i__;
+    integer j;
+    extern /* Subroutine */ int zzekjsqz_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer nrloc;
     extern logical sameai_(integer *, integer *, integer *);
-    integer nr, csgbas, candsv[10], psgbas, crwbas, crwvec[11], ncndrv, 
-	    ncndsv, prwbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen);
-    integer nsvloc, predsv[10], prwvec[11];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), chkout_(
-	    char *, ftnlen);
-    integer nprdrv, nprdsv, rvsize, svsize, loc;
+    integer nr;
+    integer csgbas;
+    integer candsv[10];
+    integer psgbas;
+    integer crwbas;
+    integer crwvec[11];
+    integer ncndrv;
+    integer ncndsv;
+    integer prwbas;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    integer nsvloc;
+    integer predsv[10];
+    integer prwvec[11];
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer nprdrv;
+    integer nprdsv;
+    integer rvsize;
+    integer svsize;
+    integer loc;
     logical hit;
-    integer crv, csv, prv, psv;
+    integer crv;
+    integer csv;
+    integer prv;
+    integer psv;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekweed_state_t* __state = get_zzekweed_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -552,7 +585,7 @@ static integer c__0 = 0;
 				    base = crwbas + (crv - 1) * rvsize;
 				    i__6 = base + 1;
 				    i__7 = base + 1;
-				    zzeksupd_(&i__6, &i__7, &c__0);
+				    zzeksupd_(&i__6, &i__7, &__state->c__0);
 				    hit = TRUE_;
 				} else {
 				    ++prv;

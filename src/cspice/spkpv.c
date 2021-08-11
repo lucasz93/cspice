@@ -1,14 +1,21 @@
-/* spkpv.f -- translated by f2c (version 19980913).
+/* spkpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spkpv_init_t __spkpv_init;
+static spkpv_state_t* get_spkpv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkpv)
+		state->spkpv = __cspice_allocate_module(sizeof(spkpv_state_t),
+	 &__spkpv_init, sizeof(__spkpv_init));
+	return state->spkpv;
+
+}
 
 /* $Procedure SPKPV ( S/P Kernel, position and velocity ) */
 /* Subroutine */ int spkpv_(integer *handle, doublereal *descr, doublereal *
@@ -16,29 +23,34 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 
-	    char *, integer *, ftnlen, ftnlen), zzctruin_(integer *), chkin_(
-	    char *, ftnlen), dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), errch_(char *, char *, ftnlen, ftnlen);
-    static char svref[32];
-    doublereal xform[36]	/* was [6][6] */, dc[2];
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    doublereal xform[36]	/* was [6][6] */;
+    doublereal dc[2];
     integer ic[6];
-    static integer svctr1[2];
     extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
 	    doublereal *);
     integer irfreq;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     doublereal tstate[6];
-    static integer svirfr;
     extern logical return_(void);
     extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
 	     integer *, doublereal *, integer *);
     integer irf;
 
+
+    /* Module state */
+    spkpv_state_t* __state = get_spkpv_state();
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -350,21 +362,22 @@ static integer c__6 = 6;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     *center = ic[1];
     irf = ic[2];
 
 /*     Rotate the raw state from its native frame to the one requested */
 /*     by the user only if the two frames differ. */
 
-    zznamfrm_(svctr1, svref, &svirfr, ref, &irfreq, (ftnlen)32, ref_len);
+    zznamfrm_(__state->svctr1, __state->svref, &__state->svirfr, ref, &irfreq,
+	     (ftnlen)32, ref_len);
     if (irfreq == 0) {
 	setmsg_("No support for frame #.", (ftnlen)23);
 	errch_("#", ref, (ftnlen)1, ref_len);
@@ -372,7 +385,7 @@ static integer c__6 = 6;
     } else if (irfreq != irf) {
 	spkpvn_(handle, descr, et, &irf, tstate, center);
 	frmchg_(&irf, &irfreq, et, xform);
-	mxvg_(xform, tstate, &c__6, &c__6, state);
+	mxvg_(xform, tstate, &__state->c__6, &__state->c__6, state);
     } else {
 	spkpvn_(handle, descr, et, &irf, state, center);
     }

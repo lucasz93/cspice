@@ -1,9 +1,17 @@
-/* nplnpt.f -- translated by f2c (version 19980913).
+/* nplnpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int nplnpt_state_t;
+static nplnpt_state_t* get_nplnpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      NPLNPT ( Nearest point on line to point ) */
 /* Subroutine */ int nplnpt_(doublereal *linpt, doublereal *lindir, 
@@ -13,16 +21,21 @@
 	    );
     doublereal proj[3];
     extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    ), chkin_(char *, ftnlen);
+	    );
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal trans[3];
     extern doublereal vdist_(doublereal *, doublereal *);
     extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
 	    *);
     extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    nplnpt_state_t* __state = get_nplnpt_state();
 /* $ Abstract */
 
 /*     Find the nearest point on a line to a specified point, and find */

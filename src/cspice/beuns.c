@@ -1,9 +1,17 @@
-/* beuns.f -- translated by f2c (version 19980913).
+/* beuns.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int beuns_state_t;
+static beuns_state_t* get_beuns_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure            BEUNS  ( Be an unsigned integer? ) */
 logical beuns_(char *string, ftnlen string_len)
@@ -16,10 +24,14 @@ logical beuns_(char *string, ftnlen string_len)
 	    s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, l;
+    integer i__;
+    integer l;
     logical ok;
     extern integer frstnb_(char *, ftnlen);
 
+
+    /* Module state */
+    beuns_state_t* __state = get_beuns_state();
 /* $ Abstract */
 
 /*     Determine whether a string represents an unsigned integer. */

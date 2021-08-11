@@ -1,9 +1,17 @@
-/* filld.f -- translated by f2c (version 19980913).
+/* filld.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int filld_state_t;
+static filld_state_t* get_filld_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FILLD ( Fill a double precision array ) */
 /* Subroutine */ int filld_(doublereal *value, integer *ndim, doublereal *
@@ -15,6 +23,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    filld_state_t* __state = get_filld_state();
 /* $ Abstract */
 
 /*      Fill a double precision array with a specified value. */

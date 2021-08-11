@@ -1,9 +1,17 @@
-/* return.f -- translated by f2c (version 19980913).
+/* return.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int return_state_t;
+static return_state_t* get_return_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RETURN ( Immediate Return Indicator ) */
 logical return_(void)
@@ -16,6 +24,9 @@ logical return_(void)
     extern /* Subroutine */ int getact_(integer *);
     integer action;
 
+
+    /* Module state */
+    return_state_t* __state = get_return_state();
 /* $ Abstract */
 
 /*     True if SPICELIB routines should return immediately upon entry. */

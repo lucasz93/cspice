@@ -1,14 +1,21 @@
-/* zzrvbf.f -- translated by f2c (version 19980913).
+/* zzrvbf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__32 = 32;
-static integer c__132 = 132;
+extern zzrvbf_init_t __zzrvbf_init;
+static zzrvbf_state_t* get_zzrvbf_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzrvbf)
+		state->zzrvbf = __cspice_allocate_module(sizeof(
+	zzrvbf_state_t), &__zzrvbf_init, sizeof(__zzrvbf_init));
+	return state->zzrvbf;
+
+}
 
 /* $Procedure ZZRVBF ( Private --- Pool, read the next buffer variable ) */
 /* Subroutine */ int zzrvbf_(char *buffer, integer *bsize, integer *linnum, 
@@ -19,7 +26,6 @@ static integer c__132 = 132;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -30,43 +36,31 @@ static integer c__132 = 132;
 	    s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    static integer head, code, itab;
-    static char name__[132];
-    static integer begs[132], free, node;
-    static char line[132];
-    static integer ends[132], tail;
-    static logical even, full;
-    static integer type__[132], b, e, i__, j, badat;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), lnkan_(integer *, integer *);
-    static logical found;
-    static integer ncomp, count;
-    static char error[256];
-    static integer iplus;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int lnkan_(integer *, integer *);
     extern integer rtrim_(char *, ftnlen);
     extern /* Subroutine */ int zzcln_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    static integer r1, r2;
     extern logical failed_(void);
-    static integer at, datahd, iblank, chnode, icomma, nameat, dpnode;
     extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    static integer iequal;
-    static doublereal dvalue;
-    extern integer lastpc_(char *, ftnlen), lnknfn_(integer *);
-    static integer ilparn, irparn, itmark, dirctv, lookat, iquote;
+    extern integer lastpc_(char *, ftnlen);
+    extern integer lnknfn_(integer *);
     extern integer zzhash_(char *, ftnlen);
-    static integer varlen;
-    static logical intokn, insepf;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    static logical inquot;
-    static integer status, vartyp, nxttok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), lnkfsl_(integer *, 
-	    integer *, integer *), tparse_(char *, doublereal *, char *, 
-	    ftnlen, ftnlen), nparsd_(char *, doublereal *, char *, integer *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int tparse_(char *, doublereal *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
+	    *, ftnlen, ftnlen);
 
+
+    /* Module state */
+    zzrvbf_state_t* __state = get_zzrvbf_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -322,44 +316,44 @@ static integer c__132 = 132;
 
 /*     Initializations. */
 
-    if (first) {
-	first = FALSE_;
-	icomma = ',';
-	iblank = ' ';
-	iquote = '\'';
-	ilparn = '(';
-	irparn = ')';
-	iequal = '=';
-	iplus = '+';
-	itmark = '@';
-	itab = 9;
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->icomma = ',';
+	__state->iblank = ' ';
+	__state->iquote = '\'';
+	__state->ilparn = '(';
+	__state->irparn = ')';
+	__state->iequal = '=';
+	__state->iplus = '+';
+	__state->itmark = '@';
+	__state->itab = 9;
     }
 
 /*     No variable yet and no parsing errors so far. */
 
-    s_copy(name__, " ", (ftnlen)132, (ftnlen)1);
-    s_copy(error, " ", (ftnlen)256, (ftnlen)1);
-    ncomp = 0;
+    s_copy(__state->name__, " ", (ftnlen)132, (ftnlen)1);
+    s_copy(__state->error, " ", (ftnlen)256, (ftnlen)1);
+    __state->ncomp = 0;
 
 /*     Get the next data line. Unless something is terribly wrong, */
 /*     this will begin a new variable definition. We have to read */
 /*     the whole variable, unless we get an error, in which case */
 /*     we can quit. */
 
-    status = 1;
-    while(status != 2 && ! failed_()) {
-	s_copy(line, " ", (ftnlen)132, (ftnlen)1);
+    __state->status = 1;
+    while(__state->status != 2 && ! failed_()) {
+	s_copy(__state->line, " ", (ftnlen)132, (ftnlen)1);
 
 /*        We need to skip blank lines... */
 
-	while(s_cmp(line, " ", (ftnlen)132, (ftnlen)1) == 0) {
+	while(s_cmp(__state->line, " ", (ftnlen)132, (ftnlen)1) == 0) {
 	    *eof = *linnum > *bsize;
 	    if (*eof) {
 		chkout_("ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(line, buffer + (*linnum - 1) * buffer_len, (ftnlen)132, 
-		    buffer_len);
+	    s_copy(__state->line, buffer + (*linnum - 1) * buffer_len, (
+		    ftnlen)132, buffer_len);
 	    ++(*linnum);
 	}
 
@@ -381,21 +375,24 @@ static integer c__132 = 132;
 /*        it to the '=' and treat the pair of characters as a single */
 /*        separator. */
 
-	even = TRUE_;
-	intokn = FALSE_;
-	inquot = FALSE_;
-	insepf = TRUE_;
-	count = 0;
-	i__ = 0;
-	while(i__ < i_len(line, (ftnlen)132)) {
+	__state->even = TRUE_;
+	__state->intokn = FALSE_;
+	__state->inquot = FALSE_;
+	__state->insepf = TRUE_;
+	__state->count = 0;
+	__state->i__ = 0;
+	while(__state->i__ < i_len(__state->line, (ftnlen)132)) {
 
 /*           The current character is either a separator, quote or */
 /*           some other character. */
 
-	    ++i__;
-	    code = *(unsigned char *)&line[i__ - 1];
-	    if (code == iblank || code == icomma || code == ilparn || code == 
-		    irparn || code == iequal || code == itab) {
+	    ++__state->i__;
+	    __state->code = *(unsigned char *)&__state->line[__state->i__ - 1]
+		    ;
+	    if (__state->code == __state->iblank || __state->code == 
+		    __state->icomma || __state->code == __state->ilparn || 
+		    __state->code == __state->irparn || __state->code == 
+		    __state->iequal || __state->code == __state->itab) {
 
 /*              There are 3 possible states we could be in */
 /*                 Separation Field */
@@ -405,99 +402,107 @@ static integer c__132 = 132;
 /*              In the first two cases nothing changes, but in the */
 /*              next two cases we transition to a separation field. */
 
-		if (intokn || inquot && even) {
-		    inquot = FALSE_;
-		    intokn = FALSE_;
-		    insepf = TRUE_;
+		if (__state->intokn || __state->inquot && __state->even) {
+		    __state->inquot = FALSE_;
+		    __state->intokn = FALSE_;
+		    __state->insepf = TRUE_;
 		}
-		if (insepf) {
+		if (__state->insepf) {
 
 /*                 We need to see if this is one of the special */
 /*                 separators */
 
-		    if (code == iequal) {
-			++count;
-			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)544)] 
-				= i__;
-			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)545)] 
-				= 5;
-			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)546)] 
-				= i__;
-			if (i__ > 1) {
+		    if (__state->code == __state->iequal) {
+			++__state->count;
+			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
+				"f_", (ftnlen)544)] = __state->i__;
+			__state->type__[(i__1 = __state->count - 1) < 132 && 
+				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
+				"vbf_", (ftnlen)545)] = 5;
+			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
+				"f_", (ftnlen)546)] = __state->i__;
+			if (__state->i__ > 1) {
 
 /*                       Look back at the previous character. */
 /*                       See if it is a plus character. */
 
-			    i__1 = i__ - 2;
-			    code = *(unsigned char *)&line[i__1];
-			    if (code == iplus) {
+			    i__1 = __state->i__ - 2;
+			    __state->code = *(unsigned char *)&__state->line[
+				    i__1];
+			    if (__state->code == __state->iplus) {
 
 /*                          This is the directive '+=' we need */
 /*                          to set the beginning of this token */
 /*                          to the one before this and adjust */
 /*                          the end of the last token. */
 
-				type__[(i__1 = count - 1) < 132 && 0 <= i__1 ?
-					 i__1 : s_rnge("type", i__1, "zzrvbf_"
-					, (ftnlen)562)] = 6;
-				begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? 
-					i__1 : s_rnge("begs", i__1, "zzrvbf_",
-					 (ftnlen)563)] = i__ - 1;
-				if (begs[(i__1 = count - 2) < 132 && 0 <= 
-					i__1 ? i__1 : s_rnge("begs", i__1, 
-					"zzrvbf_", (ftnlen)565)] == ends[(
-					i__2 = count - 2) < 132 && 0 <= i__2 ?
-					 i__2 : s_rnge("ends", i__2, "zzrvbf_"
-					, (ftnlen)565)]) {
-				    --count;
-				    begs[(i__1 = count - 1) < 132 && 0 <= 
-					    i__1 ? i__1 : s_rnge("begs", i__1,
-					     "zzrvbf_", (ftnlen)569)] = i__ - 
-					    1;
-				    ends[(i__1 = count - 1) < 132 && 0 <= 
-					    i__1 ? i__1 : s_rnge("ends", i__1,
-					     "zzrvbf_", (ftnlen)570)] = i__;
-				    type__[(i__1 = count - 1) < 132 && 0 <= 
-					    i__1 ? i__1 : s_rnge("type", i__1,
-					     "zzrvbf_", (ftnlen)571)] = 6;
+				__state->type__[(i__1 = __state->count - 1) < 
+					132 && 0 <= i__1 ? i__1 : s_rnge(
+					"type", i__1, "zzrvbf_", (ftnlen)562)]
+					 = 6;
+				__state->begs[(i__1 = __state->count - 1) < 
+					132 && 0 <= i__1 ? i__1 : s_rnge(
+					"begs", i__1, "zzrvbf_", (ftnlen)563)]
+					 = __state->i__ - 1;
+				if (__state->begs[(i__1 = __state->count - 2) 
+					< 132 && 0 <= i__1 ? i__1 : s_rnge(
+					"begs", i__1, "zzrvbf_", (ftnlen)565)]
+					 == __state->ends[(i__2 = 
+					__state->count - 2) < 132 && 0 <= 
+					i__2 ? i__2 : s_rnge("ends", i__2, 
+					"zzrvbf_", (ftnlen)565)]) {
+				    --__state->count;
+				    __state->begs[(i__1 = __state->count - 1) 
+					    < 132 && 0 <= i__1 ? i__1 : 
+					    s_rnge("begs", i__1, "zzrvbf_", (
+					    ftnlen)569)] = __state->i__ - 1;
+				    __state->ends[(i__1 = __state->count - 1) 
+					    < 132 && 0 <= i__1 ? i__1 : 
+					    s_rnge("ends", i__1, "zzrvbf_", (
+					    ftnlen)570)] = __state->i__;
+				    __state->type__[(i__1 = __state->count - 
+					    1) < 132 && 0 <= i__1 ? i__1 : 
+					    s_rnge("type", i__1, "zzrvbf_", (
+					    ftnlen)571)] = 6;
 				} else {
-				    ends[(i__1 = count - 2) < 132 && 0 <= 
-					    i__1 ? i__1 : s_rnge("ends", i__1,
-					     "zzrvbf_", (ftnlen)575)] = ends[(
-					    i__2 = count - 2) < 132 && 0 <= 
-					    i__2 ? i__2 : s_rnge("ends", i__2,
-					     "zzrvbf_", (ftnlen)575)] - 1;
+				    __state->ends[(i__1 = __state->count - 2) 
+					    < 132 && 0 <= i__1 ? i__1 : 
+					    s_rnge("ends", i__1, "zzrvbf_", (
+					    ftnlen)575)] = __state->ends[(
+					    i__2 = __state->count - 2) < 132 
+					    && 0 <= i__2 ? i__2 : s_rnge(
+					    "ends", i__2, "zzrvbf_", (ftnlen)
+					    575)] - 1;
 				}
 			    }
 			}
-		    } else if (code == irparn) {
-			++count;
-			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)586)] 
-				= i__;
-			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)587)] 
-				= i__;
-			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)588)] 
-				= 4;
-		    } else if (code == ilparn) {
-			++count;
-			begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("begs", i__1, "zzrvbf_", (ftnlen)593)] 
-				= i__;
-			ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("ends", i__1, "zzrvbf_", (ftnlen)594)] 
-				= i__;
-			type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-				s_rnge("type", i__1, "zzrvbf_", (ftnlen)595)] 
-				= 3;
+		    } else if (__state->code == __state->irparn) {
+			++__state->count;
+			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
+				"f_", (ftnlen)586)] = __state->i__;
+			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
+				"f_", (ftnlen)587)] = __state->i__;
+			__state->type__[(i__1 = __state->count - 1) < 132 && 
+				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
+				"vbf_", (ftnlen)588)] = 4;
+		    } else if (__state->code == __state->ilparn) {
+			++__state->count;
+			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
+				"f_", (ftnlen)593)] = __state->i__;
+			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
+				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
+				"f_", (ftnlen)594)] = __state->i__;
+			__state->type__[(i__1 = __state->count - 1) < 132 && 
+				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
+				"vbf_", (ftnlen)595)] = 3;
 		    }
 		}
-	    } else if (code == iquote) {
+	    } else if (__state->code == __state->iquote) {
 
 /*              There are 3 cases of interest. */
 /*                 We are in a quoted substring already */
@@ -506,20 +511,22 @@ static integer c__132 = 132;
 /*              In the first case nothing changes.  In the second */
 /*              two cases we change to being in a quoted substring. */
 
-		even = ! even;
-		if (! inquot) {
-		    insepf = FALSE_;
-		    intokn = FALSE_;
-		    inquot = TRUE_;
-		    ++count;
-		    begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)618)] = 
-			    i__;
-		    type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)619)] = 1;
+		__state->even = ! __state->even;
+		if (! __state->inquot) {
+		    __state->insepf = FALSE_;
+		    __state->intokn = FALSE_;
+		    __state->inquot = TRUE_;
+		    ++__state->count;
+		    __state->begs[(i__1 = __state->count - 1) < 132 && 0 <= 
+			    i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
+			    ftnlen)618)] = __state->i__;
+		    __state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
+			    i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
+			    ftnlen)619)] = 1;
 		}
-		ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"ends", i__1, "zzrvbf_", (ftnlen)623)] = i__;
+		__state->ends[(i__1 = __state->count - 1) < 132 && 0 <= i__1 ?
+			 i__1 : s_rnge("ends", i__1, "zzrvbf_", (ftnlen)623)] 
+			= __state->i__;
 	    } else {
 
 /*              This is some character other than a quote, or */
@@ -537,37 +544,39 @@ static integer c__132 = 132;
 /*              In cases 1 and 3 nothing changes. So we won't check */
 /*              those cases. */
 
-		if (insepf || inquot && even) {
-		    inquot = FALSE_;
-		    insepf = FALSE_;
-		    intokn = TRUE_;
-		    ++count;
-		    begs[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("begs", i__1, "zzrvbf_", (ftnlen)648)] = 
-			    i__;
-		    type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : 
-			    s_rnge("type", i__1, "zzrvbf_", (ftnlen)649)] = 2;
+		if (__state->insepf || __state->inquot && __state->even) {
+		    __state->inquot = FALSE_;
+		    __state->insepf = FALSE_;
+		    __state->intokn = TRUE_;
+		    ++__state->count;
+		    __state->begs[(i__1 = __state->count - 1) < 132 && 0 <= 
+			    i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
+			    ftnlen)648)] = __state->i__;
+		    __state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
+			    i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
+			    ftnlen)649)] = 2;
 		}
-		ends[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"ends", i__1, "zzrvbf_", (ftnlen)652)] = i__;
+		__state->ends[(i__1 = __state->count - 1) < 132 && 0 <= i__1 ?
+			 i__1 : s_rnge("ends", i__1, "zzrvbf_", (ftnlen)652)] 
+			= __state->i__;
 	    }
 	}
 
 /*        The first word on the first line should be the name of a */
 /*        variable. The second word should be a directive: = or +=. */
 
-	if (status == 1) {
+	if (__state->status == 1) {
 
 /*           There must be at least 3 contributing tokens on this line. */
 
-	    if (count < 3) {
+	    if (__state->count < 3) {
 		setmsg_("A kernel variable was not properly formed on line #"
 			" text buffer.Such an assignment should have the form"
 			": '<variable name> [+]= <values>'. This line was '#'"
 			". ", (ftnlen)157);
-		r2 = rtrim_(line, (ftnlen)132);
+		__state->r2 = rtrim_(__state->line, (ftnlen)132);
 		errint_("#", linnum, (ftnlen)1);
-		errch_("#", line, (ftnlen)1, r2);
+		errch_("#", __state->line, (ftnlen)1, __state->r2);
 		sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
 		chkout_("ZZRVBF", (ftnlen)6);
 		return 0;
@@ -575,20 +584,21 @@ static integer c__132 = 132;
 
 /*           See if the variable name is legitimate: */
 
-	    i__1 = begs[0] - 1;
-	    badat = lastpc_(line + i__1, ends[0] - i__1);
-	    if (badat <= ends[0] - begs[0]) {
+	    i__1 = __state->begs[0] - 1;
+	    __state->badat = lastpc_(__state->line + i__1, __state->ends[0] - 
+		    i__1);
+	    if (__state->badat <= __state->ends[0] - __state->begs[0]) {
 
 /*              There is a non-printing character in the variable */
 /*              name.  This isn't allowed. */
 
-		at = begs[0] + badat;
+		__state->at = __state->begs[0] + __state->badat;
 		setmsg_("There is a non-printing character embedded in line "
 			"# of the text buffer.  Non-printing characters are n"
 			"ot allowed in kernel variable assignments.  The non-"
 			"printing character has ASCII code #. ", (ftnlen)192);
 		errint_("#", linnum, (ftnlen)1);
-		i__1 = *(unsigned char *)&line[at - 1];
+		i__1 = *(unsigned char *)&__state->line[__state->at - 1];
 		errint_("#", &i__1, (ftnlen)1);
 		sigerr_("SPICE(NONPRINTINGCHAR)", (ftnlen)22);
 		chkout_("ZZRVBF", (ftnlen)6);
@@ -598,41 +608,44 @@ static integer c__132 = 132;
 /*           Check the variable name length; signal an error */
 /*           if longer than MAXLEN. */
 
-	    i__1 = begs[0] - 1;
-	    varlen = i_len(line + i__1, ends[0] - i__1);
-	    if (varlen > 32) {
+	    i__1 = __state->begs[0] - 1;
+	    __state->varlen = i_len(__state->line + i__1, __state->ends[0] - 
+		    i__1);
+	    if (__state->varlen > 32) {
 		setmsg_("A kernel pool variable name in the input buffer exc"
 			"eeds the maximum allowed length #1. The actual lengt"
 			"h of the variable name is #2, the offending variable"
 			" name to #3 characters: '#4'.", (ftnlen)184);
-		errint_("#1", &c__32, (ftnlen)2);
-		errint_("#2", &varlen, (ftnlen)2);
-		errint_("#3", &c__132, (ftnlen)2);
-		i__1 = begs[0] - 1;
-		errch_("#4", line + i__1, (ftnlen)2, ends[0] - i__1);
+		errint_("#1", &__state->c__32, (ftnlen)2);
+		errint_("#2", &__state->varlen, (ftnlen)2);
+		errint_("#3", &__state->c__132, (ftnlen)2);
+		i__1 = __state->begs[0] - 1;
+		errch_("#4", __state->line + i__1, (ftnlen)2, __state->ends[0]
+			 - i__1);
 		sigerr_("SPICE(BADVARNAME)", (ftnlen)17);
 	    }
 
 /*           The variable name is ok. How about the directive. */
 
-	    i__1 = begs[0] - 1;
-	    s_copy(varnam, line + i__1, varnam_len, ends[0] - i__1);
-	    dirctv = type__[1];
+	    i__1 = __state->begs[0] - 1;
+	    s_copy(varnam, __state->line + i__1, varnam_len, __state->ends[0] 
+		    - i__1);
+	    __state->dirctv = __state->type__[1];
 
 /*           If this is replacement (=) and not an addition (+=), */
 /*           delete the values currently associated with the variable. */
 /*           They will be replaced later. */
 
-	    if (dirctv != 5 && dirctv != 6) {
+	    if (__state->dirctv != 5 && __state->dirctv != 6) {
 		setmsg_("A kernel variable was not properly formed on line #"
 			" of the text buffer. Such an assignment should have "
 			"the form: '<variable name> [+]= <values>'.  More spe"
 			"cifically, the assignment operator did not have one "
 			"of the expected forms: '=' or '+='. The line was '#'"
 			". ", (ftnlen)261);
-		r2 = rtrim_(line, (ftnlen)132);
+		__state->r2 = rtrim_(__state->line, (ftnlen)132);
 		errint_("#", linnum, (ftnlen)1);
-		errch_("#", line, (ftnlen)1, r2);
+		errch_("#", __state->line, (ftnlen)1, __state->r2);
 		sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
 		chkout_("ZZRVBF", (ftnlen)6);
 		return 0;
@@ -643,51 +656,51 @@ static integer c__132 = 132;
 /*           we will use the variable FOUND to indicate whether or */
 /*           not it was already present. */
 
-	    lookat = zzhash_(varnam, varnam_len);
-	    node = namlst[lookat - 1];
-	    full = lnknfn_(nmpool) <= 0;
-	    found = FALSE_;
+	    __state->lookat = zzhash_(varnam, varnam_len);
+	    __state->node = namlst[__state->lookat - 1];
+	    __state->full = lnknfn_(nmpool) <= 0;
+	    __state->found = FALSE_;
 
 /*           See if this name (or one colliding with it in the */
 /*           hash scheme) has already been stored in the name list. */
 
-	    if (node > 0) {
-		head = node;
-		tail = -nmpool[(head << 1) + 11];
-		while(node > 0 && ! found) {
-		    found = s_cmp(names + (node - 1) * names_len, varnam, 
-			    names_len, varnam_len) == 0;
-		    nameat = node;
-		    node = nmpool[(node << 1) + 10];
+	    if (__state->node > 0) {
+		__state->head = __state->node;
+		__state->tail = -nmpool[(__state->head << 1) + 11];
+		while(__state->node > 0 && ! __state->found) {
+		    __state->found = s_cmp(names + (__state->node - 1) * 
+			    names_len, varnam, names_len, varnam_len) == 0;
+		    __state->nameat = __state->node;
+		    __state->node = nmpool[(__state->node << 1) + 10];
 		}
-		if (! found && ! full) {
+		if (! __state->found && ! __state->full) {
 
 /*                 We didn't find this name on the conflict resolution */
 /*                 list. Allocate a new slot for it. */
 
-		    lnkan_(nmpool, &node);
-		    lnkila_(&tail, &node, nmpool);
-		    s_copy(names + (node - 1) * names_len, varnam, names_len, 
-			    varnam_len);
-		    nameat = node;
+		    lnkan_(nmpool, &__state->node);
+		    lnkila_(&__state->tail, &__state->node, nmpool);
+		    s_copy(names + (__state->node - 1) * names_len, varnam, 
+			    names_len, varnam_len);
+		    __state->nameat = __state->node;
 		}
-	    } else if (! full) {
+	    } else if (! __state->full) {
 
 /*              Nothing like this variable name (in the hashing sense) */
 /*              has been loaded so far.  We need to allocate */
 /*              a name slot for this variable. */
 
-		lnkan_(nmpool, &node);
-		namlst[lookat - 1] = node;
-		s_copy(names + (node - 1) * names_len, varnam, names_len, 
-			varnam_len);
-		nameat = node;
+		lnkan_(nmpool, &__state->node);
+		namlst[__state->lookat - 1] = __state->node;
+		s_copy(names + (__state->node - 1) * names_len, varnam, 
+			names_len, varnam_len);
+		__state->nameat = __state->node;
 	    }
 
 /*           If the name pool was full and we didn't find this name */
 /*           we've got an error. Diagnose it and return. */
 
-	    if (full && ! found) {
+	    if (__state->full && ! __state->found) {
 		setmsg_("The kernel pool does not have room for any more var"
 			"iables.  It filled up at line # of the text buffer. ",
 			 (ftnlen)103);
@@ -701,53 +714,53 @@ static integer c__132 = 132;
 /*           to remove data and allocate a new list or simply append */
 /*           data to the existing list. */
 
-	    if (dirctv == 5) {
+	    if (__state->dirctv == 5) {
 
 /*              We are going to dump whatever is associated with */
 /*              this name and then we will need to allocate a new */
 /*              linked list for the data. */
 
-		vartyp = 3;
-		if (found) {
+		__state->vartyp = 3;
+		if (__state->found) {
 
 /*                 We need to free the data associated with this */
 /*                 variable. */
 
-		    datahd = datlst[nameat - 1];
-		    datlst[nameat - 1] = 0;
-		    if (datahd < 0) {
+		    __state->datahd = datlst[__state->nameat - 1];
+		    datlst[__state->nameat - 1] = 0;
+		    if (__state->datahd < 0) {
 
 /*                    This variable was character type we need to */
 /*                    free a linked list from the character data */
 /*                    pool. */
 
-			head = -datahd;
-			tail = -chpool[(head << 1) + 11];
-			lnkfsl_(&head, &tail, chpool);
+			__state->head = -__state->datahd;
+			__state->tail = -chpool[(__state->head << 1) + 11];
+			lnkfsl_(&__state->head, &__state->tail, chpool);
 		    } else {
 
 /*                    This variable was numeric type. We need to */
 /*                    free a linked list from the numeric pool. */
 
-			head = datahd;
-			tail = -dppool[(head << 1) + 11];
-			lnkfsl_(&head, &tail, dppool);
+			__state->head = __state->datahd;
+			__state->tail = -dppool[(__state->head << 1) + 11];
+			lnkfsl_(&__state->head, &__state->tail, dppool);
 		    }
 		}
-	    } else if (dirctv == 6) {
+	    } else if (__state->dirctv == 6) {
 
 /*              We need to append to the current variable. */
 
-		if (found) {
-		    if (datlst[nameat - 1] > 0) {
-			vartyp = 2;
-		    } else if (datlst[nameat - 1] < 0) {
-			vartyp = 1;
+		if (__state->found) {
+		    if (datlst[__state->nameat - 1] > 0) {
+			__state->vartyp = 2;
+		    } else if (datlst[__state->nameat - 1] < 0) {
+			__state->vartyp = 1;
 		    } else {
-			vartyp = 3;
+			__state->vartyp = 3;
 		    }
 		} else {
-		    vartyp = 3;
+		    __state->vartyp = 3;
 		}
 	    }
 
@@ -757,19 +770,20 @@ static integer c__132 = 132;
 /*           plant a bogus right parenthesis, to make the following loop */
 /*           terminate after one iteration. */
 
-	    if (type__[2] == 3) {
-		nxttok = 4;
+	    if (__state->type__[2] == 3) {
+		__state->nxttok = 4;
 	    } else {
-		nxttok = 3;
-		++count;
-		type__[(i__1 = count - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-			"type", i__1, "zzrvbf_", (ftnlen)921)] = 4;
+		__state->nxttok = 3;
+		++__state->count;
+		__state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
+			i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)
+			921)] = 4;
 	    }
 
 /*        For subsequent lines, treat everything as a new value. */
 
 	} else {
-	    nxttok = 1;
+	    __state->nxttok = 1;
 	}
 
 /*        We have a value anyway. Store it in the table. */
@@ -779,29 +793,32 @@ static integer c__132 = 132;
 
 /*        Dates begin with @; anything else is presumed to be a number. */
 
-	while(type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		"type", i__1, "zzrvbf_", (ftnlen)941)] != 4 && nxttok <= 
-		count) {
+	while(__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <= i__1 
+		? i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)941)] != 4 &&
+		 __state->nxttok <= __state->count) {
 
 /*           Get the begin and end of this token. */
 
-	    b = begs[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		    "begs", i__1, "zzrvbf_", (ftnlen)945)];
-	    e = ends[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ends", i__1, "zzrvbf_", (ftnlen)946)];
-	    if (vartyp == 3) {
+	    __state->b = __state->begs[(i__1 = __state->nxttok - 1) < 132 && 
+		    0 <= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
+		    ftnlen)945)];
+	    __state->e = __state->ends[(i__1 = __state->nxttok - 1) < 132 && 
+		    0 <= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvbf_", (
+		    ftnlen)946)];
+	    if (__state->vartyp == 3) {
 
 /*              We need to determine which category of variable we */
 /*              have by looking at this token and deducing the */
 /*              type. */
 
-		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)954)] == 1) {
-		    vartyp = 1;
-		} else if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? 
-			i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)958)] 
-			== 2) {
-		    vartyp = 2;
+		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
+			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
+			ftnlen)954)] == 1) {
+		    __state->vartyp = 1;
+		} else if (__state->type__[(i__1 = __state->nxttok - 1) < 132 
+			&& 0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", 
+			(ftnlen)958)] == 2) {
+		    __state->vartyp = 2;
 		} else {
 
 /*                 This is an error. We should have had one of the */
@@ -809,8 +826,8 @@ static integer c__132 = 132;
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, 
-			    dppool);
+		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
+			     nmpool, chpool, dppool);
 		    setmsg_("The first item following the assignment operato"
 			    "r should be the value of a variable or a left pa"
 			    "renthesis '(' followed by a value for a variable"
@@ -822,24 +839,25 @@ static integer c__132 = 132;
 		    return 0;
 		}
 	    }
-	    if (vartyp == 1) {
+	    if (__state->vartyp == 1) {
 
 /*              First make sure that this token represents a string. */
 
-		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)996)] != 1) {
+		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
+			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
+			ftnlen)996)] != 1) {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, 
-			    dppool);
-		    r1 = rtrim_(varnam, varnam_len);
+		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
+			     nmpool, chpool, dppool);
+		    __state->r1 = rtrim_(varnam, varnam_len);
 		    setmsg_("The kernel variable # has been set up as a stri"
 			    "ng variable.  However, the value that you are at"
 			    "tempting to assign to this variable on line # of"
 			    " the text buffer is not a string value. ", (
 			    ftnlen)183);
-		    errch_("#", varnam, (ftnlen)1, r1);
+		    errch_("#", varnam, (ftnlen)1, __state->r1);
 		    errint_("#", linnum, (ftnlen)1);
 		    sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
 		    chkout_("ZZRVBF", (ftnlen)6);
@@ -849,12 +867,12 @@ static integer c__132 = 132;
 /*              Still going? Make sure there is something between */
 /*              the quotes. */
 
-		if (b + 1 >= e) {
+		if (__state->b + 1 >= __state->e) {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, 
-			    dppool);
+		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
+			     nmpool, chpool, dppool);
 		    setmsg_("There is a quoted string with no characters on "
 			    "line # of the text buffer. ", (ftnlen)74);
 		    errint_("#", linnum, (ftnlen)1);
@@ -866,8 +884,8 @@ static integer c__132 = 132;
 /*              We are ready to go.  Allocate a node for this data */
 /*              item. First make sure there is room to do so. */
 
-		free = lnknfn_(chpool);
-		if (free <= 0) {
+		__state->free = lnknfn_(chpool);
+		if (__state->free <= 0) {
 		    setmsg_("There is no room available for adding another c"
 			    "haracter value to the kernel pool.  The characte"
 			    "r values buffer became full at line # of the tex"
@@ -880,60 +898,63 @@ static integer c__132 = 132;
 
 /*              Allocate a node for storing this string value: */
 
-		lnkan_(chpool, &chnode);
-		if (datlst[nameat - 1] == 0) {
+		lnkan_(chpool, &__state->chnode);
+		if (datlst[__state->nameat - 1] == 0) {
 
 /*                 There was no data for this name yet.  We make */
 /*                 CHNODE be the head of the data list for this name. */
 
-		    datlst[nameat - 1] = -chnode;
+		    datlst[__state->nameat - 1] = -__state->chnode;
 		} else {
 
 /*                 Put this node after the tail of the current list. */
 
-		    head = -datlst[nameat - 1];
-		    tail = -chpool[(head << 1) + 11];
-		    lnkila_(&tail, &chnode, chpool);
+		    __state->head = -datlst[__state->nameat - 1];
+		    __state->tail = -chpool[(__state->head << 1) + 11];
+		    lnkila_(&__state->tail, &__state->chnode, chpool);
 		}
 
 /*              Finally insert this data item in the data buffer */
 /*              at CHNODE.  Note any quotes will be doubled so we */
 /*              have to undo this affect when we store the data. */
 
-		s_copy(chvals + (chnode - 1) * chvals_len, " ", chvals_len, (
-			ftnlen)1);
-		++ncomp;
-		i__ = 1;
-		j = b + 1;
-		while(j < e) {
-		    code = *(unsigned char *)&line[j - 1];
-		    if (code == iquote) {
-			++j;
+		s_copy(chvals + (__state->chnode - 1) * chvals_len, " ", 
+			chvals_len, (ftnlen)1);
+		++__state->ncomp;
+		__state->i__ = 1;
+		__state->j = __state->b + 1;
+		while(__state->j < __state->e) {
+		    __state->code = *(unsigned char *)&__state->line[
+			    __state->j - 1];
+		    if (__state->code == __state->iquote) {
+			++__state->j;
 		    }
-		    *(unsigned char *)&chvals[(chnode - 1) * chvals_len + (
-			    i__ - 1)] = *(unsigned char *)&line[j - 1];
-		    ++i__;
-		    ++j;
+		    *(unsigned char *)&chvals[(__state->chnode - 1) * 
+			    chvals_len + (__state->i__ - 1)] = *(unsigned 
+			    char *)&__state->line[__state->j - 1];
+		    ++__state->i__;
+		    ++__state->j;
 		}
 
 /*              That's all for this value. It's now time to loop */
 /*              back through and get the next value. */
 
 	    } else {
-		if (type__[(i__1 = nxttok - 1) < 132 && 0 <= i__1 ? i__1 : 
-			s_rnge("type", i__1, "zzrvbf_", (ftnlen)1117)] != 2) {
+		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
+			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
+			ftnlen)1117)] != 2) {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, 
-			    dppool);
-		    r1 = rtrim_(varnam, varnam_len);
+		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
+			     nmpool, chpool, dppool);
+		    __state->r1 = rtrim_(varnam, varnam_len);
 		    setmsg_("The kernel variable # has been set up as a nume"
 			    "ric or time variable.  However, the value that y"
 			    "ou are attempting to assign to this variable on "
 			    "line # of the kernel buffer is not a numeric or "
 			    "time value. ", (ftnlen)203);
-		    errch_("#", varnam, (ftnlen)1, r1);
+		    errch_("#", varnam, (ftnlen)1, __state->r1);
 		    errint_("#", linnum, (ftnlen)1);
 		    sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
 		    chkout_("ZZRVBF", (ftnlen)6);
@@ -943,60 +964,66 @@ static integer c__132 = 132;
 /*              Look at the first character to see if we have a time */
 /*              or a number. */
 
-		code = *(unsigned char *)&line[b - 1];
-		if (code == itmark) {
+		__state->code = *(unsigned char *)&__state->line[__state->b - 
+			1];
+		if (__state->code == __state->itmark) {
 
 /*                 We need to have more than a single character. */
 
-		    if (e == b) {
+		    if (__state->e == __state->b) {
 
 /*                    First perform the clean up function. */
 
-			zzcln_(&lookat, &nameat, namlst, datlst, nmpool, 
-				chpool, dppool);
-			r1 = rtrim_(varnam, varnam_len);
+			zzcln_(&__state->lookat, &__state->nameat, namlst, 
+				datlst, nmpool, chpool, dppool);
+			__state->r1 = rtrim_(varnam, varnam_len);
 			setmsg_("At character # of  line # in the text buffe"
 				"r the character '@' appears.  This character"
 				" is reserved for identifying time values in "
 				"assignments to kernel pool variables.  Howev"
 				"er it is not being used in this fashion for "
 				"the variable '#'. ", (ftnlen)237);
-			errint_("#", &b, (ftnlen)1);
+			errint_("#", &__state->b, (ftnlen)1);
 			errint_("#", linnum, (ftnlen)1);
-			errch_("#", varnam, (ftnlen)1, r1);
+			errch_("#", varnam, (ftnlen)1, __state->r1);
 			sigerr_("SPICE(BADTIMESPEC)", (ftnlen)18);
 			chkout_("ZZRVBF", (ftnlen)6);
 			return 0;
 		    }
-		    i__1 = b;
-		    tparse_(line + i__1, &dvalue, error, e - i__1, (ftnlen)
-			    256);
-		    if (s_cmp(error, " ", (ftnlen)256, (ftnlen)1) != 0) {
+		    i__1 = __state->b;
+		    tparse_(__state->line + i__1, &__state->dvalue, 
+			    __state->error, __state->e - i__1, (ftnlen)256);
+		    if (s_cmp(__state->error, " ", (ftnlen)256, (ftnlen)1) != 
+			    0) {
 
 /*                    First perform the clean up function. */
 
-			zzcln_(&lookat, &nameat, namlst, datlst, nmpool, 
-				chpool, dppool);
+			zzcln_(&__state->lookat, &__state->nameat, namlst, 
+				datlst, nmpool, chpool, dppool);
 			setmsg_("Encountered '#' while attempting to parse a"
 				" time on line # of the text buffer. ", (
 				ftnlen)79);
-			i__1 = b;
-			errch_("#", line + i__1, (ftnlen)1, e - i__1);
+			i__1 = __state->b;
+			errch_("#", __state->line + i__1, (ftnlen)1, 
+				__state->e - i__1);
 			errint_("#", linnum, (ftnlen)1);
 			sigerr_("SPICE(BADTIMESPEC)", (ftnlen)18);
 			chkout_("ZZRVBF", (ftnlen)6);
 			return 0;
 		    }
 		} else {
-		    nparsd_(line + (b - 1), &dvalue, error, &i__, e - (b - 1),
-			     (ftnlen)256);
-		    if (s_cmp(error, " ", (ftnlen)256, (ftnlen)1) != 0) {
-			zzcln_(&lookat, &nameat, namlst, datlst, nmpool, 
-				chpool, dppool);
+		    nparsd_(__state->line + (__state->b - 1), &
+			    __state->dvalue, __state->error, &__state->i__, 
+			    __state->e - (__state->b - 1), (ftnlen)256);
+		    if (s_cmp(__state->error, " ", (ftnlen)256, (ftnlen)1) != 
+			    0) {
+			zzcln_(&__state->lookat, &__state->nameat, namlst, 
+				datlst, nmpool, chpool, dppool);
 			setmsg_("Encountered '#' while attempting to parse a"
 				" number on line # of the text buffer", (
 				ftnlen)79);
-			errch_("#", line + (b - 1), (ftnlen)1, e - (b - 1));
+			errch_("#", __state->line + (__state->b - 1), (ftnlen)
+				1, __state->e - (__state->b - 1));
 			errint_("#", linnum, (ftnlen)1);
 			sigerr_("SPICE(NUMBEREXPECTED)", (ftnlen)21);
 			chkout_("ZZRVBF", (ftnlen)6);
@@ -1007,8 +1034,8 @@ static integer c__132 = 132;
 /*              OK. We have a parsed value.  See if there is room in */
 /*              the numeric portion of the pool to store this value. */
 
-		free = lnknfn_(dppool);
-		if (free <= 0) {
+		__state->free = lnknfn_(dppool);
+		if (__state->free <= 0) {
 		    setmsg_("There is no room available for adding another n"
 			    "umeric value to the kernel pool.  The numeric va"
 			    "lues buffer became full at line # of the text bu"
@@ -1021,31 +1048,31 @@ static integer c__132 = 132;
 
 /*              Allocate a node for storing this numeric value: */
 
-		lnkan_(dppool, &dpnode);
-		if (datlst[nameat - 1] == 0) {
+		lnkan_(dppool, &__state->dpnode);
+		if (datlst[__state->nameat - 1] == 0) {
 
 /*                 There was no data for this name yet.  We make */
 /*                 DPNODE be the head of the data list for this name. */
 
-		    datlst[nameat - 1] = dpnode;
+		    datlst[__state->nameat - 1] = __state->dpnode;
 		} else {
 
 /*                 Put this node after the tail of the current list. */
 
-		    head = datlst[nameat - 1];
-		    tail = -dppool[(head << 1) + 11];
-		    lnkila_(&tail, &dpnode, dppool);
+		    __state->head = datlst[__state->nameat - 1];
+		    __state->tail = -dppool[(__state->head << 1) + 11];
+		    lnkila_(&__state->tail, &__state->dpnode, dppool);
 		}
 
 /*              Finally insert this data item into the numeric buffer. */
 
-		dpvals[dpnode - 1] = dvalue;
-		++ncomp;
+		dpvals[__state->dpnode - 1] = __state->dvalue;
+		++__state->ncomp;
 	    }
 
 /*           Now process the next token in the list of tokens. */
 
-	    ++nxttok;
+	    ++__state->nxttok;
 	}
 
 /*        We could have ended the above loop in one of two ways. */
@@ -1054,10 +1081,10 @@ static integer c__132 = 132;
 /*           an end of vector marker. */
 /*        2) We hit an end of vector marker. */
 
-	if (nxttok > count) {
-	    status = 3;
+	if (__state->nxttok > __state->count) {
+	    __state->status = 3;
 	} else {
-	    status = 2;
+	    __state->status = 2;
 	}
     }
 
@@ -1065,8 +1092,9 @@ static integer c__132 = 132;
 /*     assigning a value to the kernel pool variable.  This can */
 /*     happen if there is a vector input of the form NAME = ( ) */
 
-    if (ncomp < 1) {
-	zzcln_(&lookat, &nameat, namlst, datlst, nmpool, chpool, dppool);
+    if (__state->ncomp < 1) {
+	zzcln_(&__state->lookat, &__state->nameat, namlst, datlst, nmpool, 
+		chpool, dppool);
 	setmsg_("The first item following the assignment operator should be "
 		"the value of a variable or a left parenthesis '(' followed b"
 		"y a value for a variable. This is not true on line # of the "
@@ -1080,7 +1108,7 @@ static integer c__132 = 132;
 
 /*     Return the name of the variable. */
 
-    s_copy(name__, varnam, (ftnlen)132, varnam_len);
+    s_copy(__state->name__, varnam, (ftnlen)132, varnam_len);
     chkout_("ZZRVBF", (ftnlen)6);
     return 0;
 } /* zzrvbf_ */

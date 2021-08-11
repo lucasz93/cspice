@@ -1,13 +1,21 @@
-/* dlabfs.f -- translated by f2c (version 19980913).
+/* dlabfs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern dlabfs_init_t __dlabfs_init;
+static dlabfs_state_t* get_dlabfs_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dlabfs)
+		state->dlabfs = __cspice_allocate_module(sizeof(
+	dlabfs_state_t), &__dlabfs_init, sizeof(__dlabfs_init));
+	return state->dlabfs;
+
+}
 
 /* $Procedure DLABFS ( DLA, begin forward search ) */
 /* Subroutine */ int dlabfs_(integer *handle, integer *descr, logical *found)
@@ -20,9 +28,13 @@ static integer c__2 = 2;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dlabfs_state_t* __state = get_dlabfs_state();
 /* $ Abstract */
 
 /*     Begin a forward segment search in a DLA file. */
@@ -412,7 +424,7 @@ static integer c__2 = 2;
 /*     Look up the pointer to the first DLA segment descriptor in the */
 /*     file.  Then look up the segment descriptor itself. */
 
-    dasrdi_(handle, &c__2, &c__2, &this__);
+    dasrdi_(handle, &__state->c__2, &__state->c__2, &this__);
     if (failed_() || this__ == -1) {
 
 /*        If the pointer THIS is null, there are no segments in the */

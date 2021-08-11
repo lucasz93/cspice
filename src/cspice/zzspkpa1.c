@@ -1,14 +1,21 @@
-/* zzspkpa1.f -- translated by f2c (version 19980913).
+/* zzspkpa1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__9 = 9;
+extern zzspkpa1_init_t __zzspkpa1_init;
+static zzspkpa1_state_t* get_zzspkpa1_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkpa1)
+		state->zzspkpa1 = __cspice_allocate_module(sizeof(
+	zzspkpa1_state_t), &__zzspkpa1_init, sizeof(__zzspkpa1_init));
+	return state->zzspkpa1;
+
+}
 
 /* $Procedure ZZSPKPA1 ( S/P Kernel, apparent position only ) */
 /* Subroutine */ int zzspkpa1_(integer *targ, doublereal *et, char *ref, 
@@ -17,10 +24,6 @@ static integer c__9 = 9;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char flags[5*9] = "NONE " "LT   " "LT+S " "CN   " "CN+S " "XLT  " 
-	    "XLT+S" "XCN  " "XCN+S";
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     integer i__1;
@@ -33,31 +36,37 @@ static integer c__9 = 9;
     /* Local variables */
     char corr[5];
     extern /* Subroutine */ int zzspkgp1_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen), vsub_(doublereal *
-	    , doublereal *, doublereal *);
-    static logical xmit;
+	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
+	    );
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     doublereal tpos[3];
-    integer i__, refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    static logical usecn, uselt;
+    integer i__;
+    integer refid;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern doublereal vnorm_(doublereal *);
     extern logical failed_(void);
     extern doublereal clight_(void);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    stlabx_(doublereal *, doublereal *, doublereal *);
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+	    doublereal *);
     integer ltsign;
     extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen), setmsg_(char *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer maxitr;
     extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static logical usestl;
     extern logical odd_(integer *);
 
+
+    /* Module state */
+    zzspkpa1_state_t* __state = get_zzspkpa1_state();
 /* $ Abstract */
 
 /*     Return the position of a target body relative to an observer, */
@@ -717,7 +726,8 @@ static integer c__9 = 9;
     } else {
 	chkin_("ZZSPKPA1", (ftnlen)8);
     }
-    if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -725,11 +735,12 @@ static integer c__9 = 9;
 /*        Remove leading and embedded white space from the aberration */
 /*        correction flag, then convert to upper case. */
 
-	ljucrs_(&c__0, abcorr, corr, abcorr_len, (ftnlen)5);
+	ljucrs_(&__state->c__0, abcorr, corr, abcorr_len, (ftnlen)5);
 
 /*        Locate the flag in our list of flags. */
 
-	i__ = isrchc_(corr, &c__9, flags, (ftnlen)5, (ftnlen)5);
+	i__ = isrchc_(corr, &__state->c__9, __state->flags, (ftnlen)5, (
+		ftnlen)5);
 	if (i__ == 0) {
 	    setmsg_("Requested aberration correction was #.", (ftnlen)38);
 	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
@@ -740,16 +751,16 @@ static integer c__9 = 9;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction. */
 
-	xmit = i__ > 5;
-	uselt = i__ == 2 || i__ == 3 || i__ == 6 || i__ == 7;
-	usestl = i__ > 1 && odd_(&i__);
-	usecn = i__ == 4 || i__ == 5 || i__ == 8 || i__ == 9;
-	first = FALSE_;
+	__state->xmit = i__ > 5;
+	__state->uselt = i__ == 2 || i__ == 3 || i__ == 6 || i__ == 7;
+	__state->usestl = i__ > 1 && odd_(&i__);
+	__state->usecn = i__ == 4 || i__ == 5 || i__ == 8 || i__ == 9;
+	__state->first = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
@@ -766,7 +777,7 @@ static integer c__9 = 9;
 
 /*     Determine the sign of the light time offset. */
 
-    if (xmit) {
+    if (__state->xmit) {
 	ltsign = 1;
     } else {
 	ltsign = -1;
@@ -777,7 +788,7 @@ static integer c__9 = 9;
 /*     to get the relative position. Use this to compute the one-way */
 /*     light time. */
 
-    zzspkgp1_(targ, et, ref, &c__0, ptarg, lt, ref_len);
+    zzspkgp1_(targ, et, ref, &__state->c__0, ptarg, lt, ref_len);
     if (failed_()) {
 	chkout_("ZZSPKPA1", (ftnlen)8);
 	return 0;
@@ -790,9 +801,9 @@ static integer c__9 = 9;
 /*     at the current epoch minus the one-way light time. Note that */
 /*     the observer remains where he is. */
 
-    if (uselt) {
+    if (__state->uselt) {
 	maxitr = 1;
-    } else if (usecn) {
+    } else if (__state->usecn) {
 	maxitr = 3;
     } else {
 	maxitr = 0;
@@ -800,7 +811,7 @@ static integer c__9 = 9;
     i__1 = maxitr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	d__1 = *et + ltsign * *lt;
-	zzspkgp1_(targ, &d__1, ref, &c__0, ptarg, lt, ref_len);
+	zzspkgp1_(targ, &d__1, ref, &__state->c__0, ptarg, lt, ref_len);
 	if (failed_()) {
 	    chkout_("ZZSPKPA1", (ftnlen)8);
 	    return 0;
@@ -816,8 +827,8 @@ static integer c__9 = 9;
 
 /*     If stellar aberration correction is requested, perform it now. */
 
-    if (usestl) {
-	if (xmit) {
+    if (__state->usestl) {
+	if (__state->xmit) {
 
 /*           This is the transmission case. */
 

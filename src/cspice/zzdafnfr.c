@@ -1,14 +1,21 @@
-/* zzdafnfr.f -- translated by f2c (version 19980913).
+/* zzdafnfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern zzdafnfr_init_t __zzdafnfr_init;
+static zzdafnfr_state_t* get_zzdafnfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdafnfr)
+		state->zzdafnfr = __cspice_allocate_module(sizeof(
+	zzdafnfr_state_t), &__zzdafnfr_init, sizeof(__zzdafnfr_init));
+	return state->zzdafnfr;
+
+}
 
 /* $Procedure ZZDAFNFR ( Private --- DAF write New File Record ) */
 /* Subroutine */ int zzdafnfr_(integer *lun, char *idword, integer *nd, 
@@ -18,7 +25,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3];
@@ -38,23 +44,27 @@ static integer c__1 = 1;
     char delim[1];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer rtrim_(char *, ftnlen);
-    char locifn[60], locidw[8], locfmt[8], nullch[1], lftbkt[6];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen);
+    char locifn[60];
+    char locidw[8];
+    char locfmt[8];
+    char nullch[1];
+    char lftbkt[6];
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     char rgtbkt[6];
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static char prenul[603];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    static char ftpstr[28], pstnul[297];
     char tststr[16];
 
     /* Fortran I/O blocks */
-    static cilist io___15 = { 1, 0, 0, 0, 1 };
 
 
+
+    /* Module state */
+    zzdafnfr_state_t* __state = get_zzdafnfr_state();
 /* $ Abstract */
 
 /*    Write the file record to a new DAF file. */
@@ -304,7 +314,7 @@ static integer c__1 = 1;
 /*     On the first pass, format the PRENUL and PSTNUL strings, */
 /*     and build FTPSTR from its components. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Store NULL into NULLCH. */
 
@@ -313,13 +323,15 @@ static integer c__1 = 1;
 /*        Set all of the characters of PRENUL to nulls. */
 
 	for (i__ = 1; i__ <= 603; ++i__) {
-	    *(unsigned char *)&prenul[i__ - 1] = *(unsigned char *)nullch;
+	    *(unsigned char *)&__state->prenul[i__ - 1] = *(unsigned char *)
+		    nullch;
 	}
 
 /*        Set all of the characters of PSTNUL to nulls. */
 
 	for (i__ = 1; i__ <= 297; ++i__) {
-	    *(unsigned char *)&pstnul[i__ - 1] = *(unsigned char *)nullch;
+	    *(unsigned char *)&__state->pstnul[i__ - 1] = *(unsigned char *)
+		    nullch;
 	}
 
 /*        Build FTPSTR from its components that come back from */
@@ -343,11 +355,11 @@ static integer c__1 = 1;
 	i__1[0] = rtrim_(lftbkt, (ftnlen)6), a__1[0] = lftbkt;
 	i__1[1] = rtrim_(tststr, (ftnlen)16), a__1[1] = tststr;
 	i__1[2] = rtrim_(rgtbkt, (ftnlen)6), a__1[2] = rgtbkt;
-	s_cat(ftpstr, a__1, i__1, &c__3, (ftnlen)28);
+	s_cat(__state->ftpstr, a__1, i__1, &__state->c__3, (ftnlen)28);
 
 /*        Stop this block from executing except on the first pass. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Make local copies of each of the string arguments.  This way we */
@@ -361,52 +373,55 @@ static integer c__1 = 1;
 /*     Write the file record components out to the first record of the */
 /*     file. */
 
-    io___15.ciunit = *lun;
-    iostat = s_wdue(&io___15);
+    __state->io___15.ciunit = *lun;
+    iostat = s_wdue(&__state->io___15);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&(*nd), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*nd), (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&(*ni), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*ni), (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, locifn, (ftnlen)60);
+    iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&(*fward), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*fward), (ftnlen)sizeof(integer)
+	    );
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&(*bward), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*bward), (ftnlen)sizeof(integer)
+	    );
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&(*free), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*free), (ftnlen)sizeof(integer))
+	    ;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, locfmt, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, locfmt, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, prenul, (ftnlen)603);
+    iostat = do_uio(&__state->c__1, __state->prenul, (ftnlen)603);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, ftpstr, (ftnlen)28);
+    iostat = do_uio(&__state->c__1, __state->ftpstr, (ftnlen)28);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, pstnul, (ftnlen)297);
+    iostat = do_uio(&__state->c__1, __state->pstnul, (ftnlen)297);
     if (iostat != 0) {
 	goto L100001;
     }

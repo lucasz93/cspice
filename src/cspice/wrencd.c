@@ -1,14 +1,21 @@
-/* wrencd.f -- translated by f2c (version 19980913).
+/* wrencd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern wrencd_init_t __wrencd_init;
+static wrencd_state_t* get_wrencd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wrencd)
+		state->wrencd = __cspice_allocate_module(sizeof(
+	wrencd_state_t), &__wrencd_init, sizeof(__wrencd_init));
+	return state->wrencd;
+
+}
 
 /* $Procedure  WRENCD  ( Write encoded d.p. numbers to text file ) */
 /* Subroutine */ int wrencd_(integer *unit, integer *n, doublereal *data)
@@ -30,13 +37,19 @@ static integer c__1 = 1;
 	    ftnlen);
     integer i__;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer nitms, itmbeg, length[64];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    integer nitms;
+    integer itmbeg;
+    integer length[64];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    wrencd_state_t* __state = get_wrencd_state();
 /* $ Abstract */
 
 /*     Encode and write d.p. numbers to a text file. */
@@ -356,10 +369,10 @@ static integer c__1 = 1;
 		     work + (((i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
 		    s_rnge("work", i__2, "wrencd_", (ftnlen)335)) << 6);
 	    i__4[2] = 1, a__1[2] = "'";
-	    s_cat(ch__1, a__1, i__4, &c__3, (ftnlen)66);
-	    iostat = do_fio(&c__1, ch__1, length[(i__3 = i__ - 1) < 64 && 0 <=
-		     i__3 ? i__3 : s_rnge("length", i__3, "wrencd_", (ftnlen)
-		    335)] + 2);
+	    s_cat(ch__1, a__1, i__4, &__state->c__3, (ftnlen)66);
+	    iostat = do_fio(&__state->c__1, ch__1, length[(i__3 = i__ - 1) < 
+		    64 && 0 <= i__3 ? i__3 : s_rnge("length", i__3, "wrencd_",
+		     (ftnlen)335)] + 2);
 	    if (iostat != 0) {
 		goto L100001;
 	    }

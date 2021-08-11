@@ -1,13 +1,21 @@
-/* occult.f -- translated by f2c (version 19980913).
+/* occult.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__100 = 100;
+extern occult_init_t __occult_init;
+static occult_state_t* get_occult_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->occult)
+		state->occult = __cspice_allocate_module(sizeof(
+	occult_state_t), &__occult_init, sizeof(__occult_init));
+	return state->occult;
+
+}
 
 /* $Procedure      OCCULT ( find occultation type at time ) */
 /* Subroutine */ int occult_(char *targ1, char *shape1, char *frame1, char *
@@ -18,7 +26,6 @@ static integer c__100 = 100;
 {
     /* Initialized data */
 
-    static char occtyp[9*3] = "PARTIAL  " "ANNULAR  " "FULL     ";
 
     /* System generated locals */
     integer i__1;
@@ -33,38 +40,52 @@ static integer c__100 = 100;
     extern /* Subroutine */ int zzgfocin_(char *, char *, char *, char *, 
 	    char *, char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    char shap1[500], shap2[500];
+    char shap1[500];
+    char shap2[500];
     extern /* Subroutine */ int zzgfocst_(doublereal *, logical *);
     integer i__;
     extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
 	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
 	     ftnlen, ftnlen, ftnlen, ftnlen);
-    char bname[36], fname[36];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+    char bname[36];
+    char fname[36];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer index;
     logical found;
     char front[36];
     integer nsurf;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
     logical ellps2;
-    char prshp1[9], prshp2[9];
+    char prshp1[9];
+    char prshp2[9];
     extern logical failed_(void);
-    char bframe[32], fframe[32], bshape[500], bmethd[500], fmethd[500], 
-	    fshape[500];
+    char bframe[32];
+    char fframe[32];
+    char bshape[500];
+    char bmethd[500];
+    char fmethd[500];
+    char fshape[500];
     integer mltfac;
     char pntdef[20];
     extern logical return_(void);
     char subtyp[20];
-    integer id1, id2, srflst[100];
+    integer id1;
+    integer id2;
+    integer srflst[100];
     logical ocstat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     char trmtyp[20];
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     logical pri;
 
+
+    /* Module state */
+    occult_state_t* __state = get_occult_state();
 /* $ Abstract */
 
 /*     Determines the occultation condition (not occulted, partially, */
@@ -1279,9 +1300,9 @@ static integer c__100 = 100;
 	    chkout_("OCCULT", (ftnlen)6);
 	    return 0;
 	}
-	zzprsmet_(&id1, shap1, &c__100, prshp1, subtyp, &pri, &nsurf, srflst, 
-		pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (ftnlen)
-		20, (ftnlen)20);
+	zzprsmet_(&id1, shap1, &__state->c__100, prshp1, subtyp, &pri, &nsurf,
+		 srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
+		ftnlen)20, (ftnlen)20);
 	if (failed_()) {
 	    chkout_("OCCULT", (ftnlen)6);
 	    return 0;
@@ -1299,9 +1320,9 @@ static integer c__100 = 100;
 	    chkout_("OCCULT", (ftnlen)6);
 	    return 0;
 	}
-	zzprsmet_(&id2, shap2, &c__100, prshp2, subtyp, &pri, &nsurf, srflst, 
-		pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (ftnlen)
-		20, (ftnlen)20);
+	zzprsmet_(&id2, shap2, &__state->c__100, prshp2, subtyp, &pri, &nsurf,
+		 srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
+		ftnlen)20, (ftnlen)20);
 	if (failed_()) {
 	    chkout_("OCCULT", (ftnlen)6);
 	    return 0;
@@ -1374,12 +1395,12 @@ static integer c__100 = 100;
 /*              Both shapes are ellipsoids. */
 
 		for (index = 1; index <= 3; ++index) {
-		    zzgfocin_(occtyp + ((i__1 = index - 1) < 3 && 0 <= i__1 ? 
-			    i__1 : s_rnge("occtyp", i__1, "occult_", (ftnlen)
-			    1070)) * 9, front, fshape, fframe, back, bshape, 
-			    bframe, obsrvr, abcorr, (ftnlen)9, (ftnlen)36, (
-			    ftnlen)500, (ftnlen)32, (ftnlen)36, (ftnlen)500, (
-			    ftnlen)32, obsrvr_len, abcorr_len);
+		    zzgfocin_(__state->occtyp + ((i__1 = index - 1) < 3 && 0 
+			    <= i__1 ? i__1 : s_rnge("occtyp", i__1, "occult_",
+			     (ftnlen)1070)) * 9, front, fshape, fframe, back, 
+			    bshape, bframe, obsrvr, abcorr, (ftnlen)9, (
+			    ftnlen)36, (ftnlen)500, (ftnlen)32, (ftnlen)36, (
+			    ftnlen)500, (ftnlen)32, obsrvr_len, abcorr_len);
 		    zzgfocst_(et, &ocstat);
 		    if (failed_()) {
 			chkout_("OCCULT", (ftnlen)6);

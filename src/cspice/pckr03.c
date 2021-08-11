@@ -1,30 +1,46 @@
-/* pckr03.f -- translated by f2c (version 19980913).
+/* pckr03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern pckr03_init_t __pckr03_init;
+static pckr03_state_t* get_pckr03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckr03)
+		state->pckr03 = __cspice_allocate_module(sizeof(
+	pckr03_state_t), &__pckr03_init, sizeof(__pckr03_init));
+	return state->pckr03;
+
+}
 
 /* $Procedure PCKR03 ( PCK, read record from type 3 segment ) */
 /* Subroutine */ int pckr03_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
-    integer ends, indx;
+    integer ends;
+    integer indx;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     doublereal value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen), sgfcon_(
-	    integer *, doublereal *, integer *, integer *, doublereal *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen), sgfpkt_(integer 
-	    *, doublereal *, integer *, integer *, doublereal *, integer *), 
-	    sgfrvi_(integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *, logical *), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
+	     doublereal *, integer *, logical *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    pckr03_state_t* __state = get_pckr03_state();
 /* $ Abstract */
 
 /*     Read a single PCK data record from a segment of type 03. */
@@ -225,7 +241,7 @@ static integer c__1 = 1;
 /*     Fetch the constants and store them in the first part of */
 /*     the output RECORD. */
 
-    sgfcon_(handle, descr, &c__1, &c__1, record);
+    sgfcon_(handle, descr, &__state->c__1, &__state->c__1, record);
 
 /*     Locate the time in the file less than or equal to the input ET. */
 

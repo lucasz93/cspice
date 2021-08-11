@@ -1,15 +1,21 @@
-/* kplfrm.f -- translated by f2c (version 19980913).
+/* kplfrm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c__100 = 100;
+extern kplfrm_init_t __kplfrm_init;
+static kplfrm_state_t* get_kplfrm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->kplfrm)
+		state->kplfrm = __cspice_allocate_module(sizeof(
+	kplfrm_state_t), &__kplfrm_init, sizeof(__kplfrm_init));
+	return state->kplfrm;
+
+}
 
 /* $Procedure KPLFRM ( Kernel pool frame IDs ) */
 /* Subroutine */ int kplfrm_(integer *frmcls, integer *idset)
@@ -22,32 +28,46 @@ static integer c__100 = 100;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, l, m, n, w;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), repmc_(char *, char *,
-	     char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    integer i__;
+    integer l;
+    integer m;
+    integer n;
+    integer w;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
+	     ftnlen, ftnlen, ftnlen);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     extern integer sizei_(integer *);
-    integer total, idcode, to;
+    integer total;
+    integer idcode;
+    integer to;
     extern /* Subroutine */ int scardi_(integer *, integer *);
     char frname[32];
     extern /* Subroutine */ int validi_(integer *, integer *, integer *);
     char kvcode[32];
     integer fclass;
-    char kvname[32], kvbuff[32*100], kvclas[32];
+    char kvname[32];
+    char kvbuff[32*100];
+    char kvclas[32];
     extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen), gipool_(char *, integer *, 
-	    integer *, integer *, integer *, logical *, ftnlen);
+	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
+	    *, integer *, logical *, ftnlen);
     char tmpnam[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char kvtemp[32];
     extern /* Subroutine */ int gnpool_(char *, integer *, integer *, integer 
 	    *, char *, logical *, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    kplfrm_state_t* __state = get_kplfrm_state();
 /* $ Abstract */
 
 /*     Return a SPICE set containing the frame IDs of all reference */
@@ -754,7 +774,7 @@ static integer c__100 = 100;
 
 /*     The output set starts out empty. */
 
-    scardi_(&c__0, idset);
+    scardi_(&__state->c__0, idset);
 
 /*     Check the input frame class. */
 
@@ -789,8 +809,8 @@ static integer c__100 = 100;
 /*     assignments. */
 
     s_copy(kvtemp, "FRAME_*_NAME", (ftnlen)32, (ftnlen)12);
-    gnpool_(kvtemp, &c__1, &c__100, &n, kvbuff, &found, (ftnlen)32, (ftnlen)
-	    32);
+    gnpool_(kvtemp, &__state->c__1, &__state->c__100, &n, kvbuff, &found, (
+	    ftnlen)32, (ftnlen)32);
     total = 0;
     while(n > 0) {
 	total += n;
@@ -808,7 +828,8 @@ static integer c__100 = 100;
 
 	    gcpool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
 		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)536)) << 5), &
-		    c__1, &c__1, &m, frname, &found, (ftnlen)32, (ftnlen)32);
+		    __state->c__1, &__state->c__1, &m, frname, &found, (
+		    ftnlen)32, (ftnlen)32);
 	    if (found) {
 
 /*              We found a possible frame name. Attempt to look */
@@ -826,8 +847,8 @@ static integer c__100 = 100;
 
 /*              Try to fetch the ID code. */
 
-		gipool_(kvcode, &c__1, &c__1, &l, &idcode, &found, (ftnlen)32)
-			;
+		gipool_(kvcode, &__state->c__1, &__state->c__1, &l, &idcode, &
+			found, (ftnlen)32);
 		if (found) {
 
 /*                 We found an integer on the right hand side */
@@ -844,8 +865,8 @@ static integer c__100 = 100;
 			    17);
 		    repmi_(kvname, "<code>", &idcode, kvname, (ftnlen)32, (
 			    ftnlen)6, (ftnlen)32);
-		    gcpool_(kvname, &c__1, &c__1, &w, tmpnam, &found, (ftnlen)
-			    32, (ftnlen)32);
+		    gcpool_(kvname, &__state->c__1, &__state->c__1, &w, 
+			    tmpnam, &found, (ftnlen)32, (ftnlen)32);
 		    if (found) {
 
 /*                    Try to look up the frame class using a */
@@ -863,8 +884,8 @@ static integer c__100 = 100;
 
 /*                    Look for the frame class. */
 
-			gipool_(kvclas, &c__1, &c__1, &w, &fclass, &found, (
-				ftnlen)32);
+			gipool_(kvclas, &__state->c__1, &__state->c__1, &w, &
+				fclass, &found, (ftnlen)32);
 			if (! found) {
 
 /*                       Try to look up the frame class using a kernel */
@@ -876,8 +897,8 @@ static integer c__100 = 100;
 				    ftnlen)18);
 			    repmc_(kvclas, "<name>", frname, kvclas, (ftnlen)
 				    32, (ftnlen)6, (ftnlen)32, (ftnlen)32);
-			    gipool_(kvclas, &c__1, &c__1, &w, &fclass, &found,
-				     (ftnlen)32);
+			    gipool_(kvclas, &__state->c__1, &__state->c__1, &
+				    w, &fclass, &found, (ftnlen)32);
 			}
 
 /*                    At this point FOUND indicates whether we found */
@@ -941,8 +962,8 @@ static integer c__100 = 100;
 /*        Fetch next batch of potential frame names. */
 
 	i__1 = total + 1;
-	gnpool_(kvtemp, &i__1, &c__100, &n, kvbuff, &found, (ftnlen)32, (
-		ftnlen)32);
+	gnpool_(kvtemp, &i__1, &__state->c__100, &n, kvbuff, &found, (ftnlen)
+		32, (ftnlen)32);
     }
 
 /*     At this point all kernel variables that matched the frame name */

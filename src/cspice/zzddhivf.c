@@ -1,20 +1,33 @@
-/* zzddhivf.f -- translated by f2c (version 19980913).
+/* zzddhivf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzddhivf_state_t;
+static zzddhivf_state_t* get_zzddhivf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDDHIVF ( Private --- DDH Identify VAX DAF File Format ) */
 /* Subroutine */ int zzddhivf_(char *nsum, integer *bff, logical *found, 
 	ftnlen nsum_len)
 {
     /* System generated locals */
+    integer i__1, i__2, i__3, i__4;
     char ch__1[1];
 
     /* Local variables */
-    integer leader, trailr;
+    integer leader;
+    integer trailr;
 
+
+    /* Module state */
+    zzddhivf_state_t* __state = get_zzddhivf_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -521,9 +534,9 @@
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Before diving right into the code that examines the bit patterns */
@@ -655,9 +668,17 @@
 /*     Convert the first and second characters in NSUM to integers. */
 
     *(unsigned char *)&ch__1[0] = *(unsigned char *)nsum;
-    leader = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+    i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+    i__1 = -1, i__2 = min(i__3,i__4);
+    leader = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
     *(unsigned char *)&ch__1[0] = *(unsigned char *)&nsum[1];
-    trailr = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+    i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+    i__1 = -1, i__2 = min(i__3,i__4);
+    trailr = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 
 /*     Shift the trailing 4 bits off LEADER. */
 

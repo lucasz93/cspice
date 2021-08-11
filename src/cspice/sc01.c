@@ -1,19 +1,21 @@
-/* sc01.f -- translated by f2c (version 19980913).
+/* sc01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__0 = 0;
-static integer c__1 = 1;
-static integer c_b22 = 150000;
-static integer c__9999 = 9999;
-static integer c__10 = 10;
-static integer c__30 = 30;
+extern sc01_init_t __sc01_init;
+static sc01_state_t* get_sc01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sc01)
+		state->sc01 = __cspice_allocate_module(sizeof(sc01_state_t), &
+	__sc01_init, sizeof(__sc01_init));
+	return state->sc01;
+
+}
 
 /* $Procedure      SC01 ( Spacecraft clock, type 1 ) */
 /* Subroutine */ int sc01_0_(int n__, integer *sc, char *clkstr, doublereal *
@@ -21,26 +23,6 @@ static integer c__30 = 30;
 {
     /* Initialized data */
 
-    static char bvlmsg[320] = "Invalid value of #. Value was #.             "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                                                                "
-	    "                   ";
-    static char del[1*5] = "." ":" "-" "," " ";
-    static logical first = TRUE_;
-    static char namlst[60*9] = "SCLK_KERNEL_ID                              "
-	    "                " "SCLK01_COEFFICIENTS                          "
-	    "               " "SCLK_PARTITION_START                          "
-	    "              " "SCLK_PARTITION_END                             "
-	    "             " "SCLK01_N_FIELDS                                 "
-	    "            " "SCLK01_OFFSETS                                   "
-	    "           " "SCLK01_MODULI                                     "
-	    "          " "SCLK01_OUTPUT_DELIM                                "
-	    "         " "SCLK01_TIME_SYSTEM                                  "
-	    "        ";
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -56,56 +38,43 @@ static integer c__30 = 30;
     integer i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static doublereal rate;
-    static integer pntr;
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
-    static integer i__, j, n;
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
-	    *, doublereal *, ftnlen), scli01_(char *, integer *, integer *, 
-	    integer *, integer *, ftnlen), chkin_(char *, ftnlen), errch_(
-	    char *, char *, ftnlen, ftnlen);
-    static doublereal prend[9999];
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int scli01_(char *, integer *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
-	    ftnlen), repmi_(char *, char *, integer *, char *, ftnlen, ftnlen,
-	     ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     extern integer sumai_(integer *, integer *);
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    static integer npart;
-    static doublereal const__;
-    static integer lower;
-    static char error[240];
-    static integer upper, ntsys, delcde;
     extern logical failed_(void);
-    static integer needed, middle, ncoeff;
-    static char dpchar[30];
-    static integer nfield;
-    static doublereal coeffs[150000]	/* was [3][50000] */, tikdif;
-    static char kvname[60*9];
-    static doublereal cmpval[10], moduli[10], maxwid, cmptks[10], mxtick, 
-	    offset[10];
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static doublereal partim, tikmsc, timdif;
-    static integer cmpwid[10], length[10];
-    static logical update;
     extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    static integer usrctr[2];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen), swpool_(char *, integer *, char *, ftnlen, ftnlen), 
-	    setmsg_(char *, ftnlen), lparsm_(char *, char *, integer *, 
-	    integer *, char *, ftnlen, ftnlen, ftnlen);
-    static integer timsys;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), nparsd_(
-	    char *, doublereal *, char *, integer *, ftnlen, ftnlen), dpstrf_(
-	    doublereal *, integer *, char *, char *, ftnlen, ftnlen), prefix_(
-	    char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal prstrt[9999];
-    static integer pad, end;
-    static char cmp[30*10];
-    static doublereal rem;
+	    ftnlen);
+    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int lparsm_(char *, char *, integer *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
 
+    /* Module state */
+    sc01_state_t* __state = get_sc01_state();
 /* $ Abstract */
 
 /*     Perform time conversions between different representations of */
@@ -960,39 +929,43 @@ L_sctk01:
 /*     clock ID changes, we will set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
-	first = FALSE_;
+    if (__state->first || *sc != __state->oldsc) {
+	__state->first = FALSE_;
 
 /*        Make up a list of names of kernel variables that we'll use. */
 /*        The first name in the list is SCLK_KERNEL_ID, which does not */
 /*        require the addition of a spacecraft code suffix.  For the */
 /*        rest of the names, we'll have to add the suffix. */
 
-	s_copy(kvname, namlst, (ftnlen)60, (ftnlen)60);
-	movec_(namlst, &c__9, kvname, (ftnlen)60, (ftnlen)60);
-	for (i__ = 2; i__ <= 9; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)895)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	s_copy(__state->kvname, __state->namlst, (ftnlen)60, (ftnlen)60);
+	movec_(__state->namlst, &__state->c__9, __state->kvname, (ftnlen)60, (
+		ftnlen)60);
+	for (__state->i__ = 2; __state->i__ <= 9; ++__state->i__) {
+	    suffix_("_#", &__state->c__0, __state->kvname + ((i__1 = 
+		    __state->i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("kvna"
+		    "me", i__1, "sc01_", (ftnlen)895)) * 60, (ftnlen)2, (
+		    ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "sc01_", (ftnlen)896)) * 60, "#", &
-		    i__3, kvname + ((i__2 = i__ - 1) < 9 && 0 <= i__2 ? i__2 :
-		     s_rnge("kvname", i__2, "sc01_", (ftnlen)896)) * 60, (
-		    ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__state->kvname + ((i__1 = __state->i__ - 1) < 9 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)896)
+		    ) * 60, "#", &i__3, __state->kvname + ((i__2 = 
+		    __state->i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge("kvna"
+		    "me", i__2, "sc01_", (ftnlen)896)) * 60, (ftnlen)60, (
+		    ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables we use. */
 
-	swpool_("SC01", &c__9, kvname, (ftnlen)4, (ftnlen)60);
+	swpool_("SC01", &__state->c__9, __state->kvname, (ftnlen)4, (ftnlen)
+		60);
 
 /*        Keep track of the last spacecraft clock ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
     }
 
 /*     Find out whether we need to look up new format descriptors from */
@@ -1002,8 +975,8 @@ L_sctk01:
 /*     do a look-up, we grab everything that any of the SC01 entry */
 /*     points might need. */
 
-    zzcvpool_("SC01", usrctr, &update, (ftnlen)4);
-    if (update || nodata) {
+    zzcvpool_("SC01", __state->usrctr, &__state->update, (ftnlen)4);
+    if (__state->update || __state->nodata) {
 
 /*        Our first piece of business is to look up all of the data */
 /*        we require from the kernel pool.  We must form the names */
@@ -1019,32 +992,40 @@ L_sctk01:
 /*           -  The partition start times */
 /*           -  The partition end times */
 
-	scli01_(namlst + 240, sc, &c__1, &n, &nfield, (ftnlen)60);
-	scli01_(namlst + 420, sc, &c__1, &n, &delcde, (ftnlen)60);
-	scli01_(namlst + 480, sc, &c__1, &ntsys, &timsys, (ftnlen)60);
-	scld01_(namlst + 60, sc, &c_b22, &ncoeff, coeffs, (ftnlen)60);
-	scld01_(namlst + 120, sc, &c__9999, &n, prstrt, (ftnlen)60);
-	scld01_(namlst + 180, sc, &c__9999, &npart, prend, (ftnlen)60);
-	scld01_(namlst + 360, sc, &c__10, &n, moduli, (ftnlen)60);
-	scld01_(namlst + 300, sc, &c__10, &n, offset, (ftnlen)60);
+	scli01_(__state->namlst + 240, sc, &__state->c__1, &__state->n, &
+		__state->nfield, (ftnlen)60);
+	scli01_(__state->namlst + 420, sc, &__state->c__1, &__state->n, &
+		__state->delcde, (ftnlen)60);
+	scli01_(__state->namlst + 480, sc, &__state->c__1, &__state->ntsys, &
+		__state->timsys, (ftnlen)60);
+	scld01_(__state->namlst + 60, sc, &__state->c_b22, &__state->ncoeff, 
+		__state->coeffs, (ftnlen)60);
+	scld01_(__state->namlst + 120, sc, &__state->c__9999, &__state->n, 
+		__state->prstrt, (ftnlen)60);
+	scld01_(__state->namlst + 180, sc, &__state->c__9999, &__state->npart,
+		 __state->prend, (ftnlen)60);
+	scld01_(__state->namlst + 360, sc, &__state->c__10, &__state->n, 
+		__state->moduli, (ftnlen)60);
+	scld01_(__state->namlst + 300, sc, &__state->c__10, &__state->n, 
+		__state->offset, (ftnlen)60);
 
 /*        Don't try to continue if we had a lookup error. */
 
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCTK01", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The kernel pool look-up succeeded. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Use the default time system (TDB) if none was specified in the */
 /*        SCLK kernel. */
 
-	if (ntsys == 0) {
-	    timsys = 1;
+	if (__state->ntsys == 0) {
+	    __state->timsys = 1;
 	}
     }
 
@@ -1059,14 +1040,16 @@ L_sctk01:
 
 /*     Determine how many ticks is each field is worth. */
 
-    cmptks[(i__1 = nfield - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-	    i__1, "sc01_", (ftnlen)997)] = 1.;
-    for (i__ = nfield - 1; i__ >= 1; --i__) {
-	cmptks[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-		i__1, "sc01_", (ftnlen)1000)] = cmptks[(i__2 = i__) < 10 && 0 
-		<= i__2 ? i__2 : s_rnge("cmptks", i__2, "sc01_", (ftnlen)1000)
-		] * moduli[(i__3 = i__) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		"moduli", i__3, "sc01_", (ftnlen)1000)];
+    __state->cmptks[(i__1 = __state->nfield - 1) < 10 && 0 <= i__1 ? i__1 : 
+	    s_rnge("cmptks", i__1, "sc01_", (ftnlen)997)] = 1.;
+    for (__state->i__ = __state->nfield - 1; __state->i__ >= 1; 
+	    --__state->i__) {
+	__state->cmptks[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? i__1 : 
+		s_rnge("cmptks", i__1, "sc01_", (ftnlen)1000)] = 
+		__state->cmptks[(i__2 = __state->i__) < 10 && 0 <= i__2 ? 
+		i__2 : s_rnge("cmptks", i__2, "sc01_", (ftnlen)1000)] * 
+		__state->moduli[(i__3 = __state->i__) < 10 && 0 <= i__3 ? 
+		i__3 : s_rnge("moduli", i__3, "sc01_", (ftnlen)1000)];
     }
 
 /*     Parse the clock components from the input string. There should */
@@ -1074,15 +1057,15 @@ L_sctk01:
 /*     a clock string, we'll let LPARSM take up to MXNFLD components and */
 /*     then test for an error. */
 
-    lparsm_(clkstr, ".:-, ", &c__10, &n, cmp, clkstr_len, (ftnlen)5, (ftnlen)
-	    30);
+    lparsm_(clkstr, ".:-, ", &__state->c__10, &__state->n, __state->cmp, 
+	    clkstr_len, (ftnlen)5, (ftnlen)30);
 
 /*     If the string has too many fields for the specified spacecraft */
 /*     then signal an error. */
 
-    if (n > nfield) {
+    if (__state->n > __state->nfield) {
 	setmsg_("CLKSTR has # fields, which is too many.", (ftnlen)39);
-	errint_("#", &n, (ftnlen)1);
+	errint_("#", &__state->n, (ftnlen)1);
 	sigerr_("SPICE(INVALIDSCLKSTRING)", (ftnlen)24);
 	chkout_("SCTK01", (ftnlen)6);
 	return 0;
@@ -1093,28 +1076,30 @@ L_sctk01:
 /*     to ' ', so assign the numeric value of the blank components */
 /*     to be equal to the offset value. */
 
-    i__1 = n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if (s_cmp(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmp", i__2, "sc01_", (ftnlen)1033)) * 30, " ", (ftnlen)30, (
-		ftnlen)1) == 0) {
-	    cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval"
-		    , i__2, "sc01_", (ftnlen)1034)] = offset[(i__3 = i__ - 1) 
-		    < 10 && 0 <= i__3 ? i__3 : s_rnge("offset", i__3, "sc01_",
-		     (ftnlen)1034)];
+    i__1 = __state->n;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	if (s_cmp(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= i__2 
+		? i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1033)) * 30, 
+		" ", (ftnlen)30, (ftnlen)1) == 0) {
+	    __state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? 
+		    i__2 : s_rnge("cmpval", i__2, "sc01_", (ftnlen)1034)] = 
+		    __state->offset[(i__3 = __state->i__ - 1) < 10 && 0 <= 
+		    i__3 ? i__3 : s_rnge("offset", i__3, "sc01_", (ftnlen)
+		    1034)];
 	} else {
-	    nparsd_(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cmp", i__2, "sc01_", (ftnlen)1036)) * 30, &cmpval[(i__3 =
-		     i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmpval", 
-		    i__3, "sc01_", (ftnlen)1036)], error, &pntr, (ftnlen)30, (
-		    ftnlen)240);
+	    nparsd_(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= 
+		    i__2 ? i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1036)) 
+		    * 30, &__state->cmpval[(i__3 = __state->i__ - 1) < 10 && 
+		    0 <= i__3 ? i__3 : s_rnge("cmpval", i__3, "sc01_", (
+		    ftnlen)1036)], __state->error, &__state->pntr, (ftnlen)30,
+		     (ftnlen)240);
 	}
-	if (s_cmp(error, " ", (ftnlen)240, (ftnlen)1) != 0) {
+	if (s_cmp(__state->error, " ", (ftnlen)240, (ftnlen)1) != 0) {
 	    setmsg_("Could not parse SCLK component # from # as a number.", (
 		    ftnlen)52);
-	    errch_("#", cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("cmp", i__2, "sc01_", (ftnlen)1044)) * 30, (ftnlen)
-		    1, (ftnlen)30);
+	    errch_("#", __state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <=
+		     i__2 ? i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1044))
+		     * 30, (ftnlen)1, (ftnlen)30);
 	    errch_("#", clkstr, (ftnlen)1, clkstr_len);
 	    sigerr_("SPICE(INVALIDSCLKSTRING)", (ftnlen)24);
 	    chkout_("SCTK01", (ftnlen)6);
@@ -1126,16 +1111,18 @@ L_sctk01:
 /*         as a result of the subtraction, then that component must */
 /*         have been invalid. */
 
-	cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval", 
-		i__2, "sc01_", (ftnlen)1058)] = cmpval[(i__3 = i__ - 1) < 10 
-		&& 0 <= i__3 ? i__3 : s_rnge("cmpval", i__3, "sc01_", (ftnlen)
-		1058)] - offset[(i__4 = i__ - 1) < 10 && 0 <= i__4 ? i__4 : 
-		s_rnge("offset", i__4, "sc01_", (ftnlen)1058)];
-	if (d_nint(&cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmpval", i__2, "sc01_", (ftnlen)1061)]) < 0.) {
+	__state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge("cmpval", i__2, "sc01_", (ftnlen)1058)] = 
+		__state->cmpval[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? 
+		i__3 : s_rnge("cmpval", i__3, "sc01_", (ftnlen)1058)] - 
+		__state->offset[(i__4 = __state->i__ - 1) < 10 && 0 <= i__4 ? 
+		i__4 : s_rnge("offset", i__4, "sc01_", (ftnlen)1058)];
+	if (d_nint(&__state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= 
+		i__2 ? i__2 : s_rnge("cmpval", i__2, "sc01_", (ftnlen)1061)]) 
+		< 0.) {
 	    setmsg_(" Component number # in the SCLK string  is invalid     "
 		    "                       ", (ftnlen)78);
-	    errint_("#", &i__, (ftnlen)1);
+	    errint_("#", &__state->i__, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDSCLKSTRING)", (ftnlen)24);
 	    chkout_("SCTK01", (ftnlen)6);
 	    return 0;
@@ -1147,12 +1134,12 @@ L_sctk01:
 /*     add up the results. */
 
     *ticks = 0.;
-    i__1 = n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	*ticks += cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmpval", i__2, "sc01_", (ftnlen)1082)] * cmptks[(i__3 = i__ 
-		- 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmptks", i__3, "sc01_"
-		, (ftnlen)1082)];
+    i__1 = __state->n;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	*ticks += __state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 
+		? i__2 : s_rnge("cmpval", i__2, "sc01_", (ftnlen)1082)] * 
+		__state->cmptks[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? 
+		i__3 : s_rnge("cmptks", i__3, "sc01_", (ftnlen)1082)];
     }
     chkout_("SCTK01", (ftnlen)6);
     return 0;
@@ -1476,39 +1463,43 @@ L_scfm01:
 /*     clock ID changes, we will set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
-	first = FALSE_;
+    if (__state->first || *sc != __state->oldsc) {
+	__state->first = FALSE_;
 
 /*        Make up a list of names of kernel variables that we'll use. */
 /*        The first name in the list is SCLK_KERNEL_ID, which does not */
 /*        require the addition of a spacecraft code suffix.  For the */
 /*        rest of the names, we'll have to add the suffix. */
 
-	s_copy(kvname, namlst, (ftnlen)60, (ftnlen)60);
-	movec_(namlst, &c__9, kvname, (ftnlen)60, (ftnlen)60);
-	for (i__ = 2; i__ <= 9; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)1432)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	s_copy(__state->kvname, __state->namlst, (ftnlen)60, (ftnlen)60);
+	movec_(__state->namlst, &__state->c__9, __state->kvname, (ftnlen)60, (
+		ftnlen)60);
+	for (__state->i__ = 2; __state->i__ <= 9; ++__state->i__) {
+	    suffix_("_#", &__state->c__0, __state->kvname + ((i__1 = 
+		    __state->i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("kvna"
+		    "me", i__1, "sc01_", (ftnlen)1432)) * 60, (ftnlen)2, (
+		    ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "sc01_", (ftnlen)1433)) * 60, 
-		    "#", &i__3, kvname + ((i__2 = i__ - 1) < 9 && 0 <= i__2 ? 
-		    i__2 : s_rnge("kvname", i__2, "sc01_", (ftnlen)1433)) * 
-		    60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__state->kvname + ((i__1 = __state->i__ - 1) < 9 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)
+		    1433)) * 60, "#", &i__3, __state->kvname + ((i__2 = 
+		    __state->i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge("kvna"
+		    "me", i__2, "sc01_", (ftnlen)1433)) * 60, (ftnlen)60, (
+		    ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables we use. */
 
-	swpool_("SC01", &c__9, kvname, (ftnlen)4, (ftnlen)60);
+	swpool_("SC01", &__state->c__9, __state->kvname, (ftnlen)4, (ftnlen)
+		60);
 
 /*        Keep track of the last spacecraft clock ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
     }
 
 /*     Find out whether we need to look up new format descriptors from */
@@ -1518,8 +1509,8 @@ L_scfm01:
 /*     do a look-up, we grab everything that any of the SC01 entry */
 /*     points might need. */
 
-    zzcvpool_("SC01", usrctr, &update, (ftnlen)4);
-    if (update || nodata) {
+    zzcvpool_("SC01", __state->usrctr, &__state->update, (ftnlen)4);
+    if (__state->update || __state->nodata) {
 
 /*        Our first piece of business is to look up all of the data */
 /*        we require from the kernel pool.  We must form the names */
@@ -1535,71 +1526,84 @@ L_scfm01:
 /*           -  The partition start times */
 /*           -  The partition end times */
 
-	scli01_(namlst + 240, sc, &c__1, &n, &nfield, (ftnlen)60);
-	scli01_(namlst + 420, sc, &c__1, &n, &delcde, (ftnlen)60);
-	scli01_(namlst + 480, sc, &c__1, &ntsys, &timsys, (ftnlen)60);
-	scld01_(namlst + 60, sc, &c_b22, &ncoeff, coeffs, (ftnlen)60);
-	scld01_(namlst + 120, sc, &c__9999, &n, prstrt, (ftnlen)60);
-	scld01_(namlst + 180, sc, &c__9999, &npart, prend, (ftnlen)60);
-	scld01_(namlst + 360, sc, &c__10, &n, moduli, (ftnlen)60);
-	scld01_(namlst + 300, sc, &c__10, &n, offset, (ftnlen)60);
+	scli01_(__state->namlst + 240, sc, &__state->c__1, &__state->n, &
+		__state->nfield, (ftnlen)60);
+	scli01_(__state->namlst + 420, sc, &__state->c__1, &__state->n, &
+		__state->delcde, (ftnlen)60);
+	scli01_(__state->namlst + 480, sc, &__state->c__1, &__state->ntsys, &
+		__state->timsys, (ftnlen)60);
+	scld01_(__state->namlst + 60, sc, &__state->c_b22, &__state->ncoeff, 
+		__state->coeffs, (ftnlen)60);
+	scld01_(__state->namlst + 120, sc, &__state->c__9999, &__state->n, 
+		__state->prstrt, (ftnlen)60);
+	scld01_(__state->namlst + 180, sc, &__state->c__9999, &__state->npart,
+		 __state->prend, (ftnlen)60);
+	scld01_(__state->namlst + 360, sc, &__state->c__10, &__state->n, 
+		__state->moduli, (ftnlen)60);
+	scld01_(__state->namlst + 300, sc, &__state->c__10, &__state->n, 
+		__state->offset, (ftnlen)60);
 
 /*        Don't try to continue if we had a lookup error. */
 
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCFM01", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The kernel pool look-up succeeded. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Use the default time system (TDB) if none was specified in the */
 /*        SCLK kernel. */
 
-	if (ntsys == 0) {
-	    timsys = 1;
+	if (__state->ntsys == 0) {
+	    __state->timsys = 1;
 	}
     }
 
 /*     Determine how many ticks each field is worth. */
 
-    cmptks[(i__1 = nfield - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-	    i__1, "sc01_", (ftnlen)1520)] = 1.;
-    for (i__ = nfield - 1; i__ >= 1; --i__) {
-	cmptks[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmptks", 
-		i__1, "sc01_", (ftnlen)1523)] = cmptks[(i__2 = i__) < 10 && 0 
-		<= i__2 ? i__2 : s_rnge("cmptks", i__2, "sc01_", (ftnlen)1523)
-		] * moduli[(i__3 = i__) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		"moduli", i__3, "sc01_", (ftnlen)1523)];
+    __state->cmptks[(i__1 = __state->nfield - 1) < 10 && 0 <= i__1 ? i__1 : 
+	    s_rnge("cmptks", i__1, "sc01_", (ftnlen)1520)] = 1.;
+    for (__state->i__ = __state->nfield - 1; __state->i__ >= 1; 
+	    --__state->i__) {
+	__state->cmptks[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? i__1 : 
+		s_rnge("cmptks", i__1, "sc01_", (ftnlen)1523)] = 
+		__state->cmptks[(i__2 = __state->i__) < 10 && 0 <= i__2 ? 
+		i__2 : s_rnge("cmptks", i__2, "sc01_", (ftnlen)1523)] * 
+		__state->moduli[(i__3 = __state->i__) < 10 && 0 <= i__3 ? 
+		i__3 : s_rnge("moduli", i__3, "sc01_", (ftnlen)1523)];
     }
 
 /*     Determine the width of each field. */
 
-    i__1 = nfield;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	maxwid = moduli[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"moduli", i__2, "sc01_", (ftnlen)1531)] + offset[(i__3 = i__ 
-		- 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("offset", i__3, "sc01_"
-		, (ftnlen)1531)] - 1.;
-	d__1 = maxwid + .5;
-	cmpwid[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpwid", 
-		i__2, "sc01_", (ftnlen)1533)] = (integer) d_lg10(&d__1) + 1;
+    i__1 = __state->nfield;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	__state->maxwid = __state->moduli[(i__2 = __state->i__ - 1) < 10 && 0 
+		<= i__2 ? i__2 : s_rnge("moduli", i__2, "sc01_", (ftnlen)1531)
+		] + __state->offset[(i__3 = __state->i__ - 1) < 10 && 0 <= 
+		i__3 ? i__3 : s_rnge("offset", i__3, "sc01_", (ftnlen)1531)] 
+		- 1.;
+	d__1 = __state->maxwid + .5;
+	__state->cmpwid[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge("cmpwid", i__2, "sc01_", (ftnlen)1533)] = (integer) 
+		d_lg10(&d__1) + 1;
     }
 
 /*     Check whether the output string is long enough to contain the */
 /*     string we're about to assemble.  We need room for (NFIELD - 1) */
 /*     delimiters as well as for the numeric fields. */
 
-    needed = nfield - 1 + sumai_(cmpwid, &nfield);
-    if (i_len(clkstr, clkstr_len) < needed) {
+    __state->needed = __state->nfield - 1 + sumai_(__state->cmpwid, &
+	    __state->nfield);
+    if (i_len(clkstr, clkstr_len) < __state->needed) {
 	setmsg_("Output argument has declared length #; required length is #"
 		". Input tick value was #.", (ftnlen)84);
 	i__1 = i_len(clkstr, clkstr_len);
 	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &needed, (ftnlen)1);
+	errint_("#", &__state->needed, (ftnlen)1);
 	errdp_("#", ticks, (ftnlen)1);
 	sigerr_("SPICE(SCLKTRUNCATED)", (ftnlen)20);
 	chkout_("SCFM01", (ftnlen)6);
@@ -1620,53 +1624,58 @@ L_scfm01:
 /*     successively dividing by the number of ticks each component value */
 /*     is worth. */
 
-    rem = d_nint(ticks);
-    i__1 = nfield - 1;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	d__1 = rem / cmptks[(i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		s_rnge("cmptks", i__3, "sc01_", (ftnlen)1580)];
-	cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmpval", 
-		i__2, "sc01_", (ftnlen)1580)] = d_int(&d__1) + offset[(i__4 = 
-		i__ - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge("offset", i__4, 
-		"sc01_", (ftnlen)1580)];
-	rem = d_mod(&rem, &cmptks[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		s_rnge("cmptks", i__2, "sc01_", (ftnlen)1581)]);
+    __state->rem = d_nint(ticks);
+    i__1 = __state->nfield - 1;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	d__1 = __state->rem / __state->cmptks[(i__2 = __state->i__ - 1) < 10 
+		&& 0 <= i__2 ? i__2 : s_rnge("cmptks", i__2, "sc01_", (ftnlen)
+		1580)];
+	__state->cmpval[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
+		s_rnge("cmpval", i__3, "sc01_", (ftnlen)1580)] = d_int(&d__1) 
+		+ __state->offset[(i__4 = __state->i__ - 1) < 10 && 0 <= i__4 
+		? i__4 : s_rnge("offset", i__4, "sc01_", (ftnlen)1580)];
+	__state->rem = d_mod(&__state->rem, &__state->cmptks[(i__2 = 
+		__state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmptks", 
+		i__2, "sc01_", (ftnlen)1581)]);
     }
-    cmpval[(i__1 = nfield - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("cmpval", 
-	    i__1, "sc01_", (ftnlen)1585)] = rem + offset[(i__2 = nfield - 1) <
-	     10 && 0 <= i__2 ? i__2 : s_rnge("offset", i__2, "sc01_", (ftnlen)
-	    1585)];
+    __state->cmpval[(i__1 = __state->nfield - 1) < 10 && 0 <= i__1 ? i__1 : 
+	    s_rnge("cmpval", i__1, "sc01_", (ftnlen)1585)] = __state->rem + 
+	    __state->offset[(i__2 = __state->nfield - 1) < 10 && 0 <= i__2 ? 
+	    i__2 : s_rnge("offset", i__2, "sc01_", (ftnlen)1585)];
 
 /*     Convert the values of each component from double precision */
 /*     numbers to character strings. */
 
-    i__1 = nfield;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	dpstrf_(&cmpval[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmpval", i__2, "sc01_", (ftnlen)1593)], &c__30, "F", dpchar, 
-		(ftnlen)1, (ftnlen)30);
-	end = i_indx(dpchar, ".", (ftnlen)30, (ftnlen)1) - 1;
-	length[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("length", 
-		i__2, "sc01_", (ftnlen)1596)] = end - 1;
-	s_copy(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cmp", i__2, "sc01_", (ftnlen)1597)) * 30, dpchar + 1, (
-		ftnlen)30, end - 1);
+    i__1 = __state->nfield;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	dpstrf_(&__state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ?
+		 i__2 : s_rnge("cmpval", i__2, "sc01_", (ftnlen)1593)], &
+		__state->c__30, "F", __state->dpchar, (ftnlen)1, (ftnlen)30);
+	__state->end = i_indx(__state->dpchar, ".", (ftnlen)30, (ftnlen)1) - 
+		1;
+	__state->length[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge("length", i__2, "sc01_", (ftnlen)1596)] = __state->end 
+		- 1;
+	s_copy(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? 
+		i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1597)) * 30, 
+		__state->dpchar + 1, (ftnlen)30, __state->end - 1);
     }
 
 /*     Pad on the left with zeros if necessary. */
 
-    i__1 = nfield;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	pad = cmpwid[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("cmp"
-		"wid", i__2, "sc01_", (ftnlen)1606)] - length[(i__3 = i__ - 1) 
-		< 10 && 0 <= i__3 ? i__3 : s_rnge("length", i__3, "sc01_", (
-		ftnlen)1606)];
-	if (pad > 0) {
-	    i__2 = pad;
-	    for (j = 1; j <= i__2; ++j) {
-		prefix_("0", &c__0, cmp + ((i__3 = i__ - 1) < 10 && 0 <= i__3 
-			? i__3 : s_rnge("cmp", i__3, "sc01_", (ftnlen)1611)) *
-			 30, (ftnlen)1, (ftnlen)30);
+    i__1 = __state->nfield;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	__state->pad = __state->cmpwid[(i__2 = __state->i__ - 1) < 10 && 0 <= 
+		i__2 ? i__2 : s_rnge("cmpwid", i__2, "sc01_", (ftnlen)1606)] 
+		- __state->length[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 
+		? i__3 : s_rnge("length", i__3, "sc01_", (ftnlen)1606)];
+	if (__state->pad > 0) {
+	    i__2 = __state->pad;
+	    for (__state->j = 1; __state->j <= i__2; ++__state->j) {
+		prefix_("0", &__state->c__0, __state->cmp + ((i__3 = 
+			__state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
+			"cmp", i__3, "sc01_", (ftnlen)1611)) * 30, (ftnlen)1, 
+			(ftnlen)30);
 	    }
 	}
     }
@@ -1674,23 +1683,24 @@ L_scfm01:
 /*     Construct the clock string with a delimiter separating */
 /*     each field. */
 
-    s_copy(clkstr, cmp, clkstr_len, (ftnlen)30);
-    i__1 = nfield;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-	if (*(unsigned char *)&del[(i__2 = delcde - 1) < 5 && 0 <= i__2 ? 
-		i__2 : s_rnge("del", i__2, "sc01_", (ftnlen)1626)] != ' ') {
-	    prefix_(del + ((i__2 = delcde - 1) < 5 && 0 <= i__2 ? i__2 : 
-		    s_rnge("del", i__2, "sc01_", (ftnlen)1628)), &c__0, cmp + 
-		    ((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cmp",
-		     i__3, "sc01_", (ftnlen)1628)) * 30, (ftnlen)1, (ftnlen)
-		    30);
-	    suffix_(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cmp", i__2, "sc01_", (ftnlen)1629)) * 30, &c__0, clkstr, 
-		    (ftnlen)30, clkstr_len);
+    s_copy(clkstr, __state->cmp, clkstr_len, (ftnlen)30);
+    i__1 = __state->nfield;
+    for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
+	if (*(unsigned char *)&__state->del[(i__2 = __state->delcde - 1) < 5 
+		&& 0 <= i__2 ? i__2 : s_rnge("del", i__2, "sc01_", (ftnlen)
+		1626)] != ' ') {
+	    prefix_(__state->del + ((i__2 = __state->delcde - 1) < 5 && 0 <= 
+		    i__2 ? i__2 : s_rnge("del", i__2, "sc01_", (ftnlen)1628)),
+		     &__state->c__0, __state->cmp + ((i__3 = __state->i__ - 1)
+		     < 10 && 0 <= i__3 ? i__3 : s_rnge("cmp", i__3, "sc01_", (
+		    ftnlen)1628)) * 30, (ftnlen)1, (ftnlen)30);
+	    suffix_(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= 
+		    i__2 ? i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1629)) 
+		    * 30, &__state->c__0, clkstr, (ftnlen)30, clkstr_len);
 	} else {
-	    suffix_(cmp + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cmp", i__2, "sc01_", (ftnlen)1631)) * 30, &c__1, clkstr, 
-		    (ftnlen)30, clkstr_len);
+	    suffix_(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= 
+		    i__2 ? i__2 : s_rnge("cmp", i__2, "sc01_", (ftnlen)1631)) 
+		    * 30, &__state->c__1, clkstr, (ftnlen)30, clkstr_len);
 	}
     }
     chkout_("SCFM01", (ftnlen)6);
@@ -2001,38 +2011,42 @@ L_scte01:
 /*     clock ID changes, we will set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
-	first = FALSE_;
+    if (__state->first || *sc != __state->oldsc) {
+	__state->first = FALSE_;
 
 /*        Make up a list of names of kernel variables that we'll use. */
 /*        The first name in the list is SCLK_KERNEL_ID, which does not */
 /*        require the addition of a spacecraft code suffix.  For the */
 /*        rest of the names, we'll have to add the suffix. */
 
-	movec_(namlst, &c__9, kvname, (ftnlen)60, (ftnlen)60);
-	for (i__ = 2; i__ <= 9; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)1968)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	movec_(__state->namlst, &__state->c__9, __state->kvname, (ftnlen)60, (
+		ftnlen)60);
+	for (__state->i__ = 2; __state->i__ <= 9; ++__state->i__) {
+	    suffix_("_#", &__state->c__0, __state->kvname + ((i__1 = 
+		    __state->i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("kvna"
+		    "me", i__1, "sc01_", (ftnlen)1968)) * 60, (ftnlen)2, (
+		    ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "sc01_", (ftnlen)1969)) * 60, 
-		    "#", &i__3, kvname + ((i__2 = i__ - 1) < 9 && 0 <= i__2 ? 
-		    i__2 : s_rnge("kvname", i__2, "sc01_", (ftnlen)1969)) * 
-		    60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__state->kvname + ((i__1 = __state->i__ - 1) < 9 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)
+		    1969)) * 60, "#", &i__3, __state->kvname + ((i__2 = 
+		    __state->i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge("kvna"
+		    "me", i__2, "sc01_", (ftnlen)1969)) * 60, (ftnlen)60, (
+		    ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables we use. */
 
-	swpool_("SC01", &c__9, kvname, (ftnlen)4, (ftnlen)60);
+	swpool_("SC01", &__state->c__9, __state->kvname, (ftnlen)4, (ftnlen)
+		60);
 
 /*        Keep track of the last spacecraft clock ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
     }
 
 /*     Find out whether we need to look up new format descriptors from */
@@ -2042,8 +2056,8 @@ L_scte01:
 /*     do a look-up, we grab everything that any of the SC01 entry */
 /*     points might need. */
 
-    zzcvpool_("SC01", usrctr, &update, (ftnlen)4);
-    if (update || nodata) {
+    zzcvpool_("SC01", __state->usrctr, &__state->update, (ftnlen)4);
+    if (__state->update || __state->nodata) {
 
 /*        Our first piece of business is to look up all of the data */
 /*        we require from the kernel pool.  We must form the names */
@@ -2059,32 +2073,40 @@ L_scte01:
 /*           -  The partition start times */
 /*           -  The partition end times */
 
-	scli01_(namlst + 240, sc, &c__1, &n, &nfield, (ftnlen)60);
-	scli01_(namlst + 420, sc, &c__1, &n, &delcde, (ftnlen)60);
-	scli01_(namlst + 480, sc, &c__1, &ntsys, &timsys, (ftnlen)60);
-	scld01_(namlst + 60, sc, &c_b22, &ncoeff, coeffs, (ftnlen)60);
-	scld01_(namlst + 120, sc, &c__9999, &n, prstrt, (ftnlen)60);
-	scld01_(namlst + 180, sc, &c__9999, &npart, prend, (ftnlen)60);
-	scld01_(namlst + 360, sc, &c__10, &n, moduli, (ftnlen)60);
-	scld01_(namlst + 300, sc, &c__10, &n, offset, (ftnlen)60);
+	scli01_(__state->namlst + 240, sc, &__state->c__1, &__state->n, &
+		__state->nfield, (ftnlen)60);
+	scli01_(__state->namlst + 420, sc, &__state->c__1, &__state->n, &
+		__state->delcde, (ftnlen)60);
+	scli01_(__state->namlst + 480, sc, &__state->c__1, &__state->ntsys, &
+		__state->timsys, (ftnlen)60);
+	scld01_(__state->namlst + 60, sc, &__state->c_b22, &__state->ncoeff, 
+		__state->coeffs, (ftnlen)60);
+	scld01_(__state->namlst + 120, sc, &__state->c__9999, &__state->n, 
+		__state->prstrt, (ftnlen)60);
+	scld01_(__state->namlst + 180, sc, &__state->c__9999, &__state->npart,
+		 __state->prend, (ftnlen)60);
+	scld01_(__state->namlst + 360, sc, &__state->c__10, &__state->n, 
+		__state->moduli, (ftnlen)60);
+	scld01_(__state->namlst + 300, sc, &__state->c__10, &__state->n, 
+		__state->offset, (ftnlen)60);
 
 /*        Don't try to continue if we had a lookup error. */
 
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCTE01", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The kernel pool look-up succeeded. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Use the default time system (TDB) if none was specified in the */
 /*        SCLK kernel. */
 
-	if (ntsys == 0) {
-	    timsys = 1;
+	if (__state->ntsys == 0) {
+	    __state->timsys = 1;
 	}
     }
 
@@ -2092,22 +2114,23 @@ L_scte01:
 /*     of the last partition, in total ticks since spacecraft clock */
 /*     start. */
 
-    mxtick = 0.;
-    i__1 = npart;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	d__1 = prend[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(
-		"prend", i__2, "sc01_", (ftnlen)2061)] - prstrt[(i__3 = i__ - 
-		1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("prstrt", i__3, "sc01_"
-		, (ftnlen)2061)] + mxtick;
-	mxtick = d_nint(&d__1);
+    __state->mxtick = 0.;
+    i__1 = __state->npart;
+    for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
+	d__1 = __state->prend[(i__2 = __state->i__ - 1) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge("prend", i__2, "sc01_", (ftnlen)2061)] - 
+		__state->prstrt[(i__3 = __state->i__ - 1) < 9999 && 0 <= i__3 
+		? i__3 : s_rnge("prstrt", i__3, "sc01_", (ftnlen)2061)] + 
+		__state->mxtick;
+	__state->mxtick = d_nint(&d__1);
     }
 
 /*     We now check that SCLKDP is in range.  COEFFS(1,1) and */
 /*     MXTICK are, respectively, the first and last absolute */
 /*     tick values of the clock. */
 
-    if (*sclkdp < coeffs[0] || *sclkdp > mxtick) {
-	setmsg_(bvlmsg, (ftnlen)320);
+    if (*sclkdp < __state->coeffs[0] || *sclkdp > __state->mxtick) {
+	setmsg_(__state->bvlmsg, (ftnlen)320);
 	errch_("#", "SCLKDP", (ftnlen)1, (ftnlen)6);
 	errdp_("#", sclkdp, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
@@ -2135,10 +2158,11 @@ L_scte01:
 /*           coefficients.  In that case, we don't need to search:  the */
 /*           last SCLK value in the array is the one we want. */
 
-    if (*sclkdp < coeffs[(i__1 = ncoeff / 3 * 3 - 3) < 150000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2105)]) {
-	lower = 1;
-	upper = ncoeff / 3;
+    if (*sclkdp < __state->coeffs[(i__1 = __state->ncoeff / 3 * 3 - 3) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)2105)]) {
+	__state->lower = 1;
+	__state->upper = __state->ncoeff / 3;
 
 /*        In the following loop, we maintain an invariant: */
 
@@ -2152,14 +2176,14 @@ L_scte01:
 /*        Note that we start out with if LOWER < UPPER, since we've */
 /*        already made sure that the invariant expression above is true. */
 
-	while(lower < upper - 1) {
-	    middle = (lower + upper) / 2;
-	    if (*sclkdp < coeffs[(i__1 = middle * 3 - 3) < 150000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)
-		    2127)]) {
-		upper = middle;
+	while(__state->lower < __state->upper - 1) {
+	    __state->middle = (__state->lower + __state->upper) / 2;
+	    if (*sclkdp < __state->coeffs[(i__1 = __state->middle * 3 - 3) < 
+		    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc0"
+		    "1_", (ftnlen)2127)]) {
+		__state->upper = __state->middle;
 	    } else {
-		lower = middle;
+		__state->lower = __state->middle;
 	    }
 	}
 
@@ -2181,7 +2205,7 @@ L_scte01:
 /*        SCLKDP is greater than or equal to all of the SCLK */
 /*        coefficients in the coefficients array. */
 
-	lower = ncoeff / 3;
+	__state->lower = __state->ncoeff / 3;
     }
 
 /*     Now we evaluate a linear polynomial to find the time value that */
@@ -2196,27 +2220,31 @@ L_scte01:
 /*     SCLK count, so we use the conversion factor TIKMSC to change the */
 /*     rate to seconds per tick. */
 
-    tikmsc = 1.;
-    for (i__ = nfield; i__ >= 2; --i__) {
-	tikmsc *= moduli[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"moduli", i__1, "sc01_", (ftnlen)2175)];
+    __state->tikmsc = 1.;
+    for (__state->i__ = __state->nfield; __state->i__ >= 2; --__state->i__) {
+	__state->tikmsc *= __state->moduli[(i__1 = __state->i__ - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge("moduli", i__1, "sc01_", (ftnlen)
+		2175)];
     }
-    tikdif = *sclkdp - coeffs[(i__1 = lower * 3 - 3) < 150000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2178)];
-    const__ = coeffs[(i__1 = lower * 3 - 2) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)2179)];
-    rate = coeffs[(i__1 = lower * 3 - 1) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)2180)] / tikmsc;
-    partim = const__ + rate * tikdif;
+    __state->tikdif = *sclkdp - __state->coeffs[(i__1 = __state->lower * 3 - 
+	    3) < 150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", 
+	    (ftnlen)2178)];
+    __state->const__ = __state->coeffs[(i__1 = __state->lower * 3 - 2) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)2179)];
+    __state->rate = __state->coeffs[(i__1 = __state->lower * 3 - 1) < 150000 
+	    && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)
+	    2180)] / __state->tikmsc;
+    __state->partim = __state->const__ + __state->rate * __state->tikdif;
 
 /*     Convert the parallel time to TDB, if the system is not TDB. */
 /*     We don't need to check the validity of TIMSYS, because SCLI01 */
 /*     already made this check. */
 
-    if (timsys == 1) {
-	*et = partim;
-    } else if (timsys == 2) {
-	*et = unitim_(&partim, "TDT", "TDB", (ftnlen)3, (ftnlen)3);
+    if (__state->timsys == 1) {
+	*et = __state->partim;
+    } else if (__state->timsys == 2) {
+	*et = unitim_(&__state->partim, "TDT", "TDB", (ftnlen)3, (ftnlen)3);
     }
     chkout_("SCTE01", (ftnlen)6);
     return 0;
@@ -2535,38 +2563,42 @@ L_scet01:
 /*     clock ID changes, we will set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
-	first = FALSE_;
+    if (__state->first || *sc != __state->oldsc) {
+	__state->first = FALSE_;
 
 /*        Make up a list of names of kernel variables that we'll use. */
 /*        The first name in the list is SCLK_KERNEL_ID, which does not */
 /*        require the addition of a spacecraft code suffix.  For the */
 /*        rest of the names, we'll have to add the suffix. */
 
-	movec_(namlst, &c__9, kvname, (ftnlen)60, (ftnlen)60);
-	for (i__ = 2; i__ <= 9; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)2541)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	movec_(__state->namlst, &__state->c__9, __state->kvname, (ftnlen)60, (
+		ftnlen)60);
+	for (__state->i__ = 2; __state->i__ <= 9; ++__state->i__) {
+	    suffix_("_#", &__state->c__0, __state->kvname + ((i__1 = 
+		    __state->i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("kvna"
+		    "me", i__1, "sc01_", (ftnlen)2541)) * 60, (ftnlen)2, (
+		    ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "sc01_", (ftnlen)2542)) * 60, 
-		    "#", &i__3, kvname + ((i__2 = i__ - 1) < 9 && 0 <= i__2 ? 
-		    i__2 : s_rnge("kvname", i__2, "sc01_", (ftnlen)2542)) * 
-		    60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__state->kvname + ((i__1 = __state->i__ - 1) < 9 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)
+		    2542)) * 60, "#", &i__3, __state->kvname + ((i__2 = 
+		    __state->i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge("kvna"
+		    "me", i__2, "sc01_", (ftnlen)2542)) * 60, (ftnlen)60, (
+		    ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables we use. */
 
-	swpool_("SC01", &c__9, kvname, (ftnlen)4, (ftnlen)60);
+	swpool_("SC01", &__state->c__9, __state->kvname, (ftnlen)4, (ftnlen)
+		60);
 
 /*        Keep track of the last spacecraft clock ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
     }
 
 /*     Find out whether we need to look up new format descriptors from */
@@ -2576,8 +2608,8 @@ L_scet01:
 /*     do a look-up, we grab everything that any of the SC01 entry */
 /*     points might need. */
 
-    zzcvpool_("SC01", usrctr, &update, (ftnlen)4);
-    if (update || nodata) {
+    zzcvpool_("SC01", __state->usrctr, &__state->update, (ftnlen)4);
+    if (__state->update || __state->nodata) {
 
 /*        Our first piece of business is to look up all of the data */
 /*        we require from the kernel pool.  We must form the names */
@@ -2593,32 +2625,40 @@ L_scet01:
 /*           -  The partition start times */
 /*           -  The partition end times */
 
-	scli01_(namlst + 240, sc, &c__1, &n, &nfield, (ftnlen)60);
-	scli01_(namlst + 420, sc, &c__1, &n, &delcde, (ftnlen)60);
-	scli01_(namlst + 480, sc, &c__1, &ntsys, &timsys, (ftnlen)60);
-	scld01_(namlst + 60, sc, &c_b22, &ncoeff, coeffs, (ftnlen)60);
-	scld01_(namlst + 120, sc, &c__9999, &n, prstrt, (ftnlen)60);
-	scld01_(namlst + 180, sc, &c__9999, &npart, prend, (ftnlen)60);
-	scld01_(namlst + 360, sc, &c__10, &n, moduli, (ftnlen)60);
-	scld01_(namlst + 300, sc, &c__10, &n, offset, (ftnlen)60);
+	scli01_(__state->namlst + 240, sc, &__state->c__1, &__state->n, &
+		__state->nfield, (ftnlen)60);
+	scli01_(__state->namlst + 420, sc, &__state->c__1, &__state->n, &
+		__state->delcde, (ftnlen)60);
+	scli01_(__state->namlst + 480, sc, &__state->c__1, &__state->ntsys, &
+		__state->timsys, (ftnlen)60);
+	scld01_(__state->namlst + 60, sc, &__state->c_b22, &__state->ncoeff, 
+		__state->coeffs, (ftnlen)60);
+	scld01_(__state->namlst + 120, sc, &__state->c__9999, &__state->n, 
+		__state->prstrt, (ftnlen)60);
+	scld01_(__state->namlst + 180, sc, &__state->c__9999, &__state->npart,
+		 __state->prend, (ftnlen)60);
+	scld01_(__state->namlst + 360, sc, &__state->c__10, &__state->n, 
+		__state->moduli, (ftnlen)60);
+	scld01_(__state->namlst + 300, sc, &__state->c__10, &__state->n, 
+		__state->offset, (ftnlen)60);
 
 /*        Don't try to continue if we had a lookup error. */
 
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCET01", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The kernel pool look-up succeeded. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Use the default time system (TDB) if none was specified in the */
 /*        SCLK kernel. */
 
-	if (ntsys == 0) {
-	    timsys = 1;
+	if (__state->ntsys == 0) {
+	    __state->timsys = 1;
 	}
     }
 
@@ -2628,10 +2668,10 @@ L_scet01:
 /*     We don't need to check the validity of TIMSYS, because SCLI01 */
 /*     already made this check. */
 
-    if (timsys == 1) {
-	partim = *et;
-    } else if (timsys == 2) {
-	partim = unitim_(et, "TDB", "TDT", (ftnlen)3, (ftnlen)3);
+    if (__state->timsys == 1) {
+	__state->partim = *et;
+    } else if (__state->timsys == 2) {
+	__state->partim = unitim_(et, "TDB", "TDT", (ftnlen)3, (ftnlen)3);
     }
 
 /*     We'd like to ascertain whether PARTIM is between the minimum */
@@ -2670,13 +2710,14 @@ L_scet01:
 /*           last time value in the array is the one we want. */
 
 
-    if (partim < coeffs[1]) {
+    if (__state->partim < __state->coeffs[1]) {
 
 /*        The coefficient set to use for extrapolation is the first. */
 
-	lower = 1;
-    } else if (partim < coeffs[(i__1 = ncoeff / 3 * 3 - 2) < 150000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2688)]) {
+	__state->lower = 1;
+    } else if (__state->partim < __state->coeffs[(i__1 = __state->ncoeff / 3 *
+	     3 - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, 
+	    "sc01_", (ftnlen)2688)]) {
 
 /*        In the following loop, we maintain an invariant: */
 
@@ -2690,15 +2731,16 @@ L_scet01:
 /*        Note that we start out with if LOWER < UPPER, since we've */
 /*        already made sure that the invariant expression above is true. */
 
-	lower = 1;
-	upper = ncoeff / 3;
-	while(lower < upper - 1) {
-	    middle = (lower + upper) / 2;
-	    if (partim < coeffs[(i__1 = middle * 3 - 2) < 150000 && 0 <= i__1 
-		    ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2710)]) {
-		upper = middle;
+	__state->lower = 1;
+	__state->upper = __state->ncoeff / 3;
+	while(__state->lower < __state->upper - 1) {
+	    __state->middle = (__state->lower + __state->upper) / 2;
+	    if (__state->partim < __state->coeffs[(i__1 = __state->middle * 3 
+		    - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1,
+		     "sc01_", (ftnlen)2710)]) {
+		__state->upper = __state->middle;
 	    } else {
-		lower = middle;
+		__state->lower = __state->middle;
 	    }
 	}
 
@@ -2720,7 +2762,7 @@ L_scet01:
 /*        PARTIM is greater than or equal to all of the time values in */
 /*        the coefficients array. */
 
-	lower = ncoeff / 3;
+	__state->lower = __state->ncoeff / 3;
     }
 
 /*     Now we evaluate a linear polynomial to find the tick value that */
@@ -2739,25 +2781,29 @@ L_scet01:
 /*     We use the generic `nearest whole number' function ANINT to */
 /*     ensure this. */
 
-    timdif = partim - coeffs[(i__1 = lower * 3 - 2) < 150000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2759)];
-    const__ = coeffs[(i__1 = lower * 3 - 3) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)2760)];
-    if (coeffs[(i__1 = lower * 3 - 1) < 150000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "coeffs", i__1, "sc01_", (ftnlen)2762)] <= 0.) {
+    __state->timdif = __state->partim - __state->coeffs[(i__1 = 
+	    __state->lower * 3 - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge(
+	    "coeffs", i__1, "sc01_", (ftnlen)2759)];
+    __state->const__ = __state->coeffs[(i__1 = __state->lower * 3 - 3) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)2760)];
+    if (__state->coeffs[(i__1 = __state->lower * 3 - 1) < 150000 && 0 <= i__1 
+	    ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)2762)] <= 0.) {
 	setmsg_("Invalid SCLK rate.", (ftnlen)18);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("SCET01", (ftnlen)6);
 	return 0;
     }
-    tikmsc = 1.;
-    for (i__ = nfield; i__ >= 2; --i__) {
-	tikmsc *= moduli[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"moduli", i__1, "sc01_", (ftnlen)2775)];
+    __state->tikmsc = 1.;
+    for (__state->i__ = __state->nfield; __state->i__ >= 2; --__state->i__) {
+	__state->tikmsc *= __state->moduli[(i__1 = __state->i__ - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge("moduli", i__1, "sc01_", (ftnlen)
+		2775)];
     }
-    rate = 1. / (coeffs[(i__1 = lower * 3 - 1) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)2778)] / tikmsc);
-    d__1 = const__ + rate * timdif;
+    __state->rate = 1. / (__state->coeffs[(i__1 = __state->lower * 3 - 1) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)2778)] / __state->tikmsc);
+    d__1 = __state->const__ + __state->rate * __state->timdif;
     *sclkdp = d_nint(&d__1);
 
 /*     Now, we'll see whether the SCLK value we've found is meaningful. */
@@ -2766,15 +2812,16 @@ L_scet01:
 /*     range, we must find the end time of the last partition, in total */
 /*     ticks since spacecraft clock start. */
 
-    d__1 = prend[0] - prstrt[0];
-    mxtick = d_nint(&d__1);
-    i__1 = npart;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-	d__1 = prend[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(
-		"prend", i__2, "sc01_", (ftnlen)2792)] - prstrt[(i__3 = i__ - 
-		1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("prstrt", i__3, "sc01_"
-		, (ftnlen)2792)] + mxtick;
-	mxtick = d_nint(&d__1);
+    d__1 = __state->prend[0] - __state->prstrt[0];
+    __state->mxtick = d_nint(&d__1);
+    i__1 = __state->npart;
+    for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
+	d__1 = __state->prend[(i__2 = __state->i__ - 1) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge("prend", i__2, "sc01_", (ftnlen)2792)] - 
+		__state->prstrt[(i__3 = __state->i__ - 1) < 9999 && 0 <= i__3 
+		? i__3 : s_rnge("prstrt", i__3, "sc01_", (ftnlen)2792)] + 
+		__state->mxtick;
+	__state->mxtick = d_nint(&d__1);
     }
 
 /*     Make sure that ET does not precede the ET corresponding to */
@@ -2787,9 +2834,9 @@ L_scet01:
 /*     direct comparisons without tolerances are possible. */
 
     *sclkdp = d_nint(sclkdp);
-    coeffs[0] = d_nint(coeffs);
-    if (*sclkdp < coeffs[0] || *sclkdp > mxtick) {
-	setmsg_(bvlmsg, (ftnlen)320);
+    __state->coeffs[0] = d_nint(__state->coeffs);
+    if (*sclkdp < __state->coeffs[0] || *sclkdp > __state->mxtick) {
+	setmsg_(__state->bvlmsg, (ftnlen)320);
 	errch_("#", "ET", (ftnlen)1, (ftnlen)2);
 	errdp_("#", et, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
@@ -3059,38 +3106,42 @@ L_scec01:
 /*     clock ID changes, we will set watches on the SCLK kernel */
 /*     variables for the current clock. */
 
-    if (first || *sc != oldsc) {
-	first = FALSE_;
+    if (__state->first || *sc != __state->oldsc) {
+	__state->first = FALSE_;
 
 /*        Make up a list of names of kernel variables that we'll use. */
 /*        The first name in the list is SCLK_KERNEL_ID, which does not */
 /*        require the addition of a spacecraft code suffix.  For the */
 /*        rest of the names, we'll have to add the suffix. */
 
-	movec_(namlst, &c__9, kvname, (ftnlen)60, (ftnlen)60);
-	for (i__ = 2; i__ <= 9; ++i__) {
-	    suffix_("_#", &c__0, kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ?
-		     i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)3105)) * 
-		    60, (ftnlen)2, (ftnlen)60);
+	movec_(__state->namlst, &__state->c__9, __state->kvname, (ftnlen)60, (
+		ftnlen)60);
+	for (__state->i__ = 2; __state->i__ <= 9; ++__state->i__) {
+	    suffix_("_#", &__state->c__0, __state->kvname + ((i__1 = 
+		    __state->i__ - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("kvna"
+		    "me", i__1, "sc01_", (ftnlen)3105)) * 60, (ftnlen)2, (
+		    ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "sc01_", (ftnlen)3106)) * 60, 
-		    "#", &i__3, kvname + ((i__2 = i__ - 1) < 9 && 0 <= i__2 ? 
-		    i__2 : s_rnge("kvname", i__2, "sc01_", (ftnlen)3106)) * 
-		    60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__state->kvname + ((i__1 = __state->i__ - 1) < 9 && 0 <= 
+		    i__1 ? i__1 : s_rnge("kvname", i__1, "sc01_", (ftnlen)
+		    3106)) * 60, "#", &i__3, __state->kvname + ((i__2 = 
+		    __state->i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge("kvna"
+		    "me", i__2, "sc01_", (ftnlen)3106)) * 60, (ftnlen)60, (
+		    ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables we use. */
 
-	swpool_("SC01", &c__9, kvname, (ftnlen)4, (ftnlen)60);
+	swpool_("SC01", &__state->c__9, __state->kvname, (ftnlen)4, (ftnlen)
+		60);
 
 /*        Keep track of the last spacecraft clock ID encountered. */
 
-	oldsc = *sc;
+	__state->oldsc = *sc;
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
     }
 
 /*     Find out whether we need to look up new format descriptors from */
@@ -3100,8 +3151,8 @@ L_scec01:
 /*     do a look-up, we grab everything that any of the SC01 entry */
 /*     points might need. */
 
-    zzcvpool_("SC01", usrctr, &update, (ftnlen)4);
-    if (update || nodata) {
+    zzcvpool_("SC01", __state->usrctr, &__state->update, (ftnlen)4);
+    if (__state->update || __state->nodata) {
 
 /*        Our first piece of business is to look up all of the data */
 /*        we require from the kernel pool.  We must form the names */
@@ -3117,32 +3168,40 @@ L_scec01:
 /*           -  The partition start times */
 /*           -  The partition end times */
 
-	scli01_(namlst + 240, sc, &c__1, &n, &nfield, (ftnlen)60);
-	scli01_(namlst + 420, sc, &c__1, &n, &delcde, (ftnlen)60);
-	scli01_(namlst + 480, sc, &c__1, &ntsys, &timsys, (ftnlen)60);
-	scld01_(namlst + 60, sc, &c_b22, &ncoeff, coeffs, (ftnlen)60);
-	scld01_(namlst + 120, sc, &c__9999, &n, prstrt, (ftnlen)60);
-	scld01_(namlst + 180, sc, &c__9999, &npart, prend, (ftnlen)60);
-	scld01_(namlst + 360, sc, &c__10, &n, moduli, (ftnlen)60);
-	scld01_(namlst + 300, sc, &c__10, &n, offset, (ftnlen)60);
+	scli01_(__state->namlst + 240, sc, &__state->c__1, &__state->n, &
+		__state->nfield, (ftnlen)60);
+	scli01_(__state->namlst + 420, sc, &__state->c__1, &__state->n, &
+		__state->delcde, (ftnlen)60);
+	scli01_(__state->namlst + 480, sc, &__state->c__1, &__state->ntsys, &
+		__state->timsys, (ftnlen)60);
+	scld01_(__state->namlst + 60, sc, &__state->c_b22, &__state->ncoeff, 
+		__state->coeffs, (ftnlen)60);
+	scld01_(__state->namlst + 120, sc, &__state->c__9999, &__state->n, 
+		__state->prstrt, (ftnlen)60);
+	scld01_(__state->namlst + 180, sc, &__state->c__9999, &__state->npart,
+		 __state->prend, (ftnlen)60);
+	scld01_(__state->namlst + 360, sc, &__state->c__10, &__state->n, 
+		__state->moduli, (ftnlen)60);
+	scld01_(__state->namlst + 300, sc, &__state->c__10, &__state->n, 
+		__state->offset, (ftnlen)60);
 
 /*        Don't try to continue if we had a lookup error. */
 
 	if (failed_()) {
-	    nodata = TRUE_;
+	    __state->nodata = TRUE_;
 	    chkout_("SCEC01", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The kernel pool look-up succeeded. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
 
 /*        Use the default time system (TDB) if none was specified in the */
 /*        SCLK kernel. */
 
-	if (ntsys == 0) {
-	    timsys = 1;
+	if (__state->ntsys == 0) {
+	    __state->timsys = 1;
 	}
     }
 
@@ -3152,10 +3211,10 @@ L_scec01:
 /*     We don't need to check the validity of TIMSYS, because SCLI01 */
 /*     already made this check. */
 
-    if (timsys == 1) {
-	partim = *et;
-    } else if (timsys == 2) {
-	partim = unitim_(et, "TDB", "TDT", (ftnlen)3, (ftnlen)3);
+    if (__state->timsys == 1) {
+	__state->partim = *et;
+    } else if (__state->timsys == 2) {
+	__state->partim = unitim_(et, "TDB", "TDT", (ftnlen)3, (ftnlen)3);
     }
 
 /*     We'd like to ascertain whether PARTIM is between the minimum */
@@ -3188,18 +3247,19 @@ L_scec01:
 /*           last time value in the array is the one we want. */
 
 
-    if (partim < coeffs[1]) {
+    if (__state->partim < __state->coeffs[1]) {
 
 /*        PARTIM precedes the coverage of the kernel. */
 
-	setmsg_(bvlmsg, (ftnlen)320);
+	setmsg_(__state->bvlmsg, (ftnlen)320);
 	errch_("#", "ET", (ftnlen)1, (ftnlen)2);
 	errdp_("#", et, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("SCEC01", (ftnlen)6);
 	return 0;
-    } else if (partim < coeffs[(i__1 = ncoeff / 3 * 3 - 2) < 150000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)3251)]) {
+    } else if (__state->partim < __state->coeffs[(i__1 = __state->ncoeff / 3 *
+	     3 - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, 
+	    "sc01_", (ftnlen)3251)]) {
 
 /*        In the following loop, we maintain an invariant: */
 
@@ -3213,15 +3273,16 @@ L_scec01:
 /*        Note that we start out with if LOWER < UPPER, since we've */
 /*        already made sure that the invariant expression above is true. */
 
-	lower = 1;
-	upper = ncoeff / 3;
-	while(lower < upper - 1) {
-	    middle = (lower + upper) / 2;
-	    if (partim < coeffs[(i__1 = middle * 3 - 2) < 150000 && 0 <= i__1 
-		    ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)3273)]) {
-		upper = middle;
+	__state->lower = 1;
+	__state->upper = __state->ncoeff / 3;
+	while(__state->lower < __state->upper - 1) {
+	    __state->middle = (__state->lower + __state->upper) / 2;
+	    if (__state->partim < __state->coeffs[(i__1 = __state->middle * 3 
+		    - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1,
+		     "sc01_", (ftnlen)3273)]) {
+		__state->upper = __state->middle;
 	    } else {
-		lower = middle;
+		__state->lower = __state->middle;
 	    }
 	}
 
@@ -3243,7 +3304,7 @@ L_scec01:
 /*        PARTIM is greater than or equal to all of the time values in */
 /*        the coefficients array. */
 
-	lower = ncoeff / 3;
+	__state->lower = __state->ncoeff / 3;
     }
 
 /*     Now we evaluate a linear polynomial to find the tick value that */
@@ -3258,25 +3319,29 @@ L_scec01:
 /*     clock count, so we use the conversion factor TIKMSC (`ticks per */
 /*     most significant count') to change the rate to seconds per tick. */
 
-    timdif = partim - coeffs[(i__1 = lower * 3 - 2) < 150000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)3318)];
-    const__ = coeffs[(i__1 = lower * 3 - 3) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)3319)];
-    if (coeffs[(i__1 = lower * 3 - 1) < 150000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "coeffs", i__1, "sc01_", (ftnlen)3321)] <= 0.) {
+    __state->timdif = __state->partim - __state->coeffs[(i__1 = 
+	    __state->lower * 3 - 2) < 150000 && 0 <= i__1 ? i__1 : s_rnge(
+	    "coeffs", i__1, "sc01_", (ftnlen)3318)];
+    __state->const__ = __state->coeffs[(i__1 = __state->lower * 3 - 3) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)3319)];
+    if (__state->coeffs[(i__1 = __state->lower * 3 - 1) < 150000 && 0 <= i__1 
+	    ? i__1 : s_rnge("coeffs", i__1, "sc01_", (ftnlen)3321)] <= 0.) {
 	setmsg_("Invalid SCLK rate.", (ftnlen)18);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
 	chkout_("SCEC01", (ftnlen)6);
 	return 0;
     }
-    tikmsc = 1.;
-    for (i__ = nfield; i__ >= 2; --i__) {
-	tikmsc *= moduli[(i__1 = i__ - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"moduli", i__1, "sc01_", (ftnlen)3334)];
+    __state->tikmsc = 1.;
+    for (__state->i__ = __state->nfield; __state->i__ >= 2; --__state->i__) {
+	__state->tikmsc *= __state->moduli[(i__1 = __state->i__ - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge("moduli", i__1, "sc01_", (ftnlen)
+		3334)];
     }
-    rate = 1. / (coeffs[(i__1 = lower * 3 - 1) < 150000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("coeffs", i__1, "sc01_", (ftnlen)3337)] / tikmsc);
-    *sclkdp = const__ + rate * timdif;
+    __state->rate = 1. / (__state->coeffs[(i__1 = __state->lower * 3 - 1) < 
+	    150000 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1, "sc01_", (
+	    ftnlen)3337)] / __state->tikmsc);
+    *sclkdp = __state->const__ + __state->rate * __state->timdif;
 
 /*     Now, we'll see whether the SCLK value we've found is meaningful. */
 /*     If it's too large, that's because the input PARTIM was beyond the */
@@ -3284,15 +3349,16 @@ L_scec01:
 /*     range, we must find the end time of the last partition, in total */
 /*     ticks since spacecraft clock start. */
 
-    d__1 = prend[0] - prstrt[0];
-    mxtick = d_nint(&d__1);
-    i__1 = npart;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-	d__1 = prend[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(
-		"prend", i__2, "sc01_", (ftnlen)3351)] - prstrt[(i__3 = i__ - 
-		1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("prstrt", i__3, "sc01_"
-		, (ftnlen)3351)] + mxtick;
-	mxtick = d_nint(&d__1);
+    d__1 = __state->prend[0] - __state->prstrt[0];
+    __state->mxtick = d_nint(&d__1);
+    i__1 = __state->npart;
+    for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
+	d__1 = __state->prend[(i__2 = __state->i__ - 1) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge("prend", i__2, "sc01_", (ftnlen)3351)] - 
+		__state->prstrt[(i__3 = __state->i__ - 1) < 9999 && 0 <= i__3 
+		? i__3 : s_rnge("prstrt", i__3, "sc01_", (ftnlen)3351)] + 
+		__state->mxtick;
+	__state->mxtick = d_nint(&d__1);
     }
 
 /*     Make sure that ET does not exceed the ET corresponding to */
@@ -3300,8 +3366,8 @@ L_scec01:
 /*     using the tick value that ET mapped to and the maximum tick */
 /*     value of the spacecraft clock. */
 
-    if (*sclkdp > mxtick) {
-	setmsg_(bvlmsg, (ftnlen)320);
+    if (*sclkdp > __state->mxtick) {
+	setmsg_(__state->bvlmsg, (ftnlen)320);
 	errch_("#", "ET", (ftnlen)1, (ftnlen)2);
 	errdp_("#", et, (ftnlen)1);
 	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);

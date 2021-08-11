@@ -1,15 +1,21 @@
-/* zzektres.f -- translated by f2c (version 19980913).
+/* zzektres.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__4 = 4;
-static integer c__6 = 6;
-static integer c__1 = 1;
+extern zzektres_init_t __zzektres_init;
+static zzektres_state_t* get_zzektres_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektres)
+		state->zzektres = __cspice_allocate_module(sizeof(
+	zzektres_state_t), &__zzektres_init, sizeof(__zzektres_init));
+	return state->zzektres;
+
+}
 
 /* $Procedure  ZZEKTRES ( Private: EK, resolve times in encoded query ) */
 /* Subroutine */ int zzektres_(char *query, integer *eqryi, char *eqryc, 
@@ -23,30 +29,50 @@ static integer c__1 = 1;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer base, ntab, ncns;
+    integer base;
+    integer ntab;
+    integer ncns;
     extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen), zzekreqi_(integer *, char *, 
-	    integer *, ftnlen), zzekinqn_(doublereal *, integer *, integer *, 
-	    integer *, integer *, doublereal *, integer *), zzekweqi_(char *, 
-	    integer *, integer *, ftnlen), zzektcnv_(char *, doublereal *, 
-	    logical *, char *, ftnlen, ftnlen);
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekinqn_(doublereal *, integer *, integer *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzektcnv_(char *, doublereal *, logical *, 
+	    char *, ftnlen, ftnlen);
     integer i__;
     extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
 	    ftnlen, ftnlen);
-    char table[64*10], alias[64*10];
+    char table[64*10];
+    char alias[64*10];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer descr[6];
     extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer dtype;
     extern logical failed_(void);
-    integer sb, se;
+    integer sb;
+    integer se;
     doublereal et;
-    char colnam[32], timstr[32], touchc[1];
-    integer attdsc[6], cnstyp, colidx, irsolv, opcode, tabidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen);
-    integer lxb, lxe;
+    char colnam[32];
+    char timstr[32];
+    char touchc[1];
+    integer attdsc[6];
+    integer cnstyp;
+    integer colidx;
+    integer irsolv;
+    integer opcode;
+    integer tabidx;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lxb;
+    integer lxe;
 
+
+    /* Module state */
+    zzektres_state_t* __state = get_zzektres_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1072,8 +1098,9 @@ static integer c__1 = 1;
 /*              Insert the ET value into the query, and replace the */
 /*              value descriptor for the time string. */
 
-		zzekinqn_(&et, &c__4, &lxb, &lxe, eqryi, eqryd, descr);
-		movei_(descr, &c__6, &eqryi[base + 20]);
+		zzekinqn_(&et, &__state->c__4, &lxb, &lxe, eqryi, eqryd, 
+			descr);
+		movei_(descr, &__state->c__6, &eqryi[base + 20]);
 	    }
 
 /*           We've parsed a time string, if the current column's type */
@@ -1088,7 +1115,7 @@ static integer c__1 = 1;
 
 /*     Indicate completion of time resolution. */
 
-    zzekweqi_("TIMES_RESOLVED", &c__1, eqryi, (ftnlen)14);
+    zzekweqi_("TIMES_RESOLVED", &__state->c__1, eqryi, (ftnlen)14);
     return 0;
 } /* zzektres_ */
 

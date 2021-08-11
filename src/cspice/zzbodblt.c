@@ -1,16 +1,21 @@
-/* zzbodblt.f -- translated by f2c (version 19980913).
+/* zzbodblt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__620 = 620;
-static integer c__2 = 2;
-static integer c__3 = 3;
+extern zzbodblt_init_t __zzbodblt_init;
+static zzbodblt_state_t* get_zzbodblt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzbodblt)
+		state->zzbodblt = __cspice_allocate_module(sizeof(
+	zzbodblt_state_t), &__zzbodblt_init, sizeof(__zzbodblt_init));
+	return state->zzbodblt;
+
+}
 
 /* $Procedure ZZBODBLT ( Private --- Retrieve Built-In Body-Code Maps ) */
 /* Subroutine */ int zzbodblt_0_(int n__, integer *room, char *names, char *
@@ -20,7 +25,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[2], a__2[3];
@@ -32,23 +36,24 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
-	     ftnlen, ftnlen), movec_(char *, integer *, char *, ftnlen, 
-	    ftnlen), movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     char zzint[36];
-    static integer bltcod[620];
-    static char bltnam[36*620];
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
     extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int orderi_(integer *, integer *, integer *), 
-	    sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
-    static char bltnor[36*620];
-    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen), 
-	    setmsg_(char *, ftnlen), errint_(char *, integer *, ftnlen), 
-	    cmprss_(char *, integer *, char *, char *, ftnlen, ftnlen, ftnlen)
-	    ;
+    extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     integer zzocod[620];
     char zzline[75];
     integer zzonam[620];
@@ -57,6 +62,9 @@ static integer c__3 = 3;
     char zzrqst[4];
     extern /* Subroutine */ int zzidmap_(integer *, char *, ftnlen);
 
+
+    /* Module state */
+    zzbodblt_state_t* __state = get_zzbodblt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -678,32 +686,33 @@ L_zzbodget:
 /*     On the first invocation compute the normalized forms of BLTNAM */
 /*     and store them in BLTNOR. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Retrieve the default mapping list. */
 
-	zzidmap_(bltcod, bltnam, (ftnlen)36);
+	zzidmap_(__state->bltcod, __state->bltnam, (ftnlen)36);
 	for (i__ = 1; i__ <= 620; ++i__) {
-	    ljust_(bltnam + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bltnam", i__1, "zzbodblt_", (ftnlen)565)) * 36, 
-		    bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)565)) * 36, (
-		    ftnlen)36, (ftnlen)36);
-	    ucase_(bltnor + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bltnor", i__1, "zzbodblt_", (ftnlen)566)) * 36, 
-		    bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)566)) * 36, (
-		    ftnlen)36, (ftnlen)36);
-	    cmprss_(" ", &c__1, bltnor + ((i__1 = i__ - 1) < 620 && 0 <= i__1 
-		    ? i__1 : s_rnge("bltnor", i__1, "zzbodblt_", (ftnlen)567))
-		     * 36, bltnor + ((i__2 = i__ - 1) < 620 && 0 <= i__2 ? 
-		    i__2 : s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)567)) *
-		     36, (ftnlen)1, (ftnlen)36, (ftnlen)36);
+	    ljust_(__state->bltnam + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? 
+		    i__1 : s_rnge("bltnam", i__1, "zzbodblt_", (ftnlen)565)) *
+		     36, __state->bltnor + ((i__2 = i__ - 1) < 620 && 0 <= 
+		    i__2 ? i__2 : s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)
+		    565)) * 36, (ftnlen)36, (ftnlen)36);
+	    ucase_(__state->bltnor + ((i__1 = i__ - 1) < 620 && 0 <= i__1 ? 
+		    i__1 : s_rnge("bltnor", i__1, "zzbodblt_", (ftnlen)566)) *
+		     36, __state->bltnor + ((i__2 = i__ - 1) < 620 && 0 <= 
+		    i__2 ? i__2 : s_rnge("bltnor", i__2, "zzbodblt_", (ftnlen)
+		    566)) * 36, (ftnlen)36, (ftnlen)36);
+	    cmprss_(" ", &__state->c__1, __state->bltnor + ((i__1 = i__ - 1) <
+		     620 && 0 <= i__1 ? i__1 : s_rnge("bltnor", i__1, "zzbod"
+		    "blt_", (ftnlen)567)) * 36, __state->bltnor + ((i__2 = i__ 
+		    - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge("bltnor", i__2, 
+		    "zzbodblt_", (ftnlen)567)) * 36, (ftnlen)1, (ftnlen)36, (
+		    ftnlen)36);
 	}
 
 /*        Do not do this again. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Copy the contents of BLTNAM, BLTNOR, and BLTCOD to the output */
@@ -713,15 +722,15 @@ L_zzbodget:
 	setmsg_("Insufficient room to copy the stored body name-code mapping"
 		"s to the output arguments.  Space required is #, but the cal"
 		"ler supplied #.", (ftnlen)134);
-	errint_("#", &c__620, (ftnlen)1);
+	errint_("#", &__state->c__620, (ftnlen)1);
 	errint_("#", room, (ftnlen)1);
 	sigerr_("SPICE(BUG)", (ftnlen)10);
 	chkout_("ZZBODGET", (ftnlen)8);
 	return 0;
     }
-    movec_(bltnam, &c__620, names, (ftnlen)36, names_len);
-    movec_(bltnor, &c__620, nornam, (ftnlen)36, nornam_len);
-    movei_(bltcod, &c__620, codes);
+    movec_(__state->bltnam, &__state->c__620, names, (ftnlen)36, names_len);
+    movec_(__state->bltnor, &__state->c__620, nornam, (ftnlen)36, nornam_len);
+    movei_(__state->bltcod, &__state->c__620, codes);
     *nvals = 620;
     chkout_("ZZBODGET", (ftnlen)8);
     return 0;
@@ -904,37 +913,39 @@ L_zzbodlst:
 /*     Upper case the ZZRQST value. */
 
     ucase_(reqst, zzrqst, reqst_len, (ftnlen)4);
-    intstr_(&c__620, zzint, (ftnlen)36);
+    intstr_(&__state->c__620, zzint, (ftnlen)36);
 /* Writing concatenation */
     i__3[0] = 34, a__1[0] = "Total number of name/ID mappings: ";
     i__3[1] = 36, a__1[1] = zzint;
-    s_cat(zzline, a__1, i__3, &c__2, (ftnlen)75);
+    s_cat(zzline, a__1, i__3, &__state->c__2, (ftnlen)75);
     wrline_(device, zzline, device_len, lastnb_(zzline, (ftnlen)75));
 
 /*     Retrieve the current set of name/ID mappings */
 
-    zzidmap_(bltcod, bltnam, (ftnlen)36);
+    zzidmap_(__state->bltcod, __state->bltnam, (ftnlen)36);
 
 /*      Branch as defined by the value of ZZRQST. 'ID' or 'BOTH'. */
 
     if (eqstr_(zzrqst, "ID", (ftnlen)4, (ftnlen)2) || eqstr_(zzrqst, "BOTH", (
 	    ftnlen)4, (ftnlen)4)) {
-	orderi_(bltcod, &c__620, zzocod);
+	orderi_(__state->bltcod, &__state->c__620, zzocod);
 	wrline_(device, " ", device_len, (ftnlen)1);
 	wrline_(device, "ID to name mappings.", device_len, (ftnlen)20);
 	for (i__ = 1; i__ <= 620; ++i__) {
-	    intstr_(&bltcod[(i__2 = zzocod[(i__1 = i__ - 1) < 620 && 0 <= 
-		    i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbodblt_", (ftnlen)
-		    812)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
-		    i__2, "zzbodblt_", (ftnlen)812)], zzint, (ftnlen)36);
+	    intstr_(&__state->bltcod[(i__2 = zzocod[(i__1 = i__ - 1) < 620 && 
+		    0 <= i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbodblt_", (
+		    ftnlen)812)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge(
+		    "bltcod", i__2, "zzbodblt_", (ftnlen)812)], zzint, (
+		    ftnlen)36);
 /* Writing concatenation */
 	    i__4[0] = 36, a__2[0] = zzint;
 	    i__4[1] = 3, a__2[1] = " | ";
-	    i__4[2] = 36, a__2[2] = bltnam + ((i__2 = zzocod[(i__1 = i__ - 1) 
-		    < 620 && 0 <= i__1 ? i__1 : s_rnge("zzocod", i__1, "zzbo"
-		    "dblt_", (ftnlen)814)] - 1) < 620 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)814)) * 36;
-	    s_cat(zzline, a__2, i__4, &c__3, (ftnlen)75);
+	    i__4[2] = 36, a__2[2] = __state->bltnam + ((i__2 = zzocod[(i__1 = 
+		    i__ - 1) < 620 && 0 <= i__1 ? i__1 : s_rnge("zzocod", 
+		    i__1, "zzbodblt_", (ftnlen)814)] - 1) < 620 && 0 <= i__2 ?
+		     i__2 : s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)814)) 
+		    * 36;
+	    s_cat(zzline, a__2, i__4, &__state->c__3, (ftnlen)75);
 	    wrline_(device, zzline, device_len, lastnb_(zzline, (ftnlen)75));
 	}
     }
@@ -943,22 +954,24 @@ L_zzbodlst:
 
     if (eqstr_(zzrqst, "NAME", (ftnlen)4, (ftnlen)4) || eqstr_(zzrqst, "BOTH",
 	     (ftnlen)4, (ftnlen)4)) {
-	orderc_(bltnam, &c__620, zzonam, (ftnlen)36);
+	orderc_(__state->bltnam, &__state->c__620, zzonam, (ftnlen)36);
 	wrline_(device, " ", device_len, (ftnlen)1);
 	wrline_(device, "Name to ID mappings.", device_len, (ftnlen)20);
 	for (i__ = 1; i__ <= 620; ++i__) {
-	    intstr_(&bltcod[(i__2 = zzonam[(i__1 = i__ - 1) < 620 && 0 <= 
-		    i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbodblt_", (ftnlen)
-		    834)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge("bltcod", 
-		    i__2, "zzbodblt_", (ftnlen)834)], zzint, (ftnlen)36);
+	    intstr_(&__state->bltcod[(i__2 = zzonam[(i__1 = i__ - 1) < 620 && 
+		    0 <= i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbodblt_", (
+		    ftnlen)834)] - 1) < 620 && 0 <= i__2 ? i__2 : s_rnge(
+		    "bltcod", i__2, "zzbodblt_", (ftnlen)834)], zzint, (
+		    ftnlen)36);
 /* Writing concatenation */
-	    i__4[0] = 36, a__2[0] = bltnam + ((i__2 = zzonam[(i__1 = i__ - 1) 
-		    < 620 && 0 <= i__1 ? i__1 : s_rnge("zzonam", i__1, "zzbo"
-		    "dblt_", (ftnlen)836)] - 1) < 620 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)836)) * 36;
+	    i__4[0] = 36, a__2[0] = __state->bltnam + ((i__2 = zzonam[(i__1 = 
+		    i__ - 1) < 620 && 0 <= i__1 ? i__1 : s_rnge("zzonam", 
+		    i__1, "zzbodblt_", (ftnlen)836)] - 1) < 620 && 0 <= i__2 ?
+		     i__2 : s_rnge("bltnam", i__2, "zzbodblt_", (ftnlen)836)) 
+		    * 36;
 	    i__4[1] = 3, a__2[1] = " | ";
 	    i__4[2] = 36, a__2[2] = zzint;
-	    s_cat(zzline, a__2, i__4, &c__3, (ftnlen)75);
+	    s_cat(zzline, a__2, i__4, &__state->c__3, (ftnlen)75);
 	    wrline_(device, zzline, device_len, lastnb_(zzline, (ftnlen)75));
 	}
     }

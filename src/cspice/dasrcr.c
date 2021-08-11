@@ -1,23 +1,27 @@
-/* dasrcr.f -- translated by f2c (version 19980913).
+/* dasrcr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__3 = 3;
-static integer c__256 = 256;
+extern dasrcr_init_t __dasrcr_init;
+static dasrcr_state_t* get_dasrcr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dasrcr)
+		state->dasrcr = __cspice_allocate_module(sizeof(
+	dasrcr_state_t), &__dasrcr_init, sizeof(__dasrcr_init));
+	return state->dasrcr;
+
+}
 
 /* $Procedure      DASRCR ( DAS, remove comment records ) */
 /* Subroutine */ int dasrcr_(integer *handle, integer *n)
 {
     /* Initialized data */
 
-    static integer next[3] = { 2,3,1 };
-    static integer prev[3] = { 3,1,2 };
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -29,7 +33,12 @@ static integer c__256 = 256;
     integer base;
     char recc[1024];
     doublereal recd[128];
-    integer free, reci[256], lrec, nrec, unit, type__;
+    integer free;
+    integer reci[256];
+    integer lrec;
+    integer nrec;
+    integer unit;
+    integer type__;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
 	    integer *, ftnlen);
     integer i__;
@@ -37,30 +46,41 @@ static integer c__256 = 256;
     integer ncomc;
     extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
 	    integer *);
-    integer ncomr, lword;
+    integer ncomr;
+    integer lword;
     extern logical failed_(void);
-    extern /* Subroutine */ int cleari_(integer *, integer *), dasioc_(char *,
-	     integer *, integer *, char *, ftnlen, ftnlen), dasiod_(char *, 
-	    integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dasiod_(char *, integer *, integer *, 
+	    doublereal *, ftnlen);
     integer dirrec[256];
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     dasioi_(char *, integer *, integer *, integer *, ftnlen), 
-	    dassih_(integer *, char *, ftnlen);
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
+	    *, ftnlen);
+    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     integer lastla[3];
     extern /* Subroutine */ int daswbr_(integer *);
     integer lindex;
     extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
-    integer lastrc[3], nshift;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    integer lastwd[3], nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    integer lastrc[3];
+    integer nshift;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer lastwd[3];
+    integer nresvc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
-    integer nresvr, loc, pos;
+    integer nresvr;
+    integer loc;
+    integer pos;
 
+
+    /* Module state */
+    dasrcr_state_t* __state = get_dasrcr_state();
 /* $ Abstract */
 
 /*     Decrease the size of the comment area in a DAS file to reclaim */
@@ -272,7 +292,7 @@ static integer c__256 = 256;
 
 /*     Get the logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASRCR", (ftnlen)6);
 	return 0;
@@ -312,7 +332,7 @@ static integer c__256 = 256;
 /*     Find the record and word positions LREC and LWORD of the last */
 /*     descriptor in the file. */
 
-    maxai_(lastrc, &c__3, &lrec, &loc);
+    maxai_(lastrc, &__state->c__3, &lrec, &loc);
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
@@ -336,7 +356,7 @@ static integer c__256 = 256;
 
 /*           NRESVR + NCOMR + 2 - NSHIFT */
 
-	cleari_(&c__256, dirrec);
+	cleari_(&__state->c__256, dirrec);
 	i__1 = nresvr + ncomr + 2 - nshift;
 	dasioi_("WRITE", &unit, &i__1, dirrec, (ftnlen)5);
     } else {
@@ -390,13 +410,13 @@ static integer c__256 = 256;
 		    if (dirrec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : 
 			    s_rnge("dirrec", i__1, "dasrcr_", (ftnlen)431)] > 
 			    0) {
-			type__ = next[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
-				i__1 : s_rnge("next", i__1, "dasrcr_", (
-				ftnlen)432)];
+			type__ = __state->next[(i__1 = type__ - 1) < 3 && 0 <=
+				 i__1 ? i__1 : s_rnge("next", i__1, "dasrcr_",
+				 (ftnlen)432)];
 		    } else {
-			type__ = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? 
-				i__1 : s_rnge("prev", i__1, "dasrcr_", (
-				ftnlen)434)];
+			type__ = __state->prev[(i__1 = type__ - 1) < 3 && 0 <=
+				 i__1 ? i__1 : s_rnge("prev", i__1, "dasrcr_",
+				 (ftnlen)434)];
 		    }
 
 /*                 Update the cluster base record number. */

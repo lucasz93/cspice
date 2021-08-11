@@ -1,15 +1,21 @@
-/* zzdsksba.f -- translated by f2c (version 19980913).
+/* zzdsksba.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__8 = 8;
-static integer c__24 = 24;
-static integer c__3 = 3;
+extern zzdsksba_init_t __zzdsksba_init;
+static zzdsksba_state_t* get_zzdsksba_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzdsksba)
+		state->zzdsksba = __cspice_allocate_module(sizeof(
+	zzdsksba_state_t), &__zzdsksba_init, sizeof(__zzdsksba_init));
+	return state->zzdsksba;
+
+}
 
 /* $Procedure ZZDSKSBA ( DSK, add entry to API segment buffer ) */
 /* Subroutine */ int zzdsksba_(integer *bodyid, integer *maxbod, integer *
@@ -29,35 +35,51 @@ static integer c__3 = 3;
     extern /* Subroutine */ int zzdskbbl_(integer *);
     extern logical zzdsksbd_(integer *);
     extern /* Subroutine */ int zzsegbox_(doublereal *, doublereal *, 
-	    doublereal *), zzdsksbr_(integer *, integer *, integer *, integer 
-	    *, integer *, integer *, integer *, integer *, doublereal *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *), 
-	    zzdskbss_(integer *), zzdsksns_(U_fp, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdsksbr_(integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, doublereal 
+	    *, integer *, integer *, doublereal *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int zzdskbss_(integer *);
+    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
 	    doublereal *, logical *);
-    integer i__, j, avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *), movei_(integer *, integer *, integer *);
+    integer i__;
+    integer j;
+    integer avail;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     extern logical failed_(void);
     doublereal et;
-    integer dladsc[8], handle;
+    integer dladsc[8];
+    integer handle;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     doublereal lt;
-    integer segcld, segfid;
+    integer segcld;
+    integer segfid;
     logical segfnd;
     char frname[32];
     extern integer isrchi_(integer *, integer *, integer *);
     doublereal dskdsc[24];
-    integer frmctr, segcls;
+    integer frmctr;
+    integer segcls;
     extern logical return_(void);
     integer segctr;
-    logical frmfnd, status;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), frinfo_(integer *, integer *, integer *, integer *, 
-	    logical *), frmnam_(integer *, char *, ftnlen), spkgps_(integer *,
-	     doublereal *, char *, integer *, doublereal *, doublereal *, 
-	    ftnlen);
+    logical frmfnd;
+    logical status;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
+	    integer *, doublereal *, doublereal *, ftnlen);
 
+
+    /* Module state */
+    zzdsksba_state_t* __state = get_zzdsksba_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -772,8 +794,8 @@ static integer c__3 = 3;
 /*        index STFREE in the segment table. */
 
 	sthan[*stfree - 1] = handle;
-	movei_(dladsc, &c__8, &stdlad[(*stfree << 3) - 8]);
-	moved_(dskdsc, &c__24, &stdscr[*stfree * 24 - 24]);
+	movei_(dladsc, &__state->c__8, &stdlad[(*stfree << 3) - 8]);
+	moved_(dskdsc, &__state->c__24, &stdscr[*stfree * 24 - 24]);
 	++(*stfree);
 	zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
 	if (failed_()) {
@@ -817,7 +839,7 @@ static integer c__3 = 3;
 
 	segctr = i_dnnt(&stdscr[j * 24 - 23]);
 	if (segctr == frmctr) {
-	    cleard_(&c__3, &stoff[j * 3 - 3]);
+	    cleard_(&__state->c__3, &stoff[j * 3 - 3]);
 	} else {
 	    frmnam_(&segfid, frname, (ftnlen)32);
 	    if (s_cmp(frname, " ", (ftnlen)32, (ftnlen)1) == 0) {

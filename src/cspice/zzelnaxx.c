@@ -1,9 +1,17 @@
-/* zzelnaxx.f -- translated by f2c (version 19980913).
+/* zzelnaxx.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzelnaxx_state_t;
+static zzelnaxx_state_t* get_zzelnaxx_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZELNAXX ( ellipse normal axis intercepts ) */
 /* Subroutine */ int zzelnaxx_(doublereal *a, doublereal *b, doublereal *lat, 
@@ -16,15 +24,20 @@
     double cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errdp_(char *, 
-	    doublereal *, ftnlen), ednmpt_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int ednmpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     doublereal ept[3];
 
+
+    /* Module state */
+    zzelnaxx_state_t* __state = get_zzelnaxx_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

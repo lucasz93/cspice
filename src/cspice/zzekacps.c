@@ -1,13 +1,21 @@
-/* zzekacps.f -- translated by f2c (version 19980913).
+/* zzekacps.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern zzekacps_init_t __zzekacps_init;
+static zzekacps_state_t* get_zzekacps_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekacps)
+		state->zzekacps = __cspice_allocate_module(sizeof(
+	zzekacps_state_t), &__zzekacps_init, sizeof(__zzekacps_init));
+	return state->zzekacps;
+
+}
 
 /* $Procedure ZZEKACPS ( EK, allocate contiguous pages for segment ) */
 /* Subroutine */ int zzekacps_(integer *handle, integer *segdsc, integer *
@@ -19,13 +27,22 @@ static integer c__0 = 0;
     /* Local variables */
     integer tree;
     extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *), zzeksfwd_(integer *, integer *, integer *, integer *),
-	     zzektrap_(integer *, integer *, integer *, integer *), zzekslnk_(
-	    integer *, integer *, integer *, integer *);
-    integer b, i__, p2;
+	    integer *);
+    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer b;
+    integer i__;
+    integer p2;
     extern logical failed_(void);
     integer idx;
 
+
+    /* Module state */
+    zzekacps_state_t* __state = get_zzekacps_state();
 /* $ Abstract */
 
 /*     Allocate a series of contiguous data pages for a specified EK */
@@ -362,9 +379,9 @@ static integer c__0 = 0;
 /*        Zero out the page's link count and forward pointer. */
 
 	i__2 = *p + i__ - 1;
-	zzekslnk_(handle, type__, &i__2, &c__0);
+	zzekslnk_(handle, type__, &i__2, &__state->c__0);
 	i__2 = *p + i__ - 1;
-	zzeksfwd_(handle, type__, &i__2, &c__0);
+	zzeksfwd_(handle, type__, &i__2, &__state->c__0);
     }
 
 /*     Update the segment's metadata.  Insert the number of each new */

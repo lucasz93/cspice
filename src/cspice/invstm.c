@@ -1,23 +1,34 @@
-/* invstm.f -- translated by f2c (version 19980913).
+/* invstm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__3 = 3;
+extern invstm_init_t __invstm_init;
+static invstm_state_t* get_invstm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->invstm)
+		state->invstm = __cspice_allocate_module(sizeof(
+	invstm_state_t), &__invstm_init, sizeof(__invstm_init));
+	return state->invstm;
+
+}
 
 /* $Procedure      INVSTM ( Inverse of state transformation matrix) */
 /* Subroutine */ int invstm_(doublereal *mat, doublereal *invmat)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), xposbl_(doublereal *, integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int xposbl_(doublereal *, integer *, integer *, 
+	    integer *, doublereal *);
     extern logical return_(void);
 
+
+    /* Module state */
+    invstm_state_t* __state = get_invstm_state();
 /* $ Abstract */
 
 /*     Return the inverse of a state transformation matrix. */
@@ -209,7 +220,7 @@ static integer c__3 = 3;
 
 /*     Not much to this.  Just call the more general routine XPOSBL. */
 
-    xposbl_(mat, &c__6, &c__6, &c__3, invmat);
+    xposbl_(mat, &__state->c__6, &__state->c__6, &__state->c__3, invmat);
 
 /*     That's all folks. */
 

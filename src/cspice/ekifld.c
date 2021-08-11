@@ -1,9 +1,17 @@
-/* ekifld.f -- translated by f2c (version 19980913).
+/* ekifld.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekifld_state_t;
+static ekifld_state_t* get_ekifld_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      EKIFLD ( EK, initialize segment for fast write ) */
 /* Subroutine */ int ekifld_(integer *handle, char *tabnam, integer *ncols, 
@@ -15,8 +23,10 @@
 
     /* Local variables */
     extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
-	    integer *), zzeksdsc_(integer *, integer *, integer *);
-    integer p, mbase;
+	    integer *);
+    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
+    integer p;
+    integer mbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer stype;
     extern logical failed_(void);
@@ -24,12 +34,18 @@
 	    char *, integer *, ftnlen, ftnlen, ftnlen);
     integer segdsc[24];
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int zzekif01_(integer *, integer *, integer *), 
-	    zzekif02_(integer *, integer *);
+    extern /* Subroutine */ int zzekif01_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekif02_(integer *, integer *);
 
+
+    /* Module state */
+    ekifld_state_t* __state = get_ekifld_state();
 /* $ Abstract */
 
 /*     Initialize a new E-kernel segment to allow fast writing. */

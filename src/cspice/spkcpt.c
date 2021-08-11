@@ -1,13 +1,21 @@
-/* spkcpt.f -- translated by f2c (version 19980913).
+/* spkcpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern spkcpt_init_t __spkcpt_init;
+static spkcpt_state_t* get_spkcpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkcpt)
+		state->spkcpt = __cspice_allocate_module(sizeof(
+	spkcpt_state_t), &__spkcpt_init, sizeof(__spkcpt_init));
+	return state->spkcpt;
+
+}
 
 /* $Procedure SPKCPT ( SPK, constant position target state ) */
 /* Subroutine */ int spkcpt_(doublereal *trgpos, char *trgctr, char *trgref, 
@@ -16,8 +24,9 @@ static integer c__3 = 3;
 	trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, 
 	ftnlen obsrvr_len)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), chkin_(
-	    char *, ftnlen), cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
     doublereal trgepc;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal trgsta[6];
@@ -26,6 +35,9 @@ static integer c__3 = 3;
 	    , doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spkcpt_state_t* __state = get_spkcpt_state();
 /* $ Abstract */
 
 /*     Return the state, relative to a specified observer, of a target */
@@ -1177,7 +1189,7 @@ static integer c__3 = 3;
 /*     portion of the state is zero. */
 
     vequ_(trgpos, trgsta);
-    cleard_(&c__3, &trgsta[3]);
+    cleard_(&__state->c__3, &trgsta[3]);
 
 /*     Set the target epoch; the value is arbitrary, since */
 /*     the target's velocity is zero. */

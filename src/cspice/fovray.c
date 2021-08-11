@@ -1,9 +1,17 @@
-/* fovray.f -- translated by f2c (version 19980913).
+/* fovray.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int fovray_state_t;
+static fovray_state_t* get_fovray_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FOVRAY ( Is ray in FOV at time? ) */
 /* Subroutine */ int fovray_(char *inst, doublereal *raydir, char *rframe, 
@@ -12,12 +20,16 @@
 {
     extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
 	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen), zzgffvst_(doublereal *, logical *), chkin_(char *, 
 	    ftnlen);
+    extern /* Subroutine */ int zzgffvst_(doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    fovray_state_t* __state = get_fovray_state();
 /* $ Abstract */
 
 /*     Determine if a specified ray is within the field-of-view (FOV) of */

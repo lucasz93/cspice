@@ -1,9 +1,17 @@
-/* sygeti.f -- translated by f2c (version 19980913).
+/* sygeti.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sygeti_state_t;
+static sygeti_state_t* get_sygeti_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYGETI ( Return all components for a symbol ) */
 /* Subroutine */ int sygeti_(char *name__, char *tabsym, integer *tabptr, 
@@ -25,6 +33,9 @@
     integer locsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sygeti_state_t* __state = get_sygeti_state();
 /* $ Abstract */
 
 /*     Return the dimension and associated values for a particular */

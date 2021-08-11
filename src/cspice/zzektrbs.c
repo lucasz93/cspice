@@ -1,13 +1,21 @@
-/* zzektrbs.f -- translated by f2c (version 19980913).
+/* zzektrbs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzektrbs_init_t __zzektrbs_init;
+static zzektrbs_state_t* get_zzektrbs_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrbs)
+		state->zzektrbs = __cspice_allocate_module(sizeof(
+	zzektrbs_state_t), &__zzektrbs_init, sizeof(__zzektrbs_init));
+	return state->zzektrbs;
+
+}
 
 /* $Procedure      ZZEKTRBS ( EK tree, base address ) */
 integer zzektrbs_(integer *node)
@@ -18,6 +26,9 @@ integer zzektrbs_(integer *node)
     /* Local variables */
     extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzektrbs_state_t* __state = get_zzektrbs_state();
 /* $ Abstract */
 
 /*     Map a node in a tree to its DAS base integer address. */
@@ -180,7 +191,7 @@ integer zzektrbs_(integer *node)
 
 /*     Just use the mapping supplied by the paging system. */
 
-    zzekpgbs_(&c__3, node, &ret_val);
+    zzekpgbs_(&__state->c__3, node, &ret_val);
     return ret_val;
 } /* zzektrbs_ */
 

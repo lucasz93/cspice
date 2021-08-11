@@ -1,9 +1,17 @@
-/* badkpv.f -- translated by f2c (version 19980913).
+/* badkpv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int badkpv_state_t;
+static badkpv_state_t* get_badkpv_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure BADKPV ( Bad Kernel Pool Variable ) */
 logical badkpv_(char *caller, char *name__, char *comp, integer *size, 
@@ -24,13 +32,18 @@ logical badkpv_(char *caller, char *name__, char *comp, integer *size,
     logical found;
     integer ratio;
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dtpool_(char *, logical *, integer *, char *, ftnlen, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     integer dim;
 
+
+    /* Module state */
+    badkpv_state_t* __state = get_badkpv_state();
 /* $ Abstract */
 
 /*     Determine if a kernel pool variable is present and if so */

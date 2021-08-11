@@ -1,13 +1,21 @@
-/* zzinlat0.f -- translated by f2c (version 19980913).
+/* zzinlat0.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = 1e-12;
+extern zzinlat0_init_t __zzinlat0_init;
+static zzinlat0_state_t* get_zzinlat0_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzinlat0)
+		state->zzinlat0 = __cspice_allocate_module(sizeof(
+	zzinlat0_state_t), &__zzinlat0_init, sizeof(__zzinlat0_init));
+	return state->zzinlat0;
+
+}
 
 /* $Procedure ZZINLAT0 ( DSK, in latitudinal element, w/o margin? ) */
 /* Subroutine */ int zzinlat0_(doublereal *r__, doublereal *lon, doublereal *
@@ -15,15 +23,21 @@ static doublereal c_b2 = 1e-12;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static doublereal pi2 = -1.;
 
-    doublereal minr, maxr;
+    doublereal minr;
+    doublereal maxr;
     extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern doublereal twopi_(void);
-    doublereal loclon, maxlat, minlat, minlon, maxlon;
+    doublereal loclon;
+    doublereal maxlat;
+    doublereal minlat;
+    doublereal minlon;
+    doublereal maxlon;
 
+
+    /* Module state */
+    zzinlat0_state_t* __state = get_zzinlat0_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -419,9 +433,9 @@ static doublereal c_b2 = 1e-12;
 
 /*     Initial values */
 
-    if (first) {
-	pi2 = twopi_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->pi2 = twopi_();
+	__state->first = FALSE_;
     }
 
 /*     Assume the point is outside to start. This allows us */
@@ -479,7 +493,7 @@ static doublereal c_b2 = 1e-12;
 
 /*        Put the local longitude bounds in order, if necessary. */
 
-	zznrmlon_(bounds, &bounds[1], &c_b2, &minlon, &maxlon);
+	zznrmlon_(bounds, &bounds[1], &__state->c_b2, &minlon, &maxlon);
 
 /*        Compare the point's longitude to the segment's longitude */
 /*        bounds. */
@@ -490,13 +504,13 @@ static doublereal c_b2 = 1e-12;
 /*           If the point's longitude is less than the segment's */
 /*           longitude by more than a small margin, shift the longitude */
 /*           right by 2*pi. */
-	    loclon = *lon + pi2;
+	    loclon = *lon + __state->pi2;
 	} else if (*lon > maxlon + 1e-12) {
 
 /*           If the point's longitude is greater than the segment's */
 /*           longitude by more than a small margin, shift the longitude */
 /*           left by 2*pi. */
-	    loclon = *lon - pi2;
+	    loclon = *lon - __state->pi2;
 	}
 	if (loclon < minlon - 1e-12 || loclon > maxlon + 1e-12) {
 

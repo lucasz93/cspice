@@ -1,23 +1,36 @@
-/* getelm.f -- translated by f2c (version 19980913).
+/* getelm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int getelm_state_t;
+static getelm_state_t* get_getelm_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure GETELM ( Get the components from two-line elements) */
 /* Subroutine */ int getelm_(integer *frstyr, char *lines, doublereal *epoch, 
 	doublereal *elems, ftnlen lines_len)
 {
     extern /* Subroutine */ int zzgetelm_(integer *, char *, doublereal *, 
-	    doublereal *, logical *, char *, ftnlen, ftnlen), chkin_(char *, 
-	    ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+	    doublereal *, logical *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     char error[256];
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    getelm_state_t* __state = get_getelm_state();
 /* $ Abstract */
 
 /*    Given a the "lines" of a two-line element set, parse the */

@@ -1,9 +1,17 @@
-/* zzekesiz.f -- translated by f2c (version 19980913).
+/* zzekesiz.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekesiz_state_t;
+static zzekesiz_state_t* get_zzekesiz_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZEKESIZ ( EK, element entry size ) */
 integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
@@ -15,18 +23,25 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
     /* Local variables */
     extern integer zzekrp2n_(integer *, integer *, integer *);
     extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen), chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, 
 	    ftnlen);
-    integer class__, recno, segno;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer class__;
+    integer recno;
+    integer segno;
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    extern integer zzeksz04_(integer *, integer *, integer *, integer *), 
-	    zzeksz05_(integer *, integer *, integer *, integer *), zzeksz06_(
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern integer zzeksz04_(integer *, integer *, integer *, integer *);
+    extern integer zzeksz05_(integer *, integer *, integer *, integer *);
+    extern integer zzeksz06_(integer *, integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekesiz_state_t* __state = get_zzekesiz_state();
 /* $ Abstract */
 
 /*     Return the size of a specified column entry. */

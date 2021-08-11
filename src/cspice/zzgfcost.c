@@ -1,9 +1,17 @@
-/* zzgfcost.f -- translated by f2c (version 19980913).
+/* zzgfcost.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzgfcost_state_t;
+static zzgfcost_state_t* get_zzgfcost_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZGFCOST ( GF, coordinate definition state ) */
 /* Subroutine */ int zzgfcost_(char *vecdef, char *method, integer *trgid, 
@@ -18,17 +26,24 @@
     /* Local variables */
     extern /* Subroutine */ int zzgfssob_(char *, integer *, doublereal *, 
 	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen), zzgfssin_(char *, integer *, doublereal *, char *
-	    , char *, integer *, char *, integer *, doublereal *, doublereal *
-	    , doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    chkin_(char *, ftnlen), errch_(char *, char *, ftnlen, ftnlen), 
-	    spkez_(integer *, doublereal *, char *, char *, integer *, 
-	    doublereal *, doublereal *, ftnlen, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfssin_(char *, integer *, doublereal *, 
+	    char *, char *, integer *, char *, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
+	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
     doublereal lt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    zzgfcost_state_t* __state = get_zzgfcost_state();
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */

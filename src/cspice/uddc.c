@@ -1,21 +1,33 @@
-/* uddc.f -- translated by f2c (version 19980913).
+/* uddc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int uddc_state_t;
+static uddc_state_t* get_uddc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure UDDC ( Derivative of function less than zero, df(x)/dx < 0 ) */
 /* Subroutine */ int uddc_(U_fp udfunc, doublereal *x, doublereal *dx, 
 	logical *isdecr)
 {
     extern /* Subroutine */ int uddf_(U_fp, doublereal *, doublereal *, 
-	    doublereal *), chkin_(char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal deriv;
     extern logical failed_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    uddc_state_t* __state = get_uddc_state();
 /* $ Abstract */
 
 /*    This routine calculates the derivative of UDFUNC with respect */

@@ -1,14 +1,21 @@
-/* wrencc.f -- translated by f2c (version 19980913).
+/* wrencc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__1 = 1;
+extern wrencc_init_t __wrencc_init;
+static wrencc_state_t* get_wrencc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wrencc)
+		state->wrencc = __cspice_allocate_module(sizeof(
+	wrencc_state_t), &__wrencc_init, sizeof(__wrencc_init));
+	return state->wrencc;
+
+}
 
 /* $Procedure WRENCC ( Write characters to text file encoded ) */
 /* Subroutine */ int wrencc_(integer *unit, integer *n, char *data, ftnlen 
@@ -16,13 +23,10 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char hexdig[1*16] = "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" 
-	    "B" "C" "D" "E" "F";
-    static logical first = TRUE_;
 
     /* System generated locals */
     address a__1[3];
-    integer i__1, i__2, i__3[3];
+    integer i__1, i__2, i__3, i__4, i__5[3];
     char ch__1[1], ch__2[66];
     cilist ci__1;
 
@@ -37,11 +41,13 @@ static integer c__1 = 1;
     integer room;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer intch;
-    char ch[1], encchr[64];
-    integer dtalen, dtalin, nchars, hibits;
-    static integer intfpc, intesc;
+    char ch[1];
+    char encchr[64];
+    integer dtalen;
+    integer dtalin;
+    integer nchars;
+    integer hibits;
     integer encpos;
-    static integer intlpc;
     integer dtapos;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     integer lobits;
@@ -52,8 +58,9 @@ static integer c__1 = 1;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char lftovr[2];
     extern logical return_(void);
-    static integer intquo;
 
+    /* Module state */
+    wrencc_state_t* __state = get_wrencc_state();
 /* $ Abstract */
 
 /*     Encode and write characters to a text file. */
@@ -523,9 +530,9 @@ static integer c__1 = 1;
 /*     Statement Function Definitions */
 
 /*     This function controls the conversion of characters to integers. */
-/*     On some supported environments, ICHAR is not sufficient to */
-/*     produce the desired results.  This, however, is not the case */
-/*     with this particular environment. */
+/*     Some versions of the g77 implement ICHAR with a signed integer. */
+/*     This function computes the value of ICHAR that this code requires */
+/*     on any version of g77 for x86 Linux. */
 
 
 /*     Standard SPICE error handling. */
@@ -535,19 +542,35 @@ static integer c__1 = 1;
     } else {
 	chkin_("WRENCC", (ftnlen)6);
     }
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize the integer values for the special characters */
 
-	first = FALSE_;
+	__state->first = FALSE_;
 	*(unsigned char *)&ch__1[0] = '@';
-	intesc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	__state->intesc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = '\'';
-	intquo = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	__state->intquo = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = ' ';
-	intfpc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	__state->intfpc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 	*(unsigned char *)&ch__1[0] = '~';
-	intlpc = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	__state->intlpc = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
     }
 
 /*     Get the length of a data ``line'' in the data buffer DATA. */
@@ -608,15 +631,19 @@ static integer c__1 = 1;
 	*(unsigned char *)ch = *(unsigned char *)&data[(dtalin - 1) * 
 		data_len + (dtapos - 1)];
 	*(unsigned char *)&ch__1[0] = *(unsigned char *)ch;
-	intch = *(unsigned char *)&ch__1[0];
+/* Computing MAX */
+/* Computing MIN */
+	i__3 = 0, i__4 = *(unsigned char *)&ch__1[0];
+	i__1 = -1, i__2 = min(i__3,i__4);
+	intch = *(unsigned char *)&ch__1[0] - (max(i__1,i__2) << 8);
 
 /*        If the character is a special character, then encode it and */
 /*        place it in the encoded character buffer. Otherwise the */
 /*        character is a printing character, so just put it in the */
 /*        encoded character buffer. */
 
-	if (intch < intfpc || intch > intlpc || intch == intesc || intch == 
-		intquo) {
+	if (intch < __state->intfpc || intch > __state->intlpc || intch == 
+		__state->intesc || intch == __state->intquo) {
 
 /*           The character is a nonprinting character, the escape */
 /*           character, or a single quote, and so we need to encode */
@@ -638,29 +665,30 @@ static integer c__1 = 1;
 	    room = 64 - encpos;
 	    if (room >= 2) {
 		i__1 = encpos;
-		s_copy(encchr + i__1, hexdig + ((i__2 = hibits) < 16 && 0 <= 
-			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)664)), encpos + 1 - i__1, (ftnlen)1);
+		s_copy(encchr + i__1, __state->hexdig + ((i__2 = hibits) < 16 
+			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
+			, (ftnlen)664)), encpos + 1 - i__1, (ftnlen)1);
 		i__1 = encpos + 1;
-		s_copy(encchr + i__1, hexdig + ((i__2 = lobits) < 16 && 0 <= 
-			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)665)), encpos + 2 - i__1, (ftnlen)1);
+		s_copy(encchr + i__1, __state->hexdig + ((i__2 = lobits) < 16 
+			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
+			, (ftnlen)665)), encpos + 2 - i__1, (ftnlen)1);
 	    } else if (room == 1) {
 		i__1 = encpos;
-		s_copy(encchr + i__1, hexdig + ((i__2 = hibits) < 16 && 0 <= 
-			i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_", (
-			ftnlen)669)), encpos + 1 - i__1, (ftnlen)1);
-		*(unsigned char *)lftovr = *(unsigned char *)&hexdig[(i__1 = 
-			lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge("hexdig", 
-			i__1, "wrencc_", (ftnlen)670)];
+		s_copy(encchr + i__1, __state->hexdig + ((i__2 = hibits) < 16 
+			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
+			, (ftnlen)669)), encpos + 1 - i__1, (ftnlen)1);
+		*(unsigned char *)lftovr = *(unsigned char *)&__state->hexdig[
+			(i__1 = lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
+			"hexdig", i__1, "wrencc_", (ftnlen)670)];
 		*(unsigned char *)&lftovr[1] = ' ';
 	    } else {
-		*(unsigned char *)lftovr = *(unsigned char *)&hexdig[(i__1 = 
-			hibits) < 16 && 0 <= i__1 ? i__1 : s_rnge("hexdig", 
-			i__1, "wrencc_", (ftnlen)675)];
-		*(unsigned char *)&lftovr[1] = *(unsigned char *)&hexdig[(
-			i__1 = lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
-			"hexdig", i__1, "wrencc_", (ftnlen)676)];
+		*(unsigned char *)lftovr = *(unsigned char *)&__state->hexdig[
+			(i__1 = hibits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
+			"hexdig", i__1, "wrencc_", (ftnlen)675)];
+		*(unsigned char *)&lftovr[1] = *(unsigned char *)&
+			__state->hexdig[(i__1 = lobits) < 16 && 0 <= i__1 ? 
+			i__1 : s_rnge("hexdig", i__1, "wrencc_", (ftnlen)676)]
+			;
 	    }
 
 /*           Increment the character buffer pointers, including the */
@@ -702,11 +730,11 @@ static integer c__1 = 1;
 		goto L100001;
 	    }
 /* Writing concatenation */
-	    i__3[0] = 1, a__1[0] = "'";
-	    i__3[1] = 64, a__1[1] = encchr;
-	    i__3[2] = 1, a__1[2] = "'";
-	    s_cat(ch__2, a__1, i__3, &c__3, (ftnlen)66);
-	    iostat = do_fio(&c__1, ch__2, (ftnlen)66);
+	    i__5[0] = 1, a__1[0] = "'";
+	    i__5[1] = 64, a__1[1] = encchr;
+	    i__5[2] = 1, a__1[2] = "'";
+	    s_cat(ch__2, a__1, i__5, &__state->c__3, (ftnlen)66);
+	    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)66);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -769,11 +797,11 @@ L100001:
 	    goto L100002;
 	}
 /* Writing concatenation */
-	i__3[0] = 1, a__1[0] = "'";
-	i__3[1] = 64, a__1[1] = encchr;
-	i__3[2] = 1, a__1[2] = "'";
-	s_cat(ch__2, a__1, i__3, &c__3, (ftnlen)66);
-	iostat = do_fio(&c__1, ch__2, (ftnlen)66);
+	i__5[0] = 1, a__1[0] = "'";
+	i__5[1] = 64, a__1[1] = encchr;
+	i__5[2] = 1, a__1[2] = "'";
+	s_cat(ch__2, a__1, i__5, &__state->c__3, (ftnlen)66);
+	iostat = do_fio(&__state->c__1, ch__2, (ftnlen)66);
 	if (iostat != 0) {
 	    goto L100002;
 	}

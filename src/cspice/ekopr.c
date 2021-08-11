@@ -1,20 +1,31 @@
-/* ekopr.f -- translated by f2c (version 19980913).
+/* ekopr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ekopr_state_t;
+static ekopr_state_t* get_ekopr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   EKOPR ( EK, open file for reading ) */
 /* Subroutine */ int ekopr_(char *fname, integer *handle, ftnlen fname_len)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen), chkin_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen), chkout_(
-	    char *, ftnlen);
+    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ekopr_state_t* __state = get_ekopr_state();
 /* $ Abstract */
 
 /*     Open an existing E-kernel file for reading. */

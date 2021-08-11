@@ -1,36 +1,50 @@
-/* pckeul.f -- translated by f2c (version 19980913).
+/* pckeul.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__5 = 5;
+extern pckeul_init_t __pckeul_init;
+static pckeul_state_t* get_pckeul_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->pckeul)
+		state->pckeul = __cspice_allocate_module(sizeof(
+	pckeul_state_t), &__pckeul_init, sizeof(__pckeul_init));
+	return state->pckeul;
+
+}
 
 /* $Procedure PCKEUL ( PCK, get Euler angles at time from PCK file ) */
 /* Subroutine */ int pckeul_(integer *body, doublereal *et, logical *found, 
 	char *ref, doublereal *eulang, ftnlen ref_len)
 {
-    integer iref, type__;
+    integer iref;
+    integer type__;
     extern /* Subroutine */ int pcke02_(doublereal *, doublereal *, 
-	    doublereal *), chkin_(char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int pckr02_(integer *, doublereal *, doublereal *,
-	     doublereal *), dafus_(doublereal *, integer *, integer *, 
+	     doublereal *);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     char ident[40];
     integer handle;
     extern /* Subroutine */ int irfnam_(integer *, char *, ftnlen);
     doublereal record[130];
     extern /* Subroutine */ int pcksfs_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, logical *, ftnlen), chkout_(char *, ftnlen);
+	    doublereal *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[5];
 
+
+    /* Module state */
+    pckeul_state_t* __state = get_pckeul_state();
 /* $ Abstract */
 
 /*      This routine is obsolete.  It supports only the type 02 binary */
@@ -220,7 +234,7 @@ static integer c__5 = 5;
 
 /*        Look at parts of the descriptor. */
 
-	dafus_(descr, &c__2, &c__5, dcd, icd);
+	dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
 	type__ = icd[2];
 	iref = icd[1];
 	irfnam_(&iref, ref, ref_len);

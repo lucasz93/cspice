@@ -1,15 +1,21 @@
-/* ckr02.f -- translated by f2c (version 19980913).
+/* ckr02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
-static integer c__7 = 7;
+extern ckr02_init_t __ckr02_init;
+static ckr02_state_t* get_ckr02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckr02)
+		state->ckr02 = __cspice_allocate_module(sizeof(ckr02_state_t),
+	 &__ckr02_init, sizeof(__ckr02_init));
+	return state->ckr02;
+
+}
 
 /* $Procedure      CKR02 ( C-kernel, read pointing record, data type 2 ) */
 /* Subroutine */ int ckr02_(integer *handle, doublereal *descr, doublereal *
@@ -25,22 +31,28 @@ static integer c__7 = 7;
     /* Local variables */
     integer nrec;
     doublereal prec[8];
-    integer ndir, skip;
-    doublereal diff1, diff2;
-    integer i__, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    integer ndir;
+    integer skip;
+    doublereal diff1;
+    doublereal diff2;
+    integer i__;
+    integer n;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer index;
     extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
     integer group;
-    doublereal start, stopi;
+    doublereal start;
+    doublereal stopi;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal buffer[100];
-    integer remain, dirloc;
+    integer remain;
+    integer dirloc;
     extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal clkout;
     integer grpndx;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
@@ -49,9 +61,14 @@ static integer c__7 = 7;
     integer arrsiz;
     extern logical return_(void);
     doublereal dcd[2];
-    integer beg, icd[6], end;
+    integer beg;
+    integer icd[6];
+    integer end;
     logical fnd;
 
+
+    /* Module state */
+    ckr02_state_t* __state = get_ckr02_state();
 /* $ Abstract */
 
 /*     Read a pointing record from a CK segment, data type 2. */
@@ -376,7 +393,7 @@ static integer c__7 = 7;
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check to make sure that the segment is type 2. */
 
@@ -649,7 +666,7 @@ static integer c__7 = 7;
     i__1 = n + 7;
     dafgda_(handle, &n, &i__1, prec);
     record[2] = prec[7];
-    vequg_(prec, &c__7, &record[3]);
+    vequg_(prec, &__state->c__7, &record[3]);
 
 /*     That is all. */
 

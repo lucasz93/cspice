@@ -1,9 +1,17 @@
-/* lstled.f -- translated by f2c (version 19980913).
+/* lstled.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int lstled_state_t;
+static lstled_state_t* get_lstled_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure   LSTLED ( Last double precision element less than or equal) */
 integer lstled_(doublereal *x, integer *n, doublereal *array)
@@ -12,8 +20,15 @@ integer lstled_(doublereal *x, integer *n, doublereal *array)
     integer ret_val;
 
     /* Local variables */
-    integer j, begin, items, middle, end;
+    integer j;
+    integer begin;
+    integer items;
+    integer middle;
+    integer end;
 
+
+    /* Module state */
+    lstled_state_t* __state = get_lstled_state();
 /* $ Abstract */
 
 /*      Given a number X and an array of non-decreasing numbers, */

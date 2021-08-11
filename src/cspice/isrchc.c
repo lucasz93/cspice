@@ -1,9 +1,17 @@
-/* isrchc.f -- translated by f2c (version 19980913).
+/* isrchc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int isrchc_state_t;
+static isrchc_state_t* get_isrchc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure             ISRCHC  ( Search in a character array ) */
 integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
@@ -18,6 +26,9 @@ integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    isrchc_state_t* __state = get_isrchc_state();
 /* $ Abstract */
 
 /*      Search for a given value within a character string array. Return */

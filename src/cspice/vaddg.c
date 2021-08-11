@@ -1,9 +1,17 @@
-/* vaddg.f -- translated by f2c (version 19980913).
+/* vaddg.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int vaddg_state_t;
+static vaddg_state_t* get_vaddg_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      VADDG ( Vector addition, general dimension ) */
 /* Subroutine */ int vaddg_(doublereal *v1, doublereal *v2, integer *ndim, 
@@ -18,6 +26,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    vaddg_state_t* __state = get_vaddg_state();
 /* $ Abstract */
 
 /*     Add two vectors of arbitrary dimension. */
@@ -155,11 +166,11 @@
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "vaddg_", (ftnlen)144)] = v1[(i__3 = i__ - 1) < 
-		v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, "vaddg_", (
-		ftnlen)144)] + v2[(i__4 = i__ - 1) < v2_dim1 && 0 <= i__4 ? 
-		i__4 : s_rnge("v2", i__4, "vaddg_", (ftnlen)144)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
+		"vout", i__2, "vaddg_", (ftnlen)144)] = v1[(i__3 = i__ - 1) < 
+		1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, "vaddg_",
+		 (ftnlen)144)] + v2[(i__4 = i__ - 1) < 1 * v2_dim1 && 0 <= 
+		i__4 ? i__4 : s_rnge("v2", i__4, "vaddg_", (ftnlen)144)];
     }
     return 0;
 } /* vaddg_ */

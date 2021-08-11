@@ -1,9 +1,10 @@
-/* ckcovr.f -- translated by f2c (version 19980913).
+/* ckcovr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      CKCOVR ( CK coverage as ETs adjusted for round off ) */
 /* Subroutine */ int ckcovr_(char *ck, integer *idcode, logical *needav, char 

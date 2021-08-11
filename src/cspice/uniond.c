@@ -1,24 +1,40 @@
-/* uniond.f -- translated by f2c (version 19980913).
+/* uniond.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int uniond_state_t;
+static uniond_state_t* get_uniond_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      UNIOND ( Union two double precision sets ) */
 /* Subroutine */ int uniond_(doublereal *a, doublereal *b, doublereal *c__)
 {
-    integer over, acard, bcard, ccard;
+    integer over;
+    integer acard;
+    integer bcard;
+    integer ccard;
     extern integer cardd_(doublereal *);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     integer csize;
     extern integer sized_(doublereal *);
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    integer apoint, bpoint;
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    integer apoint;
+    integer bpoint;
+    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    uniond_state_t* __state = get_uniond_state();
 /* $ Abstract */
 
 /*      Union two double precision sets to form a third set. */

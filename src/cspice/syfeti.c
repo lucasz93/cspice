@@ -1,9 +1,17 @@
-/* syfeti.f -- translated by f2c (version 19980913).
+/* syfeti.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int syfeti_state_t;
+static syfeti_state_t* get_syfeti_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SYFETI ( Fetch the Nth symbol in the table ) */
 /* Subroutine */ int syfeti_(integer *nth, char *tabsym, integer *tabptr, 
@@ -16,10 +24,13 @@
     /* Local variables */
     integer nsym;
     extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    syfeti_state_t* __state = get_syfeti_state();
 /* $ Abstract */
 
 /*     Fetch the Nth symbol in an integer symbol table. */

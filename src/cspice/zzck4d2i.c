@@ -1,9 +1,17 @@
-/* zzck4d2i.f -- translated by f2c (version 19980913).
+/* zzck4d2i.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzck4d2i_state_t;
+static zzck4d2i_state_t* get_zzck4d2i_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZCK4D2I ( Unpack a set of integers from DP number ) */
 /* Subroutine */ int zzck4d2i_(doublereal *dpcoef, integer *nsets, doublereal 
@@ -19,6 +27,9 @@
     integer k;
     doublereal x;
 
+
+    /* Module state */
+    zzck4d2i_state_t* __state = get_zzck4d2i_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

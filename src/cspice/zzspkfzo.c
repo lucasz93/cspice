@@ -1,13 +1,21 @@
-/* zzspkfzo.f -- translated by f2c (version 19980913).
+/* zzspkfzo.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern zzspkfzo_init_t __zzspkfzo_init;
+static zzspkfzo_state_t* get_zzspkfzo_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkfzo)
+		state->zzspkfzo = __cspice_allocate_module(sizeof(
+	zzspkfzo_state_t), &__zzspkfzo_init, sizeof(__zzspkfzo_init));
+	return state->zzspkfzo;
+
+}
 
 /* $Procedure ZZSPKFZO ( SPK function, easy reader, observer ) */
 /* Subroutine */ int zzspkfzo_(integer *targ, doublereal *et, char *ref, char 
@@ -16,8 +24,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static logical pass1 = TRUE_;
-    static char prvcor[5] = "     ";
 
     /* System generated locals */
     doublereal d__1;
@@ -27,21 +33,26 @@ static integer c__6 = 6;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer fj2000;
     integer type__;
-    static logical xmit;
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *), zzspkfao_(integer *, doublereal *, char 
-	    *, char *, S_fp, doublereal *, doublereal *, doublereal *, ftnlen,
-	     ftnlen), zzvalcor_(char *, logical *, ftnlen), zzcorsxf_(logical 
-	    *, doublereal *, doublereal *, doublereal *), vaddg_(doublereal *,
-	     doublereal *, integer *, doublereal *), chkin_(char *, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zzspkfao_(integer *, doublereal *, char *, 
+	    char *, S_fp, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     logical found;
     doublereal state[6];
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
-    doublereal stemp[6], stobs[6], xform[36]	/* was [6][6] */;
+    doublereal stemp[6];
+    doublereal stobs[6];
+    doublereal xform[36]	/* was [6][6] */;
     extern doublereal vnorm_(doublereal *);
     extern logical failed_(void);
     extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
@@ -49,23 +60,33 @@ static integer c__6 = 6;
     extern doublereal clight_(void);
     integer center;
     logical attblk[15];
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen), frinfo_(
-	    integer *, integer *, integer *, integer *, logical *);
-    static logical usegeo;
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
     doublereal ltcent;
     extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
 	    integer *, doublereal *, doublereal *, ftnlen);
-    doublereal dltctr, corxfm[36]	/* was [6][6] */;
-    integer ltsign, obsctr, reqfrm, typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), spkssb_(integer *, doublereal *,
-	     char *, doublereal *, ftnlen), spkltc_(integer *, doublereal *, 
-	    char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
+    doublereal dltctr;
+    doublereal corxfm[36]	/* was [6][6] */;
+    integer ltsign;
+    integer obsctr;
+    integer reqfrm;
+    integer typeid;
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int spkltc_(integer *, doublereal *, char *, char 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, ftnlen,
+	     ftnlen);
     doublereal stoctr[6];
     extern logical return_(void);
     doublereal dlt;
 
+
+    /* Module state */
+    zzspkfzo_state_t* __state = get_zzspkfzo_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1038,7 +1059,8 @@ static integer c__6 = 6;
 	return 0;
     }
     chkin_("ZZSPKFZO", (ftnlen)8);
-    if (pass1 || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
+    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
+	    5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -1051,7 +1073,7 @@ static integer c__6 = 6;
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -1064,14 +1086,14 @@ static integer c__6 = 6;
 /*        The above definitions are consistent with those used by */
 /*        ZZVALCOR. */
 
-	xmit = attblk[4];
-	usegeo = attblk[0];
+	__state->xmit = attblk[4];
+	__state->usegeo = attblk[0];
 
 /*        Get the frame ID for J2000 on the first call to this routine. */
 
-	if (pass1) {
-	    namfrm_("J2000", &fj2000, (ftnlen)5);
-	    pass1 = FALSE_;
+	if (__state->pass1) {
+	    namfrm_("J2000", &__state->fj2000, (ftnlen)5);
+	    __state->pass1 = FALSE_;
 	}
     }
 
@@ -1083,7 +1105,7 @@ static integer c__6 = 6;
 /*     compute the requested state in the J2000 frame, then transform it */
 /*     to the frame designated by REF. */
 
-    if (usegeo) {
+    if (__state->usegeo) {
 
 /*        Get the state of the target relative to its center at ET. */
 
@@ -1097,7 +1119,7 @@ static integer c__6 = 6;
 	    chkout_("ZZSPKFZO", (ftnlen)8);
 	    return 0;
 	}
-	vsubg_(stemp, stoctr, &c__6, starg);
+	vsubg_(stemp, stoctr, &__state->c__6, starg);
 	*lt = vnorm_(starg) / clight_();
     } else {
 
@@ -1168,7 +1190,7 @@ static integer c__6 = 6;
 		chkout_("ZZSPKFZO", (ftnlen)8);
 		return 0;
 	    }
-	    vaddg_(stemp, stoctr, &c__6, stobs);
+	    vaddg_(stemp, stoctr, &__state->c__6, stobs);
 	    spkltc_(&center, et, "J2000", abcorr, stobs, stemp, &ltcent, &
 		    dltctr, (ftnlen)5, abcorr_len);
 	}
@@ -1186,7 +1208,7 @@ static integer c__6 = 6;
 /*        orientation of the non-inertial frame at an epoch later than */
 /*        ET by the one-way light time. */
 
-	if (xmit) {
+	if (__state->xmit) {
 	    ltsign = 1;
 	} else {
 	    ltsign = -1;
@@ -1196,7 +1218,7 @@ static integer c__6 = 6;
 /*        and convert the state. */
 
 	d__1 = *et + ltsign * ltcent;
-	frmchg_(&fj2000, &reqfrm, &d__1, xform);
+	frmchg_(&__state->fj2000, &reqfrm, &d__1, xform);
 	if (failed_()) {
 	    chkout_("ZZSPKFZO", (ftnlen)8);
 	    return 0;
@@ -1210,12 +1232,12 @@ static integer c__6 = 6;
 /*        XFORM is actually dependent on LTCENT. We need to account for */
 /*        this dependency in our velocity transformation. */
 
-	zzcorsxf_(&xmit, &dltctr, xform, corxfm);
+	zzcorsxf_(&__state->xmit, &dltctr, xform, corxfm);
 
 /*        Now apply the frame transformation CORXFM to produce the */
 /*        state expressed relative to the request frame REQFRM. */
 
-	mxvg_(corxfm, state, &c__6, &c__6, starg);
+	mxvg_(corxfm, state, &__state->c__6, &__state->c__6, starg);
     }
     chkout_("ZZSPKFZO", (ftnlen)8);
     return 0;

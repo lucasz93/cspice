@@ -1,13 +1,21 @@
-/* zzddhgsd.f -- translated by f2c (version 19980913).
+/* zzddhgsd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern zzddhgsd_init_t __zzddhgsd_init;
+static zzddhgsd_state_t* get_zzddhgsd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzddhgsd)
+		state->zzddhgsd = __cspice_allocate_module(sizeof(
+	zzddhgsd_state_t), &__zzddhgsd_init, sizeof(__zzddhgsd_init));
+	return state->zzddhgsd;
+
+}
 
 /* $Procedure ZZDDHGSD ( Private --- DDH Get String Definitions ) */
 /* Subroutine */ int zzddhgsd_(char *class__, integer *id, char *label, 
@@ -15,10 +23,6 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static char clslst[8*3] = "METHOD  " "ARCH    " "BFF     ";
-    static char stramh[8*4] = "READ    " "WRITE   " "SCRATCH " "NEW     ";
-    static char strarc[8*2] = "DAF     " "DAS     ";
-    static char strbff[8*4] = "BIG-IEEE" "LTL-IEEE" "VAX-GFLT" "VAX-DFLT";
 
     /* System generated locals */
     integer i__1;
@@ -29,11 +33,14 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer clsid;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     char tmpstr[8];
 
+
+    /* Module state */
+    zzddhgsd_state_t* __state = get_zzddhgsd_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -445,7 +452,8 @@ static integer c__3 = 3;
 
     ljust_(class__, tmpstr, class_len, (ftnlen)8);
     ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    clsid = isrchc_(tmpstr, &c__3, clslst, (ftnlen)8, (ftnlen)8);
+    clsid = isrchc_(tmpstr, &__state->c__3, __state->clslst, (ftnlen)8, (
+	    ftnlen)8);
 
 /*     Initialize LABEL to the default response. */
 
@@ -455,17 +463,17 @@ static integer c__3 = 3;
 /*     by ID. */
 
     if (clsid == 1 && *id >= 1 && *id <= 4) {
-	s_copy(label, stramh + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("stramh", i__1, "zzddhgsd_", (ftnlen)216)) << 3), 
-		label_len, (ftnlen)8);
+	s_copy(label, __state->stramh + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? 
+		i__1 : s_rnge("stramh", i__1, "zzddhgsd_", (ftnlen)216)) << 3)
+		, label_len, (ftnlen)8);
     } else if (clsid == 2 && *id >= 1 && *id <= 2) {
-	s_copy(label, strarc + (((i__1 = *id - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("strarc", i__1, "zzddhgsd_", (ftnlen)222)) << 3), 
-		label_len, (ftnlen)8);
+	s_copy(label, __state->strarc + (((i__1 = *id - 1) < 2 && 0 <= i__1 ? 
+		i__1 : s_rnge("strarc", i__1, "zzddhgsd_", (ftnlen)222)) << 3)
+		, label_len, (ftnlen)8);
     } else if (clsid == 3 && *id >= 1 && *id <= 4) {
-	s_copy(label, strbff + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("strbff", i__1, "zzddhgsd_", (ftnlen)228)) << 3), 
-		label_len, (ftnlen)8);
+	s_copy(label, __state->strbff + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? 
+		i__1 : s_rnge("strbff", i__1, "zzddhgsd_", (ftnlen)228)) << 3)
+		, label_len, (ftnlen)8);
     }
     return 0;
 } /* zzddhgsd_ */

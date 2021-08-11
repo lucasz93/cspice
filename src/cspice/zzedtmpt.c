@@ -1,14 +1,21 @@
-/* zzedtmpt.f -- translated by f2c (version 19980913).
+/* zzedtmpt.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static doublereal c_b31 = 1e-14;
+extern zzedtmpt_init_t __zzedtmpt_init;
+static zzedtmpt_state_t* get_zzedtmpt_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzedtmpt)
+		state->zzedtmpt = __cspice_allocate_module(sizeof(
+	zzedtmpt_state_t), &__zzedtmpt_init, sizeof(__zzedtmpt_init));
+	return state->zzedtmpt;
+
+}
 
 /* $Procedure ZZEDTMPT ( Ellipsoid terminator point in half-plane ) */
 /* Subroutine */ int zzedtmpt_(logical *umbral, doublereal *a, doublereal *b, 
@@ -20,7 +27,8 @@ static doublereal c_b31 = 1e-14;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), vhat_(doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
     doublereal maxr;
     extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
 	    );
@@ -28,36 +36,58 @@ static doublereal c_b31 = 1e-14;
     extern doublereal vdot_(doublereal *, doublereal *);
     integer nitr;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    doublereal d__, h__, s, angle;
+    doublereal d__;
+    doublereal h__;
+    doublereal s;
+    doublereal angle;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal theta;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    doublereal const__, trans[9]	/* was [3][3] */, taxis[3];
+    doublereal const__;
+    doublereal trans[9]	/* was [3][3] */;
+    doublereal taxis[3];
     extern doublereal vdist_(doublereal *, doublereal *);
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *), vcrss_(doublereal *, doublereal *, doublereal *);
+	    *);
+    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
     extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
     extern logical failed_(void);
-    doublereal ta, tb, tc, xa, xb, xc;
+    doublereal ta;
+    doublereal tb;
+    doublereal tc;
+    doublereal xa;
+    doublereal xb;
+    doublereal xc;
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern doublereal dasine_(doublereal *, doublereal *), halfpi_(void);
+    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal halfpi_(void);
     doublereal angerr;
     extern doublereal touchd_(doublereal *);
-    doublereal normal[3], hplnml[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), ednmpt_(doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *), chkout_(
-	    char *, ftnlen);
-    doublereal sgnnml[3], tmpvec[3], targpt[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    doublereal tplnvc[3], srcpnt[3], utaxis[3];
+    doublereal normal[3];
+    doublereal hplnml[3];
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int ednmpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    doublereal sgnnml[3];
+    doublereal tmpvec[3];
+    doublereal targpt[3];
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    doublereal tplnvc[3];
+    doublereal srcpnt[3];
+    doublereal utaxis[3];
     extern logical return_(void);
     extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
 	    ;
 
+
+    /* Module state */
+    zzedtmpt_state_t* __state = get_zzedtmpt_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -322,7 +352,7 @@ static doublereal c_b31 = 1e-14;
 /*     Transform the source, target, axis, and plane vector */
 /*     so that the target becomes a unit sphere. */
 
-    cleard_(&c__9, trans);
+    cleard_(&__state->c__9, trans);
     ta = 1. / *a;
     tb = 1. / *b;
     tc = 1. / *c__;
@@ -370,7 +400,7 @@ static doublereal c_b31 = 1e-14;
 /*        tangent ray does not cross the line containing TNEGAX. */
 
 	d__1 = (maxr - 1.) / d__;
-	angle = dasine_(&d__1, &c_b31);
+	angle = dasine_(&d__1, &__state->c_b31);
 	if (failed_()) {
 	    chkout_("ZZEDTMPT", (ftnlen)8);
 	    return 0;
@@ -394,7 +424,7 @@ static doublereal c_b31 = 1e-14;
 /*        toward the light source. */
 
 	d__1 = (maxr + 1.) / d__;
-	angle = dasine_(&d__1, &c_b31);
+	angle = dasine_(&d__1, &__state->c_b31);
 	if (failed_()) {
 	    chkout_("ZZEDTMPT", (ftnlen)8);
 	    return 0;

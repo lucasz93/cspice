@@ -1,13 +1,21 @@
-/* dlabbs.f -- translated by f2c (version 19980913).
+/* dlabbs.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern dlabbs_init_t __dlabbs_init;
+static dlabbs_state_t* get_dlabbs_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dlabbs)
+		state->dlabbs = __cspice_allocate_module(sizeof(
+	dlabbs_state_t), &__dlabbs_init, sizeof(__dlabbs_init));
+	return state->dlabbs;
+
+}
 
 /* $Procedure DLABBS ( DLA, begin backward search ) */
 /* Subroutine */ int dlabbs_(integer *handle, integer *descr, logical *found)
@@ -20,9 +28,13 @@ static integer c__3 = 3;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dlabbs_state_t* __state = get_dlabbs_state();
 /* $ Abstract */
 
 /*     Begin a backward segment search in a DLA file. */
@@ -418,7 +430,7 @@ static integer c__3 = 3;
 /*     Look up the pointer to the last DLA segment descriptor in the */
 /*     file.  Then look up the segment descriptor itself. */
 
-    dasrdi_(handle, &c__3, &c__3, &this__);
+    dasrdi_(handle, &__state->c__3, &__state->c__3, &this__);
     if (failed_() || this__ == -1) {
 
 /*        If the pointer THIS is null, there are no segments in the */

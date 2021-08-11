@@ -1,13 +1,21 @@
-/* m2q.f -- translated by f2c (version 19980913).
+/* m2q.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = .1;
+extern m2q_init_t __m2q_init;
+static m2q_state_t* get_m2q_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->m2q)
+		state->m2q = __cspice_allocate_module(sizeof(m2q_state_t), &
+	__m2q_init, sizeof(__m2q_init));
+	return state->m2q;
+
+}
 
 /* $Procedure      M2Q ( Matrix to quaternion ) */
 /* Subroutine */ int m2q_(doublereal *r__, doublereal *q)
@@ -16,17 +24,26 @@ static doublereal c_b2 = .1;
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal c__, s[3];
+    doublereal c__;
+    doublereal s[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal trace, l2;
+    doublereal trace;
+    doublereal l2;
     extern logical isrot_(doublereal *, doublereal *, doublereal *);
-    doublereal mtrace, factor, cc4;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    doublereal mtrace;
+    doublereal factor;
+    doublereal cc4;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal polish;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    doublereal s114, s224, s334;
+    doublereal s114;
+    doublereal s224;
+    doublereal s334;
 
+
+    /* Module state */
+    m2q_state_t* __state = get_m2q_state();
 /* $ Abstract */
 
 /*     Find a unit quaternion corresponding to a specified rotation */
@@ -491,7 +508,7 @@ static doublereal c_b2 = .1;
 
 /*     If R is not a rotation matrix, we can't proceed. */
 
-    if (! isrot_(r__, &c_b2, &c_b2)) {
+    if (! isrot_(r__, &__state->c_b2, &__state->c_b2)) {
 	chkin_("M2Q", (ftnlen)3);
 	setmsg_("Input matrix was not a rotation.", (ftnlen)32);
 	sigerr_("SPICE(NOTAROTATION)", (ftnlen)19);

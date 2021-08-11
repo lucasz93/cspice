@@ -1,9 +1,17 @@
-/* cyclac.f -- translated by f2c (version 19980913).
+/* cyclac.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int cyclac_state_t;
+static cyclac_state_t* get_cyclac_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      CYCLAC ( Cycle the elements of a character array ) */
 /* Subroutine */ int cyclac_(char *array, integer *nelt, char *dir, integer *
@@ -17,21 +25,32 @@
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    char last[1], temp[1];
-    integer c__, g, i__, j, k, l, m;
+    char last[1];
+    char temp[1];
+    integer c__;
+    integer g;
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    integer m;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern integer nbwid_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    movec_(char *, integer *, char *, ftnlen, ftnlen);
-    integer limit;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
+    integer limit;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer widest;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer outlen;
     extern logical return_(void);
     extern integer gcd_(integer *, integer *);
 
+
+    /* Module state */
+    cyclac_state_t* __state = get_cyclac_state();
 /* $ Abstract */
 
 /*      Cycle the elements of a character array forward or backward. */

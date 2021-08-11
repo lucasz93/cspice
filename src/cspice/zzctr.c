@@ -1,9 +1,21 @@
-/* zzctr.f -- translated by f2c (version 19980913).
+/* zzctr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern zzctr_init_t __zzctr_init;
+static zzctr_state_t* get_zzctr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzctr)
+		state->zzctr = __cspice_allocate_module(sizeof(zzctr_state_t),
+	 &__zzctr_init, sizeof(__zzctr_init));
+	return state->zzctr;
+
+}
 
 /* $Procedure ZZCTR ( Manipulate Counter Array ) */
 /* Subroutine */ int zzctr_0_(int n__, integer *newctr, integer *oldctr, 
@@ -11,17 +23,18 @@
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static integer ctrhgh;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
-    extern integer intmin_(void), intmax_(void);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern integer intmin_(void);
+    extern integer intmax_(void);
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    static integer ctrlow;
     extern logical return_(void);
 
+
+    /* Module state */
+    zzctr_state_t* __state = get_zzctr_state();
 /* $ Abstract */
 
 /*     Manipulate counter array. */
@@ -464,16 +477,16 @@ L_zzctruin:
 
 /*     Initialize the high and low values. */
 
-    if (first) {
-	ctrhgh = intmax_();
-	ctrlow = intmin_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->ctrhgh = intmax_();
+	__state->ctrlow = intmin_();
+	__state->first = FALSE_;
     }
 
 /*     Set counter. */
 
-    oldctr[0] = ctrhgh;
-    oldctr[1] = ctrhgh;
+    oldctr[0] = __state->ctrhgh;
+    oldctr[1] = __state->ctrhgh;
     return 0;
 /* $Procedure ZZCTRSIN ( CounTeR array, Subsystem counter INitialization ) */
 
@@ -591,16 +604,16 @@ L_zzctrsin:
 
 /*     Initialize the high and low values. */
 
-    if (first) {
-	ctrhgh = intmax_();
-	ctrlow = intmin_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->ctrhgh = intmax_();
+	__state->ctrlow = intmin_();
+	__state->first = FALSE_;
     }
 
 /*     Set counter. */
 
-    oldctr[0] = ctrlow;
-    oldctr[1] = ctrlow;
+    oldctr[0] = __state->ctrlow;
+    oldctr[1] = __state->ctrlow;
     return 0;
 /* $Procedure ZZCTRINC ( CounTeR Array, INCrement counter ) */
 
@@ -716,16 +729,16 @@ L_zzctrinc:
 
 /*     Initialize the high and low values. */
 
-    if (first) {
-	ctrhgh = intmax_();
-	ctrlow = intmin_();
-	first = FALSE_;
+    if (__state->first) {
+	__state->ctrhgh = intmax_();
+	__state->ctrlow = intmin_();
+	__state->first = FALSE_;
     }
 
 /*     Signal an error if both input counter array elements have high */
 /*     values. */
 
-    if (oldctr[0] == ctrhgh && oldctr[1] == ctrhgh) {
+    if (oldctr[0] == __state->ctrhgh && oldctr[1] == __state->ctrhgh) {
 	chkin_("ZZCTRINC", (ftnlen)8);
 	setmsg_("A subsystem state counter overflowed. For this to happen th"
 		"ere must be a SPICE bug or you must have been running your S"
@@ -739,8 +752,8 @@ L_zzctrinc:
 
 /*     Increment counters. */
 
-    if (oldctr[0] == ctrhgh) {
-	oldctr[0] = ctrlow;
+    if (oldctr[0] == __state->ctrhgh) {
+	oldctr[0] = __state->ctrlow;
 	++oldctr[1];
     } else {
 	++oldctr[0];

@@ -1,9 +1,17 @@
-/* zzeklerc.f -- translated by f2c (version 19980913).
+/* zzeklerc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzeklerc_state_t;
+static zzeklerc_state_t* get_zzeklerc_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZEKLERC  ( EK, LLE, using record pointers, character  ) */
 /* Subroutine */ int zzeklerc_(integer *handle, integer *segdsc, integer *
@@ -11,17 +19,24 @@
 	integer *prvptr, ftnlen ckey_len)
 {
     extern /* Subroutine */ int zzekerc1_(integer *, integer *, integer *, 
-	    char *, integer *, logical *, integer *, integer *, ftnlen), 
-	    zzekcnam_(integer *, integer *, char *, ftnlen), chkin_(char *, 
-	    ftnlen), errch_(char *, char *, ftnlen, ftnlen);
-    integer dtype, itype;
+	    char *, integer *, logical *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    integer dtype;
+    integer itype;
     extern logical failed_(void);
     logical indexd;
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzeklerc_state_t* __state = get_zzeklerc_state();
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */

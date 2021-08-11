@@ -1,9 +1,17 @@
-/* frame.f -- translated by f2c (version 19980913).
+/* frame.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int frame_state_t;
+static frame_state_t* get_frame_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      FRAME ( Build a right handed coordinate frame ) */
 /* Subroutine */ int frame_(doublereal *x, doublereal *y, doublereal *z__)
@@ -16,10 +24,18 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    doublereal a, b, c__, f;
-    integer s1, s2, s3;
+    doublereal a;
+    doublereal b;
+    doublereal c__;
+    doublereal f;
+    integer s1;
+    integer s2;
+    integer s3;
     extern /* Subroutine */ int vhatip_(doublereal *);
 
+
+    /* Module state */
+    frame_state_t* __state = get_frame_state();
 /* $ Abstract */
 
 /*      Given a vector X, this routine builds a right handed */

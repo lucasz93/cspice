@@ -1,13 +1,21 @@
-/* zzekrmch.f -- translated by f2c (version 19980913).
+/* zzekrmch.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
+extern zzekrmch_init_t __zzekrmch_init;
+static zzekrmch_state_t* get_zzekrmch_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekrmch)
+		state->zzekrmch = __cspice_allocate_module(sizeof(
+	zzekrmch_state_t), &__zzekrmch_init, sizeof(__zzekrmch_init));
+	return state->zzekrmch;
+
+}
 
 /* $Procedure      ZZEKRMCH ( EK, row match ) */
 logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
@@ -25,6 +33,9 @@ logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
 	    logical *, ftnlen);
     integer i__;
 
+
+    /* Module state */
+    zzekrmch_state_t* __state = get_zzekrmch_state();
 /* $ Abstract */
 
 /*     Determine whether a specified row in an EK file satisfies */
@@ -698,8 +709,8 @@ logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
 	    i__1 = cbegs[i__ - 1] - 1;
 	    ret_val = zzekscmp_(&ops[i__ - 1], handle, segdsc, &cdscrs[i__ * 
 		    11 - 11], row, &elts[i__ - 1], &vtypes[i__ - 1], chrbuf + 
-		    i__1, &dvals[i__ - 1], &ivals[i__ - 1], &c_false, cends[
-		    i__ - 1] - i__1);
+		    i__1, &dvals[i__ - 1], &ivals[i__ - 1], &__state->c_false,
+		     cends[i__ - 1] - i__1);
 	}
 
 /*        Take a look at the next constraint. */

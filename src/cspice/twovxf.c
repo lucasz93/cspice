@@ -1,21 +1,33 @@
-/* twovxf.f -- translated by f2c (version 19980913).
+/* twovxf.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int twovxf_state_t;
+static twovxf_state_t* get_twovxf_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure TWOVXF ( Two states defining a frame transformation ) */
 /* Subroutine */ int twovxf_(doublereal *axdef, integer *indexa, doublereal *
 	plndef, integer *indexp, doublereal *xform)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), zztwovxf_(doublereal *
-	    , integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zztwovxf_(doublereal *, integer *, doublereal 
+	    *, integer *, doublereal *);
     doublereal xi[36]	/* was [6][6] */;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    twovxf_state_t* __state = get_twovxf_state();
 /* $ Abstract */
 
 /*     Find the state transformation from a base frame to the */

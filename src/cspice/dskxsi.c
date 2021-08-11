@@ -1,13 +1,21 @@
-/* dskxsi.f -- translated by f2c (version 19980913).
+/* dskxsi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern dskxsi_init_t __dskxsi_init;
+static dskxsi_state_t* get_dskxsi_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dskxsi)
+		state->dskxsi = __cspice_allocate_module(sizeof(
+	dskxsi_state_t), &__dskxsi_init, sizeof(__dskxsi_init));
+	return state->dskxsi;
+
+}
 
 /* $Procedure DSKXSI (DSK, ray-surface intercept with source information) */
 /* Subroutine */ int dskxsi_(logical *pri, char *target, integer *nsurf, 
@@ -18,9 +26,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char prvfrm[32] = "                                ";
-    static integer prvtcd = 0;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -28,30 +33,36 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzpctrck_(integer *, logical *), zzsbfxri_(integer *, integer *, 
-	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
-	    integer *, logical *), zzctruin_(integer *), chkin_(char *, 
-	    ftnlen), errch_(char *, char *, ftnlen, ftnlen);
+	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
+    extern /* Subroutine */ int zzsbfxri_(integer *, integer *, integer *, 
+	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	     integer *, integer *, doublereal *, doublereal *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static integer trgcde, fixfid;
-    logical frmfnd, trgfnd;
+    logical frmfnd;
+    logical trgfnd;
     integer fxcent;
-    static integer svtcde, frmctr[2];
-    integer fxtpid, fxclss;
-    static integer trgctr[2];
+    integer fxtpid;
+    integer fxclss;
     logical newfrm;
-    static char svtnam[36];
     extern logical return_(void);
     logical newtrg;
-    static logical svtfnd;
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), sigerr_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), namfrm_(char *, integer *, ftnlen), frinfo_(integer *, 
-	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+	    integer *, logical *);
 
+
+    /* Module state */
+    dskxsi_state_t* __state = get_dskxsi_state();
 /* $ Abstract */
 
 /*     Compute a ray-surface intercept using data provided by */
@@ -1222,12 +1233,12 @@ static integer c__1 = 1;
 	return 0;
     }
     chkin_("DSKXSI", (ftnlen)6);
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(trgctr);
-	zzctruin_(frmctr);
+	zzctruin_(__state->trgctr);
+	zzctruin_(__state->frmctr);
 	if (failed_()) {
 	    chkout_("DSKXSI", (ftnlen)6);
 	    return 0;
@@ -1262,8 +1273,8 @@ static integer c__1 = 1;
 	setmsg_("Output array size MAXD must be at least #; output array siz"
 		"e MAXI must be at least #. Actual sizes were # and # respect"
 		"ively.", (ftnlen)125);
-	errint_("#", &c__1, (ftnlen)1);
-	errint_("#", &c__1, (ftnlen)1);
+	errint_("#", &__state->c__1, (ftnlen)1);
+	errint_("#", &__state->c__1, (ftnlen)1);
 	errint_("#", maxd, (ftnlen)1);
 	errint_("#", maxi, (ftnlen)1);
 	sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
@@ -1273,8 +1284,9 @@ static integer c__1 = 1;
 
 /*     Obtain integer codes for the target and reference frame. */
 
-    zzbods2c_(trgctr, svtnam, &svtcde, &svtfnd, target, &trgcde, &trgfnd, (
-	    ftnlen)36, target_len);
+    zzbods2c_(__state->trgctr, __state->svtnam, &__state->svtcde, &
+	    __state->svtfnd, target, &__state->trgcde, &trgfnd, (ftnlen)36, 
+	    target_len);
     if (failed_()) {
 	chkout_("DSKXSI", (ftnlen)6);
 	return 0;
@@ -1290,20 +1302,21 @@ static integer c__1 = 1;
 	chkout_("DSKXSI", (ftnlen)6);
 	return 0;
     }
-    newfrm = s_cmp(fixref, prvfrm, fixref_len, (ftnlen)32) != 0 || first;
-    newtrg = trgcde != prvtcd || first;
+    newfrm = s_cmp(fixref, __state->prvfrm, fixref_len, (ftnlen)32) != 0 || 
+	    __state->first;
+    newtrg = __state->trgcde != __state->prvtcd || __state->first;
 
 /*     Get the frame ID if the pool state has changed. The */
 /*     first call to ZZPCKTRCK will indicate an update. */
 
-    zzpctrck_(frmctr, &update);
+    zzpctrck_(__state->frmctr, &update);
     if (update || newfrm || newtrg) {
-	namfrm_(fixref, &fixfid, fixref_len);
+	namfrm_(fixref, &__state->fixfid, fixref_len);
 	if (failed_()) {
 	    chkout_("DSKXSI", (ftnlen)6);
 	    return 0;
 	}
-	if (fixfid == 0) {
+	if (__state->fixfid == 0) {
 	    setmsg_("Reference frame # is not recognized by the SPICE frame "
 		    "subsystem. Possibly a required frame definition kernel h"
 		    "as not been loaded.", (ftnlen)130);
@@ -1315,7 +1328,7 @@ static integer c__1 = 1;
 
 /*        Determine the attributes of the frame designated by FIXREF. */
 
-	frinfo_(&fixfid, &fxcent, &fxclss, &fxtpid, &frmfnd);
+	frinfo_(&__state->fixfid, &fxcent, &fxclss, &fxtpid, &frmfnd);
 	if (failed_()) {
 	    chkout_("DSKXSI", (ftnlen)6);
 	    return 0;
@@ -1332,7 +1345,7 @@ static integer c__1 = 1;
 
 /*        Make sure that FIXREF is centered at the target body's center. */
 
-	if (fxcent != trgcde) {
+	if (fxcent != __state->trgcde) {
 	    setmsg_("Reference frame # is not centered at the target body #."
 		    " The ID code of the frame center is #.", (ftnlen)93);
 	    errch_("#", fixref, (ftnlen)1, fixref_len);
@@ -1345,12 +1358,12 @@ static integer c__1 = 1;
 
 /*        We have a valid frame at this point. Save the name. */
 
-	first = FALSE_;
-	s_copy(prvfrm, fixref, (ftnlen)32, fixref_len);
+	__state->first = FALSE_;
+	s_copy(__state->prvfrm, fixref, (ftnlen)32, fixref_len);
 
 /*        Update the previous target ID code as well. */
 
-	prvtcd = trgcde;
+	__state->prvtcd = __state->trgcde;
     }
 
 /*     TRGCDE and FIXFID are set. */
@@ -1358,8 +1371,8 @@ static integer c__1 = 1;
 
 /*     Perform the intercept computation. */
 
-    zzsbfxri_(&trgcde, nsurf, srflst, et, &fixfid, vertex, raydir, xpt, 
-	    handle, dladsc, dskdsc, dc, ic, found);
+    zzsbfxri_(&__state->trgcde, nsurf, srflst, et, &__state->fixfid, vertex, 
+	    raydir, xpt, handle, dladsc, dskdsc, dc, ic, found);
     chkout_("DSKXSI", (ftnlen)6);
     return 0;
 } /* dskxsi_ */

@@ -1,29 +1,43 @@
-/* cknr01.f -- translated by f2c (version 19980913).
+/* cknr01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern cknr01_init_t __cknr01_init;
+static cknr01_state_t* get_cknr01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->cknr01)
+		state->cknr01 = __cspice_allocate_module(sizeof(
+	cknr01_state_t), &__cknr01_init, sizeof(__cknr01_init));
+	return state->cknr01;
+
+}
 
 /* $Procedure      CKNR01 ( C-kernel, number of records, type 01 ) */
 /* Subroutine */ int cknr01_(integer *handle, doublereal *descr, integer *
 	nrec)
 {
     doublereal n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
-	     integer *, integer *, doublereal *), sigerr_(char *, ftnlen), 
-	    chkout_(char *, ftnlen), setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     doublereal dcd[2];
     integer icd[6];
 
+
+    /* Module state */
+    cknr01_state_t* __state = get_cknr01_state();
 /* $ Abstract */
 
 /*     Given the handle of a CK file and the descriptor of a data */
@@ -302,7 +316,7 @@ static integer c__6 = 6;
 /*        ICD(6)  Final address of segment data */
 
 
-    dafus_(descr, &c__2, &c__6, dcd, icd);
+    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     If this segment is not of data type 1, then signal an error. */
 

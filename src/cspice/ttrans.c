@@ -1,25 +1,21 @@
-/* ttrans.f -- translated by f2c (version 19980913).
+/* ttrans.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2000 = 2000;
-static integer c__1 = 1;
-static integer c__4 = 4;
-static integer c__100 = 100;
-static integer c__400 = 400;
-static integer c__1991 = 1991;
-static integer c__6 = 6;
-static integer c__21 = 21;
-static integer c__280 = 280;
-static integer c__12 = 12;
-static integer c__7 = 7;
-static doublereal c_b188 = 3600.;
-static doublereal c_b189 = 60.;
+extern ttrans_init_t __ttrans_init;
+static ttrans_state_t* get_ttrans_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ttrans)
+		state->ttrans = __cspice_allocate_module(sizeof(
+	ttrans_state_t), &__ttrans_init, sizeof(__ttrans_init));
+	return state->ttrans;
+
+}
 
 /* $Procedure      TTRANS ( Time transformation ) */
 /* Subroutine */ int ttrans_(char *from, char *to, doublereal *tvec, ftnlen 
@@ -27,13 +23,6 @@ static doublereal c_b189 = 60.;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer extra[12] = { 0,0,1,1,1,1,1,1,1,1,1,1 };
-    static integer dpjan0[12] = { 0,31,59,90,120,151,181,212,243,273,304,334 }
-	    ;
-    static integer dpbegl[12] = { 0,31,60,91,121,152,182,213,244,274,305,335 }
-	    ;
-    static logical nodata = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
@@ -45,80 +34,44 @@ static doublereal c_b189 = 60.;
     double d_int(doublereal *);
 
     /* Local variables */
-    static doublereal jd1101;
-    static integer dn2000;
-    static doublereal dp2000, frac;
-    static integer nref, week;
-    static doublereal secs;
-    static integer year;
-    static doublereal mins;
-    static char vars__[32*1];
-    static integer qint;
-    static char rest[32], myto[32];
     extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
-    static integer i__;
-    static doublereal halfd;
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     extern logical elemc_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char recog[8*21];
-    static integer fmday;
-    static doublereal daydp;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
-    static logical needy[21];
-    static integer dyear;
-    static doublereal tempd;
-    static logical found;
-    static integer tempi;
-    static logical forml[21];
-    static integer wkday;
-    static doublereal tsecs;
-    static integer dofyr, pfrom, month, dpsun;
-    static doublereal hours, dt;
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    static doublereal taitab[280];
-    static integer daytab[280];
     extern /* Subroutine */ int rmaind_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    static doublereal jdsecs, daylen;
-    static integer parsed[21];
     extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
-    static doublereal formal, secspd;
-    static integer ordvec[21];
-    static logical update;
-    static integer doffst, offset;
     extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen),
-	     reordi_(integer *, integer *, integer *);
-    static doublereal exsecs, lastdt;
+    extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int reordi_(integer *, integer *, integer *);
     extern integer lstlei_(integer *, integer *, integer *);
-    static integer daynum, fyrday;
-    static char unifrm[8*27];
     extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    static integer refptr, dayptr;
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    static integer sunday, taiptr;
     extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
-    static char myfrom[32];
     extern /* Subroutine */ int reordl_(integer *, integer *, logical *);
     extern integer lstlti_(integer *, integer *, integer *);
     extern logical return_(void);
     extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen), setmsg_(char *, ftnlen);
-    static integer usrctr[2];
+	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen), sigerr_(char *, ftnlen), chkout_(char *, ftnlen), 
-	    nextwd_(char *, char *, char *, ftnlen, ftnlen, ftnlen), rmaini_(
-	    integer *, integer *, integer *, integer *);
-    static integer yr1, yr4;
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
+	    integer *);
     extern doublereal j2000_(void);
     extern logical odd_(integer *);
-    static doublereal tai;
-    static integer day, rem;
     extern doublereal spd_(void);
-    static integer pto, yr100, yr400;
 
+    /* Module state */
+    ttrans_state_t* __state = get_ttrans_state();
 /* $ Abstract */
 
 /*     Transform a time vector from one representation and system */
@@ -737,39 +690,49 @@ static doublereal c_b189 = 60.;
 /*     must set up the "watcher" for the kernel pool variables */
 /*     that will be needed by this routine. */
 
-    if (first) {
-	first = FALSE_;
-	secspd = spd_();
-	halfd = spd_() / 2.;
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->secspd = spd_();
+	__state->halfd = spd_() / 2.;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__2000) / c__4 * c__4 + 1 - abs(c__2000);
+	i__3 = 0, i__4 = 1 + abs(__state->c__2000) / __state->c__4 * 
+		__state->c__4 - abs(__state->c__2000);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__2000) / c__100 * c__100 + 1 - abs(c__2000);
+	i__5 = 0, i__6 = 1 + abs(__state->c__2000) / __state->c__100 * 
+		__state->c__100 - abs(__state->c__2000);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__2000) / c__400 * c__400 + 1 - abs(c__2000);
-	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
-		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
+	i__7 = 0, i__8 = 1 + abs(__state->c__2000) / __state->c__400 * 
+		__state->c__400 - abs(__state->c__2000);
+	__state->dn2000 = 365 * (__state->c__2000 - 1) + (__state->c__2000 - 
+		1) / 4 - (__state->c__2000 - 1) / 100 + (__state->c__2000 - 1)
+		 / 400 + (__state->dpjan0[(i__1 = __state->c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		946)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)946)] * (max(i__3,
-		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1;
+		946)] + __state->extra[(i__2 = __state->c__1 - 1) < 12 && 0 <=
+		 i__2 ? i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)946)] 
+		* (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->c__1) - 1;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(c__1991) / c__4 * c__4 + 1 - abs(c__1991);
+	i__3 = 0, i__4 = 1 + abs(__state->c__1991) / __state->c__4 * 
+		__state->c__4 - abs(__state->c__1991);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(c__1991) / c__100 * c__100 + 1 - abs(c__1991);
+	i__5 = 0, i__6 = 1 + abs(__state->c__1991) / __state->c__100 * 
+		__state->c__100 - abs(__state->c__1991);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(c__1991) / c__400 * c__400 + 1 - abs(c__1991);
-	sunday = (c__1991 - 1) * 365 + (c__1991 - 1) / 4 - (c__1991 - 1) / 
-		100 + (c__1991 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
+	i__7 = 0, i__8 = 1 + abs(__state->c__1991) / __state->c__400 * 
+		__state->c__400 - abs(__state->c__1991);
+	__state->sunday = 365 * (__state->c__1991 - 1) + (__state->c__1991 - 
+		1) / 4 - (__state->c__1991 - 1) / 100 + (__state->c__1991 - 1)
+		 / 400 + (__state->dpjan0[(i__1 = __state->c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		947)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)947)] * (max(i__3,
-		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__6) - 1;
-	jd1101 = j2000_() - (doublereal) dn2000 - .5;
+		947)] + __state->extra[(i__2 = __state->c__1 - 1) < 12 && 0 <=
+		 i__2 ? i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)947)] 
+		* (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->c__6) - 1;
+	__state->jd1101 = j2000_() - (doublereal) __state->dn2000 - .5;
 
 /*        Initialize the list of Uniform time systems. */
 
-	ssizec_(&c__21, unifrm, (ftnlen)8);
+	ssizec_(&__state->c__21, __state->unifrm, (ftnlen)8);
 
 /*        Set up the set of recognized time vectors. */
 
@@ -801,130 +764,131 @@ static doublereal c_b189 = 60.;
 /*                the time system has a year.  NEEDY(I) = NO means */
 /*                it doesn't */
 
-	s_copy(recog, "DAYSEC ", (ftnlen)8, (ftnlen)7);
-	parsed[0] = 1;
-	forml[0] = FALSE_;
-	needy[0] = FALSE_;
-	s_copy(recog + 8, "DP2000 ", (ftnlen)8, (ftnlen)7);
-	parsed[1] = 2;
-	forml[1] = FALSE_;
-	needy[1] = FALSE_;
-	s_copy(recog + 16, "ET ", (ftnlen)8, (ftnlen)3);
-	parsed[2] = 3;
-	forml[2] = FALSE_;
-	needy[2] = FALSE_;
-	insrtc_("ET", unifrm, (ftnlen)2, (ftnlen)8);
-	s_copy(recog + 24, "FORMAL ", (ftnlen)8, (ftnlen)7);
-	parsed[3] = 4;
-	forml[3] = TRUE_;
-	needy[3] = FALSE_;
-	s_copy(recog + 32, "JDTDB ", (ftnlen)8, (ftnlen)6);
-	parsed[4] = 5;
-	forml[4] = FALSE_;
-	needy[4] = FALSE_;
-	insrtc_("JDTDB", unifrm, (ftnlen)5, (ftnlen)8);
-	s_copy(recog + 40, "JDTDT ", (ftnlen)8, (ftnlen)6);
-	parsed[5] = 6;
-	forml[5] = FALSE_;
-	needy[5] = FALSE_;
-	insrtc_("JDTDT", unifrm, (ftnlen)5, (ftnlen)8);
-	s_copy(recog + 48, "JDUTC ", (ftnlen)8, (ftnlen)6);
-	parsed[6] = 7;
-	forml[6] = TRUE_;
-	needy[6] = FALSE_;
-	s_copy(recog + 56, "JED ", (ftnlen)8, (ftnlen)4);
-	parsed[7] = 8;
-	forml[7] = FALSE_;
-	needy[7] = FALSE_;
-	insrtc_("JED", unifrm, (ftnlen)3, (ftnlen)8);
-	s_copy(recog + 64, "TAI ", (ftnlen)8, (ftnlen)4);
-	parsed[8] = 9;
-	forml[8] = FALSE_;
-	needy[8] = FALSE_;
-	insrtc_("TAI", unifrm, (ftnlen)3, (ftnlen)8);
-	s_copy(recog + 72, "TDB ", (ftnlen)8, (ftnlen)4);
-	parsed[9] = 10;
-	forml[9] = FALSE_;
-	needy[9] = FALSE_;
-	insrtc_("TDB", unifrm, (ftnlen)3, (ftnlen)8);
-	s_copy(recog + 80, "TDT ", (ftnlen)8, (ftnlen)4);
-	parsed[10] = 11;
-	forml[10] = FALSE_;
-	needy[10] = FALSE_;
-	insrtc_("TDT", unifrm, (ftnlen)3, (ftnlen)8);
-	s_copy(recog + 88, "YD ", (ftnlen)8, (ftnlen)3);
-	parsed[11] = 12;
-	forml[11] = FALSE_;
-	needy[11] = TRUE_;
-	s_copy(recog + 96, "YD.D ", (ftnlen)8, (ftnlen)5);
-	parsed[12] = 13;
-	forml[12] = FALSE_;
-	needy[12] = TRUE_;
-	s_copy(recog + 104, "YD.DF ", (ftnlen)8, (ftnlen)6);
-	parsed[13] = 14;
-	forml[13] = TRUE_;
-	needy[13] = TRUE_;
-	s_copy(recog + 112, "YDF ", (ftnlen)8, (ftnlen)4);
-	parsed[14] = 15;
-	forml[14] = TRUE_;
-	needy[14] = TRUE_;
-	s_copy(recog + 120, "YMD ", (ftnlen)8, (ftnlen)4);
-	parsed[15] = 16;
-	forml[15] = FALSE_;
-	needy[15] = TRUE_;
-	s_copy(recog + 128, "YMDF ", (ftnlen)8, (ftnlen)5);
-	parsed[16] = 17;
-	forml[16] = TRUE_;
-	needy[16] = TRUE_;
-	s_copy(recog + 136, "YMWD ", (ftnlen)8, (ftnlen)5);
-	parsed[17] = 18;
-	forml[17] = FALSE_;
-	needy[17] = TRUE_;
-	s_copy(recog + 144, "YMWDF ", (ftnlen)8, (ftnlen)6);
-	parsed[18] = 19;
-	forml[18] = TRUE_;
-	needy[18] = TRUE_;
-	s_copy(recog + 152, "YWD ", (ftnlen)8, (ftnlen)4);
-	parsed[19] = 20;
-	forml[19] = FALSE_;
-	needy[19] = TRUE_;
-	s_copy(recog + 160, "YWDF ", (ftnlen)8, (ftnlen)5);
-	parsed[20] = 21;
-	forml[20] = TRUE_;
-	needy[20] = TRUE_;
-	orderc_(recog, &c__21, ordvec, (ftnlen)8);
-	reordc_(ordvec, &c__21, recog, (ftnlen)8);
-	reordi_(ordvec, &c__21, parsed);
-	reordl_(ordvec, &c__21, forml);
-	reordl_(ordvec, &c__21, needy);
+	s_copy(__state->recog, "DAYSEC ", (ftnlen)8, (ftnlen)7);
+	__state->parsed[0] = 1;
+	__state->forml[0] = FALSE_;
+	__state->needy[0] = FALSE_;
+	s_copy(__state->recog + 8, "DP2000 ", (ftnlen)8, (ftnlen)7);
+	__state->parsed[1] = 2;
+	__state->forml[1] = FALSE_;
+	__state->needy[1] = FALSE_;
+	s_copy(__state->recog + 16, "ET ", (ftnlen)8, (ftnlen)3);
+	__state->parsed[2] = 3;
+	__state->forml[2] = FALSE_;
+	__state->needy[2] = FALSE_;
+	insrtc_("ET", __state->unifrm, (ftnlen)2, (ftnlen)8);
+	s_copy(__state->recog + 24, "FORMAL ", (ftnlen)8, (ftnlen)7);
+	__state->parsed[3] = 4;
+	__state->forml[3] = TRUE_;
+	__state->needy[3] = FALSE_;
+	s_copy(__state->recog + 32, "JDTDB ", (ftnlen)8, (ftnlen)6);
+	__state->parsed[4] = 5;
+	__state->forml[4] = FALSE_;
+	__state->needy[4] = FALSE_;
+	insrtc_("JDTDB", __state->unifrm, (ftnlen)5, (ftnlen)8);
+	s_copy(__state->recog + 40, "JDTDT ", (ftnlen)8, (ftnlen)6);
+	__state->parsed[5] = 6;
+	__state->forml[5] = FALSE_;
+	__state->needy[5] = FALSE_;
+	insrtc_("JDTDT", __state->unifrm, (ftnlen)5, (ftnlen)8);
+	s_copy(__state->recog + 48, "JDUTC ", (ftnlen)8, (ftnlen)6);
+	__state->parsed[6] = 7;
+	__state->forml[6] = TRUE_;
+	__state->needy[6] = FALSE_;
+	s_copy(__state->recog + 56, "JED ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[7] = 8;
+	__state->forml[7] = FALSE_;
+	__state->needy[7] = FALSE_;
+	insrtc_("JED", __state->unifrm, (ftnlen)3, (ftnlen)8);
+	s_copy(__state->recog + 64, "TAI ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[8] = 9;
+	__state->forml[8] = FALSE_;
+	__state->needy[8] = FALSE_;
+	insrtc_("TAI", __state->unifrm, (ftnlen)3, (ftnlen)8);
+	s_copy(__state->recog + 72, "TDB ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[9] = 10;
+	__state->forml[9] = FALSE_;
+	__state->needy[9] = FALSE_;
+	insrtc_("TDB", __state->unifrm, (ftnlen)3, (ftnlen)8);
+	s_copy(__state->recog + 80, "TDT ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[10] = 11;
+	__state->forml[10] = FALSE_;
+	__state->needy[10] = FALSE_;
+	insrtc_("TDT", __state->unifrm, (ftnlen)3, (ftnlen)8);
+	s_copy(__state->recog + 88, "YD ", (ftnlen)8, (ftnlen)3);
+	__state->parsed[11] = 12;
+	__state->forml[11] = FALSE_;
+	__state->needy[11] = TRUE_;
+	s_copy(__state->recog + 96, "YD.D ", (ftnlen)8, (ftnlen)5);
+	__state->parsed[12] = 13;
+	__state->forml[12] = FALSE_;
+	__state->needy[12] = TRUE_;
+	s_copy(__state->recog + 104, "YD.DF ", (ftnlen)8, (ftnlen)6);
+	__state->parsed[13] = 14;
+	__state->forml[13] = TRUE_;
+	__state->needy[13] = TRUE_;
+	s_copy(__state->recog + 112, "YDF ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[14] = 15;
+	__state->forml[14] = TRUE_;
+	__state->needy[14] = TRUE_;
+	s_copy(__state->recog + 120, "YMD ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[15] = 16;
+	__state->forml[15] = FALSE_;
+	__state->needy[15] = TRUE_;
+	s_copy(__state->recog + 128, "YMDF ", (ftnlen)8, (ftnlen)5);
+	__state->parsed[16] = 17;
+	__state->forml[16] = TRUE_;
+	__state->needy[16] = TRUE_;
+	s_copy(__state->recog + 136, "YMWD ", (ftnlen)8, (ftnlen)5);
+	__state->parsed[17] = 18;
+	__state->forml[17] = FALSE_;
+	__state->needy[17] = TRUE_;
+	s_copy(__state->recog + 144, "YMWDF ", (ftnlen)8, (ftnlen)6);
+	__state->parsed[18] = 19;
+	__state->forml[18] = TRUE_;
+	__state->needy[18] = TRUE_;
+	s_copy(__state->recog + 152, "YWD ", (ftnlen)8, (ftnlen)4);
+	__state->parsed[19] = 20;
+	__state->forml[19] = FALSE_;
+	__state->needy[19] = TRUE_;
+	s_copy(__state->recog + 160, "YWDF ", (ftnlen)8, (ftnlen)5);
+	__state->parsed[20] = 21;
+	__state->forml[20] = TRUE_;
+	__state->needy[20] = TRUE_;
+	orderc_(__state->recog, &__state->c__21, __state->ordvec, (ftnlen)8);
+	reordc_(__state->ordvec, &__state->c__21, __state->recog, (ftnlen)8);
+	reordi_(__state->ordvec, &__state->c__21, __state->parsed);
+	reordl_(__state->ordvec, &__state->c__21, __state->forml);
+	reordl_(__state->ordvec, &__state->c__21, __state->needy);
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(usrctr);
+	zzctruin_(__state->usrctr);
 
 /*        Set up the kernel pool watchers */
 
-	s_copy(vars__, "DELTET/DELTA_AT", (ftnlen)32, (ftnlen)15);
-	swpool_("TTRANS", &c__1, vars__, (ftnlen)6, (ftnlen)32);
+	s_copy(__state->vars__, "DELTET/DELTA_AT", (ftnlen)32, (ftnlen)15);
+	swpool_("TTRANS", &__state->c__1, __state->vars__, (ftnlen)6, (ftnlen)
+		32);
     }
 
 /*     Check to see if any of the kernel items required by this */
 /*     routine have been updated since the last call to this */
 /*     entry point. */
 
-    zzcvpool_("TTRANS", usrctr, &update, (ftnlen)6);
-    if (update || nodata) {
+    zzcvpool_("TTRANS", __state->usrctr, &__state->update, (ftnlen)6);
+    if (__state->update || __state->nodata) {
 
 /*        We load the TAI-UTC offsets and formal leapsecond epochs */
 /*        into the TAITAB.  (We will modify this array in a minute). */
 
-	gdpool_("DELTET/DELTA_AT", &c__1, &c__280, &nref, taitab, &found, (
-		ftnlen)15);
+	gdpool_("DELTET/DELTA_AT", &__state->c__1, &__state->c__280, &
+		__state->nref, __state->taitab, &__state->found, (ftnlen)15);
 
 /*        Make sure all of the requested data was there. */
 
-	if (! found) {
-	    nodata = TRUE_;
+	if (! __state->found) {
+	    __state->nodata = TRUE_;
 	    setmsg_("The variable that points to the leapseconds (DELTET/DEL"
 		    "TA_AT) could not be located in the kernel pool.  It is l"
 		    "ikely that the leapseconds kernel has not been loaded vi"
@@ -965,38 +929,45 @@ static doublereal c_b189 = 60.;
 /*        the day number past 1 Jan 1 AD for the beginning of the */
 /*        days loaded in TAITAB. */
 
-	lastdt = taitab[0] - 1.;
-	i__1 = nref;
-	for (i__ = 1; i__ <= i__1; i__ += 2) {
-	    offset = i__;
-	    refptr = i__ + 1;
-	    dt = taitab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : 
-		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1199)];
-	    formal = taitab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : 
-		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1200)];
-	    taitab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1201)] = formal - 
-		    secspd + lastdt;
-	    taitab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1202)] = formal + dt;
-	    daynum = (integer) ((formal + halfd) / secspd) + dn2000;
-	    daytab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "daytab", i__2, "ttrans_", (ftnlen)1207)] = daynum - 1;
-	    daytab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "daytab", i__2, "ttrans_", (ftnlen)1208)] = daynum;
-	    lastdt = dt;
+	__state->lastdt = __state->taitab[0] - 1.;
+	i__1 = __state->nref;
+	for (__state->i__ = 1; __state->i__ <= i__1; __state->i__ += 2) {
+	    __state->offset = __state->i__;
+	    __state->refptr = __state->i__ + 1;
+	    __state->dt = __state->taitab[(i__2 = __state->offset - 1) < 280 
+		    && 0 <= i__2 ? i__2 : s_rnge("taitab", i__2, "ttrans_", (
+		    ftnlen)1199)];
+	    __state->formal = __state->taitab[(i__2 = __state->refptr - 1) < 
+		    280 && 0 <= i__2 ? i__2 : s_rnge("taitab", i__2, "ttrans_"
+		    , (ftnlen)1200)];
+	    __state->taitab[(i__2 = __state->offset - 1) < 280 && 0 <= i__2 ? 
+		    i__2 : s_rnge("taitab", i__2, "ttrans_", (ftnlen)1201)] = 
+		    __state->formal - __state->secspd + __state->lastdt;
+	    __state->taitab[(i__2 = __state->refptr - 1) < 280 && 0 <= i__2 ? 
+		    i__2 : s_rnge("taitab", i__2, "ttrans_", (ftnlen)1202)] = 
+		    __state->formal + __state->dt;
+	    __state->daynum = (integer) ((__state->formal + __state->halfd) / 
+		    __state->secspd) + __state->dn2000;
+	    __state->daytab[(i__2 = __state->offset - 1) < 280 && 0 <= i__2 ? 
+		    i__2 : s_rnge("daytab", i__2, "ttrans_", (ftnlen)1207)] = 
+		    __state->daynum - 1;
+	    __state->daytab[(i__2 = __state->refptr - 1) < 280 && 0 <= i__2 ? 
+		    i__2 : s_rnge("daytab", i__2, "ttrans_", (ftnlen)1208)] = 
+		    __state->daynum;
+	    __state->lastdt = __state->dt;
 	}
 
 /*        Since we don't have to do it very often, make sure the */
 /*        times in the TAI table are in increasing order. */
 
-	i__1 = nref;
-	for (i__ = 2; i__ <= i__1; ++i__) {
-	    nodata = TRUE_;
-	    if (taitab[(i__2 = i__ - 2) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1222)] >= taitab[(i__3 
-		    = i__ - 1) < 280 && 0 <= i__3 ? i__3 : s_rnge("taitab", 
-		    i__3, "ttrans_", (ftnlen)1222)]) {
+	i__1 = __state->nref;
+	for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
+	    __state->nodata = TRUE_;
+	    if (__state->taitab[(i__2 = __state->i__ - 2) < 280 && 0 <= i__2 ?
+		     i__2 : s_rnge("taitab", i__2, "ttrans_", (ftnlen)1222)] 
+		    >= __state->taitab[(i__3 = __state->i__ - 1) < 280 && 0 <=
+		     i__3 ? i__3 : s_rnge("taitab", i__3, "ttrans_", (ftnlen)
+		    1222)]) {
 		setmsg_("Either the leapsecond epochs taken from the kernel "
 			"pool are not properly ordered or the UTC - TAI offse"
 			"ts are completely out of range. ", (ftnlen)135);
@@ -1008,20 +979,23 @@ static doublereal c_b189 = 60.;
 
 /*        At this point, we've completed all checks on kernel data. */
 
-	nodata = FALSE_;
+	__state->nodata = FALSE_;
     }
 
 /*     Make local normalized copies of FROM and TO. */
 
-    nextwd_(from, myfrom, rest, from_len, (ftnlen)32, (ftnlen)32);
-    nextwd_(to, myto, rest, to_len, (ftnlen)32, (ftnlen)32);
-    ucase_(myfrom, myfrom, (ftnlen)32, (ftnlen)32);
-    ucase_(myto, myto, (ftnlen)32, (ftnlen)32);
+    nextwd_(from, __state->myfrom, __state->rest, from_len, (ftnlen)32, (
+	    ftnlen)32);
+    nextwd_(to, __state->myto, __state->rest, to_len, (ftnlen)32, (ftnlen)32);
+    ucase_(__state->myfrom, __state->myfrom, (ftnlen)32, (ftnlen)32);
+    ucase_(__state->myto, __state->myto, (ftnlen)32, (ftnlen)32);
 
 /*     Make sure that the FROM and TO are recognized time types. */
 
-    pto = bsrchc_(myto, &c__21, recog, (ftnlen)32, (ftnlen)8);
-    pfrom = bsrchc_(myfrom, &c__21, recog, (ftnlen)32, (ftnlen)8);
+    __state->pto = bsrchc_(__state->myto, &__state->c__21, __state->recog, (
+	    ftnlen)32, (ftnlen)8);
+    __state->pfrom = bsrchc_(__state->myfrom, &__state->c__21, __state->recog,
+	     (ftnlen)32, (ftnlen)8);
 
 /*     Eventually, we need to handle SCLKs.  When that happens */
 /*     we will do it here and in a similarly marked spot at */
@@ -1073,14 +1047,14 @@ static doublereal c_b189 = 60.;
 /*     For now we are NOT going to deal with SCLK so if something */
 /*     isn't recognized, we can just signal an error and quit. */
 
-    if (pfrom == 0) {
+    if (__state->pfrom == 0) {
 	setmsg_("The FROM time representation '#' is not recognized. ", (
 		ftnlen)52);
 	errch_("#", from, (ftnlen)1, from_len);
 	sigerr_("SPICE(UNKNONWNTIMESYSTEM)", (ftnlen)25);
 	chkout_("TTRANS", (ftnlen)6);
 	return 0;
-    } else if (pto == 0) {
+    } else if (__state->pto == 0) {
 	setmsg_("The TO time representation '#' is not recognized. ", (ftnlen)
 		50);
 	errch_("#", from, (ftnlen)1, from_len);
@@ -1097,207 +1071,242 @@ static doublereal c_b189 = 60.;
 /*     past the beginning of the day.  None of the cases below */
 /*     are particularly tricky.  There's just a lot of cases. */
 
-    if (pfrom == 16 || pfrom == 17) {
-	year = (integer) tvec[0];
-	month = (integer) tvec[1];
-	day = (integer) tvec[2];
-	i__1 = month - 1;
-	rmaini_(&i__1, &c__12, &dyear, &month);
-	year += dyear;
-	++month;
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+    if (__state->pfrom == 16 || __state->pfrom == 17) {
+	__state->year = (integer) tvec[0];
+	__state->month = (integer) tvec[1];
+	__state->day = (integer) tvec[2];
+	i__1 = __state->month - 1;
+	rmaini_(&i__1, &__state->c__12, &__state->dyear, &__state->month);
+	__state->year += __state->dyear;
+	++__state->month;
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
-		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1361)] + 
-		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1361)] * (max(i__3,i__4) - 
-		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->daynum = 365 * (__state->year - 1) + (__state->year - 1) / 4 
+		- (__state->year - 1) / 100 + (__state->year - 1) / 400 + (
+		__state->dpjan0[(i__1 = __state->month - 1) < 12 && 0 <= i__1 
+		? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1361)] + 
+		__state->extra[(i__2 = __state->month - 1) < 12 && 0 <= i__2 ?
+		 i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)1361)] * (
+		max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->day) - 1 + __state->doffst;
 	d__1 = d_int(&tvec[3]);
 	d__2 = d_int(&tvec[4]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[5];
-    } else if (pfrom == 12 || pfrom == 15) {
-	year = (integer) tvec[0];
-	day = (integer) tvec[1];
-	month = 1;
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+	__state->secs = d__1 * 3600. + d__2 * 60. + tvec[5];
+    } else if (__state->pfrom == 12 || __state->pfrom == 15) {
+	__state->year = (integer) tvec[0];
+	__state->day = (integer) tvec[1];
+	__state->month = 1;
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
-		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1388)] + 
-		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1388)] * (max(i__3,i__4) - 
-		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->daynum = 365 * (__state->year - 1) + (__state->year - 1) / 4 
+		- (__state->year - 1) / 100 + (__state->year - 1) / 400 + (
+		__state->dpjan0[(i__1 = __state->month - 1) < 12 && 0 <= i__1 
+		? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1388)] + 
+		__state->extra[(i__2 = __state->month - 1) < 12 && 0 <= i__2 ?
+		 i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)1388)] * (
+		max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->day) - 1 + __state->doffst;
 	d__1 = d_int(&tvec[2]);
 	d__2 = d_int(&tvec[3]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[4];
-    } else if (pfrom == 13 || pfrom == 14) {
-	year = (integer) tvec[0];
-	day = (integer) tvec[1];
-	month = 1;
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+	__state->secs = d__1 * 3600. + d__2 * 60. + tvec[4];
+    } else if (__state->pfrom == 13 || __state->pfrom == 14) {
+	__state->year = (integer) tvec[0];
+	__state->day = (integer) tvec[1];
+	__state->month = 1;
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
-	frac = tvec[1] - (doublereal) day;
+	__state->frac = tvec[1] - (doublereal) __state->day;
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
-		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1416)] + 
-		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1416)] * (max(i__3,i__4) - 
-		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->daynum = 365 * (__state->year - 1) + (__state->year - 1) / 4 
+		- (__state->year - 1) / 100 + (__state->year - 1) / 400 + (
+		__state->dpjan0[(i__1 = __state->month - 1) < 12 && 0 <= i__1 
+		? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1416)] + 
+		__state->extra[(i__2 = __state->month - 1) < 12 && 0 <= i__2 ?
+		 i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)1416)] * (
+		max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->day) - 1 + __state->doffst;
 
 /*        Normally the length of a day is 86400 seconds, but this day */
 /*        might be a leapsecond day.  We will set DAYLEN to SECSPD and */
 /*        change it if it turns out this is a day with a leapsecond. */
 
-	if (pfrom == 14) {
-	    secs = frac * secspd;
+	if (__state->pfrom == 14) {
+	    __state->secs = __state->frac * __state->secspd;
 	} else {
-	    daylen = secspd;
-	    dayptr = lstlei_(&daynum, &nref, daytab);
-	    if (odd_(&dayptr)) {
-		daylen = taitab[(i__1 = dayptr) < 280 && 0 <= i__1 ? i__1 : 
-			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1431)] - 
-			taitab[(i__2 = dayptr - 1) < 280 && 0 <= i__2 ? i__2 :
-			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1431)];
+	    __state->daylen = __state->secspd;
+	    __state->dayptr = lstlei_(&__state->daynum, &__state->nref, 
+		    __state->daytab);
+	    if (odd_(&__state->dayptr)) {
+		__state->daylen = __state->taitab[(i__1 = __state->dayptr) < 
+			280 && 0 <= i__1 ? i__1 : s_rnge("taitab", i__1, 
+			"ttrans_", (ftnlen)1431)] - __state->taitab[(i__2 = 
+			__state->dayptr - 1) < 280 && 0 <= i__2 ? i__2 : 
+			s_rnge("taitab", i__2, "ttrans_", (ftnlen)1431)];
 	    }
-	    secs = frac * daylen;
+	    __state->secs = __state->frac * __state->daylen;
 	}
-    } else if (pfrom == 4) {
+    } else if (__state->pfrom == 4) {
 
 /*        First lets get the number of days since 1-Jan-2000 00:00:00 */
 
-	d__1 = tvec[0] + halfd;
-	rmaind_(&d__1, &secspd, &dp2000, &secs);
-	daynum = (integer) dp2000 + dn2000;
-    } else if (pfrom == 7) {
+	d__1 = tvec[0] + __state->halfd;
+	rmaind_(&d__1, &__state->secspd, &__state->dp2000, &__state->secs);
+	__state->daynum = (integer) __state->dp2000 + __state->dn2000;
+    } else if (__state->pfrom == 7) {
 
 /*        JD1101 is the julian date UTC of Jan 1, 1 AD. */
 
-	jdsecs = (tvec[0] - jd1101) * secspd;
-	rmaind_(&jdsecs, &secspd, &daydp, &secs);
-	daynum = (integer) daydp;
-    } else if (pfrom == 1) {
-	daynum = (integer) tvec[0];
-	secs = tvec[1];
-    } else if (pfrom == 2) {
-	daynum = (integer) tvec[0] + dn2000;
-	secs = tvec[1];
-    } else if (pfrom == 20 || pfrom == 21) {
-	year = (integer) tvec[0];
-	week = (integer) tvec[1] - 1;
-	wkday = (integer) tvec[2];
-	month = 1;
+	__state->jdsecs = (tvec[0] - __state->jd1101) * __state->secspd;
+	rmaind_(&__state->jdsecs, &__state->secspd, &__state->daydp, &
+		__state->secs);
+	__state->daynum = (integer) __state->daydp;
+    } else if (__state->pfrom == 1) {
+	__state->daynum = (integer) tvec[0];
+	__state->secs = tvec[1];
+    } else if (__state->pfrom == 2) {
+	__state->daynum = (integer) tvec[0] + __state->dn2000;
+	__state->secs = tvec[1];
+    } else if (__state->pfrom == 20 || __state->pfrom == 21) {
+	__state->year = (integer) tvec[0];
+	__state->week = (integer) tvec[1] - 1;
+	__state->wkday = (integer) tvec[2];
+	__state->month = 1;
 
 /*        Compute the days past 1 jan 1 of the beginning of this */
 /*        year and month. */
 
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
-		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1504)] + 
-		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1504)] * (max(i__3,i__4) - 
-		max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1 + doffst;
-	i__1 = daynum - sunday;
-	rmaini_(&i__1, &c__7, &qint, &dpsun);
-	fyrday = dpsun + 1;
-	i__1 = wkday - fyrday;
-	rmaini_(&i__1, &c__7, &qint, &offset);
-	daynum = daynum + week * 7 + offset;
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->daynum = 365 * (__state->year - 1) + (__state->year - 1) / 4 
+		- (__state->year - 1) / 100 + (__state->year - 1) / 400 + (
+		__state->dpjan0[(i__1 = __state->month - 1) < 12 && 0 <= i__1 
+		? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1504)] + 
+		__state->extra[(i__2 = __state->month - 1) < 12 && 0 <= i__2 ?
+		 i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)1504)] * (
+		max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->c__1) - 1 + __state->doffst;
+	i__1 = __state->daynum - __state->sunday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->dpsun);
+	__state->fyrday = __state->dpsun + 1;
+	i__1 = __state->wkday - __state->fyrday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->offset);
+	__state->daynum = __state->daynum + __state->week * 7 + 
+		__state->offset;
 	d__1 = d_int(&tvec[3]);
 	d__2 = d_int(&tvec[4]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[5];
-    } else if (pfrom == 18 || pfrom == 19) {
-	year = (integer) tvec[0];
-	month = (integer) tvec[1];
-	week = (integer) tvec[2] - 1;
-	day = (integer) tvec[3];
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+	__state->secs = d__1 * 3600. + d__2 * 60. + tvec[5];
+    } else if (__state->pfrom == 18 || __state->pfrom == 19) {
+	__state->year = (integer) tvec[0];
+	__state->month = (integer) tvec[1];
+	__state->week = (integer) tvec[2] - 1;
+	__state->day = (integer) tvec[3];
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
-		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1541)] + 
-		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1541)] * (max(i__3,i__4) - 
-		max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1 + doffst;
-	i__1 = daynum - sunday;
-	rmaini_(&i__1, &c__7, &qint, &dpsun);
-	fmday = dpsun + 1;
-	i__1 = day - fmday;
-	rmaini_(&i__1, &c__7, &qint, &offset);
-	daynum = daynum + week * 7 + offset;
-	secs = tvec[4] * 3600. + tvec[5] * 60. + tvec[6];
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->daynum = 365 * (__state->year - 1) + (__state->year - 1) / 4 
+		- (__state->year - 1) / 100 + (__state->year - 1) / 400 + (
+		__state->dpjan0[(i__1 = __state->month - 1) < 12 && 0 <= i__1 
+		? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1541)] + 
+		__state->extra[(i__2 = __state->month - 1) < 12 && 0 <= i__2 ?
+		 i__2 : s_rnge("extra", i__2, "ttrans_", (ftnlen)1541)] * (
+		max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		__state->c__1) - 1 + __state->doffst;
+	i__1 = __state->daynum - __state->sunday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->dpsun);
+	__state->fmday = __state->dpsun + 1;
+	i__1 = __state->day - __state->fmday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->offset);
+	__state->daynum = __state->daynum + __state->week * 7 + 
+		__state->offset;
+	__state->secs = tvec[4] * 3600. + tvec[5] * 60. + tvec[6];
 
 /*     If we get to this point the type must be one of the continuous */
 /*     time types: 'TAI', 'TDT', 'TDB', 'JED', 'ET', 'JDTDT', 'JDTDB'. */
@@ -1308,8 +1317,9 @@ static doublereal c_b189 = 60.;
 /*        we can take a short cut and just perform the computation */
 /*        directly. */
 
-	if (elemc_(myto, unifrm, (ftnlen)32, (ftnlen)8)) {
-	    tvec[0] = unitim_(tvec, myfrom, myto, (ftnlen)32, (ftnlen)32);
+	if (elemc_(__state->myto, __state->unifrm, (ftnlen)32, (ftnlen)8)) {
+	    tvec[0] = unitim_(tvec, __state->myfrom, __state->myto, (ftnlen)
+		    32, (ftnlen)32);
 	    chkout_("TTRANS", (ftnlen)6);
 	    return 0;
 	}
@@ -1318,19 +1328,23 @@ static doublereal c_b189 = 60.;
 /*        Convert what we have to TAI and then to the DAYNUM, SECOND */
 /*        representation. */
 
-	tai = unitim_(tvec, myfrom, "TAI", (ftnlen)32, (ftnlen)3);
-	taiptr = lstled_(&tai, &nref, taitab);
+	__state->tai = unitim_(tvec, __state->myfrom, "TAI", (ftnlen)32, (
+		ftnlen)3);
+	__state->taiptr = lstled_(&__state->tai, &__state->nref, 
+		__state->taitab);
 
 /*        If the TAIPTR value is odd, then the TAI time falls during */
 /*        a day with a leap second.  We can just look up the day */
 /*        number and compute the number of seconds into that */
 /*        day directly ... */
 
-	if (odd_(&taiptr)) {
-	    daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("daytab", i__1, "ttrans_", (ftnlen)1589)];
-	    secs = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1590)];
+	if (odd_(&__state->taiptr)) {
+	    __state->daynum = __state->daytab[(i__1 = __state->taiptr - 1) < 
+		    280 && 0 <= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_"
+		    , (ftnlen)1589)];
+	    __state->secs = __state->tai - __state->taitab[(i__1 = 
+		    __state->taiptr - 1) < 280 && 0 <= i__1 ? i__1 : s_rnge(
+		    "taitab", i__1, "ttrans_", (ftnlen)1590)];
 
 /*        ...Otherwise, all days since the reference TAI time have */
 /*        the same number of seconds (SECSPD).  (This statement applies */
@@ -1344,20 +1358,22 @@ static doublereal c_b189 = 60.;
 /*           compute the number of days and seconds before the first */
 /*           entry in the TAI table. */
 
-	    taiptr = max(taiptr,1);
-	    d__1 = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1609)];
-	    rmaind_(&d__1, &secspd, &daydp, &secs);
-	    daynum = (integer) daydp + daytab[(i__1 = taiptr - 1) < 280 && 0 
-		    <= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (
-		    ftnlen)1612)];
+	    __state->taiptr = max(__state->taiptr,1);
+	    d__1 = __state->tai - __state->taitab[(i__1 = __state->taiptr - 1)
+		     < 280 && 0 <= i__1 ? i__1 : s_rnge("taitab", i__1, "ttr"
+		    "ans_", (ftnlen)1609)];
+	    rmaind_(&d__1, &__state->secspd, &__state->daydp, &__state->secs);
+	    __state->daynum = (integer) __state->daydp + __state->daytab[(
+		    i__1 = __state->taiptr - 1) < 280 && 0 <= i__1 ? i__1 : 
+		    s_rnge("daytab", i__1, "ttrans_", (ftnlen)1612)];
 	}
     }
-    if (forml[(i__1 = pfrom - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1619)]) {
-	rmaind_(&secs, &secspd, &daydp, &tsecs);
-	daynum += (integer) daydp;
-	secs = tsecs;
+    if (__state->forml[(i__1 = __state->pfrom - 1) < 21 && 0 <= i__1 ? i__1 : 
+	    s_rnge("forml", i__1, "ttrans_", (ftnlen)1619)]) {
+	rmaind_(&__state->secs, &__state->secspd, &__state->daydp, &
+		__state->tsecs);
+	__state->daynum += (integer) __state->daydp;
+	__state->secs = __state->tsecs;
     }
 /*     ================================================================== */
 
@@ -1365,45 +1381,52 @@ static doublereal c_b189 = 60.;
 /*     depending upon whether or not the output system is a formal */
 /*     time system or not. */
 
-    if (forml[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1634)] && forml[(i__2 = pfrom - 1) < 21 
-	    && 0 <= i__2 ? i__2 : s_rnge("forml", i__2, "ttrans_", (ftnlen)
-	    1634)]) {
+    if (__state->forml[(i__1 = __state->pto - 1) < 21 && 0 <= i__1 ? i__1 : 
+	    s_rnge("forml", i__1, "ttrans_", (ftnlen)1634)] && __state->forml[
+	    (i__2 = __state->pfrom - 1) < 21 && 0 <= i__2 ? i__2 : s_rnge(
+	    "forml", i__2, "ttrans_", (ftnlen)1634)]) {
 
 /*        We don't have to do anything here. */
 
     } else {
-	if (secs > secspd - 1. || secs < 0.) {
+	if (__state->secs > __state->secspd - 1. || __state->secs < 0.) {
 
 /*           First convert to TAI... */
 
 /* Computing MAX */
-	    i__1 = 1, i__2 = lstlei_(&daynum, &nref, daytab);
-	    dayptr = max(i__1,i__2);
-	    secs += (doublereal) (daynum - daytab[(i__1 = dayptr - 1) < 280 &&
-		     0 <= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (
-		    ftnlen)1647)]) * secspd;
-	    tai = taitab[(i__1 = dayptr - 1) < 280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("taitab", i__1, "ttrans_", (ftnlen)1649)] + secs;
+	    i__1 = 1, i__2 = lstlei_(&__state->daynum, &__state->nref, 
+		    __state->daytab);
+	    __state->dayptr = max(i__1,i__2);
+	    __state->secs += (doublereal) (__state->daynum - __state->daytab[(
+		    i__1 = __state->dayptr - 1) < 280 && 0 <= i__1 ? i__1 : 
+		    s_rnge("daytab", i__1, "ttrans_", (ftnlen)1647)]) * 
+		    __state->secspd;
+	    __state->tai = __state->taitab[(i__1 = __state->dayptr - 1) < 280 
+		    && 0 <= i__1 ? i__1 : s_rnge("taitab", i__1, "ttrans_", (
+		    ftnlen)1649)] + __state->secs;
 
 /*           ...then back to DAYNUM and SECS */
 
-	    taiptr = lstled_(&tai, &nref, taitab);
-	    if (odd_(&taiptr)) {
-		daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1658)];
-		secs = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? 
-			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1659)
-			];
+	    __state->taiptr = lstled_(&__state->tai, &__state->nref, 
+		    __state->taitab);
+	    if (odd_(&__state->taiptr)) {
+		__state->daynum = __state->daytab[(i__1 = __state->taiptr - 1)
+			 < 280 && 0 <= i__1 ? i__1 : s_rnge("daytab", i__1, 
+			"ttrans_", (ftnlen)1658)];
+		__state->secs = __state->tai - __state->taitab[(i__1 = 
+			__state->taiptr - 1) < 280 && 0 <= i__1 ? i__1 : 
+			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1659)];
 	    } else {
-		taiptr = max(1,taiptr);
-		daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1665)];
-		d__1 = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? 
-			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1667)
-			];
-		rmaind_(&d__1, &secspd, &daydp, &secs);
-		daynum += (integer) daydp;
+		__state->taiptr = max(1,__state->taiptr);
+		__state->daynum = __state->daytab[(i__1 = __state->taiptr - 1)
+			 < 280 && 0 <= i__1 ? i__1 : s_rnge("daytab", i__1, 
+			"ttrans_", (ftnlen)1665)];
+		d__1 = __state->tai - __state->taitab[(i__1 = __state->taiptr 
+			- 1) < 280 && 0 <= i__1 ? i__1 : s_rnge("taitab", 
+			i__1, "ttrans_", (ftnlen)1667)];
+		rmaind_(&d__1, &__state->secspd, &__state->daydp, &
+			__state->secs);
+		__state->daynum += (integer) __state->daydp;
 	    }
 	}
     }
@@ -1421,10 +1444,11 @@ static doublereal c_b189 = 60.;
 /*     the number of seconds in a normal day.  In that case we */
 /*     increment the day number by one and set SECS to zero. */
 
-    if (forml[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1690)] && secs > secspd) {
-	++daynum;
-	secs = 0.;
+    if (__state->forml[(i__1 = __state->pto - 1) < 21 && 0 <= i__1 ? i__1 : 
+	    s_rnge("forml", i__1, "ttrans_", (ftnlen)1690)] && __state->secs 
+	    > __state->secspd) {
+	++__state->daynum;
+	__state->secs = 0.;
     }
 
 /*     OK. Now we have DAYNUM and SECS,  convert this form to the */
@@ -1434,46 +1458,54 @@ static doublereal c_b189 = 60.;
 /*     will need some form of year, etc.  Do the work now and sort it */
 /*     it all out at the appropriate time later on. */
 
-    if (needy[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("needy", 
-	    i__1, "ttrans_", (ftnlen)1702)]) {
-	yr400 = daynum / 146097;
-	rem = daynum - yr400 * 146097;
+    if (__state->needy[(i__1 = __state->pto - 1) < 21 && 0 <= i__1 ? i__1 : 
+	    s_rnge("needy", i__1, "ttrans_", (ftnlen)1702)]) {
+	__state->yr400 = __state->daynum / 146097;
+	__state->rem = __state->daynum - __state->yr400 * 146097;
 
 /*        We want to be able to deal with years prior to  1 Jan 1 */
 /*        So we make sure the remainder is positive. */
 
-	if (rem < 0) {
-	    --yr400;
-	    rem += 146097;
+	if (__state->rem < 0) {
+	    --__state->yr400;
+	    __state->rem += 146097;
 	}
 /* Computing MIN */
-	i__1 = 3, i__2 = rem / 36524;
-	yr100 = min(i__1,i__2);
-	rem -= yr100 * 36524;
+	i__1 = 3, i__2 = __state->rem / 36524;
+	__state->yr100 = min(i__1,i__2);
+	__state->rem -= __state->yr100 * 36524;
 /* Computing MIN */
-	i__1 = 24, i__2 = rem / 1461;
-	yr4 = min(i__1,i__2);
-	rem -= yr4 * 1461;
+	i__1 = 24, i__2 = __state->rem / 1461;
+	__state->yr4 = min(i__1,i__2);
+	__state->rem -= __state->yr4 * 1461;
 /* Computing MIN */
-	i__1 = 3, i__2 = rem / 365;
-	yr1 = min(i__1,i__2);
-	rem -= yr1 * 365;
-	dofyr = rem + 1;
-	year = yr400 * 400 + yr100 * 100 + (yr4 << 2) + yr1 + 1;
+	i__1 = 3, i__2 = __state->rem / 365;
+	__state->yr1 = min(i__1,i__2);
+	__state->rem -= __state->yr1 * 365;
+	__state->dofyr = __state->rem + 1;
+	__state->year = __state->yr400 * 400 + __state->yr100 * 100 + (
+		__state->yr4 << 2) + __state->yr1 + 1;
 /* Computing MAX */
-	i__1 = 0, i__2 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__1 = 0, i__2 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__400 * c__400 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
 	if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
-	    month = lstlti_(&dofyr, &c__12, dpjan0);
-	    day = dofyr - dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 :
-		     s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1730)];
+	    __state->month = lstlti_(&__state->dofyr, &__state->c__12, 
+		    __state->dpjan0);
+	    __state->day = __state->dofyr - __state->dpjan0[(i__1 = 
+		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
+		    "dpjan0", i__1, "ttrans_", (ftnlen)1730)];
 	} else {
-	    month = lstlti_(&dofyr, &c__12, dpbegl);
-	    day = dofyr - dpbegl[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 :
-		     s_rnge("dpbegl", i__1, "ttrans_", (ftnlen)1733)];
+	    __state->month = lstlti_(&__state->dofyr, &__state->c__12, 
+		    __state->dpbegl);
+	    __state->day = __state->dofyr - __state->dpbegl[(i__1 = 
+		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
+		    "dpbegl", i__1, "ttrans_", (ftnlen)1733)];
 	}
 
 /*        We only want to convert that portion of seconds less than */
@@ -1481,111 +1513,125 @@ static doublereal c_b189 = 60.;
 /*        and put it in EXSECS. */
 
 /* Computing MAX */
-	d__1 = 0., d__2 = secs - secspd + 1;
-	exsecs = max(d__1,d__2);
-	tsecs = secs - exsecs;
-	rmaind_(&tsecs, &c_b188, &hours, &tempd);
-	rmaind_(&tempd, &c_b189, &mins, &tsecs);
-	tsecs += exsecs;
+	d__1 = 0., d__2 = __state->secs - __state->secspd + 1;
+	__state->exsecs = max(d__1,d__2);
+	__state->tsecs = __state->secs - __state->exsecs;
+	rmaind_(&__state->tsecs, &__state->c_b188, &__state->hours, &
+		__state->tempd);
+	rmaind_(&__state->tempd, &__state->c_b189, &__state->mins, &
+		__state->tsecs);
+	__state->tsecs += __state->exsecs;
     }
 /* ===================================================================== */
 
 /*     Finally, we convert to the requested output. */
 
-    if (pto == 16 || pto == 17) {
-	tvec[0] = (doublereal) year;
-	tvec[1] = (doublereal) month;
-	tvec[2] = (doublereal) day;
-	tvec[3] = hours;
-	tvec[4] = mins;
-	tvec[5] = tsecs;
-    } else if (pto == 12 || pto == 15) {
-	tvec[0] = (doublereal) year;
-	tvec[1] = (doublereal) dofyr;
-	tvec[2] = hours;
-	tvec[3] = mins;
-	tvec[4] = tsecs;
-    } else if (pto == 13 || pto == 14) {
-	tvec[0] = (doublereal) year;
-	if (pto == 13) {
-	    dayptr = lstlei_(&daynum, &nref, daytab);
-	    daylen = secspd;
-	    if (odd_(&dayptr)) {
-		daylen = taitab[(i__1 = dayptr) < 280 && 0 <= i__1 ? i__1 : 
-			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1782)] - 
-			taitab[(i__2 = dayptr - 1) < 280 && 0 <= i__2 ? i__2 :
-			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1782)];
+    if (__state->pto == 16 || __state->pto == 17) {
+	tvec[0] = (doublereal) __state->year;
+	tvec[1] = (doublereal) __state->month;
+	tvec[2] = (doublereal) __state->day;
+	tvec[3] = __state->hours;
+	tvec[4] = __state->mins;
+	tvec[5] = __state->tsecs;
+    } else if (__state->pto == 12 || __state->pto == 15) {
+	tvec[0] = (doublereal) __state->year;
+	tvec[1] = (doublereal) __state->dofyr;
+	tvec[2] = __state->hours;
+	tvec[3] = __state->mins;
+	tvec[4] = __state->tsecs;
+    } else if (__state->pto == 13 || __state->pto == 14) {
+	tvec[0] = (doublereal) __state->year;
+	if (__state->pto == 13) {
+	    __state->dayptr = lstlei_(&__state->daynum, &__state->nref, 
+		    __state->daytab);
+	    __state->daylen = __state->secspd;
+	    if (odd_(&__state->dayptr)) {
+		__state->daylen = __state->taitab[(i__1 = __state->dayptr) < 
+			280 && 0 <= i__1 ? i__1 : s_rnge("taitab", i__1, 
+			"ttrans_", (ftnlen)1782)] - __state->taitab[(i__2 = 
+			__state->dayptr - 1) < 280 && 0 <= i__2 ? i__2 : 
+			s_rnge("taitab", i__2, "ttrans_", (ftnlen)1782)];
 	    }
-	    tvec[1] = (doublereal) dofyr + secs / daylen;
+	    tvec[1] = (doublereal) __state->dofyr + __state->secs / 
+		    __state->daylen;
 	} else {
-	    tvec[1] = (doublereal) dofyr + secs / secspd;
+	    tvec[1] = (doublereal) __state->dofyr + __state->secs / 
+		    __state->secspd;
 	}
-    } else if (pto == 4) {
-	tvec[0] = (doublereal) (daynum - dn2000) * secspd - halfd + secs;
-    } else if (pto == 7) {
-	tvec[0] = jd1101 + (doublereal) daynum + secs / secspd;
-    } else if (pto == 1) {
-	tvec[0] = (doublereal) daynum;
-	tvec[1] = secs;
-    } else if (pto == 2) {
-	tvec[0] = (doublereal) (daynum - dn2000);
-	tvec[1] = secs;
-    } else if (pto == 20 || pto == 21) {
+    } else if (__state->pto == 4) {
+	tvec[0] = (doublereal) (__state->daynum - __state->dn2000) * 
+		__state->secspd - __state->halfd + __state->secs;
+    } else if (__state->pto == 7) {
+	tvec[0] = __state->jd1101 + (doublereal) __state->daynum + 
+		__state->secs / __state->secspd;
+    } else if (__state->pto == 1) {
+	tvec[0] = (doublereal) __state->daynum;
+	tvec[1] = __state->secs;
+    } else if (__state->pto == 2) {
+	tvec[0] = (doublereal) (__state->daynum - __state->dn2000);
+	tvec[1] = __state->secs;
+    } else if (__state->pto == 20 || __state->pto == 21) {
 
 /*        First compute the day of the week, and the week number */
 
-	i__1 = daynum - sunday;
-	rmaini_(&i__1, &c__7, &qint, &day);
-	week = (dofyr - 1) / 7 + 1;
+	i__1 = __state->daynum - __state->sunday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->day);
+	__state->week = (__state->dofyr - 1) / 7 + 1;
 
 /*        Now just put everything where it belongs. */
 
-	tvec[0] = (doublereal) year;
-	tvec[1] = (doublereal) week;
-	tvec[2] = (doublereal) day + 1.;
-	tvec[3] = hours;
-	tvec[4] = mins;
-	tvec[5] = tsecs;
-    } else if (pto == 18 || pto == 19) {
+	tvec[0] = (doublereal) __state->year;
+	tvec[1] = (doublereal) __state->week;
+	tvec[2] = (doublereal) __state->day + 1.;
+	tvec[3] = __state->hours;
+	tvec[4] = __state->mins;
+	tvec[5] = __state->tsecs;
+    } else if (__state->pto == 18 || __state->pto == 19) {
 
 /*        First compute how many weeks into the month DAYNUM is, */
 /*        and compute the day of week number. */
 
-	tvec[0] = (doublereal) year;
-	doffst = 0;
-	if (year <= 0) {
-	    rmaini_(&year, &c__400, &yr400, &tempi);
-	    year = tempi;
-	    if (year == 0) {
-		year += 400;
-		--yr400;
+	tvec[0] = (doublereal) __state->year;
+	__state->doffst = 0;
+	if (__state->year <= 0) {
+	    rmaini_(&__state->year, &__state->c__400, &__state->yr400, &
+		    __state->tempi);
+	    __state->year = __state->tempi;
+	    if (__state->year == 0) {
+		__state->year += 400;
+		--__state->yr400;
 	    }
-	    doffst = yr400 * 146097;
+	    __state->doffst = __state->yr400 * 146097;
 	}
 /* Computing MAX */
-	i__3 = 0, i__4 = abs(year) / c__4 * c__4 + 1 - abs(year);
+	i__3 = 0, i__4 = 1 + abs(__state->year) / __state->c__4 * 
+		__state->c__4 - abs(__state->year);
 /* Computing MAX */
-	i__5 = 0, i__6 = abs(year) / c__100 * c__100 + 1 - abs(year);
+	i__5 = 0, i__6 = 1 + abs(__state->year) / __state->c__100 * 
+		__state->c__100 - abs(__state->year);
 /* Computing MAX */
-	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
-	week = (daynum - ((year - 1) * 365 + (year - 1) / 4 - (year - 1) / 
-		100 + (year - 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 
-		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		1851)] + extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)1851)] * (max(i__3,
-		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1) - 
-		doffst) / 7 + 1;
-	i__1 = daynum - sunday;
-	rmaini_(&i__1, &c__7, &qint, &day);
+	i__7 = 0, i__8 = 1 + abs(__state->year) / __state->c__400 * 
+		__state->c__400 - abs(__state->year);
+	__state->week = (__state->daynum - (365 * (__state->year - 1) + (
+		__state->year - 1) / 4 - (__state->year - 1) / 100 + (
+		__state->year - 1) / 400 + (__state->dpjan0[(i__1 = 
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0"
+		, i__1, "ttrans_", (ftnlen)1851)] + __state->extra[(i__2 = 
+		__state->month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge("extra",
+		 i__2, "ttrans_", (ftnlen)1851)] * (max(i__3,i__4) - max(i__5,
+		i__6) + max(i__7,i__8)) + __state->c__1) - 1) - 
+		__state->doffst) / 7 + 1;
+	i__1 = __state->daynum - __state->sunday;
+	rmaini_(&i__1, &__state->c__7, &__state->qint, &__state->day);
 
 /*        Now just move the remaining stuff into TVEC. */
 
-	tvec[1] = (doublereal) month;
-	tvec[2] = (doublereal) week;
-	tvec[3] = (doublereal) day + 1.;
-	tvec[4] = hours;
-	tvec[5] = mins;
-	tvec[6] = tsecs;
+	tvec[1] = (doublereal) __state->month;
+	tvec[2] = (doublereal) __state->week;
+	tvec[3] = (doublereal) __state->day + 1.;
+	tvec[4] = __state->hours;
+	tvec[5] = __state->mins;
+	tvec[6] = __state->tsecs;
 
 /*     If we get to this point the type must be one of the continuous */
 /*     time types: 'TAI', 'TDT', 'TDB', 'JED', 'ET', 'JDTDT', 'JDTDB'. */
@@ -1594,14 +1640,18 @@ static doublereal c_b189 = 60.;
 
     } else {
 /* Computing MAX */
-	i__1 = 1, i__2 = lstlei_(&daynum, &nref, daytab);
-	dayptr = max(i__1,i__2);
-	secs += (doublereal) (daynum - daytab[(i__1 = dayptr - 1) < 280 && 0 
-		<= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (ftnlen)
-		1873)]) * secspd;
-	tai = taitab[(i__1 = dayptr - 1) < 280 && 0 <= i__1 ? i__1 : s_rnge(
-		"taitab", i__1, "ttrans_", (ftnlen)1875)] + secs;
-	tvec[0] = unitim_(&tai, "TAI", myto, (ftnlen)3, (ftnlen)32);
+	i__1 = 1, i__2 = lstlei_(&__state->daynum, &__state->nref, 
+		__state->daytab);
+	__state->dayptr = max(i__1,i__2);
+	__state->secs += (doublereal) (__state->daynum - __state->daytab[(
+		i__1 = __state->dayptr - 1) < 280 && 0 <= i__1 ? i__1 : 
+		s_rnge("daytab", i__1, "ttrans_", (ftnlen)1873)]) * 
+		__state->secspd;
+	__state->tai = __state->taitab[(i__1 = __state->dayptr - 1) < 280 && 
+		0 <= i__1 ? i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)
+		1875)] + __state->secs;
+	tvec[0] = unitim_(&__state->tai, "TAI", __state->myto, (ftnlen)3, (
+		ftnlen)32);
     }
 
 /*     Here's where we will handle conversion to SCLK when */

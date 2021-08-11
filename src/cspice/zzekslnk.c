@@ -1,9 +1,17 @@
-/* zzekslnk.f -- translated by f2c (version 19980913).
+/* zzekslnk.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzekslnk_state_t;
+static zzekslnk_state_t* get_zzekslnk_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKSLNK ( EK, set link count for data page ) */
 /* Subroutine */ int zzekslnk_(integer *handle, integer *type__, integer *p, 
@@ -18,9 +26,14 @@
     doublereal dplnk;
     extern logical failed_(void);
     extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
-	    doublereal *), dasudi_(integer *, integer *, integer *, integer *)
-	    , zzeksei_(integer *, integer *, integer *);
+	    doublereal *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekslnk_state_t* __state = get_zzekslnk_state();
 /* $ Abstract */
 
 /*     Set the link count for a specified EK data page. */

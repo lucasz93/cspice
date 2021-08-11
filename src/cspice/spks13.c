@@ -1,19 +1,31 @@
-/* spks13.f -- translated by f2c (version 19980913).
+/* spks13.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int spks13_state_t;
+static spks13_state_t* get_spks13_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure SPKS13 ( S/P Kernel, subset, type 13 ) */
 /* Subroutine */ int spks13_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen), spks09_(integer *, 
-	    integer *, integer *, doublereal *, doublereal *), chkout_(char *,
-	     ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int spks09_(integer *, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    spks13_state_t* __state = get_spks13_state();
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 13 */

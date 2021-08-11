@@ -1,13 +1,21 @@
-/* zzektrud.f -- translated by f2c (version 19980913).
+/* zzektrud.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__63 = 63;
+extern zzektrud_init_t __zzektrud_init;
+static zzektrud_state_t* get_zzektrud_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzektrud)
+		state->zzektrud = __cspice_allocate_module(sizeof(
+	zzektrud_state_t), &__zzektrud_init, sizeof(__zzektrud_init));
+	return state->zzektrud;
+
+}
 
 /* $Procedure      ZZEKTRUD ( EK tree, unbalanced deletion ) */
 /* Subroutine */ int zzektrud_(integer *handle, integer *tree, integer *key, 
@@ -20,26 +28,61 @@ static integer c__63 = 63;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer leaf, lsib, rsib, pkey, prev, root, lsib2, rsib2;
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *), 
-	    zzekpgwi_(integer *, integer *, integer *);
+    integer leaf;
+    integer lsib;
+    integer rsib;
+    integer pkey;
+    integer prev;
+    integer root;
+    integer lsib2;
+    integer rsib2;
+    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     integer pkey2;
     extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *), zzektrpi_(
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
-    integer i__, lpage[256];
+	    integer *, integer *, integer *);
+    integer i__;
+    integer lpage[256];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer rpage[256], tpage[256], depth, level, nnode, lpidx, lpkey, rpidx, 
-	    nkeys, rpkey, paren2, poffs2, lpidx2, lpkey2, rpidx2, rpkey2;
+    integer rpage[256];
+    integer tpage[256];
+    integer depth;
+    integer level;
+    integer nnode;
+    integer lpidx;
+    integer lpkey;
+    integer rpidx;
+    integer nkeys;
+    integer rpkey;
+    integer paren2;
+    integer poffs2;
+    integer lpidx2;
+    integer lpkey2;
+    integer rpidx2;
+    integer rpkey2;
     extern logical failed_(void);
     extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    integer target, parent;
+    integer target;
+    integer parent;
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer keyidx, datptr, loffst, nlkeys, poffst, tnkeys, toffst, totkey;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), chkout_(char *, ftnlen);
+    integer keyidx;
+    integer datptr;
+    integer loffst;
+    integer nlkeys;
+    integer poffst;
+    integer tnkeys;
+    integer toffst;
+    integer totkey;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
 
+
+    /* Module state */
+    zzektrud_state_t* __state = get_zzektrud_state();
 /* $ Abstract */
 
 /*     Delete a value from a tree at a specified location without */
@@ -722,7 +765,7 @@ static integer c__63 = 63;
 		errint_("#", tree, (ftnlen)1);
 		errhan_("#", handle, (ftnlen)1);
 		errint_("#", &tnkeys, (ftnlen)1);
-		errint_("#", &c__63, (ftnlen)1);
+		errint_("#", &__state->c__63, (ftnlen)1);
 		sigerr_("SPICE(BUG)", (ftnlen)10);
 		chkout_("ZZEKTRUD", (ftnlen)8);
 		return 0;

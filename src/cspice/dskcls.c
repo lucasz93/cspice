@@ -1,9 +1,17 @@
-/* dskcls.f -- translated by f2c (version 19980913).
+/* dskcls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dskcls_state_t;
+static dskcls_state_t* get_dskcls_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DSKCLS ( DSK, close file ) */
 /* Subroutine */ int dskcls_(integer *handle, logical *optmiz)
@@ -12,12 +20,18 @@
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dasham_(integer *, 
-	    char *, ftnlen), dasllc_(integer *), dascls_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasllc_(integer *);
+    extern /* Subroutine */ int dascls_(integer *);
     char method[10];
-    extern /* Subroutine */ int daswbr_(integer *), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int daswbr_(integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    dskcls_state_t* __state = get_dskcls_state();
 /* $ Abstract */
 
 /*     Close a DSK file. */

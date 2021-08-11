@@ -1,9 +1,17 @@
-/* ckcls.f -- translated by f2c (version 19980913).
+/* ckcls.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int ckcls_state_t;
+static ckcls_state_t* get_ckcls_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure CKCLS ( CK, Close file ) */
 /* Subroutine */ int ckcls_(integer *handle)
@@ -17,12 +25,18 @@
     logical found;
     extern /* Subroutine */ int daffna_(logical *);
     extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *), dafcls_(integer *);
+    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int dafcls_(integer *);
     char access[5];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ckcls_state_t* __state = get_ckcls_state();
 /* $ Abstract */
 
 /*     Close an open CK file. */

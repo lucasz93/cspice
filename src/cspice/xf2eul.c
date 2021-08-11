@@ -1,13 +1,21 @@
-/* xf2eul.f -- translated by f2c (version 19980913).
+/* xf2eul.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern xf2eul_init_t __xf2eul_init;
+static xf2eul_state_t* get_xf2eul_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->xf2eul)
+		state->xf2eul = __cspice_allocate_module(sizeof(
+	xf2eul_state_t), &__xf2eul_init, sizeof(__xf2eul_init));
+	return state->xf2eul;
+
+}
 
 /* $Procedure      XF2EUL ( State transformation to Euler angles ) */
 /* Subroutine */ int xf2eul_0_(int n__, doublereal *xform, integer *axisa, 
@@ -15,9 +23,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal delta[9]	/* was [3][3] */ = { 0.,-1.,1.,1.,0.,-1.,-1.,
-	    1.,0. };
-    static integer next[3] = { 2,3,1 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -29,27 +34,44 @@ static integer c__6 = 6;
     /* Local variables */
     doublereal drdt[9]	/* was [3][3] */;
     extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
-	    ), m2eul_(doublereal *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *), eul2m_(doublereal *, 
-	    doublereal *, doublereal *, integer *, integer *, integer *, 
-	    doublereal *);
-    integer a, b;
+	    );
+    extern /* Subroutine */ int m2eul_(doublereal *, integer *, integer *, 
+	    integer *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
+	    *, integer *, integer *, integer *, doublereal *);
+    integer a;
+    integer b;
     doublereal d__;
-    integer i__, j, k, l;
-    doublereal r__[9]	/* was [3][3] */, u, v, omega[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen), moved_(doublereal *, 
-	    integer *, doublereal *);
+    integer i__;
+    integer j;
+    integer k;
+    integer l;
+    doublereal r__[9]	/* was [3][3] */;
+    doublereal u;
+    doublereal v;
+    doublereal omega[3];
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     doublereal ca;
     extern logical failed_(void);
-    doublereal sa, domega[3], locang[6];
-    integer locaxa, locaxb, locaxc;
+    doublereal sa;
+    doublereal domega[3];
+    doublereal locang[6];
+    integer locaxa;
+    integer locaxb;
+    integer locaxc;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     doublereal drdtrt[9]	/* was [3][3] */;
     extern logical return_(void);
     doublereal solutn[9]	/* was [3][3] */;
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    , mxv_(doublereal *, doublereal *, doublereal *);
+	    ;
+    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+	    ;
 
+
+    /* Module state */
+    xf2eul_state_t* __state = get_xf2eul_state();
 /* $ Abstract */
 
 /*     Convert a state transformation matrix to Euler angles and their */
@@ -721,8 +743,8 @@ static integer c__6 = 6;
     a = *axisa;
     b = *axisb;
     l = 6 - a - b;
-    d__ = delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("del"
-	    "ta", i__1, "xf2eul_", (ftnlen)740)];
+    d__ = __state->delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
+	    s_rnge("delta", i__1, "xf2eul_", (ftnlen)740)];
 
 /*                      t */
 /*     Compute DR/DT * R   and extract OMEGA */
@@ -1050,7 +1072,7 @@ L_eul2xf:
 /*     state vector EULANG.  We'll also use a local set of axis */
 /*     numbers. */
 
-    moved_(eulang, &c__6, locang);
+    moved_(eulang, &__state->c__6, locang);
     locaxa = *axisa;
     locaxb = *axisb;
     locaxc = *axisc;
@@ -1089,22 +1111,22 @@ L_eul2xf:
 /*        the rotation angle about the second axis is zero, all that */
 /*        matters here is picking a distinct axis. */
 
-	if (*axisc == next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("next", i__1, "xf2eul_", (ftnlen)1130)]) {
+	if (*axisc == __state->next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1130)]) {
 
 /*           The first axis is the predecessor of the third, so we pick */
 /*           the successor of the third. */
 
-	    locaxb = next[(i__1 = *axisc - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1135)];
+	    locaxb = __state->next[(i__1 = *axisc - 1) < 3 && 0 <= i__1 ? 
+		    i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1135)];
 	} else {
 
 /*           Either the third axis is the predecessor of the first or */
 /*           matches the first, so the successor of the first is our */
 /*           choice. */
 
-	    locaxb = next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "xf2eul_", (ftnlen)1143)];
+	    locaxb = __state->next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? 
+		    i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1143)];
 	}
     }
 
@@ -1130,8 +1152,8 @@ L_eul2xf:
     a = locaxa;
     b = locaxb;
     l = 6 - a - b;
-    d__ = delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("del"
-	    "ta", i__1, "xf2eul_", (ftnlen)1175)];
+    d__ = __state->delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
+	    s_rnge("delta", i__1, "xf2eul_", (ftnlen)1175)];
 
 /*     Compute the various sines and cosines that we need. */
 

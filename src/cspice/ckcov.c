@@ -1,14 +1,21 @@
-/* ckcov.f -- translated by f2c (version 19980913).
+/* ckcov.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckcov_init_t __ckcov_init;
+static ckcov_state_t* get_ckcov_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckcov)
+		state->ckcov = __cspice_allocate_module(sizeof(ckcov_state_t),
+	 &__ckcov_init, sizeof(__ckcov_init));
+	return state->ckcov;
+
+}
 
 /* $Procedure      CKCOV ( CK coverage ) */
 /* Subroutine */ int ckcov_(char *ck, integer *idcode, logical *needav, char *
@@ -33,9 +40,11 @@ static integer c__6 = 6;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     doublereal descr[5];
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *), errch_(char *, char *, ftnlen, ftnlen);
+	    doublereal *, integer *);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     doublereal dctol[2];
-    logical istdb, found;
+    logical istdb;
+    logical found;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
     integer dtype;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
@@ -45,30 +54,41 @@ static integer c__6 = 6;
     extern logical failed_(void);
     extern /* Subroutine */ int dafbfs_(integer *);
     doublereal et;
-    integer handle, segbeg;
-    extern /* Subroutine */ int dafcls_(integer *), ckmeta_(integer *, char *,
-	     integer *, ftnlen);
+    integer handle;
+    integer segbeg;
+    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
     integer segend;
     extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen), dafopr_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen);
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
     logical seglvl;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), setmsg_(char *, 
-	    ftnlen), wninsd_(doublereal *, doublereal *, doublereal *), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     char kertyp[80];
     extern logical return_(void);
     extern /* Subroutine */ int zzckcv01_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen), zzckcv02_(
-	    integer *, integer *, integer *, integer *, doublereal *, char *, 
-	    doublereal *, ftnlen), zzckcv03_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen), zzckcv04_(
-	    integer *, integer *, integer *, integer *, doublereal *, char *, 
-	    doublereal *, ftnlen), zzckcv05_(integer *, integer *, integer *, 
+	    integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv02_(integer *, integer *, integer *, 
+	    integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv03_(integer *, integer *, integer *, 
+	    integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv04_(integer *, integer *, integer *, 
+	    integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv05_(integer *, integer *, integer *, 
 	    integer *, doublereal *, doublereal *, char *, doublereal *, 
-	    ftnlen), zzckcv06_(integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, char *, doublereal *, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int zzckcv06_(integer *, integer *, integer *, 
+	    integer *, doublereal *, doublereal *, char *, doublereal *, 
+	    ftnlen);
 
+
+    /* Module state */
+    ckcov_state_t* __state = get_ckcov_state();
 /* $ Abstract */
 
 /*     Find the coverage window for a specified object in a specified CK */
@@ -811,7 +831,7 @@ static integer c__6 = 6;
 /*        Fetch and unpack the segment descriptor. */
 
 	dafgs_(descr);
-	dafus_(descr, &c__2, &c__6, dc, ic);
+	dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*        Let AVOK indicate whether the segment satisfies the */
 /*        angular velocity restriction. */

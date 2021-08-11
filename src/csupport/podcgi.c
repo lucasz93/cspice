@@ -1,9 +1,10 @@
-/* podcgi.f -- translated by f2c (version 19980913).
+/* podcgi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+
 
 /* $Procedure      PODCGI ( Pod, close group, integer ) */
 /* Subroutine */ int podcgi_(integer *pod)

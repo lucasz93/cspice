@@ -1,15 +1,21 @@
-/* wrkvar.f -- translated by f2c (version 19980913).
+/* wrkvar.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__5 = 5;
+extern wrkvar_init_t __wrkvar_init;
+static wrkvar_state_t* get_wrkvar_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->wrkvar)
+		state->wrkvar = __cspice_allocate_module(sizeof(
+	wrkvar_state_t), &__wrkvar_init, sizeof(__wrkvar_init));
+	return state->wrkvar;
+
+}
 
 /* $Procedure      WRKVAR ( Write a variable to a kernel file ) */
 /* Subroutine */ int wrkvar_(integer *unit, char *name__, char *dirctv, char *
@@ -31,27 +37,28 @@ static integer c__5 = 5;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     logical found;
     extern /* Subroutine */ int ioerr_(char *, char *, integer *, ftnlen, 
-	    ftnlen), ljust_(char *, char *, ftnlen, ftnlen), rjust_(char *, 
-	    char *, ftnlen, ftnlen);
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int rjust_(char *, char *, ftnlen, ftnlen);
     integer margin;
     doublereal dvalue;
-    integer vardim, varlen;
+    integer vardim;
+    integer varlen;
     extern integer sydimd_(char *, char *, integer *, doublereal *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer iostat;
     extern /* Subroutine */ int synthd_(char *, integer *, char *, integer *, 
 	    doublereal *, doublereal *, logical *, ftnlen, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___9 = { 1, 0, 0, 0, 0 };
-    static cilist io___10 = { 1, 0, 0, 0, 0 };
-    static cilist io___11 = { 1, 0, 0, 0, 0 };
-    static cilist io___12 = { 1, 0, 0, 0, 0 };
 
 
+
+    /* Module state */
+    wrkvar_state_t* __state = get_wrkvar_state();
 /* $ Abstract */
 
 /*     Write the value of a variable in a double precision symbol */
@@ -243,21 +250,22 @@ static integer c__5 = 5;
 	    if (vardim > 1) {
 		i__2 = margin - 2;
 		s_copy(line + i__2, "(", margin - 1 - i__2, (ftnlen)1);
-		io___9.ciunit = *unit;
-		iostat = s_wsle(&io___9);
+		__state->io___9.ciunit = *unit;
+		iostat = s_wsle(&__state->io___9);
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = do_lio(&c__9, &c__1, line, margin);
+		iostat = do_lio(&__state->c__9, &__state->c__1, line, margin);
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = do_lio(&c__5, &c__1, (char *)&dvalue, (ftnlen)sizeof(
-			doublereal));
+		iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&
+			dvalue, (ftnlen)sizeof(doublereal));
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = do_lio(&c__9, &c__1, ", ", (ftnlen)2);
+		iostat = do_lio(&__state->c__9, &__state->c__1, ", ", (ftnlen)
+			2);
 		if (iostat != 0) {
 		    goto L100001;
 		}
@@ -265,17 +273,17 @@ static integer c__5 = 5;
 L100001:
 		;
 	    } else {
-		io___10.ciunit = *unit;
-		iostat = s_wsle(&io___10);
+		__state->io___10.ciunit = *unit;
+		iostat = s_wsle(&__state->io___10);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_lio(&c__9, &c__1, line, margin);
+		iostat = do_lio(&__state->c__9, &__state->c__1, line, margin);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_lio(&c__5, &c__1, (char *)&dvalue, (ftnlen)sizeof(
-			doublereal));
+		iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&
+			dvalue, (ftnlen)sizeof(doublereal));
 		if (iostat != 0) {
 		    goto L100002;
 		}
@@ -289,21 +297,21 @@ L100002:
 
 	} else if (i__ > 1 && i__ == vardim) {
 	    s_copy(line, " ", (ftnlen)132, (ftnlen)1);
-	    io___11.ciunit = *unit;
-	    iostat = s_wsle(&io___11);
+	    __state->io___11.ciunit = *unit;
+	    iostat = s_wsle(&__state->io___11);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_lio(&c__9, &c__1, line, margin);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, line, margin);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_lio(&c__5, &c__1, (char *)&dvalue, (ftnlen)sizeof(
-		    doublereal));
+	    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&dvalue, (
+		    ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_lio(&c__9, &c__1, "  )", (ftnlen)3);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, "  )", (ftnlen)3);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
@@ -312,21 +320,21 @@ L100003:
 	    ;
 	} else {
 	    s_copy(line, " ", (ftnlen)132, (ftnlen)1);
-	    io___12.ciunit = *unit;
-	    iostat = s_wsle(&io___12);
+	    __state->io___12.ciunit = *unit;
+	    iostat = s_wsle(&__state->io___12);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_lio(&c__9, &c__1, line, margin);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, line, margin);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_lio(&c__5, &c__1, (char *)&dvalue, (ftnlen)sizeof(
-		    doublereal));
+	    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&dvalue, (
+		    ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_lio(&c__9, &c__1, ", ", (ftnlen)2);
+	    iostat = do_lio(&__state->c__9, &__state->c__1, ", ", (ftnlen)2);
 	    if (iostat != 0) {
 		goto L100004;
 	    }

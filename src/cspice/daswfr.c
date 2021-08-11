@@ -1,14 +1,21 @@
-/* daswfr.f -- translated by f2c (version 19980913).
+/* daswfr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern daswfr_init_t __daswfr_init;
+static daswfr_state_t* get_daswfr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->daswfr)
+		state->daswfr = __cspice_allocate_module(sizeof(
+	daswfr_state_t), &__daswfr_init, sizeof(__daswfr_init));
+	return state->daswfr;
+
+}
 
 /* $Procedure DASWFR ( DAS write file record ) */
 /* Subroutine */ int daswfr_(integer *handle, char *idword, char *ifname, 
@@ -25,9 +32,12 @@ static integer c__1 = 1;
     char tail[932];
     integer unit;
     extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen), chkin_(char *, ftnlen);
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
-    integer oldcch, locncc, oldcrc;
+    integer oldcch;
+    integer locncc;
+    integer oldcrc;
     extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
     char locifn[60];
@@ -35,25 +45,30 @@ static integer c__1 = 1;
     extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
     integer lastla[3];
     char locidw[8];
-    integer locncr, locnvc, oldrrc;
+    integer locncr;
+    integer locnvc;
+    integer oldrrc;
     char format[8];
     integer lastrc[3];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer lastwd[3];
     extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *),
-	     setmsg_(char *, ftnlen);
-    integer iostat, locnvr;
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    integer iostat;
+    integer locnvr;
     extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
     extern logical return_(void);
     char ifn[60];
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 1, 0, 1, 0, 1 };
-    static cilist io___13 = { 1, 0, 0, 0, 1 };
 
 
+
+    /* Module state */
+    daswfr_state_t* __state = get_daswfr_state();
 /* $ Abstract */
 
 /*     Update the contents of the file record of a specified DAS file. */
@@ -353,7 +368,7 @@ static integer c__1 = 1;
 
 /*     Get the logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &c_false, &unit, (ftnlen)3);
+    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
     if (failed_()) {
 	chkout_("DASWFR", (ftnlen)6);
 	return 0;
@@ -365,40 +380,40 @@ static integer c__1 = 1;
 /*     buffers. The values of the LOCxxx variables are simply */
 /*     ignored, since the caller passes new values in for updates. */
 
-    io___3.ciunit = unit;
-    iostat = s_rdue(&io___3);
+    __state->io___3.ciunit = unit;
+    iostat = s_rdue(&__state->io___3);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, locifn, (ftnlen)60);
+    iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&locnvr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&locnvr, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&locnvc, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&locnvc, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&locncr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&locncr, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, (char *)&locncc, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&locncc, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, format, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&c__1, tail, (ftnlen)932);
+    iostat = do_uio(&__state->c__1, tail, (ftnlen)932);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -419,40 +434,44 @@ L100001:
 
     s_copy(ifn, ifname, (ftnlen)60, ifname_len);
     s_copy(locidw, idword, (ftnlen)8, idword_len);
-    io___13.ciunit = unit;
-    iostat = s_wdue(&io___13);
+    __state->io___13.ciunit = unit;
+    iostat = s_wdue(&__state->io___13);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, ifn, (ftnlen)60);
+    iostat = do_uio(&__state->c__1, ifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, (char *)&(*nresvr), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (ftnlen)sizeof(
+	    integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, (char *)&(*nresvc), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (ftnlen)sizeof(
+	    integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer)
+	    );
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer)
+	    );
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, format, (ftnlen)8);
+    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&c__1, tail, (ftnlen)932);
+    iostat = do_uio(&__state->c__1, tail, (ftnlen)932);
     if (iostat != 0) {
 	goto L100002;
     }

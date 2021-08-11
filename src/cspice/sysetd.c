@@ -1,13 +1,21 @@
-/* sysetd.f -- translated by f2c (version 19980913).
+/* sysetd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern sysetd_init_t __sysetd_init;
+static sysetd_state_t* get_sysetd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sysetd)
+		state->sysetd = __cspice_allocate_module(sizeof(
+	sysetd_state_t), &__sysetd_init, sizeof(__sysetd_init));
+	return state->sysetd;
+
+}
 
 /* $Procedure      SYSETD ( Set the value associated with a symbol ) */
 /* Subroutine */ int sysetd_(char *name__, doublereal *value, char *tabsym, 
@@ -21,30 +29,42 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nptr, nsym;
-    extern integer cardc_(char *, ftnlen), cardd_(doublereal *), cardi_(
+    integer nval;
+    integer nptr;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardd_(doublereal *);
+    extern integer cardi_(integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer sizec_(char *, ftnlen);
+    extern integer sized_(doublereal *);
+    extern integer sumai_(integer *, integer *);
+    extern integer sizei_(integer *);
+    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
 	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen), sized_(doublereal *), sumai_(
-	    integer *, integer *), sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen), scardd_(
-	    integer *, doublereal *), remlad_(integer *, integer *, 
-	    doublereal *, integer *), scardi_(integer *, integer *), inslac_(
-	    char *, integer *, integer *, char *, integer *, ftnlen, ftnlen), 
-	    inslad_(doublereal *, integer *, integer *, doublereal *, integer 
-	    *);
+    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int inslad_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer dimval;
     extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
 	    integer *, integer *);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym;
     logical oldsym;
     extern logical return_(void);
 
+
+    /* Module state */
+    sysetd_state_t* __state = get_sysetd_state();
 /* $ Abstract */
 
 /*     Set the value of a particular symbol in a double precision symbol */
@@ -291,14 +311,14 @@ static integer c__1 = 1;
 
     } else {
 	i__1 = locsym + 1;
-	inslac_(name__, &c__1, &i__1, tabsym + tabsym_len * 6, &nsym, 
-		name_len, tabsym_len);
+	inslac_(name__, &__state->c__1, &i__1, tabsym + tabsym_len * 6, &nsym,
+		 name_len, tabsym_len);
 	scardc_(&nsym, tabsym, tabsym_len);
 	i__1 = locsym + 1;
-	inslai_(&c__1, &c__1, &i__1, &tabptr[6], &nptr);
+	inslai_(&__state->c__1, &__state->c__1, &i__1, &tabptr[6], &nptr);
 	scardi_(&nptr, tabptr);
 	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslad_(value, &c__1, &locval, &tabval[6], &nval);
+	inslad_(value, &__state->c__1, &locval, &tabval[6], &nval);
 	scardd_(&nval, tabval);
     }
     chkout_("SYSETD", (ftnlen)6);

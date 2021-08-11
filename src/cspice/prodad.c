@@ -1,9 +1,17 @@
-/* prodad.f -- translated by f2c (version 19980913).
+/* prodad.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int prodad_state_t;
+static prodad_state_t* get_prodad_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure PRODAD ( Product of a double precision array ) */
 doublereal prodad_(doublereal *array, integer *n)
@@ -16,6 +24,9 @@ doublereal prodad_(doublereal *array, integer *n)
     doublereal prod;
     integer i__;
 
+
+    /* Module state */
+    prodad_state_t* __state = get_prodad_state();
 /* $ Abstract */
 
 /*      Return the product of the elements of a double precision array. */

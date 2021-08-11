@@ -1,9 +1,17 @@
-/* raxisa.f -- translated by f2c (version 19980913).
+/* raxisa.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int raxisa_state_t;
+static raxisa_state_t* get_raxisa_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      RAXISA ( Rotation axis of a matrix ) */
 /* Subroutine */ int raxisa_(doublereal *matrix, doublereal *axis, doublereal 
@@ -17,12 +25,16 @@
     doublereal q[4];
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *), failed_(void);
+    extern logical vzero_(doublereal *);
+    extern logical failed_(void);
     extern doublereal pi_(void);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int m2q_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    raxisa_state_t* __state = get_raxisa_state();
 /* $ Abstract */
 
 /*     Compute the axis of the rotation given by an input matrix */

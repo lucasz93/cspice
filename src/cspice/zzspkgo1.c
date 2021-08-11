@@ -1,14 +1,21 @@
-/* zzspkgo1.f -- translated by f2c (version 19980913).
+/* zzspkgo1.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
-static integer c__0 = 0;
+extern zzspkgo1_init_t __zzspkgo1_init;
+static zzspkgo1_state_t* get_zzspkgo1_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzspkgo1)
+		state->zzspkgo1 = __cspice_allocate_module(sizeof(
+	zzspkgo1_state_t), &__zzspkgo1_init, sizeof(__zzspkgo1_init));
+	return state->zzspkgo1;
+
+}
 
 /* $Procedure ZZSPKGO1 ( S/P Kernel, geometric state ) */
 /* Subroutine */ int zzspkgo1_(integer *targ, doublereal *et, char *ref, 
@@ -16,7 +23,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
 
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -28,28 +34,32 @@ static integer c__0 = 0;
     /* Local variables */
     extern /* Subroutine */ int zzfrmch1_(integer *, integer *, doublereal *, 
 	    doublereal *);
-    integer cobs, legs;
+    integer cobs;
+    integer legs;
     doublereal sobs[6];
     extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *), zznamfrm_(integer *, char *, integer *, 
-	    char *, integer *, ftnlen, ftnlen), zzctruin_(integer *);
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(integer *);
     integer i__;
     extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
-	    doublereal *), etcal_(doublereal *, char *, ftnlen);
+	    doublereal *);
+    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
     integer refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     char oname[40];
     doublereal descr[5];
     integer ctarg[20];
-    char ident[40], tname[40];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen), 
-	    moved_(doublereal *, integer *, doublereal *);
+    char ident[40];
+    char tname[40];
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen);
     doublereal starg[120]	/* was [6][20] */;
     logical nofrm;
-    static char svref[32];
     extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
 	    doublereal *);
     doublereal stemp[6];
@@ -57,23 +67,25 @@ static integer c__0 = 0;
     doublereal vtemp[6];
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
-    static integer svctr1[2];
     extern logical failed_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    integer handle, cframe;
+    integer handle;
+    integer cframe;
     extern doublereal clight_(void);
     integer tframe[20];
     extern integer isrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static integer svrefi;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen), prefix_(
-	    char *, integer *, char *, ftnlen, ftnlen), setmsg_(char *, 
-	    ftnlen), suffix_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer tmpfrm;
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *), 
-	    spksfs_(integer *, doublereal *, integer *, doublereal *, char *, 
-	    logical *, ftnlen);
+    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int spksfs_(integer *, doublereal *, integer *, 
+	    doublereal *, char *, logical *, ftnlen);
     extern integer frstnp_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
@@ -86,6 +98,9 @@ static integer c__0 = 0;
 	    ;
     char tstring[80];
 
+
+    /* Module state */
+    zzspkgo1_state_t* __state = get_zzspkgo1_state();
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -563,12 +578,12 @@ static integer c__0 = 0;
 
 /*     Initialization. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Initialize counter. */
 
-	zzctruin_(svctr1);
-	first = FALSE_;
+	zzctruin_(__state->svctr1);
+	__state->first = FALSE_;
     }
 
 /*     We take care of the obvious case first.  It TARG and OBS are the */
@@ -576,7 +591,7 @@ static integer c__0 = 0;
 
     if (*targ == *obs) {
 	*lt = 0.;
-	cleard_(&c__6, state);
+	cleard_(&__state->c__6, state);
 	chkout_("ZZSPKGO1", (ftnlen)8);
 	return 0;
     }
@@ -645,7 +660,8 @@ static integer c__0 = 0;
 /*     up) and calls IRFNUM again to reset the 'DEFAULT's frame ID */
 /*     should it change between the calls. */
 
-    zznamfrm_(svctr1, svref, &svrefi, ref, &refid, (ftnlen)32, ref_len);
+    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefi, ref, &refid, 
+	    (ftnlen)32, ref_len);
     if (refid == 0) {
 	irfnum_(ref, &refid, ref_len);
     }
@@ -696,8 +712,8 @@ static integer c__0 = 0;
     ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", i__1, 
 	    "zzspkgo1_", (ftnlen)615)] = *targ;
     found = TRUE_;
-    cleard_(&c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-	    s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)618)]);
+    cleard_(&__state->c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? 
+	    i__1 : s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)618)]);
     while(found && i__ < 20 && ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
 	    i__1 : s_rnge("ctarg", i__1, "zzspkgo1_", (ftnlen)620)] != *obs &&
 	     ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ctarg",
@@ -771,7 +787,7 @@ static integer c__0 = 0;
 /*              the last element of STARG. */
 
 		if (tframe[19] == tmpfrm) {
-		    moved_(&starg[114], &c__6, vtemp);
+		    moved_(&starg[114], &__state->c__6, vtemp);
 		} else if (tmpfrm > 0 && tmpfrm <= 21 && tframe[19] > 0 && 
 			tframe[19] <= 21) {
 		    irfrot_(&tframe[19], &tmpfrm, rot);
@@ -783,9 +799,10 @@ static integer c__0 = 0;
 			chkout_("ZZSPKGO1", (ftnlen)8);
 			return 0;
 		    }
-		    mxvg_(stxfrm, &starg[114], &c__6, &c__6, vtemp);
+		    mxvg_(stxfrm, &starg[114], &__state->c__6, &__state->c__6,
+			     vtemp);
 		}
-		vaddg_(vtemp, stemp, &c__6, &starg[114]);
+		vaddg_(vtemp, stemp, &__state->c__6, &starg[114]);
 		tframe[19] = tmpfrm;
 
 /*              If one of the routines above failed during */
@@ -819,7 +836,7 @@ static integer c__0 = 0;
 /*     the first values for COBS and SOBS. */
 
     cobs = *obs;
-    cleard_(&c__6, sobs);
+    cleard_(&__state->c__6, sobs);
 
 /*     Perhaps we have a common node already. */
 /*     If so it will be the last node on the */
@@ -887,15 +904,15 @@ static integer c__0 = 0;
 /*              number of legs in the observer state is one or greater. */
 
 		if (legs > 0) {
-		    vaddg_(sobs, stemp, &c__6, vtemp);
-		    moved_(vtemp, &c__6, sobs);
+		    vaddg_(sobs, stemp, &__state->c__6, vtemp);
+		    moved_(vtemp, &__state->c__6, sobs);
 		}
 	    } else if (tmpfrm > 0 && tmpfrm <= 21 && cframe > 0 && cframe <= 
 		    21) {
 		irfrot_(&cframe, &tmpfrm, rot);
 		mxv_(rot, sobs, vtemp);
 		mxv_(rot, &sobs[3], &vtemp[3]);
-		vaddg_(vtemp, stemp, &c__6, sobs);
+		vaddg_(vtemp, stemp, &__state->c__6, sobs);
 		cframe = tmpfrm;
 	    } else {
 		zzfrmch1_(&cframe, &tmpfrm, et, stxfrm);
@@ -903,8 +920,8 @@ static integer c__0 = 0;
 		    chkout_("ZZSPKGO1", (ftnlen)8);
 		    return 0;
 		}
-		mxvg_(stxfrm, sobs, &c__6, &c__6, vtemp);
-		vaddg_(vtemp, stemp, &c__6, sobs);
+		mxvg_(stxfrm, sobs, &__state->c__6, &__state->c__6, vtemp);
+		vaddg_(vtemp, stemp, &__state->c__6, sobs);
 		cframe = tmpfrm;
 	    }
 
@@ -932,8 +949,8 @@ static integer c__0 = 0;
     if (ctpos == 0) {
 	bodc2n_(targ, tname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &c__0, tname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &c__0, tname, (ftnlen)1, (ftnlen)40);
+	    prefix_("# (", &__state->c__0, tname, (ftnlen)3, (ftnlen)40);
+	    suffix_(")", &__state->c__0, tname, (ftnlen)1, (ftnlen)40);
 	    repmi_(tname, "#", targ, tname, (ftnlen)40, (ftnlen)1, (ftnlen)40)
 		    ;
 	} else {
@@ -941,8 +958,8 @@ static integer c__0 = 0;
 	}
 	bodc2n_(obs, oname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &c__0, oname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &c__0, oname, (ftnlen)1, (ftnlen)40);
+	    prefix_("# (", &__state->c__0, oname, (ftnlen)3, (ftnlen)40);
+	    suffix_(")", &__state->c__0, oname, (ftnlen)1, (ftnlen)40);
 	    repmi_(oname, "#", obs, oname, (ftnlen)40, (ftnlen)1, (ftnlen)40);
 	} else {
 	    intstr_(obs, oname, (ftnlen)40);
@@ -1007,11 +1024,11 @@ static integer c__0 = 0;
 	    vaddg_(&starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
 		    s_rnge("starg", i__2, "zzspkgo1_", (ftnlen)975)], &starg[(
 		    i__3 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__3 ? i__3 : 
-		    s_rnge("starg", i__3, "zzspkgo1_", (ftnlen)975)], &c__6, 
-		    vtemp);
-	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo1_", (
-		    ftnlen)976)]);
+		    s_rnge("starg", i__3, "zzspkgo1_", (ftnlen)975)], &
+		    __state->c__6, vtemp);
+	    moved_(vtemp, &__state->c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo"
+		    "1_", (ftnlen)976)]);
 	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
 		"tframe", i__3, "zzspkgo1_", (ftnlen)978)] > 0 && tframe[(
 		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, 
@@ -1031,10 +1048,10 @@ static integer c__0 = 0;
 		    3]);
 	    vaddg_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= 
 		    i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo1_", (ftnlen)
-		    983)], &c__6, vtemp);
-	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo1_", (
-		    ftnlen)984)]);
+		    983)], &__state->c__6, vtemp);
+	    moved_(vtemp, &__state->c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo"
+		    "1_", (ftnlen)984)]);
 	} else {
 	    zzfrmch1_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
 		    s_rnge("tframe", i__2, "zzspkgo1_", (ftnlen)988)], &
@@ -1046,13 +1063,13 @@ static integer c__0 = 0;
 	    }
 	    mxvg_(stxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
 		    i__2 : s_rnge("starg", i__2, "zzspkgo1_", (ftnlen)995)], &
-		    c__6, &c__6, stemp);
+		    __state->c__6, &__state->c__6, stemp);
 	    vaddg_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= 
 		    i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo1_", (ftnlen)
-		    996)], &c__6, vtemp);
-	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo1_", (
-		    ftnlen)997)]);
+		    996)], &__state->c__6, vtemp);
+	    moved_(vtemp, &__state->c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgo"
+		    "1_", (ftnlen)997)]);
 	}
     }
 
@@ -1065,7 +1082,7 @@ static integer c__0 = 0;
 	    i__1, "zzspkgo1_", (ftnlen)1010)] == cframe) {
 	vsubg_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
 		s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1012)], sobs, &
-		c__6, state);
+		__state->c__6, state);
     } else if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
 	    "tframe", i__1, "zzspkgo1_", (ftnlen)1014)] == refid) {
 
@@ -1084,7 +1101,7 @@ static integer c__0 = 0;
 		chkout_("ZZSPKGO1", (ftnlen)8);
 		return 0;
 	    }
-	    mxvg_(stxfrm, sobs, &c__6, &c__6, stemp);
+	    mxvg_(stxfrm, sobs, &__state->c__6, &__state->c__6, stemp);
 	}
 
 /*        We've now transformed SOBS into the requested reference frame. */
@@ -1093,7 +1110,7 @@ static integer c__0 = 0;
 	cframe = refid;
 	vsubg_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
 		s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1046)], stemp, &
-		c__6, state);
+		__state->c__6, state);
     } else if (cframe > 0 && cframe <= 21 && tframe[(i__1 = ctpos - 1) < 20 &&
 	     0 <= i__1 ? i__1 : s_rnge("tframe", i__1, "zzspkgo1_", (ftnlen)
 	    1049)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
@@ -1108,7 +1125,7 @@ static integer c__0 = 0;
 		s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1056)], stemp);
 	mxv_(rot, &starg[(i__1 = ctpos * 6 - 3) < 120 && 0 <= i__1 ? i__1 : 
 		s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1057)], &stemp[3]);
-	vsubg_(stemp, sobs, &c__6, state);
+	vsubg_(stemp, sobs, &__state->c__6, state);
     } else {
 
 /*        Use the more general routine ZZFRMCH1 to make the */
@@ -1122,9 +1139,9 @@ static integer c__0 = 0;
 	    return 0;
 	}
 	mxvg_(stxfrm, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 
-		: s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1072)], &c__6, &
-		c__6, stemp);
-	vsubg_(stemp, sobs, &c__6, state);
+		: s_rnge("starg", i__1, "zzspkgo1_", (ftnlen)1072)], &
+		__state->c__6, &__state->c__6, stemp);
+	vsubg_(stemp, sobs, &__state->c__6, state);
     }
 
 /*     Finally, rotate as needed into the requested frame. */
@@ -1141,15 +1158,15 @@ static integer c__0 = 0;
 	irfrot_(&cframe, &refid, rot);
 	mxv_(rot, state, stemp);
 	mxv_(rot, &state[3], &stemp[3]);
-	moved_(stemp, &c__6, state);
+	moved_(stemp, &__state->c__6, state);
     } else {
 	zzfrmch1_(&cframe, &refid, et, stxfrm);
 	if (failed_()) {
 	    chkout_("ZZSPKGO1", (ftnlen)8);
 	    return 0;
 	}
-	mxvg_(stxfrm, state, &c__6, &c__6, stemp);
-	moved_(stemp, &c__6, state);
+	mxvg_(stxfrm, state, &__state->c__6, &__state->c__6, stemp);
+	moved_(stemp, &__state->c__6, state);
     }
     *lt = vnorm_(state) / clight_();
     chkout_("ZZSPKGO1", (ftnlen)8);

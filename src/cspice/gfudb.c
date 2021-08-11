@@ -1,16 +1,21 @@
-/* gfudb.f -- translated by f2c (version 19980913).
+/* gfudb.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n1 = -1;
-static integer c__3 = 3;
-static integer c__0 = 0;
-static logical c_false = FALSE_;
+extern gfudb_init_t __gfudb_init;
+static gfudb_state_t* get_gfudb_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->gfudb)
+		state->gfudb = __cspice_allocate_module(sizeof(gfudb_state_t),
+	 &__gfudb_init, sizeof(__gfudb_init));
+	return state->gfudb;
+
+}
 
 /* $Procedure GFUDB ( GF, user defined boolean ) */
 /* Subroutine */ int gfudb_(U_fp udfuns, U_fp udfunb, doublereal *step, 
@@ -25,19 +30,28 @@ static logical c_false = FALSE_;
     extern logical gfbail_();
     logical ok;
     extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int gfrefn_(), gfrepf_(), gfrepi_(), gfrepu_(), 
-	    gfstep_();
+    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int gfrepf_();
+    extern /* Subroutine */ int gfrepi_();
+    extern /* Subroutine */ int gfrepu_();
+    extern /* Subroutine */ int gfstep_();
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), sigerr_(
-	    char *, ftnlen), chkout_(char *, ftnlen), gfsstp_(doublereal *);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(doublereal *);
     extern logical odd_(integer *);
     doublereal tol;
     extern /* Subroutine */ int zzgfudb_(U_fp, U_fp, doublereal *, U_fp, U_fp,
 	     logical *, U_fp, U_fp, U_fp, logical *, L_fp, doublereal *, 
-	    doublereal *), zzholdd_(integer *, integer *, logical *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
 	    doublereal *);
 
+
+    /* Module state */
+    gfudb_state_t* __state = get_gfudb_state();
 /* $ Abstract */
 
 /*     Perform a GF search on a user defined boolean quantity. */
@@ -1376,7 +1390,7 @@ static logical c_false = FALSE_;
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&c_n1, &c__3, &ok, &tol);
+    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1386,10 +1400,10 @@ static logical c_false = FALSE_;
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&c__0, result);
+    scardd_(&__state->c__0, result);
     zzgfudb_((U_fp)udfuns, (U_fp)udfunb, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &
-	    c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &c_false, (
-	    L_fp)gfbail_, cnfine, result);
+	    __state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &
+	    __state->c_false, (L_fp)gfbail_, cnfine, result);
     chkout_("GFUDB", (ftnlen)5);
     return 0;
 } /* gfudb_ */

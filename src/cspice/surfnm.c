@@ -1,13 +1,21 @@
-/* surfnm.f -- translated by f2c (version 19980913).
+/* surfnm.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
+extern surfnm_init_t __surfnm_init;
+static surfnm_state_t* get_surfnm_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->surfnm)
+		state->surfnm = __cspice_allocate_module(sizeof(
+	surfnm_state_t), &__surfnm_init, sizeof(__surfnm_init));
+	return state->surfnm;
+
+}
 
 /* $Procedure      SURFNM ( Surface normal vector on an ellipsoid ) */
 /* Subroutine */ int surfnm_(doublereal *a, doublereal *b, doublereal *c__, 
@@ -15,11 +23,6 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static char mssg[32*7] = "Axis A was nonpositive.         " "Axis B was "
-	    "nonpositive.         " "Axes A and B were nonpositive.  " "Axis "
-	    "C was nonpositive.         " "Axes A and C were nonpositive.  " 
-	    "Axes B and C were nonpositive.  " "All three axes were nonposit"
-	    "ive.";
 
     /* System generated locals */
     address a__1[2];
@@ -32,15 +35,17 @@ static integer c__2 = 2;
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static doublereal m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
-    static doublereal a1, b1, c1;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), vhatip_(doublereal *)
-	    , chkout_(char *, ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
-    static integer bad;
 
+    /* Module state */
+    surfnm_state_t* __state = get_surfnm_state();
 /* $ Abstract */
 
 /*     This routine computes the outward-pointing, unit normal vector */
@@ -240,22 +245,23 @@ static integer c__2 = 2;
 /*     Check the axes to make sure that none of them is less than or */
 /*     equal to zero. If one is, signal an error and return. */
 
-    bad = 0;
+    __state->bad = 0;
     if (*a <= 0.) {
-	++bad;
+	++__state->bad;
     }
     if (*b <= 0.) {
-	bad += 2;
+	__state->bad += 2;
     }
     if (*c__ <= 0.) {
-	bad += 4;
+	__state->bad += 4;
     }
-    if (bad > 0) {
+    if (__state->bad > 0) {
 /* Writing concatenation */
-	i__2[0] = 32, a__1[0] = mssg + (((i__1 = bad - 1) < 7 && 0 <= i__1 ? 
-		i__1 : s_rnge("mssg", i__1, "surfnm_", (ftnlen)251)) << 5);
+	i__2[0] = 32, a__1[0] = __state->mssg + (((i__1 = __state->bad - 1) < 
+		7 && 0 <= i__1 ? i__1 : s_rnge("mssg", i__1, "surfnm_", (
+		ftnlen)251)) << 5);
 	i__2[1] = 3, a__1[1] = " ? ";
-	s_cat(ch__1, a__1, i__2, &c__2, (ftnlen)35);
+	s_cat(ch__1, a__1, i__2, &__state->c__2, (ftnlen)35);
 	setmsg_(ch__1, (ftnlen)35);
 	errch_(" ? ", "The A,B, and C axes were #, #, and # respectively.", (
 		ftnlen)3, (ftnlen)50);
@@ -276,21 +282,21 @@ static integer c__2 = 2;
 
 /* Computing MIN */
     d__1 = min(*a,*b);
-    m = min(d__1,*c__);
+    __state->m = min(d__1,*c__);
 
 /*     M can be divided by A,B or C without fear of an overflow */
 /*     occurring. */
 
-    a1 = m / *a;
-    b1 = m / *b;
-    c1 = m / *c__;
+    __state->a1 = __state->m / *a;
+    __state->b1 = __state->m / *b;
+    __state->c1 = __state->m / *c__;
 
 /*     All of the terms A1,B1,C1 are less than 1. Thus no overflows */
 /*     can occur. */
 
-    normal[0] = point[0] * (a1 * a1);
-    normal[1] = point[1] * (b1 * b1);
-    normal[2] = point[2] * (c1 * c1);
+    normal[0] = point[0] * (__state->a1 * __state->a1);
+    normal[1] = point[1] * (__state->b1 * __state->b1);
+    normal[2] = point[2] * (__state->c1 * __state->c1);
     vhatip_(normal);
     chkout_("SURFNM", (ftnlen)6);
     return 0;

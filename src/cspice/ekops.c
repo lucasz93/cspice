@@ -1,13 +1,21 @@
-/* ekops.f -- translated by f2c (version 19980913).
+/* ekops.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern ekops_init_t __ekops_init;
+static ekops_state_t* get_ekops_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ekops)
+		state->ekops = __cspice_allocate_module(sizeof(ekops_state_t),
+	 &__ekops_init, sizeof(__ekops_init));
+	return state->ekops;
+
+}
 
 /* $Procedure   EKOPS ( EK, open scratch file ) */
 /* Subroutine */ int ekops_(integer *handle)
@@ -18,14 +26,21 @@ static integer c__3 = 3;
     /* Local variables */
     integer base;
     extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *), zzekpgin_(integer *), zzektrit_(integer *, integer *);
+	    integer *);
+    extern /* Subroutine */ int zzekpgin_(integer *);
+    extern /* Subroutine */ int zzektrit_(integer *, integer *);
     integer p;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
     extern logical failed_(void);
     extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *), dasops_(integer *), chkout_(char *, ftnlen);
+	    integer *);
+    extern /* Subroutine */ int dasops_(integer *);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ekops_state_t* __state = get_ekops_state();
 /* $ Abstract */
 
 /*     Open a scratch E-kernel file and prepare the file for writing. */
@@ -290,7 +305,7 @@ static integer c__3 = 3;
 /*     Allocate the first integer page for the file's metadata.  We */
 /*     don't need to examine the page number; it's 1. */
 
-    zzekpgan_(handle, &c__3, &p, &base);
+    zzekpgan_(handle, &__state->c__3, &p, &base);
 
 /*     Initialize a new tree.  This tree will point to the file's */
 /*     segments. */

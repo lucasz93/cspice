@@ -1,9 +1,17 @@
-/* tpictr.f -- translated by f2c (version 19980913).
+/* tpictr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int tpictr_state_t;
+static tpictr_state_t* get_tpictr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      TPICTR ( Create a Time Format Picture ) */
 /* Subroutine */ int tpictr_(char *sample, char *pictur, logical *ok, char *
@@ -18,12 +26,16 @@
     logical mods;
     char type__[5];
     integer ntvec;
-    logical succes, yabbrv;
+    logical succes;
+    logical yabbrv;
     char modify[8*5];
     extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
 	    *, char *, logical *, logical *, logical *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
 
+
+    /* Module state */
+    tpictr_state_t* __state = get_tpictr_state();
 /* $ Abstract */
 
 /*     Given a sample time string, create a time format picture */

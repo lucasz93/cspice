@@ -1,55 +1,27 @@
-/* zzwahr.f -- translated by f2c (version 19980913).
+/* zzwahr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static doublereal c_b2 = 360.;
+extern zzwahr_init_t __zzwahr_init;
+static zzwahr_state_t* get_zzwahr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzwahr)
+		state->zzwahr = __cspice_allocate_module(sizeof(
+	zzwahr_state_t), &__zzwahr_init, sizeof(__zzwahr_init));
+	return state->zzwahr;
+
+}
 
 /* $Procedure      ZZWAHR ( SPICELIB private version of Newhalls' WAHR ) */
 /* Subroutine */ int zzwahr_(doublereal *et, doublereal *dvnut)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static integer matrix[954]	/* was [9][106] */ = { 0,0,0,0,1,-171996,
-	    -1742,92025,89,0,0,0,0,2,2062,2,-895,5,-2,0,2,0,1,46,0,-24,0,2,0,
-	    -2,0,0,11,0,0,0,-2,0,2,0,2,-3,0,1,0,1,-1,0,-1,0,-3,0,0,0,0,-2,2,
-	    -2,1,-2,0,1,0,2,0,-2,0,1,1,0,0,0,0,0,2,-2,2,-13187,-16,5736,-31,0,
-	    1,0,0,0,1426,-34,54,-1,0,1,2,-2,2,-517,12,224,-6,0,-1,2,-2,2,217,
-	    -5,-95,3,0,0,2,-2,1,129,1,-70,0,2,0,0,-2,0,48,0,1,0,0,0,2,-2,0,
-	    -22,0,0,0,0,2,0,0,0,17,-1,0,0,0,1,0,0,1,-15,0,9,0,0,2,2,-2,2,-16,
-	    1,7,0,0,-1,0,0,1,-12,0,6,0,-2,0,0,2,1,-6,0,3,0,0,-1,2,-2,1,-5,0,3,
-	    0,2,0,0,-2,1,4,0,-2,0,0,1,2,-2,1,4,0,-2,0,1,0,0,-1,0,-4,0,0,0,2,1,
-	    0,-2,0,1,0,0,0,0,0,-2,2,1,1,0,0,0,0,1,-2,2,0,-1,0,0,0,0,1,0,0,2,1,
-	    0,0,0,-1,0,0,1,1,1,0,0,0,0,1,2,-2,0,-1,0,0,0,0,0,2,0,2,-2274,-2,
-	    977,-5,1,0,0,0,0,712,1,-7,0,0,0,2,0,1,-386,-4,200,0,1,0,2,0,2,
-	    -301,0,129,-1,1,0,0,-2,0,-158,0,-1,0,-1,0,2,0,2,123,0,-53,0,0,0,0,
-	    2,0,63,0,-2,0,1,0,0,0,1,63,1,-33,0,-1,0,0,0,1,-58,-1,32,0,-1,0,2,
-	    2,2,-59,0,26,0,1,0,2,0,1,-51,0,27,0,0,0,2,2,2,-38,0,16,0,2,0,0,0,
-	    0,29,0,-1,0,1,0,2,-2,2,29,0,-12,0,2,0,2,0,2,-31,0,13,0,0,0,2,0,0,
-	    26,0,-1,0,-1,0,2,0,1,21,0,-10,0,-1,0,0,2,1,16,0,-8,0,1,0,0,-2,1,
-	    -13,0,7,0,-1,0,2,2,1,-10,0,5,0,1,1,0,-2,0,-7,0,0,0,0,1,2,0,2,7,0,
-	    -3,0,0,-1,2,0,2,-7,0,3,0,1,0,2,2,2,-8,0,3,0,1,0,0,2,0,6,0,0,0,2,0,
-	    2,-2,2,6,0,-3,0,0,0,0,2,1,-6,0,3,0,0,0,2,2,1,-7,0,3,0,1,0,2,-2,1,
-	    6,0,-3,0,0,0,0,-2,1,-5,0,3,0,1,-1,0,0,0,5,0,0,0,2,0,2,0,1,-5,0,3,
-	    0,0,1,0,-2,0,-4,0,0,0,1,0,-2,0,0,4,0,0,0,0,0,0,1,0,-4,0,0,0,1,1,0,
-	    0,0,-3,0,0,0,1,0,2,0,0,3,0,0,0,1,-1,2,0,2,-3,0,1,0,-1,-1,2,2,2,-3,
-	    0,1,0,-2,0,0,0,1,-2,0,1,0,3,0,2,0,2,-3,0,1,0,0,-1,2,2,2,-3,0,1,0,
-	    1,1,2,0,2,2,0,-1,0,-1,0,2,-2,1,-2,0,1,0,2,0,0,0,1,2,0,-1,0,1,0,0,
-	    0,2,-2,0,1,0,3,0,0,0,0,2,0,0,0,0,0,2,1,2,2,0,-1,0,-1,0,0,0,2,1,0,
-	    -1,0,1,0,0,-4,0,-1,0,0,0,-2,0,2,2,2,1,0,-1,0,-1,0,2,4,2,-2,0,1,0,
-	    2,0,0,-4,0,-1,0,0,0,1,1,2,-2,2,1,0,-1,0,1,0,2,2,1,-1,0,1,0,-2,0,2,
-	    4,2,-1,0,1,0,-1,0,4,0,2,1,0,0,0,1,-1,0,-2,0,1,0,0,0,2,0,2,-2,1,1,
-	    0,-1,0,2,0,2,2,2,-1,0,0,0,1,0,0,2,1,-1,0,0,0,0,0,4,-2,2,1,0,0,0,3,
-	    0,2,-2,2,1,0,0,0,1,0,2,-2,0,-1,0,0,0,0,1,2,0,1,1,0,0,0,-1,-1,0,2,
-	    1,1,0,0,0,0,0,-2,0,1,-1,0,0,0,0,0,2,-1,2,-1,0,0,0,0,1,0,2,0,-1,0,
-	    0,0,1,0,-2,-2,0,-1,0,0,0,0,-1,2,0,1,-1,0,0,0,1,1,0,-2,1,-1,0,0,0,
-	    1,0,-2,2,0,-1,0,0,0,2,0,0,2,0,1,0,0,0,0,0,2,4,2,-1,0,0,0,0,1,0,1,
-	    0,1,0,0,0 };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -60,17 +32,13 @@ static doublereal c_b2 = 360.;
 	    ;
 
     /* Local variables */
-    static doublereal dddj;
-    static integer i__, j;
-    static doublereal t, angle[5], rasec, factr, angrt[5], argrt, d0, d1, d2, 
-	    d3, f0, f1, f2, f3, l0, l1, l2, l3;
     extern doublereal twopi_(void);
-    static doublereal ce, dd, dj, cl;
     extern doublereal pi_(void);
-    static doublereal radian, cosang, oneday, sinang, dd2, mg0, mg1, dtwopi, 
-	    mg2, mg3, lp0, lp1, lp2, lp3, arg, dpi;
     extern doublereal spd_(void);
 
+
+    /* Module state */
+    zzwahr_state_t* __state = get_zzwahr_state();
 /* $ Abstract */
 
 /*     Calculates nutation angles delta psi and delta epsilon,  and */
@@ -273,14 +241,14 @@ static doublereal c_b2 = 360.;
 
 /*     Periods: 35.0, 13.6, 25.4, 14.2, 9.5, 14.2, 34.7, 32.8, 7.1, 4.8, */
 /*              27.3 */
-    if (first) {
-	first = FALSE_;
-	dpi = pi_();
-	dtwopi = twopi_();
-	radian = 180. / dpi;
-	rasec = radian * 3600.;
-	factr = rasec * 1e4;
-	oneday = spd_();
+    if (__state->first) {
+	__state->first = FALSE_;
+	__state->dpi = pi_();
+	__state->dtwopi = twopi_();
+	__state->radian = 180. / __state->dpi;
+	__state->rasec = __state->radian * 3600.;
+	__state->factr = __state->rasec * 1e4;
+	__state->oneday = spd_();
 
 /*        The following values are direct conversions to degrees from */
 /*        page 114 of the Explanatory Supplement to the Astronomical */
@@ -295,10 +263,10 @@ static doublereal c_b2 = 360.;
 /*           L2      degrees/(0.0001 days)**2 */
 /*           L3      degrees/(0.0001 days)**3 */
 
-	l0 = 134.96298138888886;
-	l1 = 13.064992947243136;
-	l2 = 6.5192872572139397e-4;
-	l3 = 3.6484365631332527e-7;
+	__state->l0 = 134.96298138888886;
+	__state->l1 = 13.064992947243136;
+	__state->l2 = 6.5192872572139397e-4;
+	__state->l3 = 3.6484365631332527e-7;
 
 /*        LP0 through LP3 are the coefficients for l'---the mean */
 /*        longitude of the Sun minus the mean longitude of the Sun's */
@@ -309,10 +277,10 @@ static doublereal c_b2 = 360.;
 /*           LP2      degrees/(0.0001 days)**2 */
 /*           LP3      degrees/(0.0001 days)**3 */
 
-	lp0 = 357.52772333333331;
-	lp1 = .98560028309377146;
-	lp2 = -1.201414483363923e-5;
-	lp3 = -6.8408185558748495e-8;
+	__state->lp0 = 357.52772333333331;
+	__state->lp1 = .98560028309377146;
+	__state->lp2 = -1.201414483363923e-5;
+	__state->lp3 = -6.8408185558748495e-8;
 
 /*        F0 through F3 are the coefficients for F---the mean longitude */
 /*        of the Moon minus the mean longitude of the Moon's node. Units */
@@ -323,10 +291,10 @@ static doublereal c_b2 = 360.;
 /*           F2      degrees/(0.0001 days)**2 */
 /*           F3      degrees/(0.0001 days)**3 */
 
-	f0 = 93.271910277777778;
-	f1 = 13.229350240603848;
-	f2 = -2.760338267929901e-4;
-	f3 = 6.2707503428852773e-8;
+	__state->f0 = 93.271910277777778;
+	__state->f1 = 13.229350240603848;
+	__state->f2 = -2.760338267929901e-4;
+	__state->f3 = 6.2707503428852773e-8;
 
 /*        D0 through D3 are the coefficients for D---the mean longitude */
 /*        of the Moon minus the mean longitude of the Sun. Units */
@@ -337,10 +305,10 @@ static doublereal c_b2 = 360.;
 /*           D2      degrees/(0.0001 days)**2 */
 /*           D3      degrees/(0.0001 days)**3 */
 
-	d0 = 297.85036305555559;
-	d1 = 12.190749116495549;
-	d2 = -1.4348262053484912e-4;
-	d3 = 1.0831296046801845e-7;
+	__state->d0 = 297.85036305555559;
+	__state->d1 = 12.190749116495549;
+	__state->d2 = -1.4348262053484912e-4;
+	__state->d3 = 1.0831296046801845e-7;
 
 /*        MG0 through MG3 are the coefficients for Omega---the longitude */
 /*        of the mean ascending node of the lunar orbit on the ecliptic */
@@ -360,111 +328,138 @@ static doublereal c_b2 = 360.;
 /*           MG2      degrees/(0.0001 days)**2 */
 /*           MG3      degrees/(0.0001 days)**3 */
 
-	mg0 = 125.04452222222223;
-	mg1 = -.052953764841432813;
-	mg2 = 1.5522608272925558e-4;
-	mg3 = 4.5605457039165659e-8;
+	__state->mg0 = 125.04452222222223;
+	__state->mg1 = -.052953764841432813;
+	__state->mg2 = 1.5522608272925558e-4;
+	__state->mg3 = 4.5605457039165659e-8;
     }
 
 /*     Compute all of the various time components.  DJ is the delta */
 /*     in the Julian date from the J2000 epoch. */
 
-    dj = *et / oneday;
-    dd = dj / 1e4;
-    dddj = dd / 1e4;
-    dd2 = dd * dd;
-    t = dj / 365250.;
+    __state->dj = *et / __state->oneday;
+    __state->dd = __state->dj / 1e4;
+    __state->dddj = __state->dd / 1e4;
+    __state->dd2 = __state->dd * __state->dd;
+    __state->t = __state->dj / 365250.;
 
 /*     Now compute all of the various angles and their rates */
 /*     at the current epoch */
 
-    angle[0] = l0 + dj * l1 + (l2 + dd * l3) * dd2;
-    angle[1] = lp0 + dj * lp1 + (lp2 + dd * lp3) * dd2;
-    angle[2] = f0 + dj * f1 + (f2 + dd * f3) * dd2;
-    angle[3] = d0 + dj * d1 + (d2 + dd * d3) * dd2;
-    angle[4] = mg0 + dj * mg1 + (mg2 + dd * mg3) * dd2;
-    angrt[0] = l1 + dddj * (l2 * 2. + dd * 3. * l3);
-    angrt[1] = lp1 + dddj * (lp2 * 2. + dd * 3. * lp3);
-    angrt[2] = f1 + dddj * (f2 * 2. + dd * 3. * f3);
-    angrt[3] = d1 + dddj * (d2 * 2. + dd * 3. * d3);
-    angrt[4] = mg1 + dddj * (mg2 * 2. + dd * 3. * mg3);
+    __state->angle[0] = __state->l0 + __state->dj * __state->l1 + (
+	    __state->l2 + __state->dd * __state->l3) * __state->dd2;
+    __state->angle[1] = __state->lp0 + __state->dj * __state->lp1 + (
+	    __state->lp2 + __state->dd * __state->lp3) * __state->dd2;
+    __state->angle[2] = __state->f0 + __state->dj * __state->f1 + (
+	    __state->f2 + __state->dd * __state->f3) * __state->dd2;
+    __state->angle[3] = __state->d0 + __state->dj * __state->d1 + (
+	    __state->d2 + __state->dd * __state->d3) * __state->dd2;
+    __state->angle[4] = __state->mg0 + __state->dj * __state->mg1 + (
+	    __state->mg2 + __state->dd * __state->mg3) * __state->dd2;
+    __state->angrt[0] = __state->l1 + __state->dddj * (__state->l2 * 2. + 
+	    __state->dd * 3. * __state->l3);
+    __state->angrt[1] = __state->lp1 + __state->dddj * (__state->lp2 * 2. + 
+	    __state->dd * 3. * __state->lp3);
+    __state->angrt[2] = __state->f1 + __state->dddj * (__state->f2 * 2. + 
+	    __state->dd * 3. * __state->f3);
+    __state->angrt[3] = __state->d1 + __state->dddj * (__state->d2 * 2. + 
+	    __state->dd * 3. * __state->d3);
+    __state->angrt[4] = __state->mg1 + __state->dddj * (__state->mg2 * 2. + 
+	    __state->dd * 3. * __state->mg3);
 
 /*     Wrap all of the angles and rates to range from 0 to 360, then */
 /*     convert to radians. */
 
-    for (j = 1; j <= 5; ++j) {
-	angle[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angle", i__1, 
-		"zzwahr_", (ftnlen)570)] = d_mod(&angle[(i__2 = j - 1) < 5 && 
-		0 <= i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)
-		570)], &c_b2);
-	angrt[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angrt", i__1, 
-		"zzwahr_", (ftnlen)571)] = d_mod(&angrt[(i__2 = j - 1) < 5 && 
-		0 <= i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)
-		571)], &c_b2);
-	angle[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angle", i__1, 
-		"zzwahr_", (ftnlen)573)] = angle[(i__2 = j - 1) < 5 && 0 <= 
-		i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)573)] /
-		 radian;
-	angrt[(i__1 = j - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge("angrt", i__1, 
-		"zzwahr_", (ftnlen)574)] = angrt[(i__2 = j - 1) < 5 && 0 <= 
-		i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)574)] /
-		 radian;
+    for (__state->j = 1; __state->j <= 5; ++__state->j) {
+	__state->angle[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
+		s_rnge("angle", i__1, "zzwahr_", (ftnlen)570)] = d_mod(&
+		__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
+		i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)570)], &
+		__state->c_b2);
+	__state->angrt[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
+		s_rnge("angrt", i__1, "zzwahr_", (ftnlen)571)] = d_mod(&
+		__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
+		i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)571)], &
+		__state->c_b2);
+	__state->angle[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
+		s_rnge("angle", i__1, "zzwahr_", (ftnlen)573)] = 
+		__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
+		i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)573)] / 
+		__state->radian;
+	__state->angrt[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
+		s_rnge("angrt", i__1, "zzwahr_", (ftnlen)574)] = 
+		__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
+		i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)574)] / 
+		__state->radian;
     }
 
 /*     Zero out the components of the nutation array */
 
-    for (j = 1; j <= 4; ++j) {
-	dvnut[(i__1 = j - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("dvnut", i__1, 
-		"zzwahr_", (ftnlen)580)] = 0.;
+    for (__state->j = 1; __state->j <= 4; ++__state->j) {
+	dvnut[(i__1 = __state->j - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("dvnut"
+		, i__1, "zzwahr_", (ftnlen)580)] = 0.;
     }
 
 /*     Now we accumulate the various terms of Delta Psi and Delta */
 /*     epsilon as expressed on page 115 of the Green Book */
 /*     (Explanatory Supplement to the Astronomical Almanac). */
 
-    for (i__ = 1; i__ <= 106; ++i__) {
-	arg = 0.;
-	argrt = 0.;
-	for (j = 1; j <= 5; ++j) {
-	    if (matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)593)] != 0) {
-		arg += matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ? 
-			i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)594)]
-			 * angle[(i__2 = j - 1) < 5 && 0 <= i__2 ? i__2 : 
-			s_rnge("angle", i__2, "zzwahr_", (ftnlen)594)];
-		argrt += matrix[(i__1 = j + i__ * 9 - 10) < 954 && 0 <= i__1 ?
-			 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)595)
-			] * angrt[(i__2 = j - 1) < 5 && 0 <= i__2 ? i__2 : 
-			s_rnge("angrt", i__2, "zzwahr_", (ftnlen)595)];
-		arg = d_mod(&arg, &dtwopi);
+    for (__state->i__ = 1; __state->i__ <= 106; ++__state->i__) {
+	__state->arg = 0.;
+	__state->argrt = 0.;
+	for (__state->j = 1; __state->j <= 5; ++__state->j) {
+	    if (__state->matrix[(i__1 = __state->j + __state->i__ * 9 - 10) < 
+		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
+		    , (ftnlen)593)] != 0) {
+		__state->arg += __state->matrix[(i__1 = __state->j + 
+			__state->i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
+			s_rnge("matrix", i__1, "zzwahr_", (ftnlen)594)] * 
+			__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= 
+			i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (
+			ftnlen)594)];
+		__state->argrt += __state->matrix[(i__1 = __state->j + 
+			__state->i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
+			s_rnge("matrix", i__1, "zzwahr_", (ftnlen)595)] * 
+			__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= 
+			i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (
+			ftnlen)595)];
+		__state->arg = d_mod(&__state->arg, &__state->dtwopi);
 	    }
 	}
-	cl = (doublereal) matrix[(i__1 = i__ * 9 - 4) < 954 && 0 <= i__1 ? 
-		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)600)];
-	if (matrix[(i__1 = i__ * 9 - 3) < 954 && 0 <= i__1 ? i__1 : s_rnge(
-		"matrix", i__1, "zzwahr_", (ftnlen)602)] != 0) {
-	    cl += matrix[(i__1 = i__ * 9 - 3) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)603)] * t;
+	__state->cl = (doublereal) __state->matrix[(i__1 = __state->i__ * 9 - 
+		4) < 954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwah"
+		"r_", (ftnlen)600)];
+	if (__state->matrix[(i__1 = __state->i__ * 9 - 3) < 954 && 0 <= i__1 ?
+		 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)602)] != 0) 
+		{
+	    __state->cl += __state->matrix[(i__1 = __state->i__ * 9 - 3) < 
+		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
+		    , (ftnlen)603)] * __state->t;
 	}
-	ce = (doublereal) matrix[(i__1 = i__ * 9 - 2) < 954 && 0 <= i__1 ? 
-		i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)606)];
-	if (matrix[(i__1 = i__ * 9 - 1) < 954 && 0 <= i__1 ? i__1 : s_rnge(
-		"matrix", i__1, "zzwahr_", (ftnlen)608)] != 0) {
-	    ce += matrix[(i__1 = i__ * 9 - 1) < 954 && 0 <= i__1 ? i__1 : 
-		    s_rnge("matrix", i__1, "zzwahr_", (ftnlen)609)] * t;
+	__state->ce = (doublereal) __state->matrix[(i__1 = __state->i__ * 9 - 
+		2) < 954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwah"
+		"r_", (ftnlen)606)];
+	if (__state->matrix[(i__1 = __state->i__ * 9 - 1) < 954 && 0 <= i__1 ?
+		 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)608)] != 0) 
+		{
+	    __state->ce += __state->matrix[(i__1 = __state->i__ * 9 - 1) < 
+		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
+		    , (ftnlen)609)] * __state->t;
 	}
-	cosang = cos(arg);
-	sinang = sin(arg);
-	dvnut[0] += cl * sinang / factr;
-	dvnut[1] += ce * cosang / factr;
-	dvnut[2] += cl * cosang * argrt / factr;
-	dvnut[3] -= ce * sinang * argrt / factr;
+	__state->cosang = cos(__state->arg);
+	__state->sinang = sin(__state->arg);
+	dvnut[0] += __state->cl * __state->sinang / __state->factr;
+	dvnut[1] += __state->ce * __state->cosang / __state->factr;
+	dvnut[2] += __state->cl * __state->cosang * __state->argrt / 
+		__state->factr;
+	dvnut[3] -= __state->ce * __state->sinang * __state->argrt / 
+		__state->factr;
     }
 
 /*     Finally convert DVNUT(3) and DVNUT(4) to radians/second */
 
-    dvnut[2] /= oneday;
-    dvnut[3] /= oneday;
+    dvnut[2] /= __state->oneday;
+    dvnut[3] /= __state->oneday;
     return 0;
 } /* zzwahr_ */
 

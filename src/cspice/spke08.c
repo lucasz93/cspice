@@ -1,13 +1,21 @@
-/* spke08.f -- translated by f2c (version 19980913).
+/* spke08.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__6 = 6;
+extern spke08_init_t __spke08_init;
+static spke08_state_t* get_spke08_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spke08)
+		state->spke08 = __cspice_allocate_module(sizeof(
+	spke08_state_t), &__spke08_init, sizeof(__spke08_init));
+	return state->spke08;
+
+}
 
 /* $Procedure      SPKE08 ( S/P Kernel, evaluate, type 8 ) */
 /* Subroutine */ int spke08_(doublereal *et, doublereal *record, doublereal *
@@ -15,16 +23,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static doublereal work[198] = { 0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-	    0.,0.,0.,0.,0.,0.,0.,0. };
 
     /* System generated locals */
     integer i__1, i__2;
@@ -33,8 +31,8 @@ static integer c__6 = 6;
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer i__, n;
-    static doublereal locrec[198];
+    integer i__;
+    integer n;
     extern doublereal lgresp_(integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int xposeg_(doublereal *, integer *, integer *, 
@@ -42,6 +40,9 @@ static integer c__6 = 6;
     extern logical return_(void);
     integer ystart;
 
+
+    /* Module state */
+    spke08_state_t* __state = get_spke08_state();
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 8 */
@@ -341,7 +342,7 @@ static integer c__6 = 6;
 /*     interpolation routine LGRESP. */
 
     n = i_dnnt(record);
-    xposeg_(&record[3], &c__6, &n, locrec);
+    xposeg_(&record[3], &__state->c__6, &n, __state->locrec);
 
 /*     We interpolate each state component in turn. */
 
@@ -349,8 +350,9 @@ static integer c__6 = 6;
 	ystart = (i__ - 1) * n + 1;
 	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
 		 "spke08_", (ftnlen)291)] = lgresp_(&n, &record[1], &record[2]
-		, &locrec[(i__2 = ystart - 1) < 198 && 0 <= i__2 ? i__2 : 
-		s_rnge("locrec", i__2, "spke08_", (ftnlen)291)], work, et);
+		, &__state->locrec[(i__2 = ystart - 1) < 198 && 0 <= i__2 ? 
+		i__2 : s_rnge("locrec", i__2, "spke08_", (ftnlen)291)], 
+		__state->work, et);
     }
     return 0;
 } /* spke08_ */

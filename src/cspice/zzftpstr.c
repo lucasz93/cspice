@@ -1,15 +1,21 @@
-/* zzftpstr.f -- translated by f2c (version 19980913).
+/* zzftpstr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
-static integer c__2 = 2;
-static integer c__0 = 0;
+extern zzftpstr_init_t __zzftpstr_init;
+static zzftpstr_state_t* get_zzftpstr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzftpstr)
+		state->zzftpstr = __cspice_allocate_module(sizeof(
+	zzftpstr_state_t), &__zzftpstr_init, sizeof(__zzftpstr_init));
+	return state->zzftpstr;
+
+}
 
 /* $Procedure ZZFTPSTR ( Private --- Fetch FTP Validation String ) */
 /* Subroutine */ int zzftpstr_(char *tstcom, char *lend, char *rend, char *
@@ -18,10 +24,6 @@ static integer c__0 = 0;
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static char locdlm[1] = ":";
-    static char loclnd[6] = "FTPSTR";
-    static char locrnd[6] = "ENDFTP";
 
     /* System generated locals */
     address a__1[3], a__2[2];
@@ -33,13 +35,20 @@ static integer c__0 = 0;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    char asc000[1], asc010[1], asc013[1], asc016[1], asc206[1], asc129[1];
+    char asc000[1];
+    char asc010[1];
+    char asc013[1];
+    char asc016[1];
+    char asc206[1];
+    char asc129[1];
     integer i__;
     extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    static char locstr[16];
     char testsq[5*6];
 
+
+    /* Module state */
+    zzftpstr_state_t* __state = get_zzftpstr_state();
 /* $ Abstract */
 
 /*    Retrieve the components of the FTP validation string. */
@@ -365,7 +374,7 @@ static integer c__0 = 0;
 
 /*     On the first invocation initialize the string values. */
 
-    if (first) {
+    if (__state->first) {
 
 /*        Convert the integer parameters to their non-printing ASCII */
 /*        equivalents. */
@@ -387,48 +396,48 @@ static integer c__0 = 0;
 /*        Cluster #1 : <CR> - <13> - Macintosh Line Terminator */
 
 /* Writing concatenation */
-	i__1[0] = 1, a__1[0] = locdlm;
+	i__1[0] = 1, a__1[0] = __state->locdlm;
 	i__1[1] = 1, a__1[1] = asc013;
-	i__1[2] = 1, a__1[2] = locdlm;
-	s_cat(testsq, a__1, i__1, &c__3, (ftnlen)5);
+	i__1[2] = 1, a__1[2] = __state->locdlm;
+	s_cat(testsq, a__1, i__1, &__state->c__3, (ftnlen)5);
 
 /*        Cluster #2 : <LF> - <10> - Unix Line Terminator */
 
 /* Writing concatenation */
 	i__2[0] = 1, a__2[0] = asc010;
-	i__2[1] = 1, a__2[1] = locdlm;
-	s_cat(testsq + 5, a__2, i__2, &c__2, (ftnlen)5);
+	i__2[1] = 1, a__2[1] = __state->locdlm;
+	s_cat(testsq + 5, a__2, i__2, &__state->c__2, (ftnlen)5);
 
 /*        Cluster #3 : <CR><LF> - <10><13> - Microsoft Line Terminator */
 
 /* Writing concatenation */
 	i__1[0] = 1, a__1[0] = asc013;
 	i__1[1] = 1, a__1[1] = asc010;
-	i__1[2] = 1, a__1[2] = locdlm;
-	s_cat(testsq + 10, a__1, i__1, &c__3, (ftnlen)5);
+	i__1[2] = 1, a__1[2] = __state->locdlm;
+	s_cat(testsq + 10, a__1, i__1, &__state->c__3, (ftnlen)5);
 
 /*        Cluster #4 : <13><0> */
 
 /* Writing concatenation */
 	i__1[0] = 1, a__1[0] = asc013;
 	i__1[1] = 1, a__1[1] = asc000;
-	i__1[2] = 1, a__1[2] = locdlm;
-	s_cat(testsq + 15, a__1, i__1, &c__3, (ftnlen)5);
+	i__1[2] = 1, a__1[2] = __state->locdlm;
+	s_cat(testsq + 15, a__1, i__1, &__state->c__3, (ftnlen)5);
 
 /*        Cluster #5 : <129> - Macintosh Permutation of Parity Codes */
 
 /* Writing concatenation */
 	i__2[0] = 1, a__2[0] = asc129;
-	i__2[1] = 1, a__2[1] = locdlm;
-	s_cat(testsq + 20, a__2, i__2, &c__2, (ftnlen)5);
+	i__2[1] = 1, a__2[1] = __state->locdlm;
+	s_cat(testsq + 20, a__2, i__2, &__state->c__2, (ftnlen)5);
 
 /*        Cluster #6 : <16><206> */
 
 /* Writing concatenation */
 	i__1[0] = 1, a__1[0] = asc016;
 	i__1[1] = 1, a__1[1] = asc206;
-	i__1[2] = 1, a__1[2] = locdlm;
-	s_cat(testsq + 25, a__1, i__1, &c__3, (ftnlen)5);
+	i__1[2] = 1, a__1[2] = __state->locdlm;
+	s_cat(testsq + 25, a__1, i__1, &__state->c__3, (ftnlen)5);
 
 /*        Sample cluster addition code follows */
 
@@ -440,7 +449,7 @@ static integer c__0 = 0;
 /*        Now build the local copy of TSTCOM, LOCSTR. First clear the */
 /*        uninitialized contents. */
 
-	s_copy(locstr, " ", (ftnlen)16, (ftnlen)1);
+	s_copy(__state->locstr, " ", (ftnlen)16, (ftnlen)1);
 	for (i__ = 1; i__ <= 6; ++i__) {
 
 /*           Append TESTSQ(I) to LOCSTR to properly construct the */
@@ -448,21 +457,21 @@ static integer c__0 = 0;
 
 	    suffix_(testsq + ((i__3 = i__ - 1) < 6 && 0 <= i__3 ? i__3 : 
 		    s_rnge("testsq", i__3, "zzftpstr_", (ftnlen)399)) * 5, &
-		    c__0, locstr, (ftnlen)5, (ftnlen)16);
+		    __state->c__0, __state->locstr, (ftnlen)5, (ftnlen)16);
 	}
 
 /*        Prevent execution of this initialization code after first pass. */
 
-	first = FALSE_;
+	__state->first = FALSE_;
     }
 
 /*     Copy the local copies of the FTP string components to the */
 /*     arguments passed in from the caller. */
 
-    s_copy(tstcom, locstr, tstcom_len, (ftnlen)16);
-    s_copy(lend, loclnd, lend_len, (ftnlen)6);
-    s_copy(rend, locrnd, rend_len, (ftnlen)6);
-    s_copy(delim, locdlm, delim_len, (ftnlen)1);
+    s_copy(tstcom, __state->locstr, tstcom_len, (ftnlen)16);
+    s_copy(lend, __state->loclnd, lend_len, (ftnlen)6);
+    s_copy(rend, __state->locrnd, rend_len, (ftnlen)6);
+    s_copy(delim, __state->locdlm, delim_len, (ftnlen)1);
     return 0;
 } /* zzftpstr_ */
 

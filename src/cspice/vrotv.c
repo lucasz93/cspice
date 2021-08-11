@@ -1,13 +1,21 @@
-/* vrotv.f -- translated by f2c (version 19980913).
+/* vrotv.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__3 = 3;
+extern vrotv_init_t __vrotv_init;
+static vrotv_state_t* get_vrotv_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->vrotv)
+		state->vrotv = __cspice_allocate_module(sizeof(vrotv_state_t),
+	 &__vrotv_init, sizeof(__vrotv_init));
+	return state->vrotv;
+
+}
 
 /* $Procedure      VROTV ( Vector rotation about an axis ) */
 /* Subroutine */ int vrotv_(doublereal *v, doublereal *axis, doublereal *
@@ -18,17 +26,29 @@ static integer c__3 = 3;
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    ), vhat_(doublereal *, doublereal *), vsub_(doublereal *, 
-	    doublereal *, doublereal *);
-    doublereal c__, p[3], s, x[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     vlcom_(doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), vproj_(doublereal *, doublereal *, doublereal *);
+	    );
+    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
+	    );
+    doublereal c__;
+    doublereal p[3];
+    doublereal s;
+    doublereal x[3];
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
+	    *);
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    doublereal v1[3], v2[3], rplane[3];
+    doublereal v1[3];
+    doublereal v2[3];
+    doublereal rplane[3];
 
+
+    /* Module state */
+    vrotv_state_t* __state = get_vrotv_state();
 /* $ Abstract */
 
 /*     Rotate a vector about a specified axis vector by a specified */
@@ -208,7 +228,7 @@ static integer c__3 = 3;
 /*     check, and if so return the input vector */
 
     if (vnorm_(axis) == 0.) {
-	moved_(v, &c__3, r__);
+	moved_(v, &__state->c__3, r__);
 	return 0;
     }
 

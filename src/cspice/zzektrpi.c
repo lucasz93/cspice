@@ -1,9 +1,17 @@
-/* zzektrpi.f -- translated by f2c (version 19980913).
+/* zzektrpi.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrpi_state_t;
+static zzektrpi_state_t* get_zzektrpi_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRPI ( EK tree, parent information ) */
 /* Subroutine */ int zzektrpi_(integer *handle, integer *tree, integer *key, 
@@ -18,7 +26,9 @@
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer page[256], lkey, prev;
+    integer page[256];
+    integer lkey;
+    integer prev;
     extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
     integer child;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
@@ -28,10 +38,16 @@
     extern /* Subroutine */ int sigerr_(char *, ftnlen);
     extern integer lstlei_(integer *, integer *, integer *);
     extern /* Subroutine */ int chkout_(char *, ftnlen);
-    integer maxkey, newkey, prvkey, totkey;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
+    integer maxkey;
+    integer newkey;
+    integer prvkey;
+    integer totkey;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    zzektrpi_state_t* __state = get_zzektrpi_state();
 /* $ Abstract */
 
 /*     Given a key, return general information pertaining to the key's */

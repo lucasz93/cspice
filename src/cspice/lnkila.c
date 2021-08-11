@@ -1,22 +1,37 @@
-/* lnkila.f -- translated by f2c (version 19980913).
+/* lnkila.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
+extern lnkila_init_t __lnkila_init;
+static lnkila_state_t* get_lnkila_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->lnkila)
+		state->lnkila = __cspice_allocate_module(sizeof(
+	lnkila_state_t), &__lnkila_init, sizeof(__lnkila_init));
+	return state->lnkila;
+
+}
 
 /* $Procedure      LNKILA ( LNK, insert list after node ) */
 /* Subroutine */ int lnkila_(integer *prev, integer *list, integer *pool)
 {
-    integer head, tail, next;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    integer head;
+    integer tail;
+    integer next;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
 
+
+    /* Module state */
+    lnkila_state_t* __state = get_lnkila_state();
 /* $ Abstract */
 
 /*     Insert the list containing a specified node into a another list, */
@@ -276,7 +291,7 @@ static integer c__0 = 0;
 	errint_("#", list, (ftnlen)1);
 	errint_("#", &pool[(*list << 1) + 11], (ftnlen)1);
 	errint_("#", &pool[(*list << 1) + 10], (ftnlen)1);
-	errint_("#", &c__0, (ftnlen)1);
+	errint_("#", &__state->c__0, (ftnlen)1);
 	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
 	chkout_("LNKILA", (ftnlen)6);
 	return 0;

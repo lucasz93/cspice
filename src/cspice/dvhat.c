@@ -1,9 +1,17 @@
-/* dvhat.f -- translated by f2c (version 19980913).
+/* dvhat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int dvhat_state_t;
+static dvhat_state_t* get_dvhat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure DVHAT ( Derivative and unit vector "V-hat" of a state) */
 /* Subroutine */ int dvhat_(doublereal *s1, doublereal *sout)
@@ -12,12 +20,17 @@
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *), vperp_(
-	    doublereal *, doublereal *, doublereal *), unorm_(doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
+	    *);
     doublereal length;
     extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
 
+
+    /* Module state */
+    dvhat_state_t* __state = get_dvhat_state();
 /* $ Abstract */
 
 /*     Find the unit vector corresponding to a state vector and the */

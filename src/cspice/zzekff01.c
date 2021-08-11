@@ -1,18 +1,21 @@
-/* zzekff01.f -- translated by f2c (version 19980913).
+/* zzekff01.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__3 = 3;
-static integer c__254 = 254;
-static integer c__1014 = 1014;
-static integer c__126 = 126;
+extern zzekff01_init_t __zzekff01_init;
+static zzekff01_state_t* get_zzekff01_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekff01)
+		state->zzekff01 = __cspice_allocate_module(sizeof(
+	zzekff01_state_t), &__zzekff01_init, sizeof(__zzekff01_init));
+	return state->zzekff01;
+
+}
 
 /* $Procedure      ZZEKFF01 ( EK, finish fast load, segment type 1 ) */
 /* Subroutine */ int zzekff01_(integer *handle, integer *segno, integer *
@@ -25,25 +28,58 @@ static integer c__126 = 126;
     integer s_rnge(char *, integer, char *, integer);
 
     /* Local variables */
-    integer base, tree;
+    integer base;
+    integer tree;
     extern /* Subroutine */ int zzektr1s_(integer *, integer *, integer *, 
-	    integer *), zzekmloc_(integer *, integer *, integer *, integer *),
-	     zzekpgpg_(integer *, integer *, integer *, integer *), zzekpgwi_(
-	    integer *, integer *, integer *), zzektrit_(integer *, integer *);
-    integer i__, j, p, ipage[256], mbase, npage, pbase;
+	    integer *);
+    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    integer i__;
+    integer j;
+    integer p;
+    integer ipage[256];
+    integer mbase;
+    integer npage;
+    integer pbase;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, nrows, adrbuf[100], nr;
+    integer recno;
+    integer ncols;
+    integer nrows;
+    integer adrbuf[100];
+    integer nr;
     extern logical return_(void);
-    integer addrss, colidx, colord[100], pagloc, remain, rpsize, segdsc[24], 
-	    stkbas, stkhan, stkseg;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasrdi_(integer *, integer *, integer *, integer *), 
-	    cleari_(integer *, integer *), dasudi_(integer *, integer *, 
-	    integer *, integer *);
-    integer col, loc, nrp, row;
+    integer addrss;
+    integer colidx;
+    integer colord[100];
+    integer pagloc;
+    integer remain;
+    integer rpsize;
+    integer segdsc[24];
+    integer stkbas;
+    integer stkhan;
+    integer stkseg;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer col;
+    integer loc;
+    integer nrp;
+    integer row;
     extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
 
+
+    /* Module state */
+    zzekff01_state_t* __state = get_zzekff01_state();
 /* $ Abstract */
 
 /*     Complete a fast load operation on a new type 1 E-kernel segment. */
@@ -735,8 +771,8 @@ static integer c__126 = 126;
 /*     stacked values don't match the inputs HANDLE and SEGNO, we've */
 /*     got trouble. */
 
-    zzeksrd_(&c__1, &c__1, &stkhan);
-    zzeksrd_(&c__2, &c__2, &stkseg);
+    zzeksrd_(&__state->c__1, &__state->c__1, &stkhan);
+    zzeksrd_(&__state->c__2, &__state->c__2, &stkseg);
     if (stkhan != *handle || stkseg != *segno) {
 	setmsg_("Attempt to finish fast load of wrong segment.  Input segmen"
 		"t number is #; stacked segment number is #.  Input handle is"
@@ -798,8 +834,8 @@ static integer c__126 = 126;
 /*        structure on the page. */
 
 	addrss = rcptrs[recno] + 1;
-	zzekpgpg_(&c__3, &addrss, &p, &pbase);
-	cleari_(&c__254, ipage);
+	zzekpgpg_(&__state->c__3, &addrss, &p, &pbase);
+	cleari_(&__state->c__254, ipage);
 
 /*        NR is the number of record pointers we'll write to this page. */
 
@@ -873,13 +909,13 @@ static integer c__126 = 126;
     dasudi_(handle, &i__1, &i__2, &nrows);
     i__1 = base + 19;
     i__2 = base + 19;
-    dasudi_(handle, &i__1, &i__2, &c__1014);
+    dasudi_(handle, &i__1, &i__2, &__state->c__1014);
     i__1 = base + 20;
     i__2 = base + 20;
-    dasudi_(handle, &i__1, &i__2, &c__126);
+    dasudi_(handle, &i__1, &i__2, &__state->c__126);
     i__1 = base + 21;
     i__2 = base + 21;
-    dasudi_(handle, &i__1, &i__2, &c__254);
+    dasudi_(handle, &i__1, &i__2, &__state->c__254);
     chkout_("ZZEKFF01", (ftnlen)8);
     return 0;
 } /* zzekff01_ */

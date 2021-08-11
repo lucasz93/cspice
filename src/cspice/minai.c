@@ -1,9 +1,17 @@
-/* minai.f -- translated by f2c (version 19980913).
+/* minai.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int minai_state_t;
+static minai_state_t* get_minai_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure  MINAI  ( Minimum element of array, integer ) */
 /* Subroutine */ int minai_(integer *array, integer *ndim, integer *minval, 
@@ -15,6 +23,9 @@
     /* Local variables */
     integer i__;
 
+
+    /* Module state */
+    minai_state_t* __state = get_minai_state();
 /* $ Abstract */
 
 /*     Locate the minimum element of an integer array. */

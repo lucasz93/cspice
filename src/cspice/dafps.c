@@ -1,9 +1,21 @@
-/* dafps.f -- translated by f2c (version 19980913).
+/* dafps.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+extern dafps_init_t __dafps_init;
+static dafps_state_t* get_dafps_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->dafps)
+		state->dafps = __cspice_allocate_module(sizeof(dafps_state_t),
+	 &__dafps_init, sizeof(__dafps_init));
+	return state->dafps;
+
+}
 
 /* $Procedure DAFPS ( DAF, pack summary ) */
 /* Subroutine */ int dafps_0_(int n__, integer *nd, integer *ni, doublereal *
@@ -11,15 +23,17 @@
 {
     /* System generated locals */
     integer i__1, i__2;
-    static doublereal equiv_0[125];
 
     /* Local variables */
-    integer m, n;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *),
-	     movei_(integer *, integer *, integer *);
-#define dequiv (equiv_0)
-#define iequiv ((integer *)equiv_0)
+    integer m;
+    integer n;
+    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+#define dequiv (__state->equiv_0)
+#define iequiv ((integer *)__state->equiv_0)
 
+    /* Module state */
+    dafps_state_t* __state = get_dafps_state();
 /* $ Abstract */
 
 /*     Pack (assemble) an array summary from its double precision and */

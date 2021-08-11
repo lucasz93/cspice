@@ -1,16 +1,21 @@
-/* ckr06.f -- translated by f2c (version 19980913).
+/* ckr06.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__196 = 196;
-static integer c__340 = 340;
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckr06_init_t __ckr06_init;
+static ckr06_state_t* get_ckr06_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckr06)
+		state->ckr06 = __cspice_allocate_module(sizeof(ckr06_state_t),
+	 &__ckr06_init, sizeof(__ckr06_init));
+	return state->ckr06;
+
+}
 
 /* $Procedure CKR06 ( C-kernel, read record from segment, type 6 ) */
 /* Subroutine */ int ckr06_(integer *handle, doublereal *descr, doublereal *
@@ -19,25 +24,6 @@ static integer c__6 = 6;
 {
     /* Initialized data */
 
-    static integer mxwnsz[4] = { 12,24,12,24 };
-    static integer svmiix = -1;
-    static integer svminb = -1;
-    static integer svn = -1;
-    static integer svnpkt = -1;
-    static integer svpkdb = -1;
-    static integer svpknd = -1;
-    static integer svpksz = -1;
-    static doublereal svrate = -1.;
-    static integer svstyp = -1;
-    static integer svwnsz = -1;
-    static logical pass1 = TRUE_;
-    static integer pktszs[4] = { 8,4,14,7 };
-    static integer svbeg = -1;
-    static doublereal svbtim = 0.;
-    static doublereal svetim = -1.;
-    static logical svfnd = FALSE_;
-    static integer svhan = 0;
-    static logical svlast = FALSE_;
 
     /* System generated locals */
     integer i__1, i__2;
@@ -48,28 +34,46 @@ static integer c__6 = 6;
     /* Local variables */
     integer high;
     doublereal rate;
-    integer isel, ndir;
+    integer isel;
+    integer ndir;
     logical lval;
-    integer last, npkt, type__, i__, baddr, n, eaddr;
+    integer last;
+    integer npkt;
+    integer type__;
+    integer i__;
+    integer baddr;
+    integer n;
+    integer eaddr;
     doublereal t;
     integer nread;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer minib, minie;
+    integer minib;
+    integer minie;
     extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *);
     integer ivbas;
     extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    integer ivbix, iveix, lsize, first, group, rsize;
+    integer ivbix;
+    integer iveix;
+    integer lsize;
+    integer first;
+    integer group;
+    integer rsize;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
     integer ic[6];
     extern logical failed_(void);
     logical avflag;
-    integer begidx, bufbas, dirbas, pkdbas;
+    integer begidx;
+    integer bufbas;
+    integer dirbas;
+    integer pkdbas;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     doublereal buffer[101];
-    integer endidx, remain, timbas;
+    integer endidx;
+    integer remain;
+    integer timbas;
     logical samseg;
     extern integer lstled_(doublereal *, integer *, doublereal *);
     integer npkdir;
@@ -77,7 +81,8 @@ static integer c__6 = 6;
     logical samivl;
     doublereal mintim[2];
     extern logical touchl_(logical *);
-    integer maxwnd, miniix;
+    integer maxwnd;
+    integer miniix;
     doublereal contrl[4];
     integer nrcpkt;
     extern integer lstltd_(doublereal *, integer *, doublereal *);
@@ -85,14 +90,19 @@ static integer c__6 = 6;
     integer wndsiz;
     extern logical return_(void);
     logical prvfnd;
-    integer pktsiz, subtyp;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    integer pktsiz;
+    integer subtyp;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical odd_(integer *);
     doublereal gap;
     integer low;
 
+
+    /* Module state */
+    ckr06_state_t* __state = get_ckr06_state();
 /* $ Abstract */
 
 /*     Read a single CK data record from a segment of type 6 */
@@ -698,18 +708,18 @@ static integer c__6 = 6;
 /*     Start with a parameter compatibility check on the first */
 /*     pass. */
 
-    if (pass1) {
+    if (__state->pass1) {
 	if (FALSE_) {
 	    setmsg_("CK type 6 record size may be as large as #, but CKPFS r"
 		    "ecord size (defined in ckparam.inc) is #.", (ftnlen)96);
-	    errint_("#", &c__196, (ftnlen)1);
-	    errint_("#", &c__340, (ftnlen)1);
+	    errint_("#", &__state->c__196, (ftnlen)1);
+	    errint_("#", &__state->c__340, (ftnlen)1);
 	    sigerr_("SPICE(BUG)", (ftnlen)10);
 	}
 
 /*        Indicate the first pass was completed. */
 
-	pass1 = FALSE_;
+	__state->pass1 = FALSE_;
     }
 
 /*     No pointing found so far. */
@@ -721,12 +731,12 @@ static integer c__6 = 6;
 /*     so we don't have to do this prior to every return (of which there */
 /*     are more than 35). */
 
-    prvfnd = svfnd;
+    prvfnd = __state->svfnd;
 
 /*     Set the saved value of FOUND so as to reflect the value */
 /*     of FOUND we'll return next. */
 
-    svfnd = FALSE_;
+    __state->svfnd = FALSE_;
 
 /*     "Touch" the input argument NEEDAV to suppress compiler warnings. */
 
@@ -736,7 +746,7 @@ static integer c__6 = 6;
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[2];
     avflag = ic[3] == 1;
     baddr = ic[4];
@@ -875,7 +885,7 @@ static integer c__6 = 6;
 /*     data were set on a successful call. Note that PRVFND can not */
 /*     be true on the first pass. */
 
-    samseg = *handle == svhan && baddr == svbeg && prvfnd;
+    samseg = *handle == __state->svhan && baddr == __state->svbeg && prvfnd;
 
 /*     Give SAMIVL an initial value. If we do have the */
 /*     same interval, update SAMIVL to indicate this. */
@@ -886,7 +896,7 @@ static integer c__6 = 6;
 /*        We now assume that all data saved from the last */
 /*        read of this segment are valid. */
 
-	if (svlast) {
+	if (__state->svlast) {
 
 /*           We pick the last interval containing T. For all intervals */
 /*           but the last, T must be less than the interval end time. */
@@ -899,10 +909,10 @@ static integer c__6 = 6;
 /*           interval data, even though it would be possible to */
 /*           add code to do so. */
 
-	    if (svmiix < svn) {
-		samivl = t >= svbtim && t < svetim;
+	    if (__state->svmiix < __state->svn) {
+		samivl = t >= __state->svbtim && t < __state->svetim;
 	    } else {
-		samivl = t >= svbtim && t <= svetim;
+		samivl = t >= __state->svbtim && t <= __state->svetim;
 	    }
 	} else {
 
@@ -910,10 +920,10 @@ static integer c__6 = 6;
 /*           but the first, T must be greater than the interval start */
 /*           time. For the first interval, T may equal the start time. */
 
-	    if (svmiix > 1) {
-		samivl = t > svbtim && t <= svetim;
+	    if (__state->svmiix > 1) {
+		samivl = t > __state->svbtim && t <= __state->svetim;
 	    } else {
-		samivl = t >= svbtim && t <= svetim;
+		samivl = t >= __state->svbtim && t <= __state->svetim;
 	    }
 	}
     }
@@ -934,8 +944,8 @@ static integer c__6 = 6;
 /*           - The mini-segment's packet directory count */
 /*           - The mini-segment's packet directory base address */
 
-	npkdir = svpknd;
-	pkdbas = svpkdb;
+	npkdir = __state->svpknd;
+	pkdbas = __state->svpkdb;
 
 /*        Restore */
 
@@ -943,9 +953,9 @@ static integer c__6 = 6;
 /*           - The mini-segment/interval index */
 /*           - The mini-segment/interval start pointer */
 
-	n = svn;
-	miniix = svmiix;
-	minib = svminb;
+	n = __state->svn;
+	miniix = __state->svmiix;
+	minib = __state->svminb;
 
 /*        Restore */
 
@@ -955,11 +965,11 @@ static integer c__6 = 6;
 /*           - The mini-segment interpolation window size */
 /*           - The mini-segment clock rate */
 
-	subtyp = svstyp;
-	pktsiz = svpksz;
-	npkt = svnpkt;
-	wndsiz = svwnsz;
-	rate = svrate;
+	subtyp = __state->svstyp;
+	pktsiz = __state->svpksz;
+	npkt = __state->svnpkt;
+	wndsiz = __state->svwnsz;
+	rate = __state->svrate;
     } else {
 
 /*        The segment and interval information for the current segment */
@@ -1576,10 +1586,10 @@ static integer c__6 = 6;
 	    chkout_("CKR06", (ftnlen)5);
 	    return 0;
 	}
-	pktsiz = pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"pktszs", i__1, "ckr06_", (ftnlen)1457)];
-	maxwnd = mxwnsz[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"mxwnsz", i__1, "ckr06_", (ftnlen)1458)];
+	pktsiz = __state->pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : 
+		s_rnge("pktszs", i__1, "ckr06_", (ftnlen)1457)];
+	maxwnd = __state->mxwnsz[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : 
+		s_rnge("mxwnsz", i__1, "ckr06_", (ftnlen)1458)];
 
 /*        Check the window size. */
 
@@ -1629,24 +1639,24 @@ static integer c__6 = 6;
 /*           - The segment begin DAF address */
 /*           - The segment's "select last/first interval" flag */
 
-	svhan = *handle;
-	svbeg = baddr;
-	svlast = ivlsel;
+	__state->svhan = *handle;
+	__state->svbeg = baddr;
+	__state->svlast = ivlsel;
 
 /*        Save the time bounds of the applicable mini-segment/interval. */
 /*        We don't want to indicate data availability within a gap, since */
 /*        the re-use logic assumes data availability. */
 
-	svbtim = mintim[0];
-	svetim = min(mintim[1],lstepc);
+	__state->svbtim = mintim[0];
+	__state->svetim = min(mintim[1],lstepc);
 
 /*        Save */
 
 /*           - The mini-segment/interval directory count */
 /*           - The mini-segment/interval directory base address */
 
-	svpknd = npkdir;
-	svpkdb = pkdbas;
+	__state->svpknd = npkdir;
+	__state->svpkdb = pkdbas;
 
 /*        Save */
 
@@ -1654,9 +1664,9 @@ static integer c__6 = 6;
 /*           - The mini-segment/interval index */
 /*           - The mini-segment/interval start pointer */
 
-	svn = n;
-	svmiix = miniix;
-	svminb = minib;
+	__state->svn = n;
+	__state->svmiix = miniix;
+	__state->svminb = minib;
 
 /*        Save */
 
@@ -1666,11 +1676,11 @@ static integer c__6 = 6;
 /*           - The mini-segment window size */
 /*           - The mini-segment clock rate */
 
-	svstyp = subtyp;
-	svpksz = pktsiz;
-	svnpkt = npkt;
-	svwnsz = wndsiz;
-	svrate = rate;
+	__state->svstyp = subtyp;
+	__state->svpksz = pktsiz;
+	__state->svnpkt = npkt;
+	__state->svwnsz = wndsiz;
+	__state->svrate = rate;
     }
 
 /*     We're ready to construct the output record. The first step is to */
@@ -1850,7 +1860,7 @@ static integer c__6 = 6;
 /*     Indicate pointing was found. */
 
     *found = TRUE_;
-    svfnd = TRUE_;
+    __state->svfnd = TRUE_;
     chkout_("CKR06", (ftnlen)5);
     return 0;
 } /* ckr06_ */

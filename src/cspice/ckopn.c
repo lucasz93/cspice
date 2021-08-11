@@ -1,14 +1,21 @@
-/* ckopn.f -- translated by f2c (version 19980913).
+/* ckopn.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern ckopn_init_t __ckopn_init;
+static ckopn_state_t* get_ckopn_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->ckopn)
+		state->ckopn = __cspice_allocate_module(sizeof(ckopn_state_t),
+	 &__ckopn_init, sizeof(__ckopn_init));
+	return state->ckopn;
+
+}
 
 /* $Procedure      CKOPN ( CK, open new file. ) */
 /* Subroutine */ int ckopn_(char *name__, char *ifname, integer *ncomch, 
@@ -18,10 +25,13 @@ static integer c__6 = 6;
     integer ncomr;
     extern logical failed_(void);
     extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen), chkout_(
-	    char *, ftnlen);
+	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    ckopn_state_t* __state = get_ckopn_state();
 /* $ Abstract */
 
 /*     Open a new CK file, returning the handle of the opened file. */
@@ -197,8 +207,8 @@ static integer c__6 = 6;
 
 /*     Just do it. All of the error handling is taken care of for us. */
 
-    dafonw_(name__, "CK", &c__2, &c__6, ifname, &ncomr, handle, name_len, (
-	    ftnlen)2, ifname_len);
+    dafonw_(name__, "CK", &__state->c__2, &__state->c__6, ifname, &ncomr, 
+	    handle, name_len, (ftnlen)2, ifname_len);
     if (failed_()) {
 
 /*        If we failed, make sure that HANDLE does not contain a value */

@@ -1,32 +1,40 @@
-/* sigerr.f -- translated by f2c (version 19980913).
+/* sigerr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static logical c_true = TRUE_;
-static logical c_false = FALSE_;
+extern sigerr_init_t __sigerr_init;
+static sigerr_state_t* get_sigerr_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->sigerr)
+		state->sigerr = __cspice_allocate_module(sizeof(
+	sigerr_state_t), &__sigerr_init, sizeof(__sigerr_init));
+	return state->sigerr;
+
+}
 
 /* $Procedure      SIGERR ( Signal Error Condition ) */
 /* Subroutine */ int sigerr_(char *msg, ftnlen msg_len)
 {
     /* Initialized data */
 
-    static char defmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK, DEFAULT";
-    static char errmsg[40] = "SHORT, EXPLAIN, LONG, TRACEBACK         ";
 
-    static logical stat;
-    extern logical failed_(void), accept_(logical *);
+    extern logical failed_(void);
+    extern logical accept_(logical *);
     extern /* Subroutine */ int getact_(integer *);
-    static integer action;
-    extern /* Subroutine */ int byebye_(char *, ftnlen), freeze_(void);
+    extern /* Subroutine */ int byebye_(char *, ftnlen);
+    extern /* Subroutine */ int freeze_(void);
     extern logical seterr_(logical *);
-    extern /* Subroutine */ int outmsg_(char *, ftnlen), putsms_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int outmsg_(char *, ftnlen);
+    extern /* Subroutine */ int putsms_(char *, ftnlen);
 
+
+    /* Module state */
+    sigerr_state_t* __state = get_sigerr_state();
 /* $ Abstract */
 
 /*     Inform the SPICELIB error processing mechanism that an error has */
@@ -310,9 +318,9 @@ static logical c_false = FALSE_;
 /*         user's program has reset the error status via */
 /*         a call to RESET. */
 
-    getact_(&action);
-    if (action != 4) {
-	if (action != 3 || ! failed_()) {
+    getact_(&__state->action);
+    if (__state->action != 4) {
+	if (__state->action != 3 || ! failed_()) {
 
 /*           This one's for real.  Indicate an error condition, and */
 /*           store the short error message. */
@@ -321,7 +329,7 @@ static logical c_false = FALSE_;
 /*           reference sets the toolkit error status.  STAT */
 /*           doesn't have any meaning. */
 
-	    stat = seterr_(&c_true);
+	    __state->stat = seterr_(&__state->c_true);
 	    putsms_(msg, msg_len);
 
 /*           Create a frozen copy of the traceback: */
@@ -343,29 +351,29 @@ static logical c_false = FALSE_;
 /*           if the error action is DEFAULT.  In that case, the */
 /*           default message selection applies. */
 
-	    if (action != 5) {
-		outmsg_(errmsg, (ftnlen)40);
+	    if (__state->action != 5) {
+		outmsg_(__state->errmsg, (ftnlen)40);
 	    } else {
-		outmsg_(defmsg, (ftnlen)40);
+		outmsg_(__state->defmsg, (ftnlen)40);
 	    }
-	    if (action == 3) {
+	    if (__state->action == 3) {
 
 /*              Don't accept new long error messages or updates */
 /*              to current long error message: */
 /*              (STAT has no meaning). */
 
-		stat = accept_(&c_false);
+		__state->stat = accept_(&__state->c_false);
 	    } else {
-		stat = accept_(&c_true);
+		__state->stat = accept_(&__state->c_true);
 	    }
 	} else {
-	    stat = accept_(&c_false);
+	    __state->stat = accept_(&__state->c_false);
 	}
     }
 
 /*     We could be in ABORT or DEFAULT mode. */
 
-    if (action == 5 || action == 1) {
+    if (__state->action == 5 || __state->action == 1) {
 	byebye_("FAILURE", (ftnlen)7);
     }
 

@@ -1,16 +1,21 @@
-/* zzekad02.f -- translated by f2c (version 19980913).
+/* zzekad02.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c_n2 = -2;
-static integer c__2 = 2;
-static logical c_false = FALSE_;
-static integer c__1 = 1;
+extern zzekad02_init_t __zzekad02_init;
+static zzekad02_state_t* get_zzekad02_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->zzekad02)
+		state->zzekad02 = __cspice_allocate_module(sizeof(
+	zzekad02_state_t), &__zzekad02_init, sizeof(__zzekad02_init));
+	return state->zzekad02;
+
+}
 
 /* $Procedure     ZZEKAD02 ( EK, add data to class 2 column ) */
 /* Subroutine */ int zzekad02_(integer *handle, integer *segdsc, integer *
@@ -23,21 +28,39 @@ static integer c__1 = 1;
     extern /* Subroutine */ int zzekiid1_(integer *, integer *, integer *, 
 	    doublereal *, integer *, logical *);
     extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *), 
-	    zzekglnk_(integer *, integer *, integer *, integer *), zzekslnk_(
-	    integer *, integer *, integer *, integer *);
-    integer p, mbase, pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    integer recno, ncols, itype, lastw;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *), dasudi_(integer *, integer *, integer *, integer *);
-    integer colidx, datptr, nlinks, ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), dasudd_(integer *, integer *, integer *, doublereal *), 
-	    zzekaps_(integer *, integer *, integer *, logical *, integer *, 
+    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
+	    integer *);
+    integer p;
+    integer mbase;
+    integer pbase;
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    integer recno;
+    integer ncols;
+    integer itype;
+    integer lastw;
+    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+	    integer *);
+    integer colidx;
+    integer datptr;
+    integer nlinks;
+    integer ptrloc;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
+	    logical *, integer *, integer *);
 
+
+    /* Module state */
+    zzekad02_state_t* __state = get_zzekad02_state();
 /* $ Abstract */
 
 /*     Add a column entry to a specified record in a class 2 column. */
@@ -798,7 +821,7 @@ static integer c__1 = 1;
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &c_n2);
+	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n2);
     } else {
 
 /*        Decide where to write the data value.  If there's room left */
@@ -812,13 +835,13 @@ static integer c__1 = 1;
 /*           location. */
 
 	    p = segdsc[16];
-	    zzekpgbs_(&c__2, &p, &pbase);
+	    zzekpgbs_(&__state->c__2, &p, &pbase);
 	    datptr = pbase + lastw + 1;
 	    dasudi_(handle, &ptrloc, &ptrloc, &datptr);
 	    dasudd_(handle, &datptr, &datptr, dval);
-	    zzekglnk_(handle, &c__2, &p, &nlinks);
+	    zzekglnk_(handle, &__state->c__2, &p, &nlinks);
 	    i__1 = nlinks + 1;
-	    zzekslnk_(handle, &c__2, &p, &i__1);
+	    zzekslnk_(handle, &__state->c__2, &p, &i__1);
 
 /*           The last double precision word in use must be updated. */
 
@@ -828,14 +851,15 @@ static integer c__1 = 1;
 /*           Allocate a data page.  Write the data value into the */
 /*           first word of the new page. */
 
-	    zzekaps_(handle, segdsc, &c__2, &c_false, &p, &pbase);
+	    zzekaps_(handle, segdsc, &__state->c__2, &__state->c_false, &p, &
+		    pbase);
 	    i__1 = pbase + 1;
 	    i__2 = pbase + 1;
 	    dasudd_(handle, &i__1, &i__2, dval);
 
 /*           The page containing the data item now has one link. */
 
-	    zzekslnk_(handle, &c__2, &p, &c__1);
+	    zzekslnk_(handle, &__state->c__2, &p, &__state->c__1);
 
 /*           The last d.p. page and word in use must be updated. */
 

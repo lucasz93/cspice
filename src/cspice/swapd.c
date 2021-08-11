@@ -1,15 +1,26 @@
-/* swapd.f -- translated by f2c (version 19980913).
+/* swapd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int swapd_state_t;
+static swapd_state_t* get_swapd_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SWAPD ( Swap double precision values ) */
 /* Subroutine */ int swapd_(doublereal *a, doublereal *b)
 {
     doublereal temp;
 
+
+    /* Module state */
+    swapd_state_t* __state = get_swapd_state();
 /* $ Abstract */
 
 /*      Swap the contents of two double precision variables. */

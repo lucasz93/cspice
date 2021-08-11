@@ -1,14 +1,21 @@
-/* spkr03.f -- translated by f2c (version 19980913).
+/* spkr03.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__2 = 2;
-static integer c__6 = 6;
+extern spkr03_init_t __spkr03_init;
+static spkr03_state_t* get_spkr03_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->spkr03)
+		state->spkr03 = __cspice_allocate_module(sizeof(
+	spkr03_state_t), &__spkr03_init, sizeof(__spkr03_init));
+	return state->spkr03;
+
+}
 
 /* $Procedure      SPKR03 ( SPK, read record from segment, type 3 ) */
 /* Subroutine */ int spkr03_(integer *handle, doublereal *descr, doublereal *
@@ -21,19 +28,24 @@ static integer c__6 = 6;
     integer nrec;
     doublereal init;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
-	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer recno;
     extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
 	    doublereal *);
     doublereal dc[2];
-    integer ic[6], recadr;
+    integer ic[6];
+    integer recadr;
     doublereal intlen;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer recsiz;
     extern logical return_(void);
     integer end;
 
+
+    /* Module state */
+    spkr03_state_t* __state = get_spkr03_state();
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 3 */
@@ -252,7 +264,7 @@ static integer c__6 = 6;
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &c__2, &c__6, dc, ic);
+    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 

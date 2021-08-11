@@ -1,15 +1,21 @@
-/* et2utc.f -- translated by f2c (version 19980913).
+/* et2utc.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__0 = 0;
-static doublereal c_b22 = 10.;
-static integer c__1 = 1;
+extern et2utc_init_t __et2utc_init;
+static et2utc_state_t* get_et2utc_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->et2utc)
+		state->et2utc = __cspice_allocate_module(sizeof(
+	et2utc_state_t), &__et2utc_init, sizeof(__et2utc_init));
+	return state->et2utc;
+
+}
 
 /* $Procedure      ET2UTC ( Ephemeris Time to UTC ) */
 /* Subroutine */ int et2utc_(doublereal *et, char *format, integer *prec, 
@@ -17,8 +23,6 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static char mthnam[3*12] = "JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" 
-	    "AUG" "SEP" "OCT" "NOV" "DEC";
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6;
@@ -33,37 +37,28 @@ static integer c__1 = 1;
 	    i_indx(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer bday, eday, year;
-    static doublereal tvec[8];
-    static integer hour, i__;
-    static doublereal scale;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    static char fract[80];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen), 
-	    errch_(char *, char *, ftnlen, ftnlen);
-    static integer month;
+    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     extern logical failed_(void);
-    static doublereal frcsec;
-    static integer second;
-    static doublereal whlsec;
-    static integer bmonth, emonth;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen);
-    static char endstr[80];
-    static integer myprec, minute;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), dpstrf_(doublereal *,
-	     integer *, char *, char *, ftnlen, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+	    ftnlen);
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen), ttrans_(
-	    char *, char *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
+	    ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    static integer bsc, esc, bhr, bmn;
-    static doublereal tai;
-    static integer day, ehr, emn;
-    static char fmt[4], str[80];
 
+    /* Module state */
+    et2utc_state_t* __state = get_et2utc_state();
 /* $ Abstract */
 
 /*      Convert an input time from ephemeris seconds past J2000 */
@@ -488,11 +483,12 @@ static integer c__1 = 1;
 /*     Convert FORMAT to uppercase for ease of comparison. Make sure it's */
 /*     one of the recognized formats. */
 
-    ucase_(format, fmt, format_len, (ftnlen)4);
-    if (s_cmp(fmt, "J", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(fmt, "C", (ftnlen)
-	    4, (ftnlen)1) != 0 && s_cmp(fmt, "D", (ftnlen)4, (ftnlen)1) != 0 
-	    && s_cmp(fmt, "ISOD", (ftnlen)4, (ftnlen)4) != 0 && s_cmp(fmt, 
-	    "ISOC", (ftnlen)4, (ftnlen)4) != 0) {
+    ucase_(format, __state->fmt, format_len, (ftnlen)4);
+    if (s_cmp(__state->fmt, "J", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
+	    __state->fmt, "C", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
+	    __state->fmt, "D", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
+	    __state->fmt, "ISOD", (ftnlen)4, (ftnlen)4) != 0 && s_cmp(
+	    __state->fmt, "ISOC", (ftnlen)4, (ftnlen)4) != 0) {
 	setmsg_("ET2UTC: Format specification for output time string is not "
 		"recognized. Valid specifications are: 'C', 'D', 'J', 'ISOC',"
 		" or 'ISOD'. The supplied format was '#'. ", (ftnlen)160);
@@ -506,22 +502,23 @@ static integer c__1 = 1;
 
 /* Computing MAX */
     i__1 = 0, i__2 = min(14,*prec);
-    myprec = max(i__1,i__2);
+    __state->myprec = max(i__1,i__2);
 
 /*     If the output is Julian Date, we're ready to go. Remember that */
 /*     the day part of Julian Date already has seven digits built in. */
 
-    if (s_cmp(fmt, "J", (ftnlen)4, (ftnlen)1) == 0) {
-	tvec[0] = *et;
-	ttrans_("TDB", "JDUTC", tvec, (ftnlen)3, (ftnlen)5);
+    if (s_cmp(__state->fmt, "J", (ftnlen)4, (ftnlen)1) == 0) {
+	__state->tvec[0] = *et;
+	ttrans_("TDB", "JDUTC", __state->tvec, (ftnlen)3, (ftnlen)5);
 	if (failed_()) {
 	    chkout_("ET2UTC", (ftnlen)6);
 	    return 0;
 	}
-	i__1 = myprec + 7;
-	dpstrf_(tvec, &i__1, "F", str, (ftnlen)1, (ftnlen)80);
-	prefix_("JD", &c__0, str, (ftnlen)2, (ftnlen)80);
-	s_copy(utcstr, str, utcstr_len, (ftnlen)80);
+	i__1 = __state->myprec + 7;
+	dpstrf_(__state->tvec, &i__1, "F", __state->str, (ftnlen)1, (ftnlen)
+		80);
+	prefix_("JD", &__state->c__0, __state->str, (ftnlen)2, (ftnlen)80);
+	s_copy(utcstr, __state->str, utcstr_len, (ftnlen)80);
 	chkout_("ET2UTC", (ftnlen)6);
 	return 0;
     }
@@ -530,7 +527,7 @@ static integer c__1 = 1;
 /*     to construct a calendar format string. First thing to */
 /*     do is convert from ET to TAI. */
 
-    tai = unitim_(et, "TDB", "TAI", (ftnlen)3, (ftnlen)3);
+    __state->tai = unitim_(et, "TDB", "TAI", (ftnlen)3, (ftnlen)3);
 
 /*     We're going to break up TAI into an integer and a */
 /*     fractional part.  The integer will be the greatest */
@@ -559,9 +556,9 @@ static integer c__1 = 1;
 /*     is negative and is not already an integer, the result we */
 /*     want is one less than AINT(TAI). */
 
-    whlsec = d_int(&tai);
-    if (tai < 0. && tai != whlsec) {
-	whlsec += -1.;
+    __state->whlsec = d_int(&__state->tai);
+    if (__state->tai < 0. && __state->tai != __state->whlsec) {
+	__state->whlsec += -1.;
     }
 
 /*     The fractional part of TAI must be rounded to the */
@@ -573,19 +570,19 @@ static integer c__1 = 1;
 /*     10**MYPREC. */
 
 
-    d__1 = pow_di(&c_b22, &myprec);
-    scale = d_nint(&d__1);
-    d__1 = scale * (tai - whlsec);
-    frcsec = d_nint(&d__1);
+    d__1 = pow_di(&__state->c_b22, &__state->myprec);
+    __state->scale = d_nint(&d__1);
+    d__1 = __state->scale * (__state->tai - __state->whlsec);
+    __state->frcsec = d_nint(&d__1);
 
 /*     If a carry occurred, the fraction becomes zero, and */
 /*     we must increment WHLSEC. */
 
-    if (frcsec == scale) {
-	whlsec += 1.;
-	frcsec = 0.;
+    if (__state->frcsec == __state->scale) {
+	__state->whlsec += 1.;
+	__state->frcsec = 0.;
     }
-    frcsec /= scale;
+    __state->frcsec /= __state->scale;
 
 /*     Now, we let TTRANS handle the transformation to */
 /*     the desired components for output. */
@@ -594,20 +591,20 @@ static integer c__1 = 1;
 /*     This will be done later on when the output string is */
 /*     assembled. */
 
-    tvec[0] = whlsec;
-    if (s_cmp(fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(fmt, "ISOC", (
-	    ftnlen)4, (ftnlen)4) == 0) {
-	ttrans_("TAI", "YMD", tvec, (ftnlen)3, (ftnlen)3);
+    __state->tvec[0] = __state->whlsec;
+    if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
+	    __state->fmt, "ISOC", (ftnlen)4, (ftnlen)4) == 0) {
+	ttrans_("TAI", "YMD", __state->tvec, (ftnlen)3, (ftnlen)3);
 	if (failed_()) {
 	    chkout_("ET2UTC", (ftnlen)6);
 	    return 0;
 	}
-	year = i_dnnt(tvec);
-	month = i_dnnt(&tvec[1]);
-	day = i_dnnt(&tvec[2]);
-	hour = i_dnnt(&tvec[3]);
-	minute = i_dnnt(&tvec[4]);
-	second = i_dnnt(&tvec[5]);
+	__state->year = i_dnnt(__state->tvec);
+	__state->month = i_dnnt(&__state->tvec[1]);
+	__state->day = i_dnnt(&__state->tvec[2]);
+	__state->hour = i_dnnt(&__state->tvec[3]);
+	__state->minute = i_dnnt(&__state->tvec[4]);
+	__state->second = i_dnnt(&__state->tvec[5]);
 
 /*        The beginning of the string is going to be the year. */
 /*        Depending upon the size of the year, it may or */
@@ -615,69 +612,75 @@ static integer c__1 = 1;
 /*        string has a fixed size.  We set up that portion of the */
 /*        string now.  First fill in the month... */
 
-	if (s_cmp(fmt, "C", (ftnlen)4, (ftnlen)1) == 0) {
-	    s_copy(endstr, " MMM 00 00:00:00", (ftnlen)80, (ftnlen)16);
-	    s_copy(endstr + 1, mthnam + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mthnam", i__1, "et2utc_", (ftnlen)650)) *
-		     3, (ftnlen)3, (ftnlen)3);
+	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0) {
+	    s_copy(__state->endstr, " MMM 00 00:00:00", (ftnlen)80, (ftnlen)
+		    16);
+	    s_copy(__state->endstr + 1, __state->mthnam + ((i__1 = 
+		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
+		    "mthnam", i__1, "et2utc_", (ftnlen)650)) * 3, (ftnlen)3, (
+		    ftnlen)3);
 
 /*           ... and then fill in the day portion of the string. */
 
-	    eday = 7;
+	    __state->eday = 7;
 /* Computing MIN */
-	    i__1 = 1, i__2 = day / 1000;
+	    i__1 = 1, i__2 = __state->day / 1000;
 /* Computing MIN */
-	    i__3 = 1, i__4 = day / 100;
+	    i__3 = 1, i__4 = __state->day / 100;
 /* Computing MIN */
-	    i__5 = 1, i__6 = day / 10;
-	    bday = eday - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 
-		    1) + 1;
-	    intstr_(&day, endstr + (bday - 1), eday - (bday - 1));
-	    ehr = 10;
-	    emn = 13;
-	    esc = 16;
+	    i__5 = 1, i__6 = __state->day / 10;
+	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
+		    + min(i__5,i__6) + 1) + 1;
+	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
+		    __state->eday - (__state->bday - 1));
+	    __state->ehr = 10;
+	    __state->emn = 13;
+	    __state->esc = 16;
 	} else {
-	    s_copy(endstr, "-0M-00T00:00:00", (ftnlen)80, (ftnlen)15);
-	    eday = 6;
+	    s_copy(__state->endstr, "-0M-00T00:00:00", (ftnlen)80, (ftnlen)15)
+		    ;
+	    __state->eday = 6;
 /* Computing MIN */
-	    i__1 = 1, i__2 = day / 1000;
+	    i__1 = 1, i__2 = __state->day / 1000;
 /* Computing MIN */
-	    i__3 = 1, i__4 = day / 100;
+	    i__3 = 1, i__4 = __state->day / 100;
 /* Computing MIN */
-	    i__5 = 1, i__6 = day / 10;
-	    bday = eday - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 
-		    1) + 1;
-	    emonth = 3;
+	    i__5 = 1, i__6 = __state->day / 10;
+	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
+		    + min(i__5,i__6) + 1) + 1;
+	    __state->emonth = 3;
 /* Computing MIN */
-	    i__1 = 1, i__2 = month / 1000;
+	    i__1 = 1, i__2 = __state->month / 1000;
 /* Computing MIN */
-	    i__3 = 1, i__4 = month / 100;
+	    i__3 = 1, i__4 = __state->month / 100;
 /* Computing MIN */
-	    i__5 = 1, i__6 = month / 10;
-	    bmonth = emonth - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,
-		    i__6) + 1) + 1;
-	    intstr_(&month, endstr + (bmonth - 1), emonth - (bmonth - 1));
-	    intstr_(&day, endstr + (bday - 1), eday - (bday - 1));
-	    ehr = 9;
-	    emn = 12;
-	    esc = 15;
+	    i__5 = 1, i__6 = __state->month / 10;
+	    __state->bmonth = __state->emonth - (min(i__1,i__2) + min(i__3,
+		    i__4) + min(i__5,i__6) + 1) + 1;
+	    intstr_(&__state->month, __state->endstr + (__state->bmonth - 1), 
+		    __state->emonth - (__state->bmonth - 1));
+	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
+		    __state->eday - (__state->bday - 1));
+	    __state->ehr = 9;
+	    __state->emn = 12;
+	    __state->esc = 15;
 	}
     } else {
 
 /*        We must have day of year format.  Convert TAI to that */
 /*        format. */
 
-	ttrans_("TAI", "YD", tvec, (ftnlen)3, (ftnlen)2);
+	ttrans_("TAI", "YD", __state->tvec, (ftnlen)3, (ftnlen)2);
 	if (failed_()) {
 	    chkout_("ET2UTC", (ftnlen)6);
 	    return 0;
 	}
-	year = i_dnnt(tvec);
-	month = 1;
-	day = i_dnnt(&tvec[1]);
-	hour = i_dnnt(&tvec[2]);
-	minute = i_dnnt(&tvec[3]);
-	second = i_dnnt(&tvec[4]);
+	__state->year = i_dnnt(__state->tvec);
+	__state->month = 1;
+	__state->day = i_dnnt(&__state->tvec[1]);
+	__state->hour = i_dnnt(&__state->tvec[2]);
+	__state->minute = i_dnnt(&__state->tvec[3]);
+	__state->second = i_dnnt(&__state->tvec[4]);
 
 /*        As in the previous case, the end of the output string will */
 /*        have a fixed size.  We fill in the day portion of the string */
@@ -685,36 +688,39 @@ static integer c__1 = 1;
 /*        minutes and seconds appear in the same location in both */
 /*        day of year and calendar format of strings. */
 
-	if (s_cmp(fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
-	    s_copy(endstr, "-000 // 00:00:00", (ftnlen)80, (ftnlen)16);
-	    eday = 4;
+	if (s_cmp(__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
+	    s_copy(__state->endstr, "-000 // 00:00:00", (ftnlen)80, (ftnlen)
+		    16);
+	    __state->eday = 4;
 /* Computing MIN */
-	    i__1 = 1, i__2 = day / 1000;
+	    i__1 = 1, i__2 = __state->day / 1000;
 /* Computing MIN */
-	    i__3 = 1, i__4 = day / 100;
+	    i__3 = 1, i__4 = __state->day / 100;
 /* Computing MIN */
-	    i__5 = 1, i__6 = day / 10;
-	    bday = eday - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 
-		    1) + 1;
-	    intstr_(&day, endstr + (bday - 1), eday - (bday - 1));
-	    ehr = 10;
-	    emn = 13;
-	    esc = 16;
+	    i__5 = 1, i__6 = __state->day / 10;
+	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
+		    + min(i__5,i__6) + 1) + 1;
+	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
+		    __state->eday - (__state->bday - 1));
+	    __state->ehr = 10;
+	    __state->emn = 13;
+	    __state->esc = 16;
 	} else {
-	    s_copy(endstr, "-000T00:00:00", (ftnlen)80, (ftnlen)13);
-	    eday = 4;
+	    s_copy(__state->endstr, "-000T00:00:00", (ftnlen)80, (ftnlen)13);
+	    __state->eday = 4;
 /* Computing MIN */
-	    i__1 = 1, i__2 = day / 1000;
+	    i__1 = 1, i__2 = __state->day / 1000;
 /* Computing MIN */
-	    i__3 = 1, i__4 = day / 100;
+	    i__3 = 1, i__4 = __state->day / 100;
 /* Computing MIN */
-	    i__5 = 1, i__6 = day / 10;
-	    bday = eday - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 
-		    1) + 1;
-	    intstr_(&day, endstr + (bday - 1), eday - (bday - 1));
-	    ehr = 7;
-	    emn = 10;
-	    esc = 13;
+	    i__5 = 1, i__6 = __state->day / 10;
+	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
+		    + min(i__5,i__6) + 1) + 1;
+	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
+		    __state->eday - (__state->bday - 1));
+	    __state->ehr = 7;
+	    __state->emn = 10;
+	    __state->esc = 13;
 	}
     }
 
@@ -722,33 +728,39 @@ static integer c__1 = 1;
 /*     seconds in the output string. */
 
 /* Computing MIN */
-    i__1 = 1, i__2 = hour / 1000;
+    i__1 = 1, i__2 = __state->hour / 1000;
 /* Computing MIN */
-    i__3 = 1, i__4 = hour / 100;
+    i__3 = 1, i__4 = __state->hour / 100;
 /* Computing MIN */
-    i__5 = 1, i__6 = hour / 10;
-    bhr = ehr - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 1) + 1;
+    i__5 = 1, i__6 = __state->hour / 10;
+    __state->bhr = __state->ehr - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,
+	    i__6) + 1) + 1;
 /* Computing MIN */
-    i__1 = 1, i__2 = minute / 1000;
+    i__1 = 1, i__2 = __state->minute / 1000;
 /* Computing MIN */
-    i__3 = 1, i__4 = minute / 100;
+    i__3 = 1, i__4 = __state->minute / 100;
 /* Computing MIN */
-    i__5 = 1, i__6 = minute / 10;
-    bmn = emn - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 1) + 1;
+    i__5 = 1, i__6 = __state->minute / 10;
+    __state->bmn = __state->emn - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,
+	    i__6) + 1) + 1;
 /* Computing MIN */
-    i__1 = 1, i__2 = second / 1000;
+    i__1 = 1, i__2 = __state->second / 1000;
 /* Computing MIN */
-    i__3 = 1, i__4 = second / 100;
+    i__3 = 1, i__4 = __state->second / 100;
 /* Computing MIN */
-    i__5 = 1, i__6 = second / 10;
-    bsc = esc - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,i__6) + 1) + 1;
-    intstr_(&hour, endstr + (bhr - 1), ehr - (bhr - 1));
-    intstr_(&minute, endstr + (bmn - 1), emn - (bmn - 1));
-    intstr_(&second, endstr + (bsc - 1), esc - (bsc - 1));
+    i__5 = 1, i__6 = __state->second / 10;
+    __state->bsc = __state->esc - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,
+	    i__6) + 1) + 1;
+    intstr_(&__state->hour, __state->endstr + (__state->bhr - 1), 
+	    __state->ehr - (__state->bhr - 1));
+    intstr_(&__state->minute, __state->endstr + (__state->bmn - 1), 
+	    __state->emn - (__state->bmn - 1));
+    intstr_(&__state->second, __state->endstr + (__state->bsc - 1), 
+	    __state->esc - (__state->bsc - 1));
 
 /*     Append the fractional part of the seconds component. */
 
-    if (myprec > 0) {
+    if (__state->myprec > 0) {
 
 /*        DPSTRF gives MYPREC significant digits in the output, */
 /*        not necessarily MYPREC digits to the right of the */
@@ -761,13 +773,15 @@ static integer c__1 = 1;
 /*        The integer part of FRCSEC will not affect the output */
 /*        string. */
 
-	frcsec += 1.;
-	i__1 = myprec + 1;
-	dpstrf_(&frcsec, &i__1, "F", fract, (ftnlen)1, (ftnlen)80);
-	i__ = i_indx(fract, ".", (ftnlen)80, (ftnlen)1);
-	i__1 = esc;
-	s_copy(endstr + i__1, fract + (i__ - 1), 80 - i__1, i__ + myprec - (
-		i__ - 1));
+	__state->frcsec += 1.;
+	i__1 = __state->myprec + 1;
+	dpstrf_(&__state->frcsec, &i__1, "F", __state->fract, (ftnlen)1, (
+		ftnlen)80);
+	__state->i__ = i_indx(__state->fract, ".", (ftnlen)80, (ftnlen)1);
+	i__1 = __state->esc;
+	s_copy(__state->endstr + i__1, __state->fract + (__state->i__ - 1), 
+		80 - i__1, __state->i__ + __state->myprec - (__state->i__ - 1)
+		);
     }
 
 /*     The end of the time string is now complete.  We need to */
@@ -778,27 +792,29 @@ static integer c__1 = 1;
 /*     we'd get confusing day of year formats like */
 /*     999 A.D.-019 // 12:13:18. */
 
-    if (year >= 1000) {
-	intstr_(&year, str, (ftnlen)80);
-    } else if (year > 0) {
-	intstr_(&year, str, (ftnlen)80);
-	if (s_cmp(fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(fmt, "D", (
-		ftnlen)4, (ftnlen)1) == 0) {
-	    suffix_("A.D.", &c__1, str, (ftnlen)4, (ftnlen)80);
-	    *(unsigned char *)endstr = ' ';
+    if (__state->year >= 1000) {
+	intstr_(&__state->year, __state->str, (ftnlen)80);
+    } else if (__state->year > 0) {
+	intstr_(&__state->year, __state->str, (ftnlen)80);
+	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
+		__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
+	    suffix_("A.D.", &__state->c__1, __state->str, (ftnlen)4, (ftnlen)
+		    80);
+	    *(unsigned char *)__state->endstr = ' ';
 	}
-    } else if (year <= 0) {
-	if (s_cmp(fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(fmt, "D", (
-		ftnlen)4, (ftnlen)1) == 0) {
-	    year = -year + 1;
-	    intstr_(&year, str, (ftnlen)80);
-	    suffix_("B.C.", &c__1, str, (ftnlen)4, (ftnlen)80);
-	    *(unsigned char *)endstr = ' ';
+    } else if (__state->year <= 0) {
+	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
+		__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
+	    __state->year = -__state->year + 1;
+	    intstr_(&__state->year, __state->str, (ftnlen)80);
+	    suffix_("B.C.", &__state->c__1, __state->str, (ftnlen)4, (ftnlen)
+		    80);
+	    *(unsigned char *)__state->endstr = ' ';
 	} else {
-	    year = -year + 1;
+	    __state->year = -__state->year + 1;
 	    setmsg_("The year of the ET epoch supplied is # B.C.  Years in t"
 		    "his era are not supported in ISO format. ", (ftnlen)96);
-	    errint_("#", &year, (ftnlen)1);
+	    errint_("#", &__state->year, (ftnlen)1);
 	    sigerr_("SPICE(YEAROUTOFRANGE)", (ftnlen)21);
 	    chkout_("ET2UTC", (ftnlen)6);
 	    return 0;
@@ -808,8 +824,9 @@ static integer c__1 = 1;
 /*     Finally append the ENDSTR to STR to get the fully formatted */
 /*     string. */
 
-    suffix_(endstr, &c__0, str, (ftnlen)80, (ftnlen)80);
-    s_copy(utcstr, str, utcstr_len, (ftnlen)80);
+    suffix_(__state->endstr, &__state->c__0, __state->str, (ftnlen)80, (
+	    ftnlen)80);
+    s_copy(utcstr, __state->str, utcstr_len, (ftnlen)80);
     chkout_("ET2UTC", (ftnlen)6);
     return 0;
 } /* et2utc_ */

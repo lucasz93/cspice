@@ -1,17 +1,29 @@
-/* sphlat.f -- translated by f2c (version 19980913).
+/* sphlat.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int sphlat_state_t;
+static sphlat_state_t* get_sphlat_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      SPHLAT ( Spherical to latitudinal coordinates ) */
 /* Subroutine */ int sphlat_(doublereal *r__, doublereal *colat, doublereal *
 	longs, doublereal *radius, doublereal *long__, doublereal *lat)
 {
     extern doublereal halfpi_(void);
-    doublereal rr, lattud;
+    doublereal rr;
+    doublereal lattud;
 
+
+    /* Module state */
+    sphlat_state_t* __state = get_sphlat_state();
 /* $ Abstract */
 
 /*     Convert from spherical coordinates to latitudinal coordinates. */

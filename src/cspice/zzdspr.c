@@ -1,9 +1,17 @@
-/* zzdspr.f -- translated by f2c (version 19980913).
+/* zzdspr.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzdspr_state_t;
+static zzdspr_state_t* get_zzdspr_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure ZZDSPR ( SGP4 deep space long period ) */
 /* Subroutine */ int zzdspr_(integer *opmode, doublereal *e3, doublereal *ee2,
@@ -26,18 +34,50 @@
 	    , atan2(doublereal, doublereal);
 
     /* Local variables */
-    doublereal dalf, dbet, pinc, sghl, sghs, xnoh, alfdp;
+    doublereal dalf;
+    doublereal dbet;
+    doublereal pinc;
+    doublereal sghl;
+    doublereal sghs;
+    doublereal xnoh;
+    doublereal alfdp;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal betdp, cosip, sinip, cosop, f2, f3, sinop, sinzf;
+    doublereal betdp;
+    doublereal cosip;
+    doublereal sinip;
+    doublereal cosop;
+    doublereal f2;
+    doublereal f3;
+    doublereal sinop;
+    doublereal sinzf;
     extern doublereal twopi_(void);
-    doublereal pe, ph;
+    doublereal pe;
+    doublereal ph;
     extern doublereal pi_(void);
-    doublereal pl, zf, zm;
+    doublereal pl;
+    doublereal zf;
+    doublereal zm;
     extern /* Subroutine */ int chkout_(char *, ftnlen);
     extern logical return_(void);
-    doublereal pgh, dls, sel, shl, ses, sil, shs, sis, sll, zel, sls, zes, 
-	    znl, xls, zns;
+    doublereal pgh;
+    doublereal dls;
+    doublereal sel;
+    doublereal shl;
+    doublereal ses;
+    doublereal sil;
+    doublereal shs;
+    doublereal sis;
+    doublereal sll;
+    doublereal zel;
+    doublereal sls;
+    doublereal zes;
+    doublereal znl;
+    doublereal xls;
+    doublereal zns;
 
+
+    /* Module state */
+    zzdspr_state_t* __state = get_zzdspr_state();
 /* $ Abstract */
 
 /*     This subroutine provides deep space long period periodic */

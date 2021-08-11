@@ -1,13 +1,21 @@
-/* syenqd.f -- translated by f2c (version 19980913).
+/* syenqd.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
 
-/* Table of constant values */
 
-static integer c__1 = 1;
+extern syenqd_init_t __syenqd_init;
+static syenqd_state_t* get_syenqd_state() {
+	cspice_t* state =  __cspice_get_state();
+	if (!state->syenqd)
+		state->syenqd = __cspice_allocate_module(sizeof(
+	syenqd_state_t), &__syenqd_init, sizeof(__syenqd_init));
+	return state->syenqd;
+
+}
 
 /* $Procedure      SYENQD ( Enqueue a value onto a symbol ) */
 /* Subroutine */ int syenqd_(char *name__, doublereal *value, char *tabsym, 
@@ -18,23 +26,32 @@ static integer c__1 = 1;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer nval, nsym;
-    extern integer cardc_(char *, ftnlen), cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
-	     ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *), sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *), inslad_(
-	    doublereal *, integer *, integer *, doublereal *, integer *);
+    integer nval;
+    integer nsym;
+    extern integer cardc_(char *, ftnlen);
+    extern integer cardd_(doublereal *);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern integer sized_(doublereal *);
+    extern integer sumai_(integer *, integer *);
+    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int inslad_(doublereal *, integer *, integer *, 
+	    doublereal *, integer *);
     integer locval;
     extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer locsym;
     logical oldsym;
     extern /* Subroutine */ int sysetd_(char *, doublereal *, char *, integer 
 	    *, doublereal *, ftnlen, ftnlen);
     extern logical return_(void);
 
+
+    /* Module state */
+    syenqd_state_t* __state = get_syenqd_state();
 /* $ Abstract */
 
 /*     Enqueue a value onto a particular symbol in a double precision */
@@ -252,7 +269,7 @@ static integer c__1 = 1;
 
     } else {
 	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslad_(value, &c__1, &locval, &tabval[6], &nval);
+	inslad_(value, &__state->c__1, &locval, &tabval[6], &nval);
 	scardd_(&nval, tabval);
 	++tabptr[locsym + 5];
     }

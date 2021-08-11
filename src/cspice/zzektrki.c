@@ -1,15 +1,25 @@
-/* zzektrki.f -- translated by f2c (version 19980913).
+/* zzektrki.f -- translated by f2c (version 19991025).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
 
 #include "f2c.h"
+#include "__cspice_state.h"
+
+
+typedef int zzektrki_state_t;
+static zzektrki_state_t* get_zzektrki_state() {
+	cspice_t* state =  __cspice_get_state();
+	return 0;
+}
 
 /* $Procedure      ZZEKTRKI ( EK tree, look up key by index ) */
 /* Subroutine */ int zzektrki_(integer *handle, integer *tree, integer *
 	nodkey, integer *n, integer *key)
 {
-    integer base, node, size;
+    integer base;
+    integer node;
+    integer size;
     extern integer zzektrbs_(integer *);
     extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *);
@@ -19,13 +29,17 @@
     extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
 	    integer *);
     integer addrss;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(char *, ftnlen);
     integer noffst;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
-	    integer *, ftnlen);
-    integer idx, ptr;
+    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    integer idx;
+    integer ptr;
 
+
+    /* Module state */
+    zzektrki_state_t* __state = get_zzektrki_state();
 /* $ Abstract */
 
 /*     Get a key from a node by index:  return the key having a specified */
