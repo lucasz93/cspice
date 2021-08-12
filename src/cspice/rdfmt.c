@@ -133,7 +133,8 @@ rd_L(n,w,len) ftnint *n; ftnlen len;
 #else
 rd_L(ftnint *n, int w, ftnlen len)
 #endif
-{	int ch, lv;
+{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+	int ch, lv;
 	char s[84], *ps;
 	ps=s;
 	while (w) {

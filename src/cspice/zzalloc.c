@@ -287,7 +287,7 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 */
 int zzalloc_count ( int op )
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
 
    /*
    Respond according to the op variable.

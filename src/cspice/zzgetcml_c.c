@@ -221,7 +221,7 @@
 */
 
 {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
 
    /* Local variables */
 

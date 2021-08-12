@@ -14,6 +14,8 @@
 	};
  typedef struct dimen dimen;
 
+ extern ftnlen f__typesize[];
+
  extern t_getc(Void);
 
 #ifdef KR_headers
@@ -283,7 +285,6 @@ x_rsne(cilist *a)
 #endif
 {
 	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch, got1, k, n, nd, quote, readall;
 	Namelist *nl;
 	static char where[] = "namelist read";
@@ -399,7 +400,7 @@ x_rsne(cilist *a)
 			type = TYCHAR;
 			}
 		else
-			size = f2c->f__typesize[type];
+			size = f__typesize[type];
 		ivae = size;
 		iva = readall = 0;
 		if (ch == '(' /*)*/ ) {

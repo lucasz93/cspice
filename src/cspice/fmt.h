@@ -1,3 +1,6 @@
+#ifndef __F2C_FMT_H__
+#define __F2C_FMT_H__
+
 struct syl
 {	int op;
 	int p1;
@@ -89,3 +92,5 @@ extern char *f__icvt();
 #else
 extern char *f__icvt(longint, int*, int*, int);
 #endif
+
+#endif /* __F2C_FMT_H__ */

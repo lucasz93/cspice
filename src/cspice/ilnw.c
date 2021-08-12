@@ -12,7 +12,7 @@ extern void z_putc(int);
 z_wSL(Void)
 {
 	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	while(f__recpos < f__svic->icirlen)
+	while(f2c->f__recpos < f2c->f__svic->icirlen)
 		z_putc(' ');
 	return z_rnew();
 	}

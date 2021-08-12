@@ -132,7 +132,7 @@ void zzerrorinit(void)
 */
    {
     
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
 
    /*
    Prevent repeated executions of code with the 'first' flag.

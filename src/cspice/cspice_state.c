@@ -6,7 +6,7 @@
 void cspice_init() {
 	cspice_t* state = calloc(1, sizeof(cspice_t));
 #ifdef USER_T
-	__cspice_init_user(state);
+	__cspice_init_user(&state->user);
 #endif
 	__cspice_set_state(state);
 }

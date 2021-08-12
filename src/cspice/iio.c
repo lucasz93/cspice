@@ -6,9 +6,9 @@
 z_getc(Void)
 {
 	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	if(f__recpos++ < f__svic->icirlen) {
-		if(f__icptr >= f__icend) err(f__svic->iciend,(EOF),"endfile");
-		return(*(unsigned char *)f__icptr++);
+	if(f2c->f__recpos++ < f2c->f__svic->icirlen) {
+		if(f2c->f__icptr >= f2c->f__icend) err(f2c->f__svic->iciend,(EOF),"endfile");
+		return(*(unsigned char *)f2c->f__icptr++);
 		}
 	return '\n';
 }
@@ -150,8 +150,8 @@ integer e_wsfi(Void)
 		err(f2c->f__svic->icierr,110,"inwrite");
 	if (f2c->f__recpos < f2c->f__hiwater)
 		f2c->f__recpos = f2c->f__hiwater;
-	if (f2c->f__recpos >= f__svic->icirlen)
-		err(f__svic->icierr,110,"recend");
+	if (f2c->f__recpos >= f2c->f__svic->icirlen)
+		err(f2c->f__svic->icierr,110,"recend");
 	if (!f2c->f__recpos && f2c->f__icnum)
 		return n;
 	while(f2c->f__recpos++ < f2c->f__svic->icirlen)

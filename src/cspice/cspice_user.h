@@ -1,17 +1,17 @@
 #define USER_T
 
 #ifdef USER_T
-// dtime
+/* dtime */
 #ifndef USE_CLOCK
 #define _INCLUDE_POSIX_SOURCE   /* for HP-UX */
 #define _INCLUDE_XOPEN_SOURCE   /* for HP-UX */
 #include "sys/times.h"
 #endif
 
-// err
+/* err */
 #include "fio.h"
 
-// fmt
+/* fmt */
 #ifdef interdata
 #define SYLMX 300
 #endif
@@ -26,10 +26,10 @@
 #endif
 #include "fmt.h"
 
-// fmtlib
+/* fmtlib */
 #define MAXINTLENGTH 23
 
-// rsne
+/* rsne */
 typedef struct hashentry {
     struct hashentry *next;
     char *name;
@@ -128,10 +128,11 @@ typedef struct {
     int colonseen;
 } f2c_state_t;
 
-// zzadsave
-#include "SpiceZad.h"
+/* zzadsave */
+#define SPICE_N_PASSED_IN_FUNC     8
+#include "SpiceZdf.h"
 
-// zzerror
+/* zzerror */
 #define     MSG_LEN             2024
 #define     OUT_LEN             2*MSG_LEN
 

@@ -5717,13 +5717,6 @@ TRUE_,
 4,
 };
 
-#ifdef USER_T
-cspice_user_state_t user_init = {
-{
-#include "cspice_user.inl"
-}
-#endif
-
 #undef abs
 #include <stdlib.h>
 #include <string.h>

@@ -128,7 +128,7 @@
 */
 
 { /* Begin zzgfsavh_c */
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
 
    /*
    Simply save the input status value. 
@@ -265,7 +265,7 @@
 */
 
 { /* Begin zzgfgeth_c */
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
 
    /*
    Simply return the saved status value. 

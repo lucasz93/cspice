@@ -551,7 +551,7 @@ l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 	{
 		if(f2c->f__lquit) return(0);
 		if(f2c->l_eof)
-			err(f__elist->ciend, EOF, "list in")
+			err(f2c->f__elist->ciend, EOF, "list in")
 		if(f2c->f__lcount == 0) {
 			f2c->f__ltype = 0;
 			for(;;)  {

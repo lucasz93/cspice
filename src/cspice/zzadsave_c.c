@@ -49,6 +49,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZst.h"
    #include "SpiceZad.h"
+   #include "__cspice_state.h"
 
 
 
@@ -196,7 +197,7 @@
 */
 
 { /* Begin zzadsave_c */
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
   
 
    /*
@@ -361,7 +362,7 @@
 */
 
 { /* Begin zzadget_c */
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   cspice_user_state_t* user = &__cspice_get_state()->user;
   
    /*
    Participate in error tracing.

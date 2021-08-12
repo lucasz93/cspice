@@ -19,7 +19,7 @@ s_wsne(cilist *a)
 	f2c->f__external=1;
 	f2c->f__formatted=1;
 	f2c->f__putn = x_putc;
-	L_len = LINE;
+	f2c->L_len = LINE;
 	f2c->f__donewrec = x_wSL;
 	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
 		err(a->cierr, errno, "namelist output start");
